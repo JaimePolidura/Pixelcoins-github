@@ -1,0 +1,53 @@
+name: PixelCoins
+main: es.serversurvival.main.Pixelcoin
+version: 7.0
+api-version: "1.16"
+commands:
+  dinero:
+    description: Comando para ver tu dinero
+    usage: /<command>
+  pagar:
+    description: pagar dinero a otro jugador
+    usage: /<command> <nombre jugador> <cantidad>
+  estadisticas:
+    description: Ver todos tus objetos vendidos, gastos, ingresos y beneficios
+    usage: /<command>
+  deudas:
+    description: Comandos relacionados con las empresas
+    usage: /<command> <subComandos...>
+  top:
+    description: Ver a los jugadores que te deben y los que debes
+    usage: /<command>
+  tienda:
+    description: mostrar la tienda de objetos
+    usage: /<command>
+  vender:
+    description: vender objetos en la tienda a un precio, para retirarlos en /tienda
+    usage: /<command> <precio>
+  mensajes:
+    description: ver todos los mensajes pendientes
+    usage: /<command>
+  empresas:
+    description: comandos relacionados con la empresas
+    usage: /<command> <subcommands...>
+  comprar:
+    description: comprar un servicio de una empresa por pixelcoins
+    usage: /<command> <empresa> <precio>
+  empleos:
+    description: Comandos relacionados con los trabajos
+    usage: /<command> <subComandos...>
+  ayuda:
+    description: ver las ayudas
+    usage: /<command> <ayuda>
+  bolsa:
+    description: comando relacionado con los comandos de la bolsa
+    usage: /<command> <subComandos...>
+  cuenta:
+    description: ver todas tu numero de cuenta para iniciar sesion
+    usage: /<command>
+  perfil:
+    description: ver tu perfil
+    usage: /<command>
+  venderjugador:
+    description: vender un objeto a un jugador
+    usage: /<command> <jugador> <precio>
