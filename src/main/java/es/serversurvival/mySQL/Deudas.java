@@ -130,7 +130,7 @@ public final class Deudas extends MySQL {
             playerDeudor.playSound(playerDeudor.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
             ScoreBoardManager.updateScoreboard(playerDeudor);
         } else {
-            mensajesMySQL.nuevoMensaje(nombreDeudor, player.getName() + " te ha cencelado la deuda de " + pixelcoinsDeuda + " PC");
+            mensajesMySQL.nuevoMensaje("" ,nombreDeudor, player.getName() + " te ha cencelado la deuda de " + pixelcoinsDeuda + " PC");
         }
 
         ScoreBoardManager.updateScoreboard(player);
@@ -153,7 +153,7 @@ public final class Deudas extends MySQL {
             playerAcredor.playSound(playerAcredor.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
             ScoreBoardManager.updateScoreboard(playerAcredor);
         } else {
-            mensajesMySQL.nuevoMensaje(acredor, playeDeudor.getName() + " ta ha pagado toda la deuda: " + pixelcoinsDeuda + " PC");
+            mensajesMySQL.nuevoMensaje("", acredor, playeDeudor.getName() + " ta ha pagado toda la deuda: " + pixelcoinsDeuda + " PC");
         }
         ScoreBoardManager.updateScoreboard(playeDeudor);
     }
@@ -173,13 +173,13 @@ public final class Deudas extends MySQL {
             borrarDeuda(id);
 
             Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Borrada deuda en id: " + id);
-            mensajesMySQL.nuevoMensaje(deudorNombre, "Has acabado de pagar la deuda con " + acredorNombre);
-            mensajesMySQL.nuevoMensaje(acredorNombre, deudorNombre + " ha acabado de pagar la deuda contigo");
+            mensajesMySQL.nuevoMensaje("",deudorNombre, "Has acabado de pagar la deuda con " + acredorNombre);
+            mensajesMySQL.nuevoMensaje("", acredorNombre, deudorNombre + " ha acabado de pagar la deuda contigo");
         }else{
             setPagoDeuda(id, pixelcoinsDeuda - cuota, tiempo - 1, dateFormater.format(formatFehcaDeHoyException()));
 
-            mensajesMySQL.nuevoMensaje(deudorNombre, "Has pagado " + cuota + " PC por la deuda que tienes con " + acredorNombre + " a " + (tiempo - 1) + " dias");
-            mensajesMySQL.nuevoMensaje(acredorNombre, deudorNombre + " te ha pagado " + cuota + " PC por la deuda que tiene a " + (tiempo - 1) + " dias contigo");
+            mensajesMySQL.nuevoMensaje("", deudorNombre, "Has pagado " + cuota + " PC por la deuda que tienes con " + acredorNombre + " a " + (tiempo - 1) + " dias");
+            mensajesMySQL.nuevoMensaje(deudorNombre, acredorNombre, deudorNombre + " te ha pagado " + cuota + " PC por la deuda que tiene a " + (tiempo - 1) + " dias contigo");
             Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Se ha pagado en id: " + id);
         }
     }
@@ -187,8 +187,8 @@ public final class Deudas extends MySQL {
     private void sumarUnNinpagoYEnviarMensajeAlAcredor (Jugador acredor, Jugador deudor, int id) {
         jugadoresMySQL.setNinpagos(deudor.getNombre(), deudor.getNinpagos() + 1);
 
-        mensajesMySQL.nuevoMensaje(acredor.getNombre(), deudor.getNombre() + " no te ha podido pagar ese dia la deuda por falta de pixelcoins");
-        mensajesMySQL.nuevoMensaje(deudor.getNombre(), "no has podido pagar un dia la deuda con " + acredor.getNombre());
+        mensajesMySQL.nuevoMensaje("", acredor.getNombre(), deudor.getNombre() + " no te ha podido pagar ese dia la deuda por falta de pixelcoins");
+        mensajesMySQL.nuevoMensaje("", deudor.getNombre(), "no has podido pagar un dia la deuda con " + acredor.getNombre());
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + " No se puede pagar en id: " + id + " por falta de pixelcoins");
     }
 

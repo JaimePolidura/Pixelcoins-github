@@ -4,7 +4,6 @@ import es.serversurvival.mySQL.tablasObjetos.Mensaje;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,8 +27,8 @@ public final class Mensajes extends MySQL {
         executeUpdate(String.format("DELETE FROM mensajes WHERE destinatario = '%s'", jugador));
     }
 
-    public void nuevoMensaje(String jugador, String mensaje) {
-        executeUpdate("INSERT INTO mensajes (destinatario, mensaje) VALUES ('" + jugador + "','" + mensaje + "')");
+    public void nuevoMensaje(String enviador, String destinatario, String mensaje) {
+        executeUpdate("INSERT INTO mensajes (enviador, destinatario, mensaje) VALUES ('"+enviador+"','" + destinatario + "','" + mensaje + "')");
     }
 
     public void setDestinatario (String nombre, String nuevoNombre) {
@@ -55,6 +54,7 @@ public final class Mensajes extends MySQL {
     @Override
     protected Mensaje buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new Mensaje(rs.getInt("id_mensaje"),
+                rs.getString("enviador"),
                 rs.getString("destinatario"),
                 rs.getString("mensaje"));
     }

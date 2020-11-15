@@ -31,11 +31,16 @@ public abstract class MySQL {
     protected static JugadoresInfo jugadoresInfoMySQL = JugadoresInfo.INSTANCE;
 
     protected static Connection conexion;
+    /** ----------========= LINUX =========----------
     private static final String dbName = "pixelcoins";
     private static final String user = "java";
     private static final String pass = "Pixelcoins123_";
     //CONTEASEÑA MYSQL -> Pixelcoins123
-    //NUEVA CONTEASEÑA MYSQL -> Pixelcoins123_
+    //NUEVA CONTEASEÑA MYSQL -> Pixelcoins123_*/
+
+    private static final String dbName = "pixelcoins2";
+    private static final String user = "root";
+    private static final String pass = "";
 
     public static Connection conectar() {
         try {

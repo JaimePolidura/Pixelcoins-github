@@ -146,7 +146,7 @@ public final class Transacciones extends MySQL {
             tp.playSound(tp.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
             tp.sendMessage(ChatColor.GOLD + nombrePagador + " te ha pagado: " + ChatColor.GREEN + "+" + formatea.format(cantidad) + " PC " + ChatColor.AQUA + "(/estadisticas)");
         }else{
-            mensajesMySQL.nuevoMensaje(nombrePagado, nombrePagador + " te ha pagado " + formatea.format(cantidad) + " PC con el comando /pagar");
+            mensajesMySQL.nuevoMensaje("", nombrePagado, nombrePagador + " te ha pagado " + formatea.format(cantidad) + " PC con el comando /pagar");
         }
 
         ScoreBoardManager.updateScoreboard(player);
@@ -454,7 +454,7 @@ public final class Transacciones extends MySQL {
         }
 
         p.sendMessage(ChatColor.GOLD + "Has pagado " + ChatColor.GREEN + precio + " PC " + ChatColor.GOLD + " a la empresa: " + empresa + " por su servicio");
-        mensajesMySQL.nuevoMensaje(empresaAComprar.getOwner(), " el jugador: " + comprador.getNombre() + " ha comprado un servicio de tu empresa: " + empresa + " por " + precio + " PC");
+        mensajesMySQL.nuevoMensaje("", ownerEmpresa.getName() ," el jugador: " + comprador.getNombre() + " ha comprado un servicio de tu empresa: " + empresa + " por " + precio + " PC");
     }
 
     public void comprarUnidadBolsa(String tipo, String ticker, String nombreValor, String alias, double precioUnidad, int cantidad, Player jugadorPlayer) {
@@ -619,7 +619,7 @@ public final class Transacciones extends MySQL {
         jugadoresMySQL.setPixelcoin(nombre, jugadoresMySQL.getJugador(nombre).getPixelcoin() + aPagar);
         this.nuevaTransaccion(ticker, nombre, aPagar, "", TRANSACCIONES.BOLSA_DIVIDENDO);
 
-        mensajesMySQL.nuevoMensaje(nombre, "Has cobrado " + precioDividendo + " PC en dividendos por parte de la empresa " + ticker);
+        mensajesMySQL.nuevoMensaje("",nombre, "Has cobrado " + precioDividendo + " PC en dividendos por parte de la empresa " + ticker);
     }
 
     public void cambiarNombreJugadorRegistros (String jugadorACambiar, String nuevoNombre) {

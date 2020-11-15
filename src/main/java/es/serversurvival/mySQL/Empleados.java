@@ -14,7 +14,6 @@ import es.serversurvival.mySQL.tablasObjetos.Deuda;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
-import javafx.embed.swt.SWTFXUtils;
 import javafx.scene.text.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -119,7 +118,7 @@ public final class Empleados extends MySQL {
             tp.sendMessage(ChatColor.RED + "Has sido despedido de " + nombreEmpresa + " razon: " + razon);
             tp.playSound(tp.getLocation(), Sound.BLOCK_ANVIL_LAND, 10, 1);
         } else {
-            mensajesMySQL.nuevoMensaje(empleado, "Has sido despedido de " + nombreEmpresa + " por: " + razon);
+            mensajesMySQL.nuevoMensaje("", empleado, "Has sido despedido de " + nombreEmpresa + " por: " + razon);
         }
         empresasMySQL.desconectar();
     }
@@ -134,7 +133,7 @@ public final class Empleados extends MySQL {
             ownerPlayer.sendMessage(ChatColor.RED + p.getName() + " Se ha ido de tu empresa: " + nombreEmpresa);
             p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_LAND, 10, 1);
         } else {
-            mensajesMySQL.nuevoMensaje(ownerPlayer.getName(), p.getName() + " se ha ido de tu empresa: " + nombreEmpresa);
+            mensajesMySQL.nuevoMensaje("" ,ownerPlayer.getName(), p.getName() + " se ha ido de tu empresa: " + nombreEmpresa);
         }
     }
 
@@ -150,7 +149,7 @@ public final class Empleados extends MySQL {
             jugadorAEditarPlayer.sendMessage(ChatColor.GOLD + sender.getName() + " te ha cambiado el tiempo por por el que cobras el sueldo, ahora cobras " + ChatColor.GREEN + formatea.format(sueldo) + " PC" + ChatColor.GOLD + " por " + tipoString);
             jugadorAEditarPlayer.playSound(jugadorAEditarPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
         } else {
-            mensajesMySQL.nuevoMensaje(empleado.getEmpleado(), "Se te ha cambiado la frecuencia con la que cobras en la empresa: " + empresa.getNombre() + " " + sueldo + " PC/ " + tipoString);
+            mensajesMySQL.nuevoMensaje("", empleado.getEmpleado(), "Se te ha cambiado la frecuencia con la que cobras en la empresa: " + empresa.getNombre() + " " + sueldo + " PC/ " + tipoString);
         }
         sender.sendMessage(ChatColor.GOLD + "Has cambiado el tipo de pagado de sueldo de " + empleado.getEmpleado() + " en la empresa " + empresa.getNombre());
     }
@@ -167,7 +166,7 @@ public final class Empleados extends MySQL {
             jugadorAEditar.sendMessage(ChatColor.GOLD + sender.getName() + " te ha cambiado el sueldo de " + empresa.getNombre() + " a " + ChatColor.GREEN + formatea.format(nuevoSueldo) + " PC" + ChatColor.GOLD + " antes tenias: " + ChatColor.GREEN + formatea.format(sueldoAntes) + " PC");
             jugadorAEditar.playSound(jugadorAEditar.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
         } else {
-            mensajesMySQL.nuevoMensaje(empleado.getEmpleado(), "Se te ha cambiado el sueldo de la empresa: " + empresa.getNombre() + " a " + formatea.format(nuevoSueldo) + " PC antes tenias " + sueldoAntes + " PC");
+            mensajesMySQL.nuevoMensaje("", empleado.getEmpleado(), "Se te ha cambiado el sueldo de la empresa: " + empresa.getNombre() + " a " + formatea.format(nuevoSueldo) + " PC antes tenias " + sueldoAntes + " PC");
         }
     }
 
@@ -189,11 +188,11 @@ public final class Empleados extends MySQL {
             boolean sePago = transaccionesMySQL.pagarSalario(empl.getEmpleado(), empl.getEmpresa(), empl.getSueldo());
             if (sePago) {
                 setFechaPaga(empl.getId(), dateFormater.format(hoy));
-                mensajesMySQL.nuevoMensaje(empl.getEmpleado(), "Has cobrado " + empl.getSueldo() + " PC de parte de la empresa: " + empl.getEmpresa());
+                mensajesMySQL.nuevoMensaje("", empl.getEmpleado(), "Has cobrado " + empl.getSueldo() + " PC de parte de la empresa: " + empl.getEmpresa());
                 Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Se ha pagado " + empl.getSueldo() + " a " + empl.getEmpleado() + " en la empresa: " + empl.getEmpresa());
             } else {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "La empresa: " + empl.getEmpresa() + " no ha podido pagar " + empl.getSueldo() + " a " + empl.getEmpleado());
-                mensajesMySQL.nuevoMensaje(empl.getEmpleado(), "No has podido cobrar tu sueldo por parte de " + empl.getEmpresa() + " por que no tiene las suficientes pixelcoins");
+                mensajesMySQL.nuevoMensaje("", empl.getEmpleado(), "No has podido cobrar tu sueldo por parte de " + empl.getEmpresa() + " por que no tiene las suficientes pixelcoins");
             }
         }
     }

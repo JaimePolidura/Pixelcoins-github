@@ -135,7 +135,7 @@ public final class Empresas extends MySQL {
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
         empleados.forEach( (empl) -> {
-            mensajesMySQL.nuevoMensaje(empl.getEmpleado(), "La empresa en la que trabajas: " + empresa + " ha cambiado a de nombre a " + nuevoNombre);
+            mensajesMySQL.nuevoMensaje("", empl.getEmpleado(), "La empresa en la que trabajas: " + empresa + " ha cambiado a de nombre a " + nuevoNombre);
         });
 
         ScoreBoardManager.updateScoreboard(player);
@@ -164,7 +164,7 @@ public final class Empresas extends MySQL {
                 empleadoPlayer.sendMessage(org.bukkit.ChatColor.GOLD + ownerJugador.getNombre() + " ha borrado su empresa donde trabajabas: " + empresaNombre);
                 ScoreBoardManager.updateScoreboard(empleadoPlayer);
             }else{
-                mensajesMySQL.nuevoMensaje(empleado.getEmpleado(), "El owner de la empresa en la que trabajas: " + empresaNombre + " la ha borrado, ya no existe");
+                mensajesMySQL.nuevoMensaje("" , empleado.getEmpleado(), "El owner de la empresa en la que trabajas: " + empresaNombre + " la ha borrado, ya no existe");
             }
         });
     }
@@ -177,7 +177,7 @@ public final class Empresas extends MySQL {
             owner.sendMessage(ChatColor.GOLD + quienSolicita.getName() + " te ha solicitado el servicio de tu empresa: " + nombreEmpresa);
             owner.playSound(owner.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
         }else{
-            mensajesMySQL.nuevoMensaje(empresa.getOwner(), quienSolicita.getName() + " te ha solicitado el servicio de tu empresa: " + nombreEmpresa);
+            mensajesMySQL.nuevoMensaje("" ,empresa.getOwner(), quienSolicita.getName() + " te ha solicitado el servicio de tu empresa: " + nombreEmpresa);
         }
 
         List<Empleado> empleados = empleadosMySQL.getEmpleadosEmrpesa(nombreEmpresa);

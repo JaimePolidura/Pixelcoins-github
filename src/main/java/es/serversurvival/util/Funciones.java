@@ -137,7 +137,6 @@ public final class Funciones {
 
     public static Map<String, Double> crearMapaTopPatrimonioPlayers(boolean creciente){
         Jugadores jugadoresMySQL = Jugadores.INSTANCE;
-        MySQL.conectar();
 
         List<Jugador> jugadores = jugadoresMySQL.getAllJugadores();
         HashMap<String, Double> toReturn = new HashMap<>();
