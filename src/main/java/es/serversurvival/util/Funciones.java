@@ -206,8 +206,6 @@ public final class Funciones {
     }
 
     public static double getPatrimonioJugador(String nombreJugador){
-        MySQL.conectar();
-
         Jugadores jugadoresMySQL = Jugadores.INSTANCE;
         Deudas deudas = Deudas.INSTANCE;
         PosicionesAbiertas posicionesAbiertas = PosicionesAbiertas.INSTANCE;
