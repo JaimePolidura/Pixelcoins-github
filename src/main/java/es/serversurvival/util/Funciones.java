@@ -136,8 +136,6 @@ public final class Funciones {
     }
 
     public static Map<String, Double> crearMapaTopPatrimonioPlayers (boolean creciente) {
-        MySQL.conectar();
-
         Deudas deudasMySQL = Deudas.INSTANCE;
         Jugadores jugadoresMySQL = Jugadores.INSTANCE;
         PosicionesAbiertas posicionesAbiertasMySQL = PosicionesAbiertas.INSTANCE;
