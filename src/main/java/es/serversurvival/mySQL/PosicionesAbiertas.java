@@ -118,8 +118,9 @@ public final class PosicionesAbiertas extends MySQL {
 
     public double getAllPixeloinsEnAcciones (String jugador) {
         List<PosicionAbierta> posiciones = getPosicionesAbiertasJugadorCondicion(jugador, PosicionAbierta::esLargo);
+        Map<String, LlamadaApi> llamadasApiMap = llamadasApiMySQL.getMapOfAllLlamadasApi();
 
-        return getSumaTotalListDouble(posiciones, (pos) -> llamadasApiMySQL.getLlamadaAPI(pos.getNombre()).getPrecio() * pos.getCantidad());
+        return getSumaTotalListDouble(posiciones, (pos) -> llamadasApiMap.get(pos.getNombre()).getPrecio() + pos.getCantidad());
     }
 
     public Map<String, List<PosicionAbierta>> getAllPosicionesAbiertasMap (Predicate<? super PosicionAbierta> condition) {
