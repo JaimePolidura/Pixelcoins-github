@@ -68,7 +68,7 @@ public class BolsaScoreboard implements SingleScoreboard{
             if(posicion.getTipoPosicion().equalsIgnoreCase(POSICION.LARGO.toString())){
                 rentabildad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(precioInicial, precioActual), 2);
             }else{
-                rentabildad = Math.abs(Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(precioInicial, precioActual), 2));
+                rentabildad = Math.abs(Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(precioActual, precioInicial), 2));
             }
 
             posicionAbiertasConRentabilidad.put(posicion, rentabildad);

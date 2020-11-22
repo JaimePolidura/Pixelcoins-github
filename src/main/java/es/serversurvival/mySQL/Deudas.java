@@ -2,9 +2,10 @@ package es.serversurvival.mySQL;
 
 import java.sql.*;
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Date;
-import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import es.serversurvival.mySQL.tablasObjetos.Deuda;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
@@ -94,6 +95,48 @@ public final class Deudas extends MySQL {
 
     public int getAllPixelcoinsDeudasDeudor (String jugador) {
         return Funciones.getSumaTotalListInteger( getDeudasDeudor(jugador), Deuda::getPixelcoins);
+    }
+
+    public Map<String, List<Deuda>> getAllDeudasAcredorMap () {
+        List<Deuda> deudas = this.getAllDeudas();
+        Map<String, List<Deuda>> mapDeudas = new HashMap<>();
+
+        deudas.forEach(deuda ->{
+            if(mapDeudas.get(deuda.getAcredor()) == null){
+                List<Deuda> newDeudaList = new ArrayList<>();
+                newDeudaList.add(deuda);
+
+                mapDeudas.put(deuda.getAcredor(), newDeudaList);
+            }else{
+                List<Deuda> deudasList = mapDeudas.get(deuda.getAcredor());
+                deudasList.add(deuda);
+
+                mapDeudas.replace(deuda.getAcredor(), deudasList);
+            }
+        });
+
+        return mapDeudas;
+    }
+
+    public Map<String, List<Deuda>> getAllDeudasDeudorMap () {
+        List<Deuda> deudas = this.getAllDeudas();
+        Map<String, List<Deuda>> mapDeudas = new HashMap<>();
+
+        deudas.forEach(deuda ->{
+            if(mapDeudas.get(deuda.getDeudor()) == null){
+                List<Deuda> newDeudaList = new ArrayList<>();
+                newDeudaList.add(deuda);
+
+                mapDeudas.put(deuda.getDeudor(), newDeudaList);
+            }else{
+                List<Deuda> deudasList = mapDeudas.get(deuda.getDeudor());
+                deudasList.add(deuda);
+
+                mapDeudas.replace(deuda.getDeudor(), deudasList);
+            }
+        });
+
+        return mapDeudas;
     }
 
     public void pagarDeudas () {

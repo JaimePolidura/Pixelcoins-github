@@ -106,6 +106,27 @@ public final class Empresas extends MySQL {
         return Funciones.getSumaTotalListDouble( getEmpresasOwner(jugador), Empresa::getPixelcoins );
     }
 
+    public Map<String, List<Empresa>> getAllEmpresasJugadorMap () {
+        List<Empresa> empresas = this.getTodasEmpresas();
+        Map<String, List<Empresa>> mapEmpresas = new HashMap<>();
+
+        empresas.forEach(empresa -> {
+            if(mapEmpresas.get(empresa.getOwner()) == null){
+                List<Empresa> empresasList = new ArrayList<>();
+                empresasList.add(empresa);
+
+                mapEmpresas.put(empresa.getOwner(), empresasList);
+            }else{
+                List<Empresa> empresasList = mapEmpresas.get(empresa.getOwner());
+                empresasList.add(empresa);
+
+                mapEmpresas.replace(empresa.getOwner(), empresasList);
+            }
+        });
+
+        return mapEmpresas;
+    }
+
     public void crearEmpresa(String nombreEmpresa, Player player, String descripcion) {
         String owner = player.getName();
 

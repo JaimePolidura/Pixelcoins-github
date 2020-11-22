@@ -135,52 +135,66 @@ public final class Funciones {
         return redondeado.doubleValue();
     }
 
-    public static Map<String, Double> crearMapaTopPatrimonioPlayers(boolean creciente){
-        Jugadores jugadoresMySQL = Jugadores.INSTANCE;
+    public static Map<String, Double> crearMapaTopPatrimonioPlayers (boolean creciente) {
+        MySQL.conectar();
 
-        List<Jugador> jugadores = jugadoresMySQL.getAllJugadores();
+        Deudas deudasMySQL = Deudas.INSTANCE;
+        Jugadores jugadoresMySQL = Jugadores.INSTANCE;
+        PosicionesAbiertas posicionesAbiertasMySQL = PosicionesAbiertas.INSTANCE;
+        Empresas empresasMySQL = Empresas.INSTANCE;
+        LlamadasApi llamadasApiMySQL = LlamadasApi.INSTANCE;
+
+        List<Jugador> allJugadordes = jugadoresMySQL.getAllJugadores();
+        Map<String, LlamadaApi> mapAllLlamadas = llamadasApiMySQL.getMapOfAllLlamadasApi();
+        Map<String, List<Deuda>> mapDeudasAcredor = deudasMySQL.getAllDeudasAcredorMap();
+        Map<String, List<Deuda>> mapDeudasDeudor = deudasMySQL.getAllDeudasDeudorMap();
+        Map<String, List<Empresa>> mapEmpresasJugador = empresasMySQL.getAllEmpresasJugadorMap();
+        Map<String, List<PosicionAbierta>> mapPosicionesLargo = posicionesAbiertasMySQL.getAllPosicionesAbiertasMap(PosicionAbierta::esLargo);
+        Map<String, List<PosicionAbierta>> mapPosicionesCorto = posicionesAbiertasMySQL.getAllPosicionesAbiertasMap(PosicionAbierta::esCorto);
+
         HashMap<String, Double> toReturn = new HashMap<>();
 
-        Deudas deudas = Deudas.INSTANCE;
-        PosicionesAbiertas posicionesAbiertas = PosicionesAbiertas.INSTANCE;
-        Empresas empresas = Empresas.INSTANCE;
-        LlamadasApi llamadasApi = LlamadasApi.INSTANCE;
-
-        Map<String, LlamadaApi> mapAllLlamadas = llamadasApi.getMapOfAllLlamadasApi();
-
-        jugadores.forEach((jugador) -> {
+        allJugadordes.forEach((jugador) -> {
             double activosTotales = 0;
 
             //Liquidez
             activosTotales = jugador.getPixelcoin();
 
-            //Deuas a cobrar
-            activosTotales += deudas.getDeudasAcredor(jugador.getNombre()).stream()
-                    .mapToDouble(Deuda::getPixelcoins)
-                    .sum();
+            // Deudas acredor
+            if(mapDeudasAcredor.get(jugador.getNombre()) != null){
+                activosTotales += mapDeudasAcredor.get(jugador.getNombre()).stream()
+                        .mapToInt(Deuda::getPixelcoins)
+                        .sum();
+            }
 
-            //Deudas a pagar
-            activosTotales -= deudas.getDeudasDeudor(jugador.getNombre()).stream()
-                    .mapToInt(Deuda::getPixelcoins)
-                    .sum();
-            
-            //Empresas
-            activosTotales += empresas.getEmpresasOwner(jugador.getNombre()).stream()
-                    .mapToDouble(Empresa::getPixelcoins)
-                    .sum();
+            //Deudas deudor
+            if(mapDeudasDeudor.get(jugador.getNombre()) != null){
+                activosTotales -= mapDeudasDeudor.get(jugador.getNombre()).stream()
+                        .mapToInt(Deuda::getPixelcoins)
+                        .sum();
+            }
 
-            //Bolsa
-            List<PosicionAbierta> posicionAbiertasJugador = posicionesAbiertas.getPosicionesAbiertasJugador(jugador.getNombre());
+            //Emrpesas
+            if(mapEmpresasJugador.get(jugador.getNombre()) != null){
+                activosTotales += mapEmpresasJugador.get(jugador.getNombre()).stream()
+                        .mapToDouble(Empresa::getPixelcoins)
+                        .sum();
+            }
 
-            activosTotales += posicionAbiertasJugador.stream()
-                    .filter(PosicionAbierta::esLargo)
-                    .mapToDouble(pos -> (mapAllLlamadas.get(pos.getNombre()).getPrecio() * pos.getCantidad()))
-                    .sum();
+            ///Posiciones abiertas largas
+            if(mapPosicionesLargo.get(jugador.getNombre()) != null){
+                activosTotales += mapPosicionesLargo.get(jugador.getNombre()).stream()
+                        .mapToDouble(pos -> (mapAllLlamadas.get(pos.getNombre()).getPrecio() * pos.getCantidad()))
+                        .sum();
+            }
 
-            activosTotales += posicionAbiertasJugador.stream()
-                    .filter(PosicionAbierta::esLargo)
-                    .mapToDouble(pos -> (pos.getPrecioApertura() - mapAllLlamadas.get(pos.getNombre()).getPrecio()) * pos.getCantidad())
-                    .sum();
+            //Posicioenes abiertas cortas
+            if(mapPosicionesCorto.get(jugador.getNombre()) != null){
+                activosTotales += mapPosicionesCorto.get(jugador.getNombre()).stream()
+                        .mapToDouble(pos -> (pos.getPrecioApertura() - mapAllLlamadas.get(pos.getNombre()).getPrecio()) * pos.getCantidad())
+                        .sum();
+            }
+
 
             toReturn.put(jugador.getNombre(), activosTotales);
         });

@@ -122,6 +122,30 @@ public final class PosicionesAbiertas extends MySQL {
         return getSumaTotalListDouble(posiciones, (pos) -> llamadasApiMySQL.getLlamadaAPI(pos.getNombre()).getPrecio() * pos.getCantidad());
     }
 
+    public Map<String, List<PosicionAbierta>> getAllPosicionesAbiertasMap (Predicate<? super PosicionAbierta> condition) {
+        List<PosicionAbierta> posicionAbiertas = this.getTodasPosicionesAbiertas().stream()
+                .filter(condition)
+                .collect(Collectors.toList());
+
+        Map<String, List<PosicionAbierta>> mapPosicionesAbiertas = new HashMap<>();
+
+        posicionAbiertas.forEach(posicion -> {
+            if(mapPosicionesAbiertas.get(posicion.getJugador()) == null){
+                List<PosicionAbierta> newListPosiciones = new ArrayList<>();
+                newListPosiciones.add(posicion);
+
+                mapPosicionesAbiertas.put(posicion.getJugador(), newListPosiciones);
+            }else{
+                List<PosicionAbierta> posicionAbiertasList = mapPosicionesAbiertas.get(posicion.getJugador());
+                posicionAbiertasList.add(posicion);
+
+                mapPosicionesAbiertas.replace(posicion.getJugador(), posicionAbiertasList);
+            }
+        });
+
+        return mapPosicionesAbiertas;
+    }
+
     public static String getNombreSimbolo(String simbolo){
         String toReturn = "";
 
