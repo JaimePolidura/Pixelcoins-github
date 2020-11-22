@@ -23,7 +23,7 @@ public final class Mensajes extends MySQL {
         return buildListFromResultSet(rs);
     }
 
-    private void borrarMensajes(String jugador) {
+    public void borrarMensajes(String jugador) {
         executeUpdate(String.format("DELETE FROM mensajes WHERE destinatario = '%s'", jugador));
     }
 
