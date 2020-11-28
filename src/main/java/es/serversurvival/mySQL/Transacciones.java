@@ -38,6 +38,10 @@ public final class Transacciones extends MySQL {
         executeUpdate("INSERT INTO transacciones (fecha, comprador, vendedor, cantidad, objeto, tipo) VALUES ('" + fecha + "','" + comprador + "','" + vendedor + "','" + cantidad + "','" + objeto + "','" + tipo + "')");
     }
 
+    public List<Transaccion> getTransaccionesPagaEmpresa (String jugador) {
+        return buildListFromResultSet(executeQuery("SELECT * FROM transacciones WHERE tipo = '"+TRANSACCIONES.EMPRESA_PAGAR_SALARIO.toString()+"'"));
+    }
+
     public void borrarTransaccione(int id) {
         executeUpdate(String.format("DELETE FROM transacciones WHERE id = '%s'", id));
     }
