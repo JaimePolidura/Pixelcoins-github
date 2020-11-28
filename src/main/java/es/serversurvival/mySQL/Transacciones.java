@@ -39,7 +39,7 @@ public final class Transacciones extends MySQL {
     }
 
     public List<Transaccion> getTransaccionesPagaEmpresa (String jugador) {
-        return buildListFromResultSet(executeQuery("SELECT * FROM transacciones WHERE tipo = '"+TRANSACCIONES.EMPRESA_PAGAR_SALARIO.toString()+"'"));
+        return buildListFromResultSet(executeQuery("SELECT * FROM transacciones WHERE comprador = '"+jugador+"' AND tipo = '"+TRANSACCIONES.EMPRESA_PAGAR_SALARIO.toString()+"'"));
     }
 
     public void borrarTransaccione(int id) {
