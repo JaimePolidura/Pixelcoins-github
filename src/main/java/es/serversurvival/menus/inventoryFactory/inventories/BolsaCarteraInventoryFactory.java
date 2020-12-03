@@ -235,6 +235,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         posicionMeta.setLore(lore);
         posicionItem.setItemMeta(posicionMeta);
 
+        this.valorTotal = valorTotal + perdidasOBeneficios;
         this.resultadoTotal = resultadoTotal + perdidasOBeneficios;
 
         return posicionItem;

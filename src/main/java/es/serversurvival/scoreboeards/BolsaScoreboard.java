@@ -57,7 +57,7 @@ public class BolsaScoreboard implements SingleScoreboard{
     }
 
     private Map<PosicionAbierta, Double> calcularTopPosicionesAbiertas (String jugador) {
-        List<PosicionAbierta> posicionAbiertas = posicionesAbiertasMySQL.getPosicionesAbiertasJugador(jugador);
+        List<PosicionAbierta> posicionAbiertas = posicionesAbiertasMySQL.getPosicionesAbiertasJugadorCondicion(jugador, PosicionAbierta::esLargo);
         Map<PosicionAbierta, Double> posicionAbiertasConRentabilidad = new HashMap<>();
 
         for (PosicionAbierta posicion : posicionAbiertas) {

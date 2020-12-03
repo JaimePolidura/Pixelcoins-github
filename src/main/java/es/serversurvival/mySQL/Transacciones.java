@@ -8,6 +8,7 @@ import es.serversurvival.mySQL.tablasObjetos.*;
 import es.serversurvival.mySQL.enums.POSICION;
 import es.serversurvival.mySQL.enums.TRANSACCIONES;
 import es.serversurvival.task.ScoreBoardManager;
+import javafx.util.Pair;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -36,6 +37,10 @@ public final class Transacciones extends MySQL {
         String tipo = tipoTransaccion.toString();
 
         executeUpdate("INSERT INTO transacciones (fecha, comprador, vendedor, cantidad, objeto, tipo) VALUES ('" + fecha + "','" + comprador + "','" + vendedor + "','" + cantidad + "','" + objeto + "','" + tipo + "')");
+    }
+
+    public List<Transaccion> getTransaccionesPagaEmpresa (String jugador) {
+        return buildListFromResultSet(executeQuery("SELECT * FROM transacciones WHERE comprador = '"+jugador+"' AND tipo = '"+TRANSACCIONES.EMPRESA_PAGAR_SALARIO.toString()+"'"));
     }
 
     public void borrarTransaccione(int id) {

@@ -4,10 +4,8 @@ import java.sql.*;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.Date;
-import java.util.List;
 
 import es.serversurvival.mySQL.enums.TRANSACCIONES;
 import es.serversurvival.mySQL.tablasObjetos.Deuda;
@@ -89,6 +87,27 @@ public final class Empleados extends MySQL {
         ResultSet rs = executeQuery("SELECT * FROM empleados WHERE empleado = '"+jugador+"'");
 
         return buildListFromResultSet(rs);
+    }
+
+    public Map<String, List<Empleado>> getAllEmpleadosEmpresas () {
+        List<Empleado> allEmpleados = this.getAllEmpleados();
+        Map<String, List<Empleado>> toReturn = new HashMap<>();
+
+        allEmpleados.forEach(empleado -> {
+            if(toReturn.get(empleado.getEmpresa()) == null){
+                List<Empleado> empleadosEmpresa = new ArrayList<>();
+                empleadosEmpresa.add(empleado);
+
+                toReturn.put(empleado.getEmpresa(), empleadosEmpresa);
+            }else{
+                List<Empleado> empleadosEmpresa = toReturn.get(empleado.getEmpresa());
+                empleadosEmpresa.add(empleado);
+
+                toReturn.replace(empleado.getEmpresa(), empleadosEmpresa);
+            }
+        });
+
+        return toReturn;
     }
 
     public boolean trabajaEmpresa(String empleado, String nombreEmpresa) {

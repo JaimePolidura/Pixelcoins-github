@@ -242,7 +242,7 @@ public class TopInventoryFactory extends InventoryFactory {
     private List<PosicionCerrada> getNotDuplicatedElements (List<PosicionCerrada> list) {
         List<PosicionCerrada> toReturn = new ArrayList<>();
         List<PosicionCerrada> listCopy = new ArrayList<>(list);
-
+        
         for (PosicionCerrada posicionBruta : listCopy) {
             if(toReturn.size() == 0){
                 toReturn.add(posicionBruta);

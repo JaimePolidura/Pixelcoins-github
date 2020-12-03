@@ -13,7 +13,7 @@ public final class Mensajes extends MySQL {
     public final static Mensajes INSTANCE = new Mensajes();
     private Mensajes () {}
 
-    private void borrarMensaje(int id) {
+    public void borrarMensaje(int id) {
         executeUpdate(String.format("DELETE FROM mensajes WHERE id_mensaje = '%d'", id));
     }
 
@@ -23,7 +23,7 @@ public final class Mensajes extends MySQL {
         return buildListFromResultSet(rs);
     }
 
-    private void borrarMensajes(String jugador) {
+    public void borrarMensajes(String jugador) {
         executeUpdate(String.format("DELETE FROM mensajes WHERE destinatario = '%s'", jugador));
     }
 
