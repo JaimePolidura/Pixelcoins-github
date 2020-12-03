@@ -8,6 +8,7 @@ import es.serversurvival.mySQL.tablasObjetos.*;
 import es.serversurvival.mySQL.enums.POSICION;
 import es.serversurvival.mySQL.enums.TRANSACCIONES;
 import es.serversurvival.task.ScoreBoardManager;
+import javafx.util.Pair;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
