@@ -49,8 +49,8 @@ public class TopInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildTopRicosJugadoresItem () {
-        Map<String, Double> listaRicos = Funciones.crearMapaTopPatrimonioPlayers(false);
         MySQL.conectar();
+        Map<String, Double> listaRicos = Funciones.crearMapaTopPatrimonioPlayers(false);
 
         ItemStack topRicos = new ItemStack(Material.GOLD_BLOCK);
         ItemMeta topRicosItemMeta = topRicos.getItemMeta();
@@ -72,8 +72,8 @@ public class TopInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildTopPobresJugadoresItem () {
-        Map<String, Double> listaRicos = Funciones.crearMapaTopPatrimonioPlayers(true);
         MySQL.conectar();
+        Map<String, Double> listaRicos = Funciones.crearMapaTopPatrimonioPlayers(true);
 
         ItemStack topPobres = new ItemStack(Material.DIRT);
         ItemMeta topPobresItemMeta = topPobres.getItemMeta();
