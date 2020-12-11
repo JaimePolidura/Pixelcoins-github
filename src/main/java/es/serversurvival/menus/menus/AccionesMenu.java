@@ -1,16 +1,13 @@
 package es.serversurvival.menus.menus;
 
-import com.mojang.datafixers.types.Func;
 import es.serversurvival.apiHttp.IEXCloud_API;
-import es.serversurvival.main.Pixelcoin;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.AccionesInventoryPag1Factory;
 import es.serversurvival.menus.inventoryFactory.inventories.AccionesInventoryPag2Factory;
 import es.serversurvival.menus.menus.confirmaciones.ComprarBolsaConfirmacion;
-import es.serversurvival.mySQL.enums.VALORES;
+import es.serversurvival.mySQL.enums.TipoValor;
 import es.serversurvival.util.Funciones;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -63,7 +60,7 @@ public class AccionesMenu extends Menu implements Clickable, Paginated, PostLoad
         String ticker = lore.get(0).split(" ")[1];
 
         closeMenu();
-        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(ticker, nombreValor, VALORES.ACCIONES.toString(), "acciones", player.getName(), precio);
+        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(ticker, nombreValor, TipoValor.ACCIONES.toString(), "acciones", player.getName(), precio);
         confirmacion.openMenu();
     }
 

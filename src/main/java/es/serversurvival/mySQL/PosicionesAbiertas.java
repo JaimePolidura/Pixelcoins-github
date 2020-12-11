@@ -1,11 +1,9 @@
 package es.serversurvival.mySQL;
 
-import com.sun.org.apache.regexp.internal.REDebugCompiler;
 import es.serversurvival.apiHttp.FinancialModelingGrep;
 import es.serversurvival.main.Pixelcoin;
-import es.serversurvival.mySQL.enums.POSICION;
-import es.serversurvival.mySQL.enums.VALORES;
-import es.serversurvival.util.Funciones;
+import es.serversurvival.mySQL.enums.TipoPosicion;
+import es.serversurvival.mySQL.enums.TipoValor;
 import es.serversurvival.apiHttp.IEXCloud_API;
 import es.serversurvival.mySQL.tablasObjetos.LlamadaApi;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
@@ -19,12 +17,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static es.serversurvival.mySQL.enums.POSICION.*;
 import static es.serversurvival.util.Funciones.*;
 
 /**
@@ -37,11 +32,11 @@ public final class PosicionesAbiertas extends MySQL {
 
     private PosicionesAbiertas () {}
 
-    public PosicionAbierta nuevaPosicion(String jugador, String tipo, String nombre, int cantidad, double precioApertura, POSICION tipoPosicion) {
+    public PosicionAbierta nuevaPosicion(String jugador, String tipo, String nombre, int cantidad, double precioApertura, TipoPosicion tipoPosicion) {
         String fecha = dateFormater.format(new Date());
 
         executeUpdate("INSERT INTO posicionesabiertas (jugador, tipo, nombre, cantidad, precioApertura, fechaApertura, tipoPosicion) VALUES ('" + jugador + "','"+tipo+"','" + nombre + "','" + cantidad + "','" + precioApertura + "', '" + fecha + "','"+tipoPosicion.toString()+"')");
-        return new PosicionAbierta(getMaxId(), jugador, VALORES.ACCIONES.toString(), nombre, cantidad, precioApertura, fecha, tipoPosicion.toString());
+        return new PosicionAbierta(getMaxId(), jugador, TipoValor.ACCIONES.toString(), nombre, cantidad, precioApertura, fecha, tipoPosicion.toString());
     }
 
     public PosicionAbierta getPosicionAbierta(int id){
@@ -289,7 +284,7 @@ public final class PosicionesAbiertas extends MySQL {
 
     public void pagarDividendos() {
         MySQL.conectar();
-        List<PosicionAbierta> posicionAbiertas = getPosicionesAbiertasTipo(VALORES.ACCIONES.toString());
+        List<PosicionAbierta> posicionAbiertas = getPosicionesAbiertasTipo(TipoValor.ACCIONES.toString());
 
         Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
             transaccionesMySQL.conectar();

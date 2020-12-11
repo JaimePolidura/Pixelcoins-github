@@ -3,8 +3,7 @@ package es.serversurvival.menus.menus.solicitudes;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.mySQL.MySQL;
-import es.serversurvival.mySQL.Transacciones;
-import es.serversurvival.mySQL.enums.TRANSACCIONES;
+import es.serversurvival.mySQL.enums.TipoTransaccion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -13,7 +12,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -76,7 +74,7 @@ public class VenderJugadorSolicitud extends Menu implements Solicitud {
         isClicked = true;
 
         MySQL.conectar();
-        transaccionesMySQL.realizarTransferencia(jugadorAVender.getName(), jugadorVendedor.getName(), precio, itemAVender.getType().toString(), TRANSACCIONES.JUGADOR_VENDER, true);
+        transaccionesMySQL.realizarTransferencia(jugadorAVender.getName(), jugadorVendedor.getName(), precio, itemAVender.getType().toString(), TipoTransaccion.JUGADOR_VENDER, true);
         MySQL.desconectar();
 
         jugadorAVender.getInventory().addItem(itemAVender);

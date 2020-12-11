@@ -1,6 +1,6 @@
 package es.serversurvival.menus.menus.solicitudes;
 
-import es.serversurvival.mySQL.enums.TRANSACCIONES;
+import es.serversurvival.mySQL.enums.TipoTransaccion;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.MenuManager;
@@ -77,7 +77,7 @@ public class PrestamoSolicitud extends Menu implements Solicitud {
         Player destinatarioPlayer = Bukkit.getPlayer(this.destinatario);
         transaccionesMySQL.conectar();
 
-        transaccionesMySQL.realizarTransferencia(enviador, destinatario, pixelcoins, "", TRANSACCIONES.DEUDAS_PRIMERPAGO, false);
+        transaccionesMySQL.realizarTransferencia(enviador, destinatario, pixelcoins, "", TipoTransaccion.DEUDAS_PRIMERPAGO, false);
         deudasMySQL.nuevaDeuda(destinatario, enviador, Funciones.aumentarPorcentaje(pixelcoins, interes), dias, interes);
 
         transaccionesMySQL.desconectar();

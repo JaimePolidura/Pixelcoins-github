@@ -1,6 +1,6 @@
 package es.serversurvival.mySQL.tablasObjetos;
 
-import es.serversurvival.mySQL.enums.VALORES;
+import es.serversurvival.mySQL.enums.TipoValor;
 
 public final class LlamadaApi implements TablaObjeto {
     private final String simbolo;
@@ -32,18 +32,18 @@ public final class LlamadaApi implements TablaObjeto {
     }
 
     public boolean esTipoAccion () {
-        return this.getTipo().equalsIgnoreCase(VALORES.ACCIONES.toString());
+        return this.getTipo().equalsIgnoreCase(TipoValor.ACCIONES.toString());
     }
 
     public boolean esTipoCriptomoneda () {
-        return this.getTipo().equalsIgnoreCase(VALORES.CRIPTOMONEDAS.toString());
+        return this.getTipo().equalsIgnoreCase(TipoValor.CRIPTOMONEDAS.toString());
     }
 
     public boolean esTipoMateriaPrima () {
-        return this.getTipo().equalsIgnoreCase(VALORES.MATERIAS_PRIMAS.toString());
+        return this.getTipo().equalsIgnoreCase(TipoValor.MATERIAS_PRIMAS.toString());
     }
 
     public boolean esTipoIndice () {
-        return this.getTipo().equalsIgnoreCase(VALORES.INDICES.toString());
+        return this.getTipo().equalsIgnoreCase(TipoValor.INDICES.toString());
     }
 }

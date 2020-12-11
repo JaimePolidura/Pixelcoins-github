@@ -2,11 +2,10 @@ package es.serversurvival.menus.inventoryFactory.inventories;
 
 import es.serversurvival.menus.menus.Paginated;
 import es.serversurvival.mySQL.tablasObjetos.LlamadaApi;
-import es.serversurvival.mySQL.enums.POSICION;
+import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.BolsaCarteraMenu;
-import es.serversurvival.mySQL.LlamadasApi;
 import es.serversurvival.mySQL.PosicionesAbiertas;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import org.bukkit.Bukkit;
@@ -99,7 +98,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         rellenarPosicionesAbiertasPeso(posicionAbiertasJugador, getTotalInvertido(posicionAbiertasJugador));
 
         for (PosicionAbierta posicion : posicionAbiertasJugador) {
-            if(posicion.getTipoPosicion().equalsIgnoreCase(POSICION.LARGO.toString())){
+            if(posicion.getTipoPosicion().equalsIgnoreCase(TipoPosicion.LARGO.toString())){
                 posicionesAbiertasItems.add(buildPosicionAbiertaLarga(posicion));
             }else{
                 posicionesAbiertasItems.add(buildPosicionAbiertaCorto(posicion));

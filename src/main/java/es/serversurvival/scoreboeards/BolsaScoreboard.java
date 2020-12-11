@@ -1,10 +1,9 @@
 package es.serversurvival.scoreboeards;
 
-import es.serversurvival.apiHttp.IEXCloud_API;
 import es.serversurvival.mySQL.LlamadasApi;
 import es.serversurvival.mySQL.PosicionesAbiertas;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
-import es.serversurvival.mySQL.enums.POSICION;
+import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.util.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -65,7 +64,7 @@ public class BolsaScoreboard implements SingleScoreboard{
             double precioActual = llamadasApiMySQL.getLlamadaAPI(posicion.getNombre()).getPrecio();
             double rentabildad;
 
-            if(posicion.getTipoPosicion().equalsIgnoreCase(POSICION.LARGO.toString())){
+            if(posicion.getTipoPosicion().equalsIgnoreCase(TipoPosicion.LARGO.toString())){
                 rentabildad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(precioInicial, precioActual), 2);
             }else{
                 rentabildad = Math.abs(Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(precioActual, precioInicial), 2));

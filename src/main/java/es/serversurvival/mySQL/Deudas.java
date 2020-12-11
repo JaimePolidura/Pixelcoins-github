@@ -4,12 +4,10 @@ import java.sql.*;
 import java.text.ParseException;
 import java.util.*;
 import java.util.Date;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import es.serversurvival.mySQL.tablasObjetos.Deuda;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
-import es.serversurvival.mySQL.enums.TRANSACCIONES;
+import es.serversurvival.mySQL.enums.TipoTransaccion;
 import es.serversurvival.task.ScoreBoardManager;
 import es.serversurvival.util.Funciones;
 import org.bukkit.Bukkit;
@@ -184,7 +182,7 @@ public final class Deudas extends MySQL {
         int pixelcoinsDeuda = deudaAPagar.getPixelcoins();
         String acredor = deudaAPagar.getAcredor();
 
-        transaccionesMySQL.realizarTransferencia(playeDeudor.getName(), acredor, pixelcoinsDeuda, " ", TRANSACCIONES.DEUDAS_PAGAR_TODADEUDA, true);
+        transaccionesMySQL.realizarTransferencia(playeDeudor.getName(), acredor, pixelcoinsDeuda, " ", TipoTransaccion.DEUDAS_PAGAR_TODADEUDA, true);
         borrarDeuda(id);
 
         playeDeudor.sendMessage(ChatColor.GOLD + "Has pagado a " + acredor + " toda la deuda: " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC");
@@ -209,7 +207,7 @@ public final class Deudas extends MySQL {
         int tiempo = deuda.getTiempo();
         int pixelcoinsDeuda = deuda.getPixelcoins();
 
-        transaccionesMySQL.realizarTransferencia(deudorNombre, acredorNombre, cuota, "", TRANSACCIONES.DEUDAS_PAGAR_DEUDAS, true);
+        transaccionesMySQL.realizarTransferencia(deudorNombre, acredorNombre, cuota, "", TipoTransaccion.DEUDAS_PAGAR_DEUDAS, true);
         jugadoresMySQL.setNpagos(deudorNombre, deudor.getNpagos() + 1);
 
         if(tiempo == 1){

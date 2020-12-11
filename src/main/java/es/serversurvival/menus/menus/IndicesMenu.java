@@ -7,7 +7,7 @@ import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.IndicesInventoryFactory;
 import es.serversurvival.menus.menus.confirmaciones.ComprarBolsaConfirmacion;
-import es.serversurvival.mySQL.enums.VALORES;
+import es.serversurvival.mySQL.enums.TipoValor;
 import es.serversurvival.util.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -57,7 +57,7 @@ public class IndicesMenu extends Menu implements Clickable, PostLoading {
         double precio = Double.parseDouble(lore.get(1).split(" ")[1]);
         String simbolo = lore.get(0).split(" ")[1];
 
-        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, VALORES.INDICES.toString(), "contratos", player.getName(), precio);
+        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, TipoValor.INDICES.toString(), "contratos", player.getName(), precio);
         confirmacion.openMenu();
     }
 

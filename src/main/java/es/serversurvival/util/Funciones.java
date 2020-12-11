@@ -15,11 +15,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
 import java.util.function.ToIntFunction;
-import java.util.stream.Collectors;
 
 import es.serversurvival.mySQL.*;
 import es.serversurvival.mySQL.tablasObjetos.*;
-import es.serversurvival.mySQL.enums.POSICION;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -211,6 +209,7 @@ public final class Funciones {
         LlamadasApi llamadasApi = LlamadasApi.INSTANCE;
 
         Map<String, LlamadaApi> mapAllLlamadas = llamadasApi.getMapOfAllLlamadasApi();
+
         Jugador jugador = jugadoresMySQL.getJugador(nombreJugador);
 
         double patrimonio = 0;

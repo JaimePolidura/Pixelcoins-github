@@ -1,14 +1,12 @@
 package es.serversurvival.menus.menus;
 
 import es.serversurvival.menus.menus.confirmaciones.VenderAccionesConfirmacion;
-import es.serversurvival.mySQL.enums.POSICION;
+import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.BolsaCarteraInventoryFactory;
-import es.serversurvival.mySQL.PosicionesAbiertas;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -58,11 +56,11 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
             return;
         }
 
-        POSICION tipoPosicion;
+        TipoPosicion tipoPosicion;
         if (clickedItemType.equalsIgnoreCase("NAME_TAG")){
-            tipoPosicion = POSICION.LARGO;
+            tipoPosicion = TipoPosicion.LARGO;
         }else{
-            tipoPosicion = POSICION.CORTO;
+            tipoPosicion = TipoPosicion.CORTO;
         }
 
         List<String> lore = clikedItem.getItemMeta().getLore();

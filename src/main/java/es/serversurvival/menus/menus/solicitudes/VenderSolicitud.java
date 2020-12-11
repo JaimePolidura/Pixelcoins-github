@@ -1,12 +1,9 @@
 package es.serversurvival.menus.menus.solicitudes;
 
-import es.serversurvival.mySQL.enums.TRANSACCIONES;
+import es.serversurvival.mySQL.enums.TipoTransaccion;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
-import es.serversurvival.mySQL.Empleados;
-import es.serversurvival.mySQL.Mensajes;
-import es.serversurvival.mySQL.Transacciones;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.task.ScoreBoardManager;
 import org.bukkit.Bukkit;
@@ -86,7 +83,7 @@ public class VenderSolicitud extends Menu implements Solicitud {
         }
 
         transaccionesMySQL.comprarEmpresa(this.enviador, this.destinatario, empresa, precio, enviador);
-        transaccionesMySQL.nuevaTransaccion(this.destinatario, this.enviador, precio, empresa, TRANSACCIONES.EMPRESA_VENTA);
+        transaccionesMySQL.nuevaTransaccion(this.destinatario, this.enviador, precio, empresa, TipoTransaccion.EMPRESA_VENTA);
         empleadosMySQL.desconectar();
         player.sendMessage(ChatColor.GOLD + "Ahora eres dueño de " + ChatColor.DARK_AQUA + empresa + ChatColor.GOLD + " ,la has comprado por " + ChatColor.GREEN + precio + " PC");
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);

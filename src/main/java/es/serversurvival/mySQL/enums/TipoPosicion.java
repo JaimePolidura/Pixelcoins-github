@@ -1,6 +1,6 @@
 package es.serversurvival.mySQL.enums;
 
-public enum POSICION {
+public enum TipoPosicion {
     LARGO,
     CORTO
 }

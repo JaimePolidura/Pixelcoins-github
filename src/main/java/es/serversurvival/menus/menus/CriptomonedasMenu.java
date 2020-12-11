@@ -1,6 +1,6 @@
 package es.serversurvival.menus.menus;
 
-import es.serversurvival.mySQL.enums.VALORES;
+import es.serversurvival.mySQL.enums.TipoValor;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.main.Pixelcoin;
 import es.serversurvival.apiHttp.IEXCloud_API;
@@ -58,7 +58,7 @@ public class CriptomonedasMenu extends Menu implements Clickable, PostLoading {
 
         //closeMenu();
 
-        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, VALORES.CRIPTOMONEDAS.toString(), "monedas", player.getName(), precio);
+        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, TipoValor.CRIPTOMONEDAS.toString(), "monedas", player.getName(), precio);
         confirmacion.openMenu();
     }
 

@@ -6,7 +6,7 @@ import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.MateriasPrimasInventoryFactory;
 import es.serversurvival.menus.menus.confirmaciones.ComprarBolsaConfirmacion;
-import es.serversurvival.mySQL.enums.VALORES;
+import es.serversurvival.mySQL.enums.TipoValor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -66,7 +66,7 @@ public class MateriasPrimasMenu extends Menu implements Clickable, PostLoading {
             alias = "galones";
         }
 
-        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, VALORES.MATERIAS_PRIMAS.toString(), alias, player.getName(), precio);
+        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, TipoValor.MATERIAS_PRIMAS.toString(), alias, player.getName(), precio);
         confirmacion.openMenu();
     }
 

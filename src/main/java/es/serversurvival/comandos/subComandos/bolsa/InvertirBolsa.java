@@ -1,25 +1,16 @@
 package es.serversurvival.comandos.subComandos.bolsa;
 
-import com.oracle.xmlns.internal.webservices.jaxws_databinding.SoapBindingParameterStyle;
 import es.serversurvival.mySQL.*;
-import es.serversurvival.mySQL.enums.VALORES;
+import es.serversurvival.mySQL.enums.TipoValor;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.main.Pixelcoin;
 import es.serversurvival.apiHttp.IEXCloud_API;
-import net.minecraft.server.v1_16_R1.Scoreboard;
-import org.apache.commons.lang.ObjectUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Score;
 
-import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.*;
-import java.util.concurrent.ExecutorService;
 
 public class InvertirBolsa extends BolsaSubCommand {
     private final String SCNombre = "invertir";
@@ -78,7 +69,7 @@ public class InvertirBolsa extends BolsaSubCommand {
                 nombreValor = Funciones.quitarCaracteres(nombreValor, '.', ',');
                 nombreValor = Funciones.quitarPalabrasEntreEspacios(nombreValor, "group", "inc", "co", "corp");
 
-                transaccionesMySQL.comprarUnidadBolsa(VALORES.ACCIONES.toString(), ticker.toUpperCase(), nombreValor,"acciones", precioAccion, nAccinesAComprar, jugadorPlayer);
+                transaccionesMySQL.comprarUnidadBolsa(TipoValor.ACCIONES.toString(), ticker.toUpperCase(), nombreValor,"acciones", precioAccion, nAccinesAComprar, jugadorPlayer);
                 llamadasApiMySQL.actualizarSimbolo(ticker);
 
             }catch (IOException e) {

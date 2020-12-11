@@ -4,24 +4,21 @@ import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.menus.BolsaCarteraMenu;
 import es.serversurvival.mySQL.MySQL;
-import es.serversurvival.mySQL.PosicionesAbiertas;
-import es.serversurvival.mySQL.Transacciones;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
-import es.serversurvival.mySQL.enums.POSICION;
+import es.serversurvival.mySQL.enums.TipoPosicion;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import java.text.DecimalFormat;
 import java.util.*;
 
 public class VenderAccionesConfirmacion extends Menu implements Confirmacion{
     private Inventory inventory;
     private Player player;
-    private POSICION tipoPosicion;
+    private TipoPosicion tipoPosicion;
     private int id;
 
-    public VenderAccionesConfirmacion (Player player, POSICION tipoPosicion, String accionesCompradas,
+    public VenderAccionesConfirmacion (Player player, TipoPosicion tipoPosicion, String accionesCompradas,
                                        String valorTotal, String beneficios, String rentabilidad, int id) {
         this.player = player;
         this.id = id;
@@ -57,7 +54,7 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion{
         MySQL.conectar();
 
         PosicionAbierta posicionAVender = posicionesAbiertasMySQL.getPosicionAbierta(id);
-        if(tipoPosicion == POSICION.LARGO){
+        if(tipoPosicion == TipoPosicion.LARGO){
             transaccionesMySQL.venderPosicion(posicionAVender, posicionAVender.getCantidad(), player);
         }else{
             transaccionesMySQL.comprarPosicionCorto(posicionAVender, posicionAVender.getCantidad(), player);

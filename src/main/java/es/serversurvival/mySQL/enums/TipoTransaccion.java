@@ -1,6 +1,6 @@
 package es.serversurvival.mySQL.enums;
 
-public enum TRANSACCIONES {
+public enum TipoTransaccion {
     BASEDATOS_CAMBIAR_NOMBRE,
 
     TIENDA_VENTA,

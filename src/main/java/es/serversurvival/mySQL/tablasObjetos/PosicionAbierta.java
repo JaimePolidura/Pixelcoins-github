@@ -1,13 +1,7 @@
 package es.serversurvival.mySQL.tablasObjetos;
 
-import es.serversurvival.mySQL.enums.POSICION;
-import es.serversurvival.mySQL.enums.VALORES;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import es.serversurvival.mySQL.enums.TipoPosicion;
+import es.serversurvival.mySQL.enums.TipoValor;
 
 
 public final class PosicionAbierta implements TablaObjeto {
@@ -65,27 +59,27 @@ public final class PosicionAbierta implements TablaObjeto {
     }
 
     public boolean esLargo () {
-        return this.getTipoPosicion().equalsIgnoreCase(POSICION.LARGO.toString());
+        return this.getTipoPosicion().equalsIgnoreCase(TipoPosicion.LARGO.toString());
     }
 
     public boolean esCorto () {
-        return this.getTipoPosicion().equalsIgnoreCase(POSICION.CORTO.toString());
+        return this.getTipoPosicion().equalsIgnoreCase(TipoPosicion.CORTO.toString());
     }
 
     public boolean esTipoAccion () {
-        return this.getTipo().equalsIgnoreCase(VALORES.ACCIONES.toString());
+        return this.getTipo().equalsIgnoreCase(TipoValor.ACCIONES.toString());
     }
 
     public boolean esTipoCriptomoneda () {
-        return this.getTipo().equalsIgnoreCase(VALORES.CRIPTOMONEDAS.toString());
+        return this.getTipo().equalsIgnoreCase(TipoValor.CRIPTOMONEDAS.toString());
     }
 
     public boolean esTipoMateriaPrima () {
-        return this.getTipo().equalsIgnoreCase(VALORES.MATERIAS_PRIMAS.toString());
+        return this.getTipo().equalsIgnoreCase(TipoValor.MATERIAS_PRIMAS.toString());
     }
 
     public boolean esTipoIndice () {
-        return this.getTipo().equalsIgnoreCase(VALORES.INDICES.toString());
+        return this.getTipo().equalsIgnoreCase(TipoValor.INDICES.toString());
     }
 
 }

@@ -1,18 +1,13 @@
 package es.serversurvival.mySQL;
 
 import java.sql.*;
-import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
 
-import es.serversurvival.mySQL.enums.TRANSACCIONES;
-import es.serversurvival.mySQL.tablasObjetos.Deuda;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
-import javafx.scene.text.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;

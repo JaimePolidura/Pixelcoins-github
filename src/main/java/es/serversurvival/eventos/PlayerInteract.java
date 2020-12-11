@@ -2,7 +2,6 @@ package es.serversurvival.eventos;
 
 import es.serversurvival.mobs.InteractuableMob;
 import es.serversurvival.mobs.InteractuableMobManager;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

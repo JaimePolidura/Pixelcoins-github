@@ -2,11 +2,8 @@ package es.serversurvival.comandos.comandos;
 
 import es.serversurvival.comandos.Comando;
 import es.serversurvival.mySQL.MySQL;
-import es.serversurvival.mySQL.enums.TRANSACCIONES;
+import es.serversurvival.mySQL.enums.TipoTransaccion;
 import es.serversurvival.util.Funciones;
-import es.serversurvival.mySQL.Jugadores;
-import es.serversurvival.mySQL.Transacciones;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -57,7 +54,7 @@ public class Pagar extends Comando {
             return;
         }
 
-        transaccionesMySQL.realizarPagoManual(p.getName(), args[0], cantidad, p, "", TRANSACCIONES.JUGADOR_PAGO_MANUAL);
+        transaccionesMySQL.realizarPagoManual(p.getName(), args[0], cantidad, p, "", TipoTransaccion.JUGADOR_PAGO_MANUAL);
         MySQL.desconectar();
     }
 }

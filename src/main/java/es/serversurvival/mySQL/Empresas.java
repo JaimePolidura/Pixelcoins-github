@@ -6,7 +6,7 @@ import java.util.*;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
-import es.serversurvival.mySQL.enums.TRANSACCIONES;
+import es.serversurvival.mySQL.enums.TipoTransaccion;
 import es.serversurvival.task.ScoreBoardManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -175,7 +175,7 @@ public final class Empresas extends MySQL {
 
         jugadoresMySQL.setPixelcoin(ownerJugador.getNombre(), ownerJugador.getPixelcoin() + empresaABorrar.getPixelcoins());
         borrarEmpresa(empresaNombre);
-        transaccionesMySQL.nuevaTransaccion(ownerJugador.getNombre(), ownerJugador.getNombre(), empresaABorrar.getPixelcoins(), empresaNombre, TRANSACCIONES.EMPRESA_BORRAR);
+        transaccionesMySQL.nuevaTransaccion(ownerJugador.getNombre(), ownerJugador.getNombre(), empresaABorrar.getPixelcoins(), empresaNombre, TipoTransaccion.EMPRESA_BORRAR);
 
         empleados.forEach( (empleado) -> {
             empleadosMySQL.borrarEmplado(empleado.getId());
