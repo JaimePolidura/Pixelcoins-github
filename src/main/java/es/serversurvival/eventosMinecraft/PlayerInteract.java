@@ -1,4 +1,4 @@
-package es.serversurvival.eventos;
+package es.serversurvival.eventosMinecraft;
 
 import es.serversurvival.mobs.InteractuableMob;
 import es.serversurvival.mobs.InteractuableMobManager;

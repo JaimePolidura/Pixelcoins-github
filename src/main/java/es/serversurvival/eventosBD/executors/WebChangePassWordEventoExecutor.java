@@ -1,5 +1,6 @@
 package es.serversurvival.eventosBD.executors;
 
+import es.serversurvival.mySQL.VerificacionCuentas;
 import es.serversurvival.mySQL.enums.TipoEvento;
 import es.serversurvival.mySQL.tablasObjetos.Evento;
 import org.bukkit.Bukkit;
@@ -24,6 +25,7 @@ public class WebChangePassWordEventoExecutor extends EventoExecuter {
         Player player = Bukkit.getPlayer(nombreJugador);
         if(player != null){
             player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "El numero es: " + ChatColor.AQUA + "" + ChatColor.BOLD + "" + numero);
+            VerificacionCuentas.INSTANCE.nuevaVerificacionCuenta(nombreJugador, numero);
         }
     }
 }

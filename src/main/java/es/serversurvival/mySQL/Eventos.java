@@ -23,6 +23,12 @@ public final class Eventos extends MySQL{
         return buildListFromResultSet(rs);
     }
 
+    public List<Evento> getEventosTipo (TipoEvento tipoEvento) {
+        ResultSet rs = executeQuery("SELECT + FROM eventos WHERE tipoEvento = '"+tipoEvento.toString()+"'");
+
+        return buildListFromResultSet(rs);
+    }
+
     public void borrarEvento (int id) {
         executeUpdate("DELETE from eventos WHERE id = '"+id+"'");
     }

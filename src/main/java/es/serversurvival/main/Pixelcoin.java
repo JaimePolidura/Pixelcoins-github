@@ -1,7 +1,7 @@
 package es.serversurvival.main;
 
 import es.serversurvival.comandos.CommandManager;
-import es.serversurvival.eventos.*;
+import es.serversurvival.eventosMinecraft.*;
 import es.serversurvival.mySQL.*;
 import es.serversurvival.task.*;
 import org.bukkit.ChatColor;
