@@ -2,9 +2,7 @@ package es.serversurvival.comandos.subComandos.bolsa;
 
 import es.serversurvival.apiHttp.IEXCloud_API;
 import es.serversurvival.main.Pixelcoin;
-import es.serversurvival.mySQL.Jugadores;
 import es.serversurvival.mySQL.MySQL;
-import es.serversurvival.mySQL.Transacciones;
 import es.serversurvival.util.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -54,7 +52,7 @@ public class VenderCorto extends BolsaSubCommand{
 
             if(llamadasApiMySQL.estaReg(tiker)){
                 precioAccion = llamadasApiMySQL.getLlamadaAPI(tiker).getPrecio();
-                nombreValor = llamadasApiMySQL.getLlamadaAPI(tiker).getNombreValor();
+                nombreValor = llamadasApiMySQL.getLlamadaAPI(tiker).getNombre_activo();
             }else{
                 try{
                     precioAccion = IEXCloud_API.getOnlyPrice(tiker);

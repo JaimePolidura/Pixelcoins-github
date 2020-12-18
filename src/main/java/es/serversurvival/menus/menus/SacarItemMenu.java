@@ -4,9 +4,7 @@ import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.MenuManager;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.SacarItemInventoryFactory;
-import es.serversurvival.mySQL.Jugadores;
 import es.serversurvival.mySQL.MySQL;
-import es.serversurvival.mySQL.Transacciones;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -26,7 +24,7 @@ public class SacarItemMenu extends Menu implements Clickable, Refreshcable {
     public SacarItemMenu (Player player) {
         this.player = player;
         MySQL.conectar();
-        this.pixelcoinsJugador = jugadoresMySQL.getJugador(player.getName()).getPixelcoin();
+        this.pixelcoinsJugador = jugadoresMySQL.getJugador(player.getName()).getPixelcoins();
         MySQL.desconectar();
 
         this.inventory = InventoryCreator.createInventoryMenu(new SacarItemInventoryFactory(pixelcoinsJugador), player.getName());

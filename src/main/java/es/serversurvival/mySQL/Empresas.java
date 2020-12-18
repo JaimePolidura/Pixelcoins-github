@@ -35,10 +35,10 @@ public final class Empresas extends MySQL {
     }
 
     private int getMaxId(){
-        ResultSet rs = executeQuery("SELECT * FROM empresas ORDER BY id_empresa DESC LIMIT 1");
+        ResultSet rs = executeQuery("SELECT * FROM empresas ORDER BY id DESC LIMIT 1");
         Empresa cuenta = (Empresa) buildSingleObjectFromResultSet(rs);
 
-        return cuenta != null ? cuenta.getId_empresa() : -1;
+        return cuenta != null ? cuenta.getId() : -1;
     }
 
     public Empresa getEmpresa(String empresa){
@@ -47,8 +47,8 @@ public final class Empresas extends MySQL {
         return (Empresa) buildSingleObjectFromResultSet(rs);
     }
 
-    public Empresa getEmpresa(int id_empresa){
-        ResultSet rs = executeQuery("SELECT * FROM empresas WHERE id_empresa = '"+id_empresa+"'");
+    public Empresa getEmpresa(int id){
+        ResultSet rs = executeQuery("SELECT * FROM empresas WHERE id = '"+id+"'");
 
         return (Empresa) buildSingleObjectFromResultSet(rs);
     }
@@ -156,7 +156,7 @@ public final class Empresas extends MySQL {
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
         empleados.forEach( (empl) -> {
-            mensajesMySQL.nuevoMensaje("", empl.getEmpleado(), "La empresa en la que trabajas: " + empresa + " ha cambiado a de nombre a " + nuevoNombre);
+            mensajesMySQL.nuevoMensaje("", empl.getJugador(), "La empresa en la que trabajas: " + empresa + " ha cambiado a de nombre a " + nuevoNombre);
         });
 
         ScoreBoardManager.updateScoreboard(player);
@@ -173,19 +173,19 @@ public final class Empresas extends MySQL {
         Jugador ownerJugador = jugadoresMySQL.getJugador(empresaABorrar.getOwner());
         List<Empleado> empleados = empleadosMySQL.getEmpleadosEmrpesa(empresaNombre);
 
-        jugadoresMySQL.setPixelcoin(ownerJugador.getNombre(), ownerJugador.getPixelcoin() + empresaABorrar.getPixelcoins());
+        jugadoresMySQL.setPixelcoin(ownerJugador.getNombre(), ownerJugador.getPixelcoins() + empresaABorrar.getPixelcoins());
         borrarEmpresa(empresaNombre);
         transaccionesMySQL.nuevaTransaccion(ownerJugador.getNombre(), ownerJugador.getNombre(), empresaABorrar.getPixelcoins(), empresaNombre, TipoTransaccion.EMPRESA_BORRAR);
 
         empleados.forEach( (empleado) -> {
             empleadosMySQL.borrarEmplado(empleado.getId());
-            Player empleadoPlayer = Bukkit.getPlayer(empleado.getEmpleado());
+            Player empleadoPlayer = Bukkit.getPlayer(empleado.getJugador());
 
             if(empleadoPlayer != null){
                 empleadoPlayer.sendMessage(org.bukkit.ChatColor.GOLD + ownerJugador.getNombre() + " ha borrado su empresa donde trabajabas: " + empresaNombre);
                 ScoreBoardManager.updateScoreboard(empleadoPlayer);
             }else{
-                mensajesMySQL.nuevoMensaje("" , empleado.getEmpleado(), "El owner de la empresa en la que trabajas: " + empresaNombre + " la ha borrado, ya no existe");
+                mensajesMySQL.nuevoMensaje("" , empleado.getJugador(), "El owner de la empresa en la que trabajas: " + empresaNombre + " la ha borrado, ya no existe");
             }
         });
     }
@@ -203,7 +203,7 @@ public final class Empresas extends MySQL {
 
         List<Empleado> empleados = empleadosMySQL.getEmpleadosEmrpesa(nombreEmpresa);
         empleados.forEach( (empleado) -> {
-            Player empleadoPlayer = Bukkit.getPlayer(empleado.getEmpleado());
+            Player empleadoPlayer = Bukkit.getPlayer(empleado.getJugador());
             if(empleadoPlayer != null){
                 empleadoPlayer.sendMessage(ChatColor.GOLD + quienSolicita.getName() + " te ha solicitado el servicio de la empresa: " + nombreEmpresa);
                 empleadoPlayer.playSound(empleadoPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
@@ -216,7 +216,7 @@ public final class Empresas extends MySQL {
 
     @Override
     protected Empresa buildObjectFromResultSet(ResultSet rs) throws SQLException {
-        return new Empresa( rs.getInt("id_empresa"),
+        return new Empresa( rs.getInt("id"),
                 rs.getString("nombre"),
                 rs.getString("owner"),
                 rs.getDouble("pixelcoins"),

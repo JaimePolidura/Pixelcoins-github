@@ -2,7 +2,6 @@ package es.serversurvival.comandos.comandos;
 
 import es.serversurvival.comandos.Comando;
 import es.serversurvival.menus.menus.solicitudes.VenderJugadorSolicitud;
-import es.serversurvival.mySQL.Jugadores;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import org.bukkit.Bukkit;
@@ -66,7 +65,7 @@ public class VenderJugador extends Comando {
             return;
         }
         MySQL.conectar();
-        double jugadorAVenderDinero = jugadoresMySQL.getJugador(jugadorAVender.getName()).getPixelcoin();
+        double jugadorAVenderDinero = jugadoresMySQL.getJugador(jugadorAVender.getName()).getPixelcoins();
         if(precio > jugadorAVenderDinero){
             player.sendMessage(ChatColor.DARK_RED + jugadorAVender.getName() + " no tiene " + formatea.format(precio) + " PC");
             MySQL.desconectar();

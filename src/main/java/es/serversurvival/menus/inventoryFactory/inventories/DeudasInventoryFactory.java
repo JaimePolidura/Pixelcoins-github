@@ -2,7 +2,6 @@ package es.serversurvival.menus.inventoryFactory.inventories;
 
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.DeudasMenu;
-import es.serversurvival.mySQL.Deudas;
 import es.serversurvival.mySQL.tablasObjetos.Deuda;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -78,9 +77,9 @@ public class DeudasInventoryFactory extends InventoryFactory {
             List<String> lore = new ArrayList<>();
             lore.add("   ");
             lore.add(ChatColor.GOLD + "Debes a: " + deuda.getAcredor());
-            lore.add(ChatColor.GOLD + "Te queda de pagar: " + ChatColor.GREEN +  formatea.format(deuda.getPixelcoins()) + " PC" );
-            lore.add(ChatColor.GOLD + "Vence en: " + deuda.getTiempo() + " dias");
-            lore.add(ChatColor.GOLD + "ID: " + deuda.getId_deuda());
+            lore.add(ChatColor.GOLD + "Te queda de pagar: " + ChatColor.GREEN +  formatea.format(deuda.getPixelcoins_restantes()) + " PC" );
+            lore.add(ChatColor.GOLD + "Vence en: " + deuda.getTiempo_restante() + " dias");
+            lore.add(ChatColor.GOLD + "ID: " + deuda.getId());
             deudaMeta.setLore(lore);
             itemDeuda.setItemMeta(deudaMeta);
             itemsDeLasDeudas.add(itemDeuda);
@@ -94,9 +93,9 @@ public class DeudasInventoryFactory extends InventoryFactory {
             List<String> lore = new ArrayList<>();
             lore.add("   ");
             lore.add(ChatColor.GOLD + "Te debe: " + deuda.getDeudor());
-            lore.add(ChatColor.GOLD + "Le queda de pagar: " + ChatColor.GREEN +  formatea.format(deuda.getPixelcoins()) + " PC" );
-            lore.add(ChatColor.GOLD + "Vence en: " + deuda.getTiempo() + " dias");
-            lore.add(ChatColor.GOLD + "ID: " + deuda.getId_deuda());
+            lore.add(ChatColor.GOLD + "Le queda de pagar: " + ChatColor.GREEN +  formatea.format(deuda.getPixelcoins_restantes()) + " PC" );
+            lore.add(ChatColor.GOLD + "Vence en: " + deuda.getTiempo_restante() + " dias");
+            lore.add(ChatColor.GOLD + "ID: " + deuda.getId());
 
             deudaMeta.setLore(lore);
             itemDeuda.setItemMeta(deudaMeta);

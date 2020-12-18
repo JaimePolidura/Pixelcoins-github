@@ -93,12 +93,12 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
 
         llamadasApiMySQL.conectar();
         List<PosicionAbierta> posicionAbiertasJugador = posicionesAbiertasMySQL.getPosicionesAbiertasJugador(jugador);
-        this.liquidezjugador = jugadoresMySQL.getJugador(jugador).getPixelcoin();
+        this.liquidezjugador = jugadoresMySQL.getJugador(jugador).getPixelcoins();
         rellenarLlamadasApi();
         rellenarPosicionesAbiertasPeso(posicionAbiertasJugador, getTotalInvertido(posicionAbiertasJugador));
 
         for (PosicionAbierta posicion : posicionAbiertasJugador) {
-            if(posicion.getTipoPosicion().equalsIgnoreCase(TipoPosicion.LARGO.toString())){
+            if(posicion.getTipo_posicion().equalsIgnoreCase(TipoPosicion.LARGO.toString())){
                 posicionesAbiertasItems.add(buildPosicionAbiertaLarga(posicion));
             }else{
                 posicionesAbiertasItems.add(buildPosicionAbiertaCorto(posicion));
@@ -124,7 +124,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         Map<String, Integer> posicionesAbiertasConPeso = new HashMap<>();
 
         posicionesJugador.forEach( (posicion) -> {
-            posicionesAbiertasConPeso.put(posicion.getNombre(), (int) Funciones.rentabilidad(totalInverito, posicion.getCantidad() * llamadasApis.get(posicion.getNombre()).getPrecio()));
+            posicionesAbiertasConPeso.put(posicion.getNombre_activo(), (int) Funciones.rentabilidad(totalInverito, posicion.getCantidad() * llamadasApis.get(posicion.getNombre_activo()).getPrecio()));
         });
 
         this.posicionesAbiertasPeso = posicionesAbiertasConPeso;
@@ -132,7 +132,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
 
     private double getTotalInvertido (List<PosicionAbierta> posicionAbiertas) {
         return posicionAbiertas.stream()
-                .mapToDouble((pos) -> pos.getCantidad() * llamadasApis.get(pos.getNombre()).getPrecio())
+                .mapToDouble((pos) -> pos.getCantidad() * llamadasApis.get(pos.getNombre_activo()).getPrecio())
                 .sum();
     }
 
@@ -151,25 +151,25 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
 
         posicionMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + ChatColor.UNDERLINE + "CLICK PARA VENDER");
 
-        LlamadaApi llamada = llamadasApis.get(posicion.getNombre());
+        LlamadaApi llamada = llamadasApis.get(posicion.getNombre_activo());
 
         double precioAcutal = llamada.getPrecio();
-        double perdidasOBeneficios = posicion.getCantidad() * (precioAcutal - posicion.getPrecioApertura());
-        double rentabilidad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(posicion.getPrecioApertura(), precioAcutal), 2);
-        double peso = posicionesAbiertasPeso.get(posicion.getNombre());
+        double perdidasOBeneficios = posicion.getCantidad() * (precioAcutal - posicion.getPrecio_apertura());
+        double rentabilidad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(posicion.getPrecio_apertura(), precioAcutal), 2);
+        double peso = posicionesAbiertasPeso.get(posicion.getNombre_activo());
         List<String> lore = new ArrayList<>();
         lore.add("   ");
-        lore.add(ChatColor.GOLD + "Empresa: " + llamada.getNombreValor());
+        lore.add(ChatColor.GOLD + "Empresa: " + llamada.getNombre_activo());
 
-        if(!PosicionesAbiertas.getNombreSimbolo(posicion.getNombre()).equalsIgnoreCase(posicion.getNombre())) {
-            lore.add(ChatColor.GOLD + "Ticker: " + posicion.getNombre() + " (" + PosicionesAbiertas.getNombreSimbolo(posicion.getNombre()) + ")");
+        if(!PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()).equalsIgnoreCase(posicion.getNombre_activo())) {
+            lore.add(ChatColor.GOLD + "Ticker: " + posicion.getNombre_activo() + " (" + PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()) + ")");
         }else {
-            lore.add(ChatColor.GOLD + "Ticker: " + posicion.getNombre() + " (Acciones) ");
+            lore.add(ChatColor.GOLD + "Ticker: " + posicion.getNombre_activo() + " (Acciones) ");
         }
         lore.add(ChatColor.GOLD + "Peso en cartera: " + peso + "%");
         lore.add("   ");
         lore.add(ChatColor.GOLD + "Acciones compradas: " + posicion.getCantidad());
-        lore.add(ChatColor.GOLD + "Precio apertura: " + ChatColor.GREEN +formatea.format(posicion.getPrecioApertura()) + " PC");
+        lore.add(ChatColor.GOLD + "Precio apertura: " + ChatColor.GREEN +formatea.format(posicion.getPrecio_apertura()) + " PC");
         lore.add(ChatColor.GOLD + "Precio actual: " + ChatColor.GREEN + formatea.format(precioAcutal));
         if(perdidasOBeneficios >= 0){
             lore.add(ChatColor.GOLD + "Beneficios totales: " +ChatColor.GREEN + "+" + formatea.format(perdidasOBeneficios) + " PC");
@@ -180,7 +180,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         }
         lore.add(ChatColor.GOLD + "Valor total: " + ChatColor.GREEN + formatea.format(precioAcutal * posicion.getCantidad()) + " PC");
         lore.add("   ");
-        lore.add(ChatColor.GOLD + "Fecha de compra: " + posicion.getFechaApertura());
+        lore.add(ChatColor.GOLD + "Fecha de compra: " + posicion.getFecha_apertura());
         lore.add(ChatColor.GOLD + "ID: " + posicion.getId());
 
         posicionMeta.setLore(lore);
@@ -198,26 +198,26 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
 
         posicionMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + ChatColor.UNDERLINE + "CLICK PARA COMPRAR " + ChatColor.RED + "" + ChatColor.BOLD + "(CORTO)");
 
-        LlamadaApi llamada = llamadasApis.get(posicion.getNombre());
+        LlamadaApi llamada = llamadasApis.get(posicion.getNombre_activo());
 
         double precioAcutal = llamada.getPrecio();
-        double perdidasOBeneficios = posicion.getCantidad() * (posicion.getPrecioApertura() - precioAcutal);
-        double rentabilidad = Math.abs(Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(posicion.getPrecioApertura() ,precioAcutal), 2));
+        double perdidasOBeneficios = posicion.getCantidad() * (posicion.getPrecio_apertura() - precioAcutal);
+        double rentabilidad = Math.abs(Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(posicion.getPrecio_apertura() ,precioAcutal), 2));
 
-        double peso = posicionesAbiertasPeso.get(posicion.getNombre());
+        double peso = posicionesAbiertasPeso.get(posicion.getNombre_activo());
         List<String> lore = new ArrayList<>();
         lore.add("   ");
-        lore.add(ChatColor.GOLD + "Empresa: " + llamada.getNombreValor());
+        lore.add(ChatColor.GOLD + "Empresa: " + llamada.getNombre_activo());
 
-        if(!PosicionesAbiertas.getNombreSimbolo(posicion.getNombre()).equalsIgnoreCase(posicion.getNombre())) {
-            lore.add(ChatColor.GOLD + "Ticker: " + posicion.getNombre() + " (" + PosicionesAbiertas.getNombreSimbolo(posicion.getNombre()) + ")");
+        if(!PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()).equalsIgnoreCase(posicion.getNombre_activo())) {
+            lore.add(ChatColor.GOLD + "Ticker: " + posicion.getNombre_activo() + " (" + PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()) + ")");
         }else {
-            lore.add(ChatColor.GOLD + "Ticker: " + posicion.getNombre() + " (Acciones) ");
+            lore.add(ChatColor.GOLD + "Ticker: " + posicion.getNombre_activo() + " (Acciones) ");
         }
         lore.add(ChatColor.GOLD + "Peso en cartera: " + peso + "%");
         lore.add("   ");
         lore.add(ChatColor.GOLD + "Acciones vendidas: " + posicion.getCantidad());
-        lore.add(ChatColor.GOLD + "Precio apertura: " + ChatColor.GREEN +formatea.format(posicion.getPrecioApertura()) + " PC");
+        lore.add(ChatColor.GOLD + "Precio apertura: " + ChatColor.GREEN +formatea.format(posicion.getPrecio_apertura()) + " PC");
         lore.add(ChatColor.GOLD + "Precio actual: " + ChatColor.GREEN + formatea.format(precioAcutal));
         if(perdidasOBeneficios >= 0){
             lore.add(ChatColor.GOLD + "Beneficios totales: " +ChatColor.GREEN + "+" + formatea.format(perdidasOBeneficios) + " PC");
@@ -228,7 +228,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         }
         lore.add(ChatColor.GOLD + "Valor total: " + ChatColor.GREEN + formatea.format(precioAcutal * posicion.getCantidad()) + " PC");
         lore.add("   ");
-        lore.add(ChatColor.GOLD + "Fecha de compra: " + posicion.getFechaApertura());
+        lore.add(ChatColor.GOLD + "Fecha de compra: " + posicion.getFecha_apertura());
         lore.add(ChatColor.GOLD + "ID: " + posicion.getId());
 
         posicionMeta.setLore(lore);

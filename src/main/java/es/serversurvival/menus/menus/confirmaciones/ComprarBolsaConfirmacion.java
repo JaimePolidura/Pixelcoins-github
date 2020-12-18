@@ -1,12 +1,10 @@
 package es.serversurvival.menus.menus.confirmaciones;
 
-import es.serversurvival.mySQL.Jugadores;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.menus.Clickable;
-import es.serversurvival.mySQL.Transacciones;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -17,7 +15,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ComprarBolsaConfirmacion extends Menu implements Confirmacion, Clickable {
@@ -48,7 +45,7 @@ public class ComprarBolsaConfirmacion extends Menu implements Confirmacion, Clic
         this.inventory = InventoryCreator.createConfirmacionAumento(alias, simbolo, precioUnidad);
 
         MySQL.conectar();
-        this.dineroJugador = jugadoresMySQL.getJugador(player.getName()).getPixelcoin();
+        this.dineroJugador = jugadoresMySQL.getJugador(player.getName()).getPixelcoins();
         MySQL.desconectar();
     }
 

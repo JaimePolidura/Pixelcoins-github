@@ -154,19 +154,19 @@ public final class Funciones {
             double activosTotales = 0;
 
             //Liquidez
-            activosTotales = jugador.getPixelcoin();
+            activosTotales = jugador.getPixelcoins();
 
             // Deudas acredor
             if(mapDeudasAcredor.get(jugador.getNombre()) != null){
                 activosTotales += mapDeudasAcredor.get(jugador.getNombre()).stream()
-                        .mapToInt(Deuda::getPixelcoins)
+                        .mapToInt(Deuda::getPixelcoins_restantes)
                         .sum();
             }
 
             //Deudas deudor
             if(mapDeudasDeudor.get(jugador.getNombre()) != null){
                 activosTotales -= mapDeudasDeudor.get(jugador.getNombre()).stream()
-                        .mapToInt(Deuda::getPixelcoins)
+                        .mapToInt(Deuda::getPixelcoins_restantes)
                         .sum();
             }
 
@@ -180,14 +180,14 @@ public final class Funciones {
             ///Posiciones abiertas largas
             if(mapPosicionesLargo.get(jugador.getNombre()) != null){
                 activosTotales += mapPosicionesLargo.get(jugador.getNombre()).stream()
-                        .mapToDouble(pos -> (mapAllLlamadas.get(pos.getNombre()).getPrecio() * pos.getCantidad()))
+                        .mapToDouble(pos -> (mapAllLlamadas.get(pos.getNombre_activo()).getPrecio() * pos.getCantidad()))
                         .sum();
             }
 
             //Posicioenes abiertas cortas
             if(mapPosicionesCorto.get(jugador.getNombre()) != null){
                 activosTotales += mapPosicionesCorto.get(jugador.getNombre()).stream()
-                        .mapToDouble(pos -> (pos.getPrecioApertura() - mapAllLlamadas.get(pos.getNombre()).getPrecio()) * pos.getCantidad())
+                        .mapToDouble(pos -> (pos.getPrecio_apertura() - mapAllLlamadas.get(pos.getNombre_activo()).getPrecio()) * pos.getCantidad())
                         .sum();
             }
 
@@ -215,16 +215,16 @@ public final class Funciones {
         double patrimonio = 0;
 
         //Liquidez
-        patrimonio = jugador.getPixelcoin();
+        patrimonio = jugador.getPixelcoins();
 
         //Deuas a cobrar
         patrimonio += deudas.getDeudasAcredor(jugador.getNombre()).stream()
-                .mapToDouble(Deuda::getPixelcoins)
+                .mapToDouble(Deuda::getPixelcoins_restantes)
                 .sum();
 
         //Deudas a pagar
         patrimonio -= deudas.getDeudasDeudor(jugador.getNombre()).stream()
-                .mapToInt(Deuda::getPixelcoins)
+                .mapToInt(Deuda::getPixelcoins_restantes)
                 .sum();
 
         //Empresas
@@ -237,12 +237,12 @@ public final class Funciones {
 
         patrimonio += posicionAbiertasJugador.stream()
                 .filter(PosicionAbierta::esLargo)
-                .mapToDouble(pos -> (mapAllLlamadas.get(pos.getNombre()).getPrecio() * pos.getCantidad()))
+                .mapToDouble(pos -> (mapAllLlamadas.get(pos.getNombre_activo()).getPrecio() * pos.getCantidad()))
                 .sum();
 
         patrimonio += posicionAbiertasJugador.stream()
                 .filter(PosicionAbierta::esLargo)
-                .mapToDouble(pos -> (pos.getPrecioApertura() - mapAllLlamadas.get(pos.getNombre()).getPrecio()) * pos.getCantidad())
+                .mapToDouble(pos -> (pos.getPrecio_apertura() - mapAllLlamadas.get(pos.getNombre_activo()).getPrecio()) * pos.getCantidad())
                 .sum();
 
 

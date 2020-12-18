@@ -1,13 +1,13 @@
 package es.serversurvival.mySQL.tablasObjetos;
 
 public final class Mensaje implements TablaObjeto {
-    private final int id_mensaje;
+    private final int id;
     private final String enviador;
     private final String destinatario;
     private final String mensaje;
 
-    public Mensaje(int id_mensaje, String enviador, String destinatario, String mensaje) {
-        this.id_mensaje = id_mensaje;
+    public Mensaje(int id, String enviador, String destinatario, String mensaje) {
+        this.id = id;
         this.enviador = enviador;
         this.destinatario = destinatario;
         this.mensaje = mensaje;
@@ -17,8 +17,8 @@ public final class Mensaje implements TablaObjeto {
         return enviador;
     }
 
-    public int getId_mensaje() {
-        return id_mensaje;
+    public int getId() {
+        return id;
     }
 
     public String getDestinatario() {

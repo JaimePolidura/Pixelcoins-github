@@ -2,23 +2,23 @@ package es.serversurvival.mySQL.tablasObjetos;
 
 public final class Jugador implements TablaObjeto {
     private final String nombre;
-    private final double pixelcoin;
-    private final int espacios;
+    private final double pixelcoins;
     private final int nventas;
     private final double ingresos;
     private final double gastos;
-    private final double beneficios;
     private final int ninpagos;
     private final int npagos;
+    private final int numero_cuenta;
+    private final String uuid;
 
-    public Jugador(String nombre, double pixelcoin, int espacios, int nventas, double ingresos, double gastos, double beneficios, int ninpagos, int npagos) {
+    public Jugador(String nombre, double pixelcoin, int nventas, double ingresos, double gastos, int ninpagos, int npagos, int numero_cuenta, String uuid) {
         this.nombre = nombre;
-        this.pixelcoin = pixelcoin;
-        this.espacios = espacios;
+        this.pixelcoins = pixelcoin;
+        this.numero_cuenta = numero_cuenta;
+        this.uuid = uuid;
         this.nventas = nventas;
         this.ingresos = ingresos;
         this.gastos = gastos;
-        this.beneficios = beneficios;
         this.ninpagos = ninpagos;
         this.npagos = npagos;
     }
@@ -27,12 +27,8 @@ public final class Jugador implements TablaObjeto {
         return nombre;
     }
 
-    public double getPixelcoin() {
-        return pixelcoin;
-    }
-
-    public int getEspacios() {
-        return espacios;
+    public double getPixelcoins() {
+        return pixelcoins;
     }
 
     public int getNventas() {
@@ -47,15 +43,19 @@ public final class Jugador implements TablaObjeto {
         return gastos;
     }
 
-    public double getBeneficios() {
-        return beneficios;
-    }
-
     public int getNinpagos() {
         return ninpagos;
     }
 
     public int getNpagos() {
         return npagos;
+    }
+
+    public int getNumero_cuenta() {
+        return numero_cuenta;
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 }

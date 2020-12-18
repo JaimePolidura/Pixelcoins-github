@@ -40,7 +40,7 @@ public class VerCarteraBolsa extends BolsaSubCommand {
         player.sendMessage(ChatColor.GOLD + "" + "------------------------------");
         player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "   LAS CARTERA DE " + nombreJugadorAVer);
         for(Map.Entry<String, Integer> entry : posicionesConPeso.entrySet()){
-            String nombreValor = llamadasApiMySQL.getLlamadaAPI(entry.getKey()).getNombreValor();
+            String nombreValor = llamadasApiMySQL.getLlamadaAPI(entry.getKey()).getNombre_activo();
 
             if(entry.getValue() == 0){
                 player.sendMessage(ChatColor.GOLD + nombreValor + ": 0% - 1% %");
@@ -58,10 +58,10 @@ public class VerCarteraBolsa extends BolsaSubCommand {
         Map<String, Integer> posicionesAbiertasOrednadas = new HashMap<>();
 
         for(Map.Entry<PosicionAbierta, Integer> entry : posicionAbiertasPesoSinOrdenar.entrySet()){
-            if(posicionesAbiertasOrednadas.get(entry.getKey().getNombre()) != null){
-                posicionesAbiertasOrednadas.put(entry.getKey().getNombre(), posicionesAbiertasOrednadas.get(entry.getKey().getNombre()) + entry.getValue());
+            if(posicionesAbiertasOrednadas.get(entry.getKey().getNombre_activo()) != null){
+                posicionesAbiertasOrednadas.put(entry.getKey().getNombre_activo(), posicionesAbiertasOrednadas.get(entry.getKey().getNombre_activo()) + entry.getValue());
             }else{
-                posicionesAbiertasOrednadas.put(entry.getKey().getNombre(), entry.getValue());
+                posicionesAbiertasOrednadas.put(entry.getKey().getNombre_activo(), entry.getValue());
             }
         }
 

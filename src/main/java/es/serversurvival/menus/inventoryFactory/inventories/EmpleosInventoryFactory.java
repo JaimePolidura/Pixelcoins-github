@@ -2,7 +2,6 @@ package es.serversurvival.menus.inventoryFactory.inventories;
 
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.mySQL.Empleados;
-import es.serversurvival.mySQL.Empresas;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -69,8 +68,8 @@ public class EmpleosInventoryFactory extends InventoryFactory {
             lore.add("   ");
             lore.add(ChatColor.GOLD + "Empresa: " + empl.getEmpresa());
             lore.add(ChatColor.GOLD + "Cargo: " + empl.getCargo());
-            lore.add(ChatColor.GOLD + "Sueldo: " + ChatColor.GREEN + empl.getSueldoFormateado() + "/" + Empleados.toStringTipoSueldo(empl.getTipo()));
-            lore.add(ChatColor.GOLD + "Ultima vez que te pagaron: " + empl.getFechaPaga());
+            lore.add(ChatColor.GOLD + "Sueldo: " + ChatColor.GREEN + empl.getSueldoFormateado() + "/" + Empleados.toStringTipoSueldo(empl.getTipo_sueldo()));
+            lore.add(ChatColor.GOLD + "Ultima vez que te pagaron: " + empl.getFecha_ultimapaga());
             lore.add("   ");
             lore.add(ChatColor.GOLD + "ID: " + empl.getId());
 

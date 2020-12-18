@@ -7,23 +7,23 @@ import es.serversurvival.mySQL.enums.TipoValor;
 public final class PosicionAbierta implements TablaObjeto {
     private final int id;
     private final String jugador;
-    private final String tipo;
-    private final String nombre;
+    private final String tipo_activo;
+    private final String nombre_activo;
     private final int cantidad;
-    private final double precioApertura;
-    private final String fechaApertura;
-    public final String tipoPosicion;
+    private final double precio_apertura;
+    private final String fecha_apertura;
+    public final String tipo_posicion;
 
-    public PosicionAbierta(int id, String jugador, String tipo, String nombre,
-                           int cantidad, double precioApertura, String fechaApertura, String tipoPosicion) {
+    public PosicionAbierta(int id, String jugador, String tipo_activo, String nombre,
+                           int cantidad, double precio_apertura, String fecha_apertura, String tipo_posicion) {
         this.id = id;
         this.jugador = jugador;
-        this.tipo = tipo;
-        this.nombre = nombre;
+        this.tipo_activo = tipo_activo;
+        this.nombre_activo = nombre;
         this.cantidad = cantidad;
-        this.precioApertura = precioApertura;
-        this.fechaApertura = fechaApertura;
-        this.tipoPosicion = tipoPosicion;
+        this.precio_apertura = precio_apertura;
+        this.fecha_apertura = fecha_apertura;
+        this.tipo_posicion = tipo_posicion;
     }
 
     public int getId() {
@@ -34,52 +34,52 @@ public final class PosicionAbierta implements TablaObjeto {
         return jugador;
     }
 
-    public String getTipo() {
-        return tipo;
+    public String getTipo_activo() {
+        return tipo_activo;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getNombre_activo() {
+        return nombre_activo;
     }
 
     public int getCantidad() {
         return cantidad;
     }
 
-    public double getPrecioApertura() {
-        return precioApertura;
+    public double getPrecio_apertura() {
+        return precio_apertura;
     }
 
-    public String getFechaApertura() {
-        return fechaApertura;
+    public String getFecha_apertura() {
+        return fecha_apertura;
     }
 
-    public String getTipoPosicion() {
-        return tipoPosicion;
+    public String getTipo_posicion() {
+        return tipo_posicion;
     }
 
     public boolean esLargo () {
-        return this.getTipoPosicion().equalsIgnoreCase(TipoPosicion.LARGO.toString());
+        return this.getTipo_posicion().equalsIgnoreCase(TipoPosicion.LARGO.toString());
     }
 
     public boolean esCorto () {
-        return this.getTipoPosicion().equalsIgnoreCase(TipoPosicion.CORTO.toString());
+        return this.getTipo_posicion().equalsIgnoreCase(TipoPosicion.CORTO.toString());
     }
 
     public boolean esTipoAccion () {
-        return this.getTipo().equalsIgnoreCase(TipoValor.ACCIONES.toString());
+        return this.getTipo_activo().equalsIgnoreCase(TipoValor.ACCIONES.toString());
     }
 
     public boolean esTipoCriptomoneda () {
-        return this.getTipo().equalsIgnoreCase(TipoValor.CRIPTOMONEDAS.toString());
+        return this.getTipo_activo().equalsIgnoreCase(TipoValor.CRIPTOMONEDAS.toString());
     }
 
     public boolean esTipoMateriaPrima () {
-        return this.getTipo().equalsIgnoreCase(TipoValor.MATERIAS_PRIMAS.toString());
+        return this.getTipo_activo().equalsIgnoreCase(TipoValor.MATERIAS_PRIMAS.toString());
     }
 
     public boolean esTipoIndice () {
-        return this.getTipo().equalsIgnoreCase(TipoValor.INDICES.toString());
+        return this.getTipo_activo().equalsIgnoreCase(TipoValor.INDICES.toString());
     }
 
 }

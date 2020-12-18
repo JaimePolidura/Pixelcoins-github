@@ -1,20 +1,20 @@
 package es.serversurvival.mySQL.tablasObjetos;
 
 public final class Encantamiento implements TablaObjeto {
-    private final int id_encantamiento;
+    private final int id;
     private final String encantamiento;
     private final int nivel;
     private final int id_oferta;
 
     public Encantamiento(int id_encantamiento, String encantamiento, int nivel, int id_oferta) {
-        this.id_encantamiento = id_encantamiento;
+        this.id = id_encantamiento;
         this.encantamiento = encantamiento;
         this.nivel = nivel;
         this.id_oferta = id_oferta;
     }
 
-    public int getId_encantamiento() {
-        return id_encantamiento;
+    public int getId() {
+        return id;
     }
 
     public String getEncantamiento() {

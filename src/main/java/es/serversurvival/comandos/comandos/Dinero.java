@@ -28,7 +28,7 @@ public class Dinero extends Comando {
 
         MySQL.conectar();
         double patrimonioJugador = Funciones.getPatrimonioJugador(nombreJugador);
-        double totalAhorrado = jugadoresMySQL.getJugador(nombreJugador).getPixelcoin();
+        double totalAhorrado = jugadoresMySQL.getJugador(nombreJugador).getPixelcoins();
         MySQL.desconectar();
 
         patrimonioJugador = patrimonioJugador - totalAhorrado;

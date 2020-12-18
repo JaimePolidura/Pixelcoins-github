@@ -1,12 +1,12 @@
 package es.serversurvival.mySQL;
 
 import java.sql.*;
-import java.text.DecimalFormat;
 import java.util.*;
 
-import es.serversurvival.mySQL.tablasObjetos.Encantamiento;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 
 /**
  * II 240 -> 129
@@ -15,10 +15,29 @@ public final class Jugadores extends MySQL {
     public static final Jugadores INSTANCE = new Jugadores();
     private Jugadores () {}
 
-    public Jugador nuevoJugador(String nombre, double pixelcoin, int espacios, int nventas, double ingresos, double gastos, double beneficios, int ninpagos, int npagos) {
-        executeUpdate("INSERT INTO jugadores (nombre, pixelcoin, espacios, nventas, ingresos, gastos, beneficios, ninpagos, npagos) VALUES ('" + nombre + "','" + pixelcoin + "','" + espacios + "','" + nventas + "','" + ingresos + "','" + gastos + "','" + beneficios + "','" + ninpagos + "','" + npagos + "')");
+    public Jugador nuevoJugador(String nombre, double pixelcoins, int nventas, double ingresos, double gastos, int ninpagos, int npagos, String uuid) {
+        int numero_cuenta = generearNumeroCuenta();
 
-        return new Jugador(nombre, pixelcoin, espacios, nventas, ingresos, gastos, beneficios, ninpagos, npagos);
+        executeUpdate("INSERT INTO jugadores (nombre, pixelcoins, nventas, ingresos, gastos, ninpagos, npagos, numero_cuenta, uuid) VALUES ('" + nombre + "','" + pixelcoins + "','" + nventas + "','" + ingresos + "','" + gastos + "','" + ninpagos + "','" + npagos + "', '"+numero_cuenta+"', '"+uuid+"')");
+
+        return new Jugador(nombre, pixelcoins, nventas, ingresos, gastos, ninpagos, npagos, numero_cuenta, uuid);
+    }
+
+    public int generearNumeroCuenta () {
+        boolean reg = true;
+        int numero = 0;
+        while (reg){
+            numero = (int) (Math.random() * 99999);
+            reg = this.estaRegistradoNumeroCuenta(numero);
+        }
+
+        return numero;
+    }
+
+    public boolean estaRegistradoNumeroCuenta (int numero) {
+        ResultSet rs = executeQuery("SELECT * FROM jugadores WHERE numero_cuenta = '"+numero+"'");
+
+        return !isEmpty(rs);
     }
 
     public Jugador getJugador(String jugador){
@@ -31,8 +50,12 @@ public final class Jugadores extends MySQL {
         return getJugador(nombreJugador) != null;
     }
 
+    public void setNumeroCuenta (String nombreJugador, int numero_cuenta) {
+        executeUpdate("UPDATE jugadores SET numero_cuenta = '"+numero_cuenta+"' WHERE nombre = '"+nombreJugador+"'");
+    }
+
     public void setPixelcoin(String nombre, double pixelcoin) {
-        executeUpdate("UPDATE jugadores SET pixelcoin = '"+pixelcoin+"' WHERE nombre = '"+nombre+"'");
+        executeUpdate("UPDATE jugadores SET pixelcoins = '"+pixelcoin+"' WHERE nombre = '"+nombre+"'");
     }
 
     public void setNinpagos(String nombre, int ninpagos) {
@@ -43,12 +66,8 @@ public final class Jugadores extends MySQL {
         executeUpdate("UPDATE jugadores SET npagos = '"+npagos+"' WHERE nombre = '"+nombre+"'");
     }
 
-    public void setEspacios(String nombre, int espacios) {
-        executeUpdate("UPDATE jugadores SET espacios = '"+espacios+"' WHERE nombre = '"+nombre+"'");
-    }
-
     public void setEstadisticas(String nombre, double dinero, int nventas, double ingresos, double gastos) {
-        executeUpdate("UPDATE jugadores SET pixelcoin = '"+dinero+"', nventas = '"+nventas+"', ingresos = '"+ingresos+"', gastos = '"+gastos+"', beneficios = '"+(ingresos - gastos)+"' WHERE nombre = '"+nombre+"'");
+        executeUpdate("UPDATE jugadores SET pixelcoins = '"+dinero+"', nventas = '"+nventas+"', ingresos = '"+ingresos+"', gastos = '"+gastos+"' WHERE nombre = '"+nombre+"'");
     }
 
     public void cambiarNombreJugador (String jugador, String nuevoNombreJugador) {
@@ -62,13 +81,13 @@ public final class Jugadores extends MySQL {
     }
 
     public List<Jugador> getTopRicos (){
-        ResultSet rs = executeQuery("SELECT * FROM jugadores ORDER BY pixelcoin");
+        ResultSet rs = executeQuery("SELECT * FROM jugadores ORDER BY pixelcoins");
 
         return buildListFromResultSet(rs);
     }
 
     public List<Jugador> getTopPobres (){
-        ResultSet rs = executeQuery("SELECT * FROM jugadores ORDER BY pixelcoin ASC");
+        ResultSet rs = executeQuery("SELECT * FROM jugadores ORDER BY pixelcoins ASC");
 
         return buildListFromResultSet(rs);
     }
@@ -127,14 +146,13 @@ public final class Jugadores extends MySQL {
     protected Jugador buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new Jugador(
                 rs.getString("nombre"),
-                rs.getDouble("pixelcoin"),
-                rs.getInt("espacios"),
+                rs.getDouble("pixelcoins"),
                 rs.getInt("nventas"),
                 rs.getDouble("ingresos"),
                 rs.getDouble("gastos"),
-                rs.getDouble("beneficios"),
                 rs.getInt("ninpagos"),
-                rs.getInt("npagos")
-        );
+                rs.getInt("npagos"),
+                rs.getInt("numero_cuenta"),
+                rs.getString("uuid"));
     }
 }

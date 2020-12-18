@@ -13,12 +13,12 @@ public final class Encantamientos extends MySQL {
     public final static Encantamientos INSTANCE = new Encantamientos();
     private Encantamientos () {}
 
-    private void borrarEncatamiento(int id_encantamiento) {
-        executeUpdate("DELETE FROM encantamientos WHERE id_encantamiento=\"" + id_encantamiento + "\"      ");
-    }
-
     public void nuevoEncantamiento(String encantamiento, int nivel, int id_oferta) {
         executeUpdate("INSERT INTO encantamientos (encantamiento, nivel, id_oferta) VALUES ('" + encantamiento + "','" + nivel + "','" + id_oferta + "')");
+    }
+
+    private void borrarEncatamiento(int id) {
+        executeUpdate("DELETE FROM encantamientos WHERE id=\"" + id + "\"      ");
     }
 
     public void borrarEncantamientosOferta(int id_oferta) {
@@ -42,7 +42,7 @@ public final class Encantamientos extends MySQL {
 
     @Override
     protected Encantamiento buildObjectFromResultSet(ResultSet rs) throws SQLException {
-        return new Encantamiento(rs.getInt("id_encantamiento"),
+        return new Encantamiento(rs.getInt("id"),
                 rs.getString("encantamiento"),
                 rs.getInt("nivel"),
                 rs.getInt("id_oferta"));

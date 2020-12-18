@@ -44,7 +44,7 @@ public class AccionesInventoryPag2Factory extends InventoryFactory {
                 lore.add(ChatColor.GOLD + "Ticker: " + entry.getKey());
                 lore.add(ChatColor.RED + "Cargando...");
             }else{
-                itemMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + accion.getNombreValor());
+                itemMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + accion.getNombre_activo());
                 lore.add(ChatColor.GOLD + "Ticker: " + entry.getKey());
                 lore.add(ChatColor.GOLD + "Precio/Accion: " + ChatColor.GREEN + formatea.format(accion.getPrecio()) + " PC");
             }

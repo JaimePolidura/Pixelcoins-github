@@ -5,22 +5,22 @@ import es.serversurvival.mySQL.enums.TipoValor;
 public final class LlamadaApi implements TablaObjeto {
     private final String simbolo;
     private final double precio;
-    private final String tipo;
-    private final String nombreValor;
-
-    public LlamadaApi(String simbolo, double precio, String tipo, String nombreActivo) {
+    private final String tipo_activo;
+    private final String nombre_activo;
+    
+    public LlamadaApi(String simbolo, double precio, String tipo_activo, String nombre_activo) {
         this.simbolo = simbolo;
         this.precio = precio;
-        this.tipo = tipo;
-        this.nombreValor = nombreActivo;
+        this.tipo_activo = tipo_activo;
+        this.nombre_activo = nombre_activo;
     }
 
-    public String getTipo() {
-        return tipo;
+    public String getTipo_activo() {
+        return tipo_activo;
     }
 
-    public String getNombreValor() {
-        return nombreValor;
+    public String getNombre_activo() {
+        return nombre_activo;
     }
 
     public String getSimbolo() {
@@ -32,18 +32,18 @@ public final class LlamadaApi implements TablaObjeto {
     }
 
     public boolean esTipoAccion () {
-        return this.getTipo().equalsIgnoreCase(TipoValor.ACCIONES.toString());
+        return this.getTipo_activo().equalsIgnoreCase(TipoValor.ACCIONES.toString());
     }
 
     public boolean esTipoCriptomoneda () {
-        return this.getTipo().equalsIgnoreCase(TipoValor.CRIPTOMONEDAS.toString());
+        return this.getTipo_activo().equalsIgnoreCase(TipoValor.CRIPTOMONEDAS.toString());
     }
 
     public boolean esTipoMateriaPrima () {
-        return this.getTipo().equalsIgnoreCase(TipoValor.MATERIAS_PRIMAS.toString());
+        return this.getTipo_activo().equalsIgnoreCase(TipoValor.MATERIAS_PRIMAS.toString());
     }
 
     public boolean esTipoIndice () {
-        return this.getTipo().equalsIgnoreCase(TipoValor.INDICES.toString());
+        return this.getTipo_activo().equalsIgnoreCase(TipoValor.INDICES.toString());
     }
 }

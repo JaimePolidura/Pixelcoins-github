@@ -2,7 +2,6 @@ package es.serversurvival.menus.inventoryFactory.inventories;
 
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.mySQL.Empleados;
-import es.serversurvival.mySQL.Empresas;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import es.serversurvival.util.Funciones;
@@ -14,8 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.lang.reflect.Array;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -146,16 +143,16 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
 
             List<String> lore = new ArrayList<>();
             lore.add("   ");
-            lore.add(ChatColor.GOLD + "Empleado: " + empleado.getEmpleado());
+            lore.add(ChatColor.GOLD + "Empleado: " + empleado.getJugador());
             lore.add(ChatColor.GOLD + "Cargo: " + empleado.getCargo());
-            lore.add(ChatColor.GOLD + "Sueldo: " + ChatColor.GREEN + empleado.getSueldoFormateado() + " PC/" + Empleados.toStringTipoSueldo(empleado.getTipo()));
+            lore.add(ChatColor.GOLD + "Sueldo: " + ChatColor.GREEN + empleado.getSueldoFormateado() + " PC/" + Empleados.toStringTipoSueldo(empleado.getTipo_sueldo()));
             lore.add(ChatColor.GOLD + "ID: " + empleado.getId());
             lore.add("   ");
-            lore.add("/empresas despedir " + empresa + " " + empleado.getEmpleado());
+            lore.add("/empresas despedir " + empresa + " " + empleado.getJugador());
             lore.add("  <razon>");
-            lore.add("/empresas editarempleado " + empresa + " " + empleado.getEmpleado());
+            lore.add("/empresas editarempleado " + empresa + " " + empleado.getJugador());
             lore.add("  sueldo <sueldo>");
-            lore.add("/empresas editarempleado " + empresa + " " + empleado.getEmpleado());
+            lore.add("/empresas editarempleado " + empresa + " " + empleado.getJugador());
             lore.add("  tiposueldo <tipo (ver en info)>");
 
 

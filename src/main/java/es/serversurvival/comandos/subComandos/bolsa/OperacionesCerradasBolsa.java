@@ -41,12 +41,12 @@ public class OperacionesCerradasBolsa extends BolsaSubCommand {
         player.sendMessage(ChatColor.GOLD + "--------------------------------");
         player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + " TODAS TUS OPERACIONES");
         for (PosicionCerrada posicionCerrada : posicionCerradas) {
-            nombre = posicionCerrada.getNombre();
+            nombre = posicionCerrada.getNombre_activo();
             nAcciones = posicionCerrada.getCantidad();
-            precioApertura = posicionCerrada.getPrecioApertura();
-            fechaApertura = posicionCerrada.getFechaApertura();
-            precioCierre = posicionCerrada.getPrecioCierre();
-            fechaCierre = posicionCerrada.getFechaCierre();
+            precioApertura = posicionCerrada.getPrecio_apertura();
+            fechaApertura = posicionCerrada.getFecha_apertura();
+            precioCierre = posicionCerrada.getPrecio_cierre();
+            fechaCierre = posicionCerrada.getFecha_cierre();
             rentabilidad = posicionCerrada.getRentabilidad();
             revalorizacion = Funciones.redondeoDecimales(nAcciones * precioCierre, 3);
             beneficio = Funciones.redondeoDecimales(revalorizacion - (nAcciones * precioApertura), 3);

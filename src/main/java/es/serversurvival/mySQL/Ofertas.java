@@ -1,12 +1,10 @@
 package es.serversurvival.mySQL;
 
 import java.sql.*;
-import java.text.DecimalFormat;
 import java.util.*;
 
 import es.serversurvival.mySQL.tablasObjetos.Encantamiento;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
-import es.serversurvival.mySQL.tablasObjetos.NumeroCuenta;
 import es.serversurvival.mySQL.tablasObjetos.Oferta;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,37 +29,37 @@ public final class Ofertas extends MySQL {
     public final static String NOMBRE_ITEM_COMPRAR = ChatColor.AQUA + "" + ChatColor.BOLD + "CLICK PARA COMPRAR";
     private final static List<String> bannedItems = Arrays.asList("POTION", "BANNER", "SPLASH_POTION", "LINGERING_POTION");
 
-    public int nuevaOferta(String nombre, String objeto, int cantidad, double precio, int durabilidad) {
-        executeUpdate("INSERT INTO ofertas (nombre, objeto, cantidad, precio, durabilidad) VALUES ('" + nombre + "','" + objeto + "','" + cantidad + "','" + precio + "','" + durabilidad + "')");
+    public int nuevaOferta(String jugador, String objeto, int cantidad, double precio, int durabilidad) {
+        executeUpdate("INSERT INTO ofertas (jugador, objeto, cantidad, precio, durabilidad) VALUES ('" + jugador + "','" + objeto + "','" + cantidad + "','" + precio + "','" + durabilidad + "')");
 
         return getMaxId();
     }
 
     private int getMaxId() {
-        ResultSet rs = executeQuery("SELECT * FROM ofertas ORDER BY id_oferta DESC LIMIT 1");
+        ResultSet rs = executeQuery("SELECT * FROM ofertas ORDER BY id DESC LIMIT 1");
         Oferta oferta = (Oferta) buildSingleObjectFromResultSet(rs);
 
-        return oferta != null ? oferta.getId_oferta() : -1;
+        return oferta != null ? oferta.getId() : -1;
     }
 
-    private void borrarOferta(int id_oferta) {
-        executeUpdate("DELETE FROM ofertas WHERE id_oferta=\"" + id_oferta + "\"      ");
+    private void borrarOferta(int id) {
+        executeUpdate("DELETE FROM ofertas WHERE id=\"" + id + "\"      ");
     }
 
     public void setPrecio(int id, double precio){
-        executeUpdate("UPDATE ofertas SET precio = '"+precio+"' WHERE id_oferta = '"+id+"'");
+        executeUpdate("UPDATE ofertas SET precio = '"+precio+"' WHERE id = '"+id+"'");
     }
 
     public void setCantidad(int id, int cantidad) {
-        executeUpdate(String.format("UPDATE ofertas SET cantidad = '%d' WHERE id_oferta = '%d'", cantidad, id));
+        executeUpdate(String.format("UPDATE ofertas SET cantidad = '%d' WHERE id = '%d'", cantidad, id));
     }
 
-    public void setNombre (String nombre, String nuevoNombre) {
-        executeUpdate("UPDATE ofertas SET nombre = '"+nuevoNombre+"' WHERE nombre = '"+nombre+"'");
+    public void setJugador(String jugador, String nuevoJugador) {
+        executeUpdate("UPDATE ofertas SET jugador = '"+nuevoJugador+"' WHERE jugador = '"+jugador+"'");
     }
 
-    public Oferta getOferta (int id_oferta) {
-        ResultSet rs = executeQuery(String.format("SELECT * FROM ofertas WHERE id_oferta = '%d'", id_oferta));
+    public Oferta getOferta (int id) {
+        ResultSet rs = executeQuery(String.format("SELECT * FROM ofertas WHERE id = '%d'", id));
 
         return (Oferta) buildSingleObjectFromResultSet(rs);
     }
@@ -73,7 +71,7 @@ public final class Ofertas extends MySQL {
     }
 
     public List<Oferta> getOfertasJugador (String nombreJugador){
-        ResultSet rs = executeQuery(String.format("SELECT * FROM ofertas WHERE nombre = '%s'", nombreJugador));
+        ResultSet rs = executeQuery(String.format("SELECT * FROM ofertas WHERE jugador = '%s'", nombreJugador));
 
         return buildListFromResultSet(rs);
     }
@@ -131,7 +129,7 @@ public final class Ofertas extends MySQL {
         ItemStack itemToConvert = new ItemStack(Material.getMaterial(oferta.getObjeto()), oferta.getCantidad());
         itemToConvert.setDurability((short) oferta.getDurabilidad());
 
-        List<Encantamiento> enchantments = encantamientosMySQL.getEncantamientosOferta(oferta.getId_oferta());
+        List<Encantamiento> enchantments = encantamientosMySQL.getEncantamientosOferta(oferta.getId());
 
         if(oferta.getObjeto().equalsIgnoreCase("ENCHANTED_BOOK")){
             EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemToConvert.getItemMeta();
@@ -180,8 +178,8 @@ public final class Ofertas extends MySQL {
     @Override
     protected Oferta buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new Oferta(
-                rs.getInt("id_oferta"),
-                rs.getString("nombre"),
+                rs.getInt("id"),
+                rs.getString("jugador"),
                 rs.getString("objeto"),
                 rs.getInt("cantidad"),
                 rs.getDouble("precio"),

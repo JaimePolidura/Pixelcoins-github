@@ -48,7 +48,7 @@ public class Pagar extends Comando {
 
         MySQL.conectar();
 
-        if(jugadoresMySQL.getJugador(p.getName()).getPixelcoin() < cantidad ){
+        if(jugadoresMySQL.getJugador(p.getName()).getPixelcoins() < cantidad ){
             p.sendMessage(ChatColor.DARK_RED + "No puedes pagar a un jugador por encima de tu dinero :v");
             MySQL.desconectar();
             return;

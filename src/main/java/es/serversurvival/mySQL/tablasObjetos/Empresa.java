@@ -1,9 +1,7 @@
 package es.serversurvival.mySQL.tablasObjetos;
 
-import java.text.DecimalFormat;
-
 public final class Empresa implements TablaObjeto {
-    private final int id_empresa;
+    private final int id;
     private final String nombre;
     private final String owner;
     private final double pixelcoins;
@@ -12,8 +10,8 @@ public final class Empresa implements TablaObjeto {
     private final String icono;
     private final String descripcion;
 
-    public Empresa(int id_empresa, String nombre, String owner, double pixelcoins, double ingresos, double gastos, String icono, String descripcion) {
-        this.id_empresa = id_empresa;
+    public Empresa(int id, String nombre, String owner, double pixelcoins, double ingresos, double gastos, String icono, String descripcion) {
+        this.id = id;
         this.nombre = nombre;
         this.owner = owner;
         this.pixelcoins = pixelcoins;
@@ -23,8 +21,8 @@ public final class Empresa implements TablaObjeto {
         this.descripcion = descripcion;
     }
 
-    public int getId_empresa() {
-        return id_empresa;
+    public int getId() {
+        return id;
     }
 
     public String getNombre() {

@@ -2,7 +2,6 @@ package es.serversurvival.comandos.subComandos.empresas;
 
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.menus.solicitudes.VenderSolicitud;
-import es.serversurvival.mySQL.Jugadores;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -62,7 +61,7 @@ public class VenderEmpresas extends EmpresasSubCommand {
             empresasMySQL.desconectar();
             return;
         }
-        double pixelcoinsDest = jugadoresMySQL.getJugador(jugador).getPixelcoin();
+        double pixelcoinsDest = jugadoresMySQL.getJugador(jugador).getPixelcoins();
         if (pixelcoinsDest < precio) {
             p.sendMessage(ChatColor.DARK_RED + "" + jugador + " no tiene tantas pixelcoins como crees xd");
             empresasMySQL.desconectar();

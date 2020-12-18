@@ -4,19 +4,14 @@ import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.Paginated;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.Ofertas;
-import es.serversurvival.mySQL.Transacciones;
 import es.serversurvival.mySQL.tablasObjetos.Oferta;
-import es.serversurvival.util.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import sun.util.resources.cldr.bn.TimeZoneNames_bn;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,10 +33,10 @@ public class OfertaInventoryFactory extends InventoryFactory {
             List<String> lore = new ArrayList<>();
 
             lore.add(ChatColor.GOLD + "Precio: " + ChatColor.GREEN + formatea.format(oferta.getPrecio()) + " PC");
-            lore.add(ChatColor.GOLD + "Venderdor: " + oferta.getNombre());
-            lore.add("" + oferta.getId_oferta());
+            lore.add(ChatColor.GOLD + "Venderdor: " + oferta.getJugador());
+            lore.add("" + oferta.getId());
 
-            if(oferta.getNombre().equalsIgnoreCase(jugador)){
+            if(oferta.getJugador().equalsIgnoreCase(jugador)){
                 itemMetaItemStackAInsertar.setDisplayName(Ofertas.NOMBRE_ITEM_RETIRAR);
             }else{
                 itemMetaItemStackAInsertar.setDisplayName(Ofertas.NOMBRE_ITEM_COMPRAR);

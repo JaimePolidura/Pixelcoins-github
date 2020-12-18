@@ -1,8 +1,6 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
 import es.serversurvival.util.Funciones;
-import es.serversurvival.mySQL.Jugadores;
-import es.serversurvival.mySQL.Transacciones;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -40,7 +38,7 @@ public class DepositarEmpresas extends EmpresasSubCommand {
         }
         String nombreEmpresa = args[1];
         jugadoresMySQL.conectar();
-        if(jugadoresMySQL.getJugador(jugadorPlayer.getName()).getPixelcoin() < pixelcoinsADepositar){
+        if(jugadoresMySQL.getJugador(jugadorPlayer.getName()).getPixelcoins() < pixelcoinsADepositar){
             jugadorPlayer.sendMessage(ChatColor.DARK_RED + "No puedes meter mas dinero en la empresa del que tienes");
             jugadoresMySQL.desconectar();
             return;

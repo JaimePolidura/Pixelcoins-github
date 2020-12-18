@@ -13,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -69,7 +68,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
         lore.add("  ");
         List<Empleado> empleos = empleadosMySQL.getTrabajosJugador(jugador);
         empleos.forEach( (emp) -> {
-            lore.add(ChatColor.GOLD + emp.getEmpresa() + " " + ChatColor.GREEN + formatea.format(emp.getSueldo()) + " PC " + ChatColor.GOLD + "/ " + Empleados.toStringTipoSueldo(emp.getTipo()));
+            lore.add(ChatColor.GOLD + emp.getEmpresa() + " " + ChatColor.GREEN + formatea.format(emp.getSueldo()) + " PC " + ChatColor.GOLD + "/ " + Empleados.toStringTipoSueldo(emp.getTipo_sueldo()));
         });
 
         metaEmpleo.setLore(lore);
@@ -113,11 +112,11 @@ public class PerfilInventoryFactory extends InventoryFactory {
             i++;
             if(i == 6) break;
             if(pos.getRentabilidad() >= 0){
-                lore.add(ChatColor.GOLD + pos.getValorNombre() + " -> " + ChatColor.GREEN + pos.getRentabilidadString()
-                        + "% : " +  ( (int) ((pos.getCantidad() * pos.getPrecioApertura()) -  pos.getCantidad() * pos.getPrecioCierre())) + " PC");
+                lore.add(ChatColor.GOLD + pos.getSimbolo() + " -> " + ChatColor.GREEN + pos.getRentabilidadString()
+                        + "% : " +  ( (int) ((pos.getCantidad() * pos.getPrecio_apertura()) -  pos.getCantidad() * pos.getPrecio_cierre())) + " PC");
             }else{
-                lore.add(ChatColor.GOLD + pos.getValorNombre() + " -> " + ChatColor.RED + pos.getRentabilidadString()
-                        + "% : " +  ( (int) ((pos.getCantidad() * pos.getPrecioApertura()) -  pos.getCantidad() * pos.getPrecioCierre())) + " PC");
+                lore.add(ChatColor.GOLD + pos.getSimbolo() + " -> " + ChatColor.RED + pos.getRentabilidadString()
+                        + "% : " +  ( (int) ((pos.getCantidad() * pos.getPrecio_apertura()) -  pos.getCantidad() * pos.getPrecio_cierre())) + " PC");
             }
         }
 
@@ -133,8 +132,8 @@ public class PerfilInventoryFactory extends InventoryFactory {
 
         deudasMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TUS DEUDAS");
 
-        double totalQueLeDeben = deudasMySQL.getDeudasAcredor(jugador).stream().mapToInt(Deuda::getPixelcoins).sum();
-        double totalQueDebe = deudasMySQL.getDeudasDeudor(jugador).stream().mapToInt(Deuda::getPixelcoins).sum();
+        double totalQueLeDeben = deudasMySQL.getDeudasAcredor(jugador).stream().mapToInt(Deuda::getPixelcoins_restantes).sum();
+        double totalQueDebe = deudasMySQL.getDeudasDeudor(jugador).stream().mapToInt(Deuda::getPixelcoins_restantes).sum();
 
         List<String> lore = new ArrayList<>();
         lore.add("   ");
@@ -159,7 +158,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
         if(jugador == null)
             return stats;
 
-        double totalAhorrado = jugador.getPixelcoin();
+        double totalAhorrado = jugador.getPixelcoins();
         double totalDebe = deudasMySQL.getAllPixelcoinsDeudasDeudor(jugador.getNombre());
         double totalDeben = deudasMySQL.getAllPixelcoinsDeudasAcredor(jugador.getNombre());
         double totalAcciones = posicionesAbiertasMySQL.getAllPixeloinsEnAcciones(jugador.getNombre());

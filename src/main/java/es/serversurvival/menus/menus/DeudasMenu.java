@@ -6,8 +6,6 @@ import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.MenuManager;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.DeudasInventoryFactory;
-import es.serversurvival.mySQL.Deudas;
-import es.serversurvival.mySQL.Jugadores;
 import es.serversurvival.mySQL.tablasObjetos.Deuda;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -66,9 +64,9 @@ public class DeudasMenu extends Menu implements Clickable, Refreshcable, CanGoBa
         Deuda deudaAPagar = deudasMySQL.getDeuda(id);
 
         Player jugadorQueVaAPagar = Bukkit.getPlayer(deudaAPagar.getDeudor());
-        double pixelcoinsAPagar = deudaAPagar.getPixelcoins();
+        double pixelcoinsAPagar = deudaAPagar.getPixelcoins_restantes();
 
-        if(jugadoresMySQL.getJugador(jugadorQueVaAPagar.getName()).getPixelcoin() < pixelcoinsAPagar){
+        if(jugadoresMySQL.getJugador(jugadorQueVaAPagar.getName()).getPixelcoins() < pixelcoinsAPagar){
             jugadorQueVaAPagar.sendMessage(ChatColor.DARK_RED + "No tienes el suficiente dinero");
             jugadorQueVaAPagar.playSound(jugadorQueVaAPagar.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
             return;

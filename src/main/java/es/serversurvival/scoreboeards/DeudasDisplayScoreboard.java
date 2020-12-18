@@ -27,11 +27,11 @@ public class DeudasDisplayScoreboard implements SingleScoreboard{
         objective.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "DEUDAS");
 
         int totalAPagar = deudasMySQ.getDeudasDeudor(jugador).stream()
-                .mapToInt(Deuda::getPixelcoins)
+                .mapToInt(Deuda::getPixelcoins_restantes)
                 .sum();
 
         int totalASerPagado = deudasMySQ.getDeudasAcredor(jugador).stream()
-                .mapToInt(Deuda::getPixelcoins)
+                .mapToInt(Deuda::getPixelcoins_restantes)
                 .sum();
 
         Jugador jugadorScoreboear = jugadoresMySQL.getJugador(jugador);

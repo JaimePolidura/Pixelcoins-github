@@ -1,10 +1,8 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
-import es.serversurvival.mySQL.Jugadores;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.Transacciones;
-import es.serversurvival.util.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,7 +10,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +19,7 @@ public class SacarMaxItemInventoryFactory extends InventoryFactory {
         Inventory inventory = Bukkit.createInventory(null, 27, ChatColor.DARK_RED + "" + ChatColor.BOLD + "ELLIGE ITEM PARA SACR MAX");
 
         MySQL.conectar();
-        double dineroJugador = jugadoresMySQL.getJugador(jugador).getPixelcoin();
+        double dineroJugador = jugadoresMySQL.getJugador(jugador).getPixelcoins();
         MySQL.desconectar();
 
         ItemStack info = buildItemInfo();

@@ -24,20 +24,20 @@ public final class Deudas extends MySQL {
         String fechaHoy = dateFormater.format(new Date());
         int cuota = (int) Math.round((double) pixelcoins / tiempo);
 
-        executeUpdate("INSERT INTO deudas (deudor, acredor, pixelcoins, tiempo, interes, cuota, fecha) VALUES ('" + deudor + "','" + acredor + "','" + pixelcoins + "','" + tiempo + "','" + interes + "','" + cuota + "','" + fechaHoy + "')");
+        executeUpdate("INSERT INTO deudas (deudor, acredor, pixelcoins_restantes, tiempo_restante, interes, cuota, fecha_ultimapaga) VALUES ('" + deudor + "','" + acredor + "','" + pixelcoins + "','" + tiempo + "','" + interes + "','" + cuota + "','" + fechaHoy + "')");
         return new Deuda(getMaxDeuda(), deudor, acredor, pixelcoins, tiempo, interes, cuota, fechaHoy);
     }
 
-    public Deuda getDeuda(int id_deuda){
-        ResultSet rs = executeQuery(String.format("SELECT * FROM deudas WHERE id_deuda = '%d'", id_deuda));
+    public Deuda getDeuda(int id){
+        ResultSet rs = executeQuery(String.format("SELECT * FROM deudas WHERE id = '%d'", id));
 
         return (Deuda) buildSingleObjectFromResultSet(rs);
     }
 
     public int getMaxDeuda(){
-        ResultSet rs = executeQuery("SELECT * FROM deudas ORDER BY id_deuda DESC LIMIT 1");
+        ResultSet rs = executeQuery("SELECT * FROM deudas ORDER BY id DESC LIMIT 1");
 
-        return ( (Deuda) buildSingleObjectFromResultSet(rs)).getId_deuda();
+        return ( (Deuda) buildSingleObjectFromResultSet(rs)).getId();
     }
 
     public List<Deuda> getDeudasAcredor(String jugador){
@@ -59,7 +59,7 @@ public final class Deudas extends MySQL {
     }
 
     public void setPagoDeuda(int id, int pixelcoins, int tiempo, String fecha) {
-        executeUpdate("UPDATE deudas SET pixelcoins = '"+pixelcoins+"', tiempo = '"+tiempo+"', fecha = '"+fecha+"' WHERE id_deuda = '"+id+"'");
+        executeUpdate("UPDATE deudas SET pixelcoins_restantes = '"+pixelcoins+"', tiempo_restante = '"+tiempo+"', fecha_ultimapaga = '"+fecha+"' WHERE id = '"+id+"'");
     }
 
     public void setAcredorDeudor (String nombre, String nuevoNombre) {
@@ -68,7 +68,7 @@ public final class Deudas extends MySQL {
     }
 
     public void borrarDeuda(int id) {
-        executeUpdate(String.format("DELETE FROM deudas WHERE id_deuda = '%d'", id));
+        executeUpdate(String.format("DELETE FROM deudas WHERE id = '%d'", id));
     }
 
     public boolean estaRegistradaId(int id) {
@@ -76,23 +76,23 @@ public final class Deudas extends MySQL {
     }
 
     public boolean esAcredorDeDeuda(int id, String acredor) {
-        ResultSet rs = executeQuery("SELECT id_deuda FROM deudas WHERE acredor = '"+acredor+"' AND id_deuda = '"+id+"'");
+        ResultSet rs = executeQuery("SELECT id FROM deudas WHERE acredor = '"+acredor+"' AND id = '"+id+"'");
 
         return !isEmpty(rs);
     }
 
     public boolean esDeudorDeDeuda(int id, String deudor) {
-        ResultSet rs = executeQuery("SELECT id_deuda FROM deudas WHERE deudor = '"+deudor+"' AND id_deuda = '"+id+"'");
+        ResultSet rs = executeQuery("SELECT id FROM deudas WHERE deudor = '"+deudor+"' AND id = '"+id+"'");
 
         return !isEmpty(rs);
     }
 
     public int getAllPixelcoinsDeudasAcredor (String jugador) {
-        return Funciones.getSumaTotalListInteger( getDeudasAcredor(jugador), Deuda::getPixelcoins);
+        return Funciones.getSumaTotalListInteger( getDeudasAcredor(jugador), Deuda::getPixelcoins_restantes);
     }
 
     public int getAllPixelcoinsDeudasDeudor (String jugador) {
-        return Funciones.getSumaTotalListInteger( getDeudasDeudor(jugador), Deuda::getPixelcoins);
+        return Funciones.getSumaTotalListInteger( getDeudasDeudor(jugador), Deuda::getPixelcoins_restantes);
     }
 
     public Map<String, List<Deuda>> getAllDeudasAcredorMap () {
@@ -142,15 +142,15 @@ public final class Deudas extends MySQL {
 
         todasLasDeudas.forEach( (deuda) -> {
             Date fechaHoy = formatFehcaDeHoyException();
-            Date fechaUltimaPagaBaseDatos = formatFechaDeLaBaseDatosException(deuda.getFecha());
+            Date fechaUltimaPagaBaseDatos = formatFechaDeLaBaseDatosException(deuda.getFecha_ultimapaga());
             Jugador deudor = jugadoresMySQL.getJugador(deuda.getDeudor());
             Jugador acredor = jugadoresMySQL.getJugador(deuda.getAcredor());
 
             if(fechaHoy.compareTo(fechaUltimaPagaBaseDatos) != 0){
-                if(deudor.getPixelcoin() >= deuda.getCouta()){
+                if(deudor.getPixelcoins() >= deuda.getCouta()){
                     pagarDeudaYBorrarSiEsNecesario(deuda, acredor, deudor);
                 }else{
-                    sumarUnNinpagoYEnviarMensajeAlAcredor(acredor, deudor, deuda.getId_deuda());
+                    sumarUnNinpagoYEnviarMensajeAlAcredor(acredor, deudor, deuda.getId());
                 }
             }
         });
@@ -161,7 +161,7 @@ public final class Deudas extends MySQL {
         borrarDeuda(id);
 
         String nombreDeudor = deudaACancelar.getDeudor();
-        int pixelcoinsDeuda = deudaACancelar.getPixelcoins();
+        int pixelcoinsDeuda = deudaACancelar.getPixelcoins_restantes();
         player.sendMessage(ChatColor.GOLD + "Has cancelado la deuda a " + nombreDeudor + "!");
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
@@ -179,7 +179,7 @@ public final class Deudas extends MySQL {
 
     public void pagarDeuda(Player playeDeudor, int id) {
         Deuda deudaAPagar = getDeuda(id);
-        int pixelcoinsDeuda = deudaAPagar.getPixelcoins();
+        int pixelcoinsDeuda = deudaAPagar.getPixelcoins_restantes();
         String acredor = deudaAPagar.getAcredor();
 
         transaccionesMySQL.realizarTransferencia(playeDeudor.getName(), acredor, pixelcoinsDeuda, " ", TipoTransaccion.DEUDAS_PAGAR_TODADEUDA, true);
@@ -203,9 +203,9 @@ public final class Deudas extends MySQL {
         String deudorNombre = deudor.getNombre();
         String acredorNombre = acredor.getNombre();
         int cuota = deuda.getCouta();
-        int id = deuda.getId_deuda();
-        int tiempo = deuda.getTiempo();
-        int pixelcoinsDeuda = deuda.getPixelcoins();
+        int id = deuda.getId();
+        int tiempo = deuda.getTiempo_restante();
+        int pixelcoinsDeuda = deuda.getPixelcoins_restantes();
 
         transaccionesMySQL.realizarTransferencia(deudorNombre, acredorNombre, cuota, "", TipoTransaccion.DEUDAS_PAGAR_DEUDAS, true);
         jugadoresMySQL.setNpagos(deudorNombre, deudor.getNpagos() + 1);
@@ -254,14 +254,14 @@ public final class Deudas extends MySQL {
     @Override
     protected Deuda buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new Deuda(
-                rs.getInt("id_deuda"),
+                rs.getInt("id"),
                 rs.getString("deudor"),
                 rs.getString("acredor"),
-                rs.getInt("pixelcoins"),
-                rs.getInt("tiempo"),
+                rs.getInt("pixelcoins_restantes"),
+                rs.getInt("tiempo_restante"),
                 rs.getInt("interes"),
                 rs.getInt("cuota"),
-                rs.getString("fecha")
+                rs.getString("fecha_ultimapaga")
         );
     }
 }

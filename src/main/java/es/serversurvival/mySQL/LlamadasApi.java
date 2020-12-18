@@ -21,11 +21,11 @@ public final class LlamadasApi extends MySQL {
     private LlamadasApi () {}
 
     public void nuevaLlamada(String simbolo, double precio, String tipo){
-        executeUpdate("INSERT INTO llamadasapi (simbolo, precio, tipo) VALUES ('"+simbolo+"','"+precio+"','"+tipo+"')");
+        executeUpdate("INSERT INTO llamadasapi (simbolo, precio, tipo_activo) VALUES ('"+simbolo+"','"+precio+"','"+tipo+"')");
     }
 
     public void nuevaLlamada(String simbolo, double precio, String tipo, String nombreValor){
-        executeUpdate("INSERT INTO llamadasapi (simbolo, precio, tipo, nombrevalor) VALUES ('"+simbolo+"','"+precio+"','"+tipo+"','"+nombreValor+"')");
+        executeUpdate("INSERT INTO llamadasapi (simbolo, precio, tipo_activo, nombre_activo) VALUES ('"+simbolo+"','"+precio+"','"+tipo+"','"+nombreValor+"')");
     }
 
     public LlamadaApi getLlamadaAPI(String simbolo) {
@@ -64,7 +64,7 @@ public final class LlamadasApi extends MySQL {
     }
 
     public void setNombreValor(String simbolo, String nombreValor){
-        executeUpdate("UPDATE llamadasapi SET nombrevalor = '"+nombreValor+"' WHERE simbolo = '"+simbolo+"'");
+        executeUpdate("UPDATE llamadasapi SET nombre_activo = '"+nombreValor+"' WHERE simbolo = '"+simbolo+"'");
     }
 
     public boolean estaReg (String simbolo) {
@@ -75,7 +75,7 @@ public final class LlamadasApi extends MySQL {
         Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
             conectar();
             try{
-                String tipo = this.getLlamadaAPI(simbolo).getTipo();
+                String tipo = this.getLlamadaAPI(simbolo).getTipo_activo();
                 double precio = posicionesAbiertasMySQL.getPrecioActual(simbolo, tipo);
 
                 this.setPrecio(simbolo, precio);
@@ -94,7 +94,7 @@ public final class LlamadasApi extends MySQL {
 
             for (LlamadaApi llamadaApi : llamadaApis) {
                 try {
-                    double precio = posicionesAbiertasMySQL.getPrecioActual(llamadaApi.getSimbolo(), llamadaApi.getTipo());
+                    double precio = posicionesAbiertasMySQL.getPrecioActual(llamadaApi.getSimbolo(), llamadaApi.getTipo_activo());
                     setPrecio(llamadaApi.getSimbolo(), precio);
 
                     actualizadas++;
@@ -139,7 +139,7 @@ public final class LlamadasApi extends MySQL {
                     nombreValor = IEXCloud_API.getNombreEmpresa(ticker);
                 }else{
                     precioAccion = accion.getPrecio();
-                    nombreValor = accion.getNombreValor();
+                    nombreValor = accion.getNombre_activo();
                 }
 
                 double eps = IEXCloud_API.getEPS(ticker);
@@ -160,6 +160,6 @@ public final class LlamadasApi extends MySQL {
 
     @Override
     protected LlamadaApi buildObjectFromResultSet(ResultSet rs) throws SQLException {
-        return new LlamadaApi(rs.getString("simbolo"), rs.getDouble("precio"), rs.getString("tipo"), rs.getString("nombrevalor"));
+        return new LlamadaApi(rs.getString("simbolo"), rs.getDouble("precio"), rs.getString("tipo_activo"), rs.getString("nombre_activo"));
     }
 }

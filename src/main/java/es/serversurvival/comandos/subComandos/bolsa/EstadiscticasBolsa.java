@@ -36,13 +36,13 @@ public class EstadiscticasBolsa extends BolsaSubCommand {
             if(topOperaicnesMasRentables.get(i).getRentabilidad() >= 0 ){
                 PosicionCerrada operacionCerrada = topOperaicnesMasRentables.get(i);
 
-                String valorNombre = operacionCerrada.getValorNombre();
-                String tipo = operacionCerrada.getTipo();
-                String nombre = operacionCerrada.getNombre();
+                String valorNombre = operacionCerrada.getSimbolo();
+                String tipo = operacionCerrada.getTipo_activo();
+                String nombre = operacionCerrada.getNombre_activo();
                 int id = operacionCerrada.getId();
                 int cantidad = operacionCerrada.getCantidad();
-                double apertura = operacionCerrada.getPrecioApertura();
-                double cierre = operacionCerrada.getPrecioCierre();
+                double apertura = operacionCerrada.getPrecio_apertura();
+                double cierre = operacionCerrada.getPrecio_cierre();
                 double rentabilidad = operacionCerrada.getRentabilidad();
 
                 player.sendMessage(ChatColor.GOLD + "" + (i+1) + "º " + valorNombre + ": " + ChatColor.GREEN + "+" + rentabilidad + "% -> +" + formatea.format((cantidad * cierre) - (cantidad * apertura)) + " PC "
@@ -56,12 +56,12 @@ public class EstadiscticasBolsa extends BolsaSubCommand {
             if(topOpereacionesMenosRentables.get(i).getRentabilidad() < 0){
                 PosicionCerrada operacionCerrada = topOpereacionesMenosRentables.get(i);
 
-                String nombreValor = operacionCerrada.getValorNombre();
-                String nombre = operacionCerrada.getNombre();
+                String nombreValor = operacionCerrada.getSimbolo();
+                String nombre = operacionCerrada.getNombre_activo();
                 int id = operacionCerrada.getId();
                 int cantidad = operacionCerrada.getCantidad();
-                double apertura = operacionCerrada.getPrecioApertura();
-                double cierre = operacionCerrada.getPrecioCierre();
+                double apertura = operacionCerrada.getPrecio_apertura();
+                double cierre = operacionCerrada.getPrecio_cierre();
                 double rentabilidad = operacionCerrada.getRentabilidad();
 
                 player.sendMessage(ChatColor.GOLD + "" + (i + 1) + "º " + nombreValor  + ": " + ChatColor.RED + rentabilidad + "% -> " + formatea.format((cantidad * cierre) - (cantidad * apertura)) + " PC "

@@ -29,6 +29,10 @@ public final class Cuentas extends MySQL {
     public boolean estaRegJugador(String jugador){
         return getCuenta(jugador) != null;
     }
+    
+    public void setPassword (String username, String password) {
+        executeUpdate("UPDATE cuentas SET password = '"+password+"' WHERE username = '"+username+"'");
+    }
 
     public void setUsername (String username, String nuevoUsername) {
         executeUpdate("UPDATE cuentas SET username = '"+nuevoUsername+"' WHERE username = '"+username+"'");

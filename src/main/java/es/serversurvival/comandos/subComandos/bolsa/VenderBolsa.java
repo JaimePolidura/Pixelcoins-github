@@ -2,7 +2,6 @@ package es.serversurvival.comandos.subComandos.bolsa;
 
 import es.serversurvival.util.Funciones;
 import es.serversurvival.apiHttp.IEXCloud_API;
-import es.serversurvival.mySQL.Transacciones;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -77,8 +76,8 @@ public class VenderBolsa extends BolsaSubCommand {
             return;
         }
 
-        String nombre = posicionAVender.getNombre();
-        String tipo = posicionAVender.getTipo();
+        String nombre = posicionAVender.getNombre_activo();
+        String tipo = posicionAVender.getTipo_activo();
 
         transaccionesMySQL.venderPosicion(posicionAVender ,cantidad ,jugadorPlayer);
         posicionesAbiertasMySQL.desconectar();

@@ -1,10 +1,8 @@
 package es.serversurvival.comandos.comandos;
 
 import es.serversurvival.comandos.Comando;
-import es.serversurvival.mySQL.Cuentas;
-import es.serversurvival.mySQL.NumeroCuentas;
 import es.serversurvival.mySQL.tablasObjetos.Cuenta;
-import es.serversurvival.mySQL.tablasObjetos.NumeroCuenta;
+import es.serversurvival.mySQL.tablasObjetos.Jugador;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -33,19 +31,19 @@ public class CCuenta extends Comando {
         cuentasMySQL.conectar();
 
         Cuenta cuenta = cuentasMySQL.getCuenta(player.getName());
-        NumeroCuenta numeroCuenta = numeroCuentasMySQL.getNumeroCuenta(player.getName());
+        Jugador jugador = jugadoresMySQL.getJugador(player.getName());
 
-        if(numeroCuenta == null ){
-            numeroCuentasMySQL.nuevoNumeroCuenta(player.getName());
+        if(jugador.getNumero_cuenta() == 0){
+            jugadoresMySQL.setNumeroCuenta(player.getName(), jugadoresMySQL.generearNumeroCuenta());
         }else if(cuenta == null){
             player.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-            player.sendMessage(ChatColor.AQUA + "Tu numero de cuenta: " + ChatColor.BOLD + numeroCuenta.getNumero());
+            player.sendMessage(ChatColor.AQUA + "Tu numero de cuenta: " + ChatColor.BOLD + jugador.getNumero_cuenta());
             player.sendMessage("   ");
             player.sendMessage(ChatColor.AQUA + "Para registrarse: " + ChatColor.BOLD + "http://serversurvival2.ddns.net/registrarse");
             player.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
         }else{
             player.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-            player.sendMessage(ChatColor.AQUA + "Tu numero de cuenta: " + ChatColor.BOLD +numeroCuenta.getNumero());
+            player.sendMessage(ChatColor.AQUA + "Tu numero de cuenta: " + ChatColor.BOLD + jugador.getNumero_cuenta());
             player.sendMessage(ChatColor.AQUA + "Tu contraseña: " + ChatColor.BOLD + cuenta.getPassword());
             player.sendMessage("   ");
             player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "http://serversurvival2.ddns.net/perfil");

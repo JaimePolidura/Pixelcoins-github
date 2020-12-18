@@ -79,7 +79,7 @@ public class VenderSolicitud extends Menu implements Solicitud {
         List<Empleado> empleadosEmpresa = empleadosMySQL.getEmpleadosEmrpesa(empresa);
 
         for (int i = 0; i < empleadosEmpresa.size(); i++) {
-            mensajesMySQL.nuevoMensaje("", empleadosEmpresa.get(i).getEmpleado(), "La empresa en la que trabajas " + empresa + " ha cambiado de owner a " + player.getName());
+            mensajesMySQL.nuevoMensaje("", empleadosEmpresa.get(i).getJugador(), "La empresa en la que trabajas " + empresa + " ha cambiado de owner a " + player.getName());
         }
 
         transaccionesMySQL.comprarEmpresa(this.enviador, this.destinatario, empresa, precio, enviador);

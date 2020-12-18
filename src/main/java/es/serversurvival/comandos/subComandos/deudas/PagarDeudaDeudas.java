@@ -1,7 +1,6 @@
 package es.serversurvival.comandos.subComandos.deudas;
 
 import es.serversurvival.util.Funciones;
-import es.serversurvival.mySQL.Jugadores;
 import es.serversurvival.mySQL.tablasObjetos.Deuda;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -46,9 +45,9 @@ public class PagarDeudaDeudas extends DeudasSubCommand {
             playerDeudor.sendMessage(ChatColor.DARK_RED + "No eres deudor de esa deuda, las ids se ven en el comando /deudas");
             return;
         }
-        if (jugadoresMySQL.getJugador(playerDeudor.getName()).getPixelcoin() < deudaAPagar.getPixelcoins()) {
+        if (jugadoresMySQL.getJugador(playerDeudor.getName()).getPixelcoins() < deudaAPagar.getPixelcoins_restantes()) {
             deudasMySQL.desconectar();
-            playerDeudor.sendMessage(ChatColor.DARK_RED + "No tienes las suficientes pixelcoins para pagar esa deuda, pixelcoins requeridas: " + ChatColor.GREEN + formatea.format(deudaAPagar.getPixelcoins()) + " PC");
+            playerDeudor.sendMessage(ChatColor.DARK_RED + "No tienes las suficientes pixelcoins para pagar esa deuda, pixelcoins requeridas: " + ChatColor.GREEN + formatea.format(deudaAPagar.getPixelcoins_restantes()) + " PC");
             return;
         }
 

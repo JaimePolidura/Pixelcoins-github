@@ -13,8 +13,8 @@ public final class Mensajes extends MySQL {
     public final static Mensajes INSTANCE = new Mensajes();
     private Mensajes () {}
 
-    public void borrarMensaje(int id) {
-        executeUpdate(String.format("DELETE FROM mensajes WHERE id_mensaje = '%d'", id));
+    public void nuevoMensaje(String enviador, String destinatario, String mensaje) {
+        executeUpdate("INSERT INTO mensajes (enviador, destinatario, mensaje) VALUES ('"+enviador+"','" + destinatario + "','" + mensaje + "')");
     }
 
     public List<Mensaje> getMensajesJugador(String destinatario){
@@ -23,16 +23,16 @@ public final class Mensajes extends MySQL {
         return buildListFromResultSet(rs);
     }
 
+    public void setDestinatario (String nombre, String nuevoNombre) {
+        executeUpdate("UPDATE mensajes SET destinatario = '"+nuevoNombre+"' WHERE destinatario = '"+nombre+"'");
+    }
+
     public void borrarMensajes(String jugador) {
         executeUpdate(String.format("DELETE FROM mensajes WHERE destinatario = '%s'", jugador));
     }
 
-    public void nuevoMensaje(String enviador, String destinatario, String mensaje) {
-        executeUpdate("INSERT INTO mensajes (enviador, destinatario, mensaje) VALUES ('"+enviador+"','" + destinatario + "','" + mensaje + "')");
-    }
-
-    public void setDestinatario (String nombre, String nuevoNombre) {
-        executeUpdate("UPDATE mensajes SET destinatario = '"+nuevoNombre+"' WHERE destinatario = '"+nombre+"'");
+    public void borrarMensaje(int id) {
+        executeUpdate(String.format("DELETE FROM mensajes WHERE id = '%d'", id));
     }
 
     public void mostrarMensajesYBorrar(Player player) {
@@ -53,7 +53,7 @@ public final class Mensajes extends MySQL {
 
     @Override
     protected Mensaje buildObjectFromResultSet(ResultSet rs) throws SQLException {
-        return new Mensaje(rs.getInt("id_mensaje"),
+        return new Mensaje(rs.getInt("id"),
                 rs.getString("enviador"),
                 rs.getString("destinatario"),
                 rs.getString("mensaje"));

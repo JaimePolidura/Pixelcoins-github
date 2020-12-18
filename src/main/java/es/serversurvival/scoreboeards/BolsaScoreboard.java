@@ -60,11 +60,11 @@ public class BolsaScoreboard implements SingleScoreboard{
         Map<PosicionAbierta, Double> posicionAbiertasConRentabilidad = new HashMap<>();
 
         for (PosicionAbierta posicion : posicionAbiertas) {
-            double precioInicial = posicion.getPrecioApertura();
-            double precioActual = llamadasApiMySQL.getLlamadaAPI(posicion.getNombre()).getPrecio();
+            double precioInicial = posicion.getPrecio_apertura();
+            double precioActual = llamadasApiMySQL.getLlamadaAPI(posicion.getNombre_activo()).getPrecio();
             double rentabildad;
 
-            if(posicion.getTipoPosicion().equalsIgnoreCase(TipoPosicion.LARGO.toString())){
+            if(posicion.getTipo_posicion().equalsIgnoreCase(TipoPosicion.LARGO.toString())){
                 rentabildad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(precioInicial, precioActual), 2);
             }else{
                 rentabildad = Math.abs(Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(precioActual, precioInicial), 2));
@@ -77,7 +77,7 @@ public class BolsaScoreboard implements SingleScoreboard{
     }
 
     private String buildLinea (PosicionAbierta posicion, Double rentabilidad) {
-        String nombreEmpresa = llamadasApiMySQL.getLlamadaAPI(posicion.getNombre()).getNombreValor();
+        String nombreEmpresa = llamadasApiMySQL.getLlamadaAPI(posicion.getNombre_activo()).getNombre_activo();
         String linea;
 
         if(rentabilidad >= 0){
@@ -88,9 +88,9 @@ public class BolsaScoreboard implements SingleScoreboard{
 
         if(linea.length() > 40){
             if(rentabilidad >= 0){
-                linea = ChatColor.GOLD + posicion.getNombre() + ": " + ChatColor.GREEN + "+" + rentabilidad + "%";
+                linea = ChatColor.GOLD + posicion.getNombre_activo() + ": " + ChatColor.GREEN + "+" + rentabilidad + "%";
             }else{
-                linea = ChatColor.GOLD + posicion.getNombre() + ": " + ChatColor.RED + rentabilidad + "%";
+                linea = ChatColor.GOLD + posicion.getNombre_activo() + ": " + ChatColor.RED + rentabilidad + "%";
             }
         }
 

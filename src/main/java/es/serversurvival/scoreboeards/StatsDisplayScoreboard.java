@@ -27,7 +27,7 @@ public class StatsDisplayScoreboard implements SingleScoreboard{
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         objective.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "JUGADOR");
 
-        double dineroJugador = jugadoresMySQL.getJugador(jugador).getPixelcoin();
+        double dineroJugador = jugadoresMySQL.getJugador(jugador).getPixelcoins();
 
         Score score1 = objective.getScore(ChatColor.GOLD + "Tus ahorros: " + ChatColor.GREEN + formatea.format(Math.round(dineroJugador)) + " PC");
         score1.setScore(1);

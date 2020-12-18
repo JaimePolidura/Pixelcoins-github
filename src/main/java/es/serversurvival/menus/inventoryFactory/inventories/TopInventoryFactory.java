@@ -173,10 +173,10 @@ public class TopInventoryFactory extends InventoryFactory {
             double rentabilidad = Funciones.redondeoDecimales(posicionCerradasNotDuplicadas.get(i).getRentabilidad(), 3);
 
             if(rentabilidad > 0){
-                if(posicionCerradasNotDuplicadas.get(i).getTipoPosicion().equalsIgnoreCase("CORTO")){
-                    lore6.add("" + ChatColor.GOLD + (i + 1)  + "º (CORTO) " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getValorNombre() + ChatColor.GREEN + " +" + rentabilidad + "%");
+                if(posicionCerradasNotDuplicadas.get(i).getTipo_posicion().equalsIgnoreCase("CORTO")){
+                    lore6.add("" + ChatColor.GOLD + (i + 1)  + "º (CORTO) " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.GREEN + " +" + rentabilidad + "%");
                 }else{
-                    lore6.add("" + ChatColor.GOLD + (i + 1)  + "º " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getValorNombre() + ChatColor.GREEN + " +" + rentabilidad + "%");
+                    lore6.add("" + ChatColor.GOLD + (i + 1)  + "º " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.GREEN + " +" + rentabilidad + "%");
                 }
             }
         }
@@ -199,10 +199,10 @@ public class TopInventoryFactory extends InventoryFactory {
         for(int i = 0; i < 5; i++){
             double rentabilidad = Funciones.redondeoDecimales(posicionCerradasNotDuplicadas.get(i).getRentabilidad(), 3);
 
-            if(posicionCerradasNotDuplicadas.get(i).getTipoPosicion().equalsIgnoreCase("CORTO")){
-                lore6.add("" + ChatColor.GOLD + (i + 1)  + "º (CORTO) " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getValorNombre() + ChatColor.RED + " " + rentabilidad + "%");
+            if(posicionCerradasNotDuplicadas.get(i).getTipo_posicion().equalsIgnoreCase("CORTO")){
+                lore6.add("" + ChatColor.GOLD + (i + 1)  + "º (CORTO) " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.RED + " " + rentabilidad + "%");
             }else{
-                lore6.add("" + ChatColor.GOLD + (i + 1)  + "º " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getValorNombre() + ChatColor.RED + " " + rentabilidad + "%");
+                lore6.add("" + ChatColor.GOLD + (i + 1)  + "º " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.RED + " " + rentabilidad + "%");
             }
         }
 

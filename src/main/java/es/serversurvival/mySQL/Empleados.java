@@ -23,7 +23,7 @@ public final class Empleados extends MySQL {
     public void nuevoEmpleado(String empleado, String empresa, double sueldo, String tipo, String cargo) {
         String fechaPaga = dateFormater.format(new Date());
 
-        executeUpdate("INSERT INTO empleados (empleado, empresa, sueldo, cargo, tipo, fechaPaga) VALUES ('" + empleado + "','" + empresa + "','" + sueldo + "','" + cargo + "','" + tipo + "','" + fechaPaga + "')");
+        executeUpdate("INSERT INTO empleados (jugador, empresa, sueldo, cargo, tipo_sueldo, fecha_ultimapaga) VALUES ('" + empleado + "','" + empresa + "','" + sueldo + "','" + cargo + "','" + tipo + "','" + fechaPaga + "')");
     }
 
     public Empleado getEmpleado(int id){
@@ -33,7 +33,7 @@ public final class Empleados extends MySQL {
     }
 
     public Empleado getEmpleado (String nombre, String empresa) {
-        ResultSet rs = executeQuery(String.format("SELECT * FROM empleados WHERE empleado = '%s' AND empresa = '%s'", nombre, empresa));
+        ResultSet rs = executeQuery(String.format("SELECT * FROM empleados WHERE jugador = '%s' AND empresa = '%s'", nombre, empresa));
 
         return (Empleado) buildSingleObjectFromResultSet(rs);
     }
@@ -47,11 +47,11 @@ public final class Empleados extends MySQL {
     }
 
     public void setTipo(int id, String tipo) {
-        executeUpdate("UPDATE empleados SET tipo = '"+tipo+"' WHERE id = '"+id+"'");
+        executeUpdate("UPDATE empleados SET tipo_sueldo = '"+tipo+"' WHERE id = '"+id+"'");
     }
 
     public void setFechaPaga(int id, String fechaPaga) {
-        executeUpdate("UPDATE empleados SET fechaPaga = '"+fechaPaga+"' WHERE id = '"+id+"'");
+        executeUpdate("UPDATE empleados SET fecha_ultimapaga = '"+fechaPaga+"' WHERE id = '"+id+"'");
     }
 
     public void setEmpresa(int id, String empresa) {
@@ -63,7 +63,7 @@ public final class Empleados extends MySQL {
     }
 
     public void setEmpleado (String nombre, String nuevoNombre) {
-        executeUpdate("UPDATE FROM empleados SET empleado = '"+nuevoNombre+"' WHERE empleado = '"+nombre+"'");
+        executeUpdate("UPDATE FROM empleados SET jugador = '"+nuevoNombre+"' WHERE jugador = '"+nombre+"'");
     }
 
     public List<Empleado> getAllEmpleados (){
@@ -79,7 +79,7 @@ public final class Empleados extends MySQL {
     }
 
     public List<Empleado> getTrabajosJugador(String jugador){
-        ResultSet rs = executeQuery("SELECT * FROM empleados WHERE empleado = '"+jugador+"'");
+        ResultSet rs = executeQuery("SELECT * FROM empleados WHERE jugador = '"+jugador+"'");
 
         return buildListFromResultSet(rs);
     }
@@ -156,16 +156,16 @@ public final class Empleados extends MySQL {
 
         double sueldo = empleado.getSueldo();
         String tipoString = toStringTipoSueldo(tipoSueldo);
-        Player jugadorAEditarPlayer = Bukkit.getPlayer(empleado.getEmpleado());
+        Player jugadorAEditarPlayer = Bukkit.getPlayer(empleado.getJugador());
         Player sender = Bukkit.getPlayer(empresa.getOwner());
 
         if (jugadorAEditarPlayer != null) {
             jugadorAEditarPlayer.sendMessage(ChatColor.GOLD + sender.getName() + " te ha cambiado el tiempo por por el que cobras el sueldo, ahora cobras " + ChatColor.GREEN + formatea.format(sueldo) + " PC" + ChatColor.GOLD + " por " + tipoString);
             jugadorAEditarPlayer.playSound(jugadorAEditarPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
         } else {
-            mensajesMySQL.nuevoMensaje("", empleado.getEmpleado(), "Se te ha cambiado la frecuencia con la que cobras en la empresa: " + empresa.getNombre() + " " + sueldo + " PC/ " + tipoString);
+            mensajesMySQL.nuevoMensaje("", empleado.getJugador(), "Se te ha cambiado la frecuencia con la que cobras en la empresa: " + empresa.getNombre() + " " + sueldo + " PC/ " + tipoString);
         }
-        sender.sendMessage(ChatColor.GOLD + "Has cambiado el tipo de pagado de sueldo de " + empleado.getEmpleado() + " en la empresa " + empresa.getNombre());
+        sender.sendMessage(ChatColor.GOLD + "Has cambiado el tipo de pagado de sueldo de " + empleado.getJugador() + " en la empresa " + empresa.getNombre());
     }
 
     public void editarEmpleadoSueldo(Empresa empresa, Empleado empleado, double nuevoSueldo) {
@@ -173,14 +173,14 @@ public final class Empleados extends MySQL {
 
         double sueldoAntes = empleado.getSueldo();
         Player sender = Bukkit.getPlayer(empresa.getOwner());
-        Player jugadorAEditar = Bukkit.getPlayer(empleado.getEmpleado());
+        Player jugadorAEditar = Bukkit.getPlayer(empleado.getJugador());
         sender.sendMessage(ChatColor.GOLD + "Has cambiado el sueldo a " + jugadorAEditar + " a " + ChatColor.GREEN + formatea.format(nuevoSueldo) + " PC" + ChatColor.GOLD + " en la empresa: " + empresa);
 
         if (jugadorAEditar != null) {
             jugadorAEditar.sendMessage(ChatColor.GOLD + sender.getName() + " te ha cambiado el sueldo de " + empresa.getNombre() + " a " + ChatColor.GREEN + formatea.format(nuevoSueldo) + " PC" + ChatColor.GOLD + " antes tenias: " + ChatColor.GREEN + formatea.format(sueldoAntes) + " PC");
             jugadorAEditar.playSound(jugadorAEditar.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
         } else {
-            mensajesMySQL.nuevoMensaje("", empleado.getEmpleado(), "Se te ha cambiado el sueldo de la empresa: " + empresa.getNombre() + " a " + formatea.format(nuevoSueldo) + " PC antes tenias " + sueldoAntes + " PC");
+            mensajesMySQL.nuevoMensaje("", empleado.getJugador(), "Se te ha cambiado el sueldo de la empresa: " + empresa.getNombre() + " a " + formatea.format(nuevoSueldo) + " PC antes tenias " + sueldoAntes + " PC");
         }
     }
 
@@ -189,8 +189,8 @@ public final class Empleados extends MySQL {
 
         List<Empleado> todosLosEmpleados = getAllEmpleados();
         for (Empleado empl : todosLosEmpleados) {
-            Date actualEmpl = formatFechaDeLaBaseDatosException(empl.getFechaPaga());
-            String tipoSueldo = empl.getTipo();
+            Date actualEmpl = formatFechaDeLaBaseDatosException(empl.getFecha_ultimapaga());
+            String tipoSueldo = empl.getTipo_sueldo();
 
             long diferenciaDias = Funciones.diferenciaDias(hoy, actualEmpl);
 
@@ -199,14 +199,14 @@ public final class Empleados extends MySQL {
                 continue;
             }
 
-            boolean sePago = transaccionesMySQL.pagarSalario(empl.getEmpleado(), empl.getEmpresa(), empl.getSueldo());
+            boolean sePago = transaccionesMySQL.pagarSalario(empl.getJugador(), empl.getEmpresa(), empl.getSueldo());
             if (sePago) {
                 setFechaPaga(empl.getId(), dateFormater.format(hoy));
-                mensajesMySQL.nuevoMensaje("", empl.getEmpleado(), "Has cobrado " + empl.getSueldo() + " PC de parte de la empresa: " + empl.getEmpresa());
-                Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Se ha pagado " + empl.getSueldo() + " a " + empl.getEmpleado() + " en la empresa: " + empl.getEmpresa());
+                mensajesMySQL.nuevoMensaje("", empl.getJugador(), "Has cobrado " + empl.getSueldo() + " PC de parte de la empresa: " + empl.getEmpresa());
+                Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Se ha pagado " + empl.getSueldo() + " a " + empl.getJugador() + " en la empresa: " + empl.getEmpresa());
             } else {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "La empresa: " + empl.getEmpresa() + " no ha podido pagar " + empl.getSueldo() + " a " + empl.getEmpleado());
-                mensajesMySQL.nuevoMensaje("", empl.getEmpleado(), "No has podido cobrar tu sueldo por parte de " + empl.getEmpresa() + " por que no tiene las suficientes pixelcoins");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "La empresa: " + empl.getEmpresa() + " no ha podido pagar " + empl.getSueldo() + " a " + empl.getJugador());
+                mensajesMySQL.nuevoMensaje("", empl.getJugador(), "No has podido cobrar tu sueldo por parte de " + empl.getEmpresa() + " por que no tiene las suficientes pixelcoins");
             }
         }
     }
@@ -255,11 +255,11 @@ public final class Empleados extends MySQL {
     @Override
     protected Empleado buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new Empleado( rs.getInt("id"),
-                rs.getString("empleado"),
+                rs.getString("jugador"),
                 rs.getString("empresa"),
                 rs.getDouble("sueldo"),
                 rs.getString("cargo"),
-                rs.getString("tipo"),
-                rs.getString("fechaPaga"));
+                rs.getString("tipo_sueldo"),
+                rs.getString("fecha_ultimapaga"));
     }
 }

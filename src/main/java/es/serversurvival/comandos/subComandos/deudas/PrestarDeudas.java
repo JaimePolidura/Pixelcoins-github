@@ -64,7 +64,7 @@ public class PrestarDeudas extends DeudasSubCommand {
         }
 
         MySQL.conectar();
-        double pixelcoins = jugadoresMySQL.getJugador(jugadorQueEndeudaPlayer.getName()).getPixelcoin();
+        double pixelcoins = jugadoresMySQL.getJugador(jugadorQueEndeudaPlayer.getName()).getPixelcoins();
         int aPrestar = Funciones.aumentarPorcentaje(dinero, interes);
         if (aPrestar > pixelcoins) {
             jugadorQueEndeudaPlayer.sendMessage(ChatColor.DARK_RED + "No puedes prestar mas dinero del que tienes");

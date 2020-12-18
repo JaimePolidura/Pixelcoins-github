@@ -60,7 +60,7 @@ public class InvertirBolsa extends BolsaSubCommand {
                 }else {
                     precioAccion = IEXCloud_API.getOnlyPrice(ticker);
                 }
-                if(jugadoresMySQL.getJugador(jugadorPlayer.getName()).getPixelcoin() < (precioAccion * nAccinesAComprar)){
+                if(jugadoresMySQL.getJugador(jugadorPlayer.getName()).getPixelcoins() < (precioAccion * nAccinesAComprar)){
                     jugadorPlayer.sendMessage(ChatColor.DARK_RED + "No tienes las suficientes pixelcoins para pagar " + nAccinesAComprar + " " + ticker + " a " + formatea.format(precioAccion) + " $ -> " + formatea.format(precioAccion * nAccinesAComprar) + " PC");
                     return;
                 }

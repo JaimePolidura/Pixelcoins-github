@@ -35,7 +35,7 @@ public final class PosicionesAbiertas extends MySQL {
     public PosicionAbierta nuevaPosicion(String jugador, String tipo, String nombre, int cantidad, double precioApertura, TipoPosicion tipoPosicion) {
         String fecha = dateFormater.format(new Date());
 
-        executeUpdate("INSERT INTO posicionesabiertas (jugador, tipo, nombre, cantidad, precioApertura, fechaApertura, tipoPosicion) VALUES ('" + jugador + "','"+tipo+"','" + nombre + "','" + cantidad + "','" + precioApertura + "', '" + fecha + "','"+tipoPosicion.toString()+"')");
+        executeUpdate("INSERT INTO posicionesabiertas (jugador, tipo_activo, nombre_activo, cantidad, precio_apertura, fecha_apertura, tipo_posicion) VALUES ('" + jugador + "','"+tipo+"','" + nombre + "','" + cantidad + "','" + precioApertura + "', '" + fecha + "','"+tipoPosicion.toString()+"')");
         return new PosicionAbierta(getMaxId(), jugador, TipoValor.ACCIONES.toString(), nombre, cantidad, precioApertura, fecha, tipoPosicion.toString());
     }
 
@@ -69,14 +69,14 @@ public final class PosicionesAbiertas extends MySQL {
                 .collect(Collectors.toList());
     }
 
-    public List<PosicionAbierta> getPosicionesAbiertasTipo (String tipo) {
-        ResultSet rs = executeQuery(String.format("SELECT * FROM posicionesabiertas WHERE tipo = '%s'", tipo));
+    public List<PosicionAbierta> getPosicionesAbiertasTipoActivo (String tipoActivo) {
+        ResultSet rs = executeQuery(String.format("SELECT * FROM posicionesabiertas WHERE tipo_activo = '%s'", tipoActivo));
 
         return buildListFromResultSet(rs);
     }
 
     public List<PosicionAbierta> getPosicionesAbiertasCortas () {
-        ResultSet rs = executeQuery("SELECT * FROM posicionesabiertas WHERE tipoPosicion = 'CORTO'");
+        ResultSet rs = executeQuery("SELECT * FROM posicionesabiertas WHERE tipo_posicion = 'CORTO'");
 
         return buildListFromResultSet(rs);
     }
@@ -87,7 +87,7 @@ public final class PosicionesAbiertas extends MySQL {
 
     public boolean existeTicker(String nombre){
         try{
-            ResultSet rs = executeQuery(String.format("SELECT * FROM posicionesabiertas WHERE nombre = '%s'", nombre));
+            ResultSet rs = executeQuery(String.format("SELECT * FROM posicionesabiertas WHERE nombre_activo = '%s'", nombre));
             return rs.next();
         }catch (SQLException e) {
             e.printStackTrace();
@@ -104,7 +104,7 @@ public final class PosicionesAbiertas extends MySQL {
     }
 
     public void setPrecioApertura (int id, double precio) {
-        executeUpdate(String.format("UPDATE posicionesabiertas SET precioApertura = '%d' WHERE id = '%d'", precio, id));
+        executeUpdate(String.format("UPDATE posicionesabiertas SET precio_apertura = '%d' WHERE id = '%d'", precio, id));
     }
 
     public void setJugador (String jugador, String nuevoJugador) {
@@ -117,8 +117,8 @@ public final class PosicionesAbiertas extends MySQL {
 
         Map<String, LlamadaApi> llamadasApiMap = llamadasApiMySQL.getMapOfAllLlamadasApi();
 
-        double pixelcoinsEnLargos = getSumaTotalListDouble(posLargas, pos -> llamadasApiMap.get(pos.getNombre()).getPrecio() * pos.getCantidad());
-        double pixelcoinsEnCortos = getSumaTotalListDouble(posCortas, pos -> (pos.getPrecioApertura() - llamadasApiMap.get(pos.getNombre()).getPrecio()) * pos.getCantidad());
+        double pixelcoinsEnLargos = getSumaTotalListDouble(posLargas, pos -> llamadasApiMap.get(pos.getNombre_activo()).getPrecio() * pos.getCantidad());
+        double pixelcoinsEnCortos = getSumaTotalListDouble(posCortas, pos -> (pos.getPrecio_apertura() - llamadasApiMap.get(pos.getNombre_activo()).getPrecio()) * pos.getCantidad());
 
         return pixelcoinsEnLargos + pixelcoinsEnCortos;
     }
@@ -203,13 +203,13 @@ public final class PosicionesAbiertas extends MySQL {
         PosicionAbierta posicionAMedir = this.getPosicionAbierta(id);
         String jugador = posicionAMedir.getJugador();
 
-        LlamadaApi precioEnLaAPI = llamadasApiMySQL.getLlamadaAPI(posicionAMedir.getNombre());
+        LlamadaApi precioEnLaAPI = llamadasApiMySQL.getLlamadaAPI(posicionAMedir.getNombre_activo());
 
         double invertidoEnAccion = posicionAMedir.getCantidad() * precioEnLaAPI.getPrecio();
 
         List<PosicionAbierta> posicionesJugador = this.getPosicionesAbiertasJugador(jugador);
         double totalInvertido = posicionesJugador.stream()
-                .mapToDouble((pos) -> pos.getCantidad() * llamadasApiMySQL.getLlamadaAPI(pos.getNombre()).getPrecio())
+                .mapToDouble((pos) -> pos.getCantidad() * llamadasApiMySQL.getLlamadaAPI(pos.getNombre_activo()).getPrecio())
                 .sum();
 
         return rentabilidad(totalInvertido, invertidoEnAccion);
@@ -220,7 +220,7 @@ public final class PosicionesAbiertas extends MySQL {
         Map<PosicionAbierta, Integer> posicionesAbiertasConPeso = new HashMap<>();
 
         posicionAbiertasJugador.forEach( (posicion) -> {
-            posicionesAbiertasConPeso.put(posicion, (int) rentabilidad(totalInverito, posicion.getCantidad() * llamadasApiMySQL.getLlamadaAPI(posicion.getNombre()).getPrecio()));
+            posicionesAbiertasConPeso.put(posicion, (int) rentabilidad(totalInverito, posicion.getCantidad() * llamadasApiMySQL.getLlamadaAPI(posicion.getNombre_activo()).getPrecio()));
         });
 
         return posicionesAbiertasConPeso;
@@ -237,7 +237,7 @@ public final class PosicionesAbiertas extends MySQL {
                 if(infoSplitsPorAccion.get(llamada.getSimbolo()) != null){
                     try {
                         JSONObject infoSplit = IEXCloud_API.getSplitInfoEmpresa(llamada.getSimbolo());
-                        infoSplitsPorAccion.put(llamada.getNombreValor(), infoSplit);
+                        infoSplitsPorAccion.put(llamada.getNombre_activo(), infoSplit);
                     } catch (Exception ignored) {
                         //IGNORED
                     }
@@ -246,7 +246,7 @@ public final class PosicionesAbiertas extends MySQL {
 
             List<PosicionAbierta> posicionAbiertas = getTodasPosicionesAbiertasCondicion(PosicionAbierta::esTipoAccion);
             posicionAbiertas.forEach( (pos) -> {
-                JSONObject infoSplit = infoSplitsPorAccion.get(pos.getNombre());
+                JSONObject infoSplit = infoSplitsPorAccion.get(pos.getNombre_activo());
 
                 if(infoSplit != null){
                     actualizarAccionSplit(pos, infoSplit);
@@ -270,12 +270,12 @@ public final class PosicionesAbiertas extends MySQL {
                 int accionesSobrantes = pos.getCantidad() % denominador;
                 int accionesConvertidas = (cantidadDeAccionesConvertibles / denominador) * numerador;
 
-                double precioAperturaConvertido = pos.getPrecioApertura() / (numerador / denominador);
+                double precioAperturaConvertido = pos.getPrecio_apertura() / (numerador / denominador);
 
                 this.setCantidad(pos.getId(), accionesConvertidas + accionesSobrantes);
                 this.setPrecioApertura(pos.getId(), precioAperturaConvertido);
 
-                Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Se ha actualizado el split de " + pos.getNombre());
+                Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Se ha actualizado el split de " + pos.getNombre_activo());
             }
         }catch (ParseException e) {
             e.printStackTrace();
@@ -284,7 +284,7 @@ public final class PosicionesAbiertas extends MySQL {
 
     public void pagarDividendos() {
         MySQL.conectar();
-        List<PosicionAbierta> posicionAbiertas = getPosicionesAbiertasTipo(TipoValor.ACCIONES.toString());
+        List<PosicionAbierta> posicionAbiertas = getPosicionesAbiertasTipoActivo(TipoValor.ACCIONES.toString());
 
         Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
             transaccionesMySQL.conectar();
@@ -295,7 +295,7 @@ public final class PosicionesAbiertas extends MySQL {
                 Date fechaPagoDividendos;
 
                 try {
-                    JSONObject jsonDeLosDividendos = this.getJSONDividendos(posicionAbierta.getNombre());
+                    JSONObject jsonDeLosDividendos = this.getJSONDividendos(posicionAbierta.getNombre_activo());
                     dividendo = getCantidadDePagoDeDividendoDesdeJSON(jsonDeLosDividendos);
                     fechaPagoDividendos = getFechaPagoDividendosJSON(jsonDeLosDividendos);
                 } catch (Exception e) {
@@ -303,7 +303,7 @@ public final class PosicionesAbiertas extends MySQL {
                 }
 
                 if (diferenciaDias(new Date(), fechaPagoDividendos) == 0) {
-                    transaccionesMySQL.pagaDividendo(posicionAbierta.getNombre(), posicionAbierta.getJugador(), dividendo, posicionAbierta.getCantidad());
+                    transaccionesMySQL.pagaDividendo(posicionAbierta.getNombre_activo(), posicionAbierta.getJugador(), dividendo, posicionAbierta.getCantidad());
                 }
             }
 
@@ -322,7 +322,7 @@ public final class PosicionesAbiertas extends MySQL {
 
             List<PosicionAbierta> posicionesTickers = getPosicionesAbiertasJugadorCondicion(nombrePlayer, PosicionAbierta::esLargo).stream()
                     .filter(PosicionAbierta::esTipoAccion)
-                    .filter(distinctBy(PosicionAbierta::getNombre))
+                    .filter(distinctBy(PosicionAbierta::getNombre_activo))
                     .collect(Collectors.toList());
             MySQL.desconectar();
 
@@ -331,14 +331,14 @@ public final class PosicionesAbiertas extends MySQL {
             player.sendMessage("           ");
             for (PosicionAbierta posicion : posicionesTickers) {
                 try {
-                    JSONObject jsonDividendos = IEXCloud_API.getProximosDividendos(posicion.getNombre());
+                    JSONObject jsonDividendos = IEXCloud_API.getProximosDividendos(posicion.getNombre_activo());
 
                     Date fehcaPago = getFechaPagoDividendosJSON(jsonDividendos);
                     double cantidadDePago = Double.parseDouble((String) jsonDividendos.get("amount"));
         
-                    player.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + mapAllLlamadas.get(posicion.getNombre()).getNombreValor() + ChatColor.RESET + ChatColor.GOLD  + ": Proximo dividendo: " +
+                    player.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + mapAllLlamadas.get(posicion.getNombre_activo()).getNombre_activo() + ChatColor.RESET + ChatColor.GOLD  + ": Proximo dividendo: " +
                             dateFormater.format(fehcaPago) + " a " + ChatColor.GREEN + formatea.format(cantidadDePago) + " PC" + ChatColor.GOLD +
-                            "/Accion ( " + ChatColor.BOLD + ( (int) rentabilidad(mapAllLlamadas.get(posicion.getNombre()).getPrecio(), cantidadDePago) )  + "%" + ChatColor.RESET + "" + ChatColor.GOLD + " )");
+                            "/Accion ( " + ChatColor.BOLD + ( (int) rentabilidad(mapAllLlamadas.get(posicion.getNombre_activo()).getPrecio(), cantidadDePago) )  + "%" + ChatColor.RESET + "" + ChatColor.GOLD + " )");
                 } catch (Exception ignored) {
                 }
             }
@@ -364,7 +364,7 @@ public final class PosicionesAbiertas extends MySQL {
                     nombreEmpresa = IEXCloud_API.getNombreEmpresa(ticker);
                     precioPorAccion = IEXCloud_API.getOnlyPrice(ticker);
                 }else{
-                    nombreEmpresa = infoAccion.getNombreValor();
+                    nombreEmpresa = infoAccion.getNombre_activo();
                     precioPorAccion = infoAccion.getPrecio();
                 }
 
@@ -416,11 +416,11 @@ public final class PosicionesAbiertas extends MySQL {
     protected PosicionAbierta buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new PosicionAbierta(rs.getInt("id"),
                 rs.getString("jugador"),
-                rs.getString("tipo"),
-                rs.getString("nombre"),
+                rs.getString("tipo_activo"),
+                rs.getString("nombre_activo"),
                 rs.getInt("cantidad"),
-                rs.getDouble("precioApertura"),
-                rs.getString("fechaApertura"),
-                rs.getString("tipoPosicion"));
+                rs.getDouble("precio_apertura"),
+                rs.getString("fecha_apertura"),
+                rs.getString("tipo_posicion"));
     }
 }
