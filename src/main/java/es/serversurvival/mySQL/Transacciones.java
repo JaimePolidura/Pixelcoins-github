@@ -114,7 +114,7 @@ public final class Transacciones extends MySQL {
         Jugador pagado = jugadoresMySQL.getJugador(nombrePagado);
 
         if(pagado == null){
-            jugadoresMySQL.nuevoJugador(nombrePagado, cantidad, 0, 0, 0, 0, 0, 0, 0);
+            jugadoresMySQL.nuevoJugador(nombrePagado, cantidad, 0, 0, 0, 0, 0, Bukkit.getPlayer(nombrePagado).getUniqueId().toString());
         }else{
             jugadoresMySQL.setPixelcoin(nombrePagado, pagado.getPixelcoins() + cantidad);
         }
@@ -126,7 +126,7 @@ public final class Transacciones extends MySQL {
         Jugador pagado = jugadoresMySQL.getJugador(nombrePagado);
 
         if(pagado == null){
-            jugadoresMySQL.nuevoJugador(nombrePagado, cantidad, 0, 1, cantidad, 0, cantidad, 0, 0);
+            jugadoresMySQL.nuevoJugador(nombrePagado, cantidad, 0, cantidad, 0, 0, 0, Bukkit.getPlayer(nombrePagado).getUniqueId().toString());
         }else{
             jugadoresMySQL.setEstadisticas(nombrePagado, pagado.getPixelcoins() + cantidad, pagado.getNventas() + 1, pagado.getIngresos() + cantidad, pagado.getGastos());
         }
@@ -170,7 +170,7 @@ public final class Transacciones extends MySQL {
         if (registrado) {
             jugadoresMySQL.setPixelcoin(jugadorPlayer.getName(), pixelcoinsAnadir + dineroActual);
         } else {
-            jugadoresMySQL.nuevoJugador(jugadorPlayer.getName(), pixelcoinsAnadir, 0, 0, 0, 0, 0, 0, 0);
+            jugadoresMySQL.nuevoJugador(jugadorPlayer.getName(), pixelcoinsAnadir, 0, 0, 0, 0, 0, jugadorPlayer.getUniqueId().toString());
         }
         this.nuevaTransaccion(jugadorPlayer.getName(), "", pixelcoinsAnadir, nombreItem, TipoTransaccion.WITHERS_INGRESAR);
 
@@ -633,11 +633,9 @@ public final class Transacciones extends MySQL {
         empresasMySQL.setTodosOwner(jugadorACambiar, nuevoNombre);
         jugadoresMySQL.cambiarNombreJugador(jugadorACambiar, nuevoNombre);
         mensajesMySQL.setDestinatario(jugadorACambiar, nuevoNombre);
-        numeroCuentasMySQL.setJugador(jugadorACambiar, nuevoNombre);
         ofertasMySQL.setJugador(jugadorACambiar, nuevoNombre);
         posicionesAbiertasMySQL.setJugador(jugadorACambiar, nuevoNombre);
         posicionesCerradasMySQL.setJugador(jugadorACambiar, nuevoNombre);
-        jugadoresInfoMySQL.setNombreJugador(jugadorACambiar, nuevoNombre);
         setCompradorVendedor(jugadorACambiar, nuevoNombre);
 
         nuevaTransaccion(nuevoNombre, nuevoNombre, 0, "", TipoTransaccion.BASEDATOS_CAMBIAR_NOMBRE);

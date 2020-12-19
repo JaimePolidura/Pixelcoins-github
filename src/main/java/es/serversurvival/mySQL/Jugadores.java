@@ -7,6 +7,7 @@ import es.serversurvival.util.Funciones;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 /**
  * II 240 -> 129
@@ -24,14 +25,7 @@ public final class Jugadores extends MySQL {
     }
 
     public int generearNumeroCuenta () {
-        boolean reg = true;
-        int numero = 0;
-        while (reg){
-            numero = (int) (Math.random() * 99999);
-            reg = this.estaRegistradoNumeroCuenta(numero);
-        }
-
-        return numero;
+        return (int) (Math.random() * 99999);
     }
 
     public boolean estaRegistradoNumeroCuenta (int numero) {
@@ -42,6 +36,12 @@ public final class Jugadores extends MySQL {
 
     public Jugador getJugador(String jugador){
         ResultSet rs = executeQuery(String.format("SELECT * FROM jugadores WHERE nombre = '%s'", jugador));
+
+        return (Jugador) buildSingleObjectFromResultSet(rs);
+    }
+
+    public Jugador getJugadorUUID (String uuid){
+        ResultSet rs = executeQuery("SELECT * FROM jugadores WHERE uuid = '"+uuid+"'");
 
         return (Jugador) buildSingleObjectFromResultSet(rs);
     }
@@ -72,6 +72,10 @@ public final class Jugadores extends MySQL {
 
     public void cambiarNombreJugador (String jugador, String nuevoNombreJugador) {
         executeUpdate("UPDATE jugadores SET nombre = '"+nuevoNombreJugador+"' WHERE nombre = '"+nuevoNombreJugador+"'");
+    }
+
+    public void setUuid (String jugador, String uuid){
+        executeUpdate("UPDATE jugadores SET uuid = '"+uuid+"' WHERE nombre = '"+jugador+"'");
     }
 
     public List<Jugador> getAllJugadores(){
@@ -140,6 +144,28 @@ public final class Jugadores extends MySQL {
             pos++;
         }
         return -1;
+    }
+
+    public void setUpJugadorUnido (Player player) {
+        Jugador jugadorPorUUID = jugadoresMySQL.getJugadorUUID(player.getUniqueId().toString());
+
+        if(jugadorPorUUID == null){
+            Jugador jugadorPorNombre = jugadoresMySQL.getJugador(player.getName());
+
+            if(jugadorPorNombre == null){
+                jugadoresMySQL.nuevoJugador(player.getName(), 0, 0, 0, 0, 0, 0, player.getUniqueId().toString());
+            }else{
+                jugadoresMySQL.setUuid(player.getName(), player.getUniqueId().toString());
+            }
+        }else{
+            if(!player.getName().equalsIgnoreCase(jugadorPorUUID.getNombre())){
+                transaccionesMySQL.cambiarNombreJugadorRegistros(jugadorPorUUID.getNombre(), player.getName());
+            }
+
+            if(jugadorPorUUID.getNumero_cuenta() == 0){
+                jugadoresMySQL.setNumeroCuenta(player.getName(), jugadoresMySQL.generearNumeroCuenta());
+            }
+        }
     }
 
     @Override

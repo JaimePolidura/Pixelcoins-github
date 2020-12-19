@@ -14,13 +14,11 @@ public abstract class Comando {
     protected static Jugadores jugadoresMySQL = Jugadores.INSTANCE;
     protected static LlamadasApi llamadasApiMySQL = LlamadasApi.INSTANCE;
     protected static Mensajes mensajesMySQL = Mensajes.INSTANCE;
-    protected static NumeroCuentas numeroCuentasMySQL = NumeroCuentas.INSTANCE;
     protected static Ofertas ofertasMySQL = Ofertas.INSTANCE;
     protected static PosicionesAbiertas posicionesAbiertasMySQL = PosicionesAbiertas.INSTANCE;
     protected static PosicionesCerradas posicionesCerradasMySQL = PosicionesCerradas.INSTANCE;
     protected static Transacciones transaccionesMySQL = Transacciones.INSTANCE;
     protected static Deudas deudasMySQL = Deudas.INSTANCE;
-    protected static JugadoresInfo jugadoresInfoMySQL = JugadoresInfo.INSTANCE;
 
     public DecimalFormat formatea = Funciones.FORMATEA;
 

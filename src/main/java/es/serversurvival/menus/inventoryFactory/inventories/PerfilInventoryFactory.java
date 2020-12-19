@@ -229,7 +229,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
 
         Cuenta cuenta = cuentasMySQL.getCuenta(jugador);
         if(cuenta == null){
-            int numeroCuenta = numeroCuentasMySQL.getNumeroCuenta(jugador).getNumero();
+            int numeroCuenta = jugadoresMySQL.getJugador(jugador).getNumero_cuenta();
             lore.add(ChatColor.DARK_AQUA + "No tienes cuenta, para registrarse:");
             lore.add(ChatColor.DARK_AQUA + "" + ChatColor.UNDERLINE + "http://serversurvival.ddns.net/registrarse");
             lore.add(ChatColor.DARK_AQUA + "Tu numero de cuenta: " + ChatColor.BOLD + numeroCuenta);

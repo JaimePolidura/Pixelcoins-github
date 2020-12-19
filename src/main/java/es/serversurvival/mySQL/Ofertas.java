@@ -42,6 +42,13 @@ public final class Ofertas extends MySQL {
         return oferta != null ? oferta.getId() : -1;
     }
 
+    public int getEspacios (String jugador) {
+        ResultSet rs = executeQuery("SELECT * FROM ofertas WHERE jugador = '"+jugador+"'");
+        List<Oferta> ofertas = buildListFromResultSet(rs);
+
+        return ofertas != null || ofertas.size() != 0 ? 0 : ofertas.size();
+    }
+
     private void borrarOferta(int id) {
         executeUpdate("DELETE FROM ofertas WHERE id=\"" + id + "\"      ");
     }
@@ -84,8 +91,6 @@ public final class Ofertas extends MySQL {
         encantamientosMySQL.borrarEncantamientosOferta(id);
         borrarOferta(id);
 
-        int espacios = jugadoresMySQL.getJugador(nombreJugador).getEspacios() - 1;
-        jugadoresMySQL.setEspacios(nombreJugador, espacios);
     }
 
     public void crearOferta(ItemStack itemAVender, Player jugadorPlayer, double precio) {
@@ -95,19 +100,12 @@ public final class Ofertas extends MySQL {
         Jugador jugador = jugadoresMySQL.getJugador(jugadorPlayer.getName());
         int nOfertas = getTodasOfertas().size();
 
-        /*if(nOfertas == 53){
-            jugadorPlayer.sendMessage(ChatColor.GOLD + "La tienda esta llena");
-            return;
-        }*/
-
         if(jugador == null){
-            jugadoresMySQL.nuevoJugador(nombreJugador, 0, 1, 0, 0, 0, 0, 0, 0);
+            jugadoresMySQL.nuevoJugador(nombreJugador, 0, 1, 0, 0, 0, 0, jugadorPlayer.getUniqueId().toString());
         }else {
-            if (jugador.getEspacios() >= maxEspacios) {
+            if (getEspacios(nombreJugador) >= maxEspacios) {
                 jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Solo puedes tener "+maxEspacios+" objetos a la vez en la tienda");
                 return;
-            }else{
-                jugadoresMySQL.setEspacios(nombreJugador, jugador.getEspacios() + 1);
             }
         }
 

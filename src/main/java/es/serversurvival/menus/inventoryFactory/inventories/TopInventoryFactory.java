@@ -290,7 +290,7 @@ public class TopInventoryFactory extends InventoryFactory {
             this.jugador = jugador;
             this.nombre = nombre;
             this.patrimonio = patrimonio;
-            this.porcentajePatrimonioIngresos = Funciones.rentabilidad(patrimonio, jugador.getBeneficios());
+            this.porcentajePatrimonioIngresos = Funciones.rentabilidad(patrimonio, jugador.getIngresos() - jugador.getGastos());
         }
     }
 }
