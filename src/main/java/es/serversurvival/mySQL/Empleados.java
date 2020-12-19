@@ -8,6 +8,7 @@ import java.util.Date;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
+import org.apache.commons.lang.ObjectUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -107,9 +108,9 @@ public final class Empleados extends MySQL {
 
     public boolean trabajaEmpresa(String empleado, String nombreEmpresa) {
         try{
-            ResultSet rs = executeQuery("SELECT id FROM empleados WHERE empleado = '"+empleado+"' AND empresa = '"+nombreEmpresa+"'");
+            ResultSet rs = executeQuery("SELECT id FROM empleados WHERE jugador = '"+empleado+"' AND empresa = '"+nombreEmpresa+"'");
             return rs.next();
-        }catch (SQLException e){
+        }catch (SQLException | NullPointerException e){
             e.printStackTrace();
             return false;
         }

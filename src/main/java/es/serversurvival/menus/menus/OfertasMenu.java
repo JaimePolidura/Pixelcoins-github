@@ -44,7 +44,7 @@ public class OfertasMenu extends Menu implements Clickable, Paginated, Refreshca
         Player player = (Player) event.getWhoClicked();
         ItemStack itemClicked = event.getCurrentItem();
 
-        if(itemClicked == null || Funciones.noEsDeTipoItem(itemClicked, "NAME_TAG", "REDSTONE_TORCH")){
+        if(itemClicked == null || Funciones.esDeTipoItem(itemClicked, "AIR")){
             return;
         }
 

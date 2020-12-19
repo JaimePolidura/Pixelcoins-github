@@ -49,7 +49,7 @@ public final class Ofertas extends MySQL {
         return ofertas != null || ofertas.size() != 0 ? 0 : ofertas.size();
     }
 
-    private void borrarOferta(int id) {
+    public void borrarOferta(int id) {
         executeUpdate("DELETE FROM ofertas WHERE id=\"" + id + "\"      ");
     }
 
@@ -85,12 +85,6 @@ public final class Ofertas extends MySQL {
 
     public static boolean estaBaneado (String item) {
         return bannedItems.stream().anyMatch( (ite) -> ite.equalsIgnoreCase(item));
-    }
-
-    public void borrarOferta(int id, String nombreJugador) {
-        encantamientosMySQL.borrarEncantamientosOferta(id);
-        borrarOferta(id);
-
     }
 
     public void crearOferta(ItemStack itemAVender, Player jugadorPlayer, double precio) {
@@ -157,7 +151,7 @@ public final class Ofertas extends MySQL {
     public void retirarOferta(Player jugadorPlayer, int idARetirar) {
         ItemStack itemARetirar = this.getItemOferta(getOferta(idARetirar));
 
-        borrarOferta(idARetirar, jugadorPlayer.getName());
+        borrarOferta(idARetirar);
 
         jugadorPlayer.getInventory().addItem(itemARetirar);
         jugadorPlayer.sendMessage(ChatColor.GOLD + "Objeto retirado!");

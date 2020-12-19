@@ -149,7 +149,7 @@ public final class Empresas extends MySQL {
     public void cambiarNombre(Player player, String empresa, String nuevoNombre) {
         List<Empleado> empleados = empleadosMySQL.getEmpleadosEmrpesa(empresa);
 
-        empleadosMySQL.cambiarEmpresaNombre(empresa, nuevoNombre);
+        //empleadosMySQL.cambiarEmpresaNombre(empresa, nuevoNombre);
         setNombre(empresa, nuevoNombre);
 
         player.sendMessage(ChatColor.GOLD + "Has cambiado de nombre a tu empresa!");
@@ -178,7 +178,6 @@ public final class Empresas extends MySQL {
         transaccionesMySQL.nuevaTransaccion(ownerJugador.getNombre(), ownerJugador.getNombre(), empresaABorrar.getPixelcoins(), empresaNombre, TipoTransaccion.EMPRESA_BORRAR);
 
         empleados.forEach( (empleado) -> {
-            empleadosMySQL.borrarEmplado(empleado.getId());
             Player empleadoPlayer = Bukkit.getPlayer(empleado.getJugador());
 
             if(empleadoPlayer != null){

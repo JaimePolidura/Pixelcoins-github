@@ -75,7 +75,7 @@ public final class Transacciones extends MySQL {
         itemAComprar.setAmount(1);
 
         if (cantidad == 1) {
-            ofertasMySQL.borrarOferta(id, vendedor);
+            ofertasMySQL.borrarOferta(id);
         } else {
             ofertasMySQL.setCantidad(id, cantidad - 1);
         }
