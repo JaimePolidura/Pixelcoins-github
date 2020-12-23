@@ -28,6 +28,12 @@ public final class Jugadores extends MySQL {
         return (int) (Math.random() * 99999);
     }
 
+    public boolean estaRegistradoNumeroCuentaPara (String jugador, int numero) {
+        ResultSet rs = executeQuery("SELECT * FROM jugadores WHERE numero_cuenta = '"+numero+"' AND jugador = '"+jugador+"'");
+
+        return !isEmpty(rs);
+    }
+
     public boolean estaRegistradoNumeroCuenta (int numero) {
         ResultSet rs = executeQuery("SELECT * FROM jugadores WHERE numero_cuenta = '"+numero+"'");
 

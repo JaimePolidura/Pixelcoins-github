@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class WebChangePassWordEventoExecutor extends EventoExecuter {
     @Override
     public TipoEvento getTipoEvento() {
-        return TipoEvento.WEB_CHANGE_PASSWORD;
+        return TipoEvento.CHANGE_PASSWORD;
     }
 
     /**

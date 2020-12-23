@@ -36,6 +36,6 @@ public class EventoListener {
     }
 
     private void rellenarEventosDisponibles() {
-        this.tipoEventosDisponibles.put(TipoEvento.WEB_CHANGE_PASSWORD, new WebChangePassWordEventoExecutor());
+        this.tipoEventosDisponibles.put(TipoEvento.CHANGE_PASSWORD, new WebChangePassWordEventoExecutor());
     }
 }

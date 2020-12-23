@@ -3,6 +3,7 @@ package es.serversurvival.main;
 import es.serversurvival.comandos.CommandManager;
 import es.serversurvival.eventosMinecraft.*;
 import es.serversurvival.mySQL.*;
+import es.serversurvival.socketWeb.ServerSocketWeb;
 import es.serversurvival.task.*;
 import org.bukkit.ChatColor;
 
@@ -46,6 +47,7 @@ public final class Pixelcoin extends JavaPlugin {
         ActualizarNPCs actualizarNPCs = new ActualizarNPCs();
         SplitAcciones splitAccionesTask = new SplitAcciones();
         EventosBDListenerTask eventosTask = new EventosBDListenerTask();
+        ServerSocketWeb serverSocketWeb = new ServerSocketWeb();
 
         int cadaDia = 20 * 60 * 60 * 24;
         int cada20Minutos = 20 * 20 * 60;
@@ -69,6 +71,7 @@ public final class Pixelcoin extends JavaPlugin {
         actualizarNPCs.runTaskTimer(this, cada15Segundos, cada5Minutos);
         splitAccionesTask.runTaskTimer(this, cadaMinuto, cadaDia);
         dividendosTask.runTaskTimer(this, cada2Minutos, cadaDia);
+        serverSocketWeb.runTaskAsynchronously(this);
     }
 
     private void setUpListeners() {

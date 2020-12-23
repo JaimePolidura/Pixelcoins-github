@@ -1,5 +1,7 @@
 package es.serversurvival.mySQL.enums;
 
 public enum  TipoEvento {
-    WEB_CHANGE_PASSWORD,
+    CHANGE_PASSWORD,
+    IS_PLAYER_ONLINE,
+    PLAYER_STATUS
 }
