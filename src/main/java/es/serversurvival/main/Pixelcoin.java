@@ -46,7 +46,6 @@ public final class Pixelcoin extends JavaPlugin {
         ActualizarLlamadasApi actualizarPreciosTask = new ActualizarLlamadasApi();
         ActualizarNPCs actualizarNPCs = new ActualizarNPCs();
         SplitAcciones splitAccionesTask = new SplitAcciones();
-        EventosBDListenerTask eventosTask = new EventosBDListenerTask();
         ServerSocketWeb serverSocketWeb = new ServerSocketWeb();
 
         int cadaDia = 20 * 60 * 60 * 24;
@@ -66,7 +65,6 @@ public final class Pixelcoin extends JavaPlugin {
         sueldosTask.runTaskTimer(this, ahora, cadaDia);
         deudasTask.runTaskTimer(this, ahora, cadaDia);
         mensjesTask.runTaskTimer(this, ahora, cada20Minutos);
-        eventosTask.runTaskTimer(this, cada1Segundo, cada5Segundos);
         actualizarPreciosTask.runTaskTimer(this, ahora, cada3Minutos);
         actualizarNPCs.runTaskTimer(this, cada15Segundos, cada5Minutos);
         splitAccionesTask.runTaskTimer(this, cadaMinuto, cadaDia);

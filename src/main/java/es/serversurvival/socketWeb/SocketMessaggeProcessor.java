@@ -1,9 +1,8 @@
 package es.serversurvival.socketWeb;
 
+import es.serversurvival.socketWeb.messagges.IsOnlineMessagge;
 import es.serversurvival.socketWeb.messagges.SendNumberMessagge;
-import es.serversurvival.socketWeb.messagges.SocketMessagge;
 import es.serversurvival.socketWeb.messagges.SocketMessaggeExecutor;
-import jdk.internal.org.objectweb.asm.Handle;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,5 +20,6 @@ public class SocketMessaggeProcessor {
 
     private void fillHashMap () {
         socketMessagge.put("sendnumber", new SendNumberMessagge());
+        socketMessagge.put("isonline", new IsOnlineMessagge());
     }
 }

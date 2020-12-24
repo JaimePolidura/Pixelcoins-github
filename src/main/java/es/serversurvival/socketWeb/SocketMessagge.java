@@ -1,4 +1,4 @@
-package es.serversurvival.socketWeb.messagges;
+package es.serversurvival.socketWeb;
 
 import javafx.util.Pair;
 
