@@ -1,6 +1,5 @@
 package es.serversurvival.npc.groups;
 
-
 import net.jitse.npclib.api.NPC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
