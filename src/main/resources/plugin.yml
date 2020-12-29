@@ -51,3 +51,6 @@ commands:
   venderjugador:
     description: vender un objeto a un jugador
     usage: /<command> <jugador> <precio>
+  re:
+    description: Enviar un mensaje a un jugador que esta fuera del servidor (web)
+    usage: /<command> <mensaje>

@@ -33,6 +33,7 @@ public class CommandManager implements CommandExecutor {
         comandos.add(new Vender());
         comandos.add(new CMensajes());
         comandos.add(new AyudaDeudas());
+        comandos.add(new Re());
         comandos.add(new CrearEmpresas());
         comandos.add(new DepositarEmpresas());
         comandos.add(new SacarEmpresas());

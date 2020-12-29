@@ -19,6 +19,7 @@ public abstract class Comando {
     protected static PosicionesCerradas posicionesCerradasMySQL = PosicionesCerradas.INSTANCE;
     protected static Transacciones transaccionesMySQL = Transacciones.INSTANCE;
     protected static Deudas deudasMySQL = Deudas.INSTANCE;
+    protected static ConversacionesWeb conversacionesWebMySQL = ConversacionesWeb.INSTANCE;
 
     public DecimalFormat formatea = Funciones.FORMATEA;
 

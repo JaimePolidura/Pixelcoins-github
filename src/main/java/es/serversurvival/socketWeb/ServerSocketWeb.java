@@ -7,6 +7,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ServerSocketWeb extends BukkitRunnable {
+    private ServerSocketWeb () {}
+
+    public final static ServerSocketWeb INSTANCE = new ServerSocketWeb();
+
     private final SocketMessaggeProcessor socketMessaggeProcessor = new SocketMessaggeProcessor();
     private final String LOCALHOST = "127.0.0.1";
     private final int BUKKIT_PORT = 10000;
@@ -37,6 +41,19 @@ public class ServerSocketWeb extends BukkitRunnable {
                 output.close();
             }
         }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void enviarMensaje (String mensaje) {
+        try{
+            Socket serverSocket = new Socket(LOCALHOST, BACKEND_PORT);
+            DataOutputStream output = new DataOutputStream(serverSocket.getOutputStream());
+            output.writeUTF(mensaje);
+
+            output.close();
+            serverSocket.close();
+        }catch (Exception e) {
             e.printStackTrace();
         }
     }

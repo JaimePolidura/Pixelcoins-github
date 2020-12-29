@@ -47,7 +47,7 @@ public final class Pixelcoin extends JavaPlugin {
         ActualizarLlamadasApi actualizarPreciosTask = new ActualizarLlamadasApi();
         ActualizarNPCs actualizarNPCs = new ActualizarNPCs();
         SplitAcciones splitAccionesTask = new SplitAcciones();
-        ServerSocketWeb serverSocketWeb = new ServerSocketWeb();
+        ServerSocketWeb serverSocketWeb = ServerSocketWeb.INSTANCE;
         RabbitMQConsumer rabbitMQConsumer = new RabbitMQConsumer();
 
         int cadaDia = 20 * 60 * 60 * 24;
@@ -100,6 +100,7 @@ public final class Pixelcoin extends JavaPlugin {
         getCommand("cuenta").setExecutor(commandExecutor);
         getCommand("perfil").setExecutor(commandExecutor);
         getCommand("venderjugador").setExecutor(commandExecutor);
+        getCommand("re").setExecutor(commandExecutor);
     }
 
     @Override
