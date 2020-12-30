@@ -35,4 +35,23 @@ public class SocketMessagge {
     public String get (String value) {
         return content.get(value);
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(name).append("-");
+
+        int count = 1;
+        for(Map.Entry<String, String> entry : content.entrySet()){
+            if(count == content.size()){
+                builder.append(entry.getKey()).append("=").append(entry.getValue());
+            }else{
+                builder.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
+            }
+
+            count++;
+        }
+
+        return builder.toString();
+    }
 }

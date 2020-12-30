@@ -15,6 +15,7 @@ import java.sql.SQLException;
 
 public class ConversacionesWeb extends MySQL{
     public static final ConversacionesWeb INSTANCE = new ConversacionesWeb();
+    private ServerSocketWeb socket = ServerSocketWeb.INSTANCE;
 
     private ConversacionesWeb () {}
 
@@ -43,7 +44,7 @@ public class ConversacionesWeb extends MySQL{
         executeUpdate("DELETE FROM conversacionesweb WHERE web_nombre = '"+web_nombre+"'");
     }
 
-    public void handlePrimerMensajeWeb (SocketMessagge socketMessagge) {
+    public void handleMensajeWeb(SocketMessagge socketMessagge) {
         String to = socketMessagge.get("to");
         String message = socketMessagge.get("message");
         String sender = socketMessagge.get("sender");
@@ -58,7 +59,7 @@ public class ConversacionesWeb extends MySQL{
 
             if(antiguaConversacionServer != null){
                 borrarConversacionServer(to);
-                //TODO: Enviar mensaje a web didciendo que ha cerrado el chat
+                cerrarChat(antiguaConversacionServer);
             }
 
             nuevaConversacion(sender, to);
@@ -67,12 +68,29 @@ public class ConversacionesWeb extends MySQL{
         }
 
         toPlayer.sendMessage(ChatColor.BOLD + "" + ChatColor.BOLD + sender + "> " + ChatColor.RESET + "" + ChatColor.YELLOW + message);
-        toPlayer.playSound(toPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        toPlayer.playSound(toPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 10);
+    }
+
+    public void handleDesconexionWeb (SocketMessagge socketMessagge) {
+        Player player = Bukkit.getPlayer(socketMessagge.get("to"));
+        String sender = socketMessagge.get("sender");
+        this.borrarConversacionWeb(sender);
+
+        if(player != null) {
+            player.sendMessage(ChatColor.DARK_AQUA + sender + " se ha desconectado");
+            player.playSound(player.getLocation(), Sound.BLOCK_METAL_HIT, 1, 10);
+        }
+    }
+
+    public void cerrarChat (ConversacionWeb conversacionWeb) {
+        String message = "chatdisconnect-to=" + conversacionWeb.getWeb_nombre() + "&sender=" + conversacionWeb.getServer_nombre();
+        this.borrarConversacionServer(conversacionWeb.getServer_nombre());
+        socket.enviarMensaje(message);
     }
 
     public void nuevoMensaje (ConversacionWeb conversacion, Player sender, String mensaje) {
         String mensajeSocket = "chat-sender=" + sender.getName() + "&to=" + conversacion.getWeb_nombre() + "&message=" + mensaje;
-        ServerSocketWeb.INSTANCE.enviarMensaje(mensajeSocket);
+        socket.enviarMensaje(mensajeSocket);
 
         sender.sendMessage("Tu> " + ChatColor.YELLOW + mensaje);
     }

@@ -3,7 +3,6 @@ package es.serversurvival.task;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.impl.AMQImpl;
 import es.serversurvival.mySQL.ConversacionesWeb;
 import es.serversurvival.socketWeb.SocketMessagge;
 import org.bukkit.Bukkit;
@@ -51,7 +50,12 @@ public class RabbitMQConsumer extends BukkitRunnable {
         SocketMessagge processedMessage = new SocketMessagge(rawStringMessage);
         
         ConversacionesWeb.conectar();
-        ConversacionesWeb.INSTANCE.handlePrimerMensajeWeb(processedMessage);
+        if(processedMessage.getName().equalsIgnoreCase("chat")){
+            ConversacionesWeb.INSTANCE.handleMensajeWeb(processedMessage);
+        }else{
+            ConversacionesWeb.INSTANCE.handleDesconexionWeb(processedMessage);
+        }
+
         ConversacionesWeb.desconectar();
     }
 
