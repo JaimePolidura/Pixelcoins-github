@@ -9,7 +9,7 @@ import sun.misc.Queue;
 /**
  * isonline-name=jaimetruman
  */
-public class IsOnlineMessagge extends SocketMessaggeExecutor{
+public class IsOnlineMessagge extends SocketMessaggeExecutor implements CanRedirect{
     private final String name = "isonline";
 
     @Override
@@ -18,12 +18,13 @@ public class IsOnlineMessagge extends SocketMessaggeExecutor{
     }
 
     @Override
-    public String execute(SocketMessagge messagge) {
+    public SocketMessagge execute(SocketMessagge messagge) {
         String playerName = messagge.get("name");
         Player player = Bukkit.getPlayer(playerName);
 
-        System.out.println(player != null);
+        StringBuilder builder = new StringBuilder();
+        builder.append("isonline-name=").append(playerName).append("&result=").append(player != null);
 
-        return player != null ? "true" : "false";
+        return new SocketMessagge(builder.toString());
     }
 }

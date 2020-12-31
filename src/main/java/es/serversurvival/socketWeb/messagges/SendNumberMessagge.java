@@ -1,5 +1,6 @@
 package es.serversurvival.socketWeb.messagges;
 
+import es.serversurvival.mySQL.VerificacionCuentas;
 import es.serversurvival.socketWeb.SocketMessagge;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,14 +18,19 @@ public class SendNumberMessagge extends SocketMessaggeExecutor {
     }
 
     @Override
-    public String execute(SocketMessagge messagge) {
-        int number = Integer.parseInt(messagge.get("number"));
+    public SocketMessagge execute(SocketMessagge messagge) {
         Player player = Bukkit.getPlayer(messagge.get("name"));
 
         if(player != null){
+            VerificacionCuentas verificacionCuentasMySQL = VerificacionCuentas.INSTANCE;
+            int number = (int) (Math.random() * 9999);
+
+            VerificacionCuentas.INSTANCE.removeVerificacionCuenta(player.getName());
+            VerificacionCuentas.INSTANCE.nuevaVerificacionCuenta(player.getName(), number);
+
             player.sendMessage(ChatColor.GOLD + "El numero de verificacion: " + number);
         }
 
-        return NO_RETURN_MESSAGGE;
+        return NO_RESPONSE;
     }
 }

@@ -6,12 +6,12 @@ import es.serversurvival.mySQL.*;
 import es.serversurvival.socketWeb.ServerSocketWeb;
 import es.serversurvival.task.*;
 import org.bukkit.ChatColor;
-import com.rabbitmq.client.*;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Pixelcoin extends JavaPlugin {
+    private ConversacionesWeb conversacionesWebMySQL = ConversacionesWeb.INSTANCE;
     private Deudas deudasMySQL = Deudas.INSTANCE;
     private Empleados empleadosMySQL = Empleados.INSTANCE;
 
@@ -30,6 +30,7 @@ public final class Pixelcoin extends JavaPlugin {
         MySQL.conectar();
         deudasMySQL.pagarDeudas();
         empleadosMySQL.pagarSueldos();
+        conversacionesWebMySQL.borrarTodasConversacionesWeb();
         MySQL.desconectar();
 
         getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "------------------------------");
@@ -48,7 +49,7 @@ public final class Pixelcoin extends JavaPlugin {
         ActualizarNPCs actualizarNPCs = new ActualizarNPCs();
         SplitAcciones splitAccionesTask = new SplitAcciones();
         ServerSocketWeb serverSocketWeb = ServerSocketWeb.INSTANCE;
-        RabbitMQConsumer rabbitMQConsumer = new RabbitMQConsumer();
+        RabbitMQConsumerTask rabbitMQConsumer = new RabbitMQConsumerTask();
 
         int cadaDia = 20 * 60 * 60 * 24;
         int cada20Minutos = 20 * 20 * 60;
@@ -71,7 +72,6 @@ public final class Pixelcoin extends JavaPlugin {
         actualizarNPCs.runTaskTimer(this, cada15Segundos, cada5Minutos);
         splitAccionesTask.runTaskTimer(this, cadaMinuto, cadaDia);
         dividendosTask.runTaskTimer(this, cada2Minutos, cadaDia);
-        serverSocketWeb.runTaskAsynchronously(this);
         rabbitMQConsumer.runTaskAsynchronously(this);
     }
 
