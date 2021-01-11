@@ -2,11 +2,14 @@ package es.serversurvival.comandos.comandos;
 
 import es.serversurvival.comandos.Comando;
 import es.serversurvival.mySQL.MySQL;
-import es.serversurvival.mySQL.Transacciones;
-import es.serversurvival.util.Funciones;
+import main.ValidationResult;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import static es.serversurvival.validaciones.Validaciones.*;
+import static main.ValidationsService.*;
+
+//Esta clase hice el test directamente en el servidor por eso no tiene su archivo en la carpeta test
 public class Comprar extends Comando {
     private final String CNOmbre = "comprar";
     private final String sintaxis = "/comprar <empresa> <precio>";
@@ -24,23 +27,19 @@ public class Comprar extends Comando {
         return ayuda;
     }
 
-    public void execute(Player p, String[] args) {
-        if (args.length != 2) {
-            p.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: " + this.sintaxis);
-            return;
-        }
-        if(!Funciones.esDouble(args[1])){
-            p.sendMessage(ChatColor.DARK_RED + "A ser posible mete numero no texto");
-            return;
-        }
-        double precioD = Double.parseDouble(args[1]);
-        if(precioD <= 0){
-            p.sendMessage(ChatColor.DARK_RED + "A ser posible mete numeros que sean negativos o que no sean ceros");
+    public void execute(Player player, String[] args) {
+        ValidationResult result = startValidating(args, NotNull.message(mensajeUsoIncorrecto()))
+                .and(args.length, Same.as(2, mensajeUsoIncorrecto()))
+                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), PositiveNumber)
+                .validateAll();
+
+        if(result.isFailed()){
+            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
             return;
         }
 
         MySQL.conectar();
-        transaccionesMySQL.comprarServivio(args[0], precioD, p);
+        transaccionesMySQL.comprarServivio(args[0], Double.parseDouble(args[1]), player);
         MySQL.desconectar();
     }
 }

@@ -25,7 +25,7 @@ public class TiendaAyuda extends AyudaSubCommand {
         p.sendMessage("          ");
         p.sendMessage(ChatColor.GOLD + "En la tienda puedes comprar y vender objetos de manera segura y rapida sin requerir de que el vendedor este online. Se accede con /tienda o /warp spawn y clickeando al NPC llamando tienda.");
         p.sendMessage("          ");
-        p.sendMessage("/vender <precio de pixelcoins>" + ChatColor.GOLD + "Con este podras lanzar a la venta el objeto que tengas en la mano a un determinado precio en la tienda, solo podras tener " + Ofertas.maxEspacios + " como maximo en la tienda a le vez.");
+        p.sendMessage("/vender <precio de pixelcoins>" + ChatColor.GOLD + "Con este podras lanzar a la venta el objeto que tengas en la mano a un determinado precio en la tienda, solo podras tener " + Ofertas.MAX_ESPACIOS + " como maximo en la tienda a le vez.");
         p.sendMessage("          ");
         p.sendMessage("/tienda " + ChatColor.GOLD + "Con este comando podras acceder a la tienda");
         p.sendMessage("          ");

@@ -45,6 +45,18 @@ public final class PosicionesAbiertas extends MySQL {
         return (PosicionAbierta) buildSingleObjectFromResultSet(rs);
     }
 
+    public PosicionAbierta getPosicionAbierta (int id, String jugador) {
+        ResultSet rs = executeQuery(String.format("SELECT * FROM posicionesabiertas WHERE id = '"+id+"' AND jugador = '%s'", jugador));
+
+        return (PosicionAbierta) buildSingleObjectFromResultSet(rs);
+    }
+
+    public PosicionAbierta getPosicionAbierta (int id, String jugador, TipoPosicion tipoPosicion) {
+        ResultSet rs = executeQuery(String.format("SELECT * FROM posicionesabiertas WHERE id = '"+id+"' AND jugador = '%s' AND tipo_posicion = '%s'", jugador, tipoPosicion.toString()));
+
+        return (PosicionAbierta) buildSingleObjectFromResultSet(rs);
+    }
+
     public List<PosicionAbierta> getPosicionesAbiertasJugador(String jugador){
         ResultSet rs = executeQuery(String.format("SELECT * FROM posicionesabiertas WHERE jugador = '%s'", jugador));
 

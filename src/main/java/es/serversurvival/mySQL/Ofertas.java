@@ -24,7 +24,7 @@ public final class Ofertas extends MySQL {
     public final static Ofertas INSTANCE = new Ofertas();
     private Ofertas () {}
 
-    public final static int maxEspacios = 90;
+    public final static int MAX_ESPACIOS = 90;
     public final static String NOMBRE_ITEM_RETIRAR = ChatColor.RED + "" + ChatColor.BOLD + "CLICK PARA RETIRAR";
     public final static String NOMBRE_ITEM_COMPRAR = ChatColor.AQUA + "" + ChatColor.BOLD + "CLICK PARA COMPRAR";
     private final static List<String> bannedItems = Arrays.asList("POTION", "BANNER", "SPLASH_POTION", "LINGERING_POTION");
@@ -97,8 +97,8 @@ public final class Ofertas extends MySQL {
         if(jugador == null){
             jugadoresMySQL.nuevoJugador(nombreJugador, 0, 1, 0, 0, 0, 0, jugadorPlayer.getUniqueId().toString());
         }else {
-            if (getEspacios(nombreJugador) >= maxEspacios) {
-                jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Solo puedes tener "+maxEspacios+" objetos a la vez en la tienda");
+            if (getEspacios(nombreJugador) >= MAX_ESPACIOS) {
+                jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Solo puedes tener "+ MAX_ESPACIOS +" objetos a la vez en la tienda");
                 return;
             }
         }

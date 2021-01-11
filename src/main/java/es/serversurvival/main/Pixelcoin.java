@@ -49,7 +49,7 @@ public final class Pixelcoin extends JavaPlugin {
         ActualizarNPCs actualizarNPCs = new ActualizarNPCs();
         SplitAcciones splitAccionesTask = new SplitAcciones();
         ServerSocketWeb serverSocketWeb = ServerSocketWeb.INSTANCE;
-        RabbitMQConsumerTask rabbitMQConsumer = new RabbitMQConsumerTask();
+        //RabbitMQConsumerTask rabbitMQConsumer = new RabbitMQConsumerTask();
 
         int cadaDia = 20 * 60 * 60 * 24;
         int cada20Minutos = 20 * 20 * 60;
@@ -72,7 +72,7 @@ public final class Pixelcoin extends JavaPlugin {
         actualizarNPCs.runTaskTimer(this, cada15Segundos, cada5Minutos);
         splitAccionesTask.runTaskTimer(this, cadaMinuto, cadaDia);
         dividendosTask.runTaskTimer(this, cada2Minutos, cadaDia);
-        rabbitMQConsumer.runTaskAsynchronously(this);
+        //rabbitMQConsumer.runTaskAsynchronously(this);
     }
 
     private void setUpListeners() {

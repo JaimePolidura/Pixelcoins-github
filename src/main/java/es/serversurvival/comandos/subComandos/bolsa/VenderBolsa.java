@@ -1,10 +1,17 @@
 package es.serversurvival.comandos.subComandos.bolsa;
 
+import com.sun.deploy.security.ValidationState;
+import es.serversurvival.mySQL.MySQL;
+import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.apiHttp.IEXCloud_API;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
+import main.ValidationResult;
+import main.ValidationsService;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import static es.serversurvival.validaciones.Validaciones.*;
 
 public class VenderBolsa extends BolsaSubCommand {
     private final String SCNombre = "vender";
@@ -23,45 +30,22 @@ public class VenderBolsa extends BolsaSubCommand {
         return ayuda;
     }
 
-    public void execute(Player jugadorPlayer, String[] args) {
-        if (args.length != 3 && args.length != 2) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: " + this.sintaxis);
+    public void execute(Player player, String[] args) {
+        MySQL.conectar();
+
+        ValidationResult result =ValidationsService.startValidating(args.length != 3 && args.length != 2, False.of(mensajeUsoIncorrecto()))
+                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), NaturalNumber, OwnerPosicionAbierta.de(player.getName(), TipoPosicion.LARGO))
+                .andIfExists(() -> args[2], NaturalNumber)
+                .validateAll();
+
+        if(result.isFailed()){
+            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
+            MySQL.desconectar();
             return;
         }
-        if (!Funciones.esInteger(args[1])) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "En la id y en el numero de unidades a vender necesitas meter numeros que no sean texto ni decimales");
-            return;
-        }
-        if (args.length == 3 && !Funciones.esInteger(args[2])) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Elnumero de unidades a vender necesitas meter numeros que no sean texto ni decimales");
-            return;
-        }
+
         int id = Integer.parseInt(args[1]);
-
-        if (args.length == 3) {
-            int cantidad = Integer.parseInt(args[2]);
-            if (cantidad <= 0) {
-                jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Necesitas introducir numeros que no sean negativos o que sean cero");
-                return;
-            }
-        }
-        if (id < 0) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "La id ha de ser positiva");
-            return;
-        }
-
-        posicionesAbiertasMySQL.conectar();
         PosicionAbierta posicionAVender = posicionesAbiertasMySQL.getPosicionAbierta(id);
-        if (posicionAVender == null) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "No existe esa id, para verlas /bolsa cartera");
-            posicionesAbiertasMySQL.desconectar();
-            return;
-        }
-        if (!posicionAVender.getJugador().equalsIgnoreCase(jugadorPlayer.getName())) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "No tienes cantidad invertidas en cartera con esa ID, para ver las ids: /bolsa cartera");
-            posicionesAbiertasMySQL.desconectar();
-            return;
-        }
 
         int cantidad;
         if (args.length == 2) {
@@ -69,37 +53,13 @@ public class VenderBolsa extends BolsaSubCommand {
         } else {
             cantidad = Integer.parseInt(args[2]);
         }
-        int cantidadEnID = posicionAVender.getCantidad();
-        if (cantidadEnID < cantidad) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "No puedes vender mas cantidad de las que tienes en cartera");
-            posicionesAbiertasMySQL.desconectar();
-            return;
+
+        if (posicionAVender.getCantidad() < cantidad) {
+            cantidad = posicionAVender.getCantidad();
         }
 
-        String nombre = posicionAVender.getNombre_activo();
-        String tipo = posicionAVender.getTipo_activo();
+        transaccionesMySQL.venderPosicion(posicionAVender ,cantidad ,player);
 
-        transaccionesMySQL.venderPosicion(posicionAVender ,cantidad ,jugadorPlayer);
-        posicionesAbiertasMySQL.desconectar();
-    }
-
-    private double getPrecio(String tipo, String simbolo) throws Exception {
-        double precio;
-
-        switch (tipo) {
-            case "ACCIONES":
-                precio = IEXCloud_API.getOnlyPrice(simbolo);
-                break;
-            case "CRIPTOMONEDAS":
-                precio = IEXCloud_API.getPrecioCriptomoneda(simbolo);
-                break;
-            case "MATERIAS_PRIMAS":
-                precio = IEXCloud_API.getPrecioMateriaPrima(simbolo);
-                break;
-            default:
-                precio = -1;
-                break;
-        }
-        return precio;
+        MySQL.desconectar();
     }
 }

@@ -2,6 +2,7 @@ package es.serversurvival.comandos;
 
 import es.serversurvival.mySQL.*;
 import es.serversurvival.util.Funciones;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
@@ -20,6 +21,10 @@ public abstract class Comando {
     protected static Transacciones transaccionesMySQL = Transacciones.INSTANCE;
     protected static Deudas deudasMySQL = Deudas.INSTANCE;
     protected static ConversacionesWeb conversacionesWebMySQL = ConversacionesWeb.INSTANCE;
+
+    protected String mensajeUsoIncorrecto() {
+        return "Uso incorrecto " + this.getSintaxis();
+    }
 
     public DecimalFormat formatea = Funciones.FORMATEA;
 

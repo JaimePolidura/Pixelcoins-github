@@ -1,14 +1,20 @@
 package es.serversurvival.comandos.comandos;
 
+import com.sun.deploy.security.ValidationState;
 import es.serversurvival.comandos.Comando;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.mySQL.Ofertas;
+import es.serversurvival.validaciones.misValidaciones.NoHaSidoCompradoItem;
+import main.ValidationResult;
+import main.ValidationsService;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+
+import static es.serversurvival.validaciones.Validaciones.*;
 
 public class Vender extends Comando {
     private final String CNombre = "vender";
@@ -27,39 +33,28 @@ public class Vender extends Comando {
         return ayuda;
     }
 
-    public void execute(Player p, String[] args) {
-        if (args.length != 1) {
-            p.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: /vender <precio a vender en la tienda>");
-            return;
-        }
-        String precioString = args[0];
-        ItemStack itemAVender = p.getInventory().getItemInMainHand();
-        String nombreItemVender = itemAVender.getType().toString();
-        if (nombreItemVender.equalsIgnoreCase("AIR")) {
-            p.sendMessage(ChatColor.DARK_RED + "Necesitas tener un objeto en la mano");
-            return;
-        }
-        if (Ofertas.estaBaneado(nombreItemVender)) {
-            p.sendMessage(ChatColor.DARK_RED + "No se puede vender ese tipo de objeto");
-            return;
-        }
-        if (!Funciones.esDouble(precioString)) {
-            p.sendMessage(ChatColor.DARK_RED + "Introduce un numero, no texto de tal manera: /vender <precio a vender/item>");
-            return;
-        }
-        double precio = Double.parseDouble(precioString);
-        if (precio <= 0) {
-            p.sendMessage(ChatColor.DARK_RED + "A ser posible que los precios no sean negativos o 0");
-            return;
-        }
-        if(haSidoComprado(itemAVender)){
-            p.sendMessage(ChatColor.DARK_RED + "No puedes revender objetos que compraste en la tienda");
+    public void execute(Player player, String[] args) {
+        String nombreItemMano = player.getInventory().getItemInMainHand().getType().toString();
+        ItemStack itemMano = player.getInventory().getItemInMainHand();
+        
+        Ofertas.conectar();
+
+        ValidationResult result = ValidationsService.startValidating(args.length, Same.as(1))
+                .and(nombreItemMano, NotEqualsIgnoreCase.of("AIR", "Tienes que tener un objeto en la mano"), ItemNotBaneadoTienda)
+                .andMayThrowException(() -> args[0], "Uso incorrecto " + this.sintaxis, PositiveNumber)
+                .and(itemMano, NoHaSidoCompradoItem)
+                .and(player.getName(), SuficientesEspaciosTienda)
+                .validateAll();
+
+        if(result.isFailed()){
+            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
+            Ofertas.desconectar();
             return;
         }
 
-        MySQL.conectar();
-        ofertasMySQL.crearOferta(itemAVender, p, precio);
-        MySQL.desconectar();
+        ofertasMySQL.crearOferta(itemMano, player, Double.parseDouble(args[0]));
+
+        Ofertas.desconectar();
     }
 
     private boolean haSidoComprado (ItemStack item) {

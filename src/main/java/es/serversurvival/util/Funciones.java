@@ -367,4 +367,18 @@ public final class Funciones {
 
         return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
+
+    public static String buildStringFromArray (String[] array) {
+        StringBuilder builder = new StringBuilder();
+
+        for(int i = 0; i < array.length; i++){
+            builder.append(array[i]);
+
+            if((array.length - 1) != i) {
+                builder.append(" ");
+            }
+        }
+
+        return builder.toString();
+    }
 }

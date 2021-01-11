@@ -458,7 +458,6 @@ public final class Transacciones extends MySQL {
         }
 
         p.sendMessage(ChatColor.GOLD + "Has pagado " + ChatColor.GREEN + precio + " PC " + ChatColor.GOLD + " a la empresa: " + empresa + " por su servicio");
-        mensajesMySQL.nuevoMensaje("", ownerEmpresa.getName() ," el jugador: " + comprador.getNombre() + " ha comprado un servicio de tu empresa: " + empresa + " por " + precio + " PC");
     }
 
     public void comprarUnidadBolsa(String tipo, String ticker, String nombreValor, String alias, double precioUnidad, int cantidad, Player jugadorPlayer) {

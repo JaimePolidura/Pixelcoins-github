@@ -5,12 +5,16 @@ import es.serversurvival.mySQL.enums.TipoValor;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.main.Pixelcoin;
 import es.serversurvival.apiHttp.IEXCloud_API;
+import main.ValidationResult;
+import main.ValidationsService;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
+
+import static es.serversurvival.validaciones.Validaciones.*;
 
 public class InvertirBolsa extends BolsaSubCommand {
     private final String SCNombre = "invertir";
@@ -32,22 +36,16 @@ public class InvertirBolsa extends BolsaSubCommand {
     }
 
     public void execute(Player jugadorPlayer, String[] args) {
-        if (args.length != 3) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: " + this.sintaxis);
+        ValidationResult result = ValidationsService.startValidating(args.length, Same.as(3, mensajeUsoIncorrecto()))
+                .andMayThrowException(() -> args[2], mensajeUsoIncorrecto(), NaturalNumber)
+                .validateAll();
+
+        if(result.isFailed()){
+            jugadorPlayer.sendMessage(ChatColor.DARK_RED + result.getMessage());
             return;
         }
 
-        File xd = new File("xd");
-
-        if(!Funciones.esInteger(args[2])){
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Necesitas introducir un numero de acciones a comprar no texto");
-            return;
-        }
         int nAccinesAComprar = Integer.parseInt(args[2]);
-        if (nAccinesAComprar <= 0) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Debes de meter un numero de acciones a comprar que no sea negativo ni cero");
-            return;
-        }
         String ticker = args[1];
 
         Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
@@ -64,7 +62,7 @@ public class InvertirBolsa extends BolsaSubCommand {
                     jugadorPlayer.sendMessage(ChatColor.DARK_RED + "No tienes las suficientes pixelcoins para pagar " + nAccinesAComprar + " " + ticker + " a " + formatea.format(precioAccion) + " $ -> " + formatea.format(precioAccion * nAccinesAComprar) + " PC");
                     return;
                 }
-                
+
                 String nombreValor = IEXCloud_API.getNombreEmpresa(ticker);
                 nombreValor = Funciones.quitarCaracteres(nombreValor, '.', ',');
                 nombreValor = Funciones.quitarPalabrasEntreEspacios(nombreValor, "group", "inc", "co", "corp");
