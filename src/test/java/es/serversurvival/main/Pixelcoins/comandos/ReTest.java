@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import static es.serversurvival.util.Funciones.*;
 import static es.serversurvival.validaciones.Validaciones.*;
-import static es.serversurvival.validaciones.Validaciones.ExisteConversacion;
 
 public class ReTest {
     private final String sender = "JaimeTruman";
@@ -43,7 +42,6 @@ public class ReTest {
 
     public ValidationResult check (String[] args, String sender) {
         return ValidationsService.startValidating(args.length, Different.of(0, "No puede estar vacio"))
-                //.and(sender, ExisteConversacion) Already tested in the minecraft server
                 .and(buildStringFromArray(args), MaxLength.of(50), NotIncludeCharacters.of('&', '-'))
                 .validateAll();
     }

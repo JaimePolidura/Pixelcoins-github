@@ -1,6 +1,7 @@
 package es.serversurvival.comandos.comandos;
 
 import es.serversurvival.comandos.Comando;
+import es.serversurvival.mySQL.ConversacionesWeb;
 import es.serversurvival.mySQL.tablasObjetos.ConversacionWeb;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.validaciones.Validaciones;
@@ -39,7 +40,7 @@ public class Re extends Comando {
 
         ValidationResult result = ValidationsService.startValidating(args.length, Different.of(0, "Tiene que tener como minomo 2 palabras"))
                 .and(Funciones.buildStringFromArray(args), MaxLength.of(50), NotIncludeCharacters.of('&', '-'))
-                .and(playerName, ExisteConversacion)
+                .and(existeConversacion(player.getName()), True.of("No hay ninguna conversacion pendiente"))
                 .validateAll();
 
         if(result.isFailed()){
@@ -51,5 +52,9 @@ public class Re extends Comando {
         conversacionesWebMySQL.nuevoMensaje(conversacionesWebMySQL.getConversacionServer(playerName), player, Funciones.buildStringFromArray(args));
 
         conversacionesWebMySQL.desconectar();
+    }
+
+    private boolean existeConversacion (String jugador) {
+        return ConversacionesWeb.INSTANCE.getConversacionServer(jugador) != null;
     }
 }

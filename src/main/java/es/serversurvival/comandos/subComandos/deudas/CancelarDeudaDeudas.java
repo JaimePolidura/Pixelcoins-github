@@ -1,10 +1,16 @@
 package es.serversurvival.comandos.subComandos.deudas;
 
+import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.mySQL.Deudas;
 import es.serversurvival.mySQL.tablasObjetos.Deuda;
+import es.serversurvival.validaciones.Validaciones;
+import main.ValidationResult;
+import main.ValidationsService;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import static es.serversurvival.validaciones.Validaciones.*;
 
 public class CancelarDeudaDeudas extends DeudasSubCommand {
     private final String scnombre = "cancelar";
@@ -24,29 +30,38 @@ public class CancelarDeudaDeudas extends DeudasSubCommand {
     }
 
     public void execute(Player player, String[] args) {
-        if (args.length != 2) {
-            player.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: " + this.sintaxis + " , la id se ve en el comando /deudas");
-            return;
-        }
-        if(!Funciones.esInteger(args[1])){
-            player.sendMessage(ChatColor.DARK_RED + "La id debe de ser un numero no texto, la id se puede ver en el comando: /deudas");
-            return;
-        }
-        int id_deuda = Integer.parseInt(args[1]);
-        deudasMySQL.conectar();
-        Deuda deudaACancelar = deudasMySQL.getDeuda(id_deuda);
-        if(deudaACancelar == null){
-            deudasMySQL.desconectar();
-            player.sendMessage(ChatColor.DARK_RED + "No hay ninguna id con ese numero, la id se ve en comando /deudas");
-            return;
-        }
-        if(!deudaACancelar.getAcredor().equalsIgnoreCase(player.getName())){
-            deudasMySQL.desconectar();
-            player.sendMessage(ChatColor.DARK_RED + "No eres el acredor de esa deuda, las id se ven en /deuda");
+        MySQL.conectar();
+
+        ValidationResult result = ValidationsService.startValidating(args.length, Same.as(2, mensajeUsoIncorrecto()))
+                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), NaturalNumber)
+                .andMayThrowException(() -> existeDeuda(args), mensajeUsoIncorrecto(), True.of("No hay ninguna deuda con ese id"))
+                .andMayThrowException(() -> acredorDeDeuda(args, player), mensajeUsoIncorrecto(), True.of("No eres el acredor de esa deuda"))
+                .validateAll();
+
+        if(result.isFailed()){
+            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
+            MySQL.desconectar();
             return;
         }
 
-        deudasMySQL.cancelarDeuda(player, id_deuda);
-        deudasMySQL.desconectar();
+        deudasMySQL.cancelarDeuda(player, Integer.parseInt(args[1]));
+        MySQL.desconectar();
     }
+
+    private boolean existeDeuda (String[] args) {
+        try{
+            return deudasMySQL.getDeuda(Integer.parseInt(args[1])) != null;
+        }catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean acredorDeDeuda (String[] args, Player player) {
+        try{
+            return deudasMySQL.getDeuda(Integer.parseInt(args[1])).getAcredor().equalsIgnoreCase(player.getName());
+        }catch (Exception e) {
+            return false;
+        }
+    }
+
 }

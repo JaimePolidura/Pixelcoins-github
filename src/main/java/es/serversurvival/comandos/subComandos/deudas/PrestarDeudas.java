@@ -4,9 +4,16 @@ import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.MenuManager;
 import es.serversurvival.menus.menus.solicitudes.PrestamoSolicitud;
+import main.ValidationResult;
+import main.ValidationsService;
+import main.validators.booleans.False;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import java.util.function.Supplier;
+
+import static es.serversurvival.validaciones.Validaciones.*;
 
 public class PrestarDeudas extends DeudasSubCommand {
     private final String scnombre = "prestar";
@@ -25,55 +32,48 @@ public class PrestarDeudas extends DeudasSubCommand {
         return ayuda;
     }
 
-    public void execute(Player jugadorQueEndeudaPlayer, String[] args) {
-        if(args.length != 4 && args.length != 5){
-            jugadorQueEndeudaPlayer.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: " + this.sintaxis);
-            return;
-        }
-        if(Bukkit.getPlayer(args[1]) == null){
-            jugadorQueEndeudaPlayer.sendMessage(ChatColor.DARK_RED + "Solo puedes prestar dinero a jugadores que esten online");
+    public void execute(Player player, String[] args) {
+        MySQL.conectar();
+
+        ValidationResult result = ValidationsService.startValidating(args.length == 4 || args.length == 5, True.of(mensajeUsoIncorrecto()))
+                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), JugadorOnline, NotEqualsIgnoreCase.of(player.getName(), "No puedes ser tu mimsmo"))
+                .andMayThrowException(() -> args[2], mensajeUsoIncorrecto(), NaturalNumber)
+                .andMayThrowException(() -> args[3], mensajeUsoIncorrecto(), NaturalNumber)
+                .andIfExists(() -> args[4], NaturalNumber)
+                .andMayThrowException(() -> Integer.parseInt(args[2]) >= Integer.parseInt(args[3]), mensajeUsoIncorrecto(), True.of("Los dias no pueden ser superior a las pixelcoins"))
+                .andMayThrowException(() -> MenuManager.getByPlayer(Bukkit.getPlayer(args[1]).getName()) != null, mensajeUsoIncorrecto(), False.of("Ya le han enviado una solicitud"))
+                .andMayThrowException(pixelcoinsDeudaConIntereses(args), mensajeUsoIncorrecto(), SuficientesPixelcoins.of(player.getName()))
+                .validateAll();
+
+        if(result.isFailed()){
+            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
+            MySQL.desconectar();
             return;
         }
 
-        Player jugadorAEndeudarPlayer = Bukkit.getPlayer(args[1]);
-        if(jugadorAEndeudarPlayer.getName().equalsIgnoreCase(jugadorQueEndeudaPlayer.getName())){
-            jugadorQueEndeudaPlayer.sendMessage(ChatColor.DARK_RED + "Como que no :v");
-            return;
-        }
-        if(!Funciones.esInteger(args[2]) || !Funciones.esInteger(args[3]) || (args.length == 5 && !Funciones.esInteger(args[4])) ){
-            jugadorQueEndeudaPlayer.sendMessage(ChatColor.DARK_RED + "Introduce numeros no texto");
-            return;
-        }
-        int dinero = Integer.parseInt(args[2]);
-        int dias = Integer.parseInt(args[3]);
         int interes = 0;
         if(args.length == 5){
             interes = Integer.parseInt(args[4]);
         }
-        if(dinero <= 0 || dias <= 0 || interes < 0){
-            jugadorQueEndeudaPlayer.sendMessage(ChatColor.DARK_RED + "Introduce valores que no sean negativos o dias mayores de 0 o que no sean decimales");
-            return;
-        }
-        if(dinero < dias){
-            jugadorQueEndeudaPlayer.sendMessage(ChatColor.DARK_RED + "Introduce valores de tal modo que el dinero sea superior a los dias");
-            return;
-        }
-        if(MenuManager.getByPlayer(jugadorAEndeudarPlayer.getName()) != null){
-            jugadorQueEndeudaPlayer.sendMessage(ChatColor.DARK_RED + "A ese jugador ya le has enviado una solicitud / ya le han enviado una solicitud");
-            return;
-        }
 
-        MySQL.conectar();
-        double pixelcoins = jugadoresMySQL.getJugador(jugadorQueEndeudaPlayer.getName()).getPixelcoins();
-        int aPrestar = Funciones.aumentarPorcentaje(dinero, interes);
-        if (aPrestar > pixelcoins) {
-            jugadorQueEndeudaPlayer.sendMessage(ChatColor.DARK_RED + "No puedes prestar mas dinero del que tienes");
-            MySQL.desconectar();
-            return;
-        }
-        MySQL.desconectar();
-
-        PrestamoSolicitud solicitud = new PrestamoSolicitud(jugadorQueEndeudaPlayer.getName(), jugadorAEndeudarPlayer.getName(), dinero, dias, interes);
+        PrestamoSolicitud solicitud = new PrestamoSolicitud(player.getName(), Bukkit.getPlayer(args[1]).getName(), Integer.parseInt(args[2]), Integer.parseInt(args[3]), interes);
         solicitud.enviarSolicitud();
+        MySQL.conectar();
+    }
+
+    public static Supplier<String> pixelcoinsDeudaConIntereses (String[] args) {
+        try{
+            int interes = 0;
+            int dinero = Integer.parseInt(args[2]);
+
+            if(args.length == 5){
+                interes = Integer.parseInt(args[4]);
+            }
+
+            int finalInteres = interes;
+            return () -> String.valueOf(Funciones.aumentarPorcentaje(dinero, finalInteres));
+        }catch (Exception e) {
+            return () -> "";
+        }
     }
 }

@@ -4,6 +4,7 @@ import java.sql.*;
 import java.text.ParseException;
 import java.util.*;
 import java.util.Date;
+import java.util.function.Supplier;
 
 import es.serversurvival.mySQL.tablasObjetos.Deuda;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
@@ -32,6 +33,16 @@ public final class Deudas extends MySQL {
         ResultSet rs = executeQuery(String.format("SELECT * FROM deudas WHERE id = '%d'", id));
 
         return (Deuda) buildSingleObjectFromResultSet(rs);
+    }
+
+    public Deuda getDeuda (Supplier<? extends String> supplierId) {
+        try{
+            int id = Integer.parseInt(supplierId.get());
+
+            return getDeuda(id);
+        }catch (Exception e) {
+            return null;
+        }
     }
 
     public int getMaxDeuda(){
@@ -76,15 +87,15 @@ public final class Deudas extends MySQL {
     }
 
     public boolean esAcredorDeDeuda(int id, String acredor) {
-        ResultSet rs = executeQuery("SELECT id FROM deudas WHERE acredor = '"+acredor+"' AND id = '"+id+"'");
+        Deuda deuda = getDeuda(id);
 
-        return !isEmpty(rs);
+        return deuda != null && deuda.getAcredor().equalsIgnoreCase(acredor);
     }
 
     public boolean esDeudorDeDeuda(int id, String deudor) {
-        ResultSet rs = executeQuery("SELECT id FROM deudas WHERE deudor = '"+deudor+"' AND id = '"+id+"'");
+        Deuda deuda = getDeuda(id);
 
-        return !isEmpty(rs);
+        return deuda != null && deuda.getDeudor().equalsIgnoreCase(deudor);
     }
 
     public int getAllPixelcoinsDeudasAcredor (String jugador) {

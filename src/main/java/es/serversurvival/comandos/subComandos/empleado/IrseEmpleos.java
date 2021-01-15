@@ -1,9 +1,17 @@
 package es.serversurvival.comandos.subComandos.empleado;
 
 import es.serversurvival.mySQL.Empresas;
+import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.validaciones.Validaciones;
+import main.ValidationResult;
+import main.ValidationsService;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import java.util.function.Supplier;
+
+import static es.serversurvival.validaciones.Validaciones.*;
 
 public class IrseEmpleos extends EmpleosSubCommand {
     private final String SCNombre = "irse";
@@ -23,24 +31,30 @@ public class IrseEmpleos extends EmpleosSubCommand {
     }
 
     public void execute(Player jugadorPlayer, String[] args) {
-        if (args.length != 2) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: " + this.sintaxis);
-            return;
-        }
-        empresasMySQL.conectar();
-        Empresa empresaAEditarEmpleado = empresasMySQL.getEmpresa(args[1]);
-        if (empresaAEditarEmpleado == null) {
-            empresasMySQL.desconectar();
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Esa empresa no exsiste");
-            return;
-        }
-        if (!empleadosMySQL.trabajaEmpresa(jugadorPlayer.getName(), empresaAEditarEmpleado.getNombre())) {
-            empresasMySQL.desconectar();
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Ese jugador no trabaja en la empresa");
+        MySQL.conectar();
+
+        ValidationResult result = ValidationsService.startValidating(args.length, Same.as(2, mensajeUsoIncorrecto()))
+                .andMayThrowException(() -> empresasMySQL.getEmpresa(args[1]) != null, mensajeUsoIncorrecto(), True.of("Esa empresa no exsiste"))
+                .and(trabajaEnLaEmpresa(() -> args[1], jugadorPlayer.getName()), True.of("Ese jugador no trabaja en la empresa"))
+                .validateAll();
+
+        if(result.isFailed()){
+            jugadorPlayer.sendMessage(ChatColor.DARK_RED + result.getMessage());
+            MySQL.desconectar();
             return;
         }
 
         empleadosMySQL.irseEmpresa(args[1], jugadorPlayer);
-        empleadosMySQL.desconectar();
+        MySQL.desconectar();
+    }
+
+    private boolean trabajaEnLaEmpresa (Supplier<String> empresaSupplier, String jugador) {
+        try{
+            String empresaNombre = empresaSupplier.get();
+
+            return empleadosMySQL.trabajaEmpresa(jugador, empresaNombre);
+        }catch (Exception e) {
+            return false;
+        }
     }
 }

@@ -1,9 +1,18 @@
 package es.serversurvival.comandos.subComandos.deudas;
 
+import es.serversurvival.mySQL.Deudas;
+import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.mySQL.tablasObjetos.Deuda;
+import es.serversurvival.validaciones.Validaciones;
+import main.ValidationResult;
+import main.ValidationsService;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import java.util.function.Supplier;
+
+import static es.serversurvival.validaciones.Validaciones.*;
 
 public class PagarDeudaDeudas extends DeudasSubCommand {
     private String scnombre = "pagar";
@@ -22,36 +31,34 @@ public class PagarDeudaDeudas extends DeudasSubCommand {
         return ayuda;
     }
 
-    public void execute(Player playerDeudor, String[] args) {
-        if (args.length != 2) {
-            playerDeudor.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: " + this.sintaxis + " la id se ve en /deudas");
-            return;
-        }
-        if(!Funciones.esInteger(args[1])){
-            playerDeudor.sendMessage(ChatColor.DARK_RED + "A ser posible mete numeros no letras, las id se ven el comando /deudas");
-            return;
-        }
-        int id_deuda = Integer.parseInt(args[1]);
+    public void execute(Player player, String[] args) {
+        MySQL.conectar();
 
-        deudasMySQL.conectar();
-        Deuda deudaAPagar = deudasMySQL.getDeuda(id_deuda);
-        if (deudaAPagar == null) {
-            deudasMySQL.desconectar();
-            playerDeudor.sendMessage(ChatColor.DARK_RED + "No esta registrada ninguna deuda con esa id, las ids se ven en /deudas");
-            return;
-        }
-        if (!deudaAPagar.getDeudor().equalsIgnoreCase(playerDeudor.getName())) {
-            deudasMySQL.desconectar();
-            playerDeudor.sendMessage(ChatColor.DARK_RED + "No eres deudor de esa deuda, las ids se ven en el comando /deudas");
-            return;
-        }
-        if (jugadoresMySQL.getJugador(playerDeudor.getName()).getPixelcoins() < deudaAPagar.getPixelcoins_restantes()) {
-            deudasMySQL.desconectar();
-            playerDeudor.sendMessage(ChatColor.DARK_RED + "No tienes las suficientes pixelcoins para pagar esa deuda, pixelcoins requeridas: " + ChatColor.GREEN + formatea.format(deudaAPagar.getPixelcoins_restantes()) + " PC");
+        Supplier<String> supplierPixelcoins = () -> String.valueOf(Deudas.INSTANCE.getDeuda(() -> args[1]).getPixelcoins_restantes());
+
+        ValidationResult result = ValidationsService.startValidating(args.length, Same.as(2, mensajeUsoIncorrecto()))
+                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), NaturalNumber)
+                .and(esDeudor(() -> args[1], player.getName()), True.of("No eres deudor de esa deuda"))
+                .andMayThrowException(supplierPixelcoins, mensajeUsoIncorrecto(), SuficientesPixelcoins.of(player.getName(), "No tienes las suficientes pixelcoins"))
+                .validateAll();
+
+        if(result.isFailed()){
+            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
+            MySQL.desconectar();
             return;
         }
 
-        deudasMySQL.pagarDeuda(playerDeudor, id_deuda);
-        deudasMySQL.desconectar();
+        deudasMySQL.pagarDeuda(player, Integer.parseInt(args[1]));
+        MySQL.desconectar();
+    }
+
+    private boolean esDeudor (Supplier<String> idSupplier, String jugador) {
+        try{
+            int id = Integer.parseInt(idSupplier.get());
+
+            return Deudas.INSTANCE.esDeudorDeDeuda(id, jugador);
+        }catch (Exception e) {
+            return false;
+        }
     }
 }

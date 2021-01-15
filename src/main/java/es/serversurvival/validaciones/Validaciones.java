@@ -40,7 +40,6 @@ public final class Validaciones {
 
     public final static SuficinestesPixelcoins SuficientesPixelcoins = new SuficinestesPixelcoins("No tienes las suficientes pixelcoins");
     public final static JugadorRegistrado JugadorRegistrado = new JugadorRegistrado("Jugador no encontrado");
-    public final static ExisteConversacion ExisteConversacion = new ExisteConversacion("No tienes ninguna conversacion abierta");
     public final static ItemNotBaneadoTienda ItemNotBaneadoTienda = new ItemNotBaneadoTienda("Item no permitido en la tienda");
     public final static NoHaSidoCompradoItem NoHaSidoCompradoItem = new NoHaSidoCompradoItem("No puedes revender un item que ya has comprado");
     public final static SuficientesEspaciosTienda SuficientesEspaciosTienda = new SuficientesEspaciosTienda("Tienes muchos objetos en la tineda");

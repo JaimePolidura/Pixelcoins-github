@@ -95,6 +95,9 @@ public abstract class MySQL {
 
     protected boolean isEmpty (ResultSet rs) {
         try{
+            boolean next = rs.next();
+            System.out.println(next); //¿wtf?
+
             return rs.next();
         }catch (SQLException e){
             return false;
