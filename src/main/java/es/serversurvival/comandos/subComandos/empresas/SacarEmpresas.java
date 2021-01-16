@@ -1,10 +1,19 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
+import es.serversurvival.mySQL.Empresas;
+import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.mySQL.Transacciones;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.validaciones.Validaciones;
+import main.ValidationResult;
+import main.ValidationsService;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import java.util.function.Supplier;
+
+import static es.serversurvival.validaciones.Validaciones.*;
 
 public class SacarEmpresas extends EmpresasSubCommand {
     private final String SCNombre = "sacar";
@@ -23,42 +32,34 @@ public class SacarEmpresas extends EmpresasSubCommand {
         return ayuda;
     }
 
-    public void execute(Player jugadorPlayer, String[] args) {
-        if(args.length != 3){
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: " + this.sintaxis);
+    public void execute(Player player, String[] args) {
+        MySQL.conectar();
+
+        ValidationResult result = ValidationsService.startValidating(args.length == 3, True.of(mensajeUsoIncorrecto()))
+                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), OwnerDeEmpresa.of(player.getName()))
+                .andMayThrowException(() -> args[2], mensajeUsoIncorrecto(), PositiveNumber)
+                .and(suficientesPixelcoinsPredicado(() -> args[1], () -> args[2]), True.of("No puedes sacar mas pixelcoins de la empresa de las que tiene"))
+                .validateAll();
+
+        if(result.isFailed()){
+            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
+            MySQL.desconectar();
             return;
         }
-        if(!Funciones.esDouble(args[2])){
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Introduce numeros no texto");
-            return;
-        }
-        String nombreEmpresa = args[1];
+
         double pixelcoinsASacar = Double.parseDouble(args[2]);
-        if(pixelcoinsASacar <= 0){
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Introduce numeros que no sean igual a cero o que no sean negativos");
-            return;
-        }
 
-        empresasMySQL.conectar();
-        Empresa empresaASacar = empresasMySQL.getEmpresa(nombreEmpresa);
-        if (empresaASacar == null) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
-            empresasMySQL.desconectar();
-            return;
-        }
-        if (!empresaASacar.getOwner().equalsIgnoreCase(jugadorPlayer.getName())) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "No eres due?o de esa empresa");
-            empresasMySQL.desconectar();
-            return;
-        }
-        double pixelcoinsEmpresa = empresaASacar.getPixelcoins();
-        if (pixelcoinsEmpresa < pixelcoinsASacar) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "No puedes sacar mas dinero" + "+ del que la empresa tiene");
-            empresasMySQL.desconectar();
-            return;
-        }
+        transaccionesMySQL.sacarPixelcoinsEmpresa(player, pixelcoinsASacar, args[1]);
+        MySQL.desconectar();
+    }
 
-        transaccionesMySQL.sacarPixelcoinsEmpresa(jugadorPlayer, pixelcoinsASacar, nombreEmpresa);
-        empresasMySQL.desconectar();
+    private boolean suficientesPixelcoinsPredicado (Supplier<String> empresaSupplier, Supplier<String> pixelcoins) {
+        try{
+            Empresa empresa = Empresas.INSTANCE.getEmpresa(empresaSupplier.get());
+
+            return empresa.getPixelcoins() >= Double.parseDouble(pixelcoins.get());
+        }catch (Exception e) {
+            return false;
+        }
     }
 }

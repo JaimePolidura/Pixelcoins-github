@@ -1,9 +1,15 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
 import es.serversurvival.mySQL.Empresas;
+import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.validaciones.Validaciones;
+import main.ValidationResult;
+import main.ValidationsService;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import static es.serversurvival.validaciones.Validaciones.*;
 
 public class DespedirEmpresas extends EmpresasSubCommand {
     private final String SCNombre = "despedir";
@@ -22,38 +28,21 @@ public class DespedirEmpresas extends EmpresasSubCommand {
         return ayuda;
     }
 
-    public void execute(Player jugadorPlayer, String[] args) {
-        if (args.length != 4) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: /despedir <empresa> <nombreJugador> <razon>");
-            return;
-        }
-        if (args[2].equalsIgnoreCase(jugadorPlayer.getName())) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "No te puedes despedir a ti mismo");
-            return;
-        }
-        String empresanombre = args[1];
-        String empleado = args[2];
-        String razon = args[3];
+    public void execute(Player player, String[] args) {
+        MySQL.conectar();
 
-        empresasMySQL.conectar();
-        Empresa empresaDondeSeDespide = empresasMySQL.getEmpresa(empresanombre);
-        if(empresaDondeSeDespide == null){
-            empresasMySQL.desconectar();
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Esa empresa no exsiste");
-            return;
-        }
-        if (!empresaDondeSeDespide.getOwner().equalsIgnoreCase(jugadorPlayer.getName())) {
-            empresasMySQL.desconectar();
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "No eres owner de esa empresa");
-            return;
-        }
-        if(!empleadosMySQL.trabajaEmpresa(empleado, empresanombre)){
-            empresasMySQL.desconectar();
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Creo que ese men no trabaja en tu empresa");
+        ValidationResult result = ValidationsService.startValidating(args.length == 4, True.of(mensajeUsoIncorrecto()))
+                .andMayThrowException(() -> args[2], mensajeUsoIncorrecto(), TrabajaEmpresa.en(() -> args[1]), NotEqualsIgnoreCase.of(player.getName(), "No te puedes despedir a ti mismo"))
+                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), OwnerDeEmpresa.of(player.getName()))
+                .validateAll();
+
+        if(result.isFailed()){
+            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
+            MySQL.desconectar();
             return;
         }
 
-        empleadosMySQL.despedir(empresanombre, empleado, razon, jugadorPlayer);
-        empleadosMySQL.desconectar();
+        empleadosMySQL.despedir(args[1], args[2], args[3], player);
+        MySQL.desconectar();
     }
 }

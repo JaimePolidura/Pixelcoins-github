@@ -1,11 +1,17 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
+import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.mySQL.Empleados;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.validaciones.Validaciones;
+import main.ValidationResult;
+import main.ValidationsService;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import static es.serversurvival.validaciones.Validaciones.*;
 
 public class EditarEmpleadoEmpresas extends EmpresasSubCommand {
     private final String SCNombre = "editarempleado";
@@ -25,12 +31,17 @@ public class EditarEmpleadoEmpresas extends EmpresasSubCommand {
     }
 
     public void execute(Player jugadorPlayer, String[] args) {
-        if (args.length != 5) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: " + this.sintaxis);
-            return;
-        }
-        if (args[2].equalsIgnoreCase(jugadorPlayer.getName())) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "No te puedes editar a ti mismo");
+        MySQL.conectar();
+
+        ValidationResult result = ValidationsService.startValidating(args.length == 5, True.of(mensajeUsoIncorrecto()))
+                .andMayThrowException(() -> args[2], mensajeUsoIncorrecto(), NotEqualsIgnoreCase.of(jugadorPlayer.getName(), "No te puedes editar a ti mismo"))
+                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), OwnerDeEmpresa.of(jugadorPlayer.getName()))
+                .andMayThrowException(() -> args[2], mensajeUsoIncorrecto(), TrabajaEmpresa.en(() -> args[1]))
+                .validateAll();
+
+        if(result.isFailed()){
+            MySQL.desconectar();
+            jugadorPlayer.sendMessage(ChatColor.DARK_RED + result.getMessage());
             return;
         }
 
@@ -50,71 +61,34 @@ public class EditarEmpleadoEmpresas extends EmpresasSubCommand {
                 jugadorPlayer.sendMessage(ChatColor.DARK_RED + "tiposueldo");
                 break;
         }
+
+        MySQL.desconectar();
     }
 
-    public void editarSueldo (String empresa, String jugadorAEditar, String sueldo, Player jugadorPlayer) {
-        if(!Funciones.esDouble(sueldo)){
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "El sueldo ha de ser un numero positivo");
-            return;
-        }
-        double sueldoAPoner = Double.parseDouble(sueldo);
-        if (sueldoAPoner <= 0) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "A ser posible mete numeros que sean superiores a 0");
-            return;
-        }
-        empresasMySQL.conectar();
-        Empresa empresaAEditarEmpleado = empresasMySQL.getEmpresa(empresa);
-        if(empresaAEditarEmpleado == null){
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Esa empresa no exsiste");
-            empresasMySQL.desconectar();
-            return;
-        }
-        if (!empresaAEditarEmpleado.getOwner().equalsIgnoreCase(jugadorPlayer.getName())) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "No eres due?o de eas empresa");
-            empresasMySQL.desconectar();
-            return;
-        }
-        Empleado empleadoAditar = empleadosMySQL.getEmpleado(jugadorAEditar, empresa);
-        if (!empleadosMySQL.trabajaEmpresa(jugadorAEditar, empresa)) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Ese jugador no trabaja en la empresa");
-            empresasMySQL.desconectar();
+    public void editarSueldo (String empresa, String jugadorAEditar, String sueldo, Player player) {
+        ValidationResult result = ValidationsService.validate(sueldo, PositiveNumber);
+
+        if(result.isFailed()){
+            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
             return;
         }
 
+        double sueldoAPoner = Double.parseDouble(sueldo);
+        Empresa empresaAEditarEmpleado = empresasMySQL.getEmpresa(empresa);
+        Empleado empleadoAditar = empleadosMySQL.getEmpleado(jugadorAEditar, empresa);
+
         empleadosMySQL.editarEmpleadoSueldo(empresaAEditarEmpleado, empleadoAditar, sueldoAPoner);
-        empresasMySQL.desconectar();
     }
 
     public void editarTipoSueldo (String empresa, String jugadorAEditar, String tipo, Player jugadorPlayer) {
-        if (!Empleados.esUnTipoDeSueldo(tipo)) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Tipo incorrecto:");
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "d: el sueldo se paga diariamente");
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "s: el sueldo se paga cada semana");
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "2s: el sueldo se paga cada 2 semanas");
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "m: el sueldo se paga cada mes");
+        if(!Empleados.esUnTipoDeSueldo(tipo)){
+            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Tipo incorrecto. d: cada dia, s: cada semana, 2s: cada dos semanas, m: cada mes");
             return;
         }
 
-        empresasMySQL.conectar();
         Empresa empresaAEditarEmpleado = empresasMySQL.getEmpresa(empresa);
-        if(empresaAEditarEmpleado == null){
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Esa empresa no exsiste");
-            empresasMySQL.desconectar();
-            return;
-        }
-        if (!empresaAEditarEmpleado.getOwner().equalsIgnoreCase(jugadorPlayer.getName())) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "No eres due?o de eas empresa");
-            empresasMySQL.desconectar();
-            return;
-        }
         Empleado empleadoAditar = empleadosMySQL.getEmpleado(jugadorAEditar, empresa);
-        if (!empleadosMySQL.trabajaEmpresa(jugadorAEditar, empresa)) {
-            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Ese jugador no trabaja en la empresa");
-            empresasMySQL.desconectar();
-            return;
-        }
 
         empleadosMySQL.editarTipoSueldo(empresaAEditarEmpleado, empleadoAditar, tipo);
-        empresasMySQL.desconectar();
     }
 }

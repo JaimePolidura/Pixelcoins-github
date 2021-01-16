@@ -3,8 +3,13 @@ package es.serversurvival.comandos.subComandos.empresas;
 import es.serversurvival.mySQL.Empresas;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.validaciones.Validaciones;
+import main.ValidationResult;
+import main.ValidationsService;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import static es.serversurvival.validaciones.Validaciones.*;
 
 public class EditarNombreEmpresas extends EmpresasSubCommand {
     private final String SCNOmbre = "editarnombre";
@@ -23,37 +28,21 @@ public class EditarNombreEmpresas extends EmpresasSubCommand {
         return ayuda;
     }
 
-    public void execute(Player jugadorPlauer, String[] args) {
-        if (args.length != 3) {
-            jugadorPlauer.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: " + this.sintaxis);
-            return;
-        }
-        String nombreEmpresaAEditar = args[1];
-        String nuevoNombreEmpresa = args[2];
-        if (nuevoNombreEmpresa.toCharArray().length > Empresas.CrearEmpresaNombreLonMax) {
-            jugadorPlauer.sendMessage(ChatColor.DARK_RED + "La longitud maxima del nombre es " + Empresas.CrearEmpresaNombreLonMax);
-            return;
-        }
-
+    public void execute(Player player, String[] args) {
         MySQL.conectar();
-        Empresa empresaACambiar = empresasMySQL.getEmpresa(nombreEmpresaAEditar);
-        if (empresaACambiar == null) {
-            jugadorPlauer.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
-            MySQL.desconectar();
-            return;
-        }
-        if (empresasMySQL.getEmpresa(nuevoNombreEmpresa) != null) {
-            jugadorPlauer.sendMessage(ChatColor.DARK_RED + "Esa nombre ya esta cogido");
-            MySQL.desconectar();
-            return;
-        }
-        if (!empresaACambiar.getOwner().equalsIgnoreCase(jugadorPlauer.getName())) {
-            jugadorPlauer.sendMessage(ChatColor.DARK_RED + "No eres el due?o de esa empresa");
+
+        ValidationResult result = ValidationsService.startValidating(args.length == 3, True.of(mensajeUsoIncorrecto()))
+                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), OwnerDeEmpresa.of(player.getName()), MaxLength.of(Empresas.CrearEmpresaNombreLonMax, "El nombre no puede ser tan largo"))
+                .andMayThrowException(() -> args[2], mensajeUsoIncorrecto(), NombreEmpresaNoPillado)
+                .validateAll();
+
+        if(result.isFailed()){
+            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
             MySQL.desconectar();
             return;
         }
 
-        empresasMySQL.cambiarNombre(jugadorPlauer, args[1], nuevoNombreEmpresa);
+        empresasMySQL.cambiarNombre(player, args[1], args[2]);
         MySQL.desconectar();
     }
 }

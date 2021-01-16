@@ -19,7 +19,7 @@ public final class Empleados extends MySQL {
     public final static Empleados INSTANCE = new Empleados();
     private Empleados () {}
 
-    private static final List<String> tipoSueldos = Arrays.asList("d", "s", "2s", "m");
+    public static final List<String> tipoSueldos = Arrays.asList("d", "s", "2s", "m");
 
     public void nuevoEmpleado(String empleado, String empresa, double sueldo, String tipo, String cargo) {
         String fechaPaga = dateFormater.format(new Date());
@@ -175,7 +175,7 @@ public final class Empleados extends MySQL {
         double sueldoAntes = empleado.getSueldo();
         Player sender = Bukkit.getPlayer(empresa.getOwner());
         Player jugadorAEditar = Bukkit.getPlayer(empleado.getJugador());
-        sender.sendMessage(ChatColor.GOLD + "Has cambiado el sueldo a " + jugadorAEditar + " a " + ChatColor.GREEN + formatea.format(nuevoSueldo) + " PC" + ChatColor.GOLD + " en la empresa: " + empresa);
+        sender.sendMessage(ChatColor.GOLD + "Has cambiado el sueldo a " + jugadorAEditar.getName() + " a " + ChatColor.GREEN + formatea.format(nuevoSueldo) + " PC" + ChatColor.GOLD + " en la empresa: " + empresa);
 
         if (jugadorAEditar != null) {
             jugadorAEditar.sendMessage(ChatColor.GOLD + sender.getName() + " te ha cambiado el sueldo de " + empresa.getNombre() + " a " + ChatColor.GREEN + formatea.format(nuevoSueldo) + " PC" + ChatColor.GOLD + " antes tenias: " + ChatColor.GREEN + formatea.format(sueldoAntes) + " PC");

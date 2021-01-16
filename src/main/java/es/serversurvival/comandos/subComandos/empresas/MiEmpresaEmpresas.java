@@ -1,9 +1,15 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
 import es.serversurvival.menus.menus.EmpresasVerMenu;
+import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.validaciones.Validaciones;
+import main.ValidationResult;
+import main.ValidationsService;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import static es.serversurvival.validaciones.Validaciones.*;
 
 public class MiEmpresaEmpresas extends EmpresasSubCommand {
     private final String SCNombre = "miempresa";
@@ -22,26 +28,20 @@ public class MiEmpresaEmpresas extends EmpresasSubCommand {
         return ayuda;
     }
 
-    public void execute(Player p, String[] args) {
-        if (args.length != 2) {
-            p.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: " + this.sintaxis);
+    public void execute(Player player, String[] args) {
+        MySQL.conectar();
+
+        ValidationResult result = ValidationsService.startValidating(args.length == 2, True.of(mensajeUsoIncorrecto()))
+                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), OwnerDeEmpresa.of(player.getName()))
+                .validateAll();
+
+        if(result.isFailed()){
+            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
+            MySQL.desconectar();
             return;
         }
 
-        empresasMySQL.conectar();
-        Empresa empresa = empresasMySQL.getEmpresa(args[1]);
-        if (empresa == null) {
-            p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
-            empresasMySQL.desconectar();
-            return;
-        }
-        if (!empresa.getOwner().equalsIgnoreCase(p.getName())) {
-            p.sendMessage(ChatColor.DARK_RED + "No eres el dueño de la empresa");
-            empresasMySQL.desconectar();
-            return;
-        }
-
-        EmpresasVerMenu menu = new EmpresasVerMenu(p, args[1]);
+        EmpresasVerMenu menu = new EmpresasVerMenu(player, args[1]);
         menu.openMenu();
     }
 }

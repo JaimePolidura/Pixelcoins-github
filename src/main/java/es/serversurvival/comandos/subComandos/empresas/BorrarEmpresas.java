@@ -1,9 +1,15 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
 import es.serversurvival.menus.menus.confirmaciones.BorrrarEmpresaConfirmacion;
+import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.validaciones.Validaciones;
+import main.ValidationResult;
+import main.ValidationsService;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import static es.serversurvival.validaciones.Validaciones.*;
 
 public class BorrarEmpresas extends EmpresasSubCommand {
     private final String SCNombre = "borrar";
@@ -23,27 +29,19 @@ public class BorrarEmpresas extends EmpresasSubCommand {
     }
 
     public void execute(Player player, String[] args) {
-        if (args.length != 2) {
-            player.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: " + this.sintaxis);
-            return;
-        }
-        String empresaNombre = args[1];
+        MySQL.conectar();
 
-        empresasMySQL.conectar();
-        Empresa empresaABorrar = empresasMySQL.getEmpresa(empresaNombre);
-        if (empresaABorrar == null) {
-            player.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
-            empresasMySQL.desconectar();
-            return;
-        }
-        if (!empresaABorrar.getOwner().equalsIgnoreCase(player.getName())) {
-            player.sendMessage(ChatColor.DARK_RED + "No eres owner de esa empresa");
-            empresasMySQL.desconectar();
-            return;
-        }
-        empresasMySQL.desconectar();
+        ValidationResult result = ValidationsService.startValidating(args.length, Same.as(2, mensajeUsoIncorrecto()))
+                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), OwnerDeEmpresa.of(player.getName()))
+                .validateAll();
 
-        BorrrarEmpresaConfirmacion confirmacionMenu = new BorrrarEmpresaConfirmacion(player, empresaNombre);
+        if(result.isFailed()){
+            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
+            MySQL.desconectar();
+            return;
+        }
+
+        BorrrarEmpresaConfirmacion confirmacionMenu = new BorrrarEmpresaConfirmacion(player, args[1]);
         confirmacionMenu.openMenu();
     }
 }

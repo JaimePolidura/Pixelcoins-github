@@ -1,10 +1,16 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
+import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.menus.solicitudes.VenderSolicitud;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.validaciones.Validaciones;
+import main.ValidationResult;
+import main.ValidationsService;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import static es.serversurvival.validaciones.Validaciones.*;
 
 public class VenderEmpresas extends EmpresasSubCommand {
     private final String SCNOmbre = "vender";
@@ -23,52 +29,24 @@ public class VenderEmpresas extends EmpresasSubCommand {
         return ayuda;
     }
 
-    public void execute(Player p, String[] args) {
-        if (args.length != 4) {
-            p.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: " + this.sintaxis);
-            return;
-        }
-        if(!Funciones.esDouble(args[3])){
-            p.sendMessage(ChatColor.DARK_RED + "A ser posible mete numeros de precio no texto");
-            return;
-        }
-        double precio = Double.parseDouble(args[3]);
-        if(precio <= 0){
-            p.sendMessage(ChatColor.DARK_RED + "A ser posible mete numeros que no sean negativo o que no sean ceros");
-            return;
-        }
-        String jugador = args[2];
-        if (jugador.equalsIgnoreCase(p.getName())) {
-            p.sendMessage(ChatColor.DARK_RED + "No puedes vender tu empresa a ti mismo xd");
-            return;
-        }
-        String nombreempresa = args[1];
-        Player jugadorAVender = p.getServer().getPlayer(jugador);
-        if (jugadorAVender == null) {
-            p.sendMessage(ChatColor.DARK_RED + "Solo puedes vender tu empresa a jugadores que esten online");
+    public void execute(Player player, String[] args) {
+        MySQL.conectar();
+
+        ValidationResult result = ValidationsService.startValidating(args.length == 4, True.of(mensajeUsoIncorrecto()))
+                .andMayThrowException(() -> args[2], mensajeUsoIncorrecto(), JugadorOnline, NotEqualsIgnoreCase.of(player.getName(), "No te lo puedes vender a ti mismo"))
+                .andMayThrowException(() -> args[3], mensajeUsoIncorrecto(), PositiveNumber, SuficientesPixelcoins.of(() -> args[2], "No tiene tantas pixelcoins como crees xdd"))
+                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), OwnerDeEmpresa.of(player.getName()))
+                .validateAll();
+
+        if(result.isFailed()){
+            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
+            MySQL.desconectar();
             return;
         }
 
-        empresasMySQL.conectar();
-        Empresa empresaAVender = empresasMySQL.getEmpresa(nombreempresa);
-        if (empresaAVender == null) {
-            p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
-            empresasMySQL.desconectar();
-            return;
-        }
-        if (!empresaAVender.getOwner().equalsIgnoreCase(p.getName())) {
-            p.sendMessage(ChatColor.DARK_RED + "No eres dueño de esa empresa");
-            empresasMySQL.desconectar();
-            return;
-        }
-        double pixelcoinsDest = jugadoresMySQL.getJugador(jugador).getPixelcoins();
-        if (pixelcoinsDest < precio) {
-            p.sendMessage(ChatColor.DARK_RED + "" + jugador + " no tiene tantas pixelcoins como crees xd");
-            empresasMySQL.desconectar();
-            return;
-        }
-
-        VenderSolicitud venderSolicitud = new VenderSolicitud(p.getName(), jugador, nombreempresa, precio);
+        VenderSolicitud venderSolicitud = new VenderSolicitud(player.getName(), args[2], args[1], Double.parseDouble(args[3]));
         venderSolicitud.enviarSolicitud();
+
+        MySQL.desconectar();
     }
 }

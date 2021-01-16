@@ -1,14 +1,20 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
+import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.MenuManager;
 import es.serversurvival.menus.menus.solicitudes.ContratarSolicitud;
 import es.serversurvival.mySQL.Empleados;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.validaciones.Validaciones;
+import main.ValidationResult;
+import main.ValidationsService;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import static es.serversurvival.validaciones.Validaciones.*;
 
 public class ContratarEmpresas extends EmpresasSubCommand {
     private final String SCNombre = "contratar";
@@ -30,69 +36,34 @@ public class ContratarEmpresas extends EmpresasSubCommand {
     }
 
     @Override
-    public void execute(Player p, String[] args) {
-        if (args.length != 5 && args.length != 6) {
-            p.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: " + this.sintaxis);
-            return;
-        }
-        if(!Funciones.esDouble(args[3])){
-            p.sendMessage(ChatColor.DARK_RED + "A ser posible introduce texto, no numeros.");
-            return;
-        }
-        double sueldo = Double.parseDouble(args[3]);
-        if(sueldo <= 0){
-            p.sendMessage(ChatColor.DARK_RED + "EXPLOTADORRRR MACHURULOOO MACHISTA OPRESOR");
-            return;
-        }
-        if(Bukkit.getPlayer(args[1]) == null){
-            p.sendMessage(ChatColor.DARK_RED + "Solo puedes contratar a jugadores que esten online");
-            return;
-        }
-        Player jugadorAContratarPlayer = Bukkit.getPlayer(args[1]);
-        if(jugadorAContratarPlayer.getName().equalsIgnoreCase(p.getName())){
-            p.sendMessage(ChatColor.DARK_RED + "No te puedes contratar a ti mismo crack");
-            return;
-        }
-        if(!Empleados.esUnTipoDeSueldo(args[4])){
-            p.sendMessage(ChatColor.DARK_RED + "El tipo de pago de sueldo puede ser:");
-            p.sendMessage(ChatColor.DARK_RED + "   s: El sueldo se pagara cada semana");
-            p.sendMessage(ChatColor.DARK_RED + "   2s: El sueldo se pagara cada 2 semanas");
-            p.sendMessage(ChatColor.DARK_RED + "   m: El sueldo se pagara cada mes");
-            p.sendMessage(ChatColor.DARK_RED + "   d: El sueldo se pagara cada dia");
+    public void execute(Player player, String[] args) {
+        MySQL.conectar();
+
+        ValidationResult result = ValidationsService.startValidating(args.length == 5 || args.length == 6, True.of(mensajeUsoIncorrecto()))
+                .andMayThrowException(() -> args[3], mensajeUsoIncorrecto(), NaturalNumber)
+                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), JugadorOnline, NoLeHanEnviadoSolicitud, NoTrabajaEmpresa.en(() -> args[2]), NotEqualsIgnoreCase.of(player.getName(), "No te puedes contratar a ti mismo"))
+                .andMayThrowException(() -> Empleados.esUnTipoDeSueldo(args[4]), mensajeUsoIncorrecto(), True.of("El tipo de sueldo solo puede ser d: cdda dia, s: cada semana, 2s: cada dos semanas, m: cada mes"))
+                .andMayThrowException(() -> args[2], mensajeUsoIncorrecto(), OwnerDeEmpresa.of(player.getName()))
+                .validateAll();
+
+        if(result.isFailed()){
+            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
+            MySQL.desconectar();
             return;
         }
 
+        Player jugadorAContratarPlayer = Bukkit.getPlayer(args[1]);
+        double sueldo = Double.parseDouble(args[3]);
         String cargo;
-        if(args.length == 6){
-            cargo = args[5];
+        if(args.length == 5){
+            cargo = args[4];
         }else{
             cargo = "Trabajador";
         }
 
-        empresasMySQL.conectar();
-        Empresa empresaDondeContratar = empresasMySQL.getEmpresa(args[2]);
-        if (empresaDondeContratar == null) {
-            p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
-            empresasMySQL.desconectar();
-            return;
-        }
-        if (!empresaDondeContratar.getOwner().equalsIgnoreCase(p.getName())) {
-            p.sendMessage(ChatColor.DARK_RED + "No eres dueño de esa empresa");
-            empresasMySQL.desconectar();
-            return;
-        }
-        Empleado empleadoSupuestamenteNoContratado = empleadosMySQL.getEmpleado(args[1], args[2]);
-        if (empleadoSupuestamenteNoContratado != null) {
-            empresasMySQL.desconectar();
-            p.sendMessage(ChatColor.DARK_RED + "Ese jugador ya esta contratado / ya le has enviado solicitud");
-            return;
-        }
-        if(MenuManager.getByPlayer(args[1]) != null){
-            p.sendMessage(ChatColor.DARK_RED + "A ese jugador ya le han enviado una solicitud/ya le has enviado una solicitud");
-            return;
-        }
-
-        ContratarSolicitud solicitud = new ContratarSolicitud(p.getName(), jugadorAContratarPlayer.getName(), args[2], sueldo, args[4], cargo);
+        ContratarSolicitud solicitud = new ContratarSolicitud(player.getName(), jugadorAContratarPlayer.getName(), args[2], sueldo, args[4], cargo);
         solicitud.enviarSolicitud();
+
+        MySQL.desconectar();
     }
 }

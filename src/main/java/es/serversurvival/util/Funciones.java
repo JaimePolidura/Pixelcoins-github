@@ -368,10 +368,10 @@ public final class Funciones {
         return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 
-    public static String buildStringFromArray (String[] array) {
+    public static String buildStringFromArray (String[] array, int startIndex) {
         StringBuilder builder = new StringBuilder();
 
-        for(int i = 0; i < array.length; i++){
+        for(int i = startIndex; i < array.length; i++){
             builder.append(array[i]);
 
             if((array.length - 1) != i) {
@@ -380,5 +380,10 @@ public final class Funciones {
         }
 
         return builder.toString();
+    }
+
+
+    public static String buildStringFromArray (String[] array) {
+        return buildStringFromArray(array, 0);
     }
 }

@@ -59,7 +59,7 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GOLD + "Descripccion:");
 
-        List<String> descripccion = Funciones.dividirDesc(empresa, 40);
+        List<String> descripccion = Funciones.dividirDesc(empresaAVer.getDescripcion(), 40);
         lore.addAll(1, descripccion);
         lore.add("  ");
         lore.add(ChatColor.GOLD + "Pixelcoins: " + ChatColor.GREEN + formatea.format(empresaAVer.getPixelcoins()) + " PC");
