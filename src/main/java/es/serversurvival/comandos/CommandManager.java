@@ -9,6 +9,7 @@ import es.serversurvival.comandos.subComandos.empleado.AyudaEmpleos;
 import es.serversurvival.comandos.subComandos.empleado.IrseEmpleos;
 import es.serversurvival.comandos.subComandos.empleado.MisTrabajosEmpleos;
 import es.serversurvival.comandos.subComandos.empresas.*;
+import es.serversurvival.util.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -18,113 +19,8 @@ import org.bukkit.entity.Player;
 import java.util.*;
 
 public class CommandManager implements CommandExecutor {
-    private static Set<Comando> comandos = new HashSet<>();
-    private static Set<SubComando> subComandos = new HashSet();
-
-    public CommandManager() {
-        comandos.add(new Dinero());
-        comandos.add(new Pagar());
-        comandos.add(new Top());
-        comandos.add(new CancelarDeudaDeudas());
-        comandos.add(new PagarDeudaDeudas());
-        comandos.add(new PrestarDeudas());
-        comandos.add(new VerDeudas());
-        comandos.add(new Tienda());
-        comandos.add(new Vender());
-        comandos.add(new CMensajes());
-        comandos.add(new AyudaDeudas());
-        comandos.add(new Re());
-        comandos.add(new CrearEmpresas());
-        comandos.add(new DepositarEmpresas());
-        comandos.add(new SacarEmpresas());
-        comandos.add(new LogotipoEmpresas());
-        comandos.add(new VerTodasEmpresas());
-        comandos.add(new MiEmpresaEmpresas());
-        comandos.add(new ContratarEmpresas());
-        comandos.add(new DespedirEmpresas());
-        comandos.add(new BorrarEmpresas());
-        comandos.add(new VenderEmpresas());
-        comandos.add(new EditarEmpleadoEmpresas());
-        comandos.add(new EditarDescEmpresas());
-        comandos.add(new EditarNombreEmpresas());
-        comandos.add(new AyudaEmpresas());
-        comandos.add(new Comprar());
-        comandos.add(new MisTrabajosEmpleos());
-        comandos.add(new IrseEmpleos());
-        comandos.add(new AyudaEmpleos());
-        comandos.add(new JugarAyuda());
-        comandos.add(new NormasAyuda());
-        comandos.add(new EmpresarioAyuda());
-        comandos.add(new EmpleoAyuda());
-        comandos.add(new DineroAyuda());
-        comandos.add(new DeudaAyuda());
-        comandos.add(new TiendaAyuda());
-        comandos.add(new PrecioBolsa());
-        comandos.add(new ValoresBolsa());
-        comandos.add(new InvertirBolsa());
-        comandos.add(new CarteraBolsa());
-        comandos.add(new VenderBolsa());
-        comandos.add(new EstadiscticasBolsa());
-        comandos.add(new OperacionesCerradasBolsa());
-        comandos.add(new AyudaBolsa());
-        comandos.add(new BolsaAyuda());
-        comandos.add(new VerCarteraBolsa());
-        comandos.add(new CCuenta());
-        comandos.add(new Perfil());
-        comandos.add(new VenderJugador());
-        comandos.add(new VenderCorto());
-        comandos.add(new ComprarCorto());
-        comandos.add(new PerBolsa());
-        comandos.add(new DividendoBolsa());
-
-        subComandos.add(new MisTrabajosEmpleos());
-        subComandos.add(new IrseEmpleos());
-        subComandos.add(new AyudaEmpleos());
-
-        subComandos.add(new PrecioBolsa());
-        subComandos.add(new ValoresBolsa());
-        subComandos.add(new InvertirBolsa());
-        subComandos.add(new CarteraBolsa());
-        subComandos.add(new VenderBolsa());
-        subComandos.add(new EstadiscticasBolsa());
-        subComandos.add(new OperacionesCerradasBolsa());
-        subComandos.add(new AyudaBolsa());
-        subComandos.add(new VerCarteraBolsa());
-        subComandos.add(new VenderCorto());
-        subComandos.add(new ComprarCorto());
-        subComandos.add(new PerBolsa());
-        subComandos.add(new DividendoBolsa());
-
-        subComandos.add(new CancelarDeudaDeudas());
-        subComandos.add(new PagarDeudaDeudas());
-        subComandos.add(new PrestarDeudas());
-        subComandos.add(new VerDeudas());
-        subComandos.add(new AyudaDeudas());
-        subComandos.add(new TiendaAyuda());
-
-        subComandos.add(new JugarAyuda());
-        subComandos.add(new NormasAyuda());
-        subComandos.add(new EmpresarioAyuda());
-        subComandos.add(new EmpleoAyuda());
-        subComandos.add(new DineroAyuda());
-        subComandos.add(new DeudaAyuda());
-        subComandos.add(new BolsaAyuda());
-
-        subComandos.add(new CrearEmpresas());
-        subComandos.add(new DepositarEmpresas());
-        subComandos.add(new SacarEmpresas());
-        subComandos.add(new LogotipoEmpresas());
-        subComandos.add(new VerTodasEmpresas());
-        subComandos.add(new MiEmpresaEmpresas());
-        subComandos.add(new ContratarEmpresas());
-        subComandos.add(new DespedirEmpresas());
-        subComandos.add(new BorrarEmpresas());
-        subComandos.add(new VenderEmpresas());
-        subComandos.add(new EditarEmpleadoEmpresas());
-        subComandos.add(new EditarDescEmpresas());
-        subComandos.add(new EditarNombreEmpresas());
-        subComandos.add(new AyudaEmpresas());
-    }
+    private Map<String, Comando> comandos = new HashMap<>();
+    private Map<String, Map<String, SubComando>> subComandos = new HashMap<>();
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
@@ -132,54 +28,114 @@ public class CommandManager implements CommandExecutor {
             commandSender.sendMessage("No se puede poner comandos desde la consola del servidor");
             return true;
         }
-        Player p = (Player) commandSender;
-        String cn = command.getName();
 
-        Comando comando = this.getComando(cn);
+        Player player = (Player) commandSender;
+        String commandName = command.getName();
 
-        if (comando == null) {
-            p.sendMessage(ChatColor.DARK_RED + "Comando no encontrado: /ayuda");
-            return true;
-        }
-        SubComando subComando = null;
-        if (args.length != 0) {
-            subComando = this.getSubComando(cn, args[0]);
-            if (subComando != null) {
-                subComando.execute(p, args);
-                return true;
-            }
-        }
-        if (comando instanceof SubComando) {
-            if (comando instanceof AyudaSubCommand && args.length == 0) {
-                AyudaSubCommand.mostrarAyudas(p);
-                return true;
-            }
-            p.sendMessage(ChatColor.DARK_RED + "Necesitas introducer un subcomando: /" + cn + " ayuda");
-            return true;
-        }
-        comando.execute(p, args);
+        ejecutarComando(player, commandName, args);
+
         return true;
     }
 
-    public static Set<SubComando> getSubComandos() {
-        return subComandos;
+    private void ejecutarComando (Player player, String commandName, String[] args) {
+        if(esUnSubComando(commandName) && esUnSubComandoValido(commandName, args)) {
+            subComandos.get(commandName).get(args[0]).execute(player, args);
+
+        }else if (esUnComando(commandName)) {
+            comandos.get(commandName).execute(player, args);
+
+        }else if (esUnSubComando(commandName) && commandName.equalsIgnoreCase("ayuda")) {
+            AyudaSubCommand.mostrarAyudas(player);
+
+        }else{
+            player.sendMessage(ChatColor.DARK_RED + "Comando no encontrado: /ayuda");
+        }
     }
 
-    private Comando getComando(String cn) {
-        for (Comando comando : comandos) {
-            if (comando.getCNombre().equalsIgnoreCase(cn)) {
-                return comando;
-            }
-        }
-        return null;
+    private boolean esUnSubComando (String nombre) {
+        return subComandos.get(nombre) != null;
     }
 
-    private SubComando getSubComando(String cn, String scn) {
-        for (SubComando subComando : subComandos) {
-            if (subComando.getCNombre().equalsIgnoreCase(cn) && subComando.getSCNombre().equalsIgnoreCase(scn)) {
-                return subComando;
-            }
-        }
-        return null;
+    private boolean esUnComando (String commandName) {
+        return this.comandos.get(commandName) != null;
+    }
+
+    private boolean esUnSubComandoValido (String mainName, String[] args) {
+        return args.length > 0 && subComandos.get(mainName).get(args[0]) != null;
+    }
+
+    public Map<String, SubComando> getSubComandosDe (String subComandoMain) {
+        return subComandos.get(subComandoMain);
+    }
+
+    public CommandManager() {
+        comandos.put("dinero", new Dinero());
+        comandos.put("pagar", new Pagar());
+        comandos.put("top", new Top());
+        comandos.put("tienda", new Tienda());
+        comandos.put("vender", new Vender());
+        comandos.put("mensajes", new CMensajes());
+        comandos.put("re", new Re());
+        comandos.put("Comprar", new Comprar());
+        comandos.put("cuenta", new CCuenta());
+        comandos.put("perfil", new Perfil());
+        comandos.put("venderjugador", new VenderJugador());
+
+        Map<String, SubComando> subComandosBolsa = new HashMap<>();
+        subComandosBolsa.put("precio", new PrecioBolsa());
+        subComandosBolsa.put("valores", new ValoresBolsa());
+        subComandosBolsa.put("invertir", new InvertirBolsa());
+        subComandosBolsa.put("cartera", new CarteraBolsa());
+        subComandosBolsa.put("vender", new VenderBolsa());
+        subComandosBolsa.put("estadisticas", new EstadiscticasBolsa());
+        subComandosBolsa.put("operacionescerradas", new OperacionesCerradasBolsa());
+        subComandosBolsa.put("ayuda", new AyudaBolsa());
+        subComandosBolsa.put("vercartera", new VerCarteraBolsa());
+        subComandosBolsa.put("vendercorto", new VenderCorto());
+        subComandosBolsa.put("comprarcorto", new ComprarCorto());
+        subComandosBolsa.put("per", new PerBolsa());
+        subComandosBolsa.put("dividendo", new DividendoBolsa());
+        subComandos.put("bolsa", subComandosBolsa);
+
+        Map<String, SubComando> subComandoEmpleo = new HashMap<>();
+        subComandoEmpleo.put("misempleos", new MisTrabajosEmpleos());
+        subComandoEmpleo.put("irse", new IrseEmpleos());
+        subComandoEmpleo.put("ayuda", new AyudaEmpleos());
+        subComandos.put("empleos", subComandosBolsa);
+
+        Map<String, SubComando> subComandosDeudas = new HashMap<>();
+        subComandosDeudas.put("cancelar", new CancelarDeudaDeudas());
+        subComandosDeudas.put("pagar", new PagarDeudaDeudas());
+        subComandosDeudas.put("prestar", new PrestarDeudas());
+        subComandosDeudas.put("ver", new VerDeudas());
+        subComandosDeudas.put("ayuda", new AyudaDeudas());
+        subComandos.put("deudas", subComandosDeudas);
+
+        Map<String, SubComando> subComandosAyuda = new HashMap<>();
+        subComandosAyuda.put("tienda", new TiendaAyuda());
+        subComandosAyuda.put("jugar", new JugarAyuda());
+        subComandosAyuda.put("normas", new NormasAyuda());
+        subComandosAyuda.put("empresario", new EmpresarioAyuda());
+        subComandosAyuda.put("empleo", new EmpleoAyuda());
+        subComandosAyuda.put("dinero", new DineroAyuda());
+        subComandosAyuda.put("deuda", new DeudaAyuda());
+        subComandosAyuda.put("bolsa", new BolsaAyuda());
+        subComandos.put("ayuda", subComandosAyuda);
+
+        Map<String, SubComando> subComandosEmpresas = new HashMap<>();
+        subComandosEmpresas.put("crear", new CrearEmpresas());
+        subComandosEmpresas.put("depositar", new DepositarEmpresas());
+        subComandosEmpresas.put("sacar", new SacarEmpresas());
+        subComandosEmpresas.put("logotipo", new LogotipoEmpresas());
+        subComandosEmpresas.put("vertodas", new VerTodasEmpresas());
+        subComandosEmpresas.put("miempresa", new MiEmpresaEmpresas());
+        subComandosEmpresas.put("contratar", new ContratarEmpresas());
+        subComandosEmpresas.put("despedir", new DespedirEmpresas());
+        subComandosEmpresas.put("borrar", new BorrarEmpresas());
+        subComandosEmpresas.put("vender", new VenderEmpresas());
+        subComandosEmpresas.put("editarempleado", new EditarEmpleadoEmpresas());
+        subComandosEmpresas.put("editarnombre", new EditarNombreEmpresas());
+        subComandosEmpresas.put("ayuda", new AyudaEmpresas());
+        subComandos.put("empresas", subComandosEmpresas);
     }
 }

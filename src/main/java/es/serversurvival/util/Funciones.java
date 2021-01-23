@@ -90,9 +90,8 @@ public final class Funciones {
 
     public static long diferenciaDias(Date d1, Date d2) {
         long difMil = Math.abs(d1.getTime() - d2.getTime());
-        long dif = TimeUnit.DAYS.convert(difMil, TimeUnit.MILLISECONDS);
 
-        return dif;
+        return TimeUnit.DAYS.convert(difMil, TimeUnit.MILLISECONDS);
     }
 
     public static double rentabilidad(double ingresos, double beneficios) {
@@ -282,6 +281,11 @@ public final class Funciones {
         }
 
         return parser.parse(response.toString());
+    }
+
+    public static boolean cuincideNombre (String nombre, List<? extends String> bannedNamesList){
+        return bannedNamesList.stream()
+                .anyMatch( (name) -> name.equalsIgnoreCase(nombre));
     }
 
     public static boolean cuincideNombre (String nombre, String... items){

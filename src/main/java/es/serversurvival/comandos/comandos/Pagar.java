@@ -37,7 +37,7 @@ public class Pagar extends Comando {
         MySQL.conectar();
         ValidationResult result = ValidationsService.startValidating(args.length, Same.as(2, "Same"))
                 .andMayThrowException(() -> args[1], "Introduce un numero no texto", PositiveNumber, SuficientesPixelcoins.of(senderName, () -> args[1]))
-                .andMayThrowException(() -> args[0], "uso incorrecto", JugadorRegistrado, NotEqualsIgnoreCase.of(senderName))
+                .andMayThrowException(() -> args[0], mensajeUsoIncorrecto(), JugadorRegistrado, NotEqualsIgnoreCase.of(senderName))
                 .validateAll();
 
         if(result.isFailed()){

@@ -14,7 +14,6 @@ import main.validators.strings.*;
 public final class Validaciones {
     private Validaciones () {}
 
-    public final static Number Number = new Number("Tiene que ser un numero");
     public final static PositiveNumber PositiveNumber = new PositiveNumber("Tiene que ser un numero positivo");
     public final static NaturalNumber NaturalNumber = new NaturalNumber("Tiene que ser un numero positivo y no decimal");
     public final static MaxValue MaxValue = new MaxValue("No puede ser tan grande");

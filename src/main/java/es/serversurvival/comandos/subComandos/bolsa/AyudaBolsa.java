@@ -2,9 +2,11 @@ package es.serversurvival.comandos.subComandos.bolsa;
 
 import es.serversurvival.comandos.CommandManager;
 import es.serversurvival.comandos.SubComando;
+import es.serversurvival.main.Pixelcoin;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.Map;
 import java.util.Set;
 
 public class AyudaBolsa extends BolsaSubCommand {
@@ -25,12 +27,14 @@ public class AyudaBolsa extends BolsaSubCommand {
     }
 
     public void execute(Player player, String[] args) {
-        Set<SubComando> subComandoSet = CommandManager.getSubComandos();
+        Map<String, SubComando> subComandosBolsa = Pixelcoin.getCommandManager().getSubComandosDe(getCNombre());
 
         player.sendMessage("        ");
         player.sendMessage(ChatColor.GOLD + "Todos los subcomandos del comando bolsa:  Mas info en /ayuda bolsa");
-        for (SubComando subComando : subComandoSet) {
-            if (subComando instanceof BolsaSubCommand && subComando != this) {
+        for(Map.Entry<String, SubComando> entry : subComandosBolsa.entrySet()){
+            SubComando subComando = entry.getValue();
+
+            if(subComando != this){
                 player.sendMessage("   ");
                 player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + subComando.getSintaxis() + ChatColor.RESET + "" + ChatColor.GOLD + ": " + subComando.getAyuda());
             }

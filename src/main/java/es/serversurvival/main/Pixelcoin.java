@@ -11,6 +11,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Pixelcoin extends JavaPlugin {
+    private static CommandManager commandManager = new CommandManager();
+
     private ConversacionesWeb conversacionesWebMySQL = ConversacionesWeb.INSTANCE;
     private Deudas deudasMySQL = Deudas.INSTANCE;
     private Empleados empleadosMySQL = Empleados.INSTANCE;
@@ -20,12 +22,13 @@ public final class Pixelcoin extends JavaPlugin {
         return plugin;
     }
 
+    public static CommandManager getCommandManager () {return commandManager;}
+
     public void onEnable() {
         plugin = this;
 
         getLogger().info("------------Plugin activado -------------");
         getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "------------------------------");
-        getServer().getConsoleSender().sendMessage(ChatColor.YELLOW + "       Pixelcoins POO");
 
         MySQL.conectar();
         deudasMySQL.pagarDeudas();
@@ -35,7 +38,7 @@ public final class Pixelcoin extends JavaPlugin {
 
         getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "------------------------------");
 
-        setUpComandos(new CommandManager());
+        setUpComandos(commandManager);
         setUpListeners();
         setUpTasks();
     }
@@ -49,7 +52,7 @@ public final class Pixelcoin extends JavaPlugin {
         ActualizarNPCs actualizarNPCs = new ActualizarNPCs();
         SplitAcciones splitAccionesTask = new SplitAcciones();
         ServerSocketWeb serverSocketWeb = ServerSocketWeb.INSTANCE;
-        //RabbitMQConsumerTask rabbitMQConsumer = new RabbitMQConsumerTask();
+        RabbitMQConsumerTask rabbitMQConsumer = new RabbitMQConsumerTask();
 
         int cadaDia = 20 * 60 * 60 * 24;
         int cada20Minutos = 20 * 20 * 60;
@@ -72,7 +75,7 @@ public final class Pixelcoin extends JavaPlugin {
         actualizarNPCs.runTaskTimer(this, cada15Segundos, cada5Minutos);
         splitAccionesTask.runTaskTimer(this, cadaMinuto, cadaDia);
         dividendosTask.runTaskTimer(this, cada2Minutos, cadaDia);
-        //rabbitMQConsumer.runTaskAsynchronously(this);
+        rabbitMQConsumer.runTaskAsynchronously(this);
     }
 
     private void setUpListeners() {

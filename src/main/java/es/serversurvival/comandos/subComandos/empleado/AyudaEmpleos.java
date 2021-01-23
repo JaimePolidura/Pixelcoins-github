@@ -2,9 +2,11 @@ package es.serversurvival.comandos.subComandos.empleado;
 
 import es.serversurvival.comandos.CommandManager;
 import es.serversurvival.comandos.SubComando;
+import es.serversurvival.main.Pixelcoin;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.Map;
 import java.util.Set;
 
 public class AyudaEmpleos extends EmpleosSubCommand {
@@ -25,12 +27,15 @@ public class AyudaEmpleos extends EmpleosSubCommand {
     }
 
     public void execute(Player player, String[] args) {
-        Set<SubComando> subComandoSet = CommandManager.getSubComandos();
+        Map<String, SubComando> subComandosEmleos = Pixelcoin.getCommandManager().getSubComandosDe(getCNombre());
 
         player.sendMessage("        ");
         player.sendMessage(ChatColor.GOLD + "Todos los subcomandos del comando empleados:  Mas info en /ayuda empleo");
-        for (SubComando subComando : subComandoSet) {
-            if (subComando instanceof EmpleosSubCommand && subComando != this) {
+
+        for(Map.Entry<String, SubComando> entry : subComandosEmleos.entrySet()){
+            SubComando subComando = entry.getValue();
+
+            if(subComando != this){
                 player.sendMessage("   ");
                 player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + subComando.getSintaxis() + ChatColor.RESET + "" + ChatColor.GOLD + ": " + subComando.getAyuda());
             }
