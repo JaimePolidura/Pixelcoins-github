@@ -4,10 +4,10 @@ import es.serversurvival.apiHttp.IEXCloud_API;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.AccionesInventoryPag1Factory;
-import es.serversurvival.menus.inventoryFactory.inventories.AccionesInventoryPag2Factory;
 import es.serversurvival.menus.menus.confirmaciones.ComprarBolsaConfirmacion;
 import es.serversurvival.mySQL.enums.TipoValor;
 import es.serversurvival.util.Funciones;
+import es.serversurvival.util.ItemBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -20,9 +20,9 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class AccionesMenu extends Menu implements Clickable, Paginated, PostLoading{
+public class AccionesMenu extends Menu implements Clickable, Paginated, PostLoading {
     public static final String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "   Escoge para invertir";
-    private static ExecutorService pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    private static ExecutorService pool = Executors.newSingleThreadExecutor();
 
     private Player player;
     private Inventory inventory;
@@ -34,13 +34,14 @@ public class AccionesMenu extends Menu implements Clickable, Paginated, PostLoad
         this.currentIndex = 0;
 
         this.pages = new ArrayList<>();
-        Inventory inventoryPag1 = InventoryCreator.createInventoryMenu(new AccionesInventoryPag1Factory(), player.getName());
-        Inventory inventoryPag2 = InventoryCreator.createInventoryMenu(new AccionesInventoryPag2Factory(), player.getName());
-        pages.add(new Page(0, inventoryPag1));
-        pages.add(new Page(1, inventoryPag2));
+        AccionesInventoryPag1Factory inventoryFactory = new AccionesInventoryPag1Factory();
+        pages.add(new Page(0, InventoryCreator.createInventoryMenu(inventoryFactory, player.getName())));
+        pages.add(new Page(1, inventoryFactory.buildInventoryPag2()));
 
-        this.inventory = inventoryPag1;
+        this.inventory = this.pages.get(0).inventory;
+
         postLoad();
+        openMenu();
     }
 
     @Override
@@ -56,11 +57,12 @@ public class AccionesMenu extends Menu implements Clickable, Paginated, PostLoad
         if (precioLore.equalsIgnoreCase(ChatColor.RED + "Cargando...")) {
             return;
         }
-        double precio = Double.parseDouble(lore.get(1).split(" ")[1].substring(2));
+
+        double precio = Double.parseDouble(lore.get(1).split(" ")[1].split(",")[0]);
         String ticker = lore.get(0).split(" ")[1];
 
         closeMenu();
-        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(ticker, nombreValor, TipoValor.ACCIONES.toString(), "acciones", player.getName(), precio);
+        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(ticker, nombreValor, TipoValor.ACCIONES.toString(), TipoValor.ACCIONES.toString(), player.getName(), precio);
         confirmacion.openMenu();
     }
 
@@ -83,32 +85,36 @@ public class AccionesMenu extends Menu implements Clickable, Paginated, PostLoad
     public void postLoad() {
         for(int i = 0; i < inventory.getContents().length; i++){
             ItemStack actual = inventory.getContents()[i];
+
             if(i == 52 || actual == null || Funciones.esDeTipoItem(actual, "AIR")){
                 break;
             }
 
             ItemMeta actualMeta = actual.getItemMeta();
             List<String> precio = actualMeta.getLore();
+
             if(precio == null || precio.get(1) == null || !precio.get(1).equalsIgnoreCase(ChatColor.RED + "Cargando...")){
                 continue;
             }
 
-            pool.submit(() -> {
-                precio.remove(1);
-
-                String ticker = precio.get(0).split(" ")[1];
-                try {
-                    double precioAccion = IEXCloud_API.getOnlyPrice(ticker);
-
-                    precio.add(1, ChatColor.GOLD + "Precio/Accion:" + ChatColor.GREEN + " " + formatea.format(precioAccion)  + " PC");
-
-                    actualMeta.setLore(precio);
-                    actual.setItemMeta(actualMeta);
-                } catch (Exception e) {
-                    player.sendMessage(ChatColor.DARK_RED + "No hagas spam del comando");
-                }
-            });
+            asynchLoadPrice(precio, actual);
         }
+    }
+
+    private void asynchLoadPrice (List<String> lore, ItemStack item) {
+        pool.submit(() -> {
+            lore.remove(1);
+
+            String ticker = lore.get(0).split(" ")[1];
+            try {
+                double precioAccion = IEXCloud_API.getOnlyPrice(ticker);
+                lore.add(1, ChatColor.GOLD + "Precio/Accion:" + ChatColor.GREEN + " " + formatea.format(precioAccion)  + " PC");
+
+                ItemBuilder.setLore(item, lore);
+            } catch (Exception e) {
+                player.sendMessage(ChatColor.DARK_RED + "No hagas spam del comando");
+            }
+        });
     }
 
     @Override

@@ -5,6 +5,7 @@ import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
 import es.serversurvival.mySQL.tablasObjetos.PosicionCerrada;
+import es.serversurvival.util.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -25,37 +26,23 @@ public class TopInventoryFactory extends InventoryFactory {
         MySQL.conectar();
         initInfoJugadores();
 
-        ItemStack itemStackTopRicos = buildTopRicosJugadoresItem();
-        ItemStack itemStackTopPobres = buildTopPobresJugadoresItem();
-        ItemStack itemStackTopVendedores = buildTopVendedoresJugadoresItem();
-        ItemStack itemStackTopFiables = buildTopFiablesJugadoresItem();
-        ItemStack itemStackTopMenosFiables = buildTopMenosFiablesJugadoresItem();
-        ItemStack itemStackTopOperaciones = buildItemTopOperacionesBolsa();
-        ItemStack itemStackPeoresOperaciones = buildItemPeoresOperacioensBolsa();
-        ItemStack itemStackMejoresComerciantes = buildMejoresComerciantes();
+        inventory.setItem(10, buildTopRicosJugadoresItem());
+        inventory.setItem(13, buildTopVendedoresJugadoresItem());
+        inventory.setItem(16, buildTopPobresJugadoresItem());
+        inventory.setItem(28, buildTopFiablesJugadoresItem());
+        inventory.setItem(31, buildItemTopOperacionesBolsa());
+        inventory.setItem(34, buildTopMenosFiablesJugadoresItem());
+        inventory.setItem(46, buildItemPeoresOperacioensBolsa());
+        inventory.setItem(49, buildMejoresComerciantes());
 
         MySQL.desconectar();
-
-        inventory.setItem(10, itemStackTopRicos);
-        inventory.setItem(13, itemStackTopVendedores);
-        inventory.setItem(16, itemStackTopPobres);
-        inventory.setItem(28, itemStackTopFiables);
-        inventory.setItem(31, itemStackTopOperaciones);
-        inventory.setItem(34, itemStackTopMenosFiables);
-        inventory.setItem(46, itemStackPeoresOperaciones);
-        inventory.setItem(49, itemStackMejoresComerciantes);
 
         return inventory;
     }
 
     private ItemStack buildTopRicosJugadoresItem () {
-        MySQL.conectar();
         Map<String, Double> listaRicos = Funciones.crearMapaTopPatrimonioPlayers(false);
-
-        ItemStack topRicos = new ItemStack(Material.GOLD_BLOCK);
-        ItemMeta topRicosItemMeta = topRicos.getItemMeta();
-
-        topRicosItemMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "TOP RICOS");
+        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP RICOS";
 
         List<String> lore = new ArrayList<>();
         int pos = 1;
@@ -65,20 +52,14 @@ public class TopInventoryFactory extends InventoryFactory {
             lore.add(ChatColor.GOLD + "" + pos + "º " + entry.getKey() + ": " + ChatColor.GREEN + formatea.format(entry.getValue()) + " PC");
             pos++;
         }
-        topRicosItemMeta.setLore(lore);
-        topRicos.setItemMeta(topRicosItemMeta);
 
-        return topRicos;
+        return ItemBuilder.loreDisplayName(Material.GOLD_BLOCK, displayName, lore);
     }
 
     private ItemStack buildTopPobresJugadoresItem () {
-        MySQL.conectar();
         Map<String, Double> listaRicos = Funciones.crearMapaTopPatrimonioPlayers(true);
 
-        ItemStack topPobres = new ItemStack(Material.DIRT);
-        ItemMeta topPobresItemMeta = topPobres.getItemMeta();
-
-        topPobresItemMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "TOP POBRES");
+        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP POBRES";
 
         List<String> lore = new ArrayList<>();
         int pos = 1;
@@ -89,18 +70,13 @@ public class TopInventoryFactory extends InventoryFactory {
             lore.add(ChatColor.GOLD + "" + pos + "º " + entry.getKey() + ": " + ChatColor.GREEN + formatea.format(entry.getValue()) + " PC");
             pos++;
         }
-        topPobresItemMeta.setLore(lore);
-        topPobres.setItemMeta(topPobresItemMeta);
 
-        return topPobres;
+        return ItemBuilder.loreDisplayName(Material.DIRT, displayName, lore);
     }
 
     private ItemStack buildTopVendedoresJugadoresItem () {
-        ItemStack topVendedores = new ItemStack(Material.GOLD_INGOT);
-        ItemMeta topVendedoresItemMeta = topVendedores.getItemMeta();
         List<Jugador> listaVendedores = jugadoresMySQL.getTopVendedores();
-
-        topVendedoresItemMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "TOP VENDEDORES");
+        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP VENDEDORES";
         List<String> lore = new ArrayList<>();
 
         int pos = 1;
@@ -111,18 +87,12 @@ public class TopInventoryFactory extends InventoryFactory {
             pos++;
         }
 
-        topVendedoresItemMeta.setLore(lore);
-        topVendedores.setItemMeta(topVendedoresItemMeta);
-
-        return topVendedores;
+        return ItemBuilder.loreDisplayName(Material.GOLD_INGOT, displayName, lore);
     }
 
     private ItemStack buildTopFiablesJugadoresItem () {
-        ItemStack topFiables = new ItemStack(Material.GREEN_WOOL);
-        ItemMeta topFiablesItemMeta = topFiables.getItemMeta();
         List<Jugador> listaFiables = jugadoresMySQL.getTopFiables();
-
-        topFiablesItemMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "TOP MENOS MOROSOS");
+        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP MENOS MOROSOS";
         List<String> lore = new ArrayList<>();
 
         int pos = 1;
@@ -133,18 +103,12 @@ public class TopInventoryFactory extends InventoryFactory {
             pos++;
         }
 
-        topFiablesItemMeta.setLore(lore);
-        topFiables.setItemMeta(topFiablesItemMeta);
-
-        return topFiables;
+        return ItemBuilder.loreDisplayName(Material.GREEN_WOOL, displayName, lore);
     }
 
     private ItemStack buildTopMenosFiablesJugadoresItem () {
-        ItemStack topMenosFiables = new ItemStack(Material.RED_WOOL);
-        ItemMeta topMenosFiablesItemMeta = topMenosFiables.getItemMeta();
         List<Jugador> listaMenosFiables = jugadoresMySQL.getTopMenosFiables();
-
-        topMenosFiablesItemMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "TOP MOROSOS");
+        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP MOROSOS";
         List<String> lore = new ArrayList<>();
 
         int pos = 1;
@@ -154,71 +118,55 @@ public class TopInventoryFactory extends InventoryFactory {
             lore.add(ChatColor.GOLD + "" + pos  + "º " + noFiable.getNombre() + ": " + ChatColor.GREEN + formatea.format(noFiable.getNpagos()));
             pos++;
         }
-        topMenosFiablesItemMeta.setLore(lore);
-        topMenosFiables.setItemMeta(topMenosFiablesItemMeta);
 
-        return topMenosFiables;
+        return ItemBuilder.loreDisplayName(Material.RED_WOOL, displayName, lore);
     }
 
     private ItemStack buildItemTopOperacionesBolsa () {
-        ItemStack topOperaciones = new ItemStack(Material.DIAMOND_BLOCK);
-        ItemMeta topOperacionesItemMeta = topOperaciones.getItemMeta();
-        topOperacionesItemMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "TOP MEJORES OPERAIONES BOLSA");
-
+        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP MEJORES OPERAIONES BOLSA";
         List<PosicionCerrada> posicionCerradasNotDuplicadas = posicionesCerradasMySQL.getTopRentabilidades();
         posicionCerradasNotDuplicadas = getNotDuplicatedElements(posicionCerradasNotDuplicadas);
-        List<String> lore6 = new ArrayList<>();
+        List<String> lore = new ArrayList<>();
 
         for(int i = 0; i < 5; i++){
             double rentabilidad = Funciones.redondeoDecimales(posicionCerradasNotDuplicadas.get(i).getRentabilidad(), 3);
 
             if(rentabilidad > 0){
                 if(posicionCerradasNotDuplicadas.get(i).getTipo_posicion().equalsIgnoreCase("CORTO")){
-                    lore6.add("" + ChatColor.GOLD + (i + 1)  + "º (CORTO) " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.GREEN + " +" + rentabilidad + "%");
+                    lore.add("" + ChatColor.GOLD + (i + 1)  + "º (CORTO) " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.GREEN + " +" + rentabilidad + "%");
                 }else{
-                    lore6.add("" + ChatColor.GOLD + (i + 1)  + "º " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.GREEN + " +" + rentabilidad + "%");
+                    lore.add("" + ChatColor.GOLD + (i + 1)  + "º " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.GREEN + " +" + rentabilidad + "%");
                 }
             }
         }
 
-        topOperacionesItemMeta.setLore(lore6);
-        topOperaciones.setItemMeta(topOperacionesItemMeta);
-
-        return topOperaciones;
+        return ItemBuilder.loreDisplayName(Material.DIAMOND_BLOCK, displayName, lore);
     }
 
     private ItemStack buildItemPeoresOperacioensBolsa() {
-        ItemStack topOperaciones = new ItemStack(Material.COAL_BLOCK);
-        ItemMeta topOperacionesItemMeta = topOperaciones.getItemMeta();
-        topOperacionesItemMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "TOP PEORES OPERAIONES BOLSA");
-
+        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP PEORES OPERAIONES BOLSA";
         List<PosicionCerrada> posicionCerradasNotDuplicadas = posicionesCerradasMySQL.getPeoresRentabilidades();
         posicionCerradasNotDuplicadas = getNotDuplicatedElements(posicionCerradasNotDuplicadas);
+        List<String> lore = new ArrayList<>();
 
-        List<String> lore6 = new ArrayList<>();
         for(int i = 0; i < 5; i++){
             double rentabilidad = Funciones.redondeoDecimales(posicionCerradasNotDuplicadas.get(i).getRentabilidad(), 3);
 
             if(posicionCerradasNotDuplicadas.get(i).getTipo_posicion().equalsIgnoreCase("CORTO")){
-                lore6.add("" + ChatColor.GOLD + (i + 1)  + "º (CORTO) " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.RED + " " + rentabilidad + "%");
+                lore.add("" + ChatColor.GOLD + (i + 1)  + "º (CORTO) " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.RED + " " + rentabilidad + "%");
             }else{
-                lore6.add("" + ChatColor.GOLD + (i + 1)  + "º " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.RED + " " + rentabilidad + "%");
+                lore.add("" + ChatColor.GOLD + (i + 1)  + "º " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.RED + " " + rentabilidad + "%");
             }
         }
 
-        topOperacionesItemMeta.setLore(lore6);
-        topOperaciones.setItemMeta(topOperacionesItemMeta);
-
-        return topOperaciones;
+        return ItemBuilder.loreDisplayName(Material.COAL_BLOCK, displayName, lore);
     }
 
     private ItemStack buildMejoresComerciantes () {
-        ItemStack topComerciantes = new ItemStack(Material.EMERALD);
-        ItemMeta meta = topComerciantes.getItemMeta();
-        meta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "TOP COMERCIANTES MAS INTENSIVOS (MENOS MINAN)");
-
+        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP COMERCIANTES MAS INTENSIVOS (MENOS MINAN)";
         infoJugadores.sort( (inf1, inf2) -> Double.compare(inf2.porcentajePatrimonioIngresos, inf1.porcentajePatrimonioIngresos) );
         List<String> lore = new ArrayList<>();
+
         for (int i = 0; i < 5; i++) {
             if(infoJugadores.get(i).porcentajePatrimonioIngresos > 0){
                 lore.add(ChatColor.GOLD + "" + (i + 1) + " " + infoJugadores.get(i).nombre + ": " + formatea.format(Funciones.redondeoDecimales(infoJugadores.get(i).porcentajePatrimonioIngresos, 3)) + "%");
@@ -233,10 +181,7 @@ public class TopInventoryFactory extends InventoryFactory {
         lore.add(ChatColor.GOLD + "En otras palabras de cada 100 Pixelcoins que tienes");
         lore.add(ChatColor.GOLD + "Cuantas las has conseguido comerciando");
 
-        meta.setLore(lore);
-        topComerciantes.setItemMeta(meta);
-
-        return topComerciantes;
+        return ItemBuilder.loreDisplayName(Material.EMERALD, displayName, lore);
     }
 
     private List<PosicionCerrada> getNotDuplicatedElements (List<PosicionCerrada> list) {

@@ -1,6 +1,7 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
 import es.serversurvival.menus.menus.Paginated;
+import es.serversurvival.mySQL.enums.TipoValor;
 import es.serversurvival.mySQL.tablasObjetos.LlamadaApi;
 import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.util.Funciones;
@@ -8,17 +9,20 @@ import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.BolsaCarteraMenu;
 import es.serversurvival.mySQL.PosicionesAbiertas;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
+import es.serversurvival.util.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static es.serversurvival.mySQL.enums.TipoPosicion.*;
+import static es.serversurvival.util.Funciones.*;
 
 public class BolsaCarteraInventoryFactory extends InventoryFactory {
     private double resultadoTotal;
@@ -89,21 +93,18 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
     }
 
     private List<ItemStack> buildItemsPosicionesAbiertas (String jugador) {
-        List<ItemStack> posicionesAbiertasItems = new ArrayList<>();
-
         llamadasApiMySQL.conectar();
-        List<PosicionAbierta> posicionAbiertasJugador = posicionesAbiertasMySQL.getPosicionesAbiertasJugador(jugador);
         this.liquidezjugador = jugadoresMySQL.getJugador(jugador).getPixelcoins();
         rellenarLlamadasApi();
+
+        List<PosicionAbierta> posicionAbiertasJugador = posicionesAbiertasMySQL.getPosicionesAbiertasJugador(jugador);
         rellenarPosicionesAbiertasPeso(posicionAbiertasJugador, getTotalInvertido(posicionAbiertasJugador));
 
+        List<ItemStack> posicionesAbiertasItems = new ArrayList<>();
         for (PosicionAbierta posicion : posicionAbiertasJugador) {
-            if(posicion.getTipo_posicion().equalsIgnoreCase(TipoPosicion.LARGO.toString())){
-                posicionesAbiertasItems.add(buildPosicionAbiertaLarga(posicion));
-            }else{
-                posicionesAbiertasItems.add(buildPosicionAbiertaCorto(posicion));
-            }
+            posicionesAbiertasItems.add(caca(posicion));
         }
+
         llamadasApiMySQL.desconectar();
 
         return posicionesAbiertasItems;
@@ -113,9 +114,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         List<LlamadaApi> llamadaApisList = llamadasApiMySQL.getTodasLlamadasApi();
         Map<String, LlamadaApi> llamadaApiMap = new HashMap<>();
 
-        llamadaApisList.forEach( (llamada) -> {
-            llamadaApiMap.put(llamada.getSimbolo(), llamada);
-        });
+        llamadaApisList.forEach( (llamada) -> llamadaApiMap.put(llamada.getSimbolo(), llamada));
 
         this.llamadasApis = llamadaApiMap;
     }
@@ -124,85 +123,43 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         Map<String, Integer> posicionesAbiertasConPeso = new HashMap<>();
 
         posicionesJugador.forEach( (posicion) -> {
-            posicionesAbiertasConPeso.put(posicion.getNombre_activo(), (int) Funciones.rentabilidad(totalInverito, posicion.getCantidad() * llamadasApis.get(posicion.getNombre_activo()).getPrecio()));
+            posicionesAbiertasConPeso.put(posicion.getNombre_activo(), (int) rentabilidad(totalInverito, posicion.getCantidad() * llamadasApis.get(posicion.getNombre_activo()).getPrecio()));
         });
 
         this.posicionesAbiertasPeso = posicionesAbiertasConPeso;
     }
 
     private double getTotalInvertido (List<PosicionAbierta> posicionAbiertas) {
-        return posicionAbiertas.stream()
-                .mapToDouble((pos) -> pos.getCantidad() * llamadasApis.get(pos.getNombre_activo()).getPrecio())
-                .sum();
+        return getSumaTotalListDouble(posicionAbiertas, pos -> pos.getCantidad() * llamadasApis.get(pos.getNombre_activo()).getPrecio());
     }
 
     private ItemStack buildItemFordward () {
-        ItemStack forward = new ItemStack(Material.GREEN_WOOL);
-        ItemMeta forwadMeta = forward.getItemMeta();
-        forwadMeta.setDisplayName(Paginated.ITEM_NAME_GOFORDWARD);
-        forward.setItemMeta(forwadMeta);
-
-        return forward;
+        return ItemBuilder.displayname(Material.GREEN_WOOL, Paginated.ITEM_NAME_GOFORDWARD);
     }
 
-    private ItemStack buildPosicionAbiertaLarga (PosicionAbierta posicion) {
-        ItemStack posicionItem = new ItemStack(Material.NAME_TAG);
-        ItemMeta posicionMeta = posicionItem.getItemMeta();
+    private ItemStack caca (PosicionAbierta posicionAbierta) {
+        String displayName = posicionAbierta.getTipo_posicion().equals(LARGO.toString()) ?
+                ChatColor.GOLD + "" + ChatColor.BOLD + ChatColor.UNDERLINE + "CLICK PARA VENDER" :
+                ChatColor.GOLD + "" + ChatColor.BOLD + ChatColor.UNDERLINE + "CLICK PARA COMPRAR " + ChatColor.RED + "" + ChatColor.BOLD + "(CORTO)";
+        List<String> lore = buildLoreFromPosicionAbierta(posicionAbierta);
 
-        posicionMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + ChatColor.UNDERLINE + "CLICK PARA VENDER");
-
-        LlamadaApi llamada = llamadasApis.get(posicion.getNombre_activo());
-
-        double precioAcutal = llamada.getPrecio();
-        double perdidasOBeneficios = posicion.getCantidad() * (precioAcutal - posicion.getPrecio_apertura());
-        double rentabilidad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(posicion.getPrecio_apertura(), precioAcutal), 2);
-        double peso = posicionesAbiertasPeso.get(posicion.getNombre_activo());
-        List<String> lore = new ArrayList<>();
-        lore.add("   ");
-        lore.add(ChatColor.GOLD + "Empresa: " + llamada.getNombre_activo());
-
-        if(!PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()).equalsIgnoreCase(posicion.getNombre_activo())) {
-            lore.add(ChatColor.GOLD + "Ticker: " + posicion.getNombre_activo() + " (" + PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()) + ")");
-        }else {
-            lore.add(ChatColor.GOLD + "Ticker: " + posicion.getNombre_activo() + " (Acciones) ");
-        }
-        lore.add(ChatColor.GOLD + "Peso en cartera: " + peso + "%");
-        lore.add("   ");
-        lore.add(ChatColor.GOLD + "Acciones compradas: " + posicion.getCantidad());
-        lore.add(ChatColor.GOLD + "Precio apertura: " + ChatColor.GREEN +formatea.format(posicion.getPrecio_apertura()) + " PC");
-        lore.add(ChatColor.GOLD + "Precio actual: " + ChatColor.GREEN + formatea.format(precioAcutal));
-        if(perdidasOBeneficios >= 0){
-            lore.add(ChatColor.GOLD + "Beneficios totales: " +ChatColor.GREEN + "+" + formatea.format(perdidasOBeneficios) + " PC");
-            lore.add(ChatColor.GOLD + "Rentabilidad: " + ChatColor.GREEN + "+" + rentabilidad + "%");
-        }else{
-            lore.add(ChatColor.GOLD + "Perdidas totales: " + ChatColor.RED + formatea.format(perdidasOBeneficios) + " PC");
-            lore.add(ChatColor.GOLD + "Rentabilidad: " + ChatColor.RED + rentabilidad + "%");
-        }
-        lore.add(ChatColor.GOLD + "Valor total: " + ChatColor.GREEN + formatea.format(precioAcutal * posicion.getCantidad()) + " PC");
-        lore.add("   ");
-        lore.add(ChatColor.GOLD + "Fecha de compra: " + posicion.getFecha_apertura());
-        lore.add(ChatColor.GOLD + "ID: " + posicion.getId());
-
-        posicionMeta.setLore(lore);
-        posicionItem.setItemMeta(posicionMeta);
-
-        this.valorTotal = valorTotal + (precioAcutal * posicion.getCantidad());
-        this.resultadoTotal = resultadoTotal + perdidasOBeneficios;
-
-        return posicionItem;
+        return TipoPosicion.valueOf(posicionAbierta.getTipo_posicion()) == LARGO ?
+                ItemBuilder.loreDisplayName(Material.NAME_TAG, displayName, lore) :
+                ItemBuilder.loreDisplayName(Material.REDSTONE_TORCH, displayName, lore);
     }
 
-    private ItemStack buildPosicionAbiertaCorto (PosicionAbierta posicion) {
-        ItemStack posicionItem = new ItemStack(Material.REDSTONE_TORCH);
-        ItemMeta posicionMeta = posicionItem.getItemMeta();
-
-        posicionMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + ChatColor.UNDERLINE + "CLICK PARA COMPRAR " + ChatColor.RED + "" + ChatColor.BOLD + "(CORTO)");
-
+    private List<String> buildLoreFromPosicionAbierta (PosicionAbierta posicion) {
         LlamadaApi llamada = llamadasApis.get(posicion.getNombre_activo());
+        TipoPosicion tipoPosicion = TipoPosicion.valueOf(posicion.getTipo_posicion());
 
         double precioAcutal = llamada.getPrecio();
-        double perdidasOBeneficios = posicion.getCantidad() * (posicion.getPrecio_apertura() - precioAcutal);
-        double rentabilidad = Math.abs(Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(posicion.getPrecio_apertura() ,precioAcutal), 2));
+        double perdidasOBeneficios = tipoPosicion == LARGO ?
+                posicion.getCantidad() * (precioAcutal - posicion.getPrecio_apertura()) :
+                posicion.getCantidad() * (posicion.getPrecio_apertura() - precioAcutal);
+
+        double rentabilidad = tipoPosicion == LARGO ?
+                redondeoDecimales(diferenciaPorcntual(posicion.getPrecio_apertura(), precioAcutal), 2) :
+                Math.abs(redondeoDecimales(diferenciaPorcntual(posicion.getPrecio_apertura() ,precioAcutal), 2));
 
         double peso = posicionesAbiertasPeso.get(posicion.getNombre_activo());
         List<String> lore = new ArrayList<>();
@@ -216,7 +173,13 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         }
         lore.add(ChatColor.GOLD + "Peso en cartera: " + peso + "%");
         lore.add("   ");
-        lore.add(ChatColor.GOLD + "Acciones vendidas: " + posicion.getCantidad());
+
+        if (tipoPosicion == LARGO) {
+            lore.add(ChatColor.GOLD + "Acciones compradas: " + posicion.getCantidad());
+        } else {
+            lore.add(ChatColor.GOLD + "Acciones vendidas: " + posicion.getCantidad());
+        }
+
         lore.add(ChatColor.GOLD + "Precio apertura: " + ChatColor.GREEN +formatea.format(posicion.getPrecio_apertura()) + " PC");
         lore.add(ChatColor.GOLD + "Precio actual: " + ChatColor.GREEN + formatea.format(precioAcutal));
         if(perdidasOBeneficios >= 0){
@@ -228,24 +191,24 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         }
         lore.add(ChatColor.GOLD + "Valor total: " + ChatColor.GREEN + formatea.format(precioAcutal * posicion.getCantidad()) + " PC");
         lore.add("   ");
-        lore.add(ChatColor.GOLD + "Fecha de compra: " + posicion.getFecha_apertura());
+
+        if(tipoPosicion == LARGO){
+            this.valorTotal = valorTotal + (precioAcutal * posicion.getCantidad());
+            this.resultadoTotal = resultadoTotal + perdidasOBeneficios;
+            lore.add(ChatColor.GOLD + "Fecha de compra: " + posicion.getFecha_apertura());
+        }else{
+            this.valorTotal = valorTotal + perdidasOBeneficios;
+            this.resultadoTotal = resultadoTotal + perdidasOBeneficios;
+            lore.add(ChatColor.GOLD + "Fecha de venta: " + posicion.getFecha_apertura());
+        }
+
         lore.add(ChatColor.GOLD + "ID: " + posicion.getId());
 
-        posicionMeta.setLore(lore);
-        posicionItem.setItemMeta(posicionMeta);
-
-        this.valorTotal = valorTotal + perdidasOBeneficios;
-        this.resultadoTotal = resultadoTotal + perdidasOBeneficios;
-
-        return posicionItem;
+        return lore;
     }
 
     private ItemStack buildItemInfo () {
-        ItemStack info = new ItemStack(Material.PAPER);
-        ItemMeta infoMeta = info.getItemMeta();
-
-        infoMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "INFO");
-
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "INFO";
         List<String> lore = new ArrayList<>();
         lore.add("Puedes comprar valores en la bolsa");
         lore.add("que cotizen en Estados Unidos");
@@ -264,46 +227,39 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         lore.add("la web y en el comando /bolsa cartera");
         lore.add("   ");
         lore.add("Mas info en /bolsa ayuda o /ayuda bolsa o en:");
-        lore.add("http://serversurvival2.ddns.net/perfil");
+        lore.add("http://serversurvival.ddns.net/perfil");
 
-        infoMeta.setLore(lore);
-        info.setItemMeta(infoMeta);
-
-        return info;
+        return ItemBuilder.loreDisplayName(Material.PAPER, displayName, lore);
     }
 
     private ItemStack buildItemResultado() {
-        ItemStack resultado = new ItemStack(Material.WRITABLE_BOOK);
-        ItemMeta resultadoMeta = resultado.getItemMeta();
+        List<String> lore = buildLoreFromResultado();
+        String displayname = ChatColor.GOLD + "" + ChatColor.BOLD + "REUSLTADO";
 
-        resultadoMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "REUSLTADO");
+        return ItemBuilder.loreDisplayName(Material.WRITABLE_BOOK, displayname, lore);
+    }
 
+    private List<String> buildLoreFromResultado () {
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GOLD + "Estas al " + Funciones.redondeoDecimales(Funciones.rentabilidad(liquidezjugador + valorTotal, valorTotal),1)  + " % invertido");
+        lore.add(ChatColor.GOLD + "Estas al " + redondeoDecimales(rentabilidad(liquidezjugador + valorTotal, valorTotal),1)  + " % invertido");
         lore.add(ChatColor.GOLD + "Valor total: " + ChatColor.GREEN + formatea.format(valorTotal) + " PC");
         if(resultadoTotal >= 0)
             lore.add(ChatColor.GOLD + "Beneficios: " + ChatColor.GREEN + formatea.format(resultadoTotal) + " PC");
         else
             lore.add(ChatColor.GOLD + "Perdidas: " + ChatColor.RED + formatea.format(resultadoTotal) + " PC");
 
-        double rentabilidad = Funciones.rentabilidad(valorTotal, resultadoTotal);
+        double rentabilidad = rentabilidad(valorTotal, resultadoTotal);
         if(rentabilidad > 0)
             lore.add(ChatColor.GOLD + "Estas ganando un: " + ChatColor.GREEN + "+" +  rentabilidad + " %");
         else
             lore.add(ChatColor.GOLD + "Estas perdiendo un: " + ChatColor.RED + rentabilidad + " %");
 
-        resultadoMeta.setLore(lore);
-        resultado.setItemMeta(resultadoMeta);
-        return resultado;
+        return lore;
     }
 
     private ItemStack buildItemValores () {
-        ItemStack valores = new ItemStack(Material.BOOK);
-        ItemMeta valoresMeta = valores.getItemMeta();
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" +ChatColor.UNDERLINE + "CLICK PARA COMPRAR VALORES";
 
-        valoresMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "" +ChatColor.UNDERLINE + "CLICK PARA COMPRAR VALORES");
-
-        valores.setItemMeta(valoresMeta);
-        return valores;
+        return ItemBuilder.displayname(Material.BOOK, displayName);
     }
 }

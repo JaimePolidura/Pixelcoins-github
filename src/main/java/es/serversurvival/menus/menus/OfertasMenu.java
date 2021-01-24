@@ -1,26 +1,20 @@
 package es.serversurvival.menus.menus;
 
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
-import es.serversurvival.menus.inventoryFactory.inventories.IndicesInventoryFactory;
 import es.serversurvival.mySQL.MySQL;
-import es.serversurvival.mySQL.tablasObjetos.Oferta;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.MenuManager;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.OfertaInventoryFactory;
 import es.serversurvival.mySQL.Ofertas;
-import es.serversurvival.mySQL.Transacciones;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
-import java.util.function.BinaryOperator;
-import java.util.stream.Stream;
 
 public class OfertasMenu extends Menu implements Clickable, Paginated, RefreshcableOnPaginated {
     private OfertaInventoryFactory inventoryFactory = new OfertaInventoryFactory();
@@ -37,6 +31,8 @@ public class OfertasMenu extends Menu implements Clickable, Paginated, Refreshca
 
         this.pages = new ArrayList<>();
         pages.add(new Page(0, inventory));
+
+        openMenu();
     }
 
     @Override
@@ -48,6 +44,14 @@ public class OfertasMenu extends Menu implements Clickable, Paginated, Refreshca
             return;
         }
 
+        performClick(itemClicked);
+
+        refresh();
+
+        event.setCancelled(true);
+    }
+
+    private void performClick (ItemStack itemClicked) {
         int espacios = Funciones.getEspaciosOcupados(player.getInventory());
         if(espacios == 36){
             player.sendMessage(ChatColor.DARK_RED + "Tienes el inventario lleno :v");
@@ -70,10 +74,6 @@ public class OfertasMenu extends Menu implements Clickable, Paginated, Refreshca
             transaccionesMySQL.realizarVenta(player.getName(), id, player);
         }
         MySQL.desconectar();
-
-        refresh();
-
-        event.setCancelled(true);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class OfertasMenu extends Menu implements Clickable, Paginated, Refreshca
 
     @Override
     public void goFordward() {
-        if(throwsException()){
+        if(weAreInTheLastPage()){
             Inventory newInventory = inventoryFactory.buildInventoryExecess();
             this.inventory = newInventory;
             pages.add(new Page(currentIndex + 1, newInventory));
@@ -133,13 +133,8 @@ public class OfertasMenu extends Menu implements Clickable, Paginated, Refreshca
         openMenu();
     }
 
-    private boolean throwsException () {
-        try{
-            pages.get(currentIndex + 1);
-            return false;
-        }catch (Exception e){
-            return true;
-        }
+    private boolean weAreInTheLastPage() {
+        return this.currentIndex + 1 >= this.pages.size();
     }
 
     @Override

@@ -3,6 +3,7 @@ package es.serversurvival.menus.inventoryFactory.inventories;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.mySQL.Empleados;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
+import es.serversurvival.util.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -34,21 +35,13 @@ public class EmpleosInventoryFactory extends InventoryFactory {
     }
 
     public ItemStack buildInfo(){
-        ItemStack info = new ItemStack(Material.PAPER);
-        ItemMeta infoMeta = info.getItemMeta();
-
-        infoMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "INFO");
-
         List<String> lore = new ArrayList<>();
         lore.add("Puedes estar contratado en");
         lore.add("una empresa y ganar dinero.");
         lore.add("Mas info en /ayuda empleo o en:");
         lore.add("http://serversurvival.ddns.net");
 
-        infoMeta.setLore(lore);
-        info.setItemMeta(infoMeta);
-
-        return info;
+        return ItemBuilder.loreDisplayName(Material.PAPER, ChatColor.GOLD + "" + ChatColor.BOLD + "INFO", lore);
     }
 
     private List<ItemStack> buildItemsEmpleos (String jugador) {
@@ -59,10 +52,7 @@ public class EmpleosInventoryFactory extends InventoryFactory {
         List<ItemStack> itemsEmpleos = new ArrayList<>();
         empleaosJugador.forEach( (empl) -> {
             String icono = empresasMySQL.getEmpresa(empl.getEmpresa()).getIcono();
-
-            ItemStack empleo = new ItemStack(Material.getMaterial(icono));
-            ItemMeta empleoMeta = empleo.getItemMeta();
-            empleoMeta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA IRTE");
+            String displayName = ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA IRTE";
 
             List<String> lore = new ArrayList<>();
             lore.add("   ");
@@ -73,10 +63,7 @@ public class EmpleosInventoryFactory extends InventoryFactory {
             lore.add("   ");
             lore.add(ChatColor.GOLD + "ID: " + empl.getId());
 
-            empleoMeta.setLore(lore);
-            empleo.setItemMeta(empleoMeta);
-
-            itemsEmpleos.add(empleo);
+            itemsEmpleos.add(ItemBuilder.loreDisplayName(Material.valueOf(icono), displayName, lore));
         });
         empleadosMySQL.desconectar();
 

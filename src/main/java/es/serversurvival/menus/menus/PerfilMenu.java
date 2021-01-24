@@ -17,6 +17,7 @@ public class PerfilMenu extends Menu implements Clickable{
     public PerfilMenu (Player player) {
         this.inventory = InventoryCreator.createInventoryMenu(new PerfilInventoryFactory(), player.getName());
         this.player = player;
+        openMenu();
     }
 
     @Override
@@ -39,32 +40,26 @@ public class PerfilMenu extends Menu implements Clickable{
         switch (itemClicked.getType().toString()){
             case "DIAMOND_SWORD":
                 DeudasMenu menu = new DeudasMenu(player);
-                menu.openMenu();
                 break;
 
             case "BOOK":
                 BolsaCarteraMenu menuPosAbiertas = new BolsaCarteraMenu(player);
-                menuPosAbiertas.openMenu();
                 break;
 
             case "GOLD_BLOCK":
                 EmpresasOwnerMenu menuEmpresas = new EmpresasOwnerMenu(player);
-                menuEmpresas.openMenu();
                 break;
 
             case "GOLDEN_APPLE":
                 EmpleosMenu menuEmpleos = new EmpleosMenu(player);
-                menuEmpleos.openMenu();
                 break;
 
             case "PLAYER_HEAD":
                 TopMenu menuTop = new TopMenu(player);
-                menuTop.openMenu();
                 break;
 
             case "CHEST":
                 OfertasMenu menuOfertas = new OfertasMenu(player);
-                menuOfertas.openMenu();
                 break;
         }
     }

@@ -5,6 +5,7 @@ import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.EmpresasOwnerMenu;
 import es.serversurvival.mySQL.Empresas;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.util.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -17,8 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmpresasOwnerInventoryFactory extends InventoryFactory {
-    private DecimalFormat formatea = Funciones.FORMATEA;
-
     @Override
     protected Inventory buildInventory(String jugador) {
         Inventory inventory = Bukkit.createInventory(null, 54, EmpresasOwnerMenu.titulo);
@@ -46,11 +45,10 @@ public class EmpresasOwnerInventoryFactory extends InventoryFactory {
 
         List<Empresa> empresasOwner = empresasMySQL.getEmpresasOwner(jugador);
         empresasOwner.forEach( (empr) -> {
-            ItemStack empresa = new ItemStack(Material.getMaterial(empr.getIcono()));
-            ItemMeta empresaMeta = empresa.getItemMeta();
-            empresaMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER " + empr.getNombre());
-            empresa.setItemMeta(empresaMeta);
-            itemsEmpresas.add(empresa);
+            Material icono = Material.valueOf(empr.getIcono());
+            String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER " + empr.getNombre();
+
+            itemsEmpresas.add(ItemBuilder.displayname(icono, displayName));
         });
         empresasMySQL.desconectar();
 
@@ -58,11 +56,7 @@ public class EmpresasOwnerInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildItemInfo(){
-        ItemStack info = new ItemStack(Material.PAPER);
-        ItemMeta infoMeta = info.getItemMeta();
-
-        infoMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "INFO");
-
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "INFO";
         List<String> lore = new ArrayList<>();
         lore.add("Puedes crear tus propias empresas,");
         lore.add("contratar a gente, despedir etc.");
@@ -73,19 +67,12 @@ public class EmpresasOwnerInventoryFactory extends InventoryFactory {
         lore.add("En la descripccion de las empresa");
         lore.add("se vel el uso de estos");
 
-        infoMeta.setLore(lore);
-        info.setItemMeta(infoMeta);
-
-        return info;
+        return ItemBuilder.loreDisplayName(Material.PAPER, displayName, lore);
     }
 
     private ItemStack buildItemVertodas (){
-        ItemStack verempresas = new ItemStack(Material.BOOK);
-        ItemMeta verempresasMeta = verempresas.getItemMeta();
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER EL RESTO DE LAS EMPRESAS";
 
-        verempresasMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER EL RESTO DE LAS EMPRESAS");
-
-        verempresas.setItemMeta(verempresasMeta);
-        return verempresas;
+        return ItemBuilder.displayname(Material.BOOK, displayName);
     }
 }

@@ -28,7 +28,8 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
         this.currentIndex = 0;
 
         this.pages = new ArrayList<>();
-        pages.add(new Page(0, inventory));
+        this.pages.add(new Page(0, inventory));
+        openMenu();
     }
 
     @Override
@@ -45,7 +46,8 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
     public void onClick(InventoryClickEvent event) {
         ItemStack clikedItem = event.getCurrentItem();
 
-        if(clikedItem == null || !Funciones.cuincideNombre(clikedItem.getType().toString(), "BOOK", "NAME_TAG", "REDSTONE_TORCH") || clikedItem.getItemMeta().getLore().get(1) == null){
+        boolean validClick = clikedItem == null || !Funciones.cuincideNombre(clikedItem.getType().toString(), "BOOK", "NAME_TAG", "REDSTONE_TORCH") || clikedItem.getItemMeta().getLore().get(1) == null;
+        if(validClick){
             return;
         }
         String clickedItemType = clikedItem.getType().toString();
@@ -55,6 +57,12 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
             menu.openMenu();
             return;
         }
+
+        performClick(clikedItem);
+    }
+
+    private void performClick (ItemStack clikedItem) {
+        String clickedItemType = clikedItem.getType().toString();
 
         TipoPosicion tipoPosicion;
         if (clickedItemType.equalsIgnoreCase("NAME_TAG")){
@@ -71,12 +79,11 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
         int id = Integer.parseInt(lore.get(lore.size() - 1).split(" ")[1]);
 
         VenderAccionesConfirmacion confirmacion = new VenderAccionesConfirmacion(player, tipoPosicion, acciones, valorTotal, beneficios, rentabilidad, id);
-        confirmacion.openMenu();
     }
 
     @Override
     public void goFordward() {
-        if(throwsException()){
+        if(weAreInTheLasPage()){
             Inventory newInventory = bolsaCarteraInventoryFactory.buildInventoryExecess();
             this.inventory = newInventory;
             pages.add(new Page(currentIndex + 1, newInventory));
@@ -89,13 +96,8 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
         openMenu();
     }
 
-    private boolean throwsException () {
-        try{
-            pages.get(currentIndex + 1);
-            return false;
-        }catch (Exception e){
-            return true;
-        }
+    private boolean weAreInTheLasPage() {
+        return this.currentIndex + 1 >= this.pages.size();
     }
 
     @Override

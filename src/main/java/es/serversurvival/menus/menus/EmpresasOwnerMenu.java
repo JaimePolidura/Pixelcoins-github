@@ -6,6 +6,7 @@ import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.EmpresasOwnerInventoryFactory;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -19,6 +20,7 @@ public class EmpresasOwnerMenu extends Menu implements Clickable, CanGoBack{
     public EmpresasOwnerMenu (Player player) {
         this.player = player;
         this.inventory = InventoryCreator.createInventoryMenu(new EmpresasOwnerInventoryFactory(), player.getName());
+        openMenu();
     }
 
     @Override
@@ -39,19 +41,22 @@ public class EmpresasOwnerMenu extends Menu implements Clickable, CanGoBack{
             return;
         }
         
+        performClick(itemClickeado, event);
+    }
+
+    private void performClick (ItemStack itemClickeado, InventoryClickEvent event) {
         if(itemClickeado.getType().toString().equalsIgnoreCase("BOOK")){
             EmpresasVerTodasMenu menu = new EmpresasVerTodasMenu((Player) event.getWhoClicked());
-            menu.openMenu();
-        }
-        String nombreEmpresaAVer;
-        try{
-            nombreEmpresaAVer = itemClickeado.getItemMeta().getDisplayName().split(" ")[3];
-        }catch (NullPointerException | IndexOutOfBoundsException e){
-            return;
-        }
+        }else{
+            String nombreEmpresaAVer;
+            try{
+                nombreEmpresaAVer = itemClickeado.getItemMeta().getDisplayName().split(" ")[3];
+            }catch (NullPointerException | IndexOutOfBoundsException e){
+                return;
+            }
 
-        EmpresasVerMenu menu = new EmpresasVerMenu((Player) event.getWhoClicked(), nombreEmpresaAVer);
-        menu.openMenu();
+            EmpresasVerMenu menu = new EmpresasVerMenu((Player) event.getWhoClicked(), nombreEmpresaAVer);
+        }
     }
 
     @Override
@@ -62,6 +67,5 @@ public class EmpresasOwnerMenu extends Menu implements Clickable, CanGoBack{
     @Override
     public void goBack() {
         PerfilMenu menu = new PerfilMenu(player);
-        menu.openMenu();
     }
 }

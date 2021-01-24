@@ -3,6 +3,7 @@ package es.serversurvival.menus.inventoryFactory.inventories;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.Transacciones;
+import es.serversurvival.util.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -28,116 +29,74 @@ public class SacarItemInventoryFactory extends InventoryFactory {
         double dineroJugador = jugadoresMySQL.getJugador(jugador).getPixelcoins();
         MySQL.desconectar();
 
-        ItemStack info = buildItemInfo();
-        ItemStack diamante = buildItemDiamante(dineroJugador);
-        ItemStack bloqueDiamante = buildItemDiamanteBloque(dineroJugador);
-        ItemStack cuarzo = buildItemCuarzo(dineroJugador);
-        ItemStack lapis = buildItemLapis(dineroJugador);
-        ItemStack lapisBloque = buildItemLapisBloque(dineroJugador);
-
-        inventory.setItem(4, info);
-        inventory.setItem(9, diamante);
-        inventory.setItem(11, bloqueDiamante);
-        inventory.setItem(13, lapis);
-        inventory.setItem(15, lapisBloque);
-        inventory.setItem(17, cuarzo);
+        inventory.setItem(4, buildItemInfo());
+        inventory.setItem(9, buildItemDiamante(dineroJugador));
+        inventory.setItem(11, buildItemDiamanteBloque(dineroJugador));
+        inventory.setItem(13, buildItemLapis(dineroJugador));
+        inventory.setItem(15, buildItemLapisBloque(dineroJugador));
+        inventory.setItem(17, buildItemCuarzo(dineroJugador));
 
         return inventory;
     }
 
     private ItemStack buildItemInfo() {
-        ItemStack info = new ItemStack(Material.PAPER);
-        ItemMeta infoMeta = info.getItemMeta();
-
-        infoMeta.setDisplayName(ChatColor.GOLD + "INFO");
+        String displayName = ChatColor.GOLD + "INFO";
         List<String> lore = new ArrayList<>();
         lore.add("Una vez que tengas pixelcoins");
         lore.add("puedes intercambiarlas por estos");
         lore.add("bloques y viceversa");
 
-        infoMeta.setLore(lore);
-        info.setItemMeta(infoMeta);
-
-        return info;
+        return ItemBuilder.loreDisplayName(Material.PAPER, displayName, lore);
     }
 
     private ItemStack buildItemDiamante (double dineroJugador) {
-        ItemStack diamante = new ItemStack(Material.DIAMOND);
-        ItemMeta diamanteMeta = diamante.getItemMeta();
-
-        diamanteMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR UN DIAMANTE");
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR UN DIAMANTE";
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.AQUA + "1 DIAMANTE -> " + ChatColor.GREEN + Transacciones.DIAMANTE);
         lore.add("    ");
         lore.add(ChatColor.GOLD +"Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(dineroJugador));
 
-        diamanteMeta.setLore(lore);
-        diamante.setItemMeta(diamanteMeta);
-
-        return diamante;
+        return ItemBuilder.loreDisplayName(Material.DIAMOND, displayName, lore);
     }
 
     private ItemStack buildItemDiamanteBloque (double dineroJugador) {
-        ItemStack bloqueDiamante = new ItemStack(Material.DIAMOND_BLOCK);
-        ItemMeta bloqueDiamanteMeta = bloqueDiamante.getItemMeta();
-
-        bloqueDiamanteMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR UN BLOQUE DE DIAMANTE");
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR UN BLOQUE DE DIAMANTE";
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.AQUA + "1 BLOQUE DE DIAMANTE -> " + ChatColor.GREEN + Transacciones.DIAMANTE * 9 + " PC");
         lore.add("    ");
         lore.add(ChatColor.GOLD + "Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(dineroJugador));
 
-        bloqueDiamanteMeta.setLore(lore);
-        bloqueDiamante.setItemMeta(bloqueDiamanteMeta);
+        return ItemBuilder.loreDisplayName(Material.DIAMOND_BLOCK, displayName, lore);
 
-        return bloqueDiamante;
     }
 
     private ItemStack buildItemCuarzo (double dineroJugador) {
-        ItemStack cuarzo = new ItemStack(Material.QUARTZ_BLOCK);
-        ItemMeta cuarzoMeta = cuarzo.getItemMeta();
-
-        cuarzoMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR UN BLOQUE DE CUARZO");
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR UN BLOQUE DE CUARZO";
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "1 BLOQUE DE CUARZO -> " + ChatColor.GREEN + Transacciones.CUARZO + " PC");
         lore.add("    ");
         lore.add(ChatColor.GOLD + "Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(dineroJugador));
 
-        cuarzoMeta.setLore(lore);
-        cuarzo.setItemMeta(cuarzoMeta);
-
-        return cuarzo;
+        return ItemBuilder.loreDisplayName(Material.QUARTZ_BLOCK, displayName, lore);
     }
 
     private ItemStack buildItemLapis (double dineroJugador) {
-        ItemStack lapis = new ItemStack(Material.LAPIS_LAZULI);
-        ItemMeta lapisMeta = lapis.getItemMeta();
-
-        lapisMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR LAPISLAZULI");
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR LAPISLAZULI";
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.DARK_BLUE + "1 DE LAPISLAZULI -> " + ChatColor.GREEN + Transacciones.LAPISLAZULI + " PC");
         lore.add("    ");
         lore.add(ChatColor.GOLD + "Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(dineroJugador));
 
-        lapisMeta.setLore(lore);
-        lapis.setItemMeta(lapisMeta);
-
-        return lapis;
+        return ItemBuilder.loreDisplayName(Material.LAPIS_LAZULI, displayName, lore);
     }
 
     private ItemStack buildItemLapisBloque (double dineroJugador) {
-        ItemStack lapisBloque = new ItemStack(Material.LAPIS_BLOCK);
-        ItemMeta lapisBloqueMeta = lapisBloque.getItemMeta();
-
-        lapisBloqueMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR UN BLOQUE DE LAPISLAZULI");
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR UN BLOQUE DE LAPISLAZULI";
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.BLUE + "1 BLOQUE DE LAPISLAZULI -> " + ChatColor.GREEN + Transacciones.LAPISLAZULI * 9 + " PC");
         lore.add("    ");
         lore.add(ChatColor.GOLD + "Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(dineroJugador));
 
-        lapisBloqueMeta.setLore(lore);
-        lapisBloque.setItemMeta(lapisBloqueMeta);
-
-        return lapisBloque;
+        return ItemBuilder.loreDisplayName(Material.LAPIS_BLOCK, displayName, lore);
     }
 }

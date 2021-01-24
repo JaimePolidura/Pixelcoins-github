@@ -5,6 +5,7 @@ import es.serversurvival.mySQL.Empleados;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import es.serversurvival.util.Funciones;
+import es.serversurvival.util.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -29,17 +30,14 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
         Inventory inventory = Bukkit.createInventory(null, 54, ChatColor.DARK_RED + "" + ChatColor.BOLD + "      "  + empresa.toUpperCase());
 
         empresasMySQL.conectar();
-        ItemStack info = buildItemInfo();
-        ItemStack empresa = buildItemsEmpresas();
-        ItemStack borrar = buildItemBorrarEmpresa();
-        ItemStack back = buildItemGoBack();
+        inventory.setItem(0, buildItemInfo());
+        inventory.setItem(1, buildItemsEmpresas());
+        inventory.setItem(2, buildItemBorrarEmpresa());
+        inventory.setItem(53, buildItemGoBack());
         List<ItemStack> itemsEmpleados = buildItemsEmpleados();
         empresasMySQL.desconectar();
 
-        inventory.setItem(0, info);
-        inventory.setItem(1, empresa);
-        inventory.setItem(2, borrar);
-        inventory.setItem(53, back);
+
         for(int i = 0; i < itemsEmpleados.size(); i++){
             if(i == 53) break;
 
@@ -50,12 +48,9 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildItemsEmpresas () {
-        ItemStack empresaItem = new ItemStack(Material.WRITABLE_BOOK);
         Empresa empresaAVer = empresasMySQL.getEmpresa(empresa);
 
-        ItemMeta empresaMeta = empresaItem.getItemMeta();
-
-        empresaMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "" + empresa.toUpperCase());
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + empresa.toUpperCase();
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GOLD + "Descripccion:");
 
@@ -73,7 +68,6 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
             lore.add(ChatColor.GOLD + "Perdidas: " + ChatColor.RED + formatea.format(beneficiosPerdidas) + " PC");
             lore.add(ChatColor.GOLD + "Rentabilidad: " + ChatColor.RED + Funciones.redondeoDecimales(Funciones.rentabilidad(empresaAVer.getIngresos(), beneficiosPerdidas),1) + "%");
         }
-
         lore.add("   ");
         lore.add("/empresas depositar " + empresa + " <pixelcoins>");
         lore.add("/empresas sacar " + empresa + " <pixelcoins>");
@@ -84,31 +78,17 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
         lore.add("Mas info en /ayuda empresario o:");
         lore.add("http://serversurvival.ddns.net/perfil");
 
-        empresaMeta.setLore(lore);
-        empresaItem.setItemMeta(empresaMeta);
-
-
-        return empresaItem;
+        return ItemBuilder.loreDisplayName(Material.WRITABLE_BOOK, displayName, lore);
     }
 
     private ItemStack buildItemBorrarEmpresa () {
-        ItemStack borrar = new ItemStack(Material.BARRIER);
-        ItemMeta borrarMeta = borrar.getItemMeta();
+        String displayName = ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA BORRAR LA EMPRESA";
 
-        borrarMeta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA BORRAR LA EMPRESA");
-        borrarMeta.setLore(Arrays.asList("   "));
-
-        borrar.setItemMeta(borrarMeta);
-
-        return borrar;
+        return ItemBuilder.loreDisplayName(Material.BARRIER, displayName, Arrays.asList("   "));
     }
 
     public ItemStack buildItemInfo () {
-        ItemStack info = new ItemStack(Material.PAPER);
-        ItemMeta infoMeta = info.getItemMeta();
-
-        infoMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "INFO");
-
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "INFO";
         List<String> lore = new ArrayList<>();
         lore.add("Puedes contratar empleados, ");
         lore.add("despedirlos etc. Comandos:");
@@ -125,10 +105,7 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
         lore.add("Para mas info: /ayuda empresario o");
         lore.add("http://serversurvival.ddns.net/perfil");
 
-        infoMeta.setLore(lore);
-        info.setItemMeta(infoMeta);
-
-        return info;
+        return ItemBuilder.loreDisplayName(Material.PAPER, displayName, lore);
     }
 
     private List<ItemStack> buildItemsEmpleados () {

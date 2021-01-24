@@ -7,6 +7,7 @@ import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.MateriasPrimasInventoryFactory;
 import es.serversurvival.menus.menus.confirmaciones.ComprarBolsaConfirmacion;
 import es.serversurvival.mySQL.enums.TipoValor;
+import es.serversurvival.util.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -27,6 +28,7 @@ public class MateriasPrimasMenu extends Menu implements Clickable, PostLoading {
         this.inventory = InventoryCreator.createInventoryMenu(new MateriasPrimasInventoryFactory(), player.getName());
 
         postLoad();
+        openMenu();
     }
 
     @Override
@@ -52,12 +54,11 @@ public class MateriasPrimasMenu extends Menu implements Clickable, PostLoading {
         if (precioLore.equalsIgnoreCase(ChatColor.RED + "Cargando...")) {
             return;
         }
+
         double precio = Double.parseDouble(lore.get(1).split(" ")[1]);
         String simbolo = lore.get(0).split(" ")[1];
 
-        closeMenu();
         String alias;
-
         if(simbolo.equalsIgnoreCase("DCOILBRENTEU")){
             alias = "barriles";
         }else if(simbolo.equalsIgnoreCase("DHHNGSP")){
@@ -67,7 +68,6 @@ public class MateriasPrimasMenu extends Menu implements Clickable, PostLoading {
         }
 
         ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, TipoValor.MATERIAS_PRIMAS.toString(), alias, player.getName(), precio);
-        confirmacion.openMenu();
     }
 
     @Override
@@ -81,19 +81,16 @@ public class MateriasPrimasMenu extends Menu implements Clickable, PostLoading {
                 }
                 pos++;
 
-                ItemMeta actualMeta = actual.getItemMeta();
-                 List<String> precio = actualMeta.getLore();
-                precio.remove(1);
+                List<String> precioLore = actual.getItemMeta().getLore();
+                precioLore.remove(1);
 
-                String ticker = precio.get(0).split(" ")[1];
+                String ticker = precioLore.get(0).split(" ")[1];
                 try {
                     double preioMat = IEXCloud_API.getPrecioMateriaPrima(ticker);
 
-                    precio.add(1, ChatColor.GOLD + "Precio/Unidad:" + ChatColor.GREEN + " " + preioMat + " $");
+                    precioLore.add(1, ChatColor.GOLD + "Precio/Unidad:" + ChatColor.GREEN + " " + preioMat + " $");
 
-                    actualMeta.setLore(precio);
-                    actual.setItemMeta(actualMeta);
-
+                    ItemBuilder.setLore(actual, precioLore);
                 } catch (Exception e) {
                     player.sendMessage(ChatColor.DARK_RED + "No hagas spam del comando");
                 }

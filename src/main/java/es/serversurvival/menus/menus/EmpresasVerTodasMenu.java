@@ -24,6 +24,7 @@ public class EmpresasVerTodasMenu extends Menu implements CanGoBack, Clickable{
     public EmpresasVerTodasMenu(Player player) {
         this.inventory = InventoryCreator.createInventoryMenu(new EmpresasVerTodasInventoryFactory(), player.getName());
         this.player = player;
+        openMenu();
     }
 
     @Override

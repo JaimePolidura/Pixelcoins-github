@@ -40,13 +40,10 @@ public class ElegirInversionMenu extends Menu implements Clickable {
 
         if(itemStack.getItemMeta().getDisplayName().equalsIgnoreCase( ChatColor.GOLD + "" + ChatColor.BOLD + "Acciones" )){
             AccionesMenu menu = new AccionesMenu(player);
-            menu.openMenu();
         }else if(itemStack.getItemMeta().getDisplayName().equalsIgnoreCase( ChatColor.GOLD + "" + ChatColor.BOLD + "Criptomonedas" )){
             CriptomonedasMenu menu = new CriptomonedasMenu(player);
-            menu.openMenu();
         }else if (itemStack.getItemMeta().getDisplayName().equalsIgnoreCase( ChatColor.GOLD + "" + ChatColor.BOLD + "Materias primas" )) {
             MateriasPrimasMenu menu = new MateriasPrimasMenu(player);
-            menu.openMenu();
         }
     }
 }

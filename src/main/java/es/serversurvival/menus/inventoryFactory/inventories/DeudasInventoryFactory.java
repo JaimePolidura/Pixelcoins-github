@@ -3,6 +3,8 @@ package es.serversurvival.menus.inventoryFactory.inventories;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.DeudasMenu;
 import es.serversurvival.mySQL.tablasObjetos.Deuda;
+import es.serversurvival.util.ItemBuilder;
+import net.minecraft.server.v1_16_R1.ItemBisected;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -20,26 +22,61 @@ public class DeudasInventoryFactory extends InventoryFactory {
         Inventory inventory = Bukkit.createInventory(null, 54, DeudasMenu.tiulo);
 
         ItemStack info = buildItemInfo();
-        ItemStack back = super.buildItemGoBack();
+        ItemStack back = buildItemGoBack();
         List<ItemStack> itemsDeudas = buildItemsDeudas(jugador);
 
         inventory.setItem(0, info);
+        inventory.setItem(53, back);
+
         for(int i = 0; i < itemsDeudas.size(); i++){
             if(i == 53) break;
 
             inventory.setItem(i + 9, itemsDeudas.get(i));
         }
-        inventory.setItem(53, back);
 
         return inventory;
     }
 
+    private List<ItemStack> buildItemsDeudas (String jugador) {
+        List<ItemStack> itemsDeLasDeudas = new ArrayList<>();
+
+        deudasMySQL.conectar();
+        List<Deuda> deudasJugadorDebe = deudasMySQL.getDeudasDeudor(jugador);
+        List<Deuda> deudasJugadorDeben = deudasMySQL.getDeudasAcredor(jugador);
+        deudasMySQL.desconectar();
+
+        deudasJugadorDebe.forEach(deuda -> itemsDeLasDeudas.add(buildItemFromDeudaDeudor(deuda)));
+        deudasJugadorDeben.forEach(deuda -> itemsDeLasDeudas.add(buildItemFromDeudaAcredor(deuda)));
+
+        return itemsDeLasDeudas;
+    }
+
+    private ItemStack buildItemFromDeudaDeudor (Deuda deuda) {
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA PAGAR LA DEUDA";
+        List<String> lore = new ArrayList<>();
+        lore.add("   ");
+        lore.add(ChatColor.GOLD + "Debes a: " + deuda.getAcredor());
+        lore.add(ChatColor.GOLD + "Te queda de pagar: " + ChatColor.GREEN +  formatea.format(deuda.getPixelcoins_restantes()) + " PC" );
+        lore.add(ChatColor.GOLD + "Vence en: " + deuda.getTiempo_restante() + " dias");
+        lore.add(ChatColor.GOLD + "ID: " + deuda.getId());
+
+        return ItemBuilder.loreDisplayName(Material.RED_BANNER, displayName, lore);
+    }
+
+    private ItemStack buildItemFromDeudaAcredor (Deuda deuda) {
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA CANCELAR LA DEUDA";
+        List<String> lore = new ArrayList<>();
+        lore.add("   ");
+        lore.add(ChatColor.GOLD + "Te debe: " + deuda.getDeudor());
+        lore.add(ChatColor.GOLD + "Le queda de pagar: " + ChatColor.GREEN +  formatea.format(deuda.getPixelcoins_restantes()) + " PC" );
+        lore.add(ChatColor.GOLD + "Vence en: " + deuda.getTiempo_restante() + " dias");
+        lore.add(ChatColor.GOLD + "ID: " + deuda.getId());
+
+        return ItemBuilder.loreDisplayName(Material.GREEN_BANNER, displayName, lore);
+    }
+
     private ItemStack buildItemInfo () {
-        ItemStack info = new ItemStack(Material.PAPER);
-        ItemMeta infoMeta = info.getItemMeta();
-
-        infoMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "INFO");
-
+        String displayName =  ChatColor.GOLD + "" + ChatColor.BOLD + "INFO";
         List<String> lore = new ArrayList<>();
         lore.add("Para condecer prestamos has de hacer");
         lore.add("/deudas prestar <jugador> <dinero> <dias> [interes]");
@@ -55,53 +92,6 @@ public class DeudasInventoryFactory extends InventoryFactory {
         lore.add("Mas info en /deudas ayuda o en la web");
         lore.add("http://serversurvival.ddns.net/perfil");
 
-        infoMeta.setLore(lore);
-        info.setItemMeta(infoMeta);
-
-        return info;
-    }
-
-    private List<ItemStack> buildItemsDeudas (String jugador) {
-        ArrayList<ItemStack> itemsDeLasDeudas = new ArrayList<>();
-
-        deudasMySQL.conectar();
-        List<Deuda> deudasJugadorDebe = deudasMySQL.getDeudasDeudor(jugador);
-        List<Deuda> deudasJugadorDeben = deudasMySQL.getDeudasAcredor(jugador);
-        deudasMySQL.desconectar();
-
-        for (Deuda deuda : deudasJugadorDebe) {
-            ItemStack itemDeuda = new ItemStack(Material.RED_BANNER);
-            ItemMeta deudaMeta = itemDeuda.getItemMeta();
-
-            deudaMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA PAGAR LA DEUDA");
-            List<String> lore = new ArrayList<>();
-            lore.add("   ");
-            lore.add(ChatColor.GOLD + "Debes a: " + deuda.getAcredor());
-            lore.add(ChatColor.GOLD + "Te queda de pagar: " + ChatColor.GREEN +  formatea.format(deuda.getPixelcoins_restantes()) + " PC" );
-            lore.add(ChatColor.GOLD + "Vence en: " + deuda.getTiempo_restante() + " dias");
-            lore.add(ChatColor.GOLD + "ID: " + deuda.getId());
-            deudaMeta.setLore(lore);
-            itemDeuda.setItemMeta(deudaMeta);
-            itemsDeLasDeudas.add(itemDeuda);
-        }
-
-        for (Deuda deuda : deudasJugadorDeben) {
-            ItemStack itemDeuda = new ItemStack(Material.GREEN_BANNER);
-            ItemMeta deudaMeta = itemDeuda.getItemMeta();
-
-            deudaMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA CANCELAR LA DEUDA");
-            List<String> lore = new ArrayList<>();
-            lore.add("   ");
-            lore.add(ChatColor.GOLD + "Te debe: " + deuda.getDeudor());
-            lore.add(ChatColor.GOLD + "Le queda de pagar: " + ChatColor.GREEN +  formatea.format(deuda.getPixelcoins_restantes()) + " PC" );
-            lore.add(ChatColor.GOLD + "Vence en: " + deuda.getTiempo_restante() + " dias");
-            lore.add(ChatColor.GOLD + "ID: " + deuda.getId());
-
-            deudaMeta.setLore(lore);
-            itemDeuda.setItemMeta(deudaMeta);
-            itemsDeLasDeudas.add(itemDeuda);
-        }
-
-        return itemsDeLasDeudas;
+        return ItemBuilder.loreDisplayName(Material.PAPER, displayName, lore);
     }
 }

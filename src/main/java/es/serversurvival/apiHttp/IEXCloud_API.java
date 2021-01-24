@@ -19,45 +19,45 @@ public final class IEXCloud_API {
         return Double.parseDouble(String.valueOf(response));
     }
 
-    public synchronized static JSONArray getDividendo(String ticker, String dentroDeCuando) throws Exception {
+    public static JSONArray getDividendo(String ticker, String dentroDeCuando) throws Exception {
         Object response = peticionHttp("https://sandbox.iexapis.com/stable/time-series/advanced_dividends/" + ticker + "?range=next-" + dentroDeCuando + "&token=" + token);
 
         return (JSONArray) response;
     }
 
-    public synchronized static JSONObject getProximosDividendos (String ticker) throws Exception {
+    public static JSONObject getProximosDividendos (String ticker) throws Exception {
         Object response = peticionHttp("https://sandbox.iexapis.com/stable/stock/" + ticker + "/dividends/next?token=" + token);
 
         return (JSONObject) response;
     }
 
-    public synchronized static double getPrecioCriptomoneda(String simbolo) throws Exception {
+    public static double getPrecioCriptomoneda(String simbolo) throws Exception {
         JSONObject json = (JSONObject) peticionHttp("https://sandbox.iexapis.com/stable/crypto/" + simbolo +"/price?token=" + token);
 
         return Double.parseDouble((String) json.get("price"));
     }
 
-    public synchronized static double getPrecioMateriaPrima(String simbolo) throws Exception {
+    public static double getPrecioMateriaPrima(String simbolo) throws Exception {
         Object response = peticionHttp("https://sandbox.iexapis.com/stable/data-points/market/" + simbolo + "?token=" + token);
 
         return Double.parseDouble(String.valueOf(response));
     }
 
-    public synchronized static String getNombreEmpresa (String simbolo) throws Exception {
+    public static String getNombreEmpresa (String simbolo) throws Exception {
         Object response = peticionHttp("https://sandbox.iexapis.com/stable/stock/" + simbolo + "/company?token=" + token);
         JSONObject json = (JSONObject) response;
 
         return String.valueOf(json.get("companyName"));
     }
 
-    public synchronized static JSONObject getSplitInfoEmpresa (String ticker) throws Exception {
+    public static JSONObject getSplitInfoEmpresa (String ticker) throws Exception {
         Object response = peticionHttp("https://sandbox.iexapis.com/stable/stock/"+ticker+"/splits/1m?token=" + token);
         JSONArray responseArray = (JSONArray) response;
 
         return (JSONObject) responseArray.get(0);
     }
 
-    public synchronized static double getEPS (String ticker) throws Exception {
+    public static double getEPS (String ticker) throws Exception {
         JSONObject resposne = (JSONObject) peticionHttp("https://sandbox.iexapis.com/stable/stock/"+ticker+"/earnings/1?period=annual&token=" + token);
 
         JSONArray arrayEearning = (JSONArray) resposne.get("earnings");

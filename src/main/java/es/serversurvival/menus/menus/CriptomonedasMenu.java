@@ -8,6 +8,7 @@ import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.CriptomonedasInventoryFactory;
 import es.serversurvival.menus.menus.confirmaciones.ComprarBolsaConfirmacion;
+import es.serversurvival.util.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -28,6 +29,7 @@ public class CriptomonedasMenu extends Menu implements Clickable, PostLoading {
         this.inventory = InventoryCreator.createInventoryMenu(new CriptomonedasInventoryFactory(), player.getName());
 
         postLoad();
+        openMenu();
     }
 
     @Override
@@ -56,16 +58,12 @@ public class CriptomonedasMenu extends Menu implements Clickable, PostLoading {
         double precio = Double.parseDouble(lore.get(1).split(" ")[1]);
         String simbolo = lore.get(0).split(" ")[1];
 
-        //closeMenu();
-
         ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, TipoValor.CRIPTOMONEDAS.toString(), "monedas", player.getName(), precio);
-        confirmacion.openMenu();
     }
 
     @Override
     public void postLoad() {
         Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
-            List<String> precio;
             int pos = 0;
 
             for (ItemStack actual : inventory.getContents()) {
@@ -74,20 +72,16 @@ public class CriptomonedasMenu extends Menu implements Clickable, PostLoading {
                 }
                 pos++;
 
-                ItemMeta actualMeta = actual.getItemMeta();
-                precio = actualMeta.getLore();
-                precio.remove(1);
+                List<String> loreItem = actual.getItemMeta().getLore();
+                loreItem.remove(1);
+                String ticker = loreItem.get(0).split(" ")[1];
 
-                String ticker = precio.get(0).split(" ")[1];
                 try {
                     double precioMoneda = IEXCloud_API.getPrecioCriptomoneda(ticker);
 
-                    precio.add(1, ChatColor.GOLD + "Precio/Moneda:" + ChatColor.GREEN + " " + formatea.format(precioMoneda) + " $");
+                    loreItem.add(1, ChatColor.GOLD + "Precio/Moneda:" + ChatColor.GREEN + " " + formatea.format(precioMoneda) + " $");
 
-                    actualMeta.setLore(precio);
-                    actual.setItemMeta(actualMeta);
-
-                    precio.clear();
+                    ItemBuilder.setLore(actual, loreItem);
                 } catch (Exception e) {
                     player.sendMessage(ChatColor.DARK_RED + "No hagas spam del comando");
                 }

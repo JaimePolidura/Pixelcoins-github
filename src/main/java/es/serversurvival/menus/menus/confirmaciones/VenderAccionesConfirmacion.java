@@ -37,6 +37,8 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion{
         List<String> loreCancelar = Arrays.asList("");
 
         this.inventory = InventoryCreator.createSolicitud(titulo, tituloItemVender, loreVender, tituloItemCancelar, loreCancelar);
+
+        openMenu();
     }
 
     @Override

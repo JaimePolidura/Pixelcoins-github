@@ -5,7 +5,6 @@ import es.serversurvival.apiHttp.FinancialModelingGrep;
 import es.serversurvival.main.Pixelcoin;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
-import es.serversurvival.menus.inventoryFactory.inventories.IndicesInventoryFactory;
 import es.serversurvival.menus.menus.confirmaciones.ComprarBolsaConfirmacion;
 import es.serversurvival.mySQL.enums.TipoValor;
 import es.serversurvival.util.Funciones;

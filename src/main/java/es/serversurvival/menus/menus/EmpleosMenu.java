@@ -21,6 +21,7 @@ public class EmpleosMenu extends Menu implements Clickable, Refreshcable, CanGoB
     public EmpleosMenu (Player player) {
         this.player = player;
         this.inventory = InventoryCreator.createInventoryMenu(new EmpleosInventoryFactory(), player.getName());
+        openMenu();
     }
 
     @Override
@@ -38,6 +39,7 @@ public class EmpleosMenu extends Menu implements Clickable, Refreshcable, CanGoB
         if(event.getCurrentItem() == null || event.getCurrentItem().getType().toString().equalsIgnoreCase("AIR")){
             return;
         }
+
         ItemStack currentItem = event.getCurrentItem();
         if(currentItem.getItemMeta().getLore().get(1) == null){
             return;

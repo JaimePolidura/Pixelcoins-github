@@ -48,7 +48,9 @@ public class SacarItemMenu extends Menu implements Clickable, Refreshcable {
         }
         Player player = (Player) event.getWhoClicked();
         int espacios = getEspaciosOcupados(player.getInventory());
-        if(espacios == 36 || (esDeTipoItem(itemClickeado, "DIAMOND", "DIAMOND_BLOCK", "QUARTZ_BLOCK", "LAPIS_LAZULI", "LAPIS_BLOCK") && itemClickeado.getAmount() == 64)){
+
+        boolean inventarioLleno = espacios == 36 || (esDeTipoItem(itemClickeado, "DIAMOND", "DIAMOND_BLOCK", "QUARTZ_BLOCK", "LAPIS_LAZULI", "LAPIS_BLOCK") && itemClickeado.getAmount() == 64);
+        if(inventarioLleno){
             player.sendMessage(ChatColor.DARK_RED + "Necesitas tener el inventario con espacios libres");
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
             return;

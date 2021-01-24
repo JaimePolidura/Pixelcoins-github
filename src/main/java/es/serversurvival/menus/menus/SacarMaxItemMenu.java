@@ -36,19 +36,23 @@ public class SacarMaxItemMenu extends Menu implements Clickable {
     @Override
     public void onClick(InventoryClickEvent event) {
         ItemStack itemClickeado = event.getCurrentItem();
+
         if(itemClickeado == null || itemClickeado.getType().toString().equalsIgnoreCase("AIR")){
             return;
         }
         if(noEsDeTipoItem(itemClickeado, "DIAMOND_BLOCK", "QUARTZ_BLOCK", "LAPIS_LAZULI")) {
             return;
         }
+
         Player player = (Player) event.getWhoClicked();
         int espacios = getEspaciosOcupados(player.getInventory());
+
         if(espacios == 36){
             player.sendMessage(ChatColor.DARK_RED + "Tienes el inventario libre");
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
             return;
         }
+
         String tipoItemClickeado = itemClickeado.getType().toString();
         MySQL.conectar();
         transaccionesMySQL.sacarMaxItem(tipoItemClickeado, player);

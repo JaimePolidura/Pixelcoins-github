@@ -14,6 +14,7 @@ public class TopMenu extends Menu {
     public TopMenu (Player player) {
         this.inventory = InventoryCreator.createInventoryMenu(new TopInventoryFactory(), player.getName());
         this.player = player;
+        openMenu();
     }
 
     @Override

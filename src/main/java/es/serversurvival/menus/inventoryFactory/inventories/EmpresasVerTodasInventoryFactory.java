@@ -5,6 +5,7 @@ import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.EmpresasVerTodasMenu;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.util.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -30,19 +31,16 @@ public class EmpresasVerTodasInventoryFactory extends InventoryFactory {
         ItemStack back = buildItemGoBack();
 
         todasLasEmpresas.forEach( (empresa) -> {
-            ItemStack iconoEmpresa = new ItemStack(Material.getMaterial(empresa.getIcono()), 1);
-            ItemMeta itemMeta = iconoEmpresa.getItemMeta();
+            Material icono = Material.getMaterial(empresa.getIcono());
+            String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA SOLICITAR UN SERVICIO";
 
             List<String> lore = new ArrayList<>();
             lore = insertarDatosEmpresa(empresa, lore);
             lore.add("      ");
             lore = insertarEmpleados(empresa.getNombre(), lore);
 
-            itemMeta.setLore(lore);
-            itemMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA SOLICITAR UN SERVICIO");
-            iconoEmpresa.setItemMeta(itemMeta);
 
-            inventory.addItem(iconoEmpresa);
+            inventory.addItem(ItemBuilder.loreDisplayName(icono, displayName, lore));
         });
 
         inventory.setItem(53, back);

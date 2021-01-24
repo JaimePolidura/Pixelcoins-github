@@ -1,6 +1,7 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
+import es.serversurvival.util.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -24,14 +25,8 @@ public class AyudaMenuInventoryFactory extends InventoryFactory {
 
         return inventory;
     }
-
+    
     private ItemStack buildItemAyuda (String tiposAyuda) {
-        ItemStack ayuda = new ItemStack(Material.WRITABLE_BOOK);
-        ItemMeta auyudaMeta = ayuda.getItemMeta();
-
-        auyudaMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + tiposAyuda);
-        ayuda.setItemMeta(auyudaMeta);
-
-        return ayuda;
+        return ItemBuilder.displayname(Material.WRITABLE_BOOK, ChatColor.GOLD + "" + ChatColor.BOLD + tiposAyuda);
     }
 }

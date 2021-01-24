@@ -5,6 +5,7 @@ import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.menus.Clickable;
+import es.serversurvival.util.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -16,8 +17,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class ComprarBolsaConfirmacion extends Menu implements Confirmacion, Clickable {
+public class ComprarBolsaConfirmacion extends Menu implements Confirmacion {
     private String titulo;
     private String simbolo;
     private String destinatario;
@@ -31,7 +33,7 @@ public class ComprarBolsaConfirmacion extends Menu implements Confirmacion, Clic
     private double dineroJugador;
     private String nombreValor;
 
-    public ComprarBolsaConfirmacion(String simbolo, String nombreValor, String tipo,String alias, String destinatario, double precioUnidad) {
+    public ComprarBolsaConfirmacion(String simbolo, String nombreValor, String tipo, String alias, String destinatario, double precioUnidad) {
         this.nombreValor = nombreValor;
         this.alias = alias;
         this.tipo = tipo;
@@ -47,6 +49,8 @@ public class ComprarBolsaConfirmacion extends Menu implements Confirmacion, Clic
         MySQL.conectar();
         this.dineroJugador = jugadoresMySQL.getJugador(player.getName()).getPixelcoins();
         MySQL.desconectar();
+
+        openMenu();
     }
 
     @Override
@@ -54,6 +58,7 @@ public class ComprarBolsaConfirmacion extends Menu implements Confirmacion, Clic
         if(event.getCurrentItem() == null) return;
 
         String nombreItem = event.getCurrentItem().getType().toString();
+
         switch (nombreItem){
             case "GREEN_WOOL":
                 confirmar();
@@ -94,16 +99,11 @@ public class ComprarBolsaConfirmacion extends Menu implements Confirmacion, Clic
             precioTotal = precioUnidad * cantidad;
             return;
         }
-        System.out.println("4");
-        ItemStack comprar = new ItemStack(Material.GREEN_WOOL);
-        ItemMeta itemMeta = comprar.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "COMPRAR " + alias.toUpperCase());
-        ArrayList<String> lore = new ArrayList<>();
+        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "COMPRAR " + alias.toUpperCase();
+        List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GOLD + "Comprar " + cantidad + " " +  alias  + " " + simbolo + " a " + ChatColor.GREEN + precioUnidad + " PC -> total: " + formatea.format(Funciones.redondeoDecimales(precioTotal, 3)) + " PC");
-        itemMeta.setLore(lore);
-        comprar.setItemMeta(itemMeta);
-        this.inventory.setItem(14, comprar);
-        System.out.println("5");
+
+        this.inventory.setItem(14, ItemBuilder.loreDisplayName(Material.GREEN_WOOL, displayName, lore));
     }
 
     @Override

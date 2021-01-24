@@ -26,6 +26,7 @@ public class DeudasMenu extends Menu implements Clickable, Refreshcable, CanGoBa
     public DeudasMenu (Player player) {
         this.player = player;
         this.inventory = InventoryCreator.createInventoryMenu(new DeudasInventoryFactory(), player.getName());
+        openMenu();
     }
 
     @Override
@@ -40,23 +41,28 @@ public class DeudasMenu extends Menu implements Clickable, Refreshcable, CanGoBa
 
     @Override
     public void onClick(InventoryClickEvent event) {
-        ItemStack currentItem = event.getCurrentItem();
+        ItemStack itemCliqueado = event.getCurrentItem();
 
-        if(currentItem == null || !Funciones.cuincideNombre(currentItem.getType().toString(), "RED_BANNER", "GREEN_BANNER")){
+        boolean notValidClick = itemCliqueado == null || !Funciones.cuincideNombre(itemCliqueado.getType().toString(), "RED_BANNER", "GREEN_BANNER");
+        if(notValidClick){
             return;
         }
 
-        int idAPagar = Integer.parseInt(currentItem.getItemMeta().getLore().get(4).split(" ")[1]);
-        String tipoItem = currentItem.getType().toString();
+        performClick(itemCliqueado);
+    }
 
-        System.out.println(tipoItem);
+    private void performClick (ItemStack itemCliqueado) {
+        int idAPagar = Integer.parseInt(itemCliqueado.getItemMeta().getLore().get(4).split(" ")[1]);
+        String tipoItem = itemCliqueado.getType().toString();
 
         MySQL.conectar();
+
         if(tipoItem.equalsIgnoreCase("RED_BANNER")){
             pagarDeuda(idAPagar);
         }else{
             cancelarDeuda(idAPagar);
         }
+
         MySQL.desconectar();
     }
 

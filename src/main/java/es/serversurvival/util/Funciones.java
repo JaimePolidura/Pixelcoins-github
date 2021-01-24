@@ -21,6 +21,7 @@ import es.serversurvival.mySQL.tablasObjetos.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import org.bukkit.inventory.meta.ItemMeta;
 import org.json.simple.parser.JSONParser;
 
 public final class Funciones {
@@ -385,7 +386,6 @@ public final class Funciones {
 
         return builder.toString();
     }
-
 
     public static String buildStringFromArray (String[] array) {
         return buildStringFromArray(array, 0);

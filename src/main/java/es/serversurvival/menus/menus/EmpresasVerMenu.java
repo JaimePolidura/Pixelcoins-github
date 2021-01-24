@@ -28,6 +28,7 @@ public class EmpresasVerMenu extends Menu implements Clickable, Refreshcable, Po
         this.inventory = InventoryCreator.createInventoryMenu(new VerEmpresaInventoryFactory(empresa), player.getName());
 
         postLoad();
+        openMenu();
     }
 
     public String getEmpresa (){

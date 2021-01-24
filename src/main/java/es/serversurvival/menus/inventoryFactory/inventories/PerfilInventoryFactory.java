@@ -5,6 +5,7 @@ import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.PerfilMenu;
 import es.serversurvival.mySQL.*;
 import es.serversurvival.mySQL.tablasObjetos.*;
+import es.serversurvival.util.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -17,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 public class PerfilInventoryFactory extends InventoryFactory {
     private List<Integer> posicionesCristales = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46 , 47, 48, 49, 50, 51, 52, 53);
 
@@ -26,22 +26,14 @@ public class PerfilInventoryFactory extends InventoryFactory {
         Inventory inventory = Bukkit.createInventory(null, 54, PerfilMenu.titulo);
 
         MySQL.conectar();
-        ItemStack web = buildItemWEB(player);
-        ItemStack stats = buildItemStats(player);
-        ItemStack deudas = buildItemDeudas(player);
-        ItemStack bolsa = buildItemBolsa(player);
-        ItemStack empresas = buildItemEmpresa(player);
-        ItemStack empleos = buildItemEmpleos(player);
-        ItemStack tineda = buildItemTienda();
+        inventory.setItem(10, buildItemWEB(player));
+        inventory.setItem(13, buildItemStats(player));
+        inventory.setItem(16, buildItemTienda());
+        inventory.setItem(28, buildItemDeudas(player));
+        inventory.setItem(30, buildItemBolsa(player));
+        inventory.setItem(32, buildItemEmpresa(player));
+        inventory.setItem(34, buildItemEmpleos(player));
         MySQL.desconectar();
-
-        inventory.setItem(10, web);
-        inventory.setItem(13, stats);
-        inventory.setItem(16, tineda);
-        inventory.setItem(28, deudas);
-        inventory.setItem(30, bolsa);
-        inventory.setItem(32, empresas);
-        inventory.setItem(34, empleos);
 
         rellenarCristales(inventory);
 
@@ -49,20 +41,11 @@ public class PerfilInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildItemTienda () {
-        ItemStack tienda = new ItemStack(Material.CHEST);
-        ItemMeta tiendaMeta = tienda.getItemMeta();
-
-        tiendaMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER LA TIENDA");
-
-        tienda.setItemMeta(tiendaMeta);
-        return tienda;
+        return ItemBuilder.displayname(Material.CHEST, ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER LA TIENDA");
     }
 
     private ItemStack buildItemEmpleos (String jugador) {
-        ItemStack itemEmpleos = new ItemStack(Material.GOLDEN_APPLE);
-        ItemMeta metaEmpleo = itemEmpleos.getItemMeta();
-
-        metaEmpleo.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TUS EMPLEOS");
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TUS EMPLEOS";
 
         List<String> lore = new ArrayList<>();
         lore.add("  ");
@@ -71,17 +54,11 @@ public class PerfilInventoryFactory extends InventoryFactory {
             lore.add(ChatColor.GOLD + emp.getEmpresa() + " " + ChatColor.GREEN + formatea.format(emp.getSueldo()) + " PC " + ChatColor.GOLD + "/ " + Empleados.toStringTipoSueldo(emp.getTipo_sueldo()));
         });
 
-        metaEmpleo.setLore(lore);
-        itemEmpleos.setItemMeta(metaEmpleo);
-
-        return itemEmpleos;
+        return ItemBuilder.loreDisplayName(Material.GOLDEN_APPLE, displayName, lore);
     }
 
     private ItemStack buildItemEmpresa (String jugador) {
-        ItemStack itemEmpresas = new ItemStack(Material.GOLD_BLOCK);
-        ItemMeta metaEmpresa = itemEmpresas.getItemMeta();
-
-        metaEmpresa.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TUS EMPRESAS");
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TUS EMPRESAS";
 
         List<String> lore = new ArrayList<>();
         lore.add("  ");
@@ -90,27 +67,20 @@ public class PerfilInventoryFactory extends InventoryFactory {
             lore.add(ChatColor.GOLD + "- " + empresa.getNombre() + " ( " + ChatColor.GREEN + formatea.format(empresa.getPixelcoins()) + " PC" +  ChatColor.GOLD + ")");
         });
 
-        metaEmpresa.setLore(lore);
-        itemEmpresas.setItemMeta(metaEmpresa);
-
-        return itemEmpresas;
+        return ItemBuilder.loreDisplayName(Material.GOLD_BLOCK, displayName, lore);
     }
 
     private ItemStack buildItemBolsa (String jugador) {
-        ItemStack itemBolsa = new ItemStack(Material.BOOK);
-        ItemMeta metaBolsa = itemBolsa.getItemMeta();
-
-        metaBolsa.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK VER TUS ACCIONES");
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK VER TUS ACCIONES";
 
         List<PosicionCerrada> posicionCerradas = posicionesCerradasMySQL.getPosicionesCerradasJugador(jugador);
         List<String> lore = new ArrayList<>();
         lore.add("   ");
-
         lore.add(ChatColor.GOLD + "Tus posiciones cerradas:");
-        int i = 0;
-        for (PosicionCerrada pos : posicionCerradas) {
-            i++;
-            if(i == 6) break;
+
+        for(int i = 0; i < posicionCerradas.size() || i < 7; i++){
+            PosicionCerrada pos = posicionCerradas.get(i);
+
             if(pos.getRentabilidad() >= 0){
                 lore.add(ChatColor.GOLD + pos.getSimbolo() + " -> " + ChatColor.GREEN + pos.getRentabilidadString()
                         + "% : " +  ( (int) ((pos.getCantidad() * pos.getPrecio_apertura()) -  pos.getCantidad() * pos.getPrecio_cierre())) + " PC");
@@ -120,17 +90,11 @@ public class PerfilInventoryFactory extends InventoryFactory {
             }
         }
 
-        metaBolsa.setLore(lore);
-        itemBolsa.setItemMeta(metaBolsa);
-
-        return itemBolsa;
+        return ItemBuilder.loreDisplayName(Material.BOOK, displayName, lore);
     }
     
     private ItemStack buildItemDeudas (String jugador) {
-        ItemStack deudas = new ItemStack(Material.DIAMOND_SWORD);
-        ItemMeta deudasMeta = deudas.getItemMeta();
-
-        deudasMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TUS DEUDAS");
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TUS DEUDAS";
 
         double totalQueLeDeben = deudasMySQL.getDeudasAcredor(jugador).stream().mapToInt(Deuda::getPixelcoins_restantes).sum();
         double totalQueDebe = deudasMySQL.getDeudasDeudor(jugador).stream().mapToInt(Deuda::getPixelcoins_restantes).sum();
@@ -140,10 +104,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
         lore.add(ChatColor.GOLD + "Total que debes: " + ChatColor.GREEN + totalQueDebe + " PC");
         lore.add(ChatColor.GOLD + "Total que te deben: " + ChatColor.GREEN + totalQueLeDeben + " PC");
 
-        deudasMeta.setLore(lore);
-        deudas.setItemMeta(deudasMeta);
-
-        return deudas;
+        return ItemBuilder.loreDisplayName(Material.DIAMOND_SWORD, displayName, lore);
     }
 
     private ItemStack buildItemStats (String nombreJugador) {
@@ -220,10 +181,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildItemWEB (String jugador) {
-        ItemStack web = new ItemStack(Material.PAPER);
-
-        ItemMeta metaWeb = web.getItemMeta();
-        metaWeb.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "      WEB http://serversurvival.ddns.net");
+        String displayName = ChatColor.AQUA + "" + ChatColor.BOLD + "      WEB http://serversurvival.ddns.net";
         List<String> lore = new ArrayList<>();
         lore.add("  ");
 
@@ -241,10 +199,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
         lore.add(ChatColor.DARK_AQUA + "Con la web podras acceder a todas tus estadisticas");
         lore.add(ChatColor.DARK_AQUA + "y comprar acciones, realizar transacciones etc.");
 
-        metaWeb.setLore(lore);
-        web.setItemMeta(metaWeb);
-
-        return web;
+        return ItemBuilder.loreDisplayName(Material.PAPER, displayName, lore);
     }
 
     private void rellenarCristales (Inventory inventory) {
