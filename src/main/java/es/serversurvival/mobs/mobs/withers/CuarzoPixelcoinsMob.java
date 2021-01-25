@@ -24,7 +24,7 @@ public class CuarzoPixelcoinsMob extends InteractuableMob {
         }
 
         MySQL.conectar();
-        transaccionesMySQL.ingresarItem(itemEnMano, player, player.getInventory().getHeldItemSlot());
+        transaccionesMySQL.ingresarItem(itemEnMano, player);
         MySQL.desconectar();
     }
 

@@ -1,6 +1,5 @@
 package es.serversurvival.mySQL;
 
-import es.serversurvival.mySQL.tablasObjetos.TablaObjeto;
 import es.serversurvival.mySQL.tablasObjetos.VerificacionCuenta;
 
 import java.sql.ResultSet;
@@ -25,9 +24,7 @@ public final class VerificacionCuentas extends MySQL{
     }
 
     public VerificacionCuenta getVerificacionCuenta (String jugador) {
-        ResultSet rs = executeQuery("SELECT * FROM verificacioncuentas WHERE jugador = '"+jugador+"'");
-
-        return (VerificacionCuenta) buildSingleObjectFromResultSet(rs);
+        return (VerificacionCuenta) buildObjectFromQuery("SELECT * FROM verificacioncuentas WHERE jugador = '"+jugador+"'");
     }
 
     @Override

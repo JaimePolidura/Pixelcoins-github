@@ -1,50 +1,15 @@
 package es.serversurvival.mySQL.tablasObjetos;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
 public final class Transaccion implements TablaObjeto {
-    private final int id;
-    private final String fecha;
-    private final String comprador;
-    private final String vendedor;
-    private final int cantidad;
-    private final String objeto;
-    private final String tipo;
-
-    public Transaccion(int id, String fecha, String comprador, String vendedor,
-                       int cantidad, String objeto, String tipo) {
-        this.id = id;
-        this.fecha = fecha;
-        this.comprador = comprador;
-        this.vendedor = vendedor;
-        this.cantidad = cantidad;
-        this.objeto = objeto;
-        this.tipo = tipo;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getFecha() {
-        return fecha;
-    }
-
-    public String getComprador() {
-        return comprador;
-    }
-
-    public String getVendedor() {
-        return vendedor;
-    }
-
-    public int getCantidad() {
-        return cantidad;
-    }
-
-    public String getObjeto() {
-        return objeto;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
+    @Getter private final int id;
+    @Getter private final String fecha;
+    @Getter private final String comprador;
+    @Getter private final String vendedor;
+    @Getter private final int cantidad;
+    @Getter private final String objeto;
+    @Getter private final String tipo;
 }

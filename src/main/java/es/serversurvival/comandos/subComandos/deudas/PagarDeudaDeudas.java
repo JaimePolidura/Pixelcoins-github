@@ -34,7 +34,7 @@ public class PagarDeudaDeudas extends DeudasSubCommand {
     public void execute(Player player, String[] args) {
         MySQL.conectar();
 
-        Supplier<String> supplierPixelcoins = () -> String.valueOf(Deudas.INSTANCE.getDeuda(() -> args[1]).getPixelcoins_restantes());
+        Supplier<String> supplierPixelcoins = () -> String.valueOf(getDeuda(() -> args[1]).getPixelcoins_restantes());
 
         ValidationResult result = ValidationsService.startValidating(args.length, Same.as(2, mensajeUsoIncorrecto()))
                 .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), NaturalNumber)
@@ -59,6 +59,16 @@ public class PagarDeudaDeudas extends DeudasSubCommand {
             return Deudas.INSTANCE.esDeudorDeDeuda(id, jugador);
         }catch (Exception e) {
             return false;
+        }
+    }
+
+    private Deuda getDeuda (Supplier<? extends String> supplierId) {
+        try{
+            int id = Integer.parseInt(supplierId.get());
+
+            return Deudas.INSTANCE.getDeuda(id);
+        }catch (Exception e) {
+            return null;
         }
     }
 }

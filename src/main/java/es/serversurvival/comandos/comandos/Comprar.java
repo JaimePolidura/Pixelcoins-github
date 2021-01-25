@@ -30,7 +30,7 @@ public class Comprar extends Comando {
     public void execute(Player player, String[] args) {
         ValidationResult result = startValidating(args, NotNull.message(mensajeUsoIncorrecto()))
                 .and(args.length, Same.as(2, mensajeUsoIncorrecto()))
-                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), PositiveNumber)
+                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), PositiveNumber, SuficientesPixelcoins.of(player.getName()))
                 .validateAll();
 
         if(result.isFailed()){

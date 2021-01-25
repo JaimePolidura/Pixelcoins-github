@@ -67,6 +67,7 @@ public class VenderCorto extends BolsaSubCommand{
                     return;
                 }
             }
+            MySQL.conectar();
             transaccionesMySQL.venderEnCortoBolsa(player, tiker, nombreValor, numeroAccionesAVender, precioAccion);
             MySQL.desconectar();
         }, 0L);

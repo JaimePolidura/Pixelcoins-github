@@ -5,8 +5,6 @@ import java.util.*;
 
 import es.serversurvival.util.Funciones;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 /**
@@ -16,12 +14,10 @@ public final class Jugadores extends MySQL {
     public static final Jugadores INSTANCE = new Jugadores();
     private Jugadores () {}
 
-    public Jugador nuevoJugador(String nombre, double pixelcoins, int nventas, double ingresos, double gastos, int ninpagos, int npagos, String uuid) {
+    public void nuevoJugador(String nombre, double pixelcoins, int nventas, double ingresos, double gastos, int ninpagos, int npagos, String uuid) {
         int numero_cuenta = generearNumeroCuenta();
 
         executeUpdate("INSERT INTO jugadores (nombre, pixelcoins, nventas, ingresos, gastos, ninpagos, npagos, numero_cuenta, uuid) VALUES ('" + nombre + "','" + pixelcoins + "','" + nventas + "','" + ingresos + "','" + gastos + "','" + ninpagos + "','" + npagos + "', '"+numero_cuenta+"', '"+uuid+"')");
-
-        return new Jugador(nombre, pixelcoins, nventas, ingresos, gastos, ninpagos, npagos, numero_cuenta, uuid);
     }
 
     public int generearNumeroCuenta () {
@@ -29,31 +25,15 @@ public final class Jugadores extends MySQL {
     }
 
     public boolean estaRegistradoNumeroCuentaPara (String jugador, int numero) {
-        ResultSet rs = executeQuery("SELECT * FROM jugadores WHERE numero_cuenta = '"+numero+"' AND jugador = '"+jugador+"'");
-
-        return !isEmpty(rs);
-    }
-
-    public boolean estaRegistradoNumeroCuenta (int numero) {
-        ResultSet rs = executeQuery("SELECT * FROM jugadores WHERE numero_cuenta = '"+numero+"'");
-
-        return !isEmpty(rs);
+        return isEmptyFromQuery("SELECT * FROM jugadores WHERE numero_cuenta = '"+numero+"' AND jugador = '"+jugador+"'");
     }
 
     public Jugador getJugador(String jugador){
-        ResultSet rs = executeQuery(String.format("SELECT * FROM jugadores WHERE nombre = '%s'", jugador));
-
-        return (Jugador) buildSingleObjectFromResultSet(rs);
+        return (Jugador) buildObjectFromQuery(String.format("SELECT * FROM jugadores WHERE nombre = '%s'", jugador));
     }
 
     public Jugador getJugadorUUID (String uuid){
-        ResultSet rs = executeQuery("SELECT * FROM jugadores WHERE uuid = '"+uuid+"'");
-
-        return (Jugador) buildSingleObjectFromResultSet(rs);
-    }
-
-    public boolean estaRegistrado (String nombreJugador) {
-        return getJugador(nombreJugador) != null;
+        return (Jugador) buildObjectFromQuery("SELECT * FROM jugadores WHERE uuid = '"+uuid+"'");
     }
 
     public void setNumeroCuenta (String nombreJugador, int numero_cuenta) {
@@ -85,39 +65,19 @@ public final class Jugadores extends MySQL {
     }
 
     public List<Jugador> getAllJugadores(){
-        ResultSet rs = executeQuery("SELECT * FROM jugadores");
-
-        return buildListFromResultSet(rs);
-    }
-
-    public List<Jugador> getTopRicos (){
-        ResultSet rs = executeQuery("SELECT * FROM jugadores ORDER BY pixelcoins");
-
-        return buildListFromResultSet(rs);
-    }
-
-    public List<Jugador> getTopPobres (){
-        ResultSet rs = executeQuery("SELECT * FROM jugadores ORDER BY pixelcoins ASC");
-
-        return buildListFromResultSet(rs);
+        return buildListFromQuery("SELECT * FROM jugadores");
     }
 
     public List<Jugador> getTopVendedores (){
-        ResultSet rs = executeQuery("SELECT * FROM jugadores ORDER BY nventas DESC");
-
-        return buildListFromResultSet(rs);
+        return buildListFromQuery("SELECT * FROM jugadores ORDER BY nventas DESC");
     }
 
     public List<Jugador> getTopFiables (){
-        ResultSet rs = executeQuery("SELECT * FROM jugadores ORDER BY npagos DESC");
-
-        return buildListFromResultSet(rs);
+        return buildListFromQuery("SELECT * FROM jugadores ORDER BY npagos DESC");
     }
 
     public List<Jugador> getTopMenosFiables (){
-        ResultSet rs = executeQuery("SELECT * FROM jugadores ORDER BY ninpagos DESC");
-
-        return buildListFromResultSet(rs);
+        return buildListFromQuery("SELECT * FROM jugadores ORDER BY ninpagos DESC");
     }
 
     public int getPosicionTopRicos (String player){
@@ -137,12 +97,7 @@ public final class Jugadores extends MySQL {
     public int getPosicionTopVendedores (String player){
         List<Jugador> jugadores = this.getAllJugadores();
 
-        jugadores.sort((o1, o2) -> {
-            Integer o1Int = o1.getNventas();
-            Integer o2Int = o2.getNventas();
-
-            return o2Int.compareTo(o1Int);
-        });
+        jugadores.sort(Comparator.comparingInt(Jugador::getNventas));
 
         int pos = 1;
         for(Jugador jugador : jugadores){

@@ -19,6 +19,7 @@ public class ElegirInversionMenu extends Menu implements Clickable {
     public ElegirInversionMenu (Player player) {
         this.player = player;
         this.inventory = InventoryCreator.createInventoryMenu(new ElegirInversionInventoryFactory(), player.getName());
+        openMenu();
     }
 
     @Override

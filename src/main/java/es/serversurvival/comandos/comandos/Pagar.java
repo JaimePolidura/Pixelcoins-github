@@ -46,7 +46,7 @@ public class Pagar extends Comando {
             return;
         }
 
-        transaccionesMySQL.realizarPagoManual(player.getName(), args[0], Double.parseDouble(args[1]), player, "", TipoTransaccion.JUGADOR_PAGO_MANUAL);
+        transaccionesMySQL.realizarPagoManual(player.getName(), args[0], Double.parseDouble(args[1]), player, "");
         MySQL.desconectar();
     }
 }

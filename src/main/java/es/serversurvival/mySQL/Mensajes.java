@@ -18,9 +18,7 @@ public final class Mensajes extends MySQL {
     }
 
     public List<Mensaje> getMensajesJugador(String destinatario){
-        ResultSet rs = executeQuery(String.format("SELECT * FROM mensajes WHERE destinatario = '%s'", destinatario));
-
-        return buildListFromResultSet(rs);
+        return buildListFromQuery(String.format("SELECT * FROM mensajes WHERE destinatario = '%s'", destinatario));
     }
 
     public void setDestinatario (String nombre, String nuevoNombre) {
@@ -29,10 +27,6 @@ public final class Mensajes extends MySQL {
 
     public void borrarMensajes(String jugador) {
         executeUpdate(String.format("DELETE FROM mensajes WHERE destinatario = '%s'", jugador));
-    }
-
-    public void borrarMensaje(int id) {
-        executeUpdate(String.format("DELETE FROM mensajes WHERE id = '%d'", id));
     }
 
     public void mostrarMensajesYBorrar(Player player) {

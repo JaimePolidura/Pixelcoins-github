@@ -17,18 +17,8 @@ public final class Encantamientos extends MySQL {
         executeUpdate("INSERT INTO encantamientos (encantamiento, nivel, id_oferta) VALUES ('" + encantamiento + "','" + nivel + "','" + id_oferta + "')");
     }
 
-    private void borrarEncatamiento(int id) {
-        executeUpdate("DELETE FROM encantamientos WHERE id=\"" + id + "\"      ");
-    }
-
-    public void borrarEncantamientosOferta(int id_oferta) {
-        executeUpdate(String.format("DELETE FROM encantamientos WHERE id_oferta = '%d'", id_oferta));
-    }
-
     public List<Encantamiento> getEncantamientosOferta (int id_oferta){
-        ResultSet rs = executeQuery(String.format("SELECT * FROM encantamientos WHERE id_oferta = '%d'", id_oferta));
-
-        return buildListFromResultSet(rs);
+        return buildListFromQuery(String.format("SELECT * FROM encantamientos WHERE id_oferta = '%d'", id_oferta));
     }
 
     public void insertarEncantamientosDeItem (Map<Enchantment, Integer> enchantments, int id_oferta) {

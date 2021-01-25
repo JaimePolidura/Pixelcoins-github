@@ -9,7 +9,6 @@ public class MobBolsa extends InteractuableMob {
     @Override
     public void onClick(PlayerInteractEntityEvent event) {
         ElegirInversionMenu menu = new ElegirInversionMenu(event.getPlayer());
-        menu.openMenu();
     }
 
     @Override

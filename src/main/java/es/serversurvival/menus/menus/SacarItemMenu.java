@@ -28,6 +28,7 @@ public class SacarItemMenu extends Menu implements Clickable, Refreshcable {
         MySQL.desconectar();
 
         this.inventory = InventoryCreator.createInventoryMenu(new SacarItemInventoryFactory(pixelcoinsJugador), player.getName());
+        openMenu();
     }
 
     @Override

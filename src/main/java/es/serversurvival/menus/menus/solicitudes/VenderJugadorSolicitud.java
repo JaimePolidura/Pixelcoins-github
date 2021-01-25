@@ -74,7 +74,7 @@ public class VenderJugadorSolicitud extends Menu implements Solicitud {
         isClicked = true;
 
         MySQL.conectar();
-        transaccionesMySQL.realizarTransferencia(jugadorAVender.getName(), jugadorVendedor.getName(), precio, itemAVender.getType().toString(), TipoTransaccion.JUGADOR_VENDER, true);
+        transaccionesMySQL.realizarTransferenciaConEstadisticas(jugadorAVender.getName(), jugadorVendedor.getName(), precio, itemAVender.getType().toString(), TipoTransaccion.JUGADOR_VENDER);
         MySQL.desconectar();
 
         jugadorAVender.getInventory().addItem(itemAVender);

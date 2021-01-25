@@ -8,7 +8,7 @@ import java.util.Date;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
-import org.apache.commons.lang.ObjectUtils;
+import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -28,15 +28,11 @@ public final class Empleados extends MySQL {
     }
 
     public Empleado getEmpleado(int id){
-        ResultSet rs = executeQuery(String.format("SELECT * FROM empleados WHERE id = '%d'", id));
-
-        return (Empleado) buildSingleObjectFromResultSet(rs);
+        return (Empleado) buildObjectFromQuery(String.format("SELECT * FROM empleados WHERE id = '%d'", id));
     }
 
     public Empleado getEmpleado (String nombre, String empresa) {
-        ResultSet rs = executeQuery(String.format("SELECT * FROM empleados WHERE jugador = '%s' AND empresa = '%s'", nombre, empresa));
-
-        return (Empleado) buildSingleObjectFromResultSet(rs);
+        return (Empleado) buildObjectFromQuery(String.format("SELECT * FROM empleados WHERE jugador = '%s' AND empresa = '%s'", nombre, empresa));
     }
 
     public void setSueldo(int id, double sueldo) {
@@ -55,10 +51,6 @@ public final class Empleados extends MySQL {
         executeUpdate("UPDATE empleados SET fecha_ultimapaga = '"+fechaPaga+"' WHERE id = '"+id+"'");
     }
 
-    public void setEmpresa(int id, String empresa) {
-        executeUpdate("UPDATE empleados SET empresa = '"+empresa+"' WHERE id = '"+id+"'");
-    }
-
     public void borrarEmplado(int id) {
         executeUpdate("DELETE FROM empleados WHERE id=\"" + id + "\"      ");
     }
@@ -68,21 +60,15 @@ public final class Empleados extends MySQL {
     }
 
     public List<Empleado> getAllEmpleados (){
-        ResultSet rs = executeQuery("SELECT * FROM empleados");
-
-        return buildListFromResultSet(rs);
+        return buildListFromQuery("SELECT * FROM empleados");
     }
 
     public List<Empleado> getEmpleadosEmrpesa(String nombreEmpresa){
-        ResultSet rs = executeQuery("SELECT * FROM empleados WHERE empresa = '"+nombreEmpresa+"'");
-
-        return buildListFromResultSet(rs);
+        return buildListFromQuery("SELECT * FROM empleados WHERE empresa = '"+nombreEmpresa+"'");
     }
 
     public List<Empleado> getTrabajosJugador(String jugador){
-        ResultSet rs = executeQuery("SELECT * FROM empleados WHERE jugador = '"+jugador+"'");
-
-        return buildListFromResultSet(rs);
+        return buildListFromQuery("SELECT * FROM empleados WHERE jugador = '"+jugador+"'");
     }
 
     public Map<String, List<Empleado>> getAllEmpleadosEmpresas () {
@@ -91,10 +77,7 @@ public final class Empleados extends MySQL {
 
         allEmpleados.forEach(empleado -> {
             if(toReturn.get(empleado.getEmpresa()) == null){
-                List<Empleado> empleadosEmpresa = new ArrayList<>();
-                empleadosEmpresa.add(empleado);
-
-                toReturn.put(empleado.getEmpresa(), empleadosEmpresa);
+                toReturn.put(empleado.getEmpresa(), Funciones.listOf(empleado));
             }else{
                 List<Empleado> empleadosEmpresa = toReturn.get(empleado.getEmpresa());
                 empleadosEmpresa.add(empleado);
@@ -107,27 +90,19 @@ public final class Empleados extends MySQL {
     }
 
     public boolean trabajaEmpresa(String empleado, String nombreEmpresa) {
-        try{
-            ResultSet rs = executeQuery("SELECT id FROM empleados WHERE jugador = '"+empleado+"' AND empresa = '"+nombreEmpresa+"'");
-            return rs.next();
-        }catch (SQLException | NullPointerException e){
-            e.printStackTrace();
-            return false;
-        }
+        return !isEmptyFromQuery("SELECT id FROM empleados WHERE jugador = '"+empleado+"' AND empresa = '"+nombreEmpresa+"'");
     }
 
     public void cambiarEmpresaNombre(String empresa, String nuevoNombre) {
         executeUpdate("UPDATE empleados SET empresa = '"+nuevoNombre+"' WHERE empresa = '"+empresa+"'");
     }
 
-    public void despedir(String nombreEmpresa, String empleado, String razon, Player p) {
-        empresasMySQL.conectar();
-
+    public void despedir(String nombreEmpresa, String empleado, String razon, Player ownerPlayer) {
         int id_emplado = getEmpleado(empleado, nombreEmpresa).getId();
         borrarEmplado(id_emplado);
 
-        p.sendMessage(ChatColor.GOLD + "Has despedido a: " + empleado);
-        Player tp = p.getServer().getPlayer(empleado);
+        ownerPlayer.sendMessage(ChatColor.GOLD + "Has despedido a: " + empleado);
+        Player tp = ownerPlayer.getServer().getPlayer(empleado);
 
         if (tp != null) {
             tp.sendMessage(ChatColor.RED + "Has sido despedido de " + nombreEmpresa + " razon: " + razon);
@@ -135,20 +110,19 @@ public final class Empleados extends MySQL {
         } else {
             mensajesMySQL.nuevoMensaje("", empleado, "Has sido despedido de " + nombreEmpresa + " por: " + razon);
         }
-        empresasMySQL.desconectar();
     }
 
-    public void irseEmpresa(String nombreEmpresa, Player p) {
+    public void irseEmpresa (String nombreEmpresa, Player player) {
         Empresa empresaAIRse = empresasMySQL.getEmpresa(nombreEmpresa);
-        borrarEmplado(getEmpleado(p.getName(), nombreEmpresa).getId());
+        borrarEmplado(getEmpleado(player.getName(), nombreEmpresa).getId());
 
-        p.sendMessage(ChatColor.GOLD + "Te has ido de: " + nombreEmpresa);
-        Player ownerPlayer = p.getServer().getPlayer(empresaAIRse.getOwner());
+        player.sendMessage(ChatColor.GOLD + "Te has ido de: " + nombreEmpresa);
+        Player ownerPlayer = player.getServer().getPlayer(empresaAIRse.getOwner());
         if (ownerPlayer != null) {
-            ownerPlayer.sendMessage(ChatColor.RED + p.getName() + " Se ha ido de tu empresa: " + nombreEmpresa);
-            p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_LAND, 10, 1);
+            ownerPlayer.sendMessage(ChatColor.RED + player.getName() + " Se ha ido de tu empresa: " + nombreEmpresa);
+            player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 10, 1);
         } else {
-            mensajesMySQL.nuevoMensaje("" ,ownerPlayer.getName(), p.getName() + " se ha ido de tu empresa: " + nombreEmpresa);
+            mensajesMySQL.nuevoMensaje("" ,ownerPlayer.getName(), player.getName() + " se ha ido de tu empresa: " + nombreEmpresa);
         }
     }
 
@@ -235,22 +209,14 @@ public final class Empleados extends MySQL {
         return nombreTipoSueldo;
     }
 
+    @SneakyThrows
     private Date formatFechaDeLaBaseDatosException (String fecha) {
-        try {
-            return dateFormater.parse(fecha);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return dateFormater.parse(fecha);
     }
 
+    @SneakyThrows
     private Date formatFehcaDeHoyException () {
-        try {
-            return dateFormater.parse(dateFormater.format(new Date()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return dateFormater.parse(dateFormater.format(new Date()));
     }
 
     @Override

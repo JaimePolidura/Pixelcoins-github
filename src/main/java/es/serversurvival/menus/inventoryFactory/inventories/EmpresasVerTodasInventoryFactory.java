@@ -56,7 +56,7 @@ public class EmpresasVerTodasInventoryFactory extends InventoryFactory {
         lore.add(ChatColor.GOLD + "Pixelcoins: " + ChatColor.GREEN + formatea.format(empresa.getPixelcoins()) + " PC");
         lore.add(ChatColor.GOLD + "Ingresos: " + ChatColor.GREEN + formatea.format(empresa.getIngresos()) + " PC");
         lore.add(ChatColor.GOLD + "Gastos: " + ChatColor.GREEN + formatea.format(empresa.getGastos()) + " PC");
-        lore.add(ChatColor.GOLD + "Beneficios: " + ChatColor.GREEN + empresa.getBeneficiosFormateado() + " PC");
+        lore.add(ChatColor.GOLD + "Beneficios: " + ChatColor.GREEN + formatea.format(empresa.getIngresos() - empresa.getGastos()) + " PC");
         double margen = Funciones.rentabilidad(empresa.getIngresos(), empresa.getIngresos() - empresa.getGastos());
         lore.add(ChatColor.GOLD + "Rentabilidad: " + ChatColor.GREEN + ((int) margen) + "%");
         lore.add("      ");

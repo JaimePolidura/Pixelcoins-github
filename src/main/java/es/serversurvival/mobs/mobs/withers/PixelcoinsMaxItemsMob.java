@@ -9,7 +9,6 @@ public class PixelcoinsMaxItemsMob extends InteractuableMob {
     @Override
     public void onClick(PlayerInteractEntityEvent event) {
         SacarMaxItemMenu maxItemMenu = new SacarMaxItemMenu(event.getPlayer());
-        maxItemMenu.openMenu();
     }
 
     @Override

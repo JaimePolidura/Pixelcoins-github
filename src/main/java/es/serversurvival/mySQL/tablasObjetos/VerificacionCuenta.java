@@ -1,19 +1,10 @@
 package es.serversurvival.mySQL.tablasObjetos;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
 public final class VerificacionCuenta implements TablaObjeto{
-    private final String jugador;
-    private final int numero;
-
-    public VerificacionCuenta(String jugador, int numero) {
-        this.jugador = jugador;
-        this.numero = numero;
-    }
-
-    public String getJugador() {
-        return jugador;
-    }
-
-    public int getNumero() {
-        return numero;
-    }
+    @Getter private final String jugador;
+    @Getter private final int numero;
 }

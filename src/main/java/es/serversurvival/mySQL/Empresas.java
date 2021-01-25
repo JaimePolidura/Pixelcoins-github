@@ -28,35 +28,29 @@ public final class Empresas extends MySQL {
     public static final int nMaxEmpresas = 5;
     public static final int CrearEmpresaDescLonMax = 200;
 
-    public Empresa nuevaEmpresa(String nombreEmpresa, String owner, double pixelcoins, double ingresos, double gastos, String icono, String descripcion) {
+    public void nuevaEmpresa(String nombreEmpresa, String owner, double pixelcoins, double ingresos, double gastos, String icono, String descripcion) {
         executeUpdate("INSERT INTO empresas (nombre, owner, pixelcoins, ingresos, gastos, icono, descripcion) VALUES ('" + nombreEmpresa + "','" + owner + "','" + pixelcoins + "','" + ingresos + "','" + gastos + "','" + icono + "','" + descripcion + "')");
-
-        return getEmpresa(getMaxId());
-    }
-
-    private int getMaxId(){
-        ResultSet rs = executeQuery("SELECT * FROM empresas ORDER BY id DESC LIMIT 1");
-        Empresa cuenta = (Empresa) buildSingleObjectFromResultSet(rs);
-
-        return cuenta != null ? cuenta.getId() : -1;
     }
 
     public Empresa getEmpresa(String empresa){
-        ResultSet rs = executeQuery("SELECT * FROM empresas WHERE nombre = '"+empresa+"'");
-
-        return (Empresa) buildSingleObjectFromResultSet(rs);
+        return (Empresa) buildObjectFromQuery("SELECT * FROM empresas WHERE nombre = '"+empresa+"'");
     }
 
     public Empresa getEmpresa(int id){
-        ResultSet rs = executeQuery("SELECT * FROM empresas WHERE id = '"+id+"'");
+        return (Empresa) buildObjectFromQuery("SELECT * FROM empresas WHERE id = '"+id+"'");
+    }
 
-        return (Empresa) buildSingleObjectFromResultSet(rs);
+    public List<Empresa> getEmpresasOwner(String owner) {
+        return buildListFromQuery("SELECT * FROM empresas WHERE owner = '"+owner+"'");
+    }
+
+    public List<Empresa> getTodasEmpresas() {
+        return buildListFromQuery("SELECT * FROM empresas");
     }
 
     public void borrarEmpresa(String nombreEmpresa) {
         executeUpdate(String.format("DELETE FROM empresas WHERE nombre = '%s'", nombreEmpresa));
     }
-
 
     public void setOwner(String nombreEmpresa, String nuevoOwner) {
         executeUpdate("UPDATE empresas SET owner = '"+nuevoOwner+"' WHERE nombre = '"+nombreEmpresa+"'");
@@ -90,18 +84,6 @@ public final class Empresas extends MySQL {
         executeUpdate("UPDATE empresas SET descripcion = '"+descripcion+"' WHERE nombre = '"+nombreEmpresa+"'");
     }
 
-    public List<Empresa> getEmpresasOwner(String owner) {
-        ResultSet rs = executeQuery("SELECT * FROM empresas WHERE owner = '"+owner+"'");
-
-        return buildListFromResultSet(rs);
-    }
-
-    public List<Empresa> getTodasEmpresas() {
-        ResultSet rs = executeQuery("SELECT * FROM empresas");
-
-        return buildListFromResultSet(rs);
-    }
-
     public double getAllPixelcoinsEnEmpresas (String jugador){
         return Funciones.getSumaTotalListDouble( getEmpresasOwner(jugador), Empresa::getPixelcoins );
     }
@@ -112,10 +94,7 @@ public final class Empresas extends MySQL {
 
         empresas.forEach(empresa -> {
             if(mapEmpresas.get(empresa.getOwner()) == null){
-                List<Empresa> empresasList = new ArrayList<>();
-                empresasList.add(empresa);
-
-                mapEmpresas.put(empresa.getOwner(), empresasList);
+                mapEmpresas.put(empresa.getOwner(), Funciones.listOf(empresa));
             }else{
                 List<Empresa> empresasList = mapEmpresas.get(empresa.getOwner());
                 empresasList.add(empresa);
@@ -149,7 +128,6 @@ public final class Empresas extends MySQL {
     public void cambiarNombre(Player player, String empresa, String nuevoNombre) {
         List<Empleado> empleados = empleadosMySQL.getEmpleadosEmrpesa(empresa);
 
-        //empleadosMySQL.cambiarEmpresaNombre(empresa, nuevoNombre);
         setNombre(empresa, nuevoNombre);
 
         player.sendMessage(ChatColor.GOLD + "Has cambiado de nombre a tu empresa!");

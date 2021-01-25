@@ -21,6 +21,7 @@ public class AyudaMenu extends Menu implements Clickable {
     public AyudaMenu (Player player) {
         this.player = player;
         this.inventory = InventoryCreator.createInventoryMenu(new AyudaMenuInventoryFactory(), player.getName());
+        openMenu();
     }
 
     @Override

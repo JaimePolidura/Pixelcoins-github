@@ -21,6 +21,7 @@ public class SacarMaxItemMenu extends Menu implements Clickable {
     public SacarMaxItemMenu (Player player) {
         this.player = player;
         this.inventory = InventoryCreator.createInventoryMenu(new SacarMaxItemInventoryFactory(), player.getName());
+        openMenu();
     }
 
     @Override

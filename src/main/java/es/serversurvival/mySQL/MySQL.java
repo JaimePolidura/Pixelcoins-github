@@ -57,17 +57,6 @@ public abstract class MySQL {
         conexion = conex;
     }
 
-    public static Connection conectar(String driver) {
-        try {
-            Class.forName(driver);
-            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306?serverTimezone=UTC/" + dbName, user, pass);
-            return conexion;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public static void desconectar() {
         try {
             conexion.close();
@@ -104,7 +93,28 @@ public abstract class MySQL {
         }
     }
 
+    protected boolean isEmptyFromQuery (String query) {
+        try{
+            ResultSet rs = executeQuery(query);
+            boolean next = rs.next();
+
+            return rs.next();
+        }catch (SQLException e){
+            return false;
+        }
+    }
+
     protected abstract TablaObjeto buildObjectFromResultSet (ResultSet rs) throws SQLException;
+
+    protected TablaObjeto buildObjectFromQuery(String query) {
+        try{
+            ResultSet rs = executeQuery(query);
+            rs.next();
+            return buildObjectFromResultSet(rs);
+        }catch (SQLException e) {
+            return null;
+        }
+    }
 
     protected TablaObjeto buildSingleObjectFromResultSet (ResultSet rs) {
         try{
@@ -116,6 +126,19 @@ public abstract class MySQL {
     }
 
     protected <T> List<T> buildListFromResultSet (ResultSet rs) {
+        List<T> list = new ArrayList<>();
+        try{
+            while (rs.next()){
+                list.add((T) buildObjectFromResultSet(rs));
+            }
+        }catch (SQLException e){
+            return Collections.EMPTY_LIST;
+        }
+        return list;
+    }
+
+    protected <T> List<T> buildListFromQuery (String query) {
+        ResultSet rs = executeQuery(query);
         List<T> list = new ArrayList<>();
         try{
             while (rs.next()){

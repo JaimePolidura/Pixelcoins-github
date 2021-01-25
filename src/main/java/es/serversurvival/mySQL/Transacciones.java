@@ -39,11 +39,7 @@ public final class Transacciones extends MySQL {
     }
 
     public List<Transaccion> getTransaccionesPagaEmpresa (String jugador) {
-        return buildListFromResultSet(executeQuery("SELECT * FROM transacciones WHERE comprador = '"+jugador+"' AND tipo = '"+ TipoTransaccion.EMPRESA_PAGAR_SALARIO.toString()+"'"));
-    }
-
-    public void borrarTransaccione(int id) {
-        executeUpdate(String.format("DELETE FROM transacciones WHERE id = '%s'", id));
+        return buildListFromQuery("SELECT * FROM transacciones WHERE comprador = '"+jugador+"' AND tipo = '"+ TipoTransaccion.EMPRESA_PAGAR_SALARIO.toString()+"'");
     }
 
     public void setCompradorVendedor (String jugador, String nuevoJugador) {
@@ -51,18 +47,12 @@ public final class Transacciones extends MySQL {
         executeUpdate("UPDATE transacciones SET vendedor = '"+nuevoJugador+"' WHERE vendedor = '"+jugador+"'");
     }
 
-    public List<Transaccion> getTopVentasJugador(String nombreJugador, int limite){
-        ResultSet rs = executeQuery(String.format("SELECT * FROM transacciones WHERE vendedor = '%s' AND tipo = '%s' ORDER BY cantidad DESC LIMIT %d", nombreJugador, "TIENDA", limite));
-
-        return buildListFromResultSet(rs);
-    }
-
-    public void realizarVenta(String comprador, int id, Player p) {
+    public void realizarVenta(String comprador, int id, Player player) {
         Oferta ofertaAComprar = ofertasMySQL.getOferta(id);
         Jugador jugadorComprador = jugadoresMySQL.getJugador(comprador);
 
         if (jugadorComprador.getPixelcoins() < ofertaAComprar.getPrecio()) {
-            p.sendMessage(ChatColor.DARK_RED + "No puedes comprar por encima de tu dinero");
+            player.sendMessage(ChatColor.DARK_RED + "No puedes comprar por encima de tu dinero");
             return;
         }
 
@@ -79,37 +69,29 @@ public final class Transacciones extends MySQL {
         } else {
             ofertasMySQL.setCantidad(id, cantidad - 1);
         }
-        this.realizarTransferencia(comprador, vendedor, precio, objeto, TipoTransaccion.TIENDA_VENTA, true);
+        this.realizarTransferenciaConEstadisticas(comprador, vendedor, precio, objeto, TipoTransaccion.TIENDA_VENTA);
 
         ItemMeta itemMeta = itemAComprar.getItemMeta();
         List<String> lore = Arrays.asList("Comprado en la tienda");
         itemMeta.setLore(lore);
         itemAComprar.setItemMeta(itemMeta);
 
-        p.getInventory().addItem(itemAComprar);
-        p.sendMessage(ChatColor.GOLD + "Has comprado: " + objeto + " , por " + ChatColor.GREEN + formatea.format(precio) + " PC" + ChatColor.GOLD + " .Te quedan: " +
+        player.getInventory().addItem(itemAComprar);
+        player.sendMessage(ChatColor.GOLD + "Has comprado: " + objeto + " , por " + ChatColor.GREEN + formatea.format(precio) + " PC" + ChatColor.GOLD + " .Te quedan: " +
                 ChatColor.GREEN + formatea.format(jugadorComprador.getPixelcoins() - precio) + " PC");
-        p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
         Player vendedorP = Bukkit.getPlayerExact(vendedor);
         if (vendedorP != null) {
             vendedorP.sendMessage(ChatColor.GOLD + comprador + " te ha comprado: " + objeto + " por: " + ChatColor.GREEN + formatea.format(precio) + " PC ");
-            p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
             ScoreBoardManager.updateScoreboard(vendedorP);
         }
-        ScoreBoardManager.updateScoreboard(p);
+
+        ScoreBoardManager.updateScoreboard(player);
     }
 
-    public void realizarTransferencia(String nombrePagador, String nombrePagado, double cantidad, String objeto, TipoTransaccion tipo, boolean editarEstadisticas) {
-        if(editarEstadisticas){
-            realizarTransferenciaConEstadisticas(nombrePagador, nombrePagado, cantidad, objeto);
-        }else{
-            realizarTransferenciaSinEstadisticas(nombrePagador, nombrePagado, cantidad, objeto);
-        }
-        nuevaTransaccion(nombrePagador, nombrePagado, cantidad, objeto, tipo);
-    }
-
-    private void realizarTransferenciaSinEstadisticas (String nombrePagador, String nombrePagado, double cantidad, String objeto) {
+    public void realizarTransferencia (String nombrePagador, String nombrePagado, double cantidad, String objeto, TipoTransaccion tipo) {
         Jugador pagador = jugadoresMySQL.getJugador(nombrePagador);
         Jugador pagado = jugadoresMySQL.getJugador(nombrePagado);
 
@@ -119,9 +101,10 @@ public final class Transacciones extends MySQL {
             jugadoresMySQL.setPixelcoin(nombrePagado, pagado.getPixelcoins() + cantidad);
         }
         jugadoresMySQL.setPixelcoin(nombrePagador, pagador.getPixelcoins() - cantidad);
+        nuevaTransaccion(nombrePagador, nombrePagado, cantidad, objeto, tipo);
     }
 
-    private void realizarTransferenciaConEstadisticas (String nombrePagador, String nombrePagado, double cantidad, String objeto) {
+    public void realizarTransferenciaConEstadisticas (String nombrePagador, String nombrePagado, double cantidad, String objeto, TipoTransaccion tipo) {
         Jugador pagador = jugadoresMySQL.getJugador(nombrePagador);
         Jugador pagado = jugadoresMySQL.getJugador(nombrePagado);
 
@@ -131,9 +114,10 @@ public final class Transacciones extends MySQL {
             jugadoresMySQL.setEstadisticas(nombrePagado, pagado.getPixelcoins() + cantidad, pagado.getNventas() + 1, pagado.getIngresos() + cantidad, pagado.getGastos());
         }
         jugadoresMySQL.setEstadisticas(nombrePagador, pagador.getPixelcoins() - cantidad, pagador.getNventas(), pagador.getIngresos(), pagador.getGastos() + cantidad);
+        nuevaTransaccion(nombrePagador, nombrePagado, cantidad, objeto, tipo);
     }
 
-    public void realizarPagoManual(String nombrePagador, String nombrePagado, double cantidad, Player player, String objeto, TipoTransaccion tipo) {
+    public void realizarPagoManual(String nombrePagador, String nombrePagado, double cantidad, Player player, String objeto) {
         Jugador jugador = jugadoresMySQL.getJugador(nombrePagado);
 
         if(jugador == null){
@@ -141,7 +125,7 @@ public final class Transacciones extends MySQL {
             return;
         }
 
-        realizarTransferencia(nombrePagador, nombrePagado, cantidad, objeto, tipo, true);
+        realizarTransferenciaConEstadisticas(nombrePagador, nombrePagado, cantidad, objeto, TipoTransaccion.JUGADOR_PAGO_MANUAL);
 
         player.sendMessage(ChatColor.GOLD + "Has pagado: " + ChatColor.GREEN + formatea.format(cantidad) + " PC " + ChatColor.GOLD + "a " + nombrePagado);
 
@@ -158,28 +142,29 @@ public final class Transacciones extends MySQL {
         if(tp != null) ScoreBoardManager.updateScoreboard(tp);
     }
 
-    public void ingresarItem(ItemStack itemAIngresar, Player jugadorPlayer, int slot) {
-        Jugador jugadorQueIngresaElItem = jugadoresMySQL.getJugador(jugadorPlayer.getName());
+    public void ingresarItem(ItemStack itemAIngresar, Player player) {
+        Jugador jugadorQueIngresaElItem = jugadoresMySQL.getJugador(player.getName());
 
         int cantidad = itemAIngresar.getAmount();
         String nombreItem = itemAIngresar.getType().toString();
         double pixelcoinsAnadir = getCantidadARecibirTranIngresarItem(cantidad, nombreItem);
 
-        boolean registrado = jugadorQueIngresaElItem != null;
+        boolean jugadorRegistradoEnLaBaseDeDatps = jugadorQueIngresaElItem != null;
         double dineroActual = jugadorQueIngresaElItem.getPixelcoins();
-        if (registrado) {
-            jugadoresMySQL.setPixelcoin(jugadorPlayer.getName(), pixelcoinsAnadir + dineroActual);
+
+        if (jugadorRegistradoEnLaBaseDeDatps) {
+            jugadoresMySQL.setPixelcoin(player.getName(), pixelcoinsAnadir + dineroActual);
         } else {
-            jugadoresMySQL.nuevoJugador(jugadorPlayer.getName(), pixelcoinsAnadir, 0, 0, 0, 0, 0, jugadorPlayer.getUniqueId().toString());
+            jugadoresMySQL.nuevoJugador(player.getName(), pixelcoinsAnadir, 0, 0, 0, 0, 0, player.getUniqueId().toString());
         }
-        this.nuevaTransaccion(jugadorPlayer.getName(), "", pixelcoinsAnadir, nombreItem, TipoTransaccion.WITHERS_INGRESAR);
 
-        jugadorPlayer.getInventory().clear(slot);
+        nuevaTransaccion(player.getName(), "", pixelcoinsAnadir, nombreItem, TipoTransaccion.WITHERS_INGRESAR);
 
-        jugadorPlayer.sendMessage(ChatColor.GOLD + "Se ha a?adido: " + ChatColor.GREEN + formatea.format(pixelcoinsAnadir) + " PC " + ChatColor.GOLD + "Ahora tienes: " + ChatColor.GREEN + formatea.format(pixelcoinsAnadir + dineroActual) + "PC");
-        jugadorPlayer.playSound(jugadorPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        player.getInventory().clear(player.getInventory().getHeldItemSlot());
+        player.sendMessage(ChatColor.GOLD + "Se ha a?adido: " + ChatColor.GREEN + formatea.format(pixelcoinsAnadir) + " PC " + ChatColor.GOLD + "Ahora tienes: " + ChatColor.GREEN + formatea.format(pixelcoinsAnadir + dineroActual) + "PC");
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
-        ScoreBoardManager.updateScoreboard(jugadorPlayer);
+        ScoreBoardManager.updateScoreboard(player);
     }
 
     private double getCantidadARecibirTranIngresarItem (int cantidadItems, String tipoItem) {
@@ -214,19 +199,19 @@ public final class Transacciones extends MySQL {
 
         switch (tipoItem){
             case "DIAMOND":
-                pixelcoinsSacadas = sacarItem(jugadorSacarItem, tipoItem, DIAMANTE);
+                pixelcoinsSacadas = sacarObjeto(jugadorSacarItem, tipoItem, DIAMANTE);
                 break;
             case "DIAMOND_BLOCK":
-                pixelcoinsSacadas = sacarItem(jugadorSacarItem, tipoItem, DIAMANTE * 9);
+                pixelcoinsSacadas = sacarObjeto(jugadorSacarItem, tipoItem, DIAMANTE * 9);
                 break;
             case "QUARTZ_BLOCK":
-                pixelcoinsSacadas = sacarItem(jugadorSacarItem, tipoItem, CUARZO);
+                pixelcoinsSacadas = sacarObjeto(jugadorSacarItem, tipoItem, CUARZO);
                 break;
             case "LAPIS_LAZULI":
-                pixelcoinsSacadas = sacarItem(jugadorSacarItem, tipoItem, LAPISLAZULI);
+                pixelcoinsSacadas = sacarObjeto(jugadorSacarItem, tipoItem, LAPISLAZULI);
                 break;
             case "LAPIS_BLOCK":
-                pixelcoinsSacadas = sacarItem(jugadorSacarItem, tipoItem, LAPISLAZULI * 9);
+                pixelcoinsSacadas = sacarObjeto(jugadorSacarItem, tipoItem, LAPISLAZULI * 9);
                 break;
         }
 
@@ -235,7 +220,7 @@ public final class Transacciones extends MySQL {
         return pixelcoinsSacadas;
     }
 
-    private double sacarItem (Jugador jugador, String material ,int pixelcoinsPorItem) {
+    private double sacarObjeto (Jugador jugador, String material, int pixelcoinsPorItem) {
         Player jugadorPlayer = Bukkit.getPlayer(jugador.getNombre());
 
         if(jugador.getPixelcoins() >= pixelcoinsPorItem){
@@ -423,22 +408,18 @@ public final class Transacciones extends MySQL {
         return true;
     }
 
-    public void comprarServivio(String empresa, double precio, Player p) {
+    public void comprarServivio(String empresa, double precio, Player player) {
         Empresa empresaAComprar = empresasMySQL.getEmpresa(empresa);
         if (empresaAComprar == null) {
-            p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
+            player.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
             return;
         }
-        if (empresaAComprar.getOwner().equalsIgnoreCase(p.getName())) {
-            p.sendMessage(ChatColor.DARK_RED + "No puedes comprar un servivio de tu propia empresa siendo el propio owner");
+        if (empresaAComprar.getOwner().equalsIgnoreCase(player.getName())) {
+            player.sendMessage(ChatColor.DARK_RED + "No puedes comprar un servivio de tu propia empresa siendo el propio owner");
             return;
         }
 
-        Jugador comprador = jugadoresMySQL.getJugador(p.getName());
-        if (comprador.getPixelcoins() < precio) {
-            p.sendMessage(ChatColor.DARK_RED + "No puedes ir por encima de tus posibilidades");
-            return;
-        }
+        Jugador comprador = jugadoresMySQL.getJugador(player.getName());
 
         jugadoresMySQL.setEstadisticas(comprador.getNombre(), comprador.getPixelcoins() - precio, comprador.getNventas(), comprador.getIngresos(), comprador.getGastos() + precio);
         empresasMySQL.setPixelcoins(empresa, empresaAComprar.getPixelcoins() + precio);
@@ -447,17 +428,18 @@ public final class Transacciones extends MySQL {
 
         List<Empleado> empleados = empleadosMySQL.getEmpleadosEmrpesa(empresa);
         empleados.forEach((empl) -> {
-            Player tp = p.getServer().getPlayer(empl.getJugador());
+            Player tp = player.getServer().getPlayer(empl.getJugador());
             if(tp != null){
                 tp.sendMessage(ChatColor.GOLD + comprador.getNombre() + " ha comprado vuestro servicio de la empresa: " + empresa + " por " + ChatColor.GREEN + formatea.format(precio) + " PC");
             }
         });
+
         Player ownerEmpresa = Bukkit.getPlayer(empresaAComprar.getOwner());
         if(ownerEmpresa != null){
             ownerEmpresa.sendMessage(ChatColor.GOLD + comprador.getNombre() + " ha comprado vuestro servicio de la empresa: " + empresa + " por " + ChatColor.GREEN + formatea.format(precio) + " PC");
         }
 
-        p.sendMessage(ChatColor.GOLD + "Has pagado " + ChatColor.GREEN + precio + " PC " + ChatColor.GOLD + " a la empresa: " + empresa + " por su servicio");
+        player.sendMessage(ChatColor.GOLD + "Has pagado " + ChatColor.GREEN + precio + " PC " + ChatColor.GOLD + " a la empresa: " + empresa + " por su servicio");
     }
 
     public void comprarUnidadBolsa(String tipo, String ticker, String nombreValor, String alias, double precioUnidad, int cantidad, Player jugadorPlayer) {
@@ -481,15 +463,12 @@ public final class Transacciones extends MySQL {
     }
 
     public void venderEnCortoBolsa (Player player, String ticker, String nombreValor, int cantidad, double precioPorAccion) {
-        jugadoresMySQL.conectar();
-
         Jugador jugador = jugadoresMySQL.getJugador(player.getName());
-
         double dineroJugador = jugador.getPixelcoins();
         double valorTotal = precioPorAccion * cantidad;
+
         if(valorTotal > dineroJugador){
             player.sendMessage(ChatColor.DARK_RED + "No tienes el dinero suficiente para esa operacion");
-            jugadoresMySQL.desconectar();
             return;
         }
 

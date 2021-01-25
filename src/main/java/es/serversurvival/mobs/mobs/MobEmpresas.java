@@ -9,7 +9,6 @@ public class MobEmpresas extends InteractuableMob {
     @Override
     public void onClick(PlayerInteractEntityEvent event) {
         EmpresasVerTodasMenu empresasMenu = new EmpresasVerTodasMenu(event.getPlayer());
-        empresasMenu.openMenu();
     }
 
     @Override

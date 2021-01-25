@@ -3,6 +3,7 @@ package es.serversurvival.mySQL;
 import es.serversurvival.apiHttp.IEXCloud_API;
 import es.serversurvival.main.Pixelcoin;
 import es.serversurvival.mySQL.tablasObjetos.LlamadaApi;
+import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -20,24 +21,16 @@ public final class LlamadasApi extends MySQL {
     public final static LlamadasApi INSTANCE = new LlamadasApi();
     private LlamadasApi () {}
 
-    public void nuevaLlamada(String simbolo, double precio, String tipo){
-        executeUpdate("INSERT INTO llamadasapi (simbolo, precio, tipo_activo) VALUES ('"+simbolo+"','"+precio+"','"+tipo+"')");
-    }
-
     public void nuevaLlamada(String simbolo, double precio, String tipo, String nombreValor){
         executeUpdate("INSERT INTO llamadasapi (simbolo, precio, tipo_activo, nombre_activo) VALUES ('"+simbolo+"','"+precio+"','"+tipo+"','"+nombreValor+"')");
     }
 
     public LlamadaApi getLlamadaAPI(String simbolo) {
-        ResultSet rs = executeQuery("SELECT * FROM llamadasapi WHERE simbolo = '"+simbolo+"'");
-
-        return (LlamadaApi) buildSingleObjectFromResultSet(rs);
+        return (LlamadaApi) buildObjectFromQuery("SELECT * FROM llamadasapi WHERE simbolo = '"+simbolo+"'");
     }
 
     public List<LlamadaApi> getTodasLlamadasApi(){
-        ResultSet rs = executeQuery("SELECT * FROM llamadasapi");
-
-        return buildListFromResultSet(rs);
+        return buildListFromQuery("SELECT * FROM llamadasapi");
     }
 
     public List<LlamadaApi> getTodasLlamadasApiCondicion (Predicate<? super LlamadaApi> condicion) {

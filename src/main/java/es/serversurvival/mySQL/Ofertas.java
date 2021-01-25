@@ -36,15 +36,13 @@ public final class Ofertas extends MySQL {
     }
 
     private int getMaxId() {
-        ResultSet rs = executeQuery("SELECT * FROM ofertas ORDER BY id DESC LIMIT 1");
-        Oferta oferta = (Oferta) buildSingleObjectFromResultSet(rs);
+        Oferta oferta = (Oferta) buildObjectFromQuery("SELECT * FROM ofertas ORDER BY id DESC LIMIT 1");
 
         return oferta != null ? oferta.getId() : -1;
     }
 
     public int getEspacios (String jugador) {
-        ResultSet rs = executeQuery("SELECT * FROM ofertas WHERE jugador = '"+jugador+"'");
-        List<Oferta> ofertas = buildListFromResultSet(rs);
+        List<Oferta> ofertas = buildListFromQuery("SELECT * FROM ofertas WHERE jugador = '"+jugador+"'");
 
         return ofertas != null || ofertas.size() != 0 ? 0 : ofertas.size();
     }
@@ -66,21 +64,15 @@ public final class Ofertas extends MySQL {
     }
 
     public Oferta getOferta (int id) {
-        ResultSet rs = executeQuery(String.format("SELECT * FROM ofertas WHERE id = '%d'", id));
-
-        return (Oferta) buildSingleObjectFromResultSet(rs);
+        return (Oferta) buildObjectFromQuery(String.format("SELECT * FROM ofertas WHERE id = '%d'", id));
     }
     
     public List<Oferta> getTodasOfertas(){
-        ResultSet rs = executeQuery("SELECT * FROM ofertas");
-
-        return buildListFromResultSet(rs);
+        return buildListFromQuery("SELECT * FROM ofertas");
     }
 
     public List<Oferta> getOfertasJugador (String nombreJugador){
-        ResultSet rs = executeQuery(String.format("SELECT * FROM ofertas WHERE jugador = '%s'", nombreJugador));
-
-        return buildListFromResultSet(rs);
+        return buildListFromQuery(String.format("SELECT * FROM ofertas WHERE jugador = '%s'", nombreJugador));
     }
 
     public static boolean estaBaneado (String item) {
@@ -121,29 +113,40 @@ public final class Ofertas extends MySQL {
         ItemStack itemToConvert = new ItemStack(Material.getMaterial(oferta.getObjeto()), oferta.getCantidad());
         itemToConvert.setDurability((short) oferta.getDurabilidad());
 
-        List<Encantamiento> enchantments = encantamientosMySQL.getEncantamientosOferta(oferta.getId());
+        List<Encantamiento> encantamientos = encantamientosMySQL.getEncantamientosOferta(oferta.getId());
 
         if(oferta.getObjeto().equalsIgnoreCase("ENCHANTED_BOOK")){
-            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemToConvert.getItemMeta();
-
-            for(Encantamiento enchantment : enchantments){
-                Enchantment enchantMentToPut = Enchantment.getByName(enchantment.getEncantamiento());
-                int level = enchantment.getNivel();
-
-                meta.addStoredEnchant(enchantMentToPut, level, true);
-            }
-            itemToConvert.setItemMeta(meta);
-
+            rellenarEncantamientoLibro(itemToConvert, encantamientos);
         }else{
-            ItemMeta itemMeta = itemToConvert.getItemMeta();
-            for(Encantamiento encantamiento : enchantments){
-                Enchantment encantamientoAPoner = Enchantment.getByName(encantamiento.getEncantamiento());
-                int nivel = encantamiento.getNivel();
-
-                itemMeta.addEnchant(encantamientoAPoner, nivel, true);
-            }
-            itemToConvert.setItemMeta(itemMeta);
+            rellenarEncantamiento(itemToConvert, encantamientos);
         }
+
+        return itemToConvert;
+    }
+
+    private ItemStack rellenarEncantamientoLibro (ItemStack itemToConvert, List<Encantamiento> encantamientos) {
+        EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemToConvert.getItemMeta();
+
+        for(Encantamiento enchantment : encantamientos){
+            Enchantment enchantMentToPut = Enchantment.getByName(enchantment.getEncantamiento());
+            int level = enchantment.getNivel();
+
+            meta.addStoredEnchant(enchantMentToPut, level, true);
+        }
+        itemToConvert.setItemMeta(meta);
+
+        return itemToConvert;
+    }
+
+    private ItemStack rellenarEncantamiento (ItemStack itemToConvert, List<Encantamiento> encantamientos) {
+        ItemMeta itemMeta = itemToConvert.getItemMeta();
+        for(Encantamiento encantamiento : encantamientos){
+            Enchantment encantamientoAPoner = Enchantment.getByName(encantamiento.getEncantamiento());
+            int nivel = encantamiento.getNivel();
+
+            itemMeta.addEnchant(encantamientoAPoner, nivel, true);
+        }
+        itemToConvert.setItemMeta(itemMeta);
 
         return itemToConvert;
     }

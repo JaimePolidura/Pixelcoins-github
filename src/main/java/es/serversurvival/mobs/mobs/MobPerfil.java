@@ -9,7 +9,6 @@ public class MobPerfil extends InteractuableMob {
     @Override
     public void onClick(PlayerInteractEntityEvent event) {
         PerfilMenu perfilMenu = new PerfilMenu(event.getPlayer());
-        perfilMenu.openMenu();
     }
 
     @Override

@@ -11,25 +11,13 @@ public final class Cuentas extends MySQL {
     public final static Cuentas INSTANCE = new Cuentas();
 
     public Cuenta getCuenta(String jugador){
-        ResultSet rs = executeQuery("SELECT * FROM cuentas WHERE username = '"+jugador+"'");
-
-        return (Cuenta) buildSingleObjectFromResultSet(rs);
+        return (Cuenta) buildObjectFromQuery("SELECT * FROM cuentas WHERE username = '"+jugador+"'");
     }
 
     public Cuenta getCuenta(int id){
-        ResultSet rs = executeQuery("SELECT * FROM cuentas WHERE id = '"+id+"'");
-
-        return (Cuenta) buildSingleObjectFromResultSet(rs);
+        return (Cuenta) buildObjectFromQuery("SELECT * FROM cuentas WHERE id = '"+id+"'");
     }
 
-    public boolean estaRegistradoIdCuenta(int id){
-        return getCuenta(id) != null;
-    }
-
-    public boolean estaRegJugador(String jugador){
-        return getCuenta(jugador) != null;
-    }
-    
     public void setPassword (String username, String password) {
         executeUpdate("UPDATE cuentas SET password = '"+password+"' WHERE username = '"+username+"'");
     }

@@ -1,13 +1,9 @@
 package es.serversurvival.mySQL;
 
 import es.serversurvival.mySQL.tablasObjetos.ConversacionWeb;
-import es.serversurvival.mySQL.tablasObjetos.TablaObjeto;
 import es.serversurvival.socketWeb.ServerSocketWeb;
 import es.serversurvival.socketWeb.SocketMessagge;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Sound;
-import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.Conversion;
 import org.bukkit.entity.Player;
 
 import java.sql.ResultSet;
@@ -24,16 +20,11 @@ public final class ConversacionesWeb extends MySQL{
     }
 
     public ConversacionWeb getConversacionServer (String server_nombre) {
-        ResultSet rs = executeQuery("SELECT * FROM conversacionesweb WHERE server_nombre = '"+server_nombre+"'");
-
-        return (ConversacionWeb) buildSingleObjectFromResultSet(rs);
+        return (ConversacionWeb) buildObjectFromQuery("SELECT * FROM conversacionesweb WHERE server_nombre = '"+server_nombre+"'");
     }
 
     public boolean hayConversacionEntre (String web_nombre, String server_nombre) {
-        ResultSet rs = executeQuery("SELECT * FROM conversacionesweb WHERE web_nombre = '"+web_nombre+"' AND server_nombre = '"+server_nombre+"'");
-        ConversacionWeb conversacionWeb = (ConversacionWeb) buildSingleObjectFromResultSet(rs);
-
-        return conversacionWeb != null;
+        return !isEmptyFromQuery("SELECT * FROM conversacionesweb WHERE web_nombre = '"+web_nombre+"' AND server_nombre = '"+server_nombre+"'");
     }
 
     public void borrarConversacionServer (String server_nombre) {

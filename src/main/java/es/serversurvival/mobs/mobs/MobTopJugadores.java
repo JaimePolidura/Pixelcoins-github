@@ -9,7 +9,6 @@ public class MobTopJugadores extends InteractuableMob {
     @Override
     public void onClick(PlayerInteractEntityEvent event) {
         TopMenu topMenu = new TopMenu(event.getPlayer());
-        topMenu.openMenu();
     }
 
     @Override

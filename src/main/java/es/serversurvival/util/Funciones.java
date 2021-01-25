@@ -249,24 +249,6 @@ public final class Funciones {
         return patrimonio;
     }
 
-    public static boolean esDouble(String supuestoDouble) {
-        try{
-            Double.parseDouble(supuestoDouble);
-            return true;
-        }catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    public static boolean esInteger (String supuestoInteger) {
-        try{
-            Integer.parseInt(supuestoInteger);
-            return true;
-        }catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
     public static Object peticionHttp(String link) throws Exception {
         URL url = new URL(link);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -282,11 +264,6 @@ public final class Funciones {
         }
 
         return parser.parse(response.toString());
-    }
-
-    public static boolean cuincideNombre (String nombre, List<? extends String> bannedNamesList){
-        return bannedNamesList.stream()
-                .anyMatch( (name) -> name.equalsIgnoreCase(nombre));
     }
 
     public static boolean cuincideNombre (String nombre, String... items){
@@ -385,6 +362,14 @@ public final class Funciones {
         }
 
         return builder.toString();
+    }
+
+    public static<E> List<E> listOf (E... elements) {
+        List<E> list = new ArrayList<>();
+
+        list.addAll(Arrays.asList(elements));
+
+        return list;
     }
 
     public static String buildStringFromArray (String[] array) {

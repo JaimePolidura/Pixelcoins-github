@@ -10,7 +10,6 @@ public class MobTienda extends InteractuableMob {
     @Override
     public void onClick(PlayerInteractEntityEvent event) {
         OfertasMenu menu = new OfertasMenu(event.getPlayer());
-        menu.openMenu();
     }
 
     @Override

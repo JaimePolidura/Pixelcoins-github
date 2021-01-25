@@ -9,7 +9,6 @@ public class PixelcoinsItemMob extends InteractuableMob {
     @Override
     public void onClick(PlayerInteractEntityEvent event) {
         SacarItemMenu menu = new SacarItemMenu(event.getPlayer());
-        menu.openMenu();
     }
 
     @Override

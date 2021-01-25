@@ -50,18 +50,18 @@ public class EmpleosInventoryFactory extends InventoryFactory {
         List<Empleado> empleaosJugador = empleadosMySQL.getTrabajosJugador(jugador);
 
         List<ItemStack> itemsEmpleos = new ArrayList<>();
-        empleaosJugador.forEach( (empl) -> {
-            String icono = empresasMySQL.getEmpresa(empl.getEmpresa()).getIcono();
+        empleaosJugador.forEach( (empleado) -> {
+            String icono = empresasMySQL.getEmpresa(empleado.getEmpresa()).getIcono();
             String displayName = ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA IRTE";
 
             List<String> lore = new ArrayList<>();
             lore.add("   ");
-            lore.add(ChatColor.GOLD + "Empresa: " + empl.getEmpresa());
-            lore.add(ChatColor.GOLD + "Cargo: " + empl.getCargo());
-            lore.add(ChatColor.GOLD + "Sueldo: " + ChatColor.GREEN + empl.getSueldoFormateado() + "/" + Empleados.toStringTipoSueldo(empl.getTipo_sueldo()));
-            lore.add(ChatColor.GOLD + "Ultima vez que te pagaron: " + empl.getFecha_ultimapaga());
+            lore.add(ChatColor.GOLD + "Empresa: " + empleado.getEmpresa());
+            lore.add(ChatColor.GOLD + "Cargo: " + empleado.getCargo());
+            lore.add(ChatColor.GOLD + "Sueldo: " + ChatColor.GREEN + formatea.format(empleado.getSueldo()) + "/" + Empleados.toStringTipoSueldo(empleado.getTipo_sueldo()));
+            lore.add(ChatColor.GOLD + "Ultima vez que te pagaron: " + empleado.getFecha_ultimapaga());
             lore.add("   ");
-            lore.add(ChatColor.GOLD + "ID: " + empl.getId());
+            lore.add(ChatColor.GOLD + "ID: " + empleado.getId());
 
             itemsEmpleos.add(ItemBuilder.loreDisplayName(Material.valueOf(icono), displayName, lore));
         });

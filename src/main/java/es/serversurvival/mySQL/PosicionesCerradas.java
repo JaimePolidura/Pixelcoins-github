@@ -16,78 +16,41 @@ public final class PosicionesCerradas extends MySQL {
     public final static PosicionesCerradas INSTANCE = new PosicionesCerradas();
     private PosicionesCerradas () {}
 
-    public PosicionCerrada nuevaPosicion(String jugador, String tipo, String nombre,  int cantidad, double precioApertura, String fechaApertura, double precioCierre, String valorNombre, String tipoPosicion) {
+    public void nuevaPosicion(String jugador, String tipo, String nombre,  int cantidad, double precioApertura, String fechaApertura, double precioCierre, String valorNombre, String tipoPosicion) {
         String fechaCierre = dateFormater.format(new Date());
         double rentabilidad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(precioApertura, precioCierre), 3);
 
         executeUpdate("INSERT INTO posicionescerradas (jugador, tipo_activo, simbolo, cantidad, precio_apertura, fecha_apertura, precio_cierre, fecha_cierre, rentabilidad, nombre_activo) VALUES ('" + jugador + "','"+tipo+"','" + nombre + "','" + cantidad + "','" + precioApertura + "', '" + fechaApertura + "','" + precioCierre + "','" + fechaCierre + "','" + rentabilidad + "','"+valorNombre+"')");
-        return new PosicionCerrada(getMaxId(), jugador, tipo, nombre, cantidad, precioApertura, fechaApertura, precioCierre, fechaCierre, rentabilidad, valorNombre, tipoPosicion);
     }
 
-    public PosicionCerrada nuevaPosicion(String jugador, String tipo, String nombre,  int cantidad, double precioApertura, String fechaApertura, double precioCierre, String valorNombre, String tipoPosicion, double rentabilidad) {
+    public void nuevaPosicion(String jugador, String tipo, String nombre,  int cantidad, double precioApertura, String fechaApertura, double precioCierre, String valorNombre, String tipoPosicion, double rentabilidad) {
         String fechaCierre = dateFormater.format(new Date());
 
         executeUpdate("INSERT INTO posicionescerradas (jugador, tipo_activo, simbolo, cantidad, precio_apertura, fecha_apertura, precio_cierre, fecha_cierre, rentabilidad, nombre_activo) VALUES ('" + jugador + "','"+tipo+"','" + nombre + "','" + cantidad + "','" + precioApertura + "', '" + fechaApertura + "','" + precioCierre + "','" + fechaCierre + "','" + rentabilidad + "','"+valorNombre+"')");
-        return new PosicionCerrada(getMaxId(), jugador, tipo, nombre, cantidad, precioApertura, fechaApertura, precioCierre, fechaCierre, rentabilidad, valorNombre, tipoPosicion);
     }
 
     public List<PosicionCerrada> getPosicionesCerradasTopRentabilidad(String jugador, int limite) {
-        ResultSet rs = executeQuery(String.format("SELECT * FROM posicionescerradas WHERE jugador = '%s' ORDER BY rentabilidad DESC LIMIT %d", jugador, limite));
-
-        return buildListFromResultSet(rs);
+        return buildListFromQuery(String.format("SELECT * FROM posicionescerradas WHERE jugador = '%s' ORDER BY rentabilidad DESC LIMIT %d", jugador, limite));
     }
 
     public List<PosicionCerrada> getPosicionesCerradasTopMenosRentabilidad(String jugador, int limite) {
-        ResultSet rs = executeQuery(String.format("SELECT * FROM posicionescerradas WHERE jugador = '%s' ORDER BY rentabilidad ASC LIMIT %d", jugador, limite));
-
-        return buildListFromResultSet(rs);
-    }
-
-    public List<PosicionCerrada> getTopRentabilidades(int limite) {
-        ResultSet rs = executeQuery(String.format("SELECT * FROM posicionescerradas ORDER BY rentabilidad DESC LIMIT %d", limite));
-
-        return buildListFromResultSet(rs);
-    }
-
-    public List<PosicionCerrada> getPeoresRentabilidades(int limite) {
-        ResultSet rs = executeQuery(String.format("SELECT * FROM posicionescerradas ORDER BY rentabilidad ASC LIMIT %d", limite));
-
-        return buildListFromResultSet(rs);
+        return buildListFromQuery(String.format("SELECT * FROM posicionescerradas WHERE jugador = '%s' ORDER BY rentabilidad ASC LIMIT %d", jugador, limite));
     }
 
     public List<PosicionCerrada> getTopRentabilidades() {
-        ResultSet rs = executeQuery("SELECT * FROM posicionescerradas ORDER BY rentabilidad DESC");
-
-        return buildListFromResultSet(rs);
+        return buildListFromQuery("SELECT * FROM posicionescerradas ORDER BY rentabilidad DESC");
     }
 
     public List<PosicionCerrada> getPeoresRentabilidades() {
-        ResultSet rs = executeQuery("SELECT * FROM posicionescerradas ORDER BY rentabilidad ASC");
-
-        return buildListFromResultSet(rs);
+        return buildListFromQuery("SELECT * FROM posicionescerradas ORDER BY rentabilidad ASC");
     }
 
     public List<PosicionCerrada> getPosicionesCerradasJugador(String name) {
-        ResultSet rs = executeQuery(String.format("SELECT * FROM posicionescerradas WHERE jugador = '%s'", name));
-
-        return buildListFromResultSet(rs);
-    }
-
-    public List<PosicionCerrada> getAllPosicionesCerradas () {
-        ResultSet rs = executeQuery("SELECT * FROM posicionescerradas");
-        
-        return buildListFromResultSet(rs);
+        return buildListFromQuery(String.format("SELECT * FROM posicionescerradas WHERE jugador = '%s'", name));
     }
 
     public void setJugador (String jugador, String nuevoJugador) {
         executeUpdate("UPDATE posicionescerradas SET jugador = '"+nuevoJugador+"' WHERE jugador = '"+jugador+"'");
-    }
-
-    private int getMaxId(){
-        ResultSet rs = executeQuery("SELECT * FROM posicionescerradas ORDER BY id DESC LIMIT 1");
-        PosicionCerrada posicionCerrada = (PosicionCerrada) buildSingleObjectFromResultSet(rs);
-
-        return posicionCerrada != null ? posicionCerrada.getId() : -1;
     }
 
     @Override

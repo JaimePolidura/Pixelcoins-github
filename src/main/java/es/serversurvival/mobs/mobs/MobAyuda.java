@@ -9,7 +9,6 @@ public class MobAyuda extends InteractuableMob {
     @Override
     public void onClick(PlayerInteractEntityEvent event) {
         AyudaMenu menu = new AyudaMenu(event.getPlayer());
-        menu.openMenu();
     }
 
     @Override

@@ -77,7 +77,7 @@ public class PrestamoSolicitud extends Menu implements Solicitud {
         Player destinatarioPlayer = Bukkit.getPlayer(this.destinatario);
         transaccionesMySQL.conectar();
 
-        transaccionesMySQL.realizarTransferencia(enviador, destinatario, pixelcoins, "", TipoTransaccion.DEUDAS_PRIMERPAGO, false);
+        transaccionesMySQL.realizarTransferencia(enviador, destinatario, pixelcoins, "", TipoTransaccion.DEUDAS_PRIMERPAGO);
         deudasMySQL.nuevaDeuda(destinatario, enviador, Funciones.aumentarPorcentaje(pixelcoins, interes), dias, interes);
 
         transaccionesMySQL.desconectar();
