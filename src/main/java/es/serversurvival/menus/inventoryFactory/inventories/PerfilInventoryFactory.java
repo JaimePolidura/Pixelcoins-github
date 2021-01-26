@@ -5,13 +5,12 @@ import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.PerfilMenu;
 import es.serversurvival.mySQL.*;
 import es.serversurvival.mySQL.tablasObjetos.*;
-import es.serversurvival.util.ItemBuilder;
+import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildItemTienda () {
-        return ItemBuilder.displayname(Material.CHEST, ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER LA TIENDA");
+        return MinecraftUtils.displayname(Material.CHEST, ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER LA TIENDA");
     }
 
     private ItemStack buildItemEmpleos (String jugador) {
@@ -54,7 +53,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
             lore.add(ChatColor.GOLD + emp.getEmpresa() + " " + ChatColor.GREEN + formatea.format(emp.getSueldo()) + " PC " + ChatColor.GOLD + "/ " + Empleados.toStringTipoSueldo(emp.getTipo_sueldo()));
         });
 
-        return ItemBuilder.loreDisplayName(Material.GOLDEN_APPLE, displayName, lore);
+        return MinecraftUtils.loreDisplayName(Material.GOLDEN_APPLE, displayName, lore);
     }
 
     private ItemStack buildItemEmpresa (String jugador) {
@@ -67,7 +66,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
             lore.add(ChatColor.GOLD + "- " + empresa.getNombre() + " ( " + ChatColor.GREEN + formatea.format(empresa.getPixelcoins()) + " PC" +  ChatColor.GOLD + ")");
         });
 
-        return ItemBuilder.loreDisplayName(Material.GOLD_BLOCK, displayName, lore);
+        return MinecraftUtils.loreDisplayName(Material.GOLD_BLOCK, displayName, lore);
     }
 
     private ItemStack buildItemBolsa (String jugador) {
@@ -90,7 +89,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
             }
         }
 
-        return ItemBuilder.loreDisplayName(Material.BOOK, displayName, lore);
+        return MinecraftUtils.loreDisplayName(Material.BOOK, displayName, lore);
     }
     
     private ItemStack buildItemDeudas (String jugador) {
@@ -104,7 +103,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
         lore.add(ChatColor.GOLD + "Total que debes: " + ChatColor.GREEN + totalQueDebe + " PC");
         lore.add(ChatColor.GOLD + "Total que te deben: " + ChatColor.GREEN + totalQueLeDeben + " PC");
 
-        return ItemBuilder.loreDisplayName(Material.DIAMOND_SWORD, displayName, lore);
+        return MinecraftUtils.loreDisplayName(Material.DIAMOND_SWORD, displayName, lore);
     }
 
     private ItemStack buildItemStats (String nombreJugador) {
@@ -199,7 +198,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
         lore.add(ChatColor.DARK_AQUA + "Con la web podras acceder a todas tus estadisticas");
         lore.add(ChatColor.DARK_AQUA + "y comprar acciones, realizar transacciones etc.");
 
-        return ItemBuilder.loreDisplayName(Material.PAPER, displayName, lore);
+        return MinecraftUtils.loreDisplayName(Material.PAPER, displayName, lore);
     }
 
     private void rellenarCristales (Inventory inventory) {

@@ -174,12 +174,12 @@ public final class Deudas extends MySQL {
         if (playerDeudor != null) {
             playerDeudor.sendMessage(ChatColor.GOLD + player.getName() + " te ha cancelado la deuda de " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC");
             playerDeudor.playSound(playerDeudor.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-            ScoreBoardManager.updateScoreboard(playerDeudor);
+            ScoreBoardManager.getInstance().updateScoreboard(playerDeudor);
         } else {
             mensajesMySQL.nuevoMensaje("" ,nombreDeudor, player.getName() + " te ha cencelado la deuda de " + pixelcoinsDeuda + " PC");
         }
 
-        ScoreBoardManager.updateScoreboard(player);
+        ScoreBoardManager.getInstance().updateScoreboard(player);
     }
 
     public void pagarDeuda(Player playeDeudor, int id) {
@@ -197,11 +197,11 @@ public final class Deudas extends MySQL {
         if (playerAcredor != null) {
             playerAcredor.sendMessage(ChatColor.GOLD + playeDeudor.getName() + " ta ha pagado toda la deuda: " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC");
             playerAcredor.playSound(playerAcredor.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-            ScoreBoardManager.updateScoreboard(playerAcredor);
+            ScoreBoardManager.getInstance().updateScoreboard(playerAcredor);
         } else {
             mensajesMySQL.nuevoMensaje("", acredor, playeDeudor.getName() + " ta ha pagado toda la deuda: " + pixelcoinsDeuda + " PC");
         }
-        ScoreBoardManager.updateScoreboard(playeDeudor);
+        ScoreBoardManager.getInstance().updateScoreboard(playeDeudor);
     }
 
     @SneakyThrows

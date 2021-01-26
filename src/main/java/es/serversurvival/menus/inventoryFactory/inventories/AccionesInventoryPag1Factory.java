@@ -5,8 +5,7 @@ import es.serversurvival.menus.menus.AccionesMenu;
 import es.serversurvival.menus.menus.Paginated;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.tablasObjetos.LlamadaApi;
-import es.serversurvival.util.Funciones;
-import es.serversurvival.util.ItemBuilder;
+import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -94,7 +93,7 @@ public class AccionesInventoryPag1Factory extends InventoryFactory {
                 lore.add(ChatColor.GOLD + "Precio/Accion:" + ChatColor.GREEN + " " + formatea.format(accion.getPrecio())  + " PC");
             }
 
-            ItemStack accionItem = ItemBuilder.loreDisplayName(Material.BOOK, displayName, lore);
+            ItemStack accionItem = MinecraftUtils.loreDisplayName(Material.BOOK, displayName, lore);
 
             itemStackList.add(accionItem);
         }
@@ -115,7 +114,7 @@ public class AccionesInventoryPag1Factory extends InventoryFactory {
 
         String displayname = ChatColor.AQUA + "" + ChatColor.BOLD + "INFO";
 
-        return ItemBuilder.loreDisplayName(Material.PAPER, displayname, infolore);
+        return MinecraftUtils.loreDisplayName(Material.PAPER, displayname, infolore);
     }
 
     public void buildPagina1 () {

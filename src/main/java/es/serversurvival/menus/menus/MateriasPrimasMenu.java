@@ -6,15 +6,14 @@ import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.MateriasPrimasInventoryFactory;
 import es.serversurvival.menus.menus.confirmaciones.ComprarBolsaConfirmacion;
-import es.serversurvival.mySQL.enums.TipoValor;
-import es.serversurvival.util.ItemBuilder;
+import es.serversurvival.mySQL.enums.TipoActivo;
+import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
@@ -67,7 +66,7 @@ public class MateriasPrimasMenu extends Menu implements Clickable, PostLoading {
             alias = "galones";
         }
 
-        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, TipoValor.MATERIAS_PRIMAS.toString(), alias, player.getName(), precio);
+        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, TipoActivo.MATERIAS_PRIMAS.toString(), alias, player.getName(), precio);
     }
 
     @Override
@@ -90,7 +89,7 @@ public class MateriasPrimasMenu extends Menu implements Clickable, PostLoading {
 
                     precioLore.add(1, ChatColor.GOLD + "Precio/Unidad:" + ChatColor.GREEN + " " + preioMat + " $");
 
-                    ItemBuilder.setLore(actual, precioLore);
+                    MinecraftUtils.setLore(actual, precioLore);
                 } catch (Exception e) {
                     player.sendMessage(ChatColor.DARK_RED + "No hagas spam del comando");
                 }

@@ -1,9 +1,11 @@
 package es.serversurvival.scoreboeards;
 
+import es.serversurvival.comandos.subComandos.empresas.MiEmpresaEmpresas;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.mySQL.Empresas;
 import es.serversurvival.mySQL.Jugadores;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -15,39 +17,32 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class StatsDisplayScoreboard implements SingleScoreboard{
-    private Empresas empresasMySQL = Empresas.INSTANCE;
-    private Jugadores jugadoresMySQL = Jugadores.INSTANCE;
-    private DecimalFormat formatea = Funciones.FORMATEA;
+import static es.serversurvival.util.MinecraftUtils.addLineToScoreboard;
+
+public class StatsDisplayScoreboard implements SingleScoreboard {
 
     @Override
     public Scoreboard createScoreborad(String jugador) {
-        Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        Objective objective = scoreboard.registerNewObjective("dinero", "dummy");
-        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        objective.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "JUGADOR");
+        Scoreboard scoreboard = MinecraftUtils.createScoreboard("dinero", ChatColor.GOLD + "" + ChatColor.BOLD + "JUGADOR");
+        Objective objective = scoreboard.getObjective("dinero");
 
         double dineroJugador = jugadoresMySQL.getJugador(jugador).getPixelcoins();
 
-        Score score1 = objective.getScore(ChatColor.GOLD + "Tus ahorros: " + ChatColor.GREEN + formatea.format(Math.round(dineroJugador)) + " PC");
-        score1.setScore(1);
+        addLineToScoreboard(objective, ChatColor.GOLD + "Tus ahorros: " + ChatColor.GREEN + formatea.format(Math.round(dineroJugador)) + " PC", 1);
+        addLineToScoreboard(objective, "     ", 0);
+        addLineToScoreboard(objective, ChatColor.GOLD + "-------Empresas-----", -2);
 
-        Score score2 = objective.getScore("    ");
-        score2.setScore(0);
-
-        Score score3 = objective.getScore(ChatColor.GOLD + "-------Empresas-----");
-        score3.setScore(-2);
         List<Empresa> empresas = sortEmpresaByPixelcoins(empresasMySQL.getEmpresasOwner(jugador));
-        AtomicInteger fila = new AtomicInteger(-20);
-        empresas.forEach( (empresa) -> {
+        for(int i = 0; i < empresas.size(); i++){
+            Empresa empresa = empresas.get(i);
+
             String mensaje = ChatColor.GOLD + "- " + empresa.getNombre() + " (" + ChatColor.GREEN + formatea.format(empresa.getPixelcoins()) + " PC ";
             mensaje = mensaje + calcularRentabilidadEmpresaYFormatear(empresa);
             mensaje = cambiarLongitudDelMensajeSiEsNecesario(mensaje, empresa);
 
-            Score score = objective.getScore(mensaje);
-            score.setScore(fila.get());
-            fila.getAndDecrement();
-        });
+            addLineToScoreboard(objective, mensaje, i - 100);
+        }
+
         return scoreboard;
     }
 
@@ -78,6 +73,7 @@ public class StatsDisplayScoreboard implements SingleScoreboard{
             else
                 return 1;
         });
+
         return empresas;
     }
 }

@@ -1,6 +1,6 @@
 package es.serversurvival.menus.menus;
 
-import es.serversurvival.mySQL.enums.TipoValor;
+import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.main.Pixelcoin;
 import es.serversurvival.apiHttp.IEXCloud_API;
@@ -8,14 +8,13 @@ import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.CriptomonedasInventoryFactory;
 import es.serversurvival.menus.menus.confirmaciones.ComprarBolsaConfirmacion;
-import es.serversurvival.util.ItemBuilder;
+import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
@@ -58,7 +57,7 @@ public class CriptomonedasMenu extends Menu implements Clickable, PostLoading {
         double precio = Double.parseDouble(lore.get(1).split(" ")[1]);
         String simbolo = lore.get(0).split(" ")[1];
 
-        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, TipoValor.CRIPTOMONEDAS.toString(), "monedas", player.getName(), precio);
+        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, TipoActivo.CRIPTOMONEDAS.toString(), "monedas", player.getName(), precio);
     }
 
     @Override
@@ -81,7 +80,7 @@ public class CriptomonedasMenu extends Menu implements Clickable, PostLoading {
 
                     loreItem.add(1, ChatColor.GOLD + "Precio/Moneda:" + ChatColor.GREEN + " " + formatea.format(precioMoneda) + " $");
 
-                    ItemBuilder.setLore(actual, loreItem);
+                    MinecraftUtils.setLore(actual, loreItem);
                 } catch (Exception e) {
                     player.sendMessage(ChatColor.DARK_RED + "No hagas spam del comando");
                 }

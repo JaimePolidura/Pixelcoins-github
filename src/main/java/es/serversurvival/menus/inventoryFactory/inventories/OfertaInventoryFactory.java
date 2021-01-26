@@ -5,14 +5,12 @@ import es.serversurvival.menus.menus.Paginated;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.Ofertas;
 import es.serversurvival.mySQL.tablasObjetos.Oferta;
-import es.serversurvival.util.ItemBuilder;
+import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +43,7 @@ public class OfertaInventoryFactory extends InventoryFactory {
                 displayName = Ofertas.NOMBRE_ITEM_COMPRAR;
             }
 
-            ItemBuilder.setLoreAndDisplayName(itemStackAInsertar, lore, displayName);
+            MinecraftUtils.setLoreAndDisplayName(itemStackAInsertar, lore, displayName);
 
             if(i < 52){
                 inventory.addItem(itemStackAInsertar);
@@ -100,14 +98,14 @@ public class OfertaInventoryFactory extends InventoryFactory {
         lore.add("el item con la mano y 2) pon el comando:");
         lore.add("/vender <precio>");
 
-        return ItemBuilder.loreDisplayName(Material.PAPER, ChatColor.GOLD + "" + ChatColor.BOLD + "INFO", lore);
+        return MinecraftUtils.loreDisplayName(Material.PAPER, ChatColor.GOLD + "" + ChatColor.BOLD + "INFO", lore);
     }
 
     private ItemStack buildItemBack () {
-        return ItemBuilder.displayname(Material.RED_WOOL, Paginated.ITEM_NAME_GOBACK);
+        return MinecraftUtils.displayname(Material.RED_WOOL, Paginated.ITEM_NAME_GOBACK);
     }
 
     private ItemStack buildItemFordward () {
-        return ItemBuilder.displayname(Material.GREEN_WOOL, Paginated.ITEM_NAME_GOFORDWARD);
+        return MinecraftUtils.displayname(Material.GREEN_WOOL, Paginated.ITEM_NAME_GOFORDWARD);
     }
 }

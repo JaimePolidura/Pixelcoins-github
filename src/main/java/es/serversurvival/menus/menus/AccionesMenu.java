@@ -5,9 +5,9 @@ import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.AccionesInventoryPag1Factory;
 import es.serversurvival.menus.menus.confirmaciones.ComprarBolsaConfirmacion;
-import es.serversurvival.mySQL.enums.TipoValor;
+import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.util.Funciones;
-import es.serversurvival.util.ItemBuilder;
+import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -62,7 +62,7 @@ public class AccionesMenu extends Menu implements Clickable, Paginated, PostLoad
         String ticker = lore.get(0).split(" ")[1];
 
         closeMenu();
-        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(ticker, nombreValor, TipoValor.ACCIONES.toString(), TipoValor.ACCIONES.toString(), player.getName(), precio);
+        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(ticker, nombreValor, TipoActivo.ACCIONES.toString(), TipoActivo.ACCIONES.toString(), player.getName(), precio);
         confirmacion.openMenu();
     }
 
@@ -110,7 +110,7 @@ public class AccionesMenu extends Menu implements Clickable, Paginated, PostLoad
                 double precioAccion = IEXCloud_API.getOnlyPrice(ticker);
                 lore.add(1, ChatColor.GOLD + "Precio/Accion:" + ChatColor.GREEN + " " + formatea.format(precioAccion)  + " PC");
 
-                ItemBuilder.setLore(item, lore);
+                MinecraftUtils.setLore(item, lore);
             } catch (Exception e) {
                 player.sendMessage(ChatColor.DARK_RED + "No hagas spam del comando");
             }

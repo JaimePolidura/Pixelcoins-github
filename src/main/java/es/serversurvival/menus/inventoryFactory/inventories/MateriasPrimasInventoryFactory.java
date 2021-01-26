@@ -2,14 +2,12 @@ package es.serversurvival.menus.inventoryFactory.inventories;
 
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.MateriasPrimasMenu;
-import es.serversurvival.util.ItemBuilder;
+import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +37,7 @@ public class MateriasPrimasInventoryFactory extends InventoryFactory {
             lore.add(ChatColor.GOLD + "Simbolo: " + entry.getKey());
             lore.add(ChatColor.RED + "Cargando...");
 
-            inventory.addItem(ItemBuilder.loreDisplayName(icono, displayName, lore));
+            inventory.addItem(MinecraftUtils.loreDisplayName(icono, displayName, lore));
         }
 
         List<String> infoLore = new ArrayList<>();
@@ -47,7 +45,7 @@ public class MateriasPrimasInventoryFactory extends InventoryFactory {
         infoLore.add("                  ");
         infoLore.add("AVISO: ¡Estas materias primas van con unos 15 minutos aproximadamente de retraso! ");
 
-        inventory.setItem(4, ItemBuilder.loreDisplayName(Material.PAPER, ChatColor.AQUA + "" + ChatColor.BOLD + "INFO", infoLore));
+        inventory.setItem(4, MinecraftUtils.loreDisplayName(Material.PAPER, ChatColor.AQUA + "" + ChatColor.BOLD + "INFO", infoLore));
 
         return inventory;
     }

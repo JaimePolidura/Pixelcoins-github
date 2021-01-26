@@ -11,7 +11,7 @@ import org.bukkit.World;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TopNPCGroup extends NPCGroup{
+public class TopNPCGroup extends NPCGroup {
     private final int maxNumber = 3;
     private Map<Integer ,Location> locationMap;
 
@@ -48,7 +48,6 @@ public class TopNPCGroup extends NPCGroup{
             Location location = locationMap.get(top);
 
             NPC npc = NPCCreator.createTopNPC(nombreJugador, location, entry.getValue(), top);
-
             addNPC(npc);
 
             top++;

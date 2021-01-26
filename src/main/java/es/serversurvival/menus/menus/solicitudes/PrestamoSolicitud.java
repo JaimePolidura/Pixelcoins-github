@@ -87,11 +87,11 @@ public class PrestamoSolicitud extends Menu implements Solicitud {
                 ChatColor.GOLD + " a " + ChatColor.GREEN + dias + ChatColor.GOLD + " dias");
 
         if (enviadorPlayer != null) {
-            ScoreBoardManager.updateScoreboard(enviadorPlayer);
+            ScoreBoardManager.getInstance().updateScoreboard(enviadorPlayer);
             enviadorPlayer.sendMessage(ChatColor.GOLD + enviadorPlayer.getName() + " Te ha aceptado la solicitud de deuda");
             enviadorPlayer.playSound(enviadorPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
         }
-        ScoreBoardManager.updateScoreboard(destinatarioPlayer);
+        ScoreBoardManager.getInstance().updateScoreboard(destinatarioPlayer);
 
 
         closeMenu();

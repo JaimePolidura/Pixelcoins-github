@@ -5,13 +5,12 @@ import es.serversurvival.mySQL.Empleados;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import es.serversurvival.util.Funciones;
-import es.serversurvival.util.ItemBuilder;
+import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
@@ -78,13 +77,13 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
         lore.add("Mas info en /ayuda empresario o:");
         lore.add("http://serversurvival.ddns.net/perfil");
 
-        return ItemBuilder.loreDisplayName(Material.WRITABLE_BOOK, displayName, lore);
+        return MinecraftUtils.loreDisplayName(Material.WRITABLE_BOOK, displayName, lore);
     }
 
     private ItemStack buildItemBorrarEmpresa () {
         String displayName = ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA BORRAR LA EMPRESA";
 
-        return ItemBuilder.loreDisplayName(Material.BARRIER, displayName, Arrays.asList("   "));
+        return MinecraftUtils.loreDisplayName(Material.BARRIER, displayName, Arrays.asList("   "));
     }
 
     public ItemStack buildItemInfo () {
@@ -105,7 +104,7 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
         lore.add("Para mas info: /ayuda empresario o");
         lore.add("http://serversurvival.ddns.net/perfil");
 
-        return ItemBuilder.loreDisplayName(Material.PAPER, displayName, lore);
+        return MinecraftUtils.loreDisplayName(Material.PAPER, displayName, lore);
     }
 
     private List<ItemStack> buildItemsEmpleados () {

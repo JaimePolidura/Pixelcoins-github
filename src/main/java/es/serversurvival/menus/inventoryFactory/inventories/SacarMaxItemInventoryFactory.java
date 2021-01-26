@@ -3,13 +3,12 @@ package es.serversurvival.menus.inventoryFactory.inventories;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.Transacciones;
-import es.serversurvival.util.ItemBuilder;
+import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,7 @@ public class SacarMaxItemInventoryFactory extends InventoryFactory {
         lore.add("en el mayor numero posible de diamantes");
         lore.add("cuerzo o lapislazuli");
 
-        return ItemBuilder.lore(Material.PAPER, lore);
+        return MinecraftUtils.lore(Material.PAPER, lore);
     }
 
     private ItemStack buildItemLapis (double dineroJugador) {
@@ -47,7 +46,7 @@ public class SacarMaxItemInventoryFactory extends InventoryFactory {
         lore.add("    ");
         lore.add("Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(dineroJugador));
 
-        return ItemBuilder.loreDisplayName(Material.LAPIS_LAZULI, displayName, lore);
+        return MinecraftUtils.loreDisplayName(Material.LAPIS_LAZULI, displayName, lore);
     }
 
     private ItemStack buildItemCuarzo (double dineroJugador) {
@@ -57,7 +56,7 @@ public class SacarMaxItemInventoryFactory extends InventoryFactory {
         lore.add("    ");
         lore.add("Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(dineroJugador));
 
-        return ItemBuilder.loreDisplayName(Material.QUARTZ_BLOCK, displayName, lore);
+        return MinecraftUtils.loreDisplayName(Material.QUARTZ_BLOCK, displayName, lore);
     }
 
     private ItemStack buildItemDiamante (double dineroJugador) {
@@ -67,6 +66,6 @@ public class SacarMaxItemInventoryFactory extends InventoryFactory {
         lore.add("    ");
         lore.add("Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(dineroJugador));
 
-        return ItemBuilder.loreDisplayName(Material.DIAMOND_BLOCK, displayName, lore);
+        return MinecraftUtils.loreDisplayName(Material.DIAMOND_BLOCK, displayName, lore);
     }
 }

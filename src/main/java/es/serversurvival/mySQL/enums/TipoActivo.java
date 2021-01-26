@@ -1,6 +1,6 @@
 package es.serversurvival.mySQL.enums;
 
-public enum TipoValor {
+public enum TipoActivo {
     ACCIONES,
     CRIPTOMONEDAS,
     MATERIAS_PRIMAS,

@@ -1,6 +1,6 @@
 package es.serversurvival.mySQL.tablasObjetos;
 
-import es.serversurvival.mySQL.enums.TipoValor;
+import es.serversurvival.mySQL.enums.TipoActivo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,14 +12,14 @@ public final class LlamadaApi implements TablaObjeto {
     @Getter private final String nombre_activo;
 
     public boolean esTipoAccion () {
-        return this.getTipo_activo().equalsIgnoreCase(TipoValor.ACCIONES.toString());
+        return this.getTipo_activo().equalsIgnoreCase(TipoActivo.ACCIONES.toString());
     }
 
     public boolean esTipoCriptomoneda () {
-        return this.getTipo_activo().equalsIgnoreCase(TipoValor.CRIPTOMONEDAS.toString());
+        return this.getTipo_activo().equalsIgnoreCase(TipoActivo.CRIPTOMONEDAS.toString());
     }
 
     public boolean esTipoMateriaPrima () {
-        return this.getTipo_activo().equalsIgnoreCase(TipoValor.MATERIAS_PRIMAS.toString());
+        return this.getTipo_activo().equalsIgnoreCase(TipoActivo.MATERIAS_PRIMAS.toString());
     }
 }

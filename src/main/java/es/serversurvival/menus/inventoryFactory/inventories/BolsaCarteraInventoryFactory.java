@@ -1,15 +1,12 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
 import es.serversurvival.menus.menus.Paginated;
-import es.serversurvival.mySQL.enums.TipoValor;
 import es.serversurvival.mySQL.tablasObjetos.LlamadaApi;
-import es.serversurvival.mySQL.enums.TipoPosicion;
-import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.BolsaCarteraMenu;
 import es.serversurvival.mySQL.PosicionesAbiertas;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
-import es.serversurvival.util.ItemBuilder;
+import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -134,7 +131,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildItemFordward () {
-        return ItemBuilder.displayname(Material.GREEN_WOOL, Paginated.ITEM_NAME_GOFORDWARD);
+        return MinecraftUtils.displayname(Material.GREEN_WOOL, Paginated.ITEM_NAME_GOFORDWARD);
     }
 
     private ItemStack caca (PosicionAbierta posicionAbierta) {
@@ -143,21 +140,20 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
                 ChatColor.GOLD + "" + ChatColor.BOLD + ChatColor.UNDERLINE + "CLICK PARA COMPRAR " + ChatColor.RED + "" + ChatColor.BOLD + "(CORTO)";
         List<String> lore = buildLoreFromPosicionAbierta(posicionAbierta);
 
-        return TipoPosicion.valueOf(posicionAbierta.getTipo_posicion()) == LARGO ?
-                ItemBuilder.loreDisplayName(Material.NAME_TAG, displayName, lore) :
-                ItemBuilder.loreDisplayName(Material.REDSTONE_TORCH, displayName, lore);
+        return posicionAbierta.getTipo_posicion() == LARGO ?
+                MinecraftUtils.loreDisplayName(Material.NAME_TAG, displayName, lore) :
+                MinecraftUtils.loreDisplayName(Material.REDSTONE_TORCH, displayName, lore);
     }
 
     private List<String> buildLoreFromPosicionAbierta (PosicionAbierta posicion) {
         LlamadaApi llamada = llamadasApis.get(posicion.getNombre_activo());
-        TipoPosicion tipoPosicion = TipoPosicion.valueOf(posicion.getTipo_posicion());
 
         double precioAcutal = llamada.getPrecio();
-        double perdidasOBeneficios = tipoPosicion == LARGO ?
+        double perdidasOBeneficios = posicion.getTipo_posicion() == LARGO ?
                 posicion.getCantidad() * (precioAcutal - posicion.getPrecio_apertura()) :
                 posicion.getCantidad() * (posicion.getPrecio_apertura() - precioAcutal);
 
-        double rentabilidad = tipoPosicion == LARGO ?
+        double rentabilidad = posicion.getTipo_posicion() == LARGO ?
                 redondeoDecimales(diferenciaPorcntual(posicion.getPrecio_apertura(), precioAcutal), 2) :
                 Math.abs(redondeoDecimales(diferenciaPorcntual(posicion.getPrecio_apertura() ,precioAcutal), 2));
 
@@ -174,7 +170,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         lore.add(ChatColor.GOLD + "Peso en cartera: " + peso + "%");
         lore.add("   ");
 
-        if (tipoPosicion == LARGO) {
+        if (posicion.getTipo_posicion() == LARGO) {
             lore.add(ChatColor.GOLD + "Acciones compradas: " + posicion.getCantidad());
         } else {
             lore.add(ChatColor.GOLD + "Acciones vendidas: " + posicion.getCantidad());
@@ -192,7 +188,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         lore.add(ChatColor.GOLD + "Valor total: " + ChatColor.GREEN + formatea.format(precioAcutal * posicion.getCantidad()) + " PC");
         lore.add("   ");
 
-        if(tipoPosicion == LARGO){
+        if(posicion.getTipo_posicion() == LARGO){
             this.valorTotal = valorTotal + (precioAcutal * posicion.getCantidad());
             this.resultadoTotal = resultadoTotal + perdidasOBeneficios;
             lore.add(ChatColor.GOLD + "Fecha de compra: " + posicion.getFecha_apertura());
@@ -229,14 +225,14 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         lore.add("Mas info en /bolsa ayuda o /ayuda bolsa o en:");
         lore.add("http://serversurvival.ddns.net/perfil");
 
-        return ItemBuilder.loreDisplayName(Material.PAPER, displayName, lore);
+        return MinecraftUtils.loreDisplayName(Material.PAPER, displayName, lore);
     }
 
     private ItemStack buildItemResultado() {
         List<String> lore = buildLoreFromResultado();
         String displayname = ChatColor.GOLD + "" + ChatColor.BOLD + "REUSLTADO";
 
-        return ItemBuilder.loreDisplayName(Material.WRITABLE_BOOK, displayname, lore);
+        return MinecraftUtils.loreDisplayName(Material.WRITABLE_BOOK, displayname, lore);
     }
 
     private List<String> buildLoreFromResultado () {
@@ -260,6 +256,6 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
     private ItemStack buildItemValores () {
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" +ChatColor.UNDERLINE + "CLICK PARA COMPRAR VALORES";
 
-        return ItemBuilder.displayname(Material.BOOK, displayName);
+        return MinecraftUtils.displayname(Material.BOOK, displayName);
     }
 }

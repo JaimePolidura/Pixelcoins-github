@@ -1,6 +1,7 @@
 package es.serversurvival.mySQL;
 
 import es.serversurvival.main.Pixelcoin;
+import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.apiHttp.IEXCloud_API;
 import es.serversurvival.mySQL.tablasObjetos.LlamadaApi;
@@ -358,11 +359,11 @@ public final class PosicionesAbiertas extends MySQL {
     protected PosicionAbierta buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new PosicionAbierta(rs.getInt("id"),
                 rs.getString("jugador"),
-                rs.getString("tipo_activo"),
+                TipoActivo.valueOf(rs.getString("tipo_activo")),
                 rs.getString("nombre_activo"),
                 rs.getInt("cantidad"),
                 rs.getDouble("precio_apertura"),
                 rs.getString("fecha_apertura"),
-                rs.getString("tipo_posicion"));
+                TipoPosicion.valueOf(rs.getString("tipo_posicion")));
     }
 }

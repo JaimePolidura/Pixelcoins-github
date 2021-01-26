@@ -16,10 +16,6 @@ public final class NPCManager {
         npcGroups.add(new TopNPCGroup());
     }
 
-    public static void addGroup (NPCGroup group) {
-        npcGroups.add(group);
-    }
-
     public static void updateAllGroups () {
         Set<NPCGroup> copyOfNpcGroups = new HashSet<>(npcGroups);
 

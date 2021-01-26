@@ -19,9 +19,9 @@ public class MensajesServer extends BukkitRunnable {
     private void buildMensajes () {
         mensajes = new ArrayList<>();
 
-        //mensajes.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Web del server: " + ChatColor.AQUA + "" + ChatColor.UNDERLINE + "http://serversurvival.ddns.net");
-        //mensajes.add(ChatColor.GOLD + "Recuerda que para registrarse: /cuenta y despues vas a " + ChatColor.AQUA + "" + ChatColor.UNDERLINE + "http://www.serversurvival.ddns.net/registrarse");
-        //mensajes.add(ChatColor.GOLD + "Si quieres ver tu perifl en detalle: " + ChatColor.AQUA + "" + ChatColor.UNDERLINE + "http://www.serversurvival2.ddns.net/perfil");
+        mensajes.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Web del server: " + ChatColor.AQUA + "" + ChatColor.UNDERLINE + "http://serversurvival.ddns.net");
+        mensajes.add(ChatColor.GOLD + "Recuerda que para registrarse: /cuenta y despues vas a " + ChatColor.AQUA + "" + ChatColor.UNDERLINE + "http://www.serversurvival.ddns.net/registrarse");
+        mensajes.add(ChatColor.GOLD + "Si quieres ver tu perifl en detalle: " + ChatColor.AQUA + "" + ChatColor.UNDERLINE + "http://www.serversurvival2.ddns.net/perfil");
         mensajes.add(ChatColor.GOLD + "Recuerda que puedes invertir en bolsa con el comando /bolsa valores");
         mensajes.add(ChatColor.GOLD + "Puedes consultar todos los comandos en " + ChatColor.AQUA +"/ayuda");
         mensajes.add(ChatColor.GOLD + "Recuerda que puedes endeudar a jugadores con" + ChatColor.AQUA + " /deuda prestar <jugador> <cantiddad> <dias maximos a pagar> [interes] (El interes no es obligatorio)");

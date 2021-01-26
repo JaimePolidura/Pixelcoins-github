@@ -91,9 +91,9 @@ public class VenderSolicitud extends Menu implements Solicitud {
         if (enviador != null) {
             enviador.sendMessage(ChatColor.GOLD + player.getName() + " te ha comprado " + ChatColor.DARK_AQUA + empresa + ChatColor.GOLD + " por " + ChatColor.GREEN + precio + " PC " + ChatColor.GOLD + ", ahora ya no eres dueño");
             enviador.playSound(enviador.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-            ScoreBoardManager.updateScoreboard(enviador);
+            ScoreBoardManager.getInstance().updateScoreboard(enviador);
         }
-        ScoreBoardManager.updateScoreboard(player);
+        ScoreBoardManager.getInstance().updateScoreboard(player);
 
         closeMenu();
     }

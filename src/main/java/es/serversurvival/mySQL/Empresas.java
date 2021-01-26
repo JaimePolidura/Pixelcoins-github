@@ -115,7 +115,7 @@ public final class Empresas extends MySQL {
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
         player.getServer().broadcastMessage(ChatColor.GOLD + owner + " ha creado una nueva empresa: " + ChatColor.DARK_AQUA + nombreEmpresa);
 
-        ScoreBoardManager.updateScoreboard(player);
+        ScoreBoardManager.getInstance().updateScoreboard(player);
     }
 
     public void cambiarIcono(String nombreEmpresa, Player player, String icono) {
@@ -137,7 +137,7 @@ public final class Empresas extends MySQL {
             mensajesMySQL.nuevoMensaje("", empl.getJugador(), "La empresa en la que trabajas: " + empresa + " ha cambiado a de nombre a " + nuevoNombre);
         });
 
-        ScoreBoardManager.updateScoreboard(player);
+        ScoreBoardManager.getInstance().updateScoreboard(player);
     }
 
     public void cambiarDescripciom(String nombreEmpresa, String nuevaDescripcion, Player player) {
@@ -160,7 +160,7 @@ public final class Empresas extends MySQL {
 
             if(empleadoPlayer != null){
                 empleadoPlayer.sendMessage(org.bukkit.ChatColor.GOLD + ownerJugador.getNombre() + " ha borrado su empresa donde trabajabas: " + empresaNombre);
-                ScoreBoardManager.updateScoreboard(empleadoPlayer);
+                ScoreBoardManager.getInstance().updateScoreboard(empleadoPlayer);
             }else{
                 mensajesMySQL.nuevoMensaje("" , empleado.getJugador(), "El owner de la empresa en la que trabajas: " + empresaNombre + " la ha borrado, ya no existe");
             }

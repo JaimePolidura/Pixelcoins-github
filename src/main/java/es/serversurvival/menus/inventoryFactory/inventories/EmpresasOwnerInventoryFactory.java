@@ -1,19 +1,15 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
-import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.EmpresasOwnerMenu;
-import es.serversurvival.mySQL.Empresas;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
-import es.serversurvival.util.ItemBuilder;
+import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +44,7 @@ public class EmpresasOwnerInventoryFactory extends InventoryFactory {
             Material icono = Material.valueOf(empr.getIcono());
             String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER " + empr.getNombre();
 
-            itemsEmpresas.add(ItemBuilder.displayname(icono, displayName));
+            itemsEmpresas.add(MinecraftUtils.displayname(icono, displayName));
         });
         empresasMySQL.desconectar();
 
@@ -67,12 +63,12 @@ public class EmpresasOwnerInventoryFactory extends InventoryFactory {
         lore.add("En la descripccion de las empresa");
         lore.add("se vel el uso de estos");
 
-        return ItemBuilder.loreDisplayName(Material.PAPER, displayName, lore);
+        return MinecraftUtils.loreDisplayName(Material.PAPER, displayName, lore);
     }
 
     private ItemStack buildItemVertodas (){
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER EL RESTO DE LAS EMPRESAS";
 
-        return ItemBuilder.displayname(Material.BOOK, displayName);
+        return MinecraftUtils.displayname(Material.BOOK, displayName);
     }
 }

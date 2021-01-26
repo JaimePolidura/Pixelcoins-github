@@ -1,13 +1,12 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
-import es.serversurvival.util.ItemBuilder;
+import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 public class AyudaMenuInventoryFactory extends InventoryFactory {
     @Override
@@ -27,6 +26,6 @@ public class AyudaMenuInventoryFactory extends InventoryFactory {
     }
     
     private ItemStack buildItemAyuda (String tiposAyuda) {
-        return ItemBuilder.displayname(Material.WRITABLE_BOOK, ChatColor.GOLD + "" + ChatColor.BOLD + tiposAyuda);
+        return MinecraftUtils.displayname(Material.WRITABLE_BOOK, ChatColor.GOLD + "" + ChatColor.BOLD + tiposAyuda);
     }
 }

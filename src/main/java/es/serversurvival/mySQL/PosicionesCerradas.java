@@ -1,6 +1,8 @@
 package es.serversurvival.mySQL;
 
 import es.serversurvival.menus.menus.Clickable;
+import es.serversurvival.mySQL.enums.TipoActivo;
+import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.mySQL.tablasObjetos.PosicionCerrada;
 
@@ -16,17 +18,10 @@ public final class PosicionesCerradas extends MySQL {
     public final static PosicionesCerradas INSTANCE = new PosicionesCerradas();
     private PosicionesCerradas () {}
 
-    public void nuevaPosicion(String jugador, String tipo, String nombre,  int cantidad, double precioApertura, String fechaApertura, double precioCierre, String valorNombre, String tipoPosicion) {
-        String fechaCierre = dateFormater.format(new Date());
-        double rentabilidad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(precioApertura, precioCierre), 3);
-
-        executeUpdate("INSERT INTO posicionescerradas (jugador, tipo_activo, simbolo, cantidad, precio_apertura, fecha_apertura, precio_cierre, fecha_cierre, rentabilidad, nombre_activo) VALUES ('" + jugador + "','"+tipo+"','" + nombre + "','" + cantidad + "','" + precioApertura + "', '" + fechaApertura + "','" + precioCierre + "','" + fechaCierre + "','" + rentabilidad + "','"+valorNombre+"')");
-    }
-
-    public void nuevaPosicion(String jugador, String tipo, String nombre,  int cantidad, double precioApertura, String fechaApertura, double precioCierre, String valorNombre, String tipoPosicion, double rentabilidad) {
+    public void nuevaPosicion(String jugador, TipoActivo tipoActivo, String nombre,  int cantidad, double precioApertura, String fechaApertura, double precioCierre, String valorNombre, double rentabilidad, TipoPosicion tipoPosicion) {
         String fechaCierre = dateFormater.format(new Date());
 
-        executeUpdate("INSERT INTO posicionescerradas (jugador, tipo_activo, simbolo, cantidad, precio_apertura, fecha_apertura, precio_cierre, fecha_cierre, rentabilidad, nombre_activo) VALUES ('" + jugador + "','"+tipo+"','" + nombre + "','" + cantidad + "','" + precioApertura + "', '" + fechaApertura + "','" + precioCierre + "','" + fechaCierre + "','" + rentabilidad + "','"+valorNombre+"')");
+        executeUpdate("INSERT INTO posicionescerradas (jugador, tipo_activo, simbolo, cantidad, precio_apertura, fecha_apertura, precio_cierre, fecha_cierre, rentabilidad, nombre_activo, tipo_posicion) VALUES ('" + jugador + "','"+tipoActivo.toString()+"','" + nombre + "','" + cantidad + "','" + precioApertura + "', '" + fechaApertura + "','" + precioCierre + "','" + fechaCierre + "','" + rentabilidad + "','"+valorNombre+"', '"+tipoPosicion.toString()+"')");
     }
 
     public List<PosicionCerrada> getPosicionesCerradasTopRentabilidad(String jugador, int limite) {

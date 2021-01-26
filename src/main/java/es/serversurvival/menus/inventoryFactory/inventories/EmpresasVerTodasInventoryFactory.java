@@ -5,13 +5,12 @@ import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.EmpresasVerTodasMenu;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
-import es.serversurvival.util.ItemBuilder;
+import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +39,7 @@ public class EmpresasVerTodasInventoryFactory extends InventoryFactory {
             lore = insertarEmpleados(empresa.getNombre(), lore);
 
 
-            inventory.addItem(ItemBuilder.loreDisplayName(icono, displayName, lore));
+            inventory.addItem(MinecraftUtils.loreDisplayName(icono, displayName, lore));
         });
 
         inventory.setItem(53, back);

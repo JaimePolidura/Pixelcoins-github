@@ -1,7 +1,7 @@
 package es.serversurvival.comandos.subComandos.bolsa;
 
 import es.serversurvival.mySQL.*;
-import es.serversurvival.mySQL.enums.TipoValor;
+import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.main.Pixelcoin;
 import es.serversurvival.apiHttp.IEXCloud_API;
@@ -11,7 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.io.IOException;
 
 import static es.serversurvival.validaciones.Validaciones.*;
@@ -67,7 +66,7 @@ public class InvertirBolsa extends BolsaSubCommand {
                 nombreValor = Funciones.quitarCaracteres(nombreValor, '.', ',');
                 nombreValor = Funciones.quitarPalabrasEntreEspacios(nombreValor, "group", "inc", "co", "corp");
 
-                transaccionesMySQL.comprarUnidadBolsa(TipoValor.ACCIONES.toString(), ticker.toUpperCase(), nombreValor,"acciones", precioAccion, nAccinesAComprar, jugadorPlayer);
+                transaccionesMySQL.comprarUnidadBolsa(TipoActivo.ACCIONES.toString(), ticker.toUpperCase(), nombreValor,"acciones", precioAccion, nAccinesAComprar, jugadorPlayer);
                 llamadasApiMySQL.actualizarSimbolo(ticker);
 
             }catch (IOException e) {

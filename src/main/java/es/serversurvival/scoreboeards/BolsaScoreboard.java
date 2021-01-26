@@ -1,10 +1,13 @@
 package es.serversurvival.scoreboeards;
 
 import es.serversurvival.mySQL.LlamadasApi;
+import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.PosicionesAbiertas;
+import es.serversurvival.mySQL.tablasObjetos.LlamadaApi;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.util.Funciones;
+import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -14,16 +17,21 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.*;
 
-public class BolsaScoreboard implements SingleScoreboard{
-    private PosicionesAbiertas posicionesAbiertasMySQL = PosicionesAbiertas.INSTANCE;
-    private LlamadasApi llamadasApiMySQL = LlamadasApi.INSTANCE;
+import static es.serversurvival.util.MinecraftUtils.*;
+
+public class BolsaScoreboard implements SingleScoreboard {
+    private Map<String, LlamadaApi> llamadasApiMap;
+
+    public BolsaScoreboard () {
+        MySQL.conectar();
+        this.llamadasApiMap = llamadasApiMySQL.getMapOfAllLlamadasApi();
+        MySQL.desconectar();
+    }
 
     @Override
     public Scoreboard createScoreborad(String jugador) {
-        Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        Objective objective = scoreboard.registerNewObjective("bolsa", "dummy");
-        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        objective.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "TUS MEJORES ACCIONES");
+        Scoreboard scoreboard = createScoreboard("bolsa", ChatColor.GOLD + "" + ChatColor.BOLD + "TUS MEJORES ACCIONES");
+        Objective objective = scoreboard.getObjective("bolsa");
 
         Map<PosicionAbierta, Double> posicionAbiertas = calcularTopPosicionesAbiertas(jugador);
         int loops = 0;
@@ -33,24 +41,16 @@ public class BolsaScoreboard implements SingleScoreboard{
 
             String linea = buildLinea(entry.getKey(), entry.getValue());
 
-            Score score = objective.getScore(linea);
-            score.setScore(pos);
+            addLineToScoreboard(objective, linea, pos);
 
             pos--;
             loops++;
         }
-        
-        Score score0 = objective.getScore(ChatColor.GOLD + "       ");
-        score0.setScore(-10);
 
-        Score score = objective.getScore(ChatColor.GOLD + "--------------------------");
-        score.setScore(-20);
-
-        Score score2 = objective.getScore(  ChatColor.GOLD + "Para invertir /bosla valores");
-        score2.setScore(-30);
-
-        Score score3 = objective.getScore(ChatColor.GOLD + "Tus acciones /bolsa cartera");
-        score3.setScore(-40);
+        addLineToScoreboard(objective, ChatColor.GOLD + "       ", -10);
+        addLineToScoreboard(objective, ChatColor.GOLD + "--------------------------", -20);
+        addLineToScoreboard(objective, ChatColor.GOLD + "Para invertir /bosla valores", -30);
+        addLineToScoreboard(objective, ChatColor.GOLD + "Tus acciones /bolsa cartera", -40);
 
         return scoreboard;
     }
@@ -61,10 +61,10 @@ public class BolsaScoreboard implements SingleScoreboard{
 
         for (PosicionAbierta posicion : posicionAbiertas) {
             double precioInicial = posicion.getPrecio_apertura();
-            double precioActual = llamadasApiMySQL.getLlamadaAPI(posicion.getNombre_activo()).getPrecio();
+            double precioActual = llamadasApiMap.get(posicion.getNombre_activo()).getPrecio();
             double rentabildad;
 
-            if(posicion.getTipo_posicion().equalsIgnoreCase(TipoPosicion.LARGO.toString())){
+            if(posicion.getTipo_posicion() == TipoPosicion.LARGO){
                 rentabildad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(precioInicial, precioActual), 2);
             }else{
                 rentabildad = Math.abs(Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(precioActual, precioInicial), 2));
@@ -73,11 +73,11 @@ public class BolsaScoreboard implements SingleScoreboard{
             posicionAbiertasConRentabilidad.put(posicion, rentabildad);
         }
 
-        return  Funciones.sortMapByValueDecre(posicionAbiertasConRentabilidad);
+        return Funciones.sortMapByValueDecre(posicionAbiertasConRentabilidad);
     }
 
     private String buildLinea (PosicionAbierta posicion, Double rentabilidad) {
-        String nombreEmpresa = llamadasApiMySQL.getLlamadaAPI(posicion.getNombre_activo()).getNombre_activo();
+        String nombreEmpresa = llamadasApiMap.get(posicion.getNombre_activo()).getNombre_activo();
         String linea;
 
         if(rentabilidad >= 0){
@@ -87,14 +87,12 @@ public class BolsaScoreboard implements SingleScoreboard{
         }
 
         if(linea.length() > 40){
-            if(rentabilidad >= 0){
+            if(rentabilidad >= 0)
                 linea = ChatColor.GOLD + posicion.getNombre_activo() + ": " + ChatColor.GREEN + "+" + rentabilidad + "%";
-            }else{
+            else
                 linea = ChatColor.GOLD + posicion.getNombre_activo() + ": " + ChatColor.RED + rentabilidad + "%";
-            }
         }
 
         return linea;
     }
-
 }

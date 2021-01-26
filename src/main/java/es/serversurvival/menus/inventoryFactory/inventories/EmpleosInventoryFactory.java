@@ -3,13 +3,12 @@ package es.serversurvival.menus.inventoryFactory.inventories;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.mySQL.Empleados;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
-import es.serversurvival.util.ItemBuilder;
+import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +40,7 @@ public class EmpleosInventoryFactory extends InventoryFactory {
         lore.add("Mas info en /ayuda empleo o en:");
         lore.add("http://serversurvival.ddns.net");
 
-        return ItemBuilder.loreDisplayName(Material.PAPER, ChatColor.GOLD + "" + ChatColor.BOLD + "INFO", lore);
+        return MinecraftUtils.loreDisplayName(Material.PAPER, ChatColor.GOLD + "" + ChatColor.BOLD + "INFO", lore);
     }
 
     private List<ItemStack> buildItemsEmpleos (String jugador) {
@@ -63,7 +62,7 @@ public class EmpleosInventoryFactory extends InventoryFactory {
             lore.add("   ");
             lore.add(ChatColor.GOLD + "ID: " + empleado.getId());
 
-            itemsEmpleos.add(ItemBuilder.loreDisplayName(Material.valueOf(icono), displayName, lore));
+            itemsEmpleos.add(MinecraftUtils.loreDisplayName(Material.valueOf(icono), displayName, lore));
         });
         empleadosMySQL.desconectar();
 

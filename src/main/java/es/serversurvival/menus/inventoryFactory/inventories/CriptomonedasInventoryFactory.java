@@ -2,15 +2,13 @@ package es.serversurvival.menus.inventoryFactory.inventories;
 
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.CriptomonedasMenu;
-import es.serversurvival.util.ItemBuilder;
+import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +34,7 @@ public class CriptomonedasInventoryFactory extends InventoryFactory {
             lore.add(ChatColor.GOLD + "Simbolo: " + entry.getKey());
             lore.add(ChatColor.RED + "Cargando...");
 
-            inventory.addItem(ItemBuilder.loreDisplayName(Material.GOLD_BLOCK, displayName, lore));
+            inventory.addItem(MinecraftUtils.loreDisplayName(Material.GOLD_BLOCK, displayName, lore));
         }
 
         List<String> infoLore = new ArrayList<>();
@@ -46,7 +44,7 @@ public class CriptomonedasInventoryFactory extends InventoryFactory {
 
         String displayName = ChatColor.AQUA + "" + ChatColor.BOLD + "INFO";
 
-        ItemStack infoItem = ItemBuilder.loreDisplayName(Material.PAPER, displayName, infoLore);
+        ItemStack infoItem = MinecraftUtils.loreDisplayName(Material.PAPER, displayName, infoLore);
         inventory.setItem(4, infoItem);
 
         return inventory;

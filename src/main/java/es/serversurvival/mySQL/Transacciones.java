@@ -85,10 +85,10 @@ public final class Transacciones extends MySQL {
         if (vendedorP != null) {
             vendedorP.sendMessage(ChatColor.GOLD + comprador + " te ha comprado: " + objeto + " por: " + ChatColor.GREEN + formatea.format(precio) + " PC ");
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-            ScoreBoardManager.updateScoreboard(vendedorP);
+            ScoreBoardManager.getInstance().updateScoreboard(vendedorP);
         }
 
-        ScoreBoardManager.updateScoreboard(player);
+        ScoreBoardManager.getInstance().updateScoreboard(player);
     }
 
     public void realizarTransferencia (String nombrePagador, String nombrePagado, double cantidad, String objeto, TipoTransaccion tipo) {
@@ -137,9 +137,9 @@ public final class Transacciones extends MySQL {
             mensajesMySQL.nuevoMensaje("", nombrePagado, nombrePagador + " te ha pagado " + formatea.format(cantidad) + " PC con el comando /pagar");
         }
 
-        ScoreBoardManager.updateScoreboard(player);
+        ScoreBoardManager.getInstance().updateScoreboard(player);
 
-        if(tp != null) ScoreBoardManager.updateScoreboard(tp);
+        if(tp != null) ScoreBoardManager.getInstance().updateScoreboard(tp);
     }
 
     public void ingresarItem(ItemStack itemAIngresar, Player player) {
@@ -164,7 +164,7 @@ public final class Transacciones extends MySQL {
         player.sendMessage(ChatColor.GOLD + "Se ha a?adido: " + ChatColor.GREEN + formatea.format(pixelcoinsAnadir) + " PC " + ChatColor.GOLD + "Ahora tienes: " + ChatColor.GREEN + formatea.format(pixelcoinsAnadir + dineroActual) + "PC");
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
-        ScoreBoardManager.updateScoreboard(player);
+        ScoreBoardManager.getInstance().updateScoreboard(player);
     }
 
     private double getCantidadARecibirTranIngresarItem (int cantidadItems, String tipoItem) {
@@ -215,7 +215,7 @@ public final class Transacciones extends MySQL {
                 break;
         }
 
-        ScoreBoardManager.updateScoreboard(jugadorPlayer);
+        ScoreBoardManager.getInstance().updateScoreboard(jugadorPlayer);
 
         return pixelcoinsSacadas;
     }
@@ -260,7 +260,7 @@ public final class Transacciones extends MySQL {
             sacarMaxItemQuartzBlock(jugadorASacar, jugadorPlayer);
         }
 
-        ScoreBoardManager.updateScoreboard(jugadorPlayer);
+        ScoreBoardManager.getInstance().updateScoreboard(jugadorPlayer);
     }
 
     private void sacarMaxItemDiamond (Jugador jugador, Player jugadorPlayer) {
@@ -362,7 +362,7 @@ public final class Transacciones extends MySQL {
                 + " en tu empresa: " + ChatColor.DARK_AQUA + nombreEmpresa + ChatColor.GOLD + " ahora tiene: " + ChatColor.GREEN +
                 formatea.format(pixelcoinsEmpresa + pixelcoins) + " PC");
         jugadorPlayer.playSound(jugadorPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-        ScoreBoardManager.updateScoreboard(jugadorPlayer);
+        ScoreBoardManager.getInstance().updateScoreboard(jugadorPlayer);
     }
 
     public void sacarPixelcoinsEmpresa(Player jugadorPlayer, double pixelcoins, String nombreEmpresa) {
@@ -381,7 +381,7 @@ public final class Transacciones extends MySQL {
                 + " de tu empresa: " + ChatColor.DARK_AQUA + nombreEmpresa + ChatColor.GOLD + " ahora tiene: " + ChatColor.GREEN +
                 formatea.format(pixelcoinsEmpresa - pixelcoins) + " PC");
         jugadorPlayer.playSound(jugadorPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-        ScoreBoardManager.updateScoreboard(jugadorPlayer);
+        ScoreBoardManager.getInstance().updateScoreboard(jugadorPlayer);
     }
 
     public void comprarEmpresa(String vendedor, String comprador, String empresa, double precio, Player p) {
@@ -500,7 +500,6 @@ public final class Transacciones extends MySQL {
         String fechaApertura = posicionAVender.getFecha_apertura();
         double revalorizacionTotal = cantidad * precioPorAccion;
         double rentabilidad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(precioApertura, precioPorAccion), 3);
-        String tipoPosicion = posicionAVender.getTipo_activo();
 
         Jugador vendedor = jugadoresMySQL.getJugador(player.getName());
         double beneficiosPerdidas = revalorizacionTotal - (cantidad * precioApertura);
@@ -522,7 +521,7 @@ public final class Transacciones extends MySQL {
             llamadasApiMySQL.borrarLlamada(ticker);
         }
 
-        posicionesCerradasMySQL.nuevaPosicion(player.getName(), tipoPosicion, ticker, cantidad, precioApertura, fechaApertura, precioPorAccion, nombreValor, TipoPosicion.LARGO.toString());
+        posicionesCerradasMySQL.nuevaPosicion(player.getName(), posicionAVender.getTipo_activo(), ticker, cantidad, precioApertura, fechaApertura, precioPorAccion, nombreValor, rentabilidad, TipoPosicion.LARGO);
         nuevaTransaccion(ticker, player.getName(), cantidad * precioPorAccion, "", TipoTransaccion.BOLSA_VENTA);
 
         if (rentabilidad <= 0) {
@@ -554,7 +553,6 @@ public final class Transacciones extends MySQL {
         String fechaApertura = posicionAComprar.getFecha_apertura();
         double revalorizacionTotal = cantidad * (precioApertura - precioPorAccion);
         double rentabilidad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(precioPorAccion, precioApertura), 3);
-        String tipoPosicion = posicionAComprar.getTipo_activo();
         Jugador compradorJugador = jugadoresMySQL.getJugador(player.getName());
 
         double pixelcoinsJugador = compradorJugador.getPixelcoins();
@@ -575,7 +573,8 @@ public final class Transacciones extends MySQL {
             llamadasApiMySQL.borrarLlamada(ticker);
         }
 
-        posicionesCerradasMySQL.nuevaPosicion(player.getName(), tipoPosicion, ticker, cantidad, precioApertura, fechaApertura, precioPorAccion, nombreValor, TipoPosicion.CORTO.toString(), rentabilidad);
+        posicionesCerradasMySQL.nuevaPosicion(player.getName(), posicionAComprar.getTipo_activo(), ticker, cantidad, precioApertura, fechaApertura, precioPorAccion, nombreValor, rentabilidad, TipoPosicion.CORTO);
+
         nuevaTransaccion(ticker, player.getName(), cantidad * precioPorAccion, "", TipoTransaccion.BOLSA_CORTO_COMPRA);
 
         if (rentabilidad <= 0) {

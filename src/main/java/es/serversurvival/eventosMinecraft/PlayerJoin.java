@@ -27,7 +27,7 @@ public final class PlayerJoin implements Listener {
 
         MySQL.desconectar();
 
-        ScoreBoardManager.updateScoreboard(player);
+        ScoreBoardManager.getInstance().updateScoreboard(player);
         NPCManager.showPlayer(player);
     }
 }

@@ -8,6 +8,7 @@ import es.serversurvival.socketWeb.RabbitMQConsumer;
 import es.serversurvival.socketWeb.ServerSocketWeb;
 import es.serversurvival.socketWeb.SocketMessagge;
 import es.serversurvival.socketWeb.messagges.*;
+import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -21,11 +22,8 @@ public class RabbitMQConsumerTask extends BukkitRunnable {
     private RabbitMQConsumer rabbitMQConsumer = new RabbitMQConsumer();
 
     @Override
+    @SneakyThrows
     public void run() {
-        try {
-            rabbitMQConsumer.listenForMessages();
-        } catch (IOException | TimeoutException e) {
-            e.printStackTrace();
-        }
+        rabbitMQConsumer.listenForMessages();
     }
 }
