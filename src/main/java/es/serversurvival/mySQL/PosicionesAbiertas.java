@@ -7,6 +7,7 @@ import es.serversurvival.apiHttp.IEXCloud_API;
 import es.serversurvival.mySQL.tablasObjetos.LlamadaApi;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import es.serversurvival.util.Funciones;
+import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -32,10 +33,10 @@ public final class PosicionesAbiertas extends MySQL {
 
     private PosicionesAbiertas () {}
 
-    public void nuevaPosicion(String jugador, String tipo, String nombre, int cantidad, double precioApertura, TipoPosicion tipoPosicion) {
+    public void nuevaPosicion(String jugador, TipoActivo tipo, String nombre, int cantidad, double precioApertura, TipoPosicion tipoPosicion) {
         String fecha = dateFormater.format(new Date());
 
-        executeUpdate("INSERT INTO posicionesabiertas (jugador, tipo_activo, nombre_activo, cantidad, precio_apertura, fecha_apertura, tipo_posicion) VALUES ('" + jugador + "','"+tipo+"','" + nombre + "','" + cantidad + "','" + precioApertura + "', '" + fecha + "','"+tipoPosicion.toString()+"')");
+        executeUpdate("INSERT INTO posicionesabiertas (jugador, tipo_activo, nombre_activo, cantidad, precio_apertura, fecha_apertura, tipo_posicion) VALUES ('" + jugador + "','"+tipo.toString()+"','" + nombre + "','" + cantidad + "','" + precioApertura + "', '" + fecha + "','"+tipoPosicion.toString()+"')");
     }
 
     public PosicionAbierta getPosicionAbierta(int id){
@@ -79,7 +80,7 @@ public final class PosicionesAbiertas extends MySQL {
     }
 
     public boolean existeTicker(String nombre){
-        return !isEmpty(executeQuery(String.format("SELECT * FROM posicionesabiertas WHERE nombre_activo = '%s'", nombre)));
+        return !isEmptyFromQuery(String.format("SELECT * FROM posicionesabiertas WHERE nombre_activo = '%s'", nombre));
     }
 
     public void setCantidad(int id, int cantidad) {
@@ -92,6 +93,10 @@ public final class PosicionesAbiertas extends MySQL {
 
     public void setJugador (String jugador, String nuevoJugador) {
         executeUpdate("UPDATE posicionesabiertas SET jugador = '"+nuevoJugador+"' WHERE jugador = '"+jugador+"'");
+    }
+
+    public List<PosicionAbierta> getPosicionAbierta (String owner, int cantidad, String ticker) {
+        return buildListFromQuery("SELECT * FROM posicionesabiertas WHERE cantidad = '"+cantidad+"' AND jugador = '"+owner+"' AND nombre_activo = '"+ticker+"'");
     }
 
     public double getAllPixeloinsEnAcciones (String jugador) {
@@ -159,7 +164,8 @@ public final class PosicionesAbiertas extends MySQL {
         return toReturn;
     }
 
-    public double getPrecioActual(String simbolo, String tipo) throws Exception {
+    @SneakyThrows
+    public double getPrecioActual(String simbolo, String tipo) {
         double precio = -1;
 
         switch (tipo.toUpperCase()){
@@ -173,6 +179,7 @@ public final class PosicionesAbiertas extends MySQL {
                 precio = IEXCloud_API.getPrecioMateriaPrima(simbolo);
                 break;
         }
+
         return precio;
     }
 

@@ -1,6 +1,7 @@
 package es.serversurvival.apiHttp;
 
 
+import es.serversurvival.util.Funciones;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -46,8 +47,12 @@ public final class IEXCloud_API {
     public static String getNombreEmpresa (String simbolo) throws Exception {
         Object response = peticionHttp("https://sandbox.iexapis.com/stable/stock/" + simbolo + "/company?token=" + token);
         JSONObject json = (JSONObject) response;
+        String nombreValor = String.valueOf(json.get("companyName"));
 
-        return String.valueOf(json.get("companyName"));
+        nombreValor = Funciones.quitarCaracteres(nombreValor, '.', ',');
+        nombreValor = Funciones.quitarPalabrasEntreEspacios(nombreValor, "group", "inc", "co", "corp");
+
+        return nombreValor;
     }
 
     public static JSONObject getSplitInfoEmpresa (String ticker) throws Exception {

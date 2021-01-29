@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.enums.TipoTransaccion;
 import es.serversurvival.mySQL.tablasObjetos.*;
 import es.serversurvival.mySQL.enums.TipoPosicion;
@@ -442,55 +443,60 @@ public final class Transacciones extends MySQL {
         player.sendMessage(ChatColor.GOLD + "Has pagado " + ChatColor.GREEN + precio + " PC " + ChatColor.GOLD + " a la empresa: " + empresa + " por su servicio");
     }
 
-    public void comprarUnidadBolsa(String tipo, String ticker, String nombreValor, String alias, double precioUnidad, int cantidad, Player jugadorPlayer) {
-        Jugador comprador = jugadoresMySQL.getJugador(jugadorPlayer.getName());
+    public void comprarUnidadBolsa (TipoActivo tipo, String ticker, String nombreValor, String alias, double precioUnidad, int cantidad, String nombrePlayer) {
+        Jugador comprador = jugadoresMySQL.getJugador(nombrePlayer);
         double precioTotal = precioUnidad * cantidad;
 
-        jugadoresMySQL.setPixelcoin(jugadorPlayer.getName(), comprador.getPixelcoins() - precioTotal);
-        posicionesAbiertasMySQL.nuevaPosicion(jugadorPlayer.getName(), tipo, ticker, cantidad, precioUnidad, TipoPosicion.LARGO);
-        nuevaTransaccion(jugadorPlayer.getName(), ticker, precioTotal, tipo +  " " + precioUnidad, TipoTransaccion.BOLSA_COMPRA);
+        jugadoresMySQL.setPixelcoin(nombrePlayer, comprador.getPixelcoins() - precioTotal);
+        posicionesAbiertasMySQL.nuevaPosicion(nombrePlayer, tipo, ticker, cantidad, precioUnidad, TipoPosicion.LARGO);
+        nuevaTransaccion(nombrePlayer, ticker, precioTotal, tipo +  " " + precioUnidad, TipoTransaccion.BOLSA_COMPRA);
+        llamadasApiMySQL.nuevaLlamadaSiNoEstaReg(ticker, precioUnidad, tipo, nombreValor);
+        llamadasApiMySQL.actualizar(ticker);
 
-        if(!llamadasApiMySQL.estaReg(ticker)){
-            llamadasApiMySQL.nuevaLlamada(ticker, precioUnidad, tipo, nombreValor);
+        Player player = Bukkit.getPlayer(nombrePlayer);
+        if(player != null){
+            player.sendMessage(ChatColor.GOLD + "Has comprado " + formatea.format(cantidad)  + " " + alias + " a " + ChatColor.GREEN + formatea.format(precioUnidad) + " PC" + ChatColor.GOLD + " que es un total de " +
+                    ChatColor.GREEN + formatea.format(precioTotal) + " PC " + ChatColor.GOLD + " comandos: " + ChatColor.AQUA + "/bolsa vender /bolsa cartera");
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+
+            Bukkit.broadcastMessage(ChatColor.GOLD + player.getName() + " ha comprado " + cantidad + " " + alias +  " de " + nombreValor + " a " + ChatColor.GREEN + precioUnidad + "PC");
         }
-
-        jugadorPlayer.sendMessage(ChatColor.GOLD + "Has comprado " + formatea.format(cantidad)  + " " + alias + " a " + ChatColor.GREEN + formatea.format(precioUnidad) + " PC" + ChatColor.GOLD + " que es un total de " +
-                ChatColor.GREEN + formatea.format(precioTotal) + " PC " + ChatColor.GOLD + " comandos: " + ChatColor.AQUA + "/bolsa vender /bolsa cartera");
-        jugadorPlayer.playSound(jugadorPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-
-        Bukkit.broadcastMessage(ChatColor.GOLD + jugadorPlayer.getName() + " ha comprado " + cantidad + " " + alias +  " de " + nombreValor + " a " + ChatColor.GREEN + precioUnidad + "PC");
-
     }
 
-    public void venderEnCortoBolsa (Player player, String ticker, String nombreValor, int cantidad, double precioPorAccion) {
-        Jugador jugador = jugadoresMySQL.getJugador(player.getName());
+    public void venderEnCortoBolsa (String playerName, String ticker, String nombreValor, int cantidad, double precioPorAccion) {
+        Jugador jugador = jugadoresMySQL.getJugador(playerName);
         double dineroJugador = jugador.getPixelcoins();
         double valorTotal = precioPorAccion * cantidad;
+        double comision = Funciones.redondeoDecimales(Funciones.reducirPorcentaje(valorTotal, 100 - PosicionesAbiertas.PORCENTAJE_CORTO), 2);
+        
+        Player player = Bukkit.getPlayer(playerName);
+        if(comision > dineroJugador){
+            if(player != null)
+                player.sendMessage(ChatColor.DARK_RED + "No tienes el dinero suficiente para esa operacion");
+            else
+                mensajesMySQL.nuevoMensaje("", playerName, "No se ha podido vender en corto las acciones de " + ticker);
 
-        if(valorTotal > dineroJugador){
-            player.sendMessage(ChatColor.DARK_RED + "No tienes el dinero suficiente para esa operacion");
             return;
         }
 
-        double comision = Funciones.redondeoDecimales(Funciones.reducirPorcentaje(valorTotal, 100 - PosicionesAbiertas.PORCENTAJE_CORTO), 2);
         jugadoresMySQL.setEstadisticas(player.getName(), jugador.getPixelcoins() - comision, jugador.getNventas(), jugador.getIngresos(), jugador.getGastos() + comision);
-
-        posicionesAbiertasMySQL.nuevaPosicion(player.getName(), "ACCIONES", ticker, cantidad, precioPorAccion, TipoPosicion.CORTO);
+        posicionesAbiertasMySQL.nuevaPosicion(player.getName(), TipoActivo.ACCIONES, ticker, cantidad, precioPorAccion, TipoPosicion.CORTO);
         nuevaTransaccion(player.getName(), ticker, comision, "ACCIONES" +  " " + precioPorAccion, TipoTransaccion.BOLSA_CORTO_VENTA);
+        llamadasApiMySQL.nuevaLlamadaSiNoEstaReg(ticker, precioPorAccion, TipoActivo.ACCIONES, nombreValor);
 
-        if(!llamadasApiMySQL.estaReg(ticker)){
-            llamadasApiMySQL.nuevaLlamada(ticker, precioPorAccion, "ACCIONES", nombreValor);
+        if(player != null){
+            player.sendMessage(ChatColor.GOLD + "Te has puesto corto en " + nombreValor + " en " + cantidad + " cada una a " + ChatColor.GREEN + formatea.format(precioPorAccion) + " PC " + ChatColor.GOLD +  "Para recomprar las acciones: /bolsa comprarcorto <id>. /bolsa cartera");
+            player.sendMessage(ChatColor.GOLD + "Ademas se te ha cobrado un 5% del valor total de la venta (" + ChatColor.GREEN  + formatea.format(valorTotal) + " PC"
+                    + ChatColor.GOLD + ") por lo cual: " + ChatColor.RED + "-" + formatea.format(comision) + " PC");
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        }else{
+            mensajesMySQL.nuevoMensaje("", playerName, "Se ha ejecutado la orden de venta en corto en " + ticker);
         }
-
-        player.sendMessage(ChatColor.GOLD + "Te has puesto corto en " + nombreValor + " en " + cantidad + " cada una a " + ChatColor.GREEN + formatea.format(precioPorAccion) + " PC " + ChatColor.GOLD +  "Para recomprar las acciones: /bolsa comprarcorto <id>. /bolsa cartera");
-        player.sendMessage(ChatColor.GOLD + "Ademas se te ha cobrado un 5% del valor total de la venta (" + ChatColor.GREEN  + formatea.format(valorTotal) + " PC"
-                + ChatColor.GOLD + ") por lo cual: " + ChatColor.RED + "-" + formatea.format(comision) + " PC");
-        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
         Bukkit.broadcastMessage(ChatColor.GOLD + player.getName() + " se ha puesto en corto en " + nombreValor);
     }
 
-    public void venderPosicion(PosicionAbierta posicionAVender, int cantidad, Player player) {
+    public void venderPosicion(PosicionAbierta posicionAVender, int cantidad, String nombreJugador) {
         int idPosiconAbierta = posicionAVender.getId();
         double precioPorAccion = llamadasApiMySQL.getLlamadaAPI(posicionAVender.getNombre_activo()).getPrecio();
 
@@ -501,13 +507,13 @@ public final class Transacciones extends MySQL {
         double revalorizacionTotal = cantidad * precioPorAccion;
         double rentabilidad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(precioApertura, precioPorAccion), 3);
 
-        Jugador vendedor = jugadoresMySQL.getJugador(player.getName());
+        Jugador vendedor = jugadoresMySQL.getJugador(nombreJugador);
         double beneficiosPerdidas = revalorizacionTotal - (cantidad * precioApertura);
 
         if(beneficiosPerdidas >= 0){
-            jugadoresMySQL.setEstadisticas(player.getName(), vendedor.getPixelcoins() + revalorizacionTotal, vendedor.getNventas(), vendedor.getIngresos() + beneficiosPerdidas, vendedor.getGastos());
+            jugadoresMySQL.setEstadisticas(nombreJugador, vendedor.getPixelcoins() + revalorizacionTotal, vendedor.getNventas(), vendedor.getIngresos() + beneficiosPerdidas, vendedor.getGastos());
         }else{
-            jugadoresMySQL.setEstadisticas(player.getName(), vendedor.getPixelcoins() + revalorizacionTotal, vendedor.getNventas(), vendedor.getIngresos(), vendedor.getGastos() + beneficiosPerdidas);
+            jugadoresMySQL.setEstadisticas(nombreJugador, vendedor.getPixelcoins() + revalorizacionTotal, vendedor.getNventas(), vendedor.getIngresos(), vendedor.getGastos() + beneficiosPerdidas);
         }
 
         if (cantidad == nAccionesTotlaesEnCartera) {
@@ -517,33 +523,39 @@ public final class Transacciones extends MySQL {
         }
 
         String nombreValor = llamadasApiMySQL.getLlamadaAPI(ticker).getNombre_activo();
-        if(!posicionesAbiertasMySQL.existeTicker(ticker)){
-            llamadasApiMySQL.borrarLlamada(ticker);
-        }
 
-        posicionesCerradasMySQL.nuevaPosicion(player.getName(), posicionAVender.getTipo_activo(), ticker, cantidad, precioApertura, fechaApertura, precioPorAccion, nombreValor, rentabilidad, TipoPosicion.LARGO);
-        nuevaTransaccion(ticker, player.getName(), cantidad * precioPorAccion, "", TipoTransaccion.BOLSA_VENTA);
+        llamadasApiMySQL.borrarLlamadaSiNoEsUsada(ticker);
+        posicionesCerradasMySQL.nuevaPosicion(nombreJugador, posicionAVender.getTipo_activo(), ticker, cantidad, precioApertura, fechaApertura, precioPorAccion, nombreValor, rentabilidad, TipoPosicion.LARGO);
+        nuevaTransaccion(ticker, nombreJugador, cantidad * precioPorAccion, "", TipoTransaccion.BOLSA_VENTA);
 
+        String mensajeAEnviarAlJugador;
         if (rentabilidad <= 0) {
-            player.sendMessage(ChatColor.GOLD + "Has vendido " + formatea.format(cantidad) + " de " + ticker + " a " + ChatColor.GREEN + formatea.format(precioPorAccion)
+            mensajeAEnviarAlJugador = ChatColor.GOLD + "Has vendido " + formatea.format(cantidad) + " de " + ticker + " a " + ChatColor.GREEN + formatea.format(precioPorAccion)
                     + " PC/Accion " + ChatColor.GOLD + " cuando la compraste a " + ChatColor.GREEN + formatea.format(precioApertura) + " PC/Unidad " + ChatColor.GOLD + " -> " +
-                    ChatColor.RED + formatea.format(rentabilidad) + "% : " + formatea.format(Funciones.redondeoDecimales(beneficiosPerdidas, 3)) + " Perdidas PC " + ChatColor.GOLD + " de " + ChatColor.GREEN + formatea.format(revalorizacionTotal) + " PC");
-            player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 10, 1);
+                    ChatColor.RED + formatea.format(rentabilidad) + "% : " + formatea.format(Funciones.redondeoDecimales(beneficiosPerdidas, 3)) + " Perdidas PC " + ChatColor.GOLD + " de " + ChatColor.GREEN + formatea.format(revalorizacionTotal) + " PC";
 
-            Bukkit.broadcastMessage(ChatColor.GOLD + player.getName() + " ha alacanzado una rentabilidad del " + ChatColor.RED + formatea.format(Funciones.redondeoDecimales(rentabilidad, 3)) + "% "
+            Bukkit.broadcastMessage(ChatColor.GOLD + nombreJugador + " ha alacanzado una rentabilidad del " + ChatColor.RED + formatea.format(Funciones.redondeoDecimales(rentabilidad, 3)) + "% "
                     + ChatColor.GOLD + "de las acciones de " + nombreValor + " (" + ticker + ")");
         } else {
-            player.sendMessage(ChatColor.GOLD + "Has vendido " + formatea.format(cantidad) + " de " + ticker + " a " + ChatColor.GREEN + formatea.format(precioPorAccion)
+            mensajeAEnviarAlJugador = ChatColor.GOLD + "Has vendido " + formatea.format(cantidad) + " de " + ticker + " a " + ChatColor.GREEN + formatea.format(precioPorAccion)
                     + " PC/Accion " + ChatColor.GOLD + " cuando la compraste a " + ChatColor.GREEN + formatea.format(precioApertura) + " PC/Unidad " + ChatColor.GOLD + " -> " +
-                    ChatColor.GREEN + formatea.format(rentabilidad) + "% : " + formatea.format(Funciones.redondeoDecimales(beneficiosPerdidas, 3)) + " Beneficios PC " + ChatColor.GOLD + " de " + ChatColor.GREEN + formatea.format(revalorizacionTotal) + " PC");
-            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+                    ChatColor.GREEN + formatea.format(rentabilidad) + "% : " + formatea.format(Funciones.redondeoDecimales(beneficiosPerdidas, 3)) + " Beneficios PC " + ChatColor.GOLD + " de " + ChatColor.GREEN + formatea.format(revalorizacionTotal) + " PC";
 
-            Bukkit.broadcastMessage(ChatColor.GOLD + player.getName() + " ha alacanzado una rentabilidad del " + ChatColor.GREEN + "+" + formatea.format(Funciones.redondeoDecimales(rentabilidad, 3)) + "% "
+            Bukkit.broadcastMessage(ChatColor.GOLD + nombreJugador + " ha alacanzado una rentabilidad del " + ChatColor.GREEN + "+" + formatea.format(Funciones.redondeoDecimales(rentabilidad, 3)) + "% "
                     + ChatColor.GOLD + "de las acciones de " + nombreValor + " (" + ticker + ")");
         }
+
+        Player player = Bukkit.getPlayer(nombreJugador);
+        if(player == null){
+            mensajesMySQL.nuevoMensaje("", nombreJugador, mensajeAEnviarAlJugador);
+        }else{
+            player.sendMessage(mensajeAEnviarAlJugador);
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        }
+
     }
 
-    public void comprarPosicionCorto (PosicionAbierta posicionAComprar, int cantidad, Player player) {
+    public void comprarPosicionCorto (PosicionAbierta posicionAComprar, int cantidad, String playername) {
         int idPosiconAbierta = posicionAComprar.getId();
         double precioPorAccion = llamadasApiMySQL.getLlamadaAPI(posicionAComprar.getNombre_activo()).getPrecio();
 
@@ -553,13 +565,13 @@ public final class Transacciones extends MySQL {
         String fechaApertura = posicionAComprar.getFecha_apertura();
         double revalorizacionTotal = cantidad * (precioApertura - precioPorAccion);
         double rentabilidad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(precioPorAccion, precioApertura), 3);
-        Jugador compradorJugador = jugadoresMySQL.getJugador(player.getName());
+        Jugador compradorJugador = jugadoresMySQL.getJugador(playername);
 
         double pixelcoinsJugador = compradorJugador.getPixelcoins();
         if(0 > pixelcoinsJugador + revalorizacionTotal){
-            jugadoresMySQL.setEstadisticas(player.getName(), pixelcoinsJugador + revalorizacionTotal, compradorJugador.getNventas(), compradorJugador.getIngresos(), compradorJugador.getGastos() + revalorizacionTotal);
+            jugadoresMySQL.setEstadisticas(playername, pixelcoinsJugador + revalorizacionTotal, compradorJugador.getNventas(), compradorJugador.getIngresos(), compradorJugador.getGastos() + revalorizacionTotal);
         }else{
-            jugadoresMySQL.setEstadisticas(player.getName(), pixelcoinsJugador + revalorizacionTotal, compradorJugador.getNventas(), compradorJugador.getIngresos() + revalorizacionTotal, compradorJugador.getGastos());
+            jugadoresMySQL.setEstadisticas(playername, pixelcoinsJugador + revalorizacionTotal, compradorJugador.getNventas(), compradorJugador.getIngresos() + revalorizacionTotal, compradorJugador.getGastos());
         }
 
         if (cantidad == nAccionesTotlaesEnCartera) {
@@ -569,27 +581,30 @@ public final class Transacciones extends MySQL {
         }
 
         String nombreValor = llamadasApiMySQL.getLlamadaAPI(ticker).getNombre_activo();
-        if(!posicionesAbiertasMySQL.existeTicker(ticker)){
-            llamadasApiMySQL.borrarLlamada(ticker);
-        }
+        llamadasApiMySQL.borrarLlamadaSiNoEsUsada(ticker);
+        posicionesCerradasMySQL.nuevaPosicion(playername, posicionAComprar.getTipo_activo(), ticker, cantidad, precioApertura, fechaApertura, precioPorAccion, nombreValor, rentabilidad, TipoPosicion.CORTO);
+        nuevaTransaccion(ticker, playername, cantidad * precioPorAccion, "", TipoTransaccion.BOLSA_CORTO_COMPRA);
 
-        posicionesCerradasMySQL.nuevaPosicion(player.getName(), posicionAComprar.getTipo_activo(), ticker, cantidad, precioApertura, fechaApertura, precioPorAccion, nombreValor, rentabilidad, TipoPosicion.CORTO);
-
-        nuevaTransaccion(ticker, player.getName(), cantidad * precioPorAccion, "", TipoTransaccion.BOLSA_CORTO_COMPRA);
-
+        String mensaje;
         if (rentabilidad <= 0) {
-            player.sendMessage(ChatColor.GOLD + "Has comprado en corto" + formatea.format(cantidad) + " de " + ticker + " a " + ChatColor.GREEN + formatea.format(precioPorAccion)
+            mensaje = ChatColor.GOLD + "Has comprado en corto" + formatea.format(cantidad) + " de " + ticker + " a " + ChatColor.GREEN + formatea.format(precioPorAccion)
                     + " PC/Accion " + ChatColor.GOLD + " cuando la vendiste a " + ChatColor.GREEN + formatea.format(precioApertura) + " PC/Unidad " + ChatColor.GOLD + " -> " +
-                    ChatColor.RED + formatea.format(rentabilidad) + "% : " + formatea.format(Funciones.redondeoDecimales(revalorizacionTotal, 3)) + " Perdidas PC ");
-            player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 10, 1);
+                    ChatColor.RED + formatea.format(rentabilidad) + "% : " + formatea.format(Funciones.redondeoDecimales(revalorizacionTotal, 3)) + " Perdidas PC ";
         } else {
-            player.sendMessage(ChatColor.GOLD + "Has comprado en corto" + formatea.format(cantidad) + " de " + ticker + " a " + ChatColor.GREEN + formatea.format(precioPorAccion)
+            mensaje = ChatColor.GOLD + "Has comprado en corto" + formatea.format(cantidad) + " de " + ticker + " a " + ChatColor.GREEN + formatea.format(precioPorAccion)
                     + " PC/Accion " + ChatColor.GOLD + " cuando la vendiste a " + ChatColor.GREEN + formatea.format(precioApertura) + " PC/Unidad " + ChatColor.GOLD + " -> " +
-                    ChatColor.GREEN + formatea.format(rentabilidad) + "% : " + formatea.format(Funciones.redondeoDecimales(revalorizacionTotal, 3)) + " Beneficios PC ");
-            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+                    ChatColor.GREEN + formatea.format(rentabilidad) + "% : " + formatea.format(Funciones.redondeoDecimales(revalorizacionTotal, 3)) + " Beneficios PC ";
         }
 
-        Bukkit.broadcastMessage(ChatColor.GOLD + player.getName() + " ha alacanzado una rentabilidad del " + ChatColor.GREEN + "+" + formatea.format(Funciones.redondeoDecimales(rentabilidad, 3)) + "% "
+        Player player = Bukkit.getPlayer(playername);
+        if(player != null){
+            player.sendMessage(mensaje);
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        }else{
+            mensajesMySQL.nuevoMensaje("", playername, "Se ha cerrado la posicion corta en " + nombreValor + " resultado: " + revalorizacionTotal + " " + rentabilidad);
+        }
+
+        Bukkit.broadcastMessage(ChatColor.GOLD + playername + " ha alacanzado una rentabilidad del " + ChatColor.GREEN + "+" + formatea.format(Funciones.redondeoDecimales(rentabilidad, 3)) + "% "
                 + ChatColor.GOLD + "de las acciones de " + nombreValor + " (" + ticker + "), poniendose en " + ChatColor.BOLD  + "CORTO");
 
     }

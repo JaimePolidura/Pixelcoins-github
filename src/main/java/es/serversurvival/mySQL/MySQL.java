@@ -82,22 +82,10 @@ public abstract class MySQL {
         }
     }
 
-    protected boolean isEmpty (ResultSet rs) {
-        try{
-            boolean next = rs.next();
-            System.out.println(next); //¿wtf?
-
-            return rs.next();
-        }catch (SQLException e){
-            return false;
-        }
-    }
-
     protected boolean isEmptyFromQuery (String query) {
-        try{
-            ResultSet rs = executeQuery(query);
-            boolean next = rs.next();
+        ResultSet rs = executeQuery(query);
 
+        try{
             return rs.next();
         }catch (SQLException e){
             return false;
@@ -114,27 +102,6 @@ public abstract class MySQL {
         }catch (SQLException e) {
             return null;
         }
-    }
-
-    protected TablaObjeto buildSingleObjectFromResultSet (ResultSet rs) {
-        try{
-            rs.next();
-            return buildObjectFromResultSet(rs);
-        }catch (SQLException e) {
-            return null;
-        }
-    }
-
-    protected <T> List<T> buildListFromResultSet (ResultSet rs) {
-        List<T> list = new ArrayList<>();
-        try{
-            while (rs.next()){
-                list.add((T) buildObjectFromResultSet(rs));
-            }
-        }catch (SQLException e){
-            return Collections.EMPTY_LIST;
-        }
-        return list;
     }
 
     protected <T> List<T> buildListFromQuery (String query) {

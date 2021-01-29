@@ -9,7 +9,6 @@ import es.serversurvival.comandos.subComandos.empleado.AyudaEmpleos;
 import es.serversurvival.comandos.subComandos.empleado.IrseEmpleos;
 import es.serversurvival.comandos.subComandos.empleado.MisTrabajosEmpleos;
 import es.serversurvival.comandos.subComandos.empresas.*;
-import es.serversurvival.util.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -91,10 +90,11 @@ public class CommandManager implements CommandExecutor {
         subComandosBolsa.put("operacionescerradas", new OperacionesCerradasBolsa());
         subComandosBolsa.put("ayuda", new AyudaBolsa());
         subComandosBolsa.put("vercartera", new VerCarteraBolsa());
-        subComandosBolsa.put("vendercorto", new VenderCorto());
+        subComandosBolsa.put("vendercorto", new VenderCortoBolsa());
         subComandosBolsa.put("comprarcorto", new ComprarCorto());
         subComandosBolsa.put("per", new PerBolsa());
         subComandosBolsa.put("dividendo", new DividendoBolsa());
+        subComandosBolsa.put("ordenes", new OrdenesBolsa());
         subComandos.put("bolsa", subComandosBolsa);
 
         Map<String, SubComando> subComandoEmpleo = new HashMap<>();

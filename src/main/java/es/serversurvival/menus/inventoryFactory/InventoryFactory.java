@@ -24,6 +24,7 @@ public abstract class InventoryFactory {
     protected static PosicionesCerradas posicionesCerradasMySQL = PosicionesCerradas.INSTANCE;
     protected static Transacciones transaccionesMySQL = Transacciones.INSTANCE;
     protected static Deudas deudasMySQL = Deudas.INSTANCE;
+    protected static Ordenes ordenesMySQL = Ordenes.INSTANCE;
 
     protected abstract Inventory buildInventory (String jugador);
 

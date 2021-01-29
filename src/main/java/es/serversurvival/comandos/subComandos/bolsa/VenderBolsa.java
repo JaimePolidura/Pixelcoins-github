@@ -1,16 +1,14 @@
 package es.serversurvival.comandos.subComandos.bolsa;
 
-import com.sun.deploy.security.ValidationState;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.enums.TipoPosicion;
-import es.serversurvival.util.Funciones;
-import es.serversurvival.apiHttp.IEXCloud_API;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import static es.serversurvival.util.Funciones.*;
 import static es.serversurvival.validaciones.Validaciones.*;
 
 public class VenderBolsa extends BolsaSubCommand {
@@ -58,7 +56,12 @@ public class VenderBolsa extends BolsaSubCommand {
             cantidad = posicionAVender.getCantidad();
         }
 
-        transaccionesMySQL.venderPosicion(posicionAVender ,cantidad ,player);
+        if(mercadoEstaAbierto()){
+            transaccionesMySQL.venderPosicion(posicionAVender ,cantidad , player.getName());
+        }else{
+            ordenesMySQL.abrirOrdenVentaLargo(player, args[1], cantidad);
+        }
+
 
         MySQL.desconectar();
     }

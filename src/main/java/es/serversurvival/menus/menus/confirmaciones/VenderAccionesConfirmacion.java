@@ -12,6 +12,9 @@ import org.bukkit.inventory.Inventory;
 
 import java.util.*;
 
+import static es.serversurvival.util.Funciones.*;
+import static es.serversurvival.util.Funciones.mercadoEstaAbierto;
+
 public class VenderAccionesConfirmacion extends Menu implements Confirmacion{
     private Inventory inventory;
     private Player player;
@@ -56,19 +59,26 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion{
         MySQL.conectar();
 
         PosicionAbierta posicionAVender = posicionesAbiertasMySQL.getPosicionAbierta(id);
-        if(tipoPosicion == TipoPosicion.LARGO){
-            transaccionesMySQL.venderPosicion(posicionAVender, posicionAVender.getCantidad(), player);
-        }else{
-            transaccionesMySQL.comprarPosicionCorto(posicionAVender, posicionAVender.getCantidad(), player);
+
+        if(mercadoEstaAbierto() && tipoPosicion == TipoPosicion.LARGO){
+            transaccionesMySQL.venderPosicion(posicionAVender, posicionAVender.getCantidad(), player.getName());
+
+        }else if (mercadoEstaAbierto() && tipoPosicion == TipoPosicion.CORTO) {
+            transaccionesMySQL.comprarPosicionCorto(posicionAVender, posicionAVender.getCantidad(), player.getName());
+
+        }else if (mercadoNoEstaAbierto() && tipoPosicion == TipoPosicion.LARGO) {
+            ordenesMySQL.abrirOrdenVentaLargo(player, String.valueOf(id), posicionAVender.getCantidad());
+
+        }else if (mercadoNoEstaAbierto() && tipoPosicion == TipoPosicion.CORTO) {
+            ordenesMySQL.abrirOrdenCompraCorto(player, String.valueOf(id), posicionAVender.getCantidad());
         }
-        MySQL.desconectar();
 
         closeMenu();
+        MySQL.desconectar();
     }
 
     @Override
     public void cancelar() {
         BolsaCarteraMenu menu = new BolsaCarteraMenu(player);
-        menu.openMenu();
     }
 }

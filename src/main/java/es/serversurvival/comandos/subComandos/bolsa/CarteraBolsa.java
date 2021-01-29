@@ -22,6 +22,5 @@ public class CarteraBolsa extends BolsaSubCommand {
 
     public void execute(Player player, String[] args) {
         BolsaCarteraMenu menu = new BolsaCarteraMenu(player);
-        menu.openMenu();
     }
 }

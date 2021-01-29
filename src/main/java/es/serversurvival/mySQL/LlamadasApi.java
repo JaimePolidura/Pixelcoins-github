@@ -2,7 +2,10 @@ package es.serversurvival.mySQL;
 
 import es.serversurvival.apiHttp.IEXCloud_API;
 import es.serversurvival.main.Pixelcoin;
+import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.tablasObjetos.LlamadaApi;
+import es.serversurvival.util.Funciones;
+import javafx.util.Pair;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,8 +24,8 @@ public final class LlamadasApi extends MySQL {
     public final static LlamadasApi INSTANCE = new LlamadasApi();
     private LlamadasApi () {}
 
-    public void nuevaLlamada(String simbolo, double precio, String tipo, String nombreValor){
-        executeUpdate("INSERT INTO llamadasapi (simbolo, precio, tipo_activo, nombre_activo) VALUES ('"+simbolo+"','"+precio+"','"+tipo+"','"+nombreValor+"')");
+    public void nuevaLlamada(String simbolo, double precio, TipoActivo tipo, String nombreValor){
+        executeUpdate("INSERT INTO llamadasapi (simbolo, precio, tipo_activo, nombre_activo) VALUES ('"+simbolo+"','"+precio+"','"+tipo.toString()+"','"+nombreValor+"')");
     }
 
     public LlamadaApi getLlamadaAPI(String simbolo) {
@@ -64,79 +67,105 @@ public final class LlamadasApi extends MySQL {
         return getLlamadaAPI(simbolo) != null;
     }
 
-    public void actualizarSimbolo(String simbolo){
-        Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
-            conectar();
-            try{
-                String tipo = this.getLlamadaAPI(simbolo).getTipo_activo();
-                double precio = posicionesAbiertasMySQL.getPrecioActual(simbolo, tipo);
+    public void borrarLlamadaSiNoEsUsada (String ticker) {
+        if(!posicionesAbiertasMySQL.existeTicker(ticker)){
+            borrarLlamada(ticker);
+        }
+    }
 
-                this.setPrecio(simbolo, precio);
-            }catch (Exception e){
-                e.printStackTrace();
+    public void nuevaLlamadaSiNoEstaReg(String ticker, double precio, TipoActivo tipo, String nombrevalor) {
+        if(!estaReg(ticker)){
+            nuevaLlamada(ticker, precio, tipo, nombrevalor);
+        }
+    }
+
+    public Optional<Double> getPrecioAccion (String ticker) {
+        try {
+            double precio;
+            if(estaReg(ticker))
+                precio = getLlamadaAPI(ticker).getPrecio();
+            else
+                precio = IEXCloud_API.getOnlyPrice(ticker);
+
+            return Optional.of(precio);
+        }catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<String> getNombreActivo (String ticker) {
+        try {
+            String nombreActivo;
+            if(estaReg(ticker))
+                nombreActivo = getLlamadaAPI(ticker).getNombre_activo();
+            else
+                nombreActivo = IEXCloud_API.getNombreEmpresa(ticker);
+
+            return Optional.of(nombreActivo);
+        }catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<Pair<String, Double>> getPairNombreValorPrecio (String ticker) {
+        try{
+            double precio;
+            String nombreValor;
+
+            if(estaReg(ticker)){
+                LlamadaApi llamadaApi = this.getLlamadaAPI(ticker);
+                nombreValor = llamadaApi.getNombre_activo();
+                precio = llamadaApi.getPrecio();
+            }else{
+                nombreValor = IEXCloud_API.getNombreEmpresa(ticker);
+                precio = IEXCloud_API.getOnlyPrice(ticker);
             }
-            desconectar();
+
+            return Optional.of(new Pair<>(nombreValor, precio));
+        }catch (Exception e){
+            return Optional.empty();
+        }
+
+    }
+
+    public void actualizar (String simbolo){
+        Funciones.POOL.submit(() -> {
+            MySQL.conectar();
+
+            String tipo = getLlamadaAPI(simbolo).getTipo_activo();
+            double precio = posicionesAbiertasMySQL.getPrecioActual(simbolo, tipo);
+
+            this.setPrecio(simbolo, precio);
+
+            MySQL.desconectar();
         },0L);
     }
 
-    public synchronized void actualizarPrecios(){
-        Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
-            MySQL.conectar();
-            List<LlamadaApi> llamadaApis = getTodasLlamadasApi();
-            int actualizadas = 0;
+    public synchronized void actualizarPrecios (){
+        MySQL.conectar();
+        List<LlamadaApi> llamadaApis = getTodasLlamadasApi();
 
-            for (LlamadaApi llamadaApi : llamadaApis) {
-                try {
-                    double precio = posicionesAbiertasMySQL.getPrecioActual(llamadaApi.getSimbolo(), llamadaApi.getTipo_activo());
-                    setPrecio(llamadaApi.getSimbolo(), precio);
+        for (LlamadaApi llamadaApi : llamadaApis) {
+            double precio = posicionesAbiertasMySQL.getPrecioActual(llamadaApi.getSimbolo(), llamadaApi.getTipo_activo());
 
-                    actualizadas++;
-                } catch (Exception e) {
-                    Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + "Error al actualizar el precio de " + llamadaApi.getSimbolo() + " " + e.getMessage());
-                }
-            }
+            this.setPrecio(llamadaApi.getSimbolo(), precio);
+        }
 
-            if(Bukkit.getOnlinePlayers().size() != 0){
-                Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Se han actualizado: " + actualizadas + " accione(s) de " + llamadaApis.size());
-            }
-            MySQL.desconectar();
-        }  , 0L);
-    }
-
-    public synchronized void actualizarNobreEmpresa (String simbolo) {
-        conectar();
-
-        LlamadaApi llamadasApi = getLlamadaAPI(simbolo);
-        Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
-            conectar();
-            try {
-                String nombreEmpresa = IEXCloud_API.getNombreEmpresa(simbolo);
-                this.setNombreValor(simbolo, nombreEmpresa);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            desconectar();
-        }, 0L);
+        MySQL.desconectar();
     }
 
     public void mostrarRatioPer (Player player, String ticker) {
-        Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
+        Funciones.POOL.submit(() -> {
             try{
-                llamadasApiMySQL.conectar();
+                conectar();
                 LlamadaApi accion = getLlamadaAPI(ticker);
 
-                double precioAccion = 0;
-                String nombreValor;
-                if(accion == null){
-                    precioAccion = IEXCloud_API.getOnlyPrice(ticker);
-                    nombreValor = IEXCloud_API.getNombreEmpresa(ticker);
-                }else{
-                    precioAccion = accion.getPrecio();
-                    nombreValor = accion.getNombre_activo();
-                }
+                Pair<String, Double> pairNombreValorPrecio = this.getPairNombreValorPrecio(ticker).get();
 
+                String nombreValor = pairNombreValorPrecio.getKey();
+                double precioAccion = pairNombreValorPrecio.getValue();
                 double eps = IEXCloud_API.getEPS(ticker);
-                
+
                 if(eps != 0){
                     int ratioPer = (int) (precioAccion / eps);
                     player.sendMessage(ChatColor.GOLD + nombreValor + " cotiza a " + ChatColor.GREEN + formatea.format(precioAccion) + "PC" + ChatColor.GOLD + " por lo cual el PER es " + ChatColor.GREEN + formatea.format(ratioPer) + "x");
@@ -147,8 +176,8 @@ public final class LlamadasApi extends MySQL {
             }catch (Exception e) {
                 player.sendMessage(ChatColor.DARK_RED + "No se ha encontrado la accion. Para buscar el ticker lo pudes hacer en internet o el /bolsa valores. Recuerda que solo se pueden empresas que cotizen en EEUU");
             }
-            llamadasApiMySQL.desconectar();
-        }, 0L);
+            desconectar();
+        });
     }
 
     @Override

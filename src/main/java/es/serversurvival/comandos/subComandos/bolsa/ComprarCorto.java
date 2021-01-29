@@ -13,6 +13,7 @@ import main.ValidationsService;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import static es.serversurvival.util.Funciones.*;
 import static es.serversurvival.validaciones.Validaciones.*;
 
 public class ComprarCorto extends BolsaSubCommand{
@@ -58,7 +59,12 @@ public class ComprarCorto extends BolsaSubCommand{
             cantidad = posicionAComprar.getCantidad();
         }
 
-        transaccionesMySQL.comprarPosicionCorto(posicionAComprar, cantidad, player);
+        if(mercadoEstaAbierto()){
+            transaccionesMySQL.comprarPosicionCorto(posicionAComprar, cantidad, player.getName());
+        }else{
+            ordenesMySQL.abrirOrdenCompraCorto(player, args[2], cantidad);
+        }
+
         MySQL.desconectar();
     }
 }

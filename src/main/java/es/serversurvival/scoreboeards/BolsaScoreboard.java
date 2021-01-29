@@ -30,6 +30,8 @@ public class BolsaScoreboard implements SingleScoreboard {
 
     @Override
     public Scoreboard createScoreborad(String jugador) {
+        MySQL.conectar();
+
         Scoreboard scoreboard = createScoreboard("bolsa", ChatColor.GOLD + "" + ChatColor.BOLD + "TUS MEJORES ACCIONES");
         Objective objective = scoreboard.getObjective("bolsa");
 
@@ -46,6 +48,8 @@ public class BolsaScoreboard implements SingleScoreboard {
             pos--;
             loops++;
         }
+
+        MySQL.desconectar();
 
         addLineToScoreboard(objective, ChatColor.GOLD + "       ", -10);
         addLineToScoreboard(objective, ChatColor.GOLD + "--------------------------", -20);

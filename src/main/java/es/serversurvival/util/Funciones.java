@@ -8,9 +8,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
@@ -27,6 +29,7 @@ import org.json.simple.parser.JSONParser;
 public final class Funciones {
     public static final DecimalFormat FORMATEA = new DecimalFormat("###,###.##");
     public static final SimpleDateFormat DATE_FORMATER = new SimpleDateFormat("yyyy-MM-dd");
+    public static final ExecutorService POOL = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     private Funciones () {}
 
@@ -370,6 +373,28 @@ public final class Funciones {
         list.addAll(Arrays.asList(elements));
 
         return list;
+    }
+    
+    public static boolean esHoyDiaSemana (int... diaSemanas) {
+        LocalDate localDate = LocalDate.now();
+
+        return Arrays.stream(diaSemanas).anyMatch(dia -> localDate.getDayOfWeek().getValue() == dia);
+    }
+
+    public static boolean esHoyHora (int horaMin, int minMin, int horaMax, int minMax) {
+        LocalDateTime ahora = LocalDateTime.now();
+
+        return ahora.getHour() > horaMin && ahora.getHour() < horaMax || ahora.getHour() == horaMin &&
+                ahora.getMinute() >= minMin || (ahora.getHour() == horaMax && ahora.getMinute() <= minMax);
+    }
+
+    public static boolean mercadoEstaAbierto() {
+        //return !Funciones.esHoyDiaSemana(6, 0) && Funciones.esHoyHora(15, 30, 22, 30);
+        return false;
+    }
+
+    public static boolean mercadoNoEstaAbierto() {
+        return !mercadoEstaAbierto();
     }
 
     public static String buildStringFromArray (String[] array) {

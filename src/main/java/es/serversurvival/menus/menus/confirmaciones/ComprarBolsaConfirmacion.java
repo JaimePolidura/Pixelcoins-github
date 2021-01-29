@@ -1,7 +1,7 @@
 package es.serversurvival.menus.menus.confirmaciones;
 
 import es.serversurvival.mySQL.MySQL;
-import es.serversurvival.util.Funciones;
+import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.util.MinecraftUtils;
@@ -17,13 +17,15 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+import static es.serversurvival.util.Funciones.*;
+
 public class ComprarBolsaConfirmacion extends Menu implements Confirmacion {
     private String titulo;
     private String simbolo;
     private String destinatario;
     private double precioUnidad;
     private double precioTotal;
-    private String tipo;
+    private TipoActivo tipo;
     private String alias;
     private Inventory inventory;
     private Player player;
@@ -31,7 +33,7 @@ public class ComprarBolsaConfirmacion extends Menu implements Confirmacion {
     private double dineroJugador;
     private String nombreValor;
 
-    public ComprarBolsaConfirmacion(String simbolo, String nombreValor, String tipo, String alias, String destinatario, double precioUnidad) {
+    public ComprarBolsaConfirmacion(String simbolo, String nombreValor, TipoActivo tipo, String alias, String destinatario, double precioUnidad) {
         this.nombreValor = nombreValor;
         this.alias = alias;
         this.tipo = tipo;
@@ -70,7 +72,7 @@ public class ComprarBolsaConfirmacion extends Menu implements Confirmacion {
     }
 
     private void updateCantidad(ItemStack itemStack) {
-        if(itemStack == null || Funciones.noEsDeTipoItem(itemStack,"LIGHT_GRAY_BANNER" )){
+        if(itemStack == null || noEsDeTipoItem(itemStack,"LIGHT_GRAY_BANNER" )){
             return;
         }
 
@@ -99,7 +101,7 @@ public class ComprarBolsaConfirmacion extends Menu implements Confirmacion {
         }
         String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "COMPRAR " + alias.toUpperCase();
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GOLD + "Comprar " + cantidad + " " +  alias  + " " + simbolo + " a " + ChatColor.GREEN + precioUnidad + " PC -> total: " + formatea.format(Funciones.redondeoDecimales(precioTotal, 3)) + " PC");
+        lore.add(ChatColor.GOLD + "Comprar " + cantidad + " " +  alias  + " " + simbolo + " a " + ChatColor.GREEN + precioUnidad + " PC -> total: " + formatea.format(redondeoDecimales(precioTotal, 3)) + " PC");
 
         this.inventory.setItem(14, MinecraftUtils.loreDisplayName(Material.GREEN_WOOL, displayName, lore));
     }
@@ -124,7 +126,13 @@ public class ComprarBolsaConfirmacion extends Menu implements Confirmacion {
         }
 
         MySQL.conectar();
-        transaccionesMySQL.comprarUnidadBolsa(tipo.toUpperCase(), simbolo, nombreValor, alias, precioUnidad, cantidad, player);
+
+        if(mercadoEstaAbierto()){
+            transaccionesMySQL.comprarUnidadBolsa(tipo, simbolo, nombreValor, alias, precioUnidad, cantidad, player.getName());
+        }else{
+            ordenesMySQL.abrirOrdenCompraLargo(player, simbolo, cantidad);
+        }
+
         MySQL.desconectar();
 
         closeMenu();

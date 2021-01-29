@@ -18,11 +18,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AccionesInventoryPag1Factory extends InventoryFactory {
+public class AccionesInventoryFactory extends InventoryFactory {
     private HashMap<String, String> accionesPagina1 = new HashMap<>();
     private HashMap<String, String> accionesPagina2 = new HashMap<>();
 
-    public AccionesInventoryPag1Factory () {
+    public AccionesInventoryFactory() {
         buildPagina1();
         buildPagina2();
     }
@@ -118,7 +118,7 @@ public class AccionesInventoryPag1Factory extends InventoryFactory {
     }
 
     public void buildPagina1 () {
-        accionesPagina1.put("ATV", "Activision");
+        accionesPagina1.put("ATVI", "Activision");
         accionesPagina1.put("ADBE", "Adobe");
         accionesPagina1.put("GOOG", "Google");
         accionesPagina1.put("AMZN", "Amazon");

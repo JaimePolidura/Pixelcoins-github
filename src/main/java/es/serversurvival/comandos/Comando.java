@@ -21,6 +21,7 @@ public abstract class Comando {
     protected static Transacciones transaccionesMySQL = Transacciones.INSTANCE;
     protected static Deudas deudasMySQL = Deudas.INSTANCE;
     protected static ConversacionesWeb conversacionesWebMySQL = ConversacionesWeb.INSTANCE;
+    protected static Ordenes ordenesMySQL = Ordenes.INSTANCE;
 
     protected String mensajeUsoIncorrecto() {
         return "Uso incorrecto " + this.getSintaxis();

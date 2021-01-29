@@ -3,7 +3,7 @@ package es.serversurvival.menus.menus;
 import es.serversurvival.apiHttp.IEXCloud_API;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
-import es.serversurvival.menus.inventoryFactory.inventories.AccionesInventoryPag1Factory;
+import es.serversurvival.menus.inventoryFactory.inventories.AccionesInventoryFactory;
 import es.serversurvival.menus.menus.confirmaciones.ComprarBolsaConfirmacion;
 import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.util.Funciones;
@@ -34,7 +34,7 @@ public class AccionesMenu extends Menu implements Clickable, Paginated, PostLoad
         this.currentIndex = 0;
 
         this.pages = new ArrayList<>();
-        AccionesInventoryPag1Factory inventoryFactory = new AccionesInventoryPag1Factory();
+        AccionesInventoryFactory inventoryFactory = new AccionesInventoryFactory();
         pages.add(new Page(0, InventoryCreator.createInventoryMenu(inventoryFactory, player.getName())));
         pages.add(new Page(1, inventoryFactory.buildInventoryPag2()));
 
@@ -62,8 +62,7 @@ public class AccionesMenu extends Menu implements Clickable, Paginated, PostLoad
         String ticker = lore.get(0).split(" ")[1];
 
         closeMenu();
-        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(ticker, nombreValor, TipoActivo.ACCIONES.toString(), TipoActivo.ACCIONES.toString(), player.getName(), precio);
-        confirmacion.openMenu();
+        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(ticker, nombreValor, TipoActivo.ACCIONES, "acciones", player.getName(), precio);
     }
 
     @Override

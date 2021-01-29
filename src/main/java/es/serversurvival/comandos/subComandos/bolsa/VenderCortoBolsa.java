@@ -4,15 +4,21 @@ import es.serversurvival.apiHttp.IEXCloud_API;
 import es.serversurvival.main.Pixelcoin;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
+import javafx.util.Pair;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import javax.swing.text.html.Option;
+
+import java.util.Optional;
+
+import static es.serversurvival.util.Funciones.*;
 import static es.serversurvival.validaciones.Validaciones.*;
 
-public class VenderCorto extends BolsaSubCommand{
+public class VenderCortoBolsa extends BolsaSubCommand{
     private final String scnombre = "vendercorto";
     private final String sintaxis = "/bolsa vendercorto <ticker> <nº acciones>";
     private final String ayuda = "Vender una accion para despues recomprarla. El jugador se le reembolsara la diferencia de precio, es decir ganara cuando el precio de la acicon baje. Se te cobra un 5% del valor total de la venta (precioPorAccion * cantidadDeAcciones) sobre tus ahorros";
@@ -44,32 +50,29 @@ public class VenderCorto extends BolsaSubCommand{
         }
 
         int numeroAccionesAVender = Integer.parseInt(args[2]);
-        String tiker = args[1];
+        String ticker = args[1];
 
-        Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
+        POOL.submit( () -> {
             MySQL.conectar();
-            String nombreValor;
-            double precioAccion;
 
-            if(llamadasApiMySQL.estaReg(tiker)){
-                precioAccion = llamadasApiMySQL.getLlamadaAPI(tiker).getPrecio();
-                nombreValor = llamadasApiMySQL.getLlamadaAPI(tiker).getNombre_activo();
-            }else{
-                try{
-                    precioAccion = IEXCloud_API.getOnlyPrice(tiker);
-                    nombreValor = IEXCloud_API.getNombreEmpresa(tiker);
+            Optional<Pair<String, Double>> optionalNombrePrecio = llamadasApiMySQL.getPairNombreValorPrecio(ticker);
 
-                    nombreValor = Funciones.quitarCaracteres(nombreValor, '.', ',');
-                    nombreValor = Funciones.quitarPalabrasEntreEspacios(nombreValor, "group", "inc", "co", "corp");
-                }catch (Exception e) {
-                    player.sendMessage(ChatColor.DARK_RED + "El nombre que has puesto no existe. Para consultar los tickers: /bolsa valores o en internet");
-                    MySQL.desconectar();
-                    return;
-                }
+            if(!optionalNombrePrecio.isPresent()){
+                player.sendMessage(ChatColor.DARK_RED + "El nombre que has puesto no existe. Para consultar los tickers: /bolsa valores o en internet");
+                MySQL.desconectar();
+                return;
             }
-            MySQL.conectar();
-            transaccionesMySQL.venderEnCortoBolsa(player, tiker, nombreValor, numeroAccionesAVender, precioAccion);
+
+            String nombreValor = optionalNombrePrecio.get().getKey();
+            double precioAccion = optionalNombrePrecio.get().getValue();
+
+            if(mercadoEstaAbierto()){
+                transaccionesMySQL.venderEnCortoBolsa(player.getName(), ticker, nombreValor, numeroAccionesAVender, precioAccion);
+            }else{
+                ordenesMySQL.abrirOrdenVentaCorto(player, ticker, Integer.parseInt(args[2]));
+            }
+
             MySQL.desconectar();
-        }, 0L);
+        });
     }
 }
