@@ -57,7 +57,7 @@ public class EmpleosInventoryFactory extends InventoryFactory {
             lore.add("   ");
             lore.add(ChatColor.GOLD + "Empresa: " + empleado.getEmpresa());
             lore.add(ChatColor.GOLD + "Cargo: " + empleado.getCargo());
-            lore.add(ChatColor.GOLD + "Sueldo: " + ChatColor.GREEN + formatea.format(empleado.getSueldo()) + "/" + Empleados.toStringTipoSueldo(empleado.getTipo_sueldo()));
+            lore.add(ChatColor.GOLD + "Sueldo: " + ChatColor.GREEN + formatea.format(empleado.getSueldo()) + "/" + empleado.getTipo_sueldo().nombre);
             lore.add(ChatColor.GOLD + "Ultima vez que te pagaron: " + empleado.getFecha_ultimapaga());
             lore.add("   ");
             lore.add(ChatColor.GOLD + "ID: " + empleado.getId());

@@ -20,6 +20,9 @@ import java.util.function.ToIntFunction;
 
 import es.serversurvival.mySQL.*;
 import es.serversurvival.mySQL.tablasObjetos.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -389,8 +392,7 @@ public final class Funciones {
     }
 
     public static boolean mercadoEstaAbierto() {
-        //return !Funciones.esHoyDiaSemana(6, 0) && Funciones.esHoyHora(15, 30, 22, 30);
-        return false;
+        return !Funciones.esHoyDiaSemana(6, 0) && Funciones.esHoyHora(15, 30, 22, 30);
     }
 
     public static boolean mercadoNoEstaAbierto() {
@@ -399,5 +401,37 @@ public final class Funciones {
 
     public static String buildStringFromArray (String[] array) {
         return buildStringFromArray(array, 0);
+    }
+
+    public static void enviarMensajeYSonidoSiOnline(String jugador, String mensaje, Sound sound) {
+        Player player = Bukkit.getPlayer(jugador);
+        if(player != null){
+            player.sendMessage(mensaje);
+            player.playSound(player.getLocation(), sound, 10, 1);
+        }
+    }
+
+    public static void enviarMensajeYSonido (Player player, String mensaje, Sound sound) {
+        player.sendMessage(mensaje);
+        player.playSound(player.getLocation(), sound, 10, 1);
+    }
+
+    public static void enviarMensaje (String nombreJugador, String mensajeOnline, String mensajeOffline) {
+        Player player = Bukkit.getPlayer(nombreJugador);
+        if(player != null){
+            player.sendMessage(mensajeOnline);
+        }else{
+            Mensajes.INSTANCE.nuevoMensaje("", nombreJugador, mensajeOffline);
+        }
+    }
+
+    public static void enviarMensaje (String nombreJugador, String mensajeOnline, String mensajeOffline, Sound sound, int v1, int v2) {
+        Player player = Bukkit.getPlayer(nombreJugador);
+        if (player != null) {
+            player.sendMessage(mensajeOnline);
+            player.playSound(player.getLocation(), sound, v1, v2);
+        } else {
+            Mensajes.INSTANCE.nuevoMensaje("", nombreJugador, mensajeOffline);
+        }
     }
 }

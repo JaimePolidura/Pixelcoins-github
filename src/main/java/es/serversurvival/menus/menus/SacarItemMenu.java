@@ -5,6 +5,9 @@ import es.serversurvival.menus.MenuManager;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.SacarItemInventoryFactory;
 import es.serversurvival.mySQL.MySQL;
+import es.serversurvival.mySQL.enums.CambioPixelcoins;
+import es.serversurvival.mySQL.tablasObjetos.Jugador;
+import es.serversurvival.task.ScoreBoardManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -56,10 +59,17 @@ public class SacarItemMenu extends Menu implements Clickable, Refreshcable {
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
             return;
         }
-
+        
         MySQL.conectar();
-        double pixelcoinsSacadas = transaccionesMySQL.sacarItem(player, itemClickeado.getType().toString());
+
+        Jugador jugadorASacar = jugadoresMySQL.getJugador(player.getName());
+        String tipoItem = itemClickeado.getType().toString();
+
+        double pixelcoinsSacadas = CambioPixelcoins.sacarItem(jugadorASacar, tipoItem);
         this.pixelcoinsJugador = pixelcoinsJugador - pixelcoinsSacadas;
+
+        ScoreBoardManager.getInstance().updateScoreboard(player);
+
         refresh();
         MySQL.desconectar();
     }

@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.util.*;
 import java.util.Date;
 
+import es.serversurvival.mySQL.enums.TipoSueldo;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
@@ -21,10 +22,10 @@ public final class Empleados extends MySQL {
 
     public static final List<String> tipoSueldos = Arrays.asList("d", "s", "2s", "m");
 
-    public void nuevoEmpleado(String empleado, String empresa, double sueldo, String tipo, String cargo) {
+    public void nuevoEmpleado(String empleado, String empresa, double sueldo, TipoSueldo tipo, String cargo) {
         String fechaPaga = dateFormater.format(new Date());
 
-        executeUpdate("INSERT INTO empleados (jugador, empresa, sueldo, cargo, tipo_sueldo, fecha_ultimapaga) VALUES ('" + empleado + "','" + empresa + "','" + sueldo + "','" + cargo + "','" + tipo + "','" + fechaPaga + "')");
+        executeUpdate("INSERT INTO empleados (jugador, empresa, sueldo, cargo, tipo_sueldo, fecha_ultimapaga) VALUES ('" + empleado + "','" + empresa + "','" + sueldo + "','" + cargo + "','" + tipo.codigo + "','" + fechaPaga + "')");
     }
 
     public Empleado getEmpleado(int id){
@@ -43,8 +44,8 @@ public final class Empleados extends MySQL {
         executeUpdate("UPDATE empleados SET cargo = '"+cargo+"' WHERE id = '"+id+"'");
     }
 
-    public void setTipo(int id, String tipo) {
-        executeUpdate("UPDATE empleados SET tipo_sueldo = '"+tipo+"' WHERE id = '"+id+"'");
+    public void setTipo(int id, TipoSueldo tipo) {
+        executeUpdate("UPDATE empleados SET tipo_sueldo = '"+tipo.codigo+"' WHERE id = '"+id+"'");
     }
 
     public void setFechaPaga(int id, String fechaPaga) {
@@ -126,11 +127,11 @@ public final class Empleados extends MySQL {
         }
     }
 
-    public void editarTipoSueldo (Empresa empresa, Empleado empleado, String tipoSueldo) {
+    public void editarTipoSueldo (Empresa empresa, Empleado empleado, TipoSueldo tipoSueldo) {
         this.setTipo(empleado.getId(), tipoSueldo);
 
         double sueldo = empleado.getSueldo();
-        String tipoString = toStringTipoSueldo(tipoSueldo);
+        String tipoString = tipoSueldo.nombre;
         Player jugadorAEditarPlayer = Bukkit.getPlayer(empleado.getJugador());
         Player sender = Bukkit.getPlayer(empresa.getOwner());
 
@@ -165,7 +166,7 @@ public final class Empleados extends MySQL {
         List<Empleado> todosLosEmpleados = getAllEmpleados();
         for (Empleado empl : todosLosEmpleados) {
             Date actualEmpl = formatFechaDeLaBaseDatosException(empl.getFecha_ultimapaga());
-            String tipoSueldo = empl.getTipo_sueldo();
+            String tipoSueldo = empl.getTipo_sueldo().codigo;
 
             long diferenciaDias = Funciones.diferenciaDias(hoy, actualEmpl);
 
@@ -190,25 +191,6 @@ public final class Empleados extends MySQL {
         return tipoSueldos.stream().anyMatch( (ite) -> ite.equalsIgnoreCase(tipo) );
     }
 
-    public static String toStringTipoSueldo(String tipoSueldo) {
-        String nombreTipoSueldo = null;
-        switch (tipoSueldo) {
-            case "d":
-                nombreTipoSueldo = "dia";
-                break;
-            case "s":
-                nombreTipoSueldo = "semana";
-                break;
-            case "2s":
-                nombreTipoSueldo = "2 semanas";
-                break;
-            case "m":
-                nombreTipoSueldo = "mes";
-                break;
-        }
-        return nombreTipoSueldo;
-    }
-
     @SneakyThrows
     private Date formatFechaDeLaBaseDatosException (String fecha) {
         return dateFormater.parse(fecha);
@@ -226,7 +208,7 @@ public final class Empleados extends MySQL {
                 rs.getString("empresa"),
                 rs.getDouble("sueldo"),
                 rs.getString("cargo"),
-                rs.getString("tipo_sueldo"),
+                TipoSueldo.ofCodigo(rs.getString("tipo_sueldo")),
                 rs.getString("fecha_ultimapaga"));
     }
 }

@@ -1,10 +1,10 @@
 package es.serversurvival.mySQL;
 
+import es.serversurvival.mySQL.enums.AccionOrden;
 import es.serversurvival.mySQL.enums.TipoActivo;
-import es.serversurvival.mySQL.enums.TipoOperacion;
-import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.mySQL.tablasObjetos.Orden;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
+import es.serversurvival.util.Funciones;
 import javafx.util.Pair;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -21,8 +21,8 @@ public final class Ordenes extends MySQL{
 
     private Ordenes () {}
 
-    public void nuevaOrden (String jugador, String nombre_activo, int cantidad, TipoOperacion tipo_operacion, TipoPosicion tipo_posicion) {
-        executeUpdate("INSERT INTO ordenes (jugador, nombre_activo, cantidad, tipo_operacion, tipo_posicion) VALUES ('"+jugador+"', '"+nombre_activo+"', '"+cantidad+"', '"+tipo_operacion.toString()+"', '"+tipo_posicion+"')");
+    private void nuevaOrden (String jugador, String nombre_activo, int cantidad, AccionOrden accion_orden) {
+        executeUpdate("INSERT INTO ordenes (jugador, nombre_activo, cantidad, accion_orden) VALUES ('"+jugador+"', '"+nombre_activo+"', '"+cantidad+"', '"+accion_orden.toString()+"')");
     }
 
     public List<Orden> getAllOrdenes () {
@@ -42,7 +42,7 @@ public final class Ordenes extends MySQL{
     }
 
     public void abrirOrdenCompraLargo(Player player, String ticker, int cantidad) {
-        nuevaOrden(player.getName(), ticker, cantidad, TipoOperacion.COMPRA, TipoPosicion.LARGO);
+        nuevaOrden(player.getName(), ticker, cantidad, AccionOrden.LARGO_COMPRA);
 
         player.sendMessage(ChatColor.GOLD + "Se ha abierto una orden. Cuando el mercado este abierto se ejecutara. " + ChatColor.AQUA + "/bolsa ordenes");
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
@@ -55,21 +55,21 @@ public final class Ordenes extends MySQL{
             return;
         }
 
-        nuevaOrden(player.getName(), id, cantidad, TipoOperacion.VENTA, TipoPosicion.LARGO);
+        nuevaOrden(player.getName(), id, cantidad, AccionOrden.LARGO_VENTA);
 
         player.sendMessage(ChatColor.GOLD + "Se ha abierto una orden. Cuando el mercado este abierto se ejecutara. " + ChatColor.AQUA + "/bolsa ordenes");
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
     }
 
     public void abrirOrdenVentaCorto (Player player, String ticker, int cantidad){
-        nuevaOrden(player.getName(), ticker, cantidad, TipoOperacion.VENTA, TipoPosicion.CORTO);
+        nuevaOrden(player.getName(), ticker, cantidad, AccionOrden.CORTO_VENTA);
 
         player.sendMessage(ChatColor.GOLD + "Se ha abierto una orden. Cuando el mercado este abierto se ejecutara. " + ChatColor.AQUA + "/bolsa ordenes");
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
     }
 
     public void abrirOrdenCompraCorto (Player player, String id, int cantidad){
-        nuevaOrden(player.getName(), id, cantidad, TipoOperacion.COMPRA, TipoPosicion.CORTO);
+        nuevaOrden(player.getName(), id, cantidad, AccionOrden.CORTO_COMPRA);
 
         player.sendMessage(ChatColor.GOLD + "Se ha abierto una orden. Cuando el mercado este abierto se ejecutara. " + ChatColor.AQUA + "/bolsa ordenes");
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
@@ -82,7 +82,7 @@ public final class Ordenes extends MySQL{
     }
 
     public void ejecutarOrdenes () {
-        if(false){
+        if(Funciones.mercadoNoEstaAbierto()){
             return;
         }
 
@@ -91,13 +91,16 @@ public final class Ordenes extends MySQL{
 
         POOL.submit(() -> {
             todasLasOrdenes.forEach(orden -> {
-                if(orden.getTipo_operacion() == TipoOperacion.COMPRA && orden.getTipo_posicion() == TipoPosicion.LARGO){
+                if(orden.getAccion_orden() == AccionOrden.LARGO_COMPRA){
                     ejecutarOrdenCompraLargo(orden);
-                }else if (orden.getTipo_operacion() == TipoOperacion.VENTA && orden.getTipo_posicion() == TipoPosicion.LARGO){
+
+                }else if (orden.getAccion_orden() == AccionOrden.LARGO_VENTA){
                     ejecutarOrdenVentaLargo(orden);
-                }else if (orden.getTipo_operacion() == TipoOperacion.VENTA && orden.getTipo_posicion() == TipoPosicion.CORTO) {
+
+                }else if (orden.getAccion_orden() == AccionOrden.CORTO_VENTA) {
                     ejecutarOrdenVentaCorto(orden);
-                }else if (orden.getTipo_operacion() == TipoOperacion.COMPRA && orden.getTipo_posicion() == TipoPosicion.CORTO){
+
+                }else if (orden.getAccion_orden() == AccionOrden.CORTO_COMPRA){
                     ejecutarOrdenCompraCorto(orden);
                 }
             });
@@ -170,7 +173,6 @@ public final class Ordenes extends MySQL{
                 rs.getString("jugador"),
                 rs.getString("nombre_activo"),
                 rs.getInt("cantidad"),
-                TipoOperacion.valueOf(rs.getString("tipo_operacion")),
-                TipoPosicion.valueOf(rs.getString("tipo_posicion")));
+                AccionOrden.valueOf(rs.getString("accion_orden")));
     }
 }

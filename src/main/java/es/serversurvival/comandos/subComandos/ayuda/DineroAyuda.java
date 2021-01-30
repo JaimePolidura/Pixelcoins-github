@@ -1,6 +1,7 @@
 package es.serversurvival.comandos.subComandos.ayuda;
 
 import es.serversurvival.mySQL.Transacciones;
+import es.serversurvival.mySQL.enums.CambioPixelcoins;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -22,8 +23,9 @@ public class DineroAyuda extends AyudaSubCommand {
     }
 
     public void execute(Player p, String[] args) {
-        p.sendMessage(ChatColor.YELLOW + " Puedes intercambiar 1 diamante por " + Transacciones.DIAMANTE + " pixelcoins o 1 un bloque de cuarzo por " + Transacciones.CUARZO + " pixelcoins o lapislazuli por " + Transacciones.LAPISLAZULI + " pixelcoins y viceversa  en los wither en " + ChatColor.WHITE + "/warp Spawn " + ChatColor.YELLOW +
-                ". Comandos de pixelcoins:");
+        p.sendMessage(ChatColor.YELLOW + " Puedes intercambiar 1 diamante por " + CambioPixelcoins.DIAMANTE + " pixelcoins o 1 un bloque de cuarzo por " +
+                CambioPixelcoins.CUARZO + " pixelcoins o lapislazuli por " + CambioPixelcoins.LAPISLAZULI + " pixelcoins y viceversa  en los wither en " +
+                ChatColor.WHITE + "/warp Spawn " + ChatColor.YELLOW + ". Comandos de pixelcoins:");
         p.sendMessage("          ");
         p.sendMessage("/perfil" + ChatColor.GOLD + " Ver todas tus estadisticas");
         p.sendMessage("          ");

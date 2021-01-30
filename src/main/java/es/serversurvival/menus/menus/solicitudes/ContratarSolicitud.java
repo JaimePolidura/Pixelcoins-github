@@ -1,5 +1,6 @@
 package es.serversurvival.menus.menus.solicitudes;
 
+import es.serversurvival.mySQL.enums.TipoSueldo;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.MenuManager;
@@ -20,11 +21,11 @@ public class ContratarSolicitud extends Menu implements Solicitud{
     private String destinatario;
     private String empresa;
     private double sueldo;
-    private String tipoSueldo;
+    private TipoSueldo tipoSueldo;
     private String cargo;
     private boolean isClicked = false;
 
-    public ContratarSolicitud (String enviador, String destinatario, String empresa, double sueldo, String tipoSueldo, String cargo) {
+    public ContratarSolicitud (String enviador, String destinatario, String empresa, double sueldo, TipoSueldo tipoSueldo, String cargo) {
         this.player = Bukkit.getPlayer(destinatario);
         this.enviador = enviador;
         this.destinatario = destinatario;
@@ -35,7 +36,7 @@ public class ContratarSolicitud extends Menu implements Solicitud{
 
         String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "    Solicitud Contrato";
         String nombreAceptar = ChatColor.GREEN + "" + ChatColor.BOLD + "ACEPTAR";
-        String descStrinAceptar = ChatColor.GOLD + "Solicitud de contrato de la empresa " + this.empresa + " para trabajar como " + this.cargo + " , con un sueldo de " + ChatColor.GREEN + this.sueldo + " PC" + ChatColor.GOLD + "/" + Empleados.toStringTipoSueldo(tipoSueldo);
+        String descStrinAceptar = ChatColor.GOLD + "Solicitud de contrato de la empresa " + this.empresa + " para trabajar como " + this.cargo + " , con un sueldo de " + ChatColor.GREEN + this.sueldo + " PC" + ChatColor.GOLD + "/" + tipoSueldo.nombre;
         List<String> lore = Funciones.dividirDesc(descStrinAceptar, 40);
 
         String nombreCancelar = ChatColor.RED + "" + ChatColor.BOLD + "DENEGAR";

@@ -197,11 +197,11 @@ public final class Deudas extends MySQL {
         if (playerAcredor != null) {
             playerAcredor.sendMessage(ChatColor.GOLD + playeDeudor.getName() + " ta ha pagado toda la deuda: " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC");
             playerAcredor.playSound(playerAcredor.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-            ScoreBoardManager.getInstance().updateScoreboard(playerAcredor);
         } else {
             mensajesMySQL.nuevoMensaje("", acredor, playeDeudor.getName() + " ta ha pagado toda la deuda: " + pixelcoinsDeuda + " PC");
         }
-        ScoreBoardManager.getInstance().updateScoreboard(playeDeudor);
+
+        ScoreBoardManager.getInstance().updateScoreboard(playeDeudor, playerAcredor);
     }
 
     @SneakyThrows

@@ -121,7 +121,7 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
             lore.add("   ");
             lore.add(ChatColor.GOLD + "Empleado: " + empleado.getJugador());
             lore.add(ChatColor.GOLD + "Cargo: " + empleado.getCargo());
-            lore.add(ChatColor.GOLD + "Sueldo: " + ChatColor.GREEN + formatea.format(empleado.getSueldo()) + " PC/" + Empleados.toStringTipoSueldo(empleado.getTipo_sueldo()));
+            lore.add(ChatColor.GOLD + "Sueldo: " + ChatColor.GREEN + formatea.format(empleado.getSueldo()) + " PC/" + empleado.getTipo_sueldo().nombre);
             lore.add(ChatColor.GOLD + "ID: " + empleado.getId());
             lore.add("   ");
             lore.add("/empresas despedir " + empresa + " " + empleado.getJugador());

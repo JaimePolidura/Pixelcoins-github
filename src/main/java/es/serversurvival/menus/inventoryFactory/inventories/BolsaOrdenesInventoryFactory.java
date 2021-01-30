@@ -43,12 +43,13 @@ public class BolsaOrdenesInventoryFactory extends InventoryFactory {
 
     private ItemStack buildItemOrden (Orden orden) {
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA CANCELAR";
-        Material material = orden.getTipo_posicion() == TipoPosicion.LARGO ? Material.NAME_TAG : Material.REDSTONE_TORCH;
+        Material material = Material.NAME_TAG;
         List<String> lore = new ArrayList<>();
         lore.add("  ");
         lore.add(ChatColor.GOLD + "Ticker: " + orden.getNombre_activo());
         lore.add(ChatColor.GOLD + "Cantidad: " + orden.getCantidad());
-        lore.add(ChatColor.GOLD + "Operacion: " + orden.getTipo_operacion().toString().toLowerCase());
+        lore.add(ChatColor.GOLD + "Operacion: " + orden.getAccion_orden().toString().split("_")[1].toLowerCase());
+        lore.add(ChatColor.GOLD + "Tipo: " + orden.getAccion_orden().toString().split("_")[0].toLowerCase());
         lore.add("  ");
         lore.add("" + orden.getId());
 

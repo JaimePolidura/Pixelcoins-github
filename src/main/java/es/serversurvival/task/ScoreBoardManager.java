@@ -65,6 +65,14 @@ public final class ScoreBoardManager extends BukkitRunnable {
         MySQL.desconectar();
     }
 
+    public void updateScoreboard(Player... players) {
+        for(Player player : players){
+            if(player != null){
+                updateScoreboard(player);
+            }
+        }
+    }
+
     public void updateScoreboard(Player player) {
         MySQL.conectar();
         ServerScoreboard actualScoreboard = scoreboards.get(actualIndex);

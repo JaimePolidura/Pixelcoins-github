@@ -42,7 +42,6 @@ public class NoTrabajaEmpresa implements Validator {
             return Empleados.INSTANCE.trabajaEmpresa(nombreEmpleado, nombreEmpresa) ?
                     ValidationResult.failed(messageOnFailed) :
                     ValidationResult.success();
-
         }catch (Exception e) {
             return ValidationResult.failed(messageOnFailed);
         }

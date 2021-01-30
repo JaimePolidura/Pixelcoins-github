@@ -3,6 +3,7 @@ package es.serversurvival.menus.inventoryFactory.inventories;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.Transacciones;
+import es.serversurvival.mySQL.enums.CambioPixelcoins;
 import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -42,7 +43,7 @@ public class SacarMaxItemInventoryFactory extends InventoryFactory {
     private ItemStack buildItemLapis (double dineroJugador) {
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR MAXIMO DE LAPISLAZULI";
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.BLUE + "1 DE LAPISLAZULI -> " + ChatColor.GREEN + Transacciones.LAPISLAZULI + " PC");
+        lore.add(ChatColor.BLUE + "1 DE LAPISLAZULI -> " + ChatColor.GREEN + CambioPixelcoins.LAPISLAZULI + " PC");
         lore.add("    ");
         lore.add("Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(dineroJugador));
 
@@ -52,7 +53,7 @@ public class SacarMaxItemInventoryFactory extends InventoryFactory {
     private ItemStack buildItemCuarzo (double dineroJugador) {
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR MAXIMO DE CUARZO";
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "1 BLOQUE DE CUARZO -> " + ChatColor.GREEN + Transacciones.CUARZO + " PC");
+        lore.add(ChatColor.GRAY + "1 BLOQUE DE CUARZO -> " + ChatColor.GREEN + CambioPixelcoins.CUARZO + " PC");
         lore.add("    ");
         lore.add("Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(dineroJugador));
 
@@ -62,7 +63,7 @@ public class SacarMaxItemInventoryFactory extends InventoryFactory {
     private ItemStack buildItemDiamante (double dineroJugador) {
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR MAXIMO DE DIAMANTES";
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.AQUA + "1 DIAMANTE -> " + ChatColor.GREEN + Transacciones.DIAMANTE);
+        lore.add(ChatColor.AQUA + "1 DIAMANTE -> " + ChatColor.GREEN + CambioPixelcoins.DIAMANTE);
         lore.add("    ");
         lore.add("Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(dineroJugador));
 

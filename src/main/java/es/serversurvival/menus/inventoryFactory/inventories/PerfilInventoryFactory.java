@@ -50,7 +50,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
         lore.add("  ");
         List<Empleado> empleos = empleadosMySQL.getTrabajosJugador(jugador);
         empleos.forEach( (emp) -> {
-            lore.add(ChatColor.GOLD + emp.getEmpresa() + " " + ChatColor.GREEN + formatea.format(emp.getSueldo()) + " PC " + ChatColor.GOLD + "/ " + Empleados.toStringTipoSueldo(emp.getTipo_sueldo()));
+            lore.add(ChatColor.GOLD + emp.getEmpresa() + " " + ChatColor.GREEN + formatea.format(emp.getSueldo()) + " PC " + ChatColor.GOLD + "/ " + emp.getTipo_sueldo().nombre);
         });
 
         return MinecraftUtils.loreDisplayName(Material.GOLDEN_APPLE, displayName, lore);

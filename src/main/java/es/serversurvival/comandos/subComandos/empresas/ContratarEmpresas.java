@@ -1,6 +1,7 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
 import es.serversurvival.mySQL.MySQL;
+import es.serversurvival.mySQL.enums.TipoSueldo;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.MenuManager;
 import es.serversurvival.menus.menus.solicitudes.ContratarSolicitud;
@@ -61,7 +62,9 @@ public class ContratarEmpresas extends EmpresasSubCommand {
             cargo = "Trabajador";
         }
 
-        ContratarSolicitud solicitud = new ContratarSolicitud(player.getName(), jugadorAContratarPlayer.getName(), args[2], sueldo, args[4], cargo);
+        TipoSueldo tipoSueldo = TipoSueldo.ofCodigo(args[4]);
+
+        ContratarSolicitud solicitud = new ContratarSolicitud(player.getName(), jugadorAContratarPlayer.getName(), args[2], sueldo, tipoSueldo, cargo);
         solicitud.enviarSolicitud();
 
         MySQL.desconectar();

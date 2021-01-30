@@ -1,6 +1,7 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
 import es.serversurvival.mySQL.MySQL;
+import es.serversurvival.mySQL.enums.TipoSueldo;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.mySQL.Empleados;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
@@ -89,6 +90,6 @@ public class EditarEmpleadoEmpresas extends EmpresasSubCommand {
         Empresa empresaAEditarEmpleado = empresasMySQL.getEmpresa(empresa);
         Empleado empleadoAditar = empleadosMySQL.getEmpleado(jugadorAEditar, empresa);
 
-        empleadosMySQL.editarTipoSueldo(empresaAEditarEmpleado, empleadoAditar, tipo);
+        empleadosMySQL.editarTipoSueldo(empresaAEditarEmpleado, empleadoAditar, TipoSueldo.ofCodigo(tipo));
     }
 }

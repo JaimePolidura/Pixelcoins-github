@@ -1,7 +1,6 @@
 package es.serversurvival.mySQL.tablasObjetos;
 
-import es.serversurvival.mySQL.enums.TipoOperacion;
-import es.serversurvival.mySQL.enums.TipoPosicion;
+import es.serversurvival.mySQL.enums.AccionOrden;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,6 +10,5 @@ public final class Orden implements TablaObjeto{
     @Getter private final String jugador;
     @Getter private final String nombre_activo;
     @Getter private final int cantidad;
-    @Getter private final TipoOperacion tipo_operacion;
-    @Getter private final TipoPosicion tipo_posicion;
+    @Getter private final AccionOrden accion_orden;
 }

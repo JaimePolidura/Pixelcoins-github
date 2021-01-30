@@ -83,10 +83,9 @@ public abstract class MySQL {
     }
 
     protected boolean isEmptyFromQuery (String query) {
-        ResultSet rs = executeQuery(query);
-
         try{
-            return rs.next();
+            ResultSet rs = executeQuery(query);
+            return !rs.next();
         }catch (SQLException e){
             return false;
         }
