@@ -7,12 +7,15 @@ import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.BolsaCarteraInventoryFactory;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+
+import static es.serversurvival.mySQL.enums.TipoPosicion.*;
 
 public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
     public static final String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + " TU CARTERA DE ACCIONES";
@@ -46,15 +49,14 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
     public void onClick(InventoryClickEvent event) {
         ItemStack clikedItem = event.getCurrentItem();
 
-        boolean validClick = clikedItem == null || !Funciones.cuincideNombre(clikedItem.getType().toString(), "BOOK", "NAME_TAG", "REDSTONE_TORCH") || clikedItem.getItemMeta().getLore().get(1) == null;
-        if(validClick){
+        boolean notValidClick = clikedItem == null || !Funciones.cuincideNombre(clikedItem.getType().toString(), "BOOK", "NAME_TAG", "REDSTONE_TORCH", "GREEN_BANNER") || clikedItem.getItemMeta().getLore().get(1) == null;
+        if(notValidClick){
             return;
         }
-        String clickedItemType = clikedItem.getType().toString();
 
-        if(clickedItemType.equalsIgnoreCase("BOOK")){
+        String clickedItemType = clikedItem.getType().toString();
+        if(Funciones.noEsDeTipoItem(clikedItem, "BOOK")){
             ElegirInversionMenu menu = new ElegirInversionMenu((Player) event.getWhoClicked());
-            menu.openMenu();
             return;
         }
 
@@ -64,21 +66,20 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
     private void performClick (ItemStack clikedItem) {
         String clickedItemType = clikedItem.getType().toString();
 
-        TipoPosicion tipoPosicion;
-        if (clickedItemType.equalsIgnoreCase("NAME_TAG")){
-            tipoPosicion = TipoPosicion.LARGO;
+        if(clickedItemType.equalsIgnoreCase(Material.GREEN_BANNER.toString())){ //Accion del server
+            //TODO
         }else{
-            tipoPosicion = TipoPosicion.CORTO;
+            TipoPosicion tipoPosicion = clickedItemType.equalsIgnoreCase("NAME_TAG") ? LARGO : CORTO;
+
+            List<String> lore = clikedItem.getItemMeta().getLore();
+            String acciones = lore.get(5).split(" ")[2];
+            String valorTotal = lore.get(10).split(" ")[2];
+            String beneficios = lore.get(8).split(" ")[2];
+            String rentabilidad = lore.get(9).split(" ")[1];
+            int id = Integer.parseInt(lore.get(lore.size() - 1).split(" ")[1]);
+
+            VenderAccionesConfirmacion confirmacion = new VenderAccionesConfirmacion(player, tipoPosicion, acciones, valorTotal, beneficios, rentabilidad, id);
         }
-
-        List<String> lore = clikedItem.getItemMeta().getLore();
-        String acciones = lore.get(5).split(" ")[2];
-        String valorTotal = lore.get(10).split(" ")[2];
-        String beneficios = lore.get(8).split(" ")[2];
-        String rentabilidad = lore.get(9).split(" ")[1];
-        int id = Integer.parseInt(lore.get(lore.size() - 1).split(" ")[1]);
-
-        VenderAccionesConfirmacion confirmacion = new VenderAccionesConfirmacion(player, tipoPosicion, acciones, valorTotal, beneficios, rentabilidad, id);
     }
 
     @Override

@@ -43,7 +43,7 @@ public class ContratarEmpresas extends EmpresasSubCommand {
         ValidationResult result = ValidationsService.startValidating(args.length == 5 || args.length == 6, True.of(mensajeUsoIncorrecto()))
                 .andMayThrowException(() -> args[3], mensajeUsoIncorrecto(), NaturalNumber)
                 .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), JugadorOnline, NoLeHanEnviadoSolicitud, NoTrabajaEmpresa.en(() -> args[2]), NotEqualsIgnoreCase.of(player.getName(), "No te puedes contratar a ti mismo"))
-                .andMayThrowException(() -> Empleados.esUnTipoDeSueldo(args[4]), mensajeUsoIncorrecto(), True.of("El tipo de sueldo solo puede ser d: cdda dia, s: cada semana, 2s: cada dos semanas, m: cada mes"))
+                .andMayThrowException(() -> TipoSueldo.codigoCorrecto(args[4]), mensajeUsoIncorrecto(), True.of("El tipo de sueldo solo puede ser d: cdda dia, s: cada semana, 2s: cada dos semanas, m: cada mes"))
                 .andMayThrowException(() -> args[2], mensajeUsoIncorrecto(), OwnerDeEmpresa.of(player.getName()))
                 .validateAll();
 

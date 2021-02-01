@@ -2,9 +2,8 @@ package es.serversurvival.mySQL;
 
 import es.serversurvival.mySQL.enums.AccionOrden;
 import es.serversurvival.mySQL.enums.TipoActivo;
-import es.serversurvival.mySQL.tablasObjetos.Orden;
+import es.serversurvival.mySQL.tablasObjetos.OrdenPreMarket;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
-import es.serversurvival.util.Funciones;
 import javafx.util.Pair;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -15,64 +14,64 @@ import java.sql.SQLException;
 import java.util.List;
 
 import static es.serversurvival.util.Funciones.*;
+import static es.serversurvival.util.Funciones.enviarMensajeYSonido;
 
-public final class Ordenes extends MySQL{
-    public final static Ordenes INSTANCE = new Ordenes();
+public final class OrdenesPreMarket extends MySQL{
+    public final static OrdenesPreMarket INSTANCE = new OrdenesPreMarket();
 
-    private Ordenes () {}
+    private OrdenesPreMarket() {}
 
     private void nuevaOrden (String jugador, String nombre_activo, int cantidad, AccionOrden accion_orden) {
-        executeUpdate("INSERT INTO ordenes (jugador, nombre_activo, cantidad, accion_orden) VALUES ('"+jugador+"', '"+nombre_activo+"', '"+cantidad+"', '"+accion_orden.toString()+"')");
+        executeUpdate("INSERT INTO ordenespremarket (jugador, nombre_activo, cantidad, accion_orden) VALUES ('"+jugador+"', '"+nombre_activo+"', '"+cantidad+"', '"+accion_orden.toString()+"')");
     }
 
-    public List<Orden> getAllOrdenes () {
-        return buildListFromQuery("SELECT * FROM ordenes");
+    public List<OrdenPreMarket> getAllOrdenes () {
+        return buildListFromQuery("SELECT * FROM ordenespremarket");
     }
 
-    public List<Orden> getOrdenes (String jugador) {
-        return buildListFromQuery("SELECT * FROM ordenes WHERE jugador = '"+jugador+"'");
+    public List<OrdenPreMarket> getOrdenes (String jugador) {
+        return buildListFromQuery("SELECT * FROM ordenespremarket WHERE jugador = '"+jugador+"'");
     }
 
-    public Orden getOrdenTicker (String owner, String ticker) {
-        return (Orden) buildObjectFromQuery("SELECT * FROM ordenes WHERE jugador = '"+owner+"' AND nombre_activo = '"+ticker+"'");
+    public OrdenPreMarket getOrdenTicker (String owner, String ticker) {
+        return (OrdenPreMarket) buildObjectFromQuery("SELECT * FROM ordenespremarket WHERE jugador = '"+owner+"' AND nombre_activo = '"+ticker+"'");
     }
 
     public void borrarOrden(int id) {
-        executeUpdate("DELETE FROM ordenes WHERE id = '"+id+"'");
+        executeUpdate("DELETE FROM ordenespremarket WHERE id = '"+id+"'");
     }
 
     public void abrirOrdenCompraLargo(Player player, String ticker, int cantidad) {
         nuevaOrden(player.getName(), ticker, cantidad, AccionOrden.LARGO_COMPRA);
 
-        player.sendMessage(ChatColor.GOLD + "Se ha abierto una orden. Cuando el mercado este abierto se ejecutara. " + ChatColor.AQUA + "/bolsa ordenes");
-        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        enviarMensajeYSonido(player, ChatColor.GOLD + "Se ha abierto una orden. Cuando el mercado este abierto se ejecutara. " +
+                ChatColor.AQUA + "/bolsa ordenes", Sound.ENTITY_PLAYER_LEVELUP);
     }
 
     public void abrirOrdenVentaLargo(Player player, String id, int cantidad) {
         if(getOrdenTicker(player.getName(), id) != null){
-            player.sendMessage(ChatColor.DARK_RED + "Ya tienes esa orden alistada. /bolsa ordenes");
-            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
+            enviarMensajeYSonido(player,ChatColor.DARK_RED + "Ya tienes esa orden alistada. /bolsa ordenes", Sound.ENTITY_VILLAGER_NO);
             return;
         }
 
         nuevaOrden(player.getName(), id, cantidad, AccionOrden.LARGO_VENTA);
 
-        player.sendMessage(ChatColor.GOLD + "Se ha abierto una orden. Cuando el mercado este abierto se ejecutara. " + ChatColor.AQUA + "/bolsa ordenes");
-        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        enviarMensajeYSonido(player, ChatColor.GOLD + "Se ha abierto una orden. Cuando el mercado este abierto se ejecutara. " +
+                ChatColor.AQUA + "/bolsa ordenes", Sound.ENTITY_PLAYER_LEVELUP);
     }
 
     public void abrirOrdenVentaCorto (Player player, String ticker, int cantidad){
         nuevaOrden(player.getName(), ticker, cantidad, AccionOrden.CORTO_VENTA);
 
-        player.sendMessage(ChatColor.GOLD + "Se ha abierto una orden. Cuando el mercado este abierto se ejecutara. " + ChatColor.AQUA + "/bolsa ordenes");
-        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        enviarMensajeYSonido(player, ChatColor.GOLD + "Se ha abierto una orden. Cuando el mercado este abierto se ejecutara. " +
+                ChatColor.AQUA + "/bolsa ordenes", Sound.ENTITY_PLAYER_LEVELUP);
     }
 
     public void abrirOrdenCompraCorto (Player player, String id, int cantidad){
         nuevaOrden(player.getName(), id, cantidad, AccionOrden.CORTO_COMPRA);
 
-        player.sendMessage(ChatColor.GOLD + "Se ha abierto una orden. Cuando el mercado este abierto se ejecutara. " + ChatColor.AQUA + "/bolsa ordenes");
-        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        enviarMensajeYSonido(player,ChatColor.GOLD + "Se ha abierto una orden. Cuando el mercado este abierto se ejecutara. " +
+                ChatColor.AQUA + "/bolsa ordenes", Sound.ENTITY_PLAYER_LEVELUP);
     }
 
     public void cancelarOrden (int id, Player player) {
@@ -82,12 +81,12 @@ public final class Ordenes extends MySQL{
     }
 
     public void ejecutarOrdenes () {
-        if(Funciones.mercadoNoEstaAbierto()){
+        if(mercadoNoEstaAbierto()){
             return;
         }
 
         MySQL.conectar();
-        List<Orden> todasLasOrdenes = this.getAllOrdenes();
+        List<OrdenPreMarket> todasLasOrdenes = this.getAllOrdenes();
 
         POOL.submit(() -> {
             todasLasOrdenes.forEach(orden -> {
@@ -107,7 +106,7 @@ public final class Ordenes extends MySQL{
         });
     }
 
-    private void ejecutarOrdenVentaLargo(Orden orden) {
+    private void ejecutarOrdenVentaLargo(OrdenPreMarket orden) {
         MySQL.conectar();
 
         int cantidad = orden.getCantidad();
@@ -119,7 +118,7 @@ public final class Ordenes extends MySQL{
         borrarOrden(orden.getId());
     }
 
-    private void ejecutarOrdenCompraLargo(Orden orden) {
+    private void ejecutarOrdenCompraLargo(OrdenPreMarket orden) {
         MySQL.conectar();
 
         String ticker = orden.getNombre_activo();
@@ -149,7 +148,7 @@ public final class Ordenes extends MySQL{
         MySQL.desconectar();
     }
 
-    private void ejecutarOrdenVentaCorto (Orden orden) {
+    private void ejecutarOrdenVentaCorto (OrdenPreMarket orden) {
         MySQL.conectar();
 
         Pair<String, Double> pairNombrePrecio = llamadasApiMySQL.getPairNombreValorPrecio(orden.getNombre_activo()).get();
@@ -160,7 +159,7 @@ public final class Ordenes extends MySQL{
         borrarOrden(orden.getId());
     }
 
-    private void ejecutarOrdenCompraCorto (Orden orden) {
+    private void ejecutarOrdenCompraCorto (OrdenPreMarket orden) {
         PosicionAbierta posicionAbierta = posicionesAbiertasMySQL.getPosicionAbierta(Integer.parseInt(orden.getNombre_activo()));
 
         transaccionesMySQL.comprarPosicionCorto(posicionAbierta, orden.getCantidad(), orden.getJugador());
@@ -168,8 +167,8 @@ public final class Ordenes extends MySQL{
     }
 
     @Override
-    protected Orden buildObjectFromResultSet(ResultSet rs) throws SQLException {
-        return new Orden(rs.getInt("id"),
+    protected OrdenPreMarket buildObjectFromResultSet(ResultSet rs) throws SQLException {
+        return new OrdenPreMarket(rs.getInt("id"),
                 rs.getString("jugador"),
                 rs.getString("nombre_activo"),
                 rs.getInt("cantidad"),

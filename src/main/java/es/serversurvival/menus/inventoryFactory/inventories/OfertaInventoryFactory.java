@@ -105,7 +105,7 @@ public class OfertaInventoryFactory extends InventoryFactory {
         return MinecraftUtils.displayname(Material.RED_WOOL, Paginated.ITEM_NAME_GOBACK);
     }
 
-    private ItemStack buildItemFordward () {
+    public ItemStack buildItemFordward () {
         return MinecraftUtils.displayname(Material.GREEN_WOOL, Paginated.ITEM_NAME_GOFORDWARD);
     }
 }

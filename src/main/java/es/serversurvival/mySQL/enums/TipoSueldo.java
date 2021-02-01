@@ -3,17 +3,19 @@ package es.serversurvival.mySQL.enums;
 import java.util.Arrays;
 
 public enum TipoSueldo {
-    DIA("d", "dia"),
-    SEMANA("s", "semana"),
-    SEMANA_2("2s", "2 semanas"),
-    MES("m", "mes");
+    DIA("d", "dia", 1),
+    SEMANA("s", "semana", 7),
+    SEMANA_2("2s", "2 semanas", 14),
+    MES("m", "mes", 30);
 
     public final String codigo;
     public final String nombre;
+    public final int dias;
 
-    TipoSueldo(String codigo, String nombre) {
+    TipoSueldo(String codigo, String nombre, int dias) {
         this.codigo = codigo;
         this.nombre = nombre;
+        this.dias = dias;
     }
 
     @Override
@@ -26,5 +28,13 @@ public enum TipoSueldo {
                 .filter(tipoSueldo -> tipoSueldo.codigo.equals(codigo))
                 .findAny()
                 .get();
+    }
+
+    public static boolean codigoCorrecto (String codigo) {
+        return Arrays.stream(TipoSueldo.values()).anyMatch(t -> t.codigo.equals(codigo));
+    }
+
+    public static boolean dentroDeLosDias (String codigo, int dias) {
+        return TipoSueldo.ofCodigo(codigo).dias >= dias;
     }
 }

@@ -100,7 +100,7 @@ public final class PosicionesAbiertas extends MySQL {
     }
 
     public double getAllPixeloinsEnAcciones (String jugador) {
-        List<PosicionAbierta> posLargas = getPosicionesAbiertasJugadorCondicion(jugador, PosicionAbierta::esLargo);
+        List<PosicionAbierta> posLargas = getPosicionesAbiertasJugadorCondicion(jugador, PosicionAbierta::noEsTipoAccionServerYLargo);
         List<PosicionAbierta> posCortas = getPosicionesAbiertasJugadorCondicion(jugador, PosicionAbierta::esCorto);
 
         Map<String, LlamadaApi> llamadasApiMap = llamadasApiMySQL.getMapOfAllLlamadasApi();
@@ -164,27 +164,8 @@ public final class PosicionesAbiertas extends MySQL {
         return toReturn;
     }
 
-    @SneakyThrows
-    public double getPrecioActual(String simbolo, String tipo) {
-        double precio = -1;
-
-        switch (tipo.toUpperCase()){
-            case "ACCIONES":
-                precio = IEXCloud_API.getOnlyPrice(simbolo);
-                break;
-            case "CRIPTOMONEDAS":
-                precio = IEXCloud_API.getPrecioCriptomoneda(simbolo);
-                break;
-            case "MATERIAS_PRIMAS":
-                precio = IEXCloud_API.getPrecioMateriaPrima(simbolo);
-                break;
-        }
-
-        return precio;
-    }
-
     public Map<PosicionAbierta, Integer> getPosicionesAbiertasConPesoJugador(String jugador, double totalInverito) {
-        List<PosicionAbierta> posicionAbiertasJugador = getPosicionesAbiertasJugador(jugador);
+        List<PosicionAbierta> posicionAbiertasJugador = getPosicionesAbiertasJugadorCondicion(jugador, PosicionAbierta::noEsTipoAccionServer);
         Map<PosicionAbierta, Integer> posicionesAbiertasConPeso = new HashMap<>();
 
         posicionAbiertasJugador.forEach( (posicion) -> {

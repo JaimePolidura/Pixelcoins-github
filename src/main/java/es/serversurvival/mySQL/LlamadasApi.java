@@ -68,15 +68,13 @@ public final class LlamadasApi extends MySQL {
     }
 
     public void borrarLlamadaSiNoEsUsada (String ticker) {
-        if(!posicionesAbiertasMySQL.existeTicker(ticker)){
+        if(!posicionesAbiertasMySQL.existeTicker(ticker))
             borrarLlamada(ticker);
-        }
     }
 
     public void nuevaLlamadaSiNoEstaReg(String ticker, double precio, TipoActivo tipo, String nombrevalor) {
-        if(!estaReg(ticker)){
+        if(!estaReg(ticker))
             nuevaLlamada(ticker, precio, tipo, nombrevalor);
-        }
     }
 
     public Optional<Double> getPrecioAccion (String ticker) {
@@ -133,7 +131,7 @@ public final class LlamadasApi extends MySQL {
             MySQL.conectar();
 
             String tipo = getLlamadaAPI(simbolo).getTipo_activo();
-            double precio = posicionesAbiertasMySQL.getPrecioActual(simbolo, tipo);
+            double precio = TipoActivo.valueOf(tipo).getPrecio(simbolo);
 
             this.setPrecio(simbolo, precio);
 
@@ -146,7 +144,7 @@ public final class LlamadasApi extends MySQL {
         List<LlamadaApi> llamadaApis = getTodasLlamadasApi();
 
         for (LlamadaApi llamadaApi : llamadaApis) {
-            double precio = posicionesAbiertasMySQL.getPrecioActual(llamadaApi.getSimbolo(), llamadaApi.getTipo_activo());
+            double precio = TipoActivo.valueOf(llamadaApi.getTipo_activo()).getPrecio(llamadaApi.getSimbolo());
 
             this.setPrecio(llamadaApi.getSimbolo(), precio);
         }

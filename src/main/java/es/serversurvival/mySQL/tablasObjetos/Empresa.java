@@ -13,4 +13,5 @@ public final class Empresa implements TablaObjeto {
     @Getter private final double gastos;
     @Getter private final String icono;
     @Getter private final String descripcion;
+    @Getter private final boolean cotizada;
 }

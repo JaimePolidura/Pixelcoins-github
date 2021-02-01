@@ -21,7 +21,7 @@ public abstract class Menu {
     protected static PosicionesCerradas posicionesCerradasMySQL = PosicionesCerradas.INSTANCE;
     protected static Transacciones transaccionesMySQL = Transacciones.INSTANCE;
     protected static Deudas deudasMySQL = Deudas.INSTANCE;
-    protected static Ordenes ordenesMySQL = Ordenes.INSTANCE;
+    protected static OrdenesPreMarket ordenesMySQL = OrdenesPreMarket.INSTANCE;
 
     public abstract Inventory getInventory();
     public abstract Player getPlayer();

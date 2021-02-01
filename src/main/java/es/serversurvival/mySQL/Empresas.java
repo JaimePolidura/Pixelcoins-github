@@ -16,6 +16,8 @@ import org.bukkit.entity.Player;
 
 import es.serversurvival.util.Funciones;
 
+import static es.serversurvival.util.Funciones.*;
+
 /**
  * I 610 -> 300
  * II 323 -> 197
@@ -29,7 +31,7 @@ public final class Empresas extends MySQL {
     public static final int CrearEmpresaDescLonMax = 200;
 
     public void nuevaEmpresa(String nombreEmpresa, String owner, double pixelcoins, double ingresos, double gastos, String icono, String descripcion) {
-        executeUpdate("INSERT INTO empresas (nombre, owner, pixelcoins, ingresos, gastos, icono, descripcion) VALUES ('" + nombreEmpresa + "','" + owner + "','" + pixelcoins + "','" + ingresos + "','" + gastos + "','" + icono + "','" + descripcion + "')");
+        executeUpdate("INSERT INTO empresas (nombre, owner, pixelcoins, ingresos, gastos, icono, descripcion, cotizada) VALUES ('" + nombreEmpresa + "','" + owner + "','" + pixelcoins + "','" + ingresos + "','" + gastos + "','" + icono + "','" + descripcion + "', 0)");
     }
 
     public Empresa getEmpresa(String empresa){
@@ -48,8 +50,8 @@ public final class Empresas extends MySQL {
         return buildListFromQuery("SELECT * FROM empresas");
     }
 
-    public void borrarEmpresa(String nombreEmpresa) {
-        executeUpdate(String.format("DELETE FROM empresas WHERE nombre = '%s'", nombreEmpresa));
+    public boolean esCotizada (String empresa) {
+        return !isEmptyFromQuery("SELECT * FROM empresas WHERE nombre = '"+empresa+"' AND cotizada = 1");
     }
 
     public void setOwner(String nombreEmpresa, String nuevoOwner) {
@@ -84,8 +86,16 @@ public final class Empresas extends MySQL {
         executeUpdate("UPDATE empresas SET descripcion = '"+descripcion+"' WHERE nombre = '"+nombreEmpresa+"'");
     }
 
+    public void setCotizada (String empresaNombre) {
+        executeUpdate("UPDATE empresas SET cotizada = 1 WHERE nombre = '"+empresaNombre+"'");
+    }
+
+    public void borrarEmpresa(String nombreEmpresa) {
+        executeUpdate(String.format("DELETE FROM empresas WHERE nombre = '%s'", nombreEmpresa));
+    }
+
     public double getAllPixelcoinsEnEmpresas (String jugador){
-        return Funciones.getSumaTotalListDouble( getEmpresasOwner(jugador), Empresa::getPixelcoins );
+        return getSumaTotalListDouble( getEmpresasOwner(jugador), Empresa::getPixelcoins );
     }
 
     public Map<String, List<Empresa>> getAllEmpresasJugadorMap () {
@@ -94,7 +104,7 @@ public final class Empresas extends MySQL {
 
         empresas.forEach(empresa -> {
             if(mapEmpresas.get(empresa.getOwner()) == null){
-                mapEmpresas.put(empresa.getOwner(), Funciones.listOf(empresa));
+                mapEmpresas.put(empresa.getOwner(), listOf(empresa));
             }else{
                 List<Empresa> empresasList = mapEmpresas.get(empresa.getOwner());
                 empresasList.add(empresa);
@@ -121,8 +131,7 @@ public final class Empresas extends MySQL {
     public void cambiarIcono(String nombreEmpresa, Player player, String icono) {
         this.setIcono(nombreEmpresa, icono);
 
-        player.sendMessage(ChatColor.GOLD + "Has cambiado el logotipo a: " + icono);
-        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        enviarMensajeYSonido(player, ChatColor.GOLD + "Has cambiado el logotipo a: " + icono, Sound.ENTITY_PLAYER_LEVELUP);
     }
 
     public void cambiarNombre(Player player, String empresa, String nuevoNombre) {
@@ -130,8 +139,7 @@ public final class Empresas extends MySQL {
 
         setNombre(empresa, nuevoNombre);
 
-        player.sendMessage(ChatColor.GOLD + "Has cambiado de nombre a tu empresa!");
-        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        enviarMensajeYSonido(player, ChatColor.GOLD + "Has cambiado de nombre a tu empresa!", Sound.ENTITY_PLAYER_LEVELUP);
 
         empleados.forEach( (empl) -> {
             mensajesMySQL.nuevoMensaje("", empl.getJugador(), "La empresa en la que trabajas: " + empresa + " ha cambiado a de nombre a " + nuevoNombre);
@@ -156,39 +164,28 @@ public final class Empresas extends MySQL {
         transaccionesMySQL.nuevaTransaccion(ownerJugador.getNombre(), ownerJugador.getNombre(), empresaABorrar.getPixelcoins(), empresaNombre, TipoTransaccion.EMPRESA_BORRAR);
 
         empleados.forEach( (empleado) -> {
-            Player empleadoPlayer = Bukkit.getPlayer(empleado.getJugador());
+            String mensajeOnline = ChatColor.GOLD + ownerJugador.getNombre() + " ha borrado su empresa donde trabajabas: " + empresaNombre;
+            String mensajeOffline = "El owner de la empresa en la que trabajas: " + empresaNombre + " la ha borrado, ya no existe";
 
-            if(empleadoPlayer != null){
-                empleadoPlayer.sendMessage(org.bukkit.ChatColor.GOLD + ownerJugador.getNombre() + " ha borrado su empresa donde trabajabas: " + empresaNombre);
-                ScoreBoardManager.getInstance().updateScoreboard(empleadoPlayer);
-            }else{
-                mensajesMySQL.nuevoMensaje("" , empleado.getJugador(), "El owner de la empresa en la que trabajas: " + empresaNombre + " la ha borrado, ya no existe");
-            }
+            enviarMensaje(empleado.getJugador(), mensajeOnline, mensajeOffline);
         });
     }
 
     public void solicitarServicio (Player quienSolicita, String nombreEmpresa) {
         Empresa empresa = getEmpresa(nombreEmpresa);
 
-        Player owner = Bukkit.getPlayer(empresa.getOwner());
-        if(owner != null){
-            owner.sendMessage(ChatColor.GOLD + quienSolicita.getName() + " te ha solicitado el servicio de tu empresa: " + nombreEmpresa);
-            owner.playSound(owner.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-        }else{
-            mensajesMySQL.nuevoMensaje("" ,empresa.getOwner(), quienSolicita.getName() + " te ha solicitado el servicio de tu empresa: " + nombreEmpresa);
-        }
+        String mensajeOnline = ChatColor.GOLD + quienSolicita.getName() + " te ha solicitado el servicio de tu empresa: " + nombreEmpresa;
+        String mensajeOffline = quienSolicita.getName() + " te ha solicitado el servicio de tu empresa: " + nombreEmpresa;
+
+        enviarMensaje(empresa.getOwner(), mensajeOnline, mensajeOffline, Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
         List<Empleado> empleados = empleadosMySQL.getEmpleadosEmrpesa(nombreEmpresa);
-        empleados.forEach( (empleado) -> {
-            Player empleadoPlayer = Bukkit.getPlayer(empleado.getJugador());
-            if(empleadoPlayer != null){
-                empleadoPlayer.sendMessage(ChatColor.GOLD + quienSolicita.getName() + " te ha solicitado el servicio de la empresa: " + nombreEmpresa);
-                empleadoPlayer.playSound(empleadoPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-            }
+        empleados.forEach( empleado -> {
+            enviarMensajeYSonidoSiOnline(empleado.getJugador(), ChatColor.GOLD + quienSolicita.getName() +
+                    " te ha solicitado el servicio de la empresa: " + nombreEmpresa, Sound.ENTITY_PLAYER_LEVELUP);
         });
 
-        quienSolicita.sendMessage(ChatColor.GOLD + "Has solicitado el servicio");
-        quienSolicita.playSound(quienSolicita.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        enviarMensajeYSonido(quienSolicita, ChatColor.GOLD + "Has solicitado el servicio", Sound.ENTITY_PLAYER_LEVELUP);
     }
 
     @Override
@@ -200,6 +197,8 @@ public final class Empresas extends MySQL {
                 rs.getDouble("ingresos"),
                 rs.getDouble("gastos"),
                 rs.getString("icono"),
-                rs.getString("descripcion"));
+                rs.getString("descripcion"),
+                rs.getBoolean("cotizada")
+        );
     }
 }

@@ -42,6 +42,5 @@ public class BorrarEmpresas extends EmpresasSubCommand {
         }
 
         BorrrarEmpresaConfirmacion confirmacionMenu = new BorrrarEmpresaConfirmacion(player, args[1]);
-        confirmacionMenu.openMenu();
     }
 }

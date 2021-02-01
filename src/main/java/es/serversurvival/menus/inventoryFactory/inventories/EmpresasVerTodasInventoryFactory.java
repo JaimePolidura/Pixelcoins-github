@@ -18,11 +18,7 @@ import java.util.List;
 public class EmpresasVerTodasInventoryFactory extends InventoryFactory {
 
     @Override
-    protected Inventory buildInventory(String player) {
-        return buildInv();
-    }
-
-    private Inventory buildInv(){
+    protected Inventory buildInventory(String jugadorNombre) {
         Inventory inventory = Bukkit.createInventory(null, 54, EmpresasVerTodasMenu.titulo);
         empresasMySQL.conectar();
 
@@ -30,14 +26,19 @@ public class EmpresasVerTodasInventoryFactory extends InventoryFactory {
         ItemStack back = buildItemGoBack();
 
         todasLasEmpresas.forEach( (empresa) -> {
+            String displayName;
+            if(empresa.getOwner().equalsIgnoreCase(jugadorNombre)){
+                displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TU EMPRESA";
+            }else{
+                displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA SOLICITAR UN SERVICIO";
+            }
+
             Material icono = Material.getMaterial(empresa.getIcono());
-            String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA SOLICITAR UN SERVICIO";
 
             List<String> lore = new ArrayList<>();
             lore = insertarDatosEmpresa(empresa, lore);
             lore.add("      ");
             lore = insertarEmpleados(empresa.getNombre(), lore);
-
 
             inventory.addItem(MinecraftUtils.loreDisplayName(icono, displayName, lore));
         });

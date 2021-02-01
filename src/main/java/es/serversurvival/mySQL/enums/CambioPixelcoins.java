@@ -40,9 +40,9 @@ public enum CambioPixelcoins {
     public static void sacarMaxItem (String tipo, Jugador jugador, Player player) {
         CambioPixelcoins.valueOf(tipo).functionStrategy.sacar(jugador, player);
     }
-
+    
     @FunctionalInterface
-    interface FunctionStrategy {
+    private interface FunctionStrategy {
         void sacar (Jugador jugador, Player player);
     }
 }

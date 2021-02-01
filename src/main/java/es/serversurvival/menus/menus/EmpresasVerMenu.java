@@ -57,10 +57,8 @@ public class EmpresasVerMenu extends Menu implements Clickable, Refreshcable, Po
 
         if (nombreItem.equalsIgnoreCase("RED_WOOL")) {
             EmpresasOwnerMenu menu = new EmpresasOwnerMenu((Player) event.getWhoClicked());
-            menu.openMenu();
         }else if(nombreItem.equalsIgnoreCase("BARRIER")){
             BorrrarEmpresaConfirmacion confirmacion = new BorrrarEmpresaConfirmacion(player ,empresa);
-            confirmacion.openMenu();
         }else{
             String nombreEmpleadoADespedir;
             if(itemClickedao.getItemMeta().getLore().get(1).split(" ")[1] == null){
@@ -121,6 +119,5 @@ public class EmpresasVerMenu extends Menu implements Clickable, Refreshcable, Po
     @Override
     public void goBack() {
         EmpresasOwnerMenu menu = new EmpresasOwnerMenu(player);
-        menu.openMenu();
     }
 }

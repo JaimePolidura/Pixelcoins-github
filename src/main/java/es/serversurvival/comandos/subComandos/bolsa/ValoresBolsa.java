@@ -24,6 +24,5 @@ public class ValoresBolsa extends BolsaSubCommand {
 
     public void execute(Player player, String[] args) {
         ElegirInversionMenu menu = new ElegirInversionMenu(player);
-        menu.openMenu();
     }
 }

@@ -22,6 +22,5 @@ public class VerTodasEmpresas extends EmpresasSubCommand {
 
     public void execute(Player p, String[] args) {
         EmpresasVerTodasMenu menu = new EmpresasVerTodasMenu(p);
-        menu.openMenu();
     }
 }

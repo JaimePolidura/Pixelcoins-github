@@ -16,6 +16,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
+import static es.serversurvival.util.Funciones.*;
+
 // II 325 -> 218
 public final class Deudas extends MySQL {
     public final static Deudas INSTANCE = new Deudas();
@@ -58,17 +60,15 @@ public final class Deudas extends MySQL {
     }
 
     public boolean esDeudorDeDeuda(int id, String deudor) {
-        Deuda deuda = getDeuda(id);
-
-        return deuda != null && deuda.getDeudor().equalsIgnoreCase(deudor);
+        return !isEmptyFromQuery("SELECT * FROM deudas WHERE id = '"+id+"' AND deudor = '"+deudor+"'");
     }
 
     public int getAllPixelcoinsDeudasAcredor (String jugador) {
-        return Funciones.getSumaTotalListInteger( getDeudasAcredor(jugador), Deuda::getPixelcoins_restantes);
+        return getSumaTotalListInteger( getDeudasAcredor(jugador), Deuda::getPixelcoins_restantes);
     }
 
     public int getAllPixelcoinsDeudasDeudor (String jugador) {
-        return Funciones.getSumaTotalListInteger( getDeudasDeudor(jugador), Deuda::getPixelcoins_restantes);
+        return getSumaTotalListInteger( getDeudasDeudor(jugador), Deuda::getPixelcoins_restantes);
     }
 
     public Map<String, List<Deuda>> getAllDeudasAcredorMap () {
@@ -77,7 +77,7 @@ public final class Deudas extends MySQL {
 
         deudas.forEach(deuda ->{
             if(mapDeudas.get(deuda.getAcredor()) == null){
-                mapDeudas.put(deuda.getAcredor(), Funciones.listOf(deuda));
+                mapDeudas.put(deuda.getAcredor(), listOf(deuda));
             }else{
                 List<Deuda> deudasList = mapDeudas.get(deuda.getAcredor());
                 deudasList.add(deuda);
@@ -95,7 +95,7 @@ public final class Deudas extends MySQL {
 
         deudas.forEach(deuda ->{
             if(mapDeudas.get(deuda.getDeudor()) == null){
-                mapDeudas.put(deuda.getDeudor(), Funciones.listOf(deuda));
+                mapDeudas.put(deuda.getDeudor(), listOf(deuda));
             }else{
                 List<Deuda> deudasList = mapDeudas.get(deuda.getDeudor());
                 deudasList.add(deuda);
@@ -163,23 +163,17 @@ public final class Deudas extends MySQL {
 
     public void cancelarDeuda(Player player, int id) {
         Deuda deudaACancelar = getDeuda(id);
-        borrarDeuda(id);
-
         String nombreDeudor = deudaACancelar.getDeudor();
         int pixelcoinsDeuda = deudaACancelar.getPixelcoins_restantes();
-        player.sendMessage(ChatColor.GOLD + "Has cancelado la deuda a " + nombreDeudor + "!");
-        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        borrarDeuda(id);
 
-        Player playerDeudor = player.getServer().getPlayer(nombreDeudor);
-        if (playerDeudor != null) {
-            playerDeudor.sendMessage(ChatColor.GOLD + player.getName() + " te ha cancelado la deuda de " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC");
-            playerDeudor.playSound(playerDeudor.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-            ScoreBoardManager.getInstance().updateScoreboard(playerDeudor);
-        } else {
-            mensajesMySQL.nuevoMensaje("" ,nombreDeudor, player.getName() + " te ha cencelado la deuda de " + pixelcoinsDeuda + " PC");
-        }
+        enviarMensajeYSonido(player, ChatColor.GOLD + "Has cancelado la deuda a " + nombreDeudor + "!", Sound.ENTITY_PLAYER_LEVELUP);
 
-        ScoreBoardManager.getInstance().updateScoreboard(player);
+        String mensajeOnline = ChatColor.GOLD + player.getName() + " te ha cancelado la deuda de " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC";
+        String mensajeOffline = player.getName() + " te ha cencelado la deuda de " + pixelcoinsDeuda + " PC";
+        enviarMensaje(nombreDeudor, mensajeOnline, mensajeOnline, Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+
+        ScoreBoardManager.getInstance().updateScoreboard(player, Bukkit.getPlayer(nombreDeudor));
     }
 
     public void pagarDeuda(Player playeDeudor, int id) {
@@ -190,18 +184,13 @@ public final class Deudas extends MySQL {
         transaccionesMySQL.realizarTransferenciaConEstadisticas(playeDeudor.getName(), acredor, pixelcoinsDeuda, " ", TipoTransaccion.DEUDAS_PAGAR_TODADEUDA);
         borrarDeuda(id);
 
-        playeDeudor.sendMessage(ChatColor.GOLD + "Has pagado a " + acredor + " toda la deuda: " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC");
-        playeDeudor.playSound(playeDeudor.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        enviarMensajeYSonido(playeDeudor, ChatColor.GOLD + "Has pagado a " + acredor + " toda la deuda: " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
 
-        Player playerAcredor = playeDeudor.getServer().getPlayer(acredor);
-        if (playerAcredor != null) {
-            playerAcredor.sendMessage(ChatColor.GOLD + playeDeudor.getName() + " ta ha pagado toda la deuda: " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC");
-            playerAcredor.playSound(playerAcredor.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-        } else {
-            mensajesMySQL.nuevoMensaje("", acredor, playeDeudor.getName() + " ta ha pagado toda la deuda: " + pixelcoinsDeuda + " PC");
-        }
+        String mensajeOnline = ChatColor.GOLD + playeDeudor.getName() + " ta ha pagado toda la deuda: " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC";
+        String mensajeOffline = playeDeudor.getName() + " ta ha pagado toda la deuda: " + pixelcoinsDeuda + " PC";
+        enviarMensaje(acredor, mensajeOnline, mensajeOffline, Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
-        ScoreBoardManager.getInstance().updateScoreboard(playeDeudor, playerAcredor);
+        ScoreBoardManager.getInstance().updateScoreboard(playeDeudor, Bukkit.getPlayer(acredor));
     }
 
     @SneakyThrows

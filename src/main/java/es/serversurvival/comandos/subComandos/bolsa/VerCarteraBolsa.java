@@ -52,7 +52,7 @@ public class VerCarteraBolsa extends BolsaSubCommand {
 
         MySQL.desconectar();
     }
-    
+
     private Map<String, Integer> getPesoCarteraAcciones (String jugador, double totalInvertido){
         Map<PosicionAbierta, Integer> posicionAbiertasPesoSinOrdenar = posicionesAbiertasMySQL.getPosicionesAbiertasConPesoJugador(jugador, totalInvertido);
         Map<String, Integer> posicionesAbiertasOrednadas = new HashMap<>();

@@ -8,7 +8,6 @@ import es.serversurvival.mySQL.PosicionesAbiertas;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -20,6 +19,7 @@ import java.util.Map;
 
 import static es.serversurvival.mySQL.enums.TipoPosicion.*;
 import static es.serversurvival.util.Funciones.*;
+import static org.bukkit.ChatColor.*;
 
 public class BolsaCarteraInventoryFactory extends InventoryFactory {
     private double resultadoTotal;
@@ -94,12 +94,16 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         this.liquidezjugador = jugadoresMySQL.getJugador(jugador).getPixelcoins();
         rellenarLlamadasApi();
 
-        List<PosicionAbierta> posicionAbiertasJugador = posicionesAbiertasMySQL.getPosicionesAbiertasJugador(jugador);
-        rellenarPosicionesAbiertasPeso(posicionAbiertasJugador, getTotalInvertido(posicionAbiertasJugador));
+        List<PosicionAbierta> jugadorPosNoServer = posicionesAbiertasMySQL.getPosicionesAbiertasJugadorCondicion(jugador, PosicionAbierta::noEsTipoAccionServer);
+        List<PosicionAbierta> jugadorPosServer = posicionesAbiertasMySQL.getPosicionesAbiertasJugadorCondicion(jugador, PosicionAbierta::esTipoAccionServer);
+        rellenarPosicionesAbiertasPeso(jugadorPosNoServer, getTotalInvertido(jugadorPosNoServer));
 
         List<ItemStack> posicionesAbiertasItems = new ArrayList<>();
-        for (PosicionAbierta posicion : posicionAbiertasJugador) {
-            posicionesAbiertasItems.add(caca(posicion));
+        for (PosicionAbierta posicion : jugadorPosNoServer) {
+            posicionesAbiertasItems.add(buildItemFromPosicionNoServer(posicion));
+        }
+        for(PosicionAbierta posicion : jugadorPosServer){
+            posicionesAbiertasItems.add(buildItemFromPosicionServer(posicion));
         }
 
         llamadasApiMySQL.desconectar();
@@ -130,19 +134,32 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         return getSumaTotalListDouble(posicionAbiertas, pos -> pos.getCantidad() * llamadasApis.get(pos.getNombre_activo()).getPrecio());
     }
 
-    private ItemStack buildItemFordward () {
-        return MinecraftUtils.displayname(Material.GREEN_WOOL, Paginated.ITEM_NAME_GOFORDWARD);
-    }
+    private ItemStack buildItemFromPosicionNoServer(PosicionAbierta posicionAbierta) {
+        String displayName = posicionAbierta.getTipo_posicion() == LARGO ?
+                GOLD + "" + BOLD + UNDERLINE + "CLICK PARA VENDER" :
+                GOLD + "" + BOLD + UNDERLINE + "CLICK PARA COMPRAR " + RED + "" + BOLD + "(CORTO)";
 
-    private ItemStack caca (PosicionAbierta posicionAbierta) {
-        String displayName = posicionAbierta.getTipo_posicion().equals(LARGO.toString()) ?
-                ChatColor.GOLD + "" + ChatColor.BOLD + ChatColor.UNDERLINE + "CLICK PARA VENDER" :
-                ChatColor.GOLD + "" + ChatColor.BOLD + ChatColor.UNDERLINE + "CLICK PARA COMPRAR " + ChatColor.RED + "" + ChatColor.BOLD + "(CORTO)";
         List<String> lore = buildLoreFromPosicionAbierta(posicionAbierta);
 
         return posicionAbierta.getTipo_posicion() == LARGO ?
                 MinecraftUtils.loreDisplayName(Material.NAME_TAG, displayName, lore) :
                 MinecraftUtils.loreDisplayName(Material.REDSTONE_TORCH, displayName, lore);
+    }
+
+    private ItemStack buildItemFromPosicionServer(PosicionAbierta posicionAbierta) {
+        String displayName = GOLD + "" + BOLD + UNDERLINE + "CLICK PARA VENDER";
+        List<String> lore = new ArrayList<>();
+        lore.add("   ");
+        lore.add(GOLD + "Empresa (server): " + posicionAbierta.getNombre_activo()); //14
+        lore.add(GOLD + "Acciones compradas: " + posicionAbierta.getCantidad());
+        lore.add(GOLD + "Precio apertura: " + GREEN + formatea.format(posicionAbierta.getPrecio_apertura()));
+        lore.add(GOLD + "Valor total de compra: " + GREEN + formatea.format(posicionAbierta.getPrecio_apertura() * posicionAbierta.getCantidad()));
+        lore.add("    ");
+        lore.add(GOLD + "Fecha de compra: " + posicionAbierta.getFecha_apertura());
+        lore.add("   ");
+        lore.add(GOLD + "ID: " + posicionAbierta.getId());
+
+        return MinecraftUtils.loreDisplayName(Material.GREEN_BANNER, displayName, lore);
     }
 
     private List<String> buildLoreFromPosicionAbierta (PosicionAbierta posicion) {
@@ -160,51 +177,51 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         double peso = posicionesAbiertasPeso.get(posicion.getNombre_activo());
         List<String> lore = new ArrayList<>();
         lore.add("   ");
-        lore.add(ChatColor.GOLD + "Empresa: " + llamada.getNombre_activo());
+        lore.add(GOLD + "Empresa: " + llamada.getNombre_activo());
 
         if(!PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()).equalsIgnoreCase(posicion.getNombre_activo())) {
-            lore.add(ChatColor.GOLD + "Ticker: " + posicion.getNombre_activo() + " (" + PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()) + ")");
+            lore.add(GOLD + "Ticker: " + posicion.getNombre_activo() + " (" + PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()) + ")");
         }else {
-            lore.add(ChatColor.GOLD + "Ticker: " + posicion.getNombre_activo() + " (Acciones) ");
+            lore.add(GOLD + "Ticker: " + posicion.getNombre_activo() + " (Acciones) ");
         }
-        lore.add(ChatColor.GOLD + "Peso en cartera: " + peso + "%");
+        lore.add(GOLD + "Peso en cartera: " + peso + "%");
         lore.add("   ");
 
         if (posicion.getTipo_posicion() == LARGO) {
-            lore.add(ChatColor.GOLD + "Acciones compradas: " + posicion.getCantidad());
+            lore.add(GOLD + "Acciones compradas: " + posicion.getCantidad());
         } else {
-            lore.add(ChatColor.GOLD + "Acciones vendidas: " + posicion.getCantidad());
+            lore.add(GOLD + "Acciones vendidas: " + posicion.getCantidad());
         }
 
-        lore.add(ChatColor.GOLD + "Precio apertura: " + ChatColor.GREEN +formatea.format(posicion.getPrecio_apertura()) + " PC");
-        lore.add(ChatColor.GOLD + "Precio actual: " + ChatColor.GREEN + formatea.format(precioAcutal));
+        lore.add(GOLD + "Precio apertura: " + GREEN +formatea.format(posicion.getPrecio_apertura()) + " PC");
+        lore.add(GOLD + "Precio actual: " + GREEN + formatea.format(precioAcutal));
         if(perdidasOBeneficios >= 0){
-            lore.add(ChatColor.GOLD + "Beneficios totales: " +ChatColor.GREEN + "+" + formatea.format(perdidasOBeneficios) + " PC");
-            lore.add(ChatColor.GOLD + "Rentabilidad: " + ChatColor.GREEN + "+" + rentabilidad + "%");
+            lore.add(GOLD + "Beneficios totales: " + GREEN + "+" + formatea.format(perdidasOBeneficios) + " PC");
+            lore.add(GOLD + "Rentabilidad: " + GREEN + "+" + rentabilidad + "%");
         }else{
-            lore.add(ChatColor.GOLD + "Perdidas totales: " + ChatColor.RED + formatea.format(perdidasOBeneficios) + " PC");
-            lore.add(ChatColor.GOLD + "Rentabilidad: " + ChatColor.RED + rentabilidad + "%");
+            lore.add(GOLD + "Perdidas totales: " + RED + formatea.format(perdidasOBeneficios) + " PC");
+            lore.add(GOLD + "Rentabilidad: " + RED + rentabilidad + "%");
         }
-        lore.add(ChatColor.GOLD + "Valor total: " + ChatColor.GREEN + formatea.format(precioAcutal * posicion.getCantidad()) + " PC");
+        lore.add(GOLD + "Valor total: " + GREEN + formatea.format(precioAcutal * posicion.getCantidad()) + " PC");
         lore.add("   ");
 
         if(posicion.getTipo_posicion() == LARGO){
             this.valorTotal = valorTotal + (precioAcutal * posicion.getCantidad());
             this.resultadoTotal = resultadoTotal + perdidasOBeneficios;
-            lore.add(ChatColor.GOLD + "Fecha de compra: " + posicion.getFecha_apertura());
+            lore.add(GOLD + "Fecha de compra: " + posicion.getFecha_apertura());
         }else{
             this.valorTotal = valorTotal + perdidasOBeneficios;
             this.resultadoTotal = resultadoTotal + perdidasOBeneficios;
-            lore.add(ChatColor.GOLD + "Fecha de venta: " + posicion.getFecha_apertura());
+            lore.add(GOLD + "Fecha de venta: " + posicion.getFecha_apertura());
         }
 
-        lore.add(ChatColor.GOLD + "ID: " + posicion.getId());
+        lore.add(GOLD + "ID: " + posicion.getId());
 
         return lore;
     }
 
     private ItemStack buildItemInfo () {
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "INFO";
+        String displayName = GOLD + "" + BOLD + "INFO";
         List<String> lore = new ArrayList<>();
         lore.add("Puedes comprar valores en la bolsa");
         lore.add("que cotizen en Estados Unidos");
@@ -230,31 +247,31 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
 
     private ItemStack buildItemResultado() {
         List<String> lore = buildLoreFromResultado();
-        String displayname = ChatColor.GOLD + "" + ChatColor.BOLD + "REUSLTADO";
+        String displayname = GOLD + "" + BOLD + "REUSLTADO";
 
         return MinecraftUtils.loreDisplayName(Material.WRITABLE_BOOK, displayname, lore);
     }
 
     private List<String> buildLoreFromResultado () {
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GOLD + "Estas al " + redondeoDecimales(rentabilidad(liquidezjugador + valorTotal, valorTotal),1)  + " % invertido");
-        lore.add(ChatColor.GOLD + "Valor total: " + ChatColor.GREEN + formatea.format(valorTotal) + " PC");
+        lore.add(GOLD + "Estas al " + redondeoDecimales(rentabilidad(liquidezjugador + valorTotal, valorTotal),1)  + " % invertido");
+        lore.add(GOLD + "Valor total: " + GREEN + formatea.format(valorTotal) + " PC");
         if(resultadoTotal >= 0)
-            lore.add(ChatColor.GOLD + "Beneficios: " + ChatColor.GREEN + formatea.format(resultadoTotal) + " PC");
+            lore.add(GOLD + "Beneficios: " + GREEN + formatea.format(resultadoTotal) + " PC");
         else
-            lore.add(ChatColor.GOLD + "Perdidas: " + ChatColor.RED + formatea.format(resultadoTotal) + " PC");
+            lore.add(GOLD + "Perdidas: " + RED + formatea.format(resultadoTotal) + " PC");
 
         double rentabilidad = rentabilidad(valorTotal, resultadoTotal);
         if(rentabilidad > 0)
-            lore.add(ChatColor.GOLD + "Estas ganando un: " + ChatColor.GREEN + "+" +  rentabilidad + " %");
+            lore.add(GOLD + "Estas ganando un: " + GREEN + "+" +  rentabilidad + " %");
         else
-            lore.add(ChatColor.GOLD + "Estas perdiendo un: " + ChatColor.RED + rentabilidad + " %");
+            lore.add(GOLD + "Estas perdiendo un: " + RED + rentabilidad + " %");
 
         return lore;
     }
 
     private ItemStack buildItemValores () {
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" +ChatColor.UNDERLINE + "CLICK PARA COMPRAR VALORES";
+        String displayName = GOLD + "" + BOLD + "" + UNDERLINE + "CLICK PARA COMPRAR VALORES";
 
         return MinecraftUtils.displayname(Material.BOOK, displayName);
     }

@@ -62,9 +62,15 @@ public class EmpresasVerTodasMenu extends Menu implements CanGoBack, Clickable{
         MySQL.conectar();
 
         String nombreEmpresa = lore.get(1).split(" ")[1].substring(4);
-        empresasMySQL.solicitarServicio((Player) event.getWhoClicked(), nombreEmpresa);
+        String displayName = itemClickeado.getItemMeta().getDisplayName();
 
-        closeMenu();
+        if(displayName.equalsIgnoreCase(ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TU EMPRESA")){
+            EmpresasVerMenu menu = new EmpresasVerMenu(player, nombreEmpresa);
+        }else{
+            empresasMySQL.solicitarServicio((Player) event.getWhoClicked(), nombreEmpresa);
+            closeMenu();
+        }
+
         MySQL.desconectar();
     }
 }

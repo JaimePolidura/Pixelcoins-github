@@ -1,7 +1,9 @@
 package es.serversurvival.menus.inventoryFactory;
 
+import es.serversurvival.menus.menus.Paginated;
 import es.serversurvival.mySQL.*;
 import es.serversurvival.util.Funciones;
+import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -24,7 +26,8 @@ public abstract class InventoryFactory {
     protected static PosicionesCerradas posicionesCerradasMySQL = PosicionesCerradas.INSTANCE;
     protected static Transacciones transaccionesMySQL = Transacciones.INSTANCE;
     protected static Deudas deudasMySQL = Deudas.INSTANCE;
-    protected static Ordenes ordenesMySQL = Ordenes.INSTANCE;
+    protected static OrdenesPreMarket ordenesMySQL = OrdenesPreMarket.INSTANCE;
+    protected static OfertasMercadoServer ofertasMercadoServerMySQL = OfertasMercadoServer.INSTANCE;
 
     protected abstract Inventory buildInventory (String jugador);
 
@@ -35,5 +38,9 @@ public abstract class InventoryFactory {
 
         back.setItemMeta(backMeta);
         return back;
+    }
+
+    protected ItemStack buildItemFordward () {
+        return MinecraftUtils.displayname(Material.GREEN_WOOL, Paginated.ITEM_NAME_GOFORDWARD);
     }
 }

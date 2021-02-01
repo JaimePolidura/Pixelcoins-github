@@ -1,19 +1,16 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
-import es.serversurvival.mySQL.enums.TipoPosicion;
-import es.serversurvival.mySQL.tablasObjetos.Orden;
+import es.serversurvival.mySQL.tablasObjetos.OrdenPreMarket;
 import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class BolsaOrdenesInventoryFactory extends InventoryFactory {
     @Override
@@ -31,17 +28,17 @@ public class BolsaOrdenesInventoryFactory extends InventoryFactory {
     }
 
     private List<ItemStack> buildItemsOrdenes (String jugador) {
-        List<Orden> ordenes = ordenesMySQL.getOrdenes(jugador);
+        List<OrdenPreMarket> ordenes = ordenesMySQL.getOrdenes(jugador);
         List<ItemStack> items = new ArrayList<>();
 
-        for(Orden orden : ordenes){
+        for(OrdenPreMarket orden : ordenes){
             items.add(buildItemOrden(orden));
         }
 
         return items;
     }
 
-    private ItemStack buildItemOrden (Orden orden) {
+    private ItemStack buildItemOrden (OrdenPreMarket orden) {
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA CANCELAR";
         Material material = Material.NAME_TAG;
         List<String> lore = new ArrayList<>();

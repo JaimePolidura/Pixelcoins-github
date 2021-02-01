@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.util.*;
 import java.util.Date;
 
+import com.mojang.datafixers.types.Func;
 import es.serversurvival.mySQL.enums.TipoSueldo;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
@@ -15,12 +16,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
+import static es.serversurvival.util.Funciones.*;
+
 //II 354 -> 236
 public final class Empleados extends MySQL {
     public final static Empleados INSTANCE = new Empleados();
     private Empleados () {}
-
-    public static final List<String> tipoSueldos = Arrays.asList("d", "s", "2s", "m");
 
     public void nuevoEmpleado(String empleado, String empresa, double sueldo, TipoSueldo tipo, String cargo) {
         String fechaPaga = dateFormater.format(new Date());
@@ -78,7 +79,7 @@ public final class Empleados extends MySQL {
 
         allEmpleados.forEach(empleado -> {
             if(toReturn.get(empleado.getEmpresa()) == null){
-                toReturn.put(empleado.getEmpresa(), Funciones.listOf(empleado));
+                toReturn.put(empleado.getEmpresa(), listOf(empleado));
             }else{
                 List<Empleado> empleadosEmpresa = toReturn.get(empleado.getEmpresa());
                 empleadosEmpresa.add(empleado);
@@ -103,14 +104,10 @@ public final class Empleados extends MySQL {
         borrarEmplado(id_emplado);
 
         ownerPlayer.sendMessage(ChatColor.GOLD + "Has despedido a: " + empleado);
-        Player tp = ownerPlayer.getServer().getPlayer(empleado);
 
-        if (tp != null) {
-            tp.sendMessage(ChatColor.RED + "Has sido despedido de " + nombreEmpresa + " razon: " + razon);
-            tp.playSound(tp.getLocation(), Sound.BLOCK_ANVIL_LAND, 10, 1);
-        } else {
-            mensajesMySQL.nuevoMensaje("", empleado, "Has sido despedido de " + nombreEmpresa + " por: " + razon);
-        }
+        String mensajeOnline = ChatColor.RED + "Has sido despedido de " + nombreEmpresa + " razon: " + razon;
+        String mensajeOffline = "Has sido despedido de " + nombreEmpresa + " por: " + razon;
+        enviarMensaje(empleado, mensajeOnline, mensajeOnline, Sound.BLOCK_ANVIL_LAND, 10, 1);
     }
 
     public void irseEmpresa (String nombreEmpresa, Player player) {
@@ -118,46 +115,10 @@ public final class Empleados extends MySQL {
         borrarEmplado(getEmpleado(player.getName(), nombreEmpresa).getId());
 
         player.sendMessage(ChatColor.GOLD + "Te has ido de: " + nombreEmpresa);
-        Player ownerPlayer = player.getServer().getPlayer(empresaAIRse.getOwner());
-        if (ownerPlayer != null) {
-            ownerPlayer.sendMessage(ChatColor.RED + player.getName() + " Se ha ido de tu empresa: " + nombreEmpresa);
-            player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 10, 1);
-        } else {
-            mensajesMySQL.nuevoMensaje("" ,ownerPlayer.getName(), player.getName() + " se ha ido de tu empresa: " + nombreEmpresa);
-        }
-    }
 
-    public void editarTipoSueldo (Empresa empresa, Empleado empleado, TipoSueldo tipoSueldo) {
-        this.setTipo(empleado.getId(), tipoSueldo);
-
-        double sueldo = empleado.getSueldo();
-        String tipoString = tipoSueldo.nombre;
-        Player jugadorAEditarPlayer = Bukkit.getPlayer(empleado.getJugador());
-        Player sender = Bukkit.getPlayer(empresa.getOwner());
-
-        if (jugadorAEditarPlayer != null) {
-            jugadorAEditarPlayer.sendMessage(ChatColor.GOLD + sender.getName() + " te ha cambiado el tiempo por por el que cobras el sueldo, ahora cobras " + ChatColor.GREEN + formatea.format(sueldo) + " PC" + ChatColor.GOLD + " por " + tipoString);
-            jugadorAEditarPlayer.playSound(jugadorAEditarPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-        } else {
-            mensajesMySQL.nuevoMensaje("", empleado.getJugador(), "Se te ha cambiado la frecuencia con la que cobras en la empresa: " + empresa.getNombre() + " " + sueldo + " PC/ " + tipoString);
-        }
-        sender.sendMessage(ChatColor.GOLD + "Has cambiado el tipo de pagado de sueldo de " + empleado.getJugador() + " en la empresa " + empresa.getNombre());
-    }
-
-    public void editarEmpleadoSueldo(Empresa empresa, Empleado empleado, double nuevoSueldo) {
-        setSueldo(empleado.getId(), nuevoSueldo);
-
-        double sueldoAntes = empleado.getSueldo();
-        Player sender = Bukkit.getPlayer(empresa.getOwner());
-        Player jugadorAEditar = Bukkit.getPlayer(empleado.getJugador());
-        sender.sendMessage(ChatColor.GOLD + "Has cambiado el sueldo a " + jugadorAEditar.getName() + " a " + ChatColor.GREEN + formatea.format(nuevoSueldo) + " PC" + ChatColor.GOLD + " en la empresa: " + empresa);
-
-        if (jugadorAEditar != null) {
-            jugadorAEditar.sendMessage(ChatColor.GOLD + sender.getName() + " te ha cambiado el sueldo de " + empresa.getNombre() + " a " + ChatColor.GREEN + formatea.format(nuevoSueldo) + " PC" + ChatColor.GOLD + " antes tenias: " + ChatColor.GREEN + formatea.format(sueldoAntes) + " PC");
-            jugadorAEditar.playSound(jugadorAEditar.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-        } else {
-            mensajesMySQL.nuevoMensaje("", empleado.getJugador(), "Se te ha cambiado el sueldo de la empresa: " + empresa.getNombre() + " a " + formatea.format(nuevoSueldo) + " PC antes tenias " + sueldoAntes + " PC");
-        }
+        String mensajeOnline = ChatColor.RED + player.getName() + " Se ha ido de tu empresa: " + nombreEmpresa;
+        String mensajeOffline = player.getName() + " se ha ido de tu empresa: " + nombreEmpresa;
+        enviarMensaje(empresaAIRse.getOwner(), mensajeOnline, mensajeOffline, Sound.BLOCK_ANVIL_LAND, 10, 1);
     }
 
     public void pagarSueldos() {
@@ -168,14 +129,14 @@ public final class Empleados extends MySQL {
             Date actualEmpl = formatFechaDeLaBaseDatosException(empl.getFecha_ultimapaga());
             String tipoSueldo = empl.getTipo_sueldo().codigo;
 
-            long diferenciaDias = Funciones.diferenciaDias(hoy, actualEmpl);
+            int diferenciaDias = (int) diferenciaDias(hoy, actualEmpl);
 
-            if ((tipoSueldo.equalsIgnoreCase("d") && diferenciaDias <= 1) || (tipoSueldo.equalsIgnoreCase("s") && diferenciaDias <= 7) ||
-                    (tipoSueldo.equalsIgnoreCase("2s") && diferenciaDias <= 14) || (tipoSueldo.equalsIgnoreCase("m") && diferenciaDias <= 30)) {
-                continue;
+            if(TipoSueldo.dentroDeLosDias(tipoSueldo, diferenciaDias)){
+               continue;
             }
 
             boolean sePago = transaccionesMySQL.pagarSalario(empl.getJugador(), empl.getEmpresa(), empl.getSueldo());
+
             if (sePago) {
                 setFechaPaga(empl.getId(), dateFormater.format(hoy));
                 mensajesMySQL.nuevoMensaje("", empl.getJugador(), "Has cobrado " + empl.getSueldo() + " PC de parte de la empresa: " + empl.getEmpresa());
@@ -185,10 +146,6 @@ public final class Empleados extends MySQL {
                 mensajesMySQL.nuevoMensaje("", empl.getJugador(), "No has podido cobrar tu sueldo por parte de " + empl.getEmpresa() + " por que no tiene las suficientes pixelcoins");
             }
         }
-    }
-
-    public static boolean esUnTipoDeSueldo (String tipo) {
-        return tipoSueldos.stream().anyMatch( (ite) -> ite.equalsIgnoreCase(tipo) );
     }
 
     @SneakyThrows

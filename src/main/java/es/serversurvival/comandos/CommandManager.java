@@ -136,6 +136,7 @@ public class CommandManager implements CommandExecutor {
         subComandosEmpresas.put("editarempleado", new EditarEmpleadoEmpresas());
         subComandosEmpresas.put("editarnombre", new EditarNombreEmpresas());
         subComandosEmpresas.put("ayuda", new AyudaEmpresas());
+        subComandosEmpresas.put("mercado", new MercadoEmpresas());
         subComandos.put("empresas", subComandosEmpresas);
     }
 }

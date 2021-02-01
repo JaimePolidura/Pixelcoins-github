@@ -1,6 +1,7 @@
 package es.serversurvival.comandos.subComandos.bolsa;
 
 import es.serversurvival.mySQL.MySQL;
+import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import main.ValidationResult;
@@ -42,18 +43,18 @@ public class VenderBolsa extends BolsaSubCommand {
             return;
         }
 
-        int id = Integer.parseInt(args[1]);
-        PosicionAbierta posicionAVender = posicionesAbiertasMySQL.getPosicionAbierta(id);
+        PosicionAbierta posicionAVender = posicionesAbiertasMySQL.getPosicionAbierta(Integer.parseInt(args[1]));
 
-        int cantidad;
-        if (args.length == 2) {
-            cantidad = posicionAVender.getCantidad();
-        } else {
-            cantidad = Integer.parseInt(args[2]);
-        }
+        int cantidad = args.length == 2 ?
+                posicionAVender.getCantidad() :
+                Integer.parseInt(args[2]);
 
-        if (posicionAVender.getCantidad() < cantidad) {
+        if (posicionAVender.getCantidad() < cantidad)
             cantidad = posicionAVender.getCantidad();
+
+        if(posicionAVender.getTipo_activo() == TipoActivo.ACCIONES_SERVER){
+            //TODO:
+            return;
         }
 
         if(mercadoEstaAbierto()){
@@ -61,7 +62,6 @@ public class VenderBolsa extends BolsaSubCommand {
         }else{
             ordenesMySQL.abrirOrdenVentaLargo(player, args[1], cantidad);
         }
-
 
         MySQL.desconectar();
     }

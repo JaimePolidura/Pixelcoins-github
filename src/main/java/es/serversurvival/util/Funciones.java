@@ -151,7 +151,7 @@ public final class Funciones {
         Map<String, List<Deuda>> mapDeudasAcredor = deudasMySQL.getAllDeudasAcredorMap();
         Map<String, List<Deuda>> mapDeudasDeudor = deudasMySQL.getAllDeudasDeudorMap();
         Map<String, List<Empresa>> mapEmpresasJugador = empresasMySQL.getAllEmpresasJugadorMap();
-        Map<String, List<PosicionAbierta>> mapPosicionesLargo = posicionesAbiertasMySQL.getAllPosicionesAbiertasMap(PosicionAbierta::esLargo);
+        Map<String, List<PosicionAbierta>> mapPosicionesLargo = posicionesAbiertasMySQL.getAllPosicionesAbiertasMap(PosicionAbierta::noEsTipoAccionServerYLargo);
         Map<String, List<PosicionAbierta>> mapPosicionesCorto = posicionesAbiertasMySQL.getAllPosicionesAbiertasMap(PosicionAbierta::esCorto);
 
         HashMap<String, Double> toReturn = new HashMap<>();
@@ -239,7 +239,7 @@ public final class Funciones {
                 .sum();
 
         //Bolsa
-        List<PosicionAbierta> posicionAbiertasJugador = posicionesAbiertas.getPosicionesAbiertasJugador(jugador.getNombre());
+        List<PosicionAbierta> posicionAbiertasJugador = posicionesAbiertas.getPosicionesAbiertasJugadorCondicion(jugador.getNombre(), PosicionAbierta::noEsTipoAccionServer);
 
         patrimonio += posicionAbiertasJugador.stream()
                 .filter(PosicionAbierta::esLargo)
@@ -247,7 +247,7 @@ public final class Funciones {
                 .sum();
 
         patrimonio += posicionAbiertasJugador.stream()
-                .filter(PosicionAbierta::esLargo)
+                .filter(PosicionAbierta::esCorto)
                 .mapToDouble(pos -> (pos.getPrecio_apertura() - mapAllLlamadas.get(pos.getNombre_activo()).getPrecio()) * pos.getCantidad())
                 .sum();
 

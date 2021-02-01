@@ -6,6 +6,7 @@ import java.util.*;
 import es.serversurvival.mySQL.tablasObjetos.Encantamiento;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
 import es.serversurvival.mySQL.tablasObjetos.Oferta;
+import es.serversurvival.util.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -16,6 +17,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import static es.serversurvival.util.Funciones.*;
 
 /**
  * 363 -> 193
@@ -79,33 +82,17 @@ public final class Ofertas extends MySQL {
         return bannedItems.stream().anyMatch( (ite) -> ite.equalsIgnoreCase(item));
     }
 
-    public void crearOferta(ItemStack itemAVender, Player jugadorPlayer, double precio) {
-        Inventory inventarioJugador = jugadorPlayer.getInventory();
-        String nombreJugador = jugadorPlayer.getName();
+    public void crearOferta(ItemStack itemAVender, Player player, double precio) {
+        Inventory inventarioJugador = player.getInventory();
+        String nombreJugador = player.getName();
+        int idOfetaNueva = nuevaOferta(nombreJugador, itemAVender.getType().toString(), itemAVender.getAmount(), precio, itemAVender.getDurability());
 
-        Jugador jugador = jugadoresMySQL.getJugador(jugadorPlayer.getName());
-        int nOfertas = getTodasOfertas().size();
-
-        if(jugador == null){
-            jugadoresMySQL.nuevoJugador(nombreJugador, 0, 1, 0, 0, 0, 0, jugadorPlayer.getUniqueId().toString());
-        }else {
-            if (getEspacios(nombreJugador) >= MAX_ESPACIOS) {
-                jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Solo puedes tener "+ MAX_ESPACIOS +" objetos a la vez en la tienda");
-                return;
-            }
-        }
-
-        int idOfetaNueva =  nuevaOferta(nombreJugador, itemAVender.getType().toString(), itemAVender.getAmount(), precio, itemAVender.getDurability());
-
-        int id = this.getMaxId();
         Map<Enchantment, Integer> encantamientos = getEncantamientosDeItem(itemAVender);
         encantamientosMySQL.insertarEncantamientosDeItem(encantamientos, idOfetaNueva);
+        inventarioJugador.clear(player.getInventory().getHeldItemSlot());
 
-        int slot = jugadorPlayer.getInventory().getHeldItemSlot();
-        inventarioJugador.clear(slot);
+        enviarMensajeYSonido(player, ChatColor.GOLD + "Se ha añadido a la tienda. Para retirarlos /tienda y clikc izquierdo en ellos", Sound.ENTITY_VILLAGER_YES);
 
-        jugadorPlayer.sendMessage(ChatColor.GOLD + "Se ha añadido a la tienda. Para retirarlos /tienda y clikc izquierdo en ellos");
-        jugadorPlayer.playSound(jugadorPlayer.getLocation(), Sound.ENTITY_VILLAGER_YES, 10, 1);
         Bukkit.getServer().broadcastMessage(ChatColor.GOLD + nombreJugador + " ha añadido un objeto a la tienda por: " + ChatColor.GREEN + formatea.format(precio) + " PC " + ChatColor.AQUA + "/tienda");
     }
 
@@ -151,14 +138,13 @@ public final class Ofertas extends MySQL {
         return itemToConvert;
     }
 
-    public void retirarOferta(Player jugadorPlayer, int idARetirar) {
-        ItemStack itemARetirar = this.getItemOferta(getOferta(idARetirar));
-
+    public void retirarOferta(Player player, int idARetirar) {
         borrarOferta(idARetirar);
 
-        jugadorPlayer.getInventory().addItem(itemARetirar);
-        jugadorPlayer.sendMessage(ChatColor.GOLD + "Objeto retirado!");
-        jugadorPlayer.playSound(jugadorPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        ItemStack itemARetirar = this.getItemOferta(getOferta(idARetirar));
+        player.getInventory().addItem(itemARetirar);
+
+        enviarMensajeYSonido(player, ChatColor.GOLD + "Objeto retirado!", Sound.ENTITY_PLAYER_LEVELUP);
     }
 
     private Map<Enchantment, Integer> getEncantamientosDeItem (ItemStack item) {

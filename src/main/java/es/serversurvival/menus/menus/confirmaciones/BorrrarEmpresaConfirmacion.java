@@ -30,6 +30,7 @@ public class BorrrarEmpresaConfirmacion extends Menu implements Confirmacion {
         List<String> loreAceptar = Funciones.dividirDesc(descAceptar, 40);
 
         this.inventory = InventoryCreator.createSolicitud(titulo, nombreAceptar, loreAceptar, nombreCancelar, Collections.emptyList());
+        openMenu();
     }
 
     @Override

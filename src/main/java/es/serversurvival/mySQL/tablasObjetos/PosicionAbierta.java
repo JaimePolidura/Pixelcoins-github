@@ -28,4 +28,16 @@ public final class PosicionAbierta implements TablaObjeto {
     public boolean esTipoAccion () {
         return tipo_activo == TipoActivo.ACCIONES;
     }
+       
+    public boolean noEsTipoAccionServer () {
+        return tipo_activo != TipoActivo.ACCIONES_SERVER;
+    }
+
+    public boolean esTipoAccionServer () {
+        return tipo_activo == TipoActivo.ACCIONES_SERVER;
+    }
+
+    public boolean noEsTipoAccionServerYLargo () {
+        return tipo_activo != TipoActivo.ACCIONES_SERVER && tipo_posicion == TipoPosicion.LARGO;
+    }
 }
