@@ -33,10 +33,10 @@ public final class PosicionesAbiertas extends MySQL {
 
     private PosicionesAbiertas () {}
 
-    public void nuevaPosicion(String jugador, TipoActivo tipo, String nombre, int cantidad, double precioApertura, TipoPosicion tipoPosicion) {
+    public void nuevaPosicion(String jugador, TipoActivo tipoAcivo, String nombreActivo, int cantidad, double precioApertura, TipoPosicion tipoPosicion) {
         String fecha = dateFormater.format(new Date());
 
-        executeUpdate("INSERT INTO posicionesabiertas (jugador, tipo_activo, nombre_activo, cantidad, precio_apertura, fecha_apertura, tipo_posicion) VALUES ('" + jugador + "','"+tipo.toString()+"','" + nombre + "','" + cantidad + "','" + precioApertura + "', '" + fecha + "','"+tipoPosicion.toString()+"')");
+        executeUpdate("INSERT INTO posicionesabiertas (jugador, tipo_activo, nombre_activo, cantidad, precio_apertura, fecha_apertura, tipo_posicion) VALUES ('" + jugador + "','"+tipoAcivo.toString()+"','" + nombreActivo + "','" + cantidad + "','" + precioApertura + "', '" + fecha + "','"+tipoPosicion.toString()+"')");
     }
 
     public PosicionAbierta getPosicionAbierta(int id){

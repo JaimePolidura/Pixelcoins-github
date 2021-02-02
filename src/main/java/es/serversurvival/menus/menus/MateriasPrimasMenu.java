@@ -66,7 +66,7 @@ public class MateriasPrimasMenu extends Menu implements Clickable, PostLoading {
             alias = "galones";
         }
 
-        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, TipoActivo.MATERIAS_PRIMAS, alias, player.getName(), precio);
+        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, TipoActivo.MATERIAS_PRIMAS, alias, player, precio);
     }
 
     @Override

@@ -1,11 +1,13 @@
 package es.serversurvival.menus.menus;
 
 import es.serversurvival.menus.menus.confirmaciones.VenderAccionesConfirmacion;
+import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.BolsaCarteraInventoryFactory;
+import lombok.SneakyThrows;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -55,7 +57,7 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
         }
 
         String clickedItemType = clikedItem.getType().toString();
-        if(Funciones.noEsDeTipoItem(clikedItem, "BOOK")){
+        if(Funciones.esDeTipoItem(clikedItem, "BOOK")){
             ElegirInversionMenu menu = new ElegirInversionMenu((Player) event.getWhoClicked());
             return;
         }
@@ -64,21 +66,15 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
     }
 
     private void performClick (ItemStack clikedItem) {
-        String clickedItemType = clikedItem.getType().toString();
+        Material clickedItemType = clikedItem.getType();
+        TipoPosicion tipoPosicion = clickedItemType == Material.NAME_TAG ? LARGO : CORTO;
+        List<String> loreItemClicked = clikedItem.getItemMeta().getLore();
+        int id = Integer.parseInt(loreItemClicked.get(loreItemClicked.size() - 1).split(" ")[1]);
 
-        if(clickedItemType.equalsIgnoreCase(Material.GREEN_BANNER.toString())){ //Accion del server
-            //TODO
+        if(clickedItemType == Material.GREEN_BANNER){ //Accion del server
+            VenderAccionesConfirmacion confirmacion = new VenderAccionesConfirmacion(player, id, tipoPosicion, TipoActivo.ACCIONES_SERVER, loreItemClicked);
         }else{
-            TipoPosicion tipoPosicion = clickedItemType.equalsIgnoreCase("NAME_TAG") ? LARGO : CORTO;
-
-            List<String> lore = clikedItem.getItemMeta().getLore();
-            String acciones = lore.get(5).split(" ")[2];
-            String valorTotal = lore.get(10).split(" ")[2];
-            String beneficios = lore.get(8).split(" ")[2];
-            String rentabilidad = lore.get(9).split(" ")[1];
-            int id = Integer.parseInt(lore.get(lore.size() - 1).split(" ")[1]);
-
-            VenderAccionesConfirmacion confirmacion = new VenderAccionesConfirmacion(player, tipoPosicion, acciones, valorTotal, beneficios, rentabilidad, id);
+            VenderAccionesConfirmacion confirmacion = new VenderAccionesConfirmacion(player, id, tipoPosicion, TipoActivo.ACCIONES, loreItemClicked); //TODO Hay que hacerlo compatible con los demas activos
         }
     }
 

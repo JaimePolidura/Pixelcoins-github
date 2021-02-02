@@ -3,8 +3,11 @@ package es.serversurvival.menus.menus;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.EmpresasMercadoInventoryFactory;
+import es.serversurvival.menus.menus.confirmaciones.ComprarBolsaConfirmacion;
 import es.serversurvival.mySQL.MySQL;
+import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.util.Funciones;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -50,6 +53,20 @@ public class EmpresasMercadoMenu extends Menu implements Clickable, Paginated{
         boolean notValidClick = clikedItem == null || !Funciones.cuincideNombre(clikedItem.getType().toString(), "RED_BANNER", "BLUE_BANNER", "GREEN_BANNER") || clikedItem.getItemMeta().getLore().get(1) == null;
         if(notValidClick){
             return;
+        }
+
+        List<String> loreItemClicked = clikedItem.getItemMeta().getLore();
+        int id = Integer.parseInt(loreItemClicked.get(loreItemClicked.size() - 1));
+        String empresa = loreItemClicked.get(1).split(" ")[1];
+
+        if(clikedItem.getType() == Material.RED_BANNER){ //Red banner -> la oferta es del jugador
+            MySQL.conectar();
+            ofertasMercadoServerMySQL.cancelarOferta(player, id);
+            closeMenu();
+        }else if (clikedItem.getType() == Material.BLUE_BANNER) { //blue banner -> la oferta es de la empresa
+            ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(player, id);
+        }else{ //green banner -> la oferta es de un jugador singular
+
         }
 
         //TODO:

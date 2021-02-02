@@ -62,7 +62,7 @@ public class AccionesMenu extends Menu implements Clickable, Paginated, PostLoad
         String ticker = lore.get(0).split(" ")[1];
 
         closeMenu();
-        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(ticker, nombreValor, TipoActivo.ACCIONES, "acciones", player.getName(), precio);
+        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(ticker, nombreValor, TipoActivo.ACCIONES, "acciones", player, precio);
     }
 
     @Override

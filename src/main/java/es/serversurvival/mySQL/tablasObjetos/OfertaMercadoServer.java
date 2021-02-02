@@ -4,6 +4,7 @@ import es.serversurvival.mySQL.enums.TipoOfertante;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.io.FileWriter;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -15,4 +16,5 @@ public final class OfertaMercadoServer implements TablaObjeto{
     @Getter private final int cantidad;
     @Getter private final String fecha;
     @Getter private final TipoOfertante tipo_ofertante;
+    @Getter private final double precio_apertura;
 }

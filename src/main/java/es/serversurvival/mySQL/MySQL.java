@@ -27,6 +27,7 @@ public abstract class MySQL {
     protected static PosicionesCerradas posicionesCerradasMySQL = PosicionesCerradas.INSTANCE;
     protected static Transacciones transaccionesMySQL = Transacciones.INSTANCE;
     protected static Deudas deudasMySQL = Deudas.INSTANCE;
+    protected static OfertasMercadoServer ofertasMercadoServerMySQL = OfertasMercadoServer.INSTANCE;
 
     protected static Connection conexion;
     /** ----------========= LINUX =========----------

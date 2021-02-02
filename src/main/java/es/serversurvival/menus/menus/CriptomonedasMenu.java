@@ -57,7 +57,7 @@ public class CriptomonedasMenu extends Menu implements Clickable, PostLoading {
         double precio = Double.parseDouble(lore.get(1).split(" ")[1]);
         String simbolo = lore.get(0).split(" ")[1];
 
-        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, TipoActivo.CRIPTOMONEDAS, "monedas", player.getName(), precio);
+        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, TipoActivo.CRIPTOMONEDAS, "monedas", player, precio);
     }
 
     @Override

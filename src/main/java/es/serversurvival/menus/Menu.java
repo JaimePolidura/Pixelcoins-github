@@ -1,5 +1,6 @@
 package es.serversurvival.menus;
 
+import es.serversurvival.menus.menus.OfertasMenu;
 import es.serversurvival.mySQL.*;
 import es.serversurvival.util.Funciones;
 import org.bukkit.entity.Player;
@@ -22,6 +23,7 @@ public abstract class Menu {
     protected static Transacciones transaccionesMySQL = Transacciones.INSTANCE;
     protected static Deudas deudasMySQL = Deudas.INSTANCE;
     protected static OrdenesPreMarket ordenesMySQL = OrdenesPreMarket.INSTANCE;
+    protected static OfertasMercadoServer ofertasMercadoServerMySQL = OfertasMercadoServer.INSTANCE;
 
     public abstract Inventory getInventory();
     public abstract Player getPlayer();

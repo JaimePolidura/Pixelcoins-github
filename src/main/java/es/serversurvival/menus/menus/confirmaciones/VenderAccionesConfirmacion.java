@@ -4,40 +4,57 @@ import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.menus.BolsaCarteraMenu;
 import es.serversurvival.mySQL.MySQL;
+import es.serversurvival.mySQL.enums.TipoActivo;
+import es.serversurvival.mySQL.enums.TipoOfertante;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import es.serversurvival.mySQL.enums.TipoPosicion;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static es.serversurvival.util.Funciones.*;
 import static es.serversurvival.util.Funciones.mercadoEstaAbierto;
+import static org.bukkit.ChatColor.*;
 
 public class VenderAccionesConfirmacion extends Menu implements Confirmacion{
     private Inventory inventory;
     private Player player;
     private TipoPosicion tipoPosicion;
+    private TipoActivo tipoActivo;
     private int id;
 
-    public VenderAccionesConfirmacion (Player player, TipoPosicion tipoPosicion, String accionesCompradas,
-                                       String valorTotal, String beneficios, String rentabilidad, int id) {
+    public VenderAccionesConfirmacion (Player player, int id, TipoPosicion tipoPosicion, TipoActivo tipoActivo, List<String> loreItemClicked) {
         this.player = player;
         this.id = id;
-        this.tipoPosicion = tipoPosicion;
+        this.tipoPosicion = tipoPosicion;;
+        this.tipoActivo = tipoActivo;
 
-        String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "     ¿Quieres vender?";
-        String tituloItemVender = ChatColor.GREEN + "" + ChatColor.BOLD + "VENDER";
-        List<String> loreVender;
-        System.out.println(beneficios);
-        if(beneficios.charAt(2) == '+'){
-            loreVender = Arrays.asList(ChatColor.GOLD +  "Vender " + accionesCompradas + " acciones con unos beneficios de " + ChatColor.GREEN + beneficios + " PC", ChatColor.GOLD + "y una rentabilidad del " + ChatColor.GREEN + rentabilidad);
-        }else{
-            loreVender = Arrays.asList(ChatColor.GOLD +  "Vender " + accionesCompradas + " acciones con unas perdidas de " + ChatColor.RED + beneficios + " PC", ChatColor.GOLD + " y una rentabilidad del " + ChatColor.RED + rentabilidad);
-        }
-        String tituloItemCancelar = ChatColor.RED + "" + ChatColor.BOLD + "CANCELAR";
+        String titulo = DARK_RED + "" + BOLD + "     ¿Quieres vender?";
+        String tituloItemVender = GREEN + "" + BOLD + "VENDER";
+        String tituloItemCancelar = RED + "" + BOLD + "CANCELAR";
         List<String> loreCancelar = Arrays.asList("");
+        List<String> loreVender;
+
+        if(tipoActivo == TipoActivo.ACCIONES_SERVER){
+            String cantidadAcciones = loreItemClicked.get(2).split(" ")[1];
+            loreVender = Arrays.asList(GOLD + "Se añadiran al mercado de acciones del server, ", GOLD + cantidadAcciones + " acciones. /empresas mercado");
+
+        }else{
+            String cantidadAcciones = loreItemClicked.get(5).split(" ")[1];
+            String valorTotal = loreItemClicked.get(10).split(" ")[2];
+            String beneficios = loreItemClicked.get(8).split(" ")[2];
+            String rentabilidad = loreItemClicked.get(9).split(" ")[1];
+
+            if(beneficios.charAt(2) == '+'){
+                loreVender = Arrays.asList(GOLD +  "Vender " + cantidadAcciones + " acciones con unos beneficios de " + GREEN + beneficios + " PC", GOLD + "y una rentabilidad del " + GREEN + rentabilidad);
+            }else{
+                loreVender = Arrays.asList(GOLD +  "Vender " + cantidadAcciones + " acciones con unas perdidas de " + RED + beneficios + " PC", GOLD + " y una rentabilidad del " + RED + rentabilidad);
+            }
+        }
 
         this.inventory = InventoryCreator.createSolicitud(titulo, tituloItemVender, loreVender, tituloItemCancelar, loreCancelar);
 
@@ -60,7 +77,10 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion{
 
         PosicionAbierta posicionAVender = posicionesAbiertasMySQL.getPosicionAbierta(id);
 
-        if(mercadoEstaAbierto() && tipoPosicion == TipoPosicion.LARGO){
+        if(tipoActivo == TipoActivo.ACCIONES_SERVER) {
+            ofertasMercadoServerMySQL.venderOfertaDesdeBolsaCartera(player, posicionAVender);
+
+        }else if(mercadoEstaAbierto() && tipoPosicion == TipoPosicion.LARGO){
             transaccionesMySQL.venderPosicion(posicionAVender, posicionAVender.getCantidad(), player.getName());
 
         }else if (mercadoEstaAbierto() && tipoPosicion == TipoPosicion.CORTO) {

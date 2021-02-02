@@ -4,8 +4,8 @@ import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
+import es.serversurvival.mySQL.tablasObjetos.OfertaMercadoServer;
 import es.serversurvival.util.MinecraftUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -20,28 +20,26 @@ import java.util.List;
 import static es.serversurvival.util.Funciones.*;
 
 public class ComprarBolsaConfirmacion extends Menu implements Confirmacion {
-    private String titulo;
-    private String simbolo;
-    private String destinatario;
+    private final String simbolo;
     private double precioUnidad;
     private double precioTotal;
-    private TipoActivo tipo;
-    private String alias;
-    private Inventory inventory;
-    private Player player;
-    private int cantidad;
+    private final TipoActivo tipoActivo;
+    private final String alias;
+    private final Inventory inventory;
+    private final Player player;
+    private int cantidadAComprar = 1;
     private double dineroJugador;
-    private String nombreValor;
+    private final String nombreValor;
+    private int maxAccionesAComprar = 999999;
+    private int id;
 
-    public ComprarBolsaConfirmacion(String simbolo, String nombreValor, TipoActivo tipo, String alias, String destinatario, double precioUnidad) {
+    public ComprarBolsaConfirmacion(String simbolo, String nombreValor, TipoActivo tipoActivo, String alias, Player player, double precioUnidad) {
         this.nombreValor = nombreValor;
         this.alias = alias;
-        this.tipo = tipo;
+        this.tipoActivo = tipoActivo;
         this.simbolo = simbolo;
-        this.destinatario = destinatario;
         this.precioUnidad = precioUnidad;
-        this.player = Bukkit.getPlayer(destinatario);
-        this.cantidad = 1;
+        this.player = player;
         this.precioTotal = precioUnidad;
 
         this.inventory = InventoryCreator.createConfirmacionAumento(alias, simbolo, precioUnidad);
@@ -50,6 +48,28 @@ public class ComprarBolsaConfirmacion extends Menu implements Confirmacion {
         this.dineroJugador = jugadoresMySQL.getJugador(player.getName()).getPixelcoins();
         MySQL.desconectar();
 
+        openMenu();
+    }
+
+    //Contructor para el tipo activo = acciones_empresa
+    public ComprarBolsaConfirmacion(Player player, int id) {
+        this.alias = "acciones";
+        this.tipoActivo = TipoActivo.ACCIONES_SERVER;
+        this.player = player;
+        this.id = id;
+        this.precioTotal = precioUnidad;
+
+        MySQL.conectar();
+        OfertaMercadoServer oferta = ofertasMercadoServerMySQL.get(id);
+
+        this.maxAccionesAComprar = oferta.getCantidad();
+        this.precioUnidad = oferta.getPrecio();
+        this.dineroJugador = jugadoresMySQL.getJugador(player.getName()).getPixelcoins();
+        this.nombreValor = oferta.getEmpresa();
+        this.simbolo = oferta.getEmpresa();
+        this.inventory = InventoryCreator.createConfirmacionAumento(alias, oferta.getEmpresa(), oferta.getPrecio());
+
+        MySQL.desconectar();
         openMenu();
     }
 
@@ -87,21 +107,22 @@ public class ComprarBolsaConfirmacion extends Menu implements Confirmacion {
             }
         }
         int nuevasAcciones = Integer.parseInt(stringBuild.toString());
-        this.cantidad = cantidad + nuevasAcciones;
+        this.cantidadAComprar = cantidadAComprar + nuevasAcciones;
 
-        precioTotal = precioUnidad * cantidad;
-        if(precioTotal > dineroJugador){
+        precioTotal = precioUnidad * cantidadAComprar;
+        if(precioTotal > dineroJugador || cantidadAComprar > maxAccionesAComprar){
+            this.cantidadAComprar = cantidadAComprar - nuevasAcciones;
             return;
         }
 
         if (precioTotal <= 0) {
-            cantidad = cantidad - nuevasAcciones;
-            precioTotal = precioUnidad * cantidad;
+            cantidadAComprar = cantidadAComprar - nuevasAcciones;
+            precioTotal = precioUnidad * cantidadAComprar;
             return;
         }
         String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "COMPRAR " + alias.toUpperCase();
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GOLD + "Comprar " + cantidad + " " +  alias  + " " + simbolo + " a " + ChatColor.GREEN + precioUnidad + " PC -> total: " + formatea.format(redondeoDecimales(precioTotal, 3)) + " PC");
+        lore.add(ChatColor.GOLD + "Comprar " + cantidadAComprar + " " +  alias  + " " + simbolo + " a " + ChatColor.GREEN + precioUnidad + " PC -> total: " + formatea.format(redondeoDecimales(precioTotal, 3)) + " PC");
 
         this.inventory.setItem(14, MinecraftUtils.loreDisplayName(Material.GREEN_WOOL, displayName, lore));
     }
@@ -118,7 +139,7 @@ public class ComprarBolsaConfirmacion extends Menu implements Confirmacion {
 
     @Override
     public void confirmar() {
-        if(dineroJugador < precioTotal){
+        if (dineroJugador < precioTotal) {
             player.sendMessage(ChatColor.DARK_RED + "No tienes el suficiente dinero");
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
             closeMenu();
@@ -127,14 +148,15 @@ public class ComprarBolsaConfirmacion extends Menu implements Confirmacion {
 
         MySQL.conectar();
 
-        if(mercadoEstaAbierto()){
-            transaccionesMySQL.comprarUnidadBolsa(tipo, simbolo, nombreValor, alias, precioUnidad, cantidad, player.getName());
+        if(tipoActivo == TipoActivo.ACCIONES_SERVER){
+            transaccionesMySQL.comprarOfertaMercadoAccionServer(player, id, cantidadAComprar);
+        }else if(mercadoEstaAbierto()){
+            transaccionesMySQL.comprarUnidadBolsa(tipoActivo, simbolo, nombreValor, alias, precioUnidad, cantidadAComprar, player.getName());
         }else{
-            ordenesMySQL.abrirOrdenCompraLargo(player, simbolo, cantidad);
+            ordenesMySQL.abrirOrdenCompraLargo(player, simbolo, cantidadAComprar);
         }
 
         MySQL.desconectar();
-
         closeMenu();
     }
 
