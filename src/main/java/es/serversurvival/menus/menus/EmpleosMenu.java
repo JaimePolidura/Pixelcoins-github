@@ -35,7 +35,7 @@ public class EmpleosMenu extends Menu implements Clickable, Refreshcable, CanGoB
     }
 
     @Override
-    public void onClick(InventoryClickEvent event) {
+    public void onOherClick(InventoryClickEvent event) {
         if(event.getCurrentItem() == null || event.getCurrentItem().getType().toString().equalsIgnoreCase("AIR")){
             return;
         }

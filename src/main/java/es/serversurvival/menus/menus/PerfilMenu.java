@@ -1,5 +1,6 @@
 package es.serversurvival.menus.menus;
 
+import es.serversurvival.comandos.subComandos.empresas.VerTodasEmpresas;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.PerfilInventoryFactory;
@@ -31,7 +32,7 @@ public class PerfilMenu extends Menu implements Clickable{
     }
 
     @Override
-    public void onClick(InventoryClickEvent event) {
+    public void onOherClick(InventoryClickEvent event) {
         ItemStack itemClicked = event.getCurrentItem();
         Player player = (Player) event.getWhoClicked();
 
@@ -47,7 +48,7 @@ public class PerfilMenu extends Menu implements Clickable{
                 break;
 
             case "GOLD_BLOCK":
-                EmpresasOwnerMenu menuEmpresas = new EmpresasOwnerMenu(player);
+                EmpresasVerTodasMenu todasEmpresas = new EmpresasVerTodasMenu(player);
                 break;
 
             case "GOLDEN_APPLE":

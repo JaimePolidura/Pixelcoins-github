@@ -33,7 +33,7 @@ public class ElegirInversionMenu extends Menu implements Clickable {
     }
 
     @Override
-    public void onClick(InventoryClickEvent event) {
+    public void onOherClick(InventoryClickEvent event) {
         ItemStack itemStack = event.getCurrentItem();
         if(itemStack == null || !Funciones.cuincideNombre(itemStack.getType().toString(), "GOLD_INGOT", "PAPER", "CHARCOAL")){
             return;

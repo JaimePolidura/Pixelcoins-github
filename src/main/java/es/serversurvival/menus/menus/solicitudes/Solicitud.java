@@ -12,7 +12,7 @@ public interface Solicitud extends Clickable {
     void onCloseInventory(InventoryCloseEvent event);
 
     @Override
-    default void onClick(InventoryClickEvent event) {
+    default void onOherClick(InventoryClickEvent event) {
         if(event.getCurrentItem() == null) return;
 
         String nombreItem = event.getCurrentItem().getType().toString();

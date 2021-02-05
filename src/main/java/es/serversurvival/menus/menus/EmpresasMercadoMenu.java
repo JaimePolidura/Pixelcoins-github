@@ -3,6 +3,7 @@ package es.serversurvival.menus.menus;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.EmpresasMercadoInventoryFactory;
+import es.serversurvival.menus.menus.confirmaciones.ComprarAccionesServerConfirmacion;
 import es.serversurvival.menus.menus.confirmaciones.ComprarBolsaConfirmacion;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.enums.TipoActivo;
@@ -47,7 +48,7 @@ public class EmpresasMercadoMenu extends Menu implements Clickable, Paginated{
     }
 
     @Override
-    public void onClick(InventoryClickEvent event) {
+    public void onOherClick(InventoryClickEvent event) {
         ItemStack clikedItem = event.getCurrentItem();
 
         boolean notValidClick = clikedItem == null || !Funciones.cuincideNombre(clikedItem.getType().toString(), "RED_BANNER", "BLUE_BANNER", "GREEN_BANNER") || clikedItem.getItemMeta().getLore().get(1) == null;
@@ -63,13 +64,9 @@ public class EmpresasMercadoMenu extends Menu implements Clickable, Paginated{
             MySQL.conectar();
             ofertasMercadoServerMySQL.cancelarOferta(player, id);
             closeMenu();
-        }else if (clikedItem.getType() == Material.BLUE_BANNER) { //blue banner -> la oferta es de la empresa
-            ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(player, id);
-        }else{ //green banner -> la oferta es de un jugador singular
-
+        }else if (clikedItem.getType() == Material.BLUE_BANNER || clikedItem.getType() == Material.GREEN_BANNER) {
+            ComprarAccionesServerConfirmacion conrimracin = new ComprarAccionesServerConfirmacion(player, id);
         }
-
-        //TODO:
     }
 
     @Override

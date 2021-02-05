@@ -45,7 +45,7 @@ public class SacarItemMenu extends Menu implements Clickable, Refreshcable {
     }
 
     @Override
-    public void onClick(InventoryClickEvent event) {
+    public void onOherClick(InventoryClickEvent event) {
         ItemStack itemClickeado = event.getCurrentItem();
         if(itemClickeado == null || itemClickeado.getType().toString().equalsIgnoreCase("AIR")){
             return;

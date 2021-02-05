@@ -14,8 +14,15 @@ import org.bukkit.entity.Player;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
+import static es.serversurvival.mySQL.enums.TipoActivo.ACCIONES_SERVER;
+import static es.serversurvival.mySQL.enums.TipoOfertante.*;
 import static es.serversurvival.util.Funciones.*;
 import static org.bukkit.ChatColor.*;
 
@@ -31,6 +38,18 @@ public final class OfertasMercadoServer extends MySQL{
 
     public List<OfertaMercadoServer> getAll () {
         return buildListFromQuery("SELECT * FROM ofertasbolsaserver");
+    }
+
+    public List<OfertaMercadoServer> getOfertasEmpresa (String empresa) {
+        return buildListFromQuery("SELECT * FROM ofertasbolsaserver WHERE empresa = '"+empresa+"'");
+    }
+
+    public List<OfertaMercadoServer> getOfertasEmpresa (String empresa, Predicate<? super OfertaMercadoServer> condition) {
+        List<OfertaMercadoServer> ofertas = buildListFromQuery("SELECT * FROM ofertasbolsaserver WHERE empresa = '"+empresa+"'");
+
+        return ofertas.stream()
+                .filter(condition)
+                .collect(Collectors.toList());
     }
 
     public OfertaMercadoServer get (int id) {
@@ -53,11 +72,48 @@ public final class OfertasMercadoServer extends MySQL{
         }
     }
 
+    public int getAccionesTotales (String empresa) {
+        int accionesNoEnCirculacion = getSumaTotalListInteger(posicionesAbiertasMySQL.getPosicionesAccionesServer(empresa), PosicionAbierta::getCantidad);
+        int accionesEnCirculacion = getSumaTotalListInteger(getOfertasEmpresa(empresa), OfertaMercadoServer::getCantidad);
+
+        return accionesNoEnCirculacion + accionesEnCirculacion;
+    }
+
+    public int getAccionesDeEmpresa (String empresa) {
+        List<OfertaMercadoServer> ofertas = buildListFromQuery("SELECT * FROM ofertasbolsaserver WHERE empresa = '"+empresa+"' AND tipo_ofertante = '"+ EMPRESA+"'");
+
+        return Funciones.getSumaTotalListInteger(ofertas, OfertaMercadoServer::getCantidad);
+    }
+
+    public Map<String, Integer> getAccionistasEmpresaServer (String empresa) {
+        List<PosicionAbierta> posicionesAcciones = posicionesAbiertasMySQL.getPosicionesAccionesServer(empresa);
+        List<OfertaMercadoServer> ofertasAcciones = getOfertasEmpresa(empresa);
+
+        int accionesTotales = getAccionesTotales(empresa);
+
+        Map<String, Integer> accionistasPeso = new HashMap<>();
+
+        posicionesAcciones.forEach(posicion -> {
+            accionistasPeso.put(posicion.getJugador(), (int) rentabilidad(accionesTotales, posicion.getCantidad()));
+        });
+        ofertasAcciones.forEach(oferta -> {
+            if(accionistasPeso.get(oferta.getJugador()) == null){
+                accionistasPeso.put(oferta.getJugador(), (int) rentabilidad(accionesTotales, oferta.getCantidad()));
+            }else{
+                int acciones = accionistasPeso.get(oferta.getJugador());
+
+                accionistasPeso.put(oferta.getJugador(), (int) rentabilidad(accionesTotales, acciones + oferta.getCantidad()));
+            }
+        });
+
+        return sortMapByValueDecre(accionistasPeso);
+    }
+
     /**
      * Hay que hacer que el jugador puede ejercer un precio de venta
      */
-    public void venderOfertaDesdeBolsaCartera (Player player, PosicionAbierta posicionAVender) {
-        nueva(player.getName(), posicionAVender.getNombre_activo(), posicionAVender.getPrecio_apertura(), posicionAVender.getCantidad(), TipoOfertante.JUGADOR, posicionAVender.getPrecio_apertura());
+    public void venderOfertaDesdeBolsaCartera (Player player, PosicionAbierta posicionAVender, double precio) {
+        nueva(player.getName(), posicionAVender.getNombre_activo(), precio, posicionAVender.getCantidad(), JUGADOR, posicionAVender.getPrecio_apertura());
         posicionesAbiertasMySQL.borrarPosicionAbierta(posicionAVender.getId());
 
         enviarMensajeYSonido(player, GOLD + "Al ser un accion de una empresa del servidor de minecraft. Se ha puesta la oferta de venta en el mercado de acciones. Para consultar el mercado: " + AQUA + "/empresas mercado",

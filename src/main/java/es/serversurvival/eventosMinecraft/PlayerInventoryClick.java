@@ -4,6 +4,7 @@ import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.MenuManager;
 import es.serversurvival.menus.menus.CanGoBack;
 import es.serversurvival.menus.menus.Clickable;
+import es.serversurvival.menus.menus.confirmaciones.AumentoConfirmacion;
 import es.serversurvival.menus.menus.confirmaciones.Confirmacion;
 import es.serversurvival.menus.menus.Paginated;
 import es.serversurvival.menus.menus.solicitudes.Solicitud;
@@ -32,11 +33,15 @@ public final class PlayerInventoryClick implements Listener {
             if(menu instanceof CanGoBack && ((CanGoBack) menu).getNameItemGoBack().equalsIgnoreCase(clickedItemName)) {
                 ((CanGoBack) menu).goBack();
             }else if (menu instanceof Clickable) {
-                ((Clickable) menu).onClick(event);
+                ((Clickable) menu).onOherClick(event);
             }else if(menu instanceof Solicitud){
-                ((Solicitud) menu).onClick(event);
+                ((Solicitud) menu).onOherClick(event);
             }else if(menu instanceof Confirmacion){
-                ((Confirmacion) menu).onClick(event);
+                ((Confirmacion) menu).onOherClick(event);
+
+                if(menu instanceof AumentoConfirmacion){
+                    ((AumentoConfirmacion) menu).onOherClick(event);
+                }
             }
         }
     }

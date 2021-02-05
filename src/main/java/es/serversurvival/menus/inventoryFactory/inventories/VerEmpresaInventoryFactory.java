@@ -1,13 +1,12 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
-import es.serversurvival.mySQL.Empleados;
+import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +15,9 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+
+import static org.bukkit.ChatColor.*;
 
 public class VerEmpresaInventoryFactory extends InventoryFactory {
     private String empresa;
@@ -26,15 +28,20 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
 
     @Override
     protected Inventory buildInventory(String jugador) {
-        Inventory inventory = Bukkit.createInventory(null, 54, ChatColor.DARK_RED + "" + ChatColor.BOLD + "      "  + empresa.toUpperCase());
+        Inventory inventory = Bukkit.createInventory(null, 54, DARK_RED + "" + BOLD + "      "  + empresa.toUpperCase());
 
-        empresasMySQL.conectar();
+        MySQL.conectar();
         inventory.setItem(0, buildItemInfo());
         inventory.setItem(1, buildItemsEmpresas());
-        inventory.setItem(2, buildItemBorrarEmpresa());
+        inventory.setItem(8, buildItemBorrarEmpresa());
         inventory.setItem(53, buildItemGoBack());
+        if(empresasMySQL.esCotizada(empresa)){
+            inventory.setItem(2, buildItemAccionistas());
+            inventory.setItem(3, buildItemDividendo());
+        }
+
         List<ItemStack> itemsEmpleados = buildItemsEmpleados();
-        empresasMySQL.desconectar();
+        MySQL.desconectar();
 
 
         for(int i = 0; i < itemsEmpleados.size(); i++){
@@ -49,23 +56,23 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
     private ItemStack buildItemsEmpresas () {
         Empresa empresaAVer = empresasMySQL.getEmpresa(empresa);
 
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + empresa.toUpperCase();
+        String displayName = GOLD + "" + BOLD + "" + empresa.toUpperCase();
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GOLD + "Descripccion:");
+        lore.add(GOLD + "Descripccion:");
 
         List<String> descripccion = Funciones.dividirDesc(empresaAVer.getDescripcion(), 40);
         lore.addAll(1, descripccion);
         lore.add("  ");
-        lore.add(ChatColor.GOLD + "Pixelcoins: " + ChatColor.GREEN + formatea.format(empresaAVer.getPixelcoins()) + " PC");
-        lore.add(ChatColor.GOLD + "Ingresos: " + ChatColor.GREEN + formatea.format(empresaAVer.getIngresos()) + " PC");
-        lore.add(ChatColor.GOLD + "Gastos: " + ChatColor.GREEN + formatea.format(empresaAVer.getGastos()) + " PC");
+        lore.add(GOLD + "Pixelcoins: " + GREEN + formatea.format(empresaAVer.getPixelcoins()) + " PC");
+        lore.add(GOLD + "Ingresos: " + GREEN + formatea.format(empresaAVer.getIngresos()) + " PC");
+        lore.add(GOLD + "Gastos: " + GREEN + formatea.format(empresaAVer.getGastos()) + " PC");
         double beneficiosPerdidas = empresaAVer.getIngresos() - empresaAVer.getGastos();
         if(beneficiosPerdidas >= 0){
-            lore.add(ChatColor.GOLD + "Beneficios: "  +  ChatColor.GREEN + "+" +  formatea.format(beneficiosPerdidas) + " PC");
-            lore.add(ChatColor.GOLD + "Rentabilidad: " + ChatColor.GREEN + "+" + Funciones.redondeoDecimales(Funciones.rentabilidad(empresaAVer.getIngresos(), beneficiosPerdidas),1) + "%");
+            lore.add(GOLD + "Beneficios: "  +  GREEN + "+" +  formatea.format(beneficiosPerdidas) + " PC");
+            lore.add(GOLD + "Rentabilidad: " + GREEN + "+" + Funciones.redondeoDecimales(Funciones.rentabilidad(empresaAVer.getIngresos(), beneficiosPerdidas),1) + "%");
         }else{
-            lore.add(ChatColor.GOLD + "Perdidas: " + ChatColor.RED + formatea.format(beneficiosPerdidas) + " PC");
-            lore.add(ChatColor.GOLD + "Rentabilidad: " + ChatColor.RED + Funciones.redondeoDecimales(Funciones.rentabilidad(empresaAVer.getIngresos(), beneficiosPerdidas),1) + "%");
+            lore.add(GOLD + "Perdidas: " + RED + formatea.format(beneficiosPerdidas) + " PC");
+            lore.add(GOLD + "Rentabilidad: " + RED + Funciones.redondeoDecimales(Funciones.rentabilidad(empresaAVer.getIngresos(), beneficiosPerdidas),1) + "%");
         }
         lore.add("   ");
         lore.add("/empresas depositar " + empresa + " <pixelcoins>");
@@ -81,13 +88,13 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildItemBorrarEmpresa () {
-        String displayName = ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA BORRAR LA EMPRESA";
+        String displayName = RED + "" + BOLD + "" + UNDERLINE + "CLICK PARA BORRAR LA EMPRESA";
 
         return MinecraftUtils.loreDisplayName(Material.BARRIER, displayName, Arrays.asList("   "));
     }
 
     public ItemStack buildItemInfo () {
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "INFO";
+        String displayName = GOLD + "" + BOLD + "INFO";
         List<String> lore = new ArrayList<>();
         lore.add("Puedes contratar empleados, ");
         lore.add("despedirlos etc. Comandos:");
@@ -115,14 +122,14 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
             ItemStack empleadoItem = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta empleadoMeta = (SkullMeta) empleadoItem.getItemMeta();
 
-            empleadoMeta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA DESPEDIR");
+            empleadoMeta.setDisplayName(RED + "" + BOLD + "" + UNDERLINE + "CLICK PARA DESPEDIR");
 
             List<String> lore = new ArrayList<>();
             lore.add("   ");
-            lore.add(ChatColor.GOLD + "Empleado: " + empleado.getJugador());
-            lore.add(ChatColor.GOLD + "Cargo: " + empleado.getCargo());
-            lore.add(ChatColor.GOLD + "Sueldo: " + ChatColor.GREEN + formatea.format(empleado.getSueldo()) + " PC/" + empleado.getTipo_sueldo().nombre);
-            lore.add(ChatColor.GOLD + "ID: " + empleado.getId());
+            lore.add(GOLD + "Empleado: " + empleado.getJugador());
+            lore.add(GOLD + "Cargo: " + empleado.getCargo());
+            lore.add(GOLD + "Sueldo: " + GREEN + formatea.format(empleado.getSueldo()) + " PC/" + empleado.getTipo_sueldo().nombre);
+            lore.add(GOLD + "ID: " + empleado.getId());
             lore.add("   ");
             lore.add("/empresas despedir " + empresa + " " + empleado.getJugador());
             lore.add("  <razon>");
@@ -138,5 +145,32 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
         });
 
         return itemsEmpleados;
+    }
+
+    private ItemStack buildItemAccionistas () {
+        Material material = Material.NETHERITE_SCRAP;
+        String displayName = GOLD + "" + BOLD + "ACCIONISTAS";
+        List<String> lore = new ArrayList<>();
+        Map<String, Integer> jugadoresAccionistas = ofertasMercadoServerMySQL.getAccionistasEmpresaServer(empresa);
+
+        jugadoresAccionistas.forEach((jugador, peso) -> {
+            if(jugador.equalsIgnoreCase(empresa)){
+                lore.add(GOLD + "" + "EMPRESA : " + GREEN + formatea.format(peso) + "%");
+            }else{
+                lore.add(GOLD + jugador + ": " + GREEN + formatea.format(peso) + "%");
+            }
+
+        });
+
+        return MinecraftUtils.loreDisplayName(material, displayName, lore);
+    }
+
+    private ItemStack buildItemDividendo () {
+        Material material = Material.GOLD_INGOT;
+        String displayName = GOLD + "" + BOLD + "REPARTIR DIVIDENDO";
+        List<String> lore = new ArrayList<>();
+        lore.add(GOLD + "Repartir pixelcoins por cada accion");
+
+        return MinecraftUtils.loreDisplayName(material, displayName, lore);
     }
 }

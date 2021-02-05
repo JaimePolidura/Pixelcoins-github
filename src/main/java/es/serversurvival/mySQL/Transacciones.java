@@ -19,6 +19,9 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import static es.serversurvival.mySQL.enums.CambioPixelcoins.*;
+import static es.serversurvival.mySQL.enums.TipoActivo.*;
+import static es.serversurvival.mySQL.enums.TipoPosicion.*;
+import static es.serversurvival.mySQL.enums.TipoTransaccion.*;
 import static es.serversurvival.util.Funciones.*;
 import static org.bukkit.ChatColor.*;
 
@@ -36,7 +39,7 @@ public final class Transacciones extends MySQL {
     }
 
     public List<Transaccion> getTransaccionesPagaEmpresa (String jugador) {
-        return buildListFromQuery("SELECT * FROM transacciones WHERE comprador = '"+jugador+"' AND tipo = '"+ TipoTransaccion.EMPRESA_PAGAR_SALARIO.toString()+"'");
+        return buildListFromQuery("SELECT * FROM transacciones WHERE comprador = '"+jugador+"' AND tipo = '"+ EMPRESA_PAGAR_SALARIO.toString()+"'");
     }
 
     public void setCompradorVendedor (String jugador, String nuevoJugador) {
@@ -66,7 +69,7 @@ public final class Transacciones extends MySQL {
          else
             ofertasMySQL.setCantidad(id, cantidad - 1);
 
-        realizarTransferenciaConEstadisticas(comprador, vendedor, precio, objeto, TipoTransaccion.TIENDA_VENTA);
+        realizarTransferenciaConEstadisticas(comprador, vendedor, precio, objeto, TIENDA_VENTA);
 
         MinecraftUtils.setLore(itemAComprar, Arrays.asList("Comprado en la tienda"));
         player.getInventory().addItem(itemAComprar);
@@ -98,7 +101,7 @@ public final class Transacciones extends MySQL {
     }
 
     public void realizarPagoManual(String nombrePagador, String nombrePagado, double cantidad, Player player, String objeto) {
-        realizarTransferenciaConEstadisticas(nombrePagador, nombrePagado, cantidad, objeto, TipoTransaccion.JUGADOR_PAGO_MANUAL);
+        realizarTransferenciaConEstadisticas(nombrePagador, nombrePagado, cantidad, objeto, JUGADOR_PAGO_MANUAL);
 
         player.sendMessage(GOLD + "Has pagado: " + GREEN + formatea.format(cantidad) + " PC " + GOLD + "a " + nombrePagado);
 
@@ -118,7 +121,7 @@ public final class Transacciones extends MySQL {
         double dineroActual = jugadorQueIngresaElItem.getPixelcoins();
 
         jugadoresMySQL.setPixelcoin(player.getName(), pixelcoinsAnadir + dineroActual);
-        nuevaTransaccion(player.getName(), "", pixelcoinsAnadir, nombreItem, TipoTransaccion.WITHERS_INGRESAR);
+        nuevaTransaccion(player.getName(), "", pixelcoinsAnadir, nombreItem, WITHERS_INGRESAR);
 
         player.getInventory().clear(player.getInventory().getHeldItemSlot());
 
@@ -184,7 +187,7 @@ public final class Transacciones extends MySQL {
 
         int coste = (DIAMANTE * bloquesAnadidos * 9) + (DIAMANTE * diamantesAnadidos);
         jugadoresMySQL.setPixelcoin(player.getName(), dineroJugador - coste);
-        nuevaTransaccion(player.getName(), "", coste, "DIAMOND", TipoTransaccion.WITHERS_SACARMAX);
+        nuevaTransaccion(player.getName(), "", coste, "DIAMOND", WITHERS_SACARMAX);
 
         enviarMensajeYSonido(player , GOLD + "Se ha a?adio: " + AQUA + "+" + bloquesAnadidos + " bloques " + "+" + diamantesAnadidos + " diamantes. " + RED + "-" + formatea.format(coste)
                 + GOLD + " Quedan: " + GREEN + formatea.format(dineroJugador - coste) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
@@ -214,7 +217,7 @@ public final class Transacciones extends MySQL {
 
         int coste = (LAPISLAZULI * bloquesAnadidos * 9) + (LAPISLAZULI * diamantesAnadidos);
         jugadoresMySQL.setPixelcoin(player.getName(), dineroJugador - coste);
-        nuevaTransaccion(player.getName(), "", coste, "LAPIS_LAZULI", TipoTransaccion.WITHERS_SACARMAX);
+        nuevaTransaccion(player.getName(), "", coste, "LAPIS_LAZULI", WITHERS_SACARMAX);
 
         enviarMensajeYSonido(player, GOLD + "Se ha a?adio: " + BLUE + "+" + bloquesAnadidos + " bloques " + "+" + diamantesAnadidos + " Lapislazuli. " + RED + "-" + formatea.format(coste)
                 + GOLD + " Quedan: " + GREEN + formatea.format(dineroJugador - coste) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
@@ -235,7 +238,7 @@ public final class Transacciones extends MySQL {
 
         int coste = (CUARZO * bloquesAnadidos);
         jugadoresMySQL.setPixelcoin(player.getName(), pixelcoinsJugador - coste);
-        nuevaTransaccion(player.getName(), "", coste, "QUARTZ_BLOCK", TipoTransaccion.WITHERS_SACARMAX);
+        nuevaTransaccion(player.getName(), "", coste, "QUARTZ_BLOCK", WITHERS_SACARMAX);
 
         enviarMensajeYSonido(player, GOLD + "Se ha a?adio: " + GRAY + "+" + bloquesAnadidos + " bloques de cuarzo " + RED + "-" + formatea.format(coste)
                 + GOLD + " Quedan: " + GREEN + formatea.format(pixelcoinsJugador - coste) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
@@ -250,7 +253,7 @@ public final class Transacciones extends MySQL {
 
         empresasMySQL.setPixelcoins(nombreEmpresa, pixelcoinsEmpresa + pixelcoins);
         jugadoresMySQL.setEstadisticas(nombreJugador, pixelcoinsJugador - pixelcoins, jugador.getNventas(), jugador.getIngresos(), jugador.getGastos());
-        nuevaTransaccion(nombreJugador, nombreEmpresa, pixelcoins, "", TipoTransaccion.EMPRESA_DEPOSITAR);
+        nuevaTransaccion(nombreJugador, nombreEmpresa, pixelcoins, "", EMPRESA_DEPOSITAR);
 
         enviarMensajeYSonido(player, GOLD + "Has metido " + GREEN + formatea.format(pixelcoins) + " PC" + GOLD + " en tu empresa: " + DARK_AQUA + nombreEmpresa +
                 GOLD + " ahora tiene: " + GREEN + formatea.format(pixelcoinsEmpresa + pixelcoins) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
@@ -267,7 +270,7 @@ public final class Transacciones extends MySQL {
 
         empresasMySQL.setPixelcoins(nombreEmpresa, pixelcoinsEmpresa - pixelcoins);
         jugadoresMySQL.setEstadisticas(nombreJugador, pixelcoinsJugador + pixelcoins, jugadorQueSaca.getNventas(), jugadorQueSaca.getIngresos(), jugadorQueSaca.getGastos());
-        nuevaTransaccion(nombreEmpresa, nombreJugador, pixelcoins, "", TipoTransaccion.EMPRESA_SACAR);
+        nuevaTransaccion(nombreEmpresa, nombreJugador, pixelcoins, "", EMPRESA_SACAR);
 
         enviarMensajeYSonido(player, GOLD + "Has sacado " + GREEN + formatea.format(pixelcoins) + " PC" + GOLD + " de tu empresa: " + DARK_AQUA + nombreEmpresa +
                 GOLD + " ahora tiene: " + GREEN + formatea.format(pixelcoinsEmpresa - pixelcoins) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
@@ -294,7 +297,7 @@ public final class Transacciones extends MySQL {
 
         Jugador empleadoAPagar = jugadoresMySQL.getJugador(jugador);
         jugadoresMySQL.setEstadisticas(jugador, empleadoAPagar.getPixelcoins() + salario, empleadoAPagar.getNventas(), empleadoAPagar.getIngresos() + salario, empleadoAPagar.getGastos());
-        nuevaTransaccion(jugador, empresa, salario, "", TipoTransaccion.EMPRESA_PAGAR_SALARIO);
+        nuevaTransaccion(jugador, empresa, salario, "", EMPRESA_PAGAR_SALARIO);
         return true;
     }
 
@@ -314,7 +317,7 @@ public final class Transacciones extends MySQL {
         jugadoresMySQL.setEstadisticas(comprador.getNombre(), comprador.getPixelcoins() - precio, comprador.getNventas(), comprador.getIngresos(), comprador.getGastos() + precio);
         empresasMySQL.setPixelcoins(empresa, empresaAComprar.getPixelcoins() + precio);
         empresasMySQL.setIngresos(empresa, empresaAComprar.getIngresos() + precio);
-        nuevaTransaccion(comprador.getNombre(), empresa, precio, "", TipoTransaccion.EMPRESA_COMPRAR_SERVICIO);
+        nuevaTransaccion(comprador.getNombre(), empresa, precio, "", EMPRESA_COMPRAR_SERVICIO);
 
         String mensajeOnline = GOLD + comprador.getNombre() + " ha comprado vuestro servicio de la empresa: " + empresa + " por " + GREEN + formatea.format(precio) + " PC";
         String mensajeOffline = comprador.getNombre() + " ha comprado vuestro servicio de la empresa: " + empresa + " por " + formatea.format(precio) + " PC";
@@ -329,8 +332,8 @@ public final class Transacciones extends MySQL {
         double precioTotal = precioUnidad * cantidad;
 
         jugadoresMySQL.setPixelcoin(nombrePlayer, comprador.getPixelcoins() - precioTotal);
-        posicionesAbiertasMySQL.nuevaPosicion(nombrePlayer, tipo, ticker, cantidad, precioUnidad, TipoPosicion.LARGO);
-        nuevaTransaccion(nombrePlayer, ticker, precioTotal, tipo +  " " + precioUnidad, TipoTransaccion.BOLSA_COMPRA);
+        posicionesAbiertasMySQL.nuevaPosicion(nombrePlayer, tipo, ticker, cantidad, precioUnidad, LARGO);
+        nuevaTransaccion(nombrePlayer, ticker, precioTotal, tipo +  " " + precioUnidad, BOLSA_COMPRA);
         llamadasApiMySQL.nuevaLlamadaSiNoEstaReg(ticker, precioUnidad, tipo, nombreValor);
         llamadasApiMySQL.actualizar(ticker);
 
@@ -352,9 +355,9 @@ public final class Transacciones extends MySQL {
         }
 
         jugadoresMySQL.setEstadisticas(player.getName(), jugador.getPixelcoins() - comision, jugador.getNventas(), jugador.getIngresos(), jugador.getGastos() + comision);
-        posicionesAbiertasMySQL.nuevaPosicion(player.getName(), TipoActivo.ACCIONES, ticker, cantidad, precioPorAccion, TipoPosicion.CORTO);
-        nuevaTransaccion(player.getName(), ticker, comision, "ACCIONES" +  " " + precioPorAccion, TipoTransaccion.BOLSA_CORTO_VENTA);
-        llamadasApiMySQL.nuevaLlamadaSiNoEstaReg(ticker, precioPorAccion, TipoActivo.ACCIONES, nombreValor);
+        posicionesAbiertasMySQL.nuevaPosicion(player.getName(), ACCIONES, ticker, cantidad, precioPorAccion, CORTO);
+        nuevaTransaccion(player.getName(), ticker, comision, "ACCIONES" +  " " + precioPorAccion, BOLSA_CORTO_VENTA);
+        llamadasApiMySQL.nuevaLlamadaSiNoEstaReg(ticker, precioPorAccion, ACCIONES, nombreValor);
 
         enviarMensajeYSonido( player, GOLD + "Te has puesto corto en " + nombreValor + " en " + cantidad + " cada una a " + GREEN + formatea.format(precioPorAccion) + " PC " + GOLD +
                 "Para recomprar las acciones: /bolsa comprarcorto <id>. /bolsa cartera" + GOLD + "Ademas se te ha cobrado un 5% del valor total de la venta (" + GREEN  + formatea.format(valorTotal) + " PC"
@@ -390,8 +393,8 @@ public final class Transacciones extends MySQL {
         String nombreValor = llamadasApiMySQL.getLlamadaAPI(ticker).getNombre_activo();
 
         llamadasApiMySQL.borrarLlamadaSiNoEsUsada(ticker);
-        posicionesCerradasMySQL.nuevaPosicion(nombreJugador, posicionAVender.getTipo_activo(), ticker, cantidad, precioApertura, fechaApertura, precioPorAccion, nombreValor, rentabilidad, TipoPosicion.LARGO);
-        nuevaTransaccion(ticker, nombreJugador, cantidad * precioPorAccion, "", TipoTransaccion.BOLSA_VENTA);
+        posicionesCerradasMySQL.nuevaPosicion(nombreJugador, posicionAVender.getTipo_activo(), ticker, cantidad, precioApertura, fechaApertura, precioPorAccion, nombreValor, rentabilidad, LARGO);
+        nuevaTransaccion(ticker, nombreJugador, cantidad * precioPorAccion, "", BOLSA_VENTA);
 
         String mensajeAEnviarAlJugador;
         if (rentabilidad <= 0) {
@@ -439,8 +442,8 @@ public final class Transacciones extends MySQL {
 
         String nombreValor = llamadasApiMySQL.getLlamadaAPI(ticker).getNombre_activo();
         llamadasApiMySQL.borrarLlamadaSiNoEsUsada(ticker);
-        posicionesCerradasMySQL.nuevaPosicion(playername, posicionAComprar.getTipo_activo(), ticker, cantidad, precioApertura, fechaApertura, precioPorAccion, nombreValor, rentabilidad, TipoPosicion.CORTO);
-        nuevaTransaccion(ticker, playername, cantidad * precioPorAccion, "", TipoTransaccion.BOLSA_CORTO_COMPRA);
+        posicionesCerradasMySQL.nuevaPosicion(playername, posicionAComprar.getTipo_activo(), ticker, cantidad, precioApertura, fechaApertura, precioPorAccion, nombreValor, rentabilidad, CORTO);
+        nuevaTransaccion(ticker, playername, cantidad * precioPorAccion, "", BOLSA_CORTO_COMPRA);
 
         String mensaje;
         if (rentabilidad <= 0)
@@ -462,7 +465,7 @@ public final class Transacciones extends MySQL {
         double aPagar = precioDividendo * nAcciones;
 
         jugadoresMySQL.setPixelcoin(nombre, jugadoresMySQL.getJugador(nombre).getPixelcoins() + aPagar);
-        nuevaTransaccion(ticker, nombre, aPagar, "", TipoTransaccion.BOLSA_DIVIDENDO);
+        nuevaTransaccion(ticker, nombre, aPagar, "", BOLSA_DIVIDENDO);
 
         mensajesMySQL.nuevoMensaje("",nombre, "Has cobrado " + precioDividendo + " PC en dividendos por parte de la empresa " + ticker);
     }
@@ -479,7 +482,7 @@ public final class Transacciones extends MySQL {
         posicionesCerradasMySQL.setJugador(jugadorACambiar, nuevoNombre);
         setCompradorVendedor(jugadorACambiar, nuevoNombre);
 
-        nuevaTransaccion(nuevoNombre, nuevoNombre, 0, "", TipoTransaccion.BASEDATOS_CAMBIAR_NOMBRE);
+        nuevaTransaccion(nuevoNombre, nuevoNombre, 0, "", BASEDATOS_CAMBIAR_NOMBRE);
     }
 
     public void comprarOfertaMercadoAccionServer (Player player, int idOfeta, int cantidadAComprar) {
@@ -493,7 +496,7 @@ public final class Transacciones extends MySQL {
         }
 
         jugadoresMySQL.setPixelcoin(jugadorComprador.getNombre(), jugadorComprador.getPixelcoins() - precioTotalAPagar);
-        posicionesAbiertasMySQL.nuevaPosicion(jugadorComprador.getNombre(), TipoActivo.ACCIONES_SERVER, oferta.getEmpresa(), cantidadAComprar, oferta.getPrecio(),TipoPosicion.LARGO);
+        posicionesAbiertasMySQL.nuevaPosicion(jugadorComprador.getNombre(), ACCIONES_SERVER, oferta.getEmpresa(), cantidadAComprar, oferta.getPrecio(), LARGO);
         ofertasMercadoServerMySQL.setCantidadOBorrar(idOfeta, oferta.getCantidad() - cantidadAComprar);
 
         if(oferta.getTipo_ofertante() == TipoOfertante.EMPRESA){
@@ -506,12 +509,13 @@ public final class Transacciones extends MySQL {
                 GREEN + formatea.format(precioTotalAPagar) + " PC " + GOLD + " comandos: " + AQUA + "/bolsa vender /bolsa cartera", Sound.ENTITY_PLAYER_LEVELUP);
         Bukkit.broadcastMessage(GOLD + player.getName() + " ha comprado " + cantidadAComprar + " acciones de la empresa del server: " + oferta.getEmpresa() + " a " + GREEN + oferta.getPrecio() + "PC");
     }
-
+    
     private void comprarAccionServerAEmpresa (Player player, OfertaMercadoServer oferta, int cantidadAComprar, double precioTotalAPagar) {
         Empresa empresa = empresasMySQL.getEmpresa(oferta.getEmpresa());
 
         empresasMySQL.setPixelcoins(empresa.getNombre(), empresa.getPixelcoins() + precioTotalAPagar);
         empresasMySQL.setIngresos(empresa.getNombre(), empresa.getIngresos() + precioTotalAPagar);
+        nuevaTransaccion(player.getName(), empresa.getNombre(), precioTotalAPagar, "ACCION", EMPRESA_COMPRA_ACCION_EMPRESA);
 
         String mensajeOnline = GOLD + player.getName() + " ha comprado " + cantidadAComprar + " acciones de " + empresa.getNombre() + "."+GREEN+" +" + formatea.format(precioTotalAPagar) + "PC";
         String mensajeOffline = player.getName() + " ha comprado " + cantidadAComprar + " acciones de " + empresa.getNombre() + ". +" + formatea.format(precioTotalAPagar) + "PC";
@@ -522,20 +526,57 @@ public final class Transacciones extends MySQL {
     private void comprarAccionServerAJugador (Player player, OfertaMercadoServer oferta, int cantidadAComprar, double precioTotalAPagar) {
         Jugador jugadorVendedor = jugadoresMySQL.getJugador(oferta.getJugador());
         double beneficiosPerdidas = (oferta.getPrecio() - oferta.getPrecio_apertura()) * cantidadAComprar;
+        double rentabilidad = redondeoDecimales(diferenciaPorcntual(oferta.getPrecio_apertura(), oferta.getPrecio()), 3);
 
         if(beneficiosPerdidas >= 0)
             jugadoresMySQL.setEstadisticas(jugadorVendedor.getNombre(), jugadorVendedor.getPixelcoins() + precioTotalAPagar, jugadorVendedor.getNventas(), jugadorVendedor.getIngresos(), jugadorVendedor.getGastos() + beneficiosPerdidas);
         else
             jugadoresMySQL.setEstadisticas(jugadorVendedor.getNombre(), jugadorVendedor.getPixelcoins() + precioTotalAPagar, jugadorVendedor.getNventas(), jugadorVendedor.getIngresos() + beneficiosPerdidas, jugadorVendedor.getGastos());
 
+        nuevaTransaccion(player.getName(), oferta.getJugador(), precioTotalAPagar, "ACCION", EMPRESA_COMPRA_ACCION_JUGADOR);
+
+        posicionesCerradasMySQL.nuevaPosicion(oferta.getJugador(), ACCIONES_SERVER, oferta.getEmpresa(), cantidadAComprar, oferta.getPrecio_apertura(), oferta.getFecha(), oferta.getPrecio(), oferta.getEmpresa(), rentabilidad, LARGO);
+
         String mensajeOnline = beneficiosPerdidas >= 0 ?
-                GOLD + player.getName() + " te ha comprado " + cantidadAComprar + " acciones de " + oferta.getEmpresa() + " con unos beneficios de " + GREEN + "+" + formatea.format(beneficiosPerdidas) + " PC":
-                GOLD + player.getName() + " te ha comprado " + cantidadAComprar + " acciones de " + oferta.getEmpresa() + " con unos beneficios de " + RED + formatea.format(beneficiosPerdidas) + " PC" ;
+                GOLD + player.getName() + " te ha comprado " + cantidadAComprar + " acciones de " + oferta.getEmpresa() + " con unos beneficios de " + GREEN + "+" + formatea.format(beneficiosPerdidas) + " PC +" + formatea.format(rentabilidad):
+                GOLD + player.getName() + " te ha comprado " + cantidadAComprar + " acciones de " + oferta.getEmpresa() + " con unos beneficios de " + RED + formatea.format(beneficiosPerdidas) + " PC " + formatea.format(rentabilidad) ;
         String mensajeOffline = beneficiosPerdidas >= 0 ?
-                player.getName() + " te ha comprado " + cantidadAComprar + " acciones de " + oferta.getEmpresa() + " con unos beneficios de " + "+" + formatea.format(beneficiosPerdidas) + " PC":
-                player.getName() + " te ha comprado " + cantidadAComprar + " acciones de " + oferta.getEmpresa() + " con unos beneficios de " + formatea.format(beneficiosPerdidas) + " PC" ;
+                player.getName() + " te ha comprado " + cantidadAComprar + " acciones de " + oferta.getEmpresa() + " con unos beneficios de " + "+" + formatea.format(beneficiosPerdidas) + " PC +" + formatea.format(rentabilidad) :
+                player.getName() + " te ha comprado " + cantidadAComprar + " acciones de " + oferta.getEmpresa() + " con unos beneficios de " + formatea.format(beneficiosPerdidas) + " PC" + formatea.format(rentabilidad);
 
         enviarMensaje(jugadorVendedor.getNombre(), mensajeOnline, mensajeOffline);
+    }
+
+    public void pagarDividendoAccionServer (Player owner, String nombreEmpresa, double dividendoPorAccion, double totalAPagar) {
+        List<PosicionAbierta> posicionesAccion = posicionesAbiertasMySQL.getPosicionesAccionesServer(nombreEmpresa);
+        List<OfertaMercadoServer> ofertasAccion =  ofertasMercadoServerMySQL.getOfertasEmpresa(nombreEmpresa, OfertaMercadoServer::esTipoOfertanteJugador);
+
+        Map<String, Jugador> allJugadoresMap = jugadoresMySQL.getMapAllJugadores();
+
+        String mensajeOnline = GOLD + "Has cobrado " + GREEN + "%s PC" + GOLD + " en dividendo de la empresa " + nombreEmpresa;
+        String mensajeOffline = GOLD + "Has cobrado %s PC en dividendo de la empresa " + nombreEmpresa;
+
+        posicionesAccion.forEach(posicion -> {
+            pagarDividendoAccionAJugador(allJugadoresMap.get(posicion.getJugador()), posicion.getCantidad(), dividendoPorAccion, nombreEmpresa);
+
+            enviarMensaje(posicion.getJugador(), String.format(mensajeOnline, formatea.format(posicion.getCantidad() * dividendoPorAccion)), String.format(mensajeOffline, formatea.format(posicion.getCantidad() * dividendoPorAccion)));
+        });
+        ofertasAccion.forEach(oferta -> {
+            pagarDividendoAccionAJugador(allJugadoresMap.get(oferta.getJugador()), oferta.getCantidad(), dividendoPorAccion, nombreEmpresa);
+
+            enviarMensaje(oferta.getJugador(), String.format(mensajeOnline, formatea.format(oferta.getCantidad() * dividendoPorAccion)), String.format(mensajeOffline, formatea.format(oferta.getCantidad() * dividendoPorAccion)));
+        });
+
+        empresasMySQL.setPixelcoins(nombreEmpresa, empresasMySQL.getEmpresa(nombreEmpresa).getPixelcoins() - totalAPagar);
+
+        enviarMensajeYSonido(owner, GOLD + "Se han pagado todos los dividendos", Sound.ENTITY_PLAYER_LEVELUP);
+    }
+
+    private void pagarDividendoAccionAJugador (Jugador jugador, int cantidad, double dividendoPorAccion, String nombreEmpresa) {
+        double dividendo = cantidad * dividendoPorAccion;
+
+        jugadoresMySQL.setEstadisticas(jugador.getNombre(), jugador.getPixelcoins() + dividendo, jugador.getNventas(), jugador.getIngresos() + dividendo, jugador.getGastos());
+        nuevaTransaccion(jugador.getNombre(), nombreEmpresa, cantidad * dividendoPorAccion, "DIVIDENDO", EMPRESA_DIVIDENDO_ACCION);
     }
 
     @Override

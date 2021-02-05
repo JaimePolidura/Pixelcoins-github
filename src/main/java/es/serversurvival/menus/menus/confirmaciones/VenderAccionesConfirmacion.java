@@ -3,6 +3,7 @@ package es.serversurvival.menus.menus.confirmaciones;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.menus.BolsaCarteraMenu;
+import es.serversurvival.menus.menus.BolsaVenderAccionEmpresaMenu;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.enums.TipoOfertante;
@@ -10,6 +11,7 @@ import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import es.serversurvival.mySQL.enums.TipoPosicion;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -77,10 +79,7 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion{
 
         PosicionAbierta posicionAVender = posicionesAbiertasMySQL.getPosicionAbierta(id);
 
-        if(tipoActivo == TipoActivo.ACCIONES_SERVER) {
-            ofertasMercadoServerMySQL.venderOfertaDesdeBolsaCartera(player, posicionAVender);
-
-        }else if(mercadoEstaAbierto() && tipoPosicion == TipoPosicion.LARGO){
+        if(mercadoEstaAbierto() && tipoPosicion == TipoPosicion.LARGO){
             transaccionesMySQL.venderPosicion(posicionAVender, posicionAVender.getCantidad(), player.getName());
 
         }else if (mercadoEstaAbierto() && tipoPosicion == TipoPosicion.CORTO) {
@@ -101,4 +100,7 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion{
     public void cancelar() {
         BolsaCarteraMenu menu = new BolsaCarteraMenu(player);
     }
+
+    @Override
+    public void onOtherClick(InventoryClickEvent event) { return; }
 }

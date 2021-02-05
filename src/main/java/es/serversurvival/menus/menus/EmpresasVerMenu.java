@@ -1,6 +1,8 @@
 package es.serversurvival.menus.menus;
 
 import es.serversurvival.menus.menus.confirmaciones.BorrrarEmpresaConfirmacion;
+import es.serversurvival.menus.menus.confirmaciones.PagarDividendoConfirmacion;
+import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.MenuManager;
@@ -46,19 +48,22 @@ public class EmpresasVerMenu extends Menu implements Clickable, Refreshcable, Po
     }
 
     @Override
-    public void onClick(InventoryClickEvent event) {
+    public void onOherClick(InventoryClickEvent event) {
         ItemStack itemClickedao = event.getCurrentItem();
 
-        if (itemClickedao == null || !Funciones.cuincideNombre(itemClickedao.getType().toString(), "PLAYER_HEAD", "RED_WOOL", "BARRIER")) {
+        if (itemClickedao == null || !Funciones.cuincideNombre(itemClickedao.getType().toString(), "PLAYER_HEAD", "RED_WOOL", "BARRIER", "GOLD_INGOT")) {
             return;
         }
 
         String nombreItem = itemClickedao.getType().toString();
 
         if (nombreItem.equalsIgnoreCase("RED_WOOL")) {
-            EmpresasOwnerMenu menu = new EmpresasOwnerMenu((Player) event.getWhoClicked());
+            PerfilMenu perfilMenu = new PerfilMenu((Player) event.getWhoClicked());
         }else if(nombreItem.equalsIgnoreCase("BARRIER")){
             BorrrarEmpresaConfirmacion confirmacion = new BorrrarEmpresaConfirmacion(player ,empresa);
+        }else if(nombreItem.equalsIgnoreCase("GOLD_INGOT")) {
+            PagarDividendoConfirmacion pagarDividendoConfirmacion = new PagarDividendoConfirmacion(player, empresa);
+
         }else{
             String nombreEmpleadoADespedir;
             if(itemClickedao.getItemMeta().getLore().get(1).split(" ")[1] == null){
@@ -66,12 +71,12 @@ public class EmpresasVerMenu extends Menu implements Clickable, Refreshcable, Po
             }
             nombreEmpleadoADespedir = itemClickedao.getItemMeta().getLore().get(1).split(" ")[1];
 
-            empleadosMySQL.conectar();
+            MySQL.conectar();
 
             empleadosMySQL.despedir(empresa, nombreEmpleadoADespedir, "Despedido desde el menu", (Player) event.getWhoClicked());
             refresh();
 
-            empleadosMySQL.desconectar();
+            MySQL.desconectar();
         }
     }
 
@@ -118,6 +123,6 @@ public class EmpresasVerMenu extends Menu implements Clickable, Refreshcable, Po
 
     @Override
     public void goBack() {
-        EmpresasOwnerMenu menu = new EmpresasOwnerMenu(player);
+        EmpresasVerTodasMenu empresasVerTodasMenu = new EmpresasVerTodasMenu(player);
     }
 }

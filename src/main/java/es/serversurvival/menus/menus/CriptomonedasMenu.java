@@ -42,7 +42,7 @@ public class CriptomonedasMenu extends Menu implements Clickable, PostLoading {
     }
 
     @Override
-    public void onClick(InventoryClickEvent event) {
+    public void onOherClick(InventoryClickEvent event) {
         ItemStack itemStack = event.getCurrentItem();
         if(itemStack == null || !Funciones.cuincideNombre(itemStack.getType().toString(), "GOLD_BLOCK")){
             return;

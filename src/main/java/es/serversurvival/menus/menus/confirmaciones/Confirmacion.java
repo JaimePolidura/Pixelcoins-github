@@ -8,7 +8,7 @@ public interface Confirmacion extends Clickable {
     void cancelar();
 
     @Override
-    default void onClick(InventoryClickEvent event) {
+    default void onOherClick(InventoryClickEvent event) {
         if(event.getCurrentItem() == null) return;
 
         String nombreItem = event.getCurrentItem().getType().toString();
@@ -19,6 +19,10 @@ public interface Confirmacion extends Clickable {
             case "RED_WOOL":
                 cancelar();
                 break;
+            default:
+                onOtherClick(event);
         }
     }
+
+    void onOtherClick (InventoryClickEvent event);
 }

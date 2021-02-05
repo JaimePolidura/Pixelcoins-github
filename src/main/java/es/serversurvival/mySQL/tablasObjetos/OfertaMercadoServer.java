@@ -17,4 +17,8 @@ public final class OfertaMercadoServer implements TablaObjeto{
     @Getter private final String fecha;
     @Getter private final TipoOfertante tipo_ofertante;
     @Getter private final double precio_apertura;
+
+    public boolean esTipoOfertanteJugador () {
+        return this.tipo_ofertante == TipoOfertante.JUGADOR;
+    }
 }

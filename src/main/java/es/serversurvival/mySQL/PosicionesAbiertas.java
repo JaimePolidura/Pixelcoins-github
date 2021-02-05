@@ -4,9 +4,11 @@ import es.serversurvival.main.Pixelcoin;
 import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.apiHttp.IEXCloud_API;
+import es.serversurvival.mySQL.tablasObjetos.Jugador;
 import es.serversurvival.mySQL.tablasObjetos.LlamadaApi;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import es.serversurvival.util.Funciones;
+import javafx.util.Pair;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,6 +23,7 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static es.serversurvival.mySQL.enums.TipoActivo.*;
 import static es.serversurvival.util.Funciones.*;
 
 /**
@@ -97,6 +100,10 @@ public final class PosicionesAbiertas extends MySQL {
 
     public List<PosicionAbierta> getPosicionAbierta (String owner, int cantidad, String ticker) {
         return buildListFromQuery("SELECT * FROM posicionesabiertas WHERE cantidad = '"+cantidad+"' AND jugador = '"+owner+"' AND nombre_activo = '"+ticker+"'");
+    }
+
+    public List<PosicionAbierta> getPosicionesAccionesServer(String empresa) {
+        return buildListFromQuery("SELECT * FROM posicionesabiertas WHERE nombre_activo = '"+empresa+"' AND tipo_activo = 'ACCIONES_SERVER'");
     }
 
     public double getAllPixeloinsEnAcciones (String jugador) {
@@ -347,7 +354,7 @@ public final class PosicionesAbiertas extends MySQL {
     protected PosicionAbierta buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new PosicionAbierta(rs.getInt("id"),
                 rs.getString("jugador"),
-                TipoActivo.valueOf(rs.getString("tipo_activo")),
+                valueOf(rs.getString("tipo_activo")),
                 rs.getString("nombre_activo"),
                 rs.getInt("cantidad"),
                 rs.getDouble("precio_apertura"),

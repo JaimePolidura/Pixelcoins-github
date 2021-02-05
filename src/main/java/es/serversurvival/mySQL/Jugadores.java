@@ -80,6 +80,15 @@ public final class Jugadores extends MySQL {
         return buildListFromQuery("SELECT * FROM jugadores ORDER BY ninpagos DESC");
     }
 
+    public Map<String, Jugador> getMapAllJugadores () {
+        Map<String, Jugador> jugadoresMap = new HashMap<>();
+        List<Jugador> jugadoresList = getAllJugadores();
+
+        jugadoresList.forEach(jugador -> jugadoresMap.put(jugador.getNombre(), jugador));
+
+        return jugadoresMap;
+    }
+
     public int getPosicionTopRicos (String player){
         Map<String, Double> topPlayers = Funciones.crearMapaTopPatrimonioPlayers(false);
 

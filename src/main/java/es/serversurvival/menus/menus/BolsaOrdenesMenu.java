@@ -32,7 +32,7 @@ public class BolsaOrdenesMenu extends Menu implements Clickable{
     }
 
     @Override
-    public void onClick(InventoryClickEvent event) {
+    public void onOherClick(InventoryClickEvent event) {
         ItemStack itemClicked = event.getCurrentItem();
 
         if(Funciones.noEsDeTipoItem(itemClicked, "NAME_TAG", "REDSTONE_TORCH")){

@@ -40,7 +40,7 @@ public class DeudasMenu extends Menu implements Clickable, Refreshcable, CanGoBa
     }
 
     @Override
-    public void onClick(InventoryClickEvent event) {
+    public void onOherClick(InventoryClickEvent event) {
         ItemStack itemCliqueado = event.getCurrentItem();
 
         boolean notValidClick = itemCliqueado == null || !Funciones.cuincideNombre(itemCliqueado.getType().toString(), "RED_BANNER", "GREEN_BANNER");

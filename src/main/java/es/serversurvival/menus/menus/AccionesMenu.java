@@ -45,7 +45,7 @@ public class AccionesMenu extends Menu implements Clickable, Paginated, PostLoad
     }
 
     @Override
-    public void onClick(InventoryClickEvent event) {
+    public void onOherClick(InventoryClickEvent event) {
         ItemStack itemStack = event.getCurrentItem();
         if(!Funciones.cuincideNombre(itemStack.getType().toString(), "BOOK")){
             return;

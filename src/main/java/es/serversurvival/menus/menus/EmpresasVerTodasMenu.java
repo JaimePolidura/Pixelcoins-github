@@ -44,12 +44,11 @@ public class EmpresasVerTodasMenu extends Menu implements CanGoBack, Clickable{
 
     @Override
     public void goBack() {
-        EmpresasOwnerMenu menu = new EmpresasOwnerMenu(player);
-        menu.openMenu();
+        PerfilMenu perfilMenu = new PerfilMenu(player);
     }
 
     @Override
-    public void onClick(InventoryClickEvent event) {
+    public void onOherClick(InventoryClickEvent event) {
         ItemStack itemClickeado = event.getCurrentItem();
         if(itemClickeado == null || Funciones.esDeTipoItem(itemClickeado, "AIR")){
             return;

@@ -1,6 +1,7 @@
 package es.serversurvival.menus.menus;
 
 import es.serversurvival.menus.menus.confirmaciones.VenderAccionesConfirmacion;
+import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.util.Funciones;
@@ -48,7 +49,7 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
     }
 
     @Override
-    public void onClick(InventoryClickEvent event) {
+    public void onOherClick(InventoryClickEvent event) {
         ItemStack clikedItem = event.getCurrentItem();
 
         boolean notValidClick = clikedItem == null || !Funciones.cuincideNombre(clikedItem.getType().toString(), "BOOK", "NAME_TAG", "REDSTONE_TORCH", "GREEN_BANNER") || clikedItem.getItemMeta().getLore().get(1) == null;
@@ -71,8 +72,10 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
         List<String> loreItemClicked = clikedItem.getItemMeta().getLore();
         int id = Integer.parseInt(loreItemClicked.get(loreItemClicked.size() - 1).split(" ")[1]);
 
-        if(clickedItemType == Material.GREEN_BANNER){ //Accion del server
-            VenderAccionesConfirmacion confirmacion = new VenderAccionesConfirmacion(player, id, tipoPosicion, TipoActivo.ACCIONES_SERVER, loreItemClicked);
+        if(clickedItemType == Material.GREEN_BANNER){
+            MySQL.conectar();
+            BolsaVenderAccionEmpresaMenu menu = new BolsaVenderAccionEmpresaMenu(player, posicionesAbiertasMySQL.getPosicionAbierta(id));
+            MySQL.desconectar();
         }else{
             VenderAccionesConfirmacion confirmacion = new VenderAccionesConfirmacion(player, id, tipoPosicion, TipoActivo.ACCIONES, loreItemClicked); //TODO Hay que hacerlo compatible con los demas activos
         }

@@ -8,6 +8,7 @@ import es.serversurvival.mySQL.Empresas;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import java.util.Collections;
@@ -61,4 +62,7 @@ public class BorrrarEmpresaConfirmacion extends Menu implements Confirmacion {
 
         closeMenu();
     }
+
+    @Override
+    public void onOtherClick(InventoryClickEvent event) {return;}
 }

@@ -35,7 +35,7 @@ public class AyudaMenu extends Menu implements Clickable {
     }
 
     @Override
-    public void onClick(InventoryClickEvent event) {
+    public void onOherClick(InventoryClickEvent event) {
         if(event.getCurrentItem() == null || Funciones.noEsDeTipoItem(event.getCurrentItem(), "WRITABLE_BOOK")){
             return;
         }

@@ -18,8 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static es.serversurvival.util.Funciones.*;
+import static org.bukkit.ChatColor.*;
+import static org.bukkit.Material.RED_WOOL;
 
-public class ComprarBolsaConfirmacion extends Menu implements Confirmacion {
+public class ComprarBolsaConfirmacion extends Menu implements AumentoConfirmacion {
     private final String simbolo;
     private double precioUnidad;
     private double precioTotal;
@@ -30,7 +32,6 @@ public class ComprarBolsaConfirmacion extends Menu implements Confirmacion {
     private int cantidadAComprar = 1;
     private double dineroJugador;
     private final String nombreValor;
-    private int maxAccionesAComprar = 999999;
     private int id;
 
     public ComprarBolsaConfirmacion(String simbolo, String nombreValor, TipoActivo tipoActivo, String alias, Player player, double precioUnidad) {
@@ -42,81 +43,33 @@ public class ComprarBolsaConfirmacion extends Menu implements Confirmacion {
         this.player = player;
         this.precioTotal = precioUnidad;
 
-        this.inventory = InventoryCreator.createConfirmacionAumento(alias, simbolo, precioUnidad);
+        String titulo = DARK_RED + "" + BOLD + "   SELECCIONA " + alias.toUpperCase();
+        String tituloAceptar = GREEN + "" + BOLD + "COMPRAR " + alias.toUpperCase();
+        String tituloCancelar = RED + "" + BOLD + "CANCELAR";
+        List<String> lore = new ArrayList<>();
+        lore.add(GOLD + "Comprar 1 " + alias + " de " + simbolo + " a " + GREEN + formatea.format(precioUnidad) + " PC");
+
+        this.inventory = InventoryCreator.createConfirmacionAumento(titulo, tituloAceptar, lore, tituloCancelar);
 
         MySQL.conectar();
         this.dineroJugador = jugadoresMySQL.getJugador(player.getName()).getPixelcoins();
         MySQL.desconectar();
 
-        openMenu();
-    }
-
-    //Contructor para el tipo activo = acciones_empresa
-    public ComprarBolsaConfirmacion(Player player, int id) {
-        this.alias = "acciones";
-        this.tipoActivo = TipoActivo.ACCIONES_SERVER;
-        this.player = player;
-        this.id = id;
-        this.precioTotal = precioUnidad;
-
-        MySQL.conectar();
-        OfertaMercadoServer oferta = ofertasMercadoServerMySQL.get(id);
-
-        this.maxAccionesAComprar = oferta.getCantidad();
-        this.precioUnidad = oferta.getPrecio();
-        this.dineroJugador = jugadoresMySQL.getJugador(player.getName()).getPixelcoins();
-        this.nombreValor = oferta.getEmpresa();
-        this.simbolo = oferta.getEmpresa();
-        this.inventory = InventoryCreator.createConfirmacionAumento(alias, oferta.getEmpresa(), oferta.getPrecio());
-
-        MySQL.desconectar();
         openMenu();
     }
 
     @Override
-    public void onClick (InventoryClickEvent event) {
-        if(event.getCurrentItem() == null) return;
-
-        String nombreItem = event.getCurrentItem().getType().toString();
-
-        switch (nombreItem){
-            case "GREEN_WOOL":
-                confirmar();
-                break;
-            case "RED_WOOL":
-                cancelar();
-                break;
-            default:
-                updateCantidad(event.getCurrentItem());
-        }
-    }
-
-    private void updateCantidad(ItemStack itemStack) {
-        if(itemStack == null || noEsDeTipoItem(itemStack,"LIGHT_GRAY_BANNER" )){
-            return;
-        }
-
-        String name = itemStack.getItemMeta().getDisplayName();
-        StringBuilder stringBuild = new StringBuilder();
-        for (int i = 0; i < name.length(); i++) {
-            if(i == 2){
-                if(name.charAt(i) == '-')
-                    stringBuild.append(name.charAt(2));
-            }else if (i >= 2){
-                stringBuild.append(name.charAt(i));
-            }
-        }
-        int nuevasAcciones = Integer.parseInt(stringBuild.toString());
-        this.cantidadAComprar = cantidadAComprar + nuevasAcciones;
+    public void onChangeAumento(int var) {
+        this.cantidadAComprar = cantidadAComprar + var;
 
         precioTotal = precioUnidad * cantidadAComprar;
-        if(precioTotal > dineroJugador || cantidadAComprar > maxAccionesAComprar){
-            this.cantidadAComprar = cantidadAComprar - nuevasAcciones;
+        if(precioTotal > dineroJugador){
+            this.cantidadAComprar = cantidadAComprar - var;
             return;
         }
 
         if (precioTotal <= 0) {
-            cantidadAComprar = cantidadAComprar - nuevasAcciones;
+            cantidadAComprar = cantidadAComprar - var;
             precioTotal = precioUnidad * cantidadAComprar;
             return;
         }
@@ -125,16 +78,6 @@ public class ComprarBolsaConfirmacion extends Menu implements Confirmacion {
         lore.add(ChatColor.GOLD + "Comprar " + cantidadAComprar + " " +  alias  + " " + simbolo + " a " + ChatColor.GREEN + precioUnidad + " PC -> total: " + formatea.format(redondeoDecimales(precioTotal, 3)) + " PC");
 
         this.inventory.setItem(14, MinecraftUtils.loreDisplayName(Material.GREEN_WOOL, displayName, lore));
-    }
-
-    @Override
-    public Inventory getInventory() {
-        return inventory;
-    }
-
-    @Override
-    public Player getPlayer() {
-        return player;
     }
 
     @Override
@@ -165,5 +108,15 @@ public class ComprarBolsaConfirmacion extends Menu implements Confirmacion {
         player.sendMessage(ChatColor.GOLD + "Has cancelado la compra");
 
         closeMenu();
+    }
+
+    @Override
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    @Override
+    public Player getPlayer() {
+        return player;
     }
 }

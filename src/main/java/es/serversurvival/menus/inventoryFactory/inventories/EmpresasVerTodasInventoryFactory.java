@@ -1,5 +1,6 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
+import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.EmpresasVerTodasMenu;
@@ -15,12 +16,14 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.bukkit.ChatColor.*;
+
 public class EmpresasVerTodasInventoryFactory extends InventoryFactory {
 
     @Override
     protected Inventory buildInventory(String jugadorNombre) {
         Inventory inventory = Bukkit.createInventory(null, 54, EmpresasVerTodasMenu.titulo);
-        empresasMySQL.conectar();
+        MySQL.conectar();
 
         List<Empresa> todasLasEmpresas = empresasMySQL.getTodasEmpresas();
         ItemStack back = buildItemGoBack();
@@ -28,9 +31,9 @@ public class EmpresasVerTodasInventoryFactory extends InventoryFactory {
         todasLasEmpresas.forEach( (empresa) -> {
             String displayName;
             if(empresa.getOwner().equalsIgnoreCase(jugadorNombre)){
-                displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TU EMPRESA";
+                displayName = GOLD + "" + BOLD + "" + UNDERLINE + "CLICK PARA VER TU EMPRESA";
             }else{
-                displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA SOLICITAR UN SERVICIO";
+                displayName = GOLD + "" + BOLD + "" + UNDERLINE + "CLICK PARA SOLICITAR UN SERVICIO";
             }
 
             Material icono = Material.getMaterial(empresa.getIcono());
@@ -50,17 +53,19 @@ public class EmpresasVerTodasInventoryFactory extends InventoryFactory {
 
     private List<String> insertarDatosEmpresa (Empresa empresa, List<String> lore) {
         lore.add("   ");
-        lore.add(ChatColor.GOLD + "Empresa: " + ChatColor.BOLD + empresa.getNombre());
-        lore.add(ChatColor.GOLD + "Owner: " + ChatColor.GOLD + empresa.getOwner());
+        lore.add(GOLD + "Empresa: " + BOLD + empresa.getNombre());
+        lore.add(GOLD + "Owner: " + GOLD + empresa.getOwner());
+        if(empresa.isCotizada()) lore.add(GOLD + "Cotiza en bolsa");
         lore.add("     ");
-        lore.add(ChatColor.GOLD + "Pixelcoins: " + ChatColor.GREEN + formatea.format(empresa.getPixelcoins()) + " PC");
-        lore.add(ChatColor.GOLD + "Ingresos: " + ChatColor.GREEN + formatea.format(empresa.getIngresos()) + " PC");
-        lore.add(ChatColor.GOLD + "Gastos: " + ChatColor.GREEN + formatea.format(empresa.getGastos()) + " PC");
-        lore.add(ChatColor.GOLD + "Beneficios: " + ChatColor.GREEN + formatea.format(empresa.getIngresos() - empresa.getGastos()) + " PC");
+        lore.add(GOLD + "Pixelcoins: " + GREEN + formatea.format(empresa.getPixelcoins()) + " PC");
+        lore.add(GOLD + "Ingresos: " + GREEN + formatea.format(empresa.getIngresos()) + " PC");
+        lore.add(GOLD + "Gastos: " + GREEN + formatea.format(empresa.getGastos()) + " PC");
+        lore.add(GOLD + "Beneficios: " + GREEN + formatea.format(empresa.getIngresos() - empresa.getGastos()) + " PC");
         double margen = Funciones.rentabilidad(empresa.getIngresos(), empresa.getIngresos() - empresa.getGastos());
-        lore.add(ChatColor.GOLD + "Rentabilidad: " + ChatColor.GREEN + ((int) margen) + "%");
+        lore.add(GOLD + "Rentabilidad: " + GREEN + ((int) margen) + "%");
+
         lore.add("      ");
-        lore.add(ChatColor.GOLD + "Empleados:");
+        lore.add(GOLD + "Empleados:");
 
         return lore;
     }
@@ -68,13 +73,13 @@ public class EmpresasVerTodasInventoryFactory extends InventoryFactory {
     private List<String> insertarEmpleados (String nombreEmpresa, List<String> lore) {
         List<Empleado> empleados = empleadosMySQL.getEmpleadosEmrpesa(nombreEmpresa);
 
-        lore.add(ChatColor.GOLD + "Empleados:");
+        lore.add(GOLD + "Empleados:");
         if(empleados.size() != 0){
             for(int i = 0; i < empleados.size(); i++){
-                lore.add(ChatColor.GOLD + "-" + empleados.get(i).getJugador());
+                lore.add(GOLD + "-" + empleados.get(i).getJugador());
             }
         }else{
-            lore.add(ChatColor.GOLD + "Sin trabajadores");
+            lore.add(GOLD + "Sin trabajadores");
         }
 
         return lore;

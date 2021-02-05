@@ -35,7 +35,7 @@ public class SacarMaxItemMenu extends Menu implements Clickable {
     }
 
     @Override
-    public void onClick(InventoryClickEvent event) {
+    public void onOherClick(InventoryClickEvent event) {
         ItemStack itemClickeado = event.getCurrentItem();
 
         if(itemClickeado == null || itemClickeado.getType().toString().equalsIgnoreCase("AIR")){

@@ -36,7 +36,7 @@ public class OfertasMenu extends Menu implements Clickable, Paginated, Refreshca
     }
 
     @Override
-    public void onClick(InventoryClickEvent event) {
+    public void onOherClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         ItemStack itemClicked = event.getCurrentItem();
 

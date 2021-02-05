@@ -41,7 +41,7 @@ public class MateriasPrimasMenu extends Menu implements Clickable, PostLoading {
     }
 
     @Override
-    public void onClick(InventoryClickEvent event) {
+    public void onOherClick(InventoryClickEvent event) {
         ItemStack itemStack = event.getCurrentItem();
         if(itemStack == null || !itemStack.getType().toString().equalsIgnoreCase("COAL")){
             return;
