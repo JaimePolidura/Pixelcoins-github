@@ -25,7 +25,7 @@ public final class Jugadores extends MySQL {
     }
 
     public boolean estaRegistradoNumeroCuentaPara (String jugador, int numero) {
-        return isEmptyFromQuery("SELECT * FROM jugadores WHERE numero_cuenta = '"+numero+"' AND jugador = '"+jugador+"'");
+        return !isEmptyFromQuery("SELECT * FROM jugadores WHERE numero_cuenta = '"+numero+"' AND nombre = '"+jugador+"'");
     }
 
     public Jugador getJugador(String jugador){

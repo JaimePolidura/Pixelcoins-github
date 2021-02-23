@@ -21,7 +21,7 @@ public final class OrdenesPreMarket extends MySQL{
 
     private OrdenesPreMarket() {}
 
-    private void nuevaOrden (String jugador, String nombre_activo, int cantidad, AccionOrden accion_orden) {
+    public void nuevaOrden (String jugador, String nombre_activo, int cantidad, AccionOrden accion_orden) {
         executeUpdate("INSERT INTO ordenespremarket (jugador, nombre_activo, cantidad, accion_orden) VALUES ('"+jugador+"', '"+nombre_activo+"', '"+cantidad+"', '"+accion_orden.toString()+"')");
     }
 

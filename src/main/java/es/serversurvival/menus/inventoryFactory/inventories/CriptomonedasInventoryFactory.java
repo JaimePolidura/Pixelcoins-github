@@ -30,7 +30,7 @@ public class CriptomonedasInventoryFactory extends InventoryFactory {
 
         for (Map.Entry<String, String> entry : criptomonedas.entrySet()) {
             List<String> lore = new ArrayList<>();
-            String displayName = entry.getValue();
+            String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + entry.getValue();
             lore.add(ChatColor.GOLD + "Simbolo: " + entry.getKey());
             lore.add(ChatColor.RED + "Cargando...");
 

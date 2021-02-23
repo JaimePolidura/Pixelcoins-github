@@ -5,6 +5,7 @@ import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.ElegirInversionInventoryFactory;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -39,11 +40,11 @@ public class ElegirInversionMenu extends Menu implements Clickable {
             return;
         }
 
-        if(itemStack.getItemMeta().getDisplayName().equalsIgnoreCase( ChatColor.GOLD + "" + ChatColor.BOLD + "Acciones" )){
+        if(itemStack.getType() == Material.PAPER){
             AccionesMenu menu = new AccionesMenu(player);
-        }else if(itemStack.getItemMeta().getDisplayName().equalsIgnoreCase( ChatColor.GOLD + "" + ChatColor.BOLD + "Criptomonedas" )){
+        }else if (itemStack.getType() == Material.GOLD_INGOT) {
             CriptomonedasMenu menu = new CriptomonedasMenu(player);
-        }else if (itemStack.getItemMeta().getDisplayName().equalsIgnoreCase( ChatColor.GOLD + "" + ChatColor.BOLD + "Materias primas" )) {
+        }else if (itemStack.getType() == Material.CHARCOAL) {
             MateriasPrimasMenu menu = new MateriasPrimasMenu(player);
         }
     }

@@ -28,7 +28,7 @@ public class PagarDividendoConfirmacion extends Menu implements AumentoConfirmac
     public PagarDividendoConfirmacion (Player player, String nombreEmpresa) {
         MySQL.conectar();
 
-        this.accionesTotales = ofertasMercadoServerMySQL.getAccionesTotales(nombreEmpresa) - ofertasMercadoServerMySQL.getAccionesDeEmpresa(nombreEmpresa);
+        this.accionesTotales = ofertasMercadoServerMySQL.getAccionesTotalesParaPagarDividendo(nombreEmpresa);
         this.empresa = empresasMySQL.getEmpresa(nombreEmpresa);
 
         this.player = player;

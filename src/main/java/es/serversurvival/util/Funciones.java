@@ -21,6 +21,7 @@ import java.util.function.ToIntFunction;
 import es.serversurvival.mySQL.*;
 import es.serversurvival.mySQL.tablasObjetos.*;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -283,6 +284,15 @@ public final class Funciones {
         return !cuincideNombre(nombre, items);
     }
 
+    public static boolean esDeTipo (ItemStack item, Material... tipos) {
+        for(Material material : tipos){
+            if (item.getType() == material)
+                return true;
+        }
+
+        return false;
+    }
+
     public static boolean esDeTipoItem(ItemStack item, String...tipos) {
         return cuincideNombre(item.getType().toString(), tipos);
     }
@@ -392,7 +402,8 @@ public final class Funciones {
     }
 
     public static boolean mercadoEstaAbierto() {
-        return !Funciones.esHoyDiaSemana(6, 0) && Funciones.esHoyHora(15, 30, 22, 30);
+        return true;
+        //return !Funciones.esHoyDiaSemana(7, 1) && Funciones.esHoyHora(15, 30, 22, 30);
     }
 
     public static boolean mercadoNoEstaAbierto() {

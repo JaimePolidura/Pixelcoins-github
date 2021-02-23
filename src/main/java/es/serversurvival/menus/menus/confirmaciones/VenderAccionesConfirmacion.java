@@ -3,19 +3,14 @@ package es.serversurvival.menus.menus.confirmaciones;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.menus.BolsaCarteraMenu;
-import es.serversurvival.menus.menus.BolsaVenderAccionEmpresaMenu;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.enums.TipoActivo;
-import es.serversurvival.mySQL.enums.TipoOfertante;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import es.serversurvival.mySQL.enums.TipoPosicion;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static es.serversurvival.util.Funciones.*;

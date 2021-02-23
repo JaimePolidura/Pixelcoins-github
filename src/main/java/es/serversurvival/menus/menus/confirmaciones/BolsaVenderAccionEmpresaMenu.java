@@ -1,4 +1,4 @@
-package es.serversurvival.menus.menus;
+package es.serversurvival.menus.menus.confirmaciones;
 
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;

@@ -1,6 +1,6 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
-import es.serversurvival.menus.menus.Paginated;
+import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.tablasObjetos.LlamadaApi;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.BolsaCarteraMenu;
@@ -138,26 +138,24 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         String displayName = posicionAbierta.getTipo_posicion() == LARGO ?
                 GOLD + "" + BOLD + UNDERLINE + "CLICK PARA VENDER" :
                 GOLD + "" + BOLD + UNDERLINE + "CLICK PARA COMPRAR " + RED + "" + BOLD + "(CORTO)";
-
+        Material material = TipoActivo.getMaterialFor(posicionAbierta);
         List<String> lore = buildLoreFromPosicionAbierta(posicionAbierta);
 
-        return posicionAbierta.getTipo_posicion() == LARGO ?
-                MinecraftUtils.loreDisplayName(Material.NAME_TAG, displayName, lore) :
-                MinecraftUtils.loreDisplayName(Material.REDSTONE_TORCH, displayName, lore);
+        return MinecraftUtils.loreDisplayName(material, displayName, lore);
     }
 
-    private ItemStack buildItemFromPosicionServer(PosicionAbierta posicionAbierta) {
+    private ItemStack buildItemFromPosicionServer(PosicionAbierta posicion) {
         String displayName = GOLD + "" + BOLD + UNDERLINE + "CLICK PARA VENDER";
         List<String> lore = new ArrayList<>();
         lore.add("   ");
-        lore.add(GOLD + "Empresa (server): " + posicionAbierta.getNombre_activo()); //14
-        lore.add(GOLD + "Acciones compradas: " + posicionAbierta.getCantidad());
-        lore.add(GOLD + "Precio apertura: " + GREEN + formatea.format(posicionAbierta.getPrecio_apertura()));
-        lore.add(GOLD + "Valor total de compra: " + GREEN + formatea.format(posicionAbierta.getPrecio_apertura() * posicionAbierta.getCantidad()));
+        lore.add(GOLD + "Activo: " + posicion.getNombre_activo()); //14
+        lore.add(GOLD + "Cantidad: " + posicion.getCantidad() + " " + posicion.getTipo_activo().getAlias());
+        lore.add(GOLD + "Precio apertura: " + GREEN + formatea.format(posicion.getPrecio_apertura()));
+        lore.add(GOLD + "Valor total de compra: " + GREEN + formatea.format(posicion.getPrecio_apertura() * posicion.getCantidad()));
         lore.add("    ");
-        lore.add(GOLD + "Fecha de compra: " + posicionAbierta.getFecha_apertura());
+        lore.add(GOLD + "Fecha de compra: " + posicion.getFecha_apertura());
         lore.add("   ");
-        lore.add(GOLD + "ID: " + posicionAbierta.getId());
+        lore.add(GOLD + "ID: " + posicion.getId());
 
         return MinecraftUtils.loreDisplayName(Material.GREEN_BANNER, displayName, lore);
     }
@@ -177,18 +175,18 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         double peso = posicionesAbiertasPeso.get(posicion.getNombre_activo());
         List<String> lore = new ArrayList<>();
         lore.add("   ");
-        lore.add(GOLD + "Empresa: " + llamada.getNombre_activo());
+        lore.add(GOLD + "Activo: " + llamada.getNombre_activo());
 
         if(!PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()).equalsIgnoreCase(posicion.getNombre_activo())) {
-            lore.add(GOLD + "Ticker: " + posicion.getNombre_activo() + " (" + PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()) + ")");
+            lore.add(GOLD + "Simbolo: " + posicion.getNombre_activo() + " (" + PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()) + ")");
         }else {
-            lore.add(GOLD + "Ticker: " + posicion.getNombre_activo() + " (Acciones) ");
+            lore.add(GOLD + "Simbolo: " + posicion.getNombre_activo() + " " + posicion.getTipo_activo().getAlias());
         }
         lore.add(GOLD + "Peso en cartera: " + peso + "%");
         lore.add("   ");
 
         if (posicion.getTipo_posicion() == LARGO) {
-            lore.add(GOLD + "Acciones compradas: " + posicion.getCantidad());
+            lore.add(GOLD + posicion.getTipo_activo().getAliasUpperFirst() + " compradas: " + posicion.getCantidad());
         } else {
             lore.add(GOLD + "Acciones vendidas: " + posicion.getCantidad());
         }

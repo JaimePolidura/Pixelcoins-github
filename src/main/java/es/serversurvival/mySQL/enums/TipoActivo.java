@@ -1,10 +1,15 @@
 package es.serversurvival.mySQL.enums;
 
 import es.serversurvival.apiHttp.IEXCloud_API;
+import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import lombok.SneakyThrows;
+import org.bukkit.Material;
+
+import java.util.Arrays;
+import java.util.Locale;
 
 public enum TipoActivo {
-    ACCIONES {
+    ACCIONES(Material.NAME_TAG, "acciones") {
         @Override
         public double getPrecio(String simbolo) {
             try {
@@ -14,7 +19,7 @@ public enum TipoActivo {
             }
         }
     },
-    CRIPTOMONEDAS{
+    CRIPTOMONEDAS(Material.GOLD_BLOCK, "monedas"){
         @Override
         public double getPrecio(String simbolo) {
             try {
@@ -24,7 +29,7 @@ public enum TipoActivo {
             }
         }
     },
-    MATERIAS_PRIMAS{
+    MATERIAS_PRIMAS(Material.COAL, "unidades"){
         @Override
         public double getPrecio(String simbolo) {
             try {
@@ -34,7 +39,7 @@ public enum TipoActivo {
             }
         }
     },
-    ACCIONES_SERVER {
+    ACCIONES_SERVER(Material.GREEN_BANNER, "acciones"){
         @Override
         public double getPrecio(String simbolo) {
             return 0;
@@ -42,4 +47,30 @@ public enum TipoActivo {
     };
 
     public abstract double getPrecio (String simbolo);
+
+    private Material materialDisplay;
+    private String alias;
+
+    TipoActivo(Material materialDisplay, String alias) {
+        this.materialDisplay = materialDisplay;
+        this.alias = alias;
+    }
+
+    public Material getMaterialDisplay() {
+        return materialDisplay;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public String getAliasUpperFirst() {
+        return alias.substring(0, 1).toUpperCase() + alias.substring(1);
+    }
+
+    public static Material getMaterialFor (PosicionAbierta posicion) {
+        return posicion.getTipo_posicion() == TipoPosicion.CORTO ?
+                Material.REDSTONE_TORCH :
+                posicion.getTipo_activo().materialDisplay;
+    }
 }

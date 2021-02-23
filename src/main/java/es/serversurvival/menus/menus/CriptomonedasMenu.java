@@ -11,6 +11,7 @@ import es.serversurvival.menus.menus.confirmaciones.ComprarBolsaConfirmacion;
 import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -44,7 +45,7 @@ public class CriptomonedasMenu extends Menu implements Clickable, PostLoading {
     @Override
     public void onOherClick(InventoryClickEvent event) {
         ItemStack itemStack = event.getCurrentItem();
-        if(itemStack == null || !Funciones.cuincideNombre(itemStack.getType().toString(), "GOLD_BLOCK")){
+        if(itemStack == null || !Funciones.cuincideNombre(itemStack.getType().toString(), Material.GOLD_BLOCK.toString())){
             return;
         }
 

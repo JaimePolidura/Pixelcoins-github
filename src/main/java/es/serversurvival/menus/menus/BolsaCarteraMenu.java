@@ -1,5 +1,6 @@
 package es.serversurvival.menus.menus;
 
+import es.serversurvival.menus.menus.confirmaciones.BolsaVenderAccionEmpresaMenu;
 import es.serversurvival.menus.menus.confirmaciones.VenderAccionesConfirmacion;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.enums.TipoActivo;
@@ -8,7 +9,6 @@ import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.BolsaCarteraInventoryFactory;
-import lombok.SneakyThrows;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,6 +19,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
 import static es.serversurvival.mySQL.enums.TipoPosicion.*;
+import static es.serversurvival.util.Funciones.*;
+import static org.bukkit.Material.*;
 
 public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
     public static final String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + " TU CARTERA DE ACCIONES";
@@ -52,13 +54,15 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
     public void onOherClick(InventoryClickEvent event) {
         ItemStack clikedItem = event.getCurrentItem();
 
-        boolean notValidClick = clikedItem == null || !Funciones.cuincideNombre(clikedItem.getType().toString(), "BOOK", "NAME_TAG", "REDSTONE_TORCH", "GREEN_BANNER") || clikedItem.getItemMeta().getLore().get(1) == null;
-        if(notValidClick){
+        boolean notValid = clikedItem == null || esDeTipo(event.getCurrentItem(), BOOK, NAME_TAG, REDSTONE_TORCH, GREEN_BANNER, COAL, GOLD_BLOCK)
+                || clikedItem.getItemMeta().getLore().get(1) == null;
+
+        if(notValid){
             return;
         }
 
         String clickedItemType = clikedItem.getType().toString();
-        if(Funciones.esDeTipoItem(clikedItem, "BOOK")){
+        if(esDeTipo(clikedItem, BOOK)){
             ElegirInversionMenu menu = new ElegirInversionMenu((Player) event.getWhoClicked());
             return;
         }
@@ -68,11 +72,11 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
 
     private void performClick (ItemStack clikedItem) {
         Material clickedItemType = clikedItem.getType();
-        TipoPosicion tipoPosicion = clickedItemType == Material.NAME_TAG ? LARGO : CORTO;
+        TipoPosicion tipoPosicion = clickedItemType == NAME_TAG ? LARGO : CORTO;
         List<String> loreItemClicked = clikedItem.getItemMeta().getLore();
         int id = Integer.parseInt(loreItemClicked.get(loreItemClicked.size() - 1).split(" ")[1]);
 
-        if(clickedItemType == Material.GREEN_BANNER){
+        if(clickedItemType == GREEN_BANNER){
             MySQL.conectar();
             BolsaVenderAccionEmpresaMenu menu = new BolsaVenderAccionEmpresaMenu(player, posicionesAbiertasMySQL.getPosicionAbierta(id));
             MySQL.desconectar();

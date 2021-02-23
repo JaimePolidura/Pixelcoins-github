@@ -106,6 +106,10 @@ public final class PosicionesAbiertas extends MySQL {
         return buildListFromQuery("SELECT * FROM posicionesabiertas WHERE nombre_activo = '"+empresa+"' AND tipo_activo = 'ACCIONES_SERVER'");
     }
 
+    public List<PosicionAbierta> getPosicionesServerJugador (String jugador) {
+        return buildListFromQuery("SELECT * FROM posicionesabiertas WHERE jugador = '"+jugador+"' AND tipo_activo = 'ACCIONES_SERVER'");
+    }
+
     public double getAllPixeloinsEnAcciones (String jugador) {
         List<PosicionAbierta> posLargas = getPosicionesAbiertasJugadorCondicion(jugador, PosicionAbierta::noEsTipoAccionServerYLargo);
         List<PosicionAbierta> posCortas = getPosicionesAbiertasJugadorCondicion(jugador, PosicionAbierta::esCorto);
