@@ -1,30 +1,20 @@
 package es.serversurvival.comandos.subComandos.bolsa;
 
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.comandos.ComandoUtilidades;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.mySQL.tablasObjetos.PosicionCerrada;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class OperacionesCerradasBolsa extends BolsaSubCommand {
-    private final String SCNombre = "operacionescerradas";
-    private final String sintaxis = "/bolsa operacionescerradas";
-    private final String ayuda = "Ver todas las operaciones que has hecho en bolsa en todo el tiempo";
+@Command(name = "bolsa operacionescerradas")
+public class OperacionesCerradasBolsa extends ComandoUtilidades implements CommandRunner {
 
-    public String getSCNombre() {
-        return SCNombre;
-    }
-
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    public void execute(Player player, String[] args) {
+    public void execute(CommandSender player, String[] args) {
         posicionesCerradasMySQL.conectar();
         List<PosicionCerrada> posicionCerradas = posicionesCerradasMySQL.getPosicionesCerradasJugador(player.getName());
 

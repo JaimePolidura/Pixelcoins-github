@@ -1,6 +1,9 @@
 package es.serversurvival.comandos.subComandos.bolsa;
 
 import com.mojang.datafixers.functions.PointFreeRule;
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.comandos.ComandoUtilidades;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.PosicionesAbiertas;
 import es.serversurvival.mySQL.Transacciones;
@@ -11,43 +14,30 @@ import es.serversurvival.validaciones.misValidaciones.OwnerPosicionAbierta;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import static es.serversurvival.scoreboeards.SingleScoreboard.posicionesAbiertasMySQL;
 import static es.serversurvival.util.Funciones.*;
 import static es.serversurvival.validaciones.Validaciones.*;
+import static org.bukkit.ChatColor.*;
 
-public class ComprarCorto extends BolsaSubCommand{
-    private final String scnombre = "comprarcorto";
-    private final String sintaxis = "/bolsa comprarcorto <id> <cantidad>";
-    private final String ayuda = "Comprar en corto una posicion. Es decir cerrarla";
-
-    @Override
-    public String getSCNombre() {
-        return scnombre;
-    }
+@Command(name = "bolsa comprarcorto")
+public class ComprarCorto extends ComandoUtilidades implements CommandRunner{
+    private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /bolsa comprarcorto <id> <cantidad>";
 
     @Override
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    @Override
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
+    public void execute(CommandSender player, String[] args) {
         MySQL.conectar();
         //TODO: Cuando args[1] es 1 no funciona pero con el resto de valores funciona perfectamente, Revisar
-        ValidationResult result = ValidationsService.startValidating(args.length, Same.as(3, mensajeUsoIncorrecto()))
-                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), OwnerPosicionAbierta.de(player.getName(), TipoPosicion.CORTO))
-                .andMayThrowException(() -> args[2], mensajeUsoIncorrecto(), NaturalNumber)
+        ValidationResult result = ValidationsService.startValidating(args.length, Same.as(3, usoIncorrecto))
+                .andMayThrowException(() -> args[1], usoIncorrecto, OwnerPosicionAbierta.de(player.getName(), TipoPosicion.CORTO))
+                .andMayThrowException(() -> args[2], usoIncorrecto, NaturalNumber)
                 .validateAll();
 
         if(result.isFailed()){
             MySQL.desconectar();
-            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
+            player.sendMessage(DARK_RED + result.getMessage());
             return;
         }
 
@@ -62,7 +52,7 @@ public class ComprarCorto extends BolsaSubCommand{
         if(mercadoEstaAbierto()){
             transaccionesMySQL.comprarPosicionCorto(posicionAComprar, cantidad, player.getName());
         }else{
-            ordenesMySQL.abrirOrdenCompraCorto(player, args[2], cantidad);
+            ordenesMySQL.abrirOrdenCompraCorto((Player) player, args[2], cantidad);
         }
 
         MySQL.desconectar();

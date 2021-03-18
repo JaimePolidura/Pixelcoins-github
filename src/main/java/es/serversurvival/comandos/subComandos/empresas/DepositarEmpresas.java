@@ -1,5 +1,8 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.comandos.ComandoUtilidades;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
@@ -7,33 +10,23 @@ import es.serversurvival.validaciones.Validaciones;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static es.serversurvival.validaciones.Validaciones.*;
+import static org.bukkit.ChatColor.DARK_RED;
 
-public class DepositarEmpresas extends EmpresasSubCommand {
-    private final String scnombre = "depositar";
-    private final String sintaxis = "/empresas depositar <empresa> <pixelcoins>";
-    private final String ayuda = "Depositar pixelcoins en tu empresa: para poder pagar el salario de los trabajadores";
+@Command(name = "empresas depositar")
+public class DepositarEmpresas extends ComandoUtilidades implements CommandRunner {
+    private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /empresas depositar <empresa> <pixelcoins>";
 
-    public String getSCNombre() {
-        return scnombre;
-    }
-
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    public void execute(Player player, String[] args) {
+    @Override
+    public void execute(CommandSender player, String[] args) {
         MySQL.conectar();
 
-        ValidationResult result = ValidationsService.startValidating(args.length == 3, True.of(mensajeUsoIncorrecto()))
-                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), OwnerDeEmpresa.of(player.getName()))
-                .andMayThrowException(() -> args[2], mensajeUsoIncorrecto(), PositiveNumber, SuficientesPixelcoins.of(player.getName()))
+        ValidationResult result = ValidationsService.startValidating(args.length == 3, True.of(usoIncorrecto))
+                .andMayThrowException(() -> args[1], usoIncorrecto, OwnerDeEmpresa.of(player.getName()))
+                .andMayThrowException(() -> args[2], usoIncorrecto, PositiveNumber, SuficientesPixelcoins.of(player.getName()))
                 .validateAll();
 
         if(result.isFailed()){
@@ -42,7 +35,7 @@ public class DepositarEmpresas extends EmpresasSubCommand {
             return;
         }
 
-        transaccionesMySQL.depositarPixelcoinsEmpresa(player, Double.parseDouble(args[2]), args[1]);
+        transaccionesMySQL.depositarPixelcoinsEmpresa((Player) player, Double.parseDouble(args[2]), args[1]);
         MySQL.desconectar();
     }
 }

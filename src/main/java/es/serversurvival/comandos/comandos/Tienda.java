@@ -1,28 +1,17 @@
 package es.serversurvival.comandos.comandos;
 
-import es.serversurvival.comandos.Comando;
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.comandos.ComandoUtilidades;
 import es.serversurvival.menus.menus.OfertasMenu;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Tienda extends Comando {
-    private final String CNombre = "tienda";
-    private final String sintaxis = "/tienda";
-    private final String ayuda = "mostrar la tienda de objetos";
-
-    public String getCNombre() {
-        return CNombre;
-    }
-
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    public void execute(Player p, String[] args){
-        OfertasMenu ofertasMenu = new OfertasMenu(p);
+@Command(name = "tienda")
+public class Tienda extends ComandoUtilidades implements CommandRunner {
+    @Override
+    public void execute(CommandSender p, String[] args){
+        OfertasMenu ofertasMenu = new OfertasMenu((Player) p);
         ofertasMenu.openMenu();
     }
 }

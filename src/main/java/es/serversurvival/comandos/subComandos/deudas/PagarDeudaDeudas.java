@@ -1,5 +1,8 @@
 package es.serversurvival.comandos.subComandos.deudas;
 
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.comandos.ComandoUtilidades;
 import es.serversurvival.mySQL.Deudas;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
@@ -8,47 +11,37 @@ import es.serversurvival.validaciones.Validaciones;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.function.Supplier;
 
 import static es.serversurvival.validaciones.Validaciones.*;
+import static org.bukkit.ChatColor.*;
 
-public class PagarDeudaDeudas extends DeudasSubCommand {
-    private String scnombre = "pagar";
-    private String sintaxis = "/deudas pagar <id>";
-    private String ayuda = "Pagar toda la deuda, la id se ve en /deudas ver";
+@Command(name = "deudas pagar")
+public class PagarDeudaDeudas extends ComandoUtilidades implements CommandRunner {
+    private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /deudas pagar <id>";
 
-    public String getSCNombre() {
-        return scnombre;
-    }
-
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    public void execute(Player player, String[] args) {
+    @Override
+    public void execute(CommandSender player, String[] args) {
         MySQL.conectar();
 
         Supplier<String> supplierPixelcoins = () -> String.valueOf(getDeuda(() -> args[1]).getPixelcoins_restantes());
 
-        ValidationResult result = ValidationsService.startValidating(args.length, Same.as(2, mensajeUsoIncorrecto()))
-                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), NaturalNumber)
+        ValidationResult result = ValidationsService.startValidating(args.length, Same.as(2, usoIncorrecto))
+                .andMayThrowException(() -> args[1], usoIncorrecto, NaturalNumber)
                 .and(esDeudor(() -> args[1], player.getName()), True.of("No eres deudor de esa deuda"))
-                .andMayThrowException(supplierPixelcoins, mensajeUsoIncorrecto(), SuficientesPixelcoins.of(player.getName(), "No tienes las suficientes pixelcoins"))
+                .andMayThrowException(supplierPixelcoins, usoIncorrecto, SuficientesPixelcoins.of(player.getName(), "No tienes las suficientes pixelcoins"))
                 .validateAll();
 
         if(result.isFailed()){
-            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
+            player.sendMessage(DARK_RED + result.getMessage());
             MySQL.desconectar();
             return;
         }
 
-        deudasMySQL.pagarDeuda(player, Integer.parseInt(args[1]));
+        deudasMySQL.pagarDeuda((Player) player, Integer.parseInt(args[1]));
         MySQL.desconectar();
     }
 

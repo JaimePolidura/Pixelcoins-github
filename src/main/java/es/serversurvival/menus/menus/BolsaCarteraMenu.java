@@ -54,7 +54,7 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
     public void onOherClick(InventoryClickEvent event) {
         ItemStack clikedItem = event.getCurrentItem();
 
-        boolean notValid = clikedItem == null || esDeTipo(event.getCurrentItem(), BOOK, NAME_TAG, REDSTONE_TORCH, GREEN_BANNER, COAL, GOLD_BLOCK)
+        boolean notValid = clikedItem == null || !esDeTipo(event.getCurrentItem(), BOOK, NAME_TAG, REDSTONE_TORCH, GREEN_BANNER, COAL, GOLD_BLOCK)
                 || clikedItem.getItemMeta().getLore().get(1) == null;
 
         if(notValid){

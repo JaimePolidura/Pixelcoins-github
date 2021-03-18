@@ -1,32 +1,18 @@
 package es.serversurvival.comandos.comandos;
 
-import es.serversurvival.comandos.Comando;
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.comandos.ComandoUtilidades;
 import es.serversurvival.menus.menus.PerfilMenu;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Perfil extends Comando {
-    private final String cnombre = "perfil";
-    private final String sintaxis = "/perfil";
-    private final String ayuda = "ver todos tus datos";
+@Command(name = "perfil")
+public class Perfil extends ComandoUtilidades implements CommandRunner {
 
     @Override
-    public String getCNombre() {
-        return cnombre;
-    }
-
-    @Override
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    @Override
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
-        PerfilMenu perfilMenu = new PerfilMenu(player);
+    public void execute(CommandSender sender, String[] args) {
+        PerfilMenu perfilMenu = new PerfilMenu((Player) sender);
         perfilMenu.openMenu();
     }
 }

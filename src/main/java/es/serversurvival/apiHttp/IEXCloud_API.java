@@ -50,7 +50,7 @@ public final class IEXCloud_API {
         String nombreValor = String.valueOf(json.get("companyName"));
 
         nombreValor = Funciones.quitarCaracteres(nombreValor, '.', ',');
-        nombreValor = Funciones.quitarPalabrasEntreEspacios(nombreValor, "group", "inc", "co", "corp");
+        nombreValor = Funciones.quitarPalabrasEntreEspacios(nombreValor, "group", "inc", "co", "corp", "holdings", "ltd", "adr");
 
         return nombreValor;
     }

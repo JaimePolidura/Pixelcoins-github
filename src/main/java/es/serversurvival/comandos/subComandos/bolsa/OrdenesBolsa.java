@@ -1,37 +1,22 @@
 package es.serversurvival.comandos.subComandos.bolsa;
 
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.menus.menus.BolsaOrdenesMenu;
 import es.serversurvival.menus.menus.Clickable;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class OrdenesBolsa extends BolsaSubCommand {
-    private final String sintaxis = "/bolsa ordenes";
-    private final String ayuda = "ver todas las ordenes pendientes para ejecutar cuando el mercado abra";
-    private final String SCNombre = "ordenes";
-
+@Command(name = "bolsa ordenes")
+public class OrdenesBolsa implements CommandRunner {
     @Override
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    @Override
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    @Override
-    public String getSCNombre() {
-        return SCNombre;
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
+    public void execute(CommandSender player, String[] args) {
         MySQL.conectar();
-        BolsaOrdenesMenu menu = new BolsaOrdenesMenu(player);
+        BolsaOrdenesMenu menu = new BolsaOrdenesMenu((Player) player);
         MySQL.desconectar();
     }
 }

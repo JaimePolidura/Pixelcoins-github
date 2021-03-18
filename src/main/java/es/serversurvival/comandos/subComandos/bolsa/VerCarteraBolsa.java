@@ -1,34 +1,24 @@
 package es.serversurvival.comandos.subComandos.bolsa;
 
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.comandos.ComandoUtilidades;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import es.serversurvival.util.Funciones;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class VerCarteraBolsa extends BolsaSubCommand {
-    private final String SCNombre = "vercartera";
-    private final String sintaxis = "/bolsa vercartera <jugador>";
-    private final String ayuda = "ver la cartera de acciones de otros jugadores";
-
-    public String getSCNombre() {
-        return SCNombre;
-    }
-
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    public void execute(Player player, String[] args) {
+@Command(name = "bolsa vercartera")
+public class VerCarteraBolsa extends ComandoUtilidades implements CommandRunner {
+    @Override
+    public void execute(CommandSender player, String[] args) {
         if (args.length != 2) {
-            player.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: " + this.sintaxis);
+            player.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: /bolsa vercartera <jugador>");
             return;
         }
         String nombreJugadorAVer = args[1];

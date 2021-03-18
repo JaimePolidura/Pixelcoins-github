@@ -1,5 +1,8 @@
 package es.serversurvival.comandos.subComandos.empleado;
 
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.comandos.ComandoUtilidades;
 import es.serversurvival.mySQL.Empresas;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
@@ -7,34 +10,23 @@ import es.serversurvival.validaciones.Validaciones;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.function.Supplier;
 
 import static es.serversurvival.validaciones.Validaciones.*;
 
-public class IrseEmpleos extends EmpleosSubCommand {
-    private final String SCNombre = "irse";
-    private final String sintaxis = "/empleos irse <empresa>";
-    private final String ayuda = "irse de un trabajo";
+@Command(name = "empleos irse")
+public class IrseEmpleos extends ComandoUtilidades implements CommandRunner {
+    private final String usoIncorrecto = ChatColor.DARK_RED + "Uso incorrecto: /empleos irse <empresa>";
 
-    public String getSCNombre() {
-        return SCNombre;
-    }
-
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    public void execute(Player jugadorPlayer, String[] args) {
+    @Override
+    public void execute(CommandSender jugadorPlayer, String[] args) {
         MySQL.conectar();
 
-        ValidationResult result = ValidationsService.startValidating(args.length, Same.as(2, mensajeUsoIncorrecto()))
-                .andMayThrowException(() -> empresasMySQL.getEmpresa(args[1]) != null, mensajeUsoIncorrecto(), True.of("Esa empresa no exsiste"))
+        ValidationResult result = ValidationsService.startValidating(args.length, Same.as(2, usoIncorrecto))
+                .andMayThrowException(() -> empresasMySQL.getEmpresa(args[1]) != null, usoIncorrecto, True.of("Esa empresa no exsiste"))
                 .and(trabajaEnLaEmpresa(() -> args[1], jugadorPlayer.getName()), True.of("Ese jugador no trabaja en la empresa"))
                 .validateAll();
 
@@ -44,7 +36,7 @@ public class IrseEmpleos extends EmpleosSubCommand {
             return;
         }
 
-        empleadosMySQL.irseEmpresa(args[1], jugadorPlayer);
+        empleadosMySQL.irseEmpresa(args[1], (Player) jugadorPlayer);
         MySQL.desconectar();
     }
 

@@ -1,35 +1,22 @@
 package es.serversurvival.comandos.comandos;
 
-import es.serversurvival.comandos.Comando;
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.comandos.ComandoUtilidades;
 import es.serversurvival.mySQL.tablasObjetos.Cuenta;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CCuenta extends Comando {
-    private final String CNombre = "cuenta";
-    private final String sintaxis = "/cuenta";
-    private final String ayuda = "ver todas tu numero de cuenta para iniciar sesion";
+@Command(name = "cuenta")
+public class CCuenta extends ComandoUtilidades implements CommandRunner {
 
     @Override
-    public String getCNombre() {
-        return CNombre;
-    }
-
-    @Override
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    @Override
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
+    public void execute(CommandSender commandSender, String[] strings) {
         cuentasMySQL.conectar();
 
+        Player player = (Player) commandSender;
         Cuenta cuenta = cuentasMySQL.getCuenta(player.getName());
         Jugador jugador = jugadoresMySQL.getJugador(player.getName());
 

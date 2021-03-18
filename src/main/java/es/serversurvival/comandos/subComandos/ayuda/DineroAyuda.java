@@ -1,28 +1,17 @@
 package es.serversurvival.comandos.subComandos.ayuda;
 
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.mySQL.Transacciones;
 import es.serversurvival.mySQL.enums.CambioPixelcoins;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class DineroAyuda extends AyudaSubCommand {
-    private final String SCNombre = "dinero";
-    private final String sintaxis = "/ayuda dinero";
-    private final String ayuda = "";
-
-    public String getSCNombre() {
-        return SCNombre;
-    }
-
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    public void execute(Player p, String[] args) {
+@Command(name = "ayuda dinero")
+public class DineroAyuda implements CommandRunner {
+    @Override
+    public void execute(CommandSender p, String[] args) {
         p.sendMessage(ChatColor.YELLOW + " Puedes intercambiar 1 diamante por " + CambioPixelcoins.DIAMANTE + " pixelcoins o 1 un bloque de cuarzo por " +
                 CambioPixelcoins.CUARZO + " pixelcoins o lapislazuli por " + CambioPixelcoins.LAPISLAZULI + " pixelcoins y viceversa  en los wither en " +
                 ChatColor.WHITE + "/warp Spawn " + ChatColor.YELLOW + ". Comandos de pixelcoins:");

@@ -1,5 +1,8 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.comandos.ComandoUtilidades;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.enums.TipoSueldo;
 import es.serversurvival.util.Funciones;
@@ -13,38 +16,25 @@ import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static es.serversurvival.validaciones.Validaciones.*;
+import static org.bukkit.ChatColor.DARK_RED;
 
-public class ContratarEmpresas extends EmpresasSubCommand {
-    private final String SCNombre = "contratar";
-    private final String sintaxis = "/empresas contratar <jugador> <empresa> <sueldo> <tipo sueldo (/ayuda empresas)> [cargo]";
-    private final String ayuda = "Contratar a un juagdor a tu empresa: <sueldo> cantidad de pixel coins que le vas a pagar, <tipo> frequencia de pago de sueldo (/ayuda empresario), [cargo] es opcional";
-
-    public String getSCNombre() {
-        return SCNombre;
-    }
+@Command(name = "empresas contratar")
+public class ContratarEmpresas extends ComandoUtilidades implements CommandRunner {
+    private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /empresas contratar <jugador> <empresa> <sueldo> <tipo sueldo (/ayuda empresas)> [cargo]";
 
     @Override
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    @Override
-    public String getAyuda() {
-        return null;
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
+    public void execute(CommandSender player, String[] args) {
         MySQL.conectar();
 
-        ValidationResult result = ValidationsService.startValidating(args.length == 5 || args.length == 6, True.of(mensajeUsoIncorrecto()))
-                .andMayThrowException(() -> args[3], mensajeUsoIncorrecto(), NaturalNumber)
-                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), JugadorOnline, NoLeHanEnviadoSolicitud, NoTrabajaEmpresa.en(() -> args[2]), NotEqualsIgnoreCase.of(player.getName(), "No te puedes contratar a ti mismo"))
-                .andMayThrowException(() -> TipoSueldo.codigoCorrecto(args[4]), mensajeUsoIncorrecto(), True.of("El tipo de sueldo solo puede ser d: cdda dia, s: cada semana, 2s: cada dos semanas, m: cada mes"))
-                .andMayThrowException(() -> args[2], mensajeUsoIncorrecto(), OwnerDeEmpresa.of(player.getName()))
+        ValidationResult result = ValidationsService.startValidating(args.length == 5 || args.length == 6, True.of(usoIncorrecto))
+                .andMayThrowException(() -> args[3], usoIncorrecto, NaturalNumber)
+                .andMayThrowException(() -> args[1], usoIncorrecto, JugadorOnline, NoLeHanEnviadoSolicitud, NoTrabajaEmpresa.en(() -> args[2]), NotEqualsIgnoreCase.of(player.getName(), "No te puedes contratar a ti mismo"))
+                .andMayThrowException(() -> TipoSueldo.codigoCorrecto(args[4]), usoIncorrecto, True.of("El tipo de sueldo solo puede ser d: cdda dia, s: cada semana, 2s: cada dos semanas, m: cada mes"))
+                .andMayThrowException(() -> args[2], usoIncorrecto, OwnerDeEmpresa.of(player.getName()))
                 .validateAll();
 
         if(result.isFailed()){

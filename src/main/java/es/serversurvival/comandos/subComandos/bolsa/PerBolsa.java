@@ -1,35 +1,21 @@
 package es.serversurvival.comandos.subComandos.bolsa;
 
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.comandos.ComandoUtilidades;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class PerBolsa extends BolsaSubCommand{
-    private final String SCNombre = "per";
-    private final String sintaxis = "/bolsa per <ticker>";
-    private final String ayuda = "Ver el ratio del PER mediante el ticker de la accion";
-
+@Command(name = "bolsa per")
+public class PerBolsa extends ComandoUtilidades implements CommandRunner {
     @Override
-    public String getSCNombre() {
-        return SCNombre;
-    }
-
-    @Override
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    @Override
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
+    public void execute(CommandSender sender, String[] args) {
         if(args.length != 2){
-            player.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: " + sintaxis);
+            sender.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: /bolsa per <ticker>");
             return;
         }
         String ticker = args[1];
-        llamadasApiMySQL.mostrarRatioPer(player, ticker);
+        llamadasApiMySQL.mostrarRatioPer((Player) sender, ticker);
     }
 }

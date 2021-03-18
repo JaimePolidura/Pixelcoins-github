@@ -1,29 +1,20 @@
 package es.serversurvival.comandos.comandos;
 
-import es.serversurvival.comandos.Comando;
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.comandos.ComandoUtilidades;
 import es.serversurvival.mySQL.*;
 import es.serversurvival.util.Funciones;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Dinero extends Comando {
-    private final String CNombre = "dinero";
-    private final String sintaxis = "/dinero";
-    private final String ayuda = "Ver todas las pixelcoins que tienes";
+@Command(name = "dinero")
+public class Dinero extends ComandoUtilidades implements CommandRunner{
 
-    public String getCNombre() {
-        return CNombre;
-    }
-
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    public void execute(Player player, String[] args) {
+    @Override
+    public void execute(CommandSender commandSender, String[] strings) {
+        Player player = (Player) commandSender;
         String nombreJugador = player.getName();
 
         MySQL.conectar();

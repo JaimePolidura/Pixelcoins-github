@@ -1,52 +1,38 @@
 package es.serversurvival.comandos.comandos;
 
-import es.serversurvival.comandos.Comando;
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.comandos.ComandoUtilidades;
 import es.serversurvival.mySQL.MySQL;
-import es.serversurvival.mySQL.enums.TipoTransaccion;
-import es.serversurvival.util.Funciones;
 import main.ValidationResult;
 import main.ValidationsService;
-import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static es.serversurvival.validaciones.Validaciones.*;
+import static org.bukkit.ChatColor.*;
 
-public class Pagar extends Comando {
-    private final String cnombre = "pagar";
-    private final String sintaxis = "/pagar <jugador> <pixelcoins>";
-    private final String ayuda = "Pagar a un jugador un numero de pixelcoins";
-
-    public String getCNombre() {
-        return cnombre;
-    }
+@Command(name = "pagar")
+public class Pagar extends ComandoUtilidades implements CommandRunner {
+    private final String usoIncorrecto = DARK_RED +"/pagar <jugador> <pixelcoins>";
 
     @Override
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    @Override
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    @Override
-    public void execute(Player player, String[] args) {
-        String senderName = player.getName();
+    public void execute(CommandSender sender, String[] args) {
+        String senderName = sender.getName();
 
         MySQL.conectar();
         ValidationResult result = ValidationsService.startValidating(args.length, Same.as(2, "Same"))
                 .andMayThrowException(() -> args[1], "Introduce un numero no texto", PositiveNumber, SuficientesPixelcoins.of(senderName, () -> args[1]))
-                .andMayThrowException(() -> args[0], mensajeUsoIncorrecto(), JugadorRegistrado, NotEqualsIgnoreCase.of(senderName))
+                .andMayThrowException(() -> args[0],usoIncorrecto , JugadorRegistrado, NotEqualsIgnoreCase.of(senderName))
                 .validateAll();
 
         if(result.isFailed()){
-            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
+            sender.sendMessage(DARK_RED + result.getMessage());
             MySQL.desconectar();
             return;
         }
 
-        transaccionesMySQL.realizarPagoManual(player.getName(), args[0], Double.parseDouble(args[1]), player, "");
+        transaccionesMySQL.realizarPagoManual(sender.getName(), args[0], Double.parseDouble(args[1]), (Player) sender, "");
         MySQL.desconectar();
     }
 }

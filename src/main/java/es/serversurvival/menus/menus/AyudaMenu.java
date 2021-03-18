@@ -1,7 +1,6 @@
 package es.serversurvival.menus.menus;
 
-import es.serversurvival.comandos.CommandManager;
-import es.serversurvival.comandos.SubComando;
+import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.subComandos.ayuda.*;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
@@ -42,15 +41,15 @@ public class AyudaMenu extends Menu implements Clickable {
 
         String tipoAyuda = getTipoAyuda(event.getCurrentItem().getItemMeta().getDisplayName());
         if(tipoAyuda != null){
-            AyudaSubCommand ayudaSubCommand = getCommandOfAyuda(tipoAyuda);
-            ayudaSubCommand.execute((Player) event.getWhoClicked(), null);
+            CommandRunner ayudaSubCommand = getCommandOfAyuda(tipoAyuda);
+            ayudaSubCommand.execute(event.getWhoClicked(), null);
 
             ((Player) event.getWhoClicked()).performCommand("/ayuda " + tipoAyuda.toLowerCase());
             event.getWhoClicked().closeInventory();
         }
     }
 
-    private AyudaSubCommand getCommandOfAyuda (String nombreComando) {
+    private CommandRunner getCommandOfAyuda (String nombreComando) {
         switch ((nombreComando)) {
             case "JUGAR":
                 return new JugarAyuda();

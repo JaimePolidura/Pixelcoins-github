@@ -1,34 +1,32 @@
 package es.serversurvival.main;
 
-import es.serversurvival.comandos.CommandManager;
+import es.jaimetruman.commands.CommandMapper;
 import es.serversurvival.eventosMinecraft.*;
 import es.serversurvival.mySQL.*;
 import es.serversurvival.socketWeb.ServerSocketWeb;
 import es.serversurvival.task.*;
-import org.bukkit.ChatColor;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class Pixelcoin extends JavaPlugin {
-    private static CommandManager commandManager = new CommandManager();
+import static org.bukkit.ChatColor.*;
 
+public final class Pixelcoin extends JavaPlugin {
     private ConversacionesWeb conversacionesWebMySQL = ConversacionesWeb.INSTANCE;
     private Deudas deudasMySQL = Deudas.INSTANCE;
     private Empleados empleadosMySQL = Empleados.INSTANCE;
 
     private static Pixelcoin plugin;
+
     public static Pixelcoin getInstance() {
         return plugin;
     }
-
-    public static CommandManager getCommandManager () {return commandManager;}
 
     public void onEnable() {
         plugin = this;
 
         getLogger().info("------------Plugin activado -------------");
-        getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "------------------------------");
+        getServer().getConsoleSender().sendMessage(GREEN + "------------------------------");
 
         MySQL.conectar();
         deudasMySQL.pagarDeudas();
@@ -36,9 +34,9 @@ public final class Pixelcoin extends JavaPlugin {
         conversacionesWebMySQL.borrarTodasConversacionesWeb();
         MySQL.desconectar();
 
-        getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "------------------------------");
+        this.setUpCommands();
 
-        setUpComandos(commandManager);
+        getServer().getConsoleSender().sendMessage(GREEN + "------------------------------");
         setUpListeners();
         setUpTasks();
     }
@@ -81,32 +79,20 @@ public final class Pixelcoin extends JavaPlugin {
         rabbitMQConsumer.runTaskAsynchronously(this);
     }
 
+    private void setUpCommands () {
+        CommandMapper.create(
+                "es.serversurvival.comandos",
+                DARK_RED + "Comando no encontrado /ayuda",
+                DARK_RED + "Paara ejecutar ese comando, tienes que estar en el servidor"
+        );
+    }
+
     private void setUpListeners() {
         getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
         getServer().getPluginManager().registerEvents(new PlayerInteract(), this);
         getServer().getPluginManager().registerEvents(new PlayerInventoryClick(), this);
         getServer().getPluginManager().registerEvents(new PlayerCloseInventory(), this);
         getServer().getPluginManager().registerEvents(new PlayerQuit(), this);
-    }
-
-    private void setUpComandos(CommandExecutor commandExecutor) {
-        getCommand("pagar").setExecutor(commandExecutor);
-        getCommand("dinero").setExecutor(commandExecutor);
-        getCommand("estadisticas").setExecutor(commandExecutor);
-        getCommand("top").setExecutor(commandExecutor);
-        getCommand("deudas").setExecutor(commandExecutor);
-        getCommand("tienda").setExecutor(commandExecutor);
-        getCommand("vender").setExecutor(commandExecutor);
-        getCommand("mensajes").setExecutor(commandExecutor);
-        getCommand("empresas").setExecutor(commandExecutor);
-        getCommand("comprar").setExecutor(commandExecutor);
-        getCommand("empleos").setExecutor(commandExecutor);
-        getCommand("ayuda").setExecutor(commandExecutor);
-        getCommand("bolsa").setExecutor(commandExecutor);
-        getCommand("cuenta").setExecutor(commandExecutor);
-        getCommand("perfil").setExecutor(commandExecutor);
-        getCommand("venderjugador").setExecutor(commandExecutor);
-        getCommand("re").setExecutor(commandExecutor);
     }
 
     @Override

@@ -1,14 +1,13 @@
 package es.serversurvival.comandos.comandos;
 
-import com.sun.deploy.security.ValidationState;
-import es.serversurvival.comandos.Comando;
-import es.serversurvival.mySQL.MySQL;
-import es.serversurvival.util.Funciones;
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.comandos.ComandoUtilidades;
 import es.serversurvival.mySQL.Ofertas;
-import es.serversurvival.validaciones.misValidaciones.NoHaSidoCompradoItem;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,24 +15,12 @@ import java.util.*;
 
 import static es.serversurvival.validaciones.Validaciones.*;
 
-public class Vender extends Comando {
-    private final String CNombre = "vender";
-    private final String sintaxis = "/vender <precio>";
-    private final String ayuda = "vender objetos en la tienda a un precio, para retirarlos en /tienda";
+@Command(name = "vender")
+public class Vender extends ComandoUtilidades implements CommandRunner {
 
-    public String getCNombre() {
-        return CNombre;
-    }
-
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    public void execute(Player player, String[] args) {
+    @Override
+    public void execute(CommandSender sender, String[] args) {
+        Player player = (Player) sender;
         String nombreItemMano = player.getInventory().getItemInMainHand().getType().toString();
         ItemStack itemMano = player.getInventory().getItemInMainHand();
         
@@ -41,7 +28,7 @@ public class Vender extends Comando {
 
         ValidationResult result = ValidationsService.startValidating(args.length, Same.as(1))
                 .and(nombreItemMano, NotEqualsIgnoreCase.of("AIR", "Tienes que tener un objeto en la mano"), ItemNotBaneadoTienda)
-                .andMayThrowException(() -> args[0], "Uso incorrecto " + this.sintaxis, PositiveNumber)
+                .andMayThrowException(() -> args[0], "Uso incorrecto " + "/vender <precio>", PositiveNumber)
                 .and(itemMano, NoHaSidoCompradoItem)
                 .and(player.getName(), SuficientesEspaciosTienda)
                 .validateAll();

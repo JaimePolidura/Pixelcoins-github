@@ -1,5 +1,8 @@
 package es.serversurvival.comandos.subComandos.deudas;
 
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.comandos.ComandoUtilidades;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.MenuManager;
@@ -9,44 +12,34 @@ import main.ValidationsService;
 import main.validators.booleans.False;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.function.Supplier;
 
 import static es.serversurvival.validaciones.Validaciones.*;
+import static org.bukkit.ChatColor.*;
 
-public class PrestarDeudas extends DeudasSubCommand {
-    private final String scnombre = "prestar";
-    private final String sintaxis = "/deudas prestar <jugador> <dinero> <dias> [interes]";
-    private final String ayuda = "prestar una deuda en pixelcoins en un plazo de unos diads. /ayuda deudas";
+@Command(name = "deudas prestar")
+public class PrestarDeudas extends ComandoUtilidades implements CommandRunner {
+    private final String mensajeIncorrecto = DARK_RED + "Uso incorrecto: /deudas prestar <jugador> <dinero> <dias> [interes]";
 
-    public String getSCNombre() {
-        return scnombre;
-    }
-
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    public void execute(Player player, String[] args) {
+    @Override
+    public void execute(CommandSender player, String[] args) {
         MySQL.conectar();
 
-        ValidationResult result = ValidationsService.startValidating(args.length == 4 || args.length == 5, True.of(mensajeUsoIncorrecto()))
-                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), JugadorOnline, NotEqualsIgnoreCase.of(player.getName(), "No puedes ser tu mimsmo"))
-                .andMayThrowException(() -> args[2], mensajeUsoIncorrecto(), NaturalNumber)
-                .andMayThrowException(() -> args[3], mensajeUsoIncorrecto(), NaturalNumber)
+        ValidationResult result = ValidationsService.startValidating(args.length == 4 || args.length == 5, True.of(mensajeIncorrecto))
+                .andMayThrowException(() -> args[1], mensajeIncorrecto, JugadorOnline, NotEqualsIgnoreCase.of(player.getName(), "No puedes ser tu mimsmo"))
+                .andMayThrowException(() -> args[2], mensajeIncorrecto, NaturalNumber)
+                .andMayThrowException(() -> args[3], mensajeIncorrecto, NaturalNumber)
                 .andIfExists(() -> args[4], NaturalNumber)
-                .andMayThrowException(() -> Integer.parseInt(args[2]) >= Integer.parseInt(args[3]), mensajeUsoIncorrecto(), True.of("Los dias no pueden ser superior a las pixelcoins"))
-                .andMayThrowException(() -> MenuManager.getByPlayer(Bukkit.getPlayer(args[1]).getName()) != null, mensajeUsoIncorrecto(), False.of("Ya le han enviado una solicitud"))
-                .andMayThrowException(pixelcoinsDeudaConIntereses(args), mensajeUsoIncorrecto(), SuficientesPixelcoins.of(player.getName()))
+                .andMayThrowException(() -> Integer.parseInt(args[2]) >= Integer.parseInt(args[3]), mensajeIncorrecto, True.of("Los dias no pueden ser superior a las pixelcoins"))
+                .andMayThrowException(() -> MenuManager.getByPlayer(Bukkit.getPlayer(args[1]).getName()) != null, mensajeIncorrecto, False.of("Ya le han enviado una solicitud"))
+                .andMayThrowException(pixelcoinsDeudaConIntereses(args), mensajeIncorrecto, SuficientesPixelcoins.of(player.getName()))
                 .validateAll();
 
         if(result.isFailed()){
-            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
+            player.sendMessage(DARK_RED + result.getMessage());
             MySQL.desconectar();
             return;
         }

@@ -1,26 +1,15 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.menus.menus.EmpresasVerTodasMenu;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class VerTodasEmpresas extends EmpresasSubCommand {
-    private final String SCNombre = "vertodas";
-    private final String sintaxis = "/empresas vertodas";
-    private final String ayuda = "ver todas las empresas creadas hasta el momento";
-
-    public String getSCNombre() {
-        return SCNombre;
-    }
-
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    public void execute(Player p, String[] args) {
-        EmpresasVerTodasMenu menu = new EmpresasVerTodasMenu(p);
+@Command(name = "empresas vertodas")
+public class VerTodasEmpresas implements CommandRunner {
+    @Override
+    public void execute(CommandSender sender, String[] args) {
+        EmpresasVerTodasMenu menu = new EmpresasVerTodasMenu((Player) sender);
     }
 }

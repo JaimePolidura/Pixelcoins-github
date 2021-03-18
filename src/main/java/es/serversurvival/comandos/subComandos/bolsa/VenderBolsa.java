@@ -1,5 +1,8 @@
 package es.serversurvival.comandos.subComandos.bolsa;
 
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.comandos.ComandoUtilidades;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.enums.TipoPosicion;
@@ -7,38 +10,28 @@ import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static es.serversurvival.util.Funciones.*;
 import static es.serversurvival.validaciones.Validaciones.*;
+import static org.bukkit.ChatColor.*;
 
-public class VenderBolsa extends BolsaSubCommand {
-    private final String SCNombre = "vender";
-    private final String sintaxis = "/bolsa vender <id> [numero a vender]";
-    private final String ayuda = "Vender acciones, bitcoin, barriles etc con una id que se ven en /bolsa cartera y un numero de acciones a vender";
+@Command(name = "bolsa vender")
+public class VenderBolsa extends ComandoUtilidades implements CommandRunner {
+    private final String mensajeIncorrecto = DARK_RED + "Uso incorrecto: /bolsa vender <id> [numero a vender]";
 
-    public String getSCNombre() {
-        return SCNombre;
-    }
-
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    public void execute(Player player, String[] args) {
+    @Override
+    public void execute(CommandSender player, String[] args) {
         MySQL.conectar();
 
-        ValidationResult result =ValidationsService.startValidating(args.length != 3 && args.length != 2, False.of(mensajeUsoIncorrecto()))
-                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), NaturalNumber, OwnerPosicionAbierta.de(player.getName(), TipoPosicion.LARGO))
+        ValidationResult result =ValidationsService.startValidating(args.length != 3 && args.length != 2, False.of(mensajeIncorrecto))
+                .andMayThrowException(() -> args[1], mensajeIncorrecto, NaturalNumber, OwnerPosicionAbierta.de(player.getName(), TipoPosicion.LARGO))
                 .andIfExists(() -> args[2], NaturalNumber)
                 .validateAll();
 
         if(result.isFailed()){
-            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
+            player.sendMessage(DARK_RED + result.getMessage());
             MySQL.desconectar();
             return;
         }
@@ -60,7 +53,7 @@ public class VenderBolsa extends BolsaSubCommand {
         if(mercadoEstaAbierto()){
             transaccionesMySQL.venderPosicion(posicionAVender ,cantidad , player.getName());
         }else{
-            ordenesMySQL.abrirOrdenVentaLargo(player, args[1], cantidad);
+            ordenesMySQL.abrirOrdenVentaLargo((Player) player, args[1], cantidad);
         }
 
         MySQL.desconectar();

@@ -1,5 +1,8 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.comandos.ComandoUtilidades;
 import es.serversurvival.mySQL.Empresas;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
@@ -7,33 +10,23 @@ import es.serversurvival.validaciones.Validaciones;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static es.serversurvival.validaciones.Validaciones.*;
+import static org.bukkit.ChatColor.DARK_RED;
 
-public class DespedirEmpresas extends EmpresasSubCommand {
-    private final String SCNombre = "despedir";
-    private final String sintaxis = "/empresas despedir <empresa> <jugador> <razon>";
-    private final String ayuda = "despedir a un jugador de tu propia empresa";
+@Command(name = "empresas despedir")
+public class DespedirEmpresas extends ComandoUtilidades implements CommandRunner {
+    private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /empresas despedir <empresa> <jugador> <razon>";
 
-    public String getSCNombre() {
-        return SCNombre;
-    }
-
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    public void execute(Player player, String[] args) {
+    @Override
+    public void execute(CommandSender player, String[] args) {
         MySQL.conectar();
 
-        ValidationResult result = ValidationsService.startValidating(args.length == 4, True.of(mensajeUsoIncorrecto()))
-                .andMayThrowException(() -> args[2], mensajeUsoIncorrecto(), TrabajaEmpresa.en(() -> args[1]), NotEqualsIgnoreCase.of(player.getName(), "No te puedes despedir a ti mismo"))
-                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), OwnerDeEmpresa.of(player.getName()))
+        ValidationResult result = ValidationsService.startValidating(args.length == 4, True.of(usoIncorrecto))
+                .andMayThrowException(() -> args[2], usoIncorrecto, TrabajaEmpresa.en(() -> args[1]), NotEqualsIgnoreCase.of(player.getName(), "No te puedes despedir a ti mismo"))
+                .andMayThrowException(() -> args[1], usoIncorrecto, OwnerDeEmpresa.of(player.getName()))
                 .validateAll();
 
         if(result.isFailed()){
@@ -42,7 +35,7 @@ public class DespedirEmpresas extends EmpresasSubCommand {
             return;
         }
 
-        empleadosMySQL.despedir(args[1], args[2], args[3], player);
+        empleadosMySQL.despedir(args[1], args[2], args[3], (Player) player);
         MySQL.desconectar();
     }
 }

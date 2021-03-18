@@ -2,11 +2,10 @@ package es.serversurvival.comandos;
 
 import es.serversurvival.mySQL.*;
 import es.serversurvival.util.Funciones;
-import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
 
-public abstract class Comando {
+public class ComandoUtilidades {
     protected static Cuentas cuentasMySQL = Cuentas.INSTANCE;
     protected static Empleados empleadosMySQL = Empleados.INSTANCE;
     protected static Empresas empresasMySQL = Empresas.INSTANCE;
@@ -22,17 +21,5 @@ public abstract class Comando {
     protected static ConversacionesWeb conversacionesWebMySQL = ConversacionesWeb.INSTANCE;
     protected static OrdenesPreMarket ordenesMySQL = OrdenesPreMarket.INSTANCE;
 
-    protected String mensajeUsoIncorrecto() {
-        return "Uso incorrecto " + this.getSintaxis();
-    }
-
     public DecimalFormat formatea = Funciones.FORMATEA;
-
-    public abstract String getCNombre();
-
-    public abstract String getSintaxis();
-
-    public abstract String getAyuda();
-
-    public abstract void execute(Player player, String[] args);
 }

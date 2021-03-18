@@ -1,26 +1,17 @@
 package es.serversurvival.comandos.subComandos.ayuda;
 
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.comandos.ComandoUtilidades;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class BolsaAyuda extends AyudaSubCommand {
-    private final String SCNombre = "bolsa";
-    private final String sintaxis = "/ayuda bolsa";
-    private final String ayuda = "";
+@Command(name = "ayuda bolsa")
+public class BolsaAyuda implements CommandRunner {
 
-    public String getSCNombre() {
-        return SCNombre;
-    }
-
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    public void execute(Player player, String[] args) {
+    @Override
+    public void execute(CommandSender player, String[] args) {
         player.sendMessage("     ");
         player.sendMessage(ChatColor.GOLD + "Se puede invertir en acciones de empresas de verdad que cotizen en estados unidos para ello puedes hacer /bolsa valores, se te abrira un menu " +
                 "con diferentes accines de ejemplo por ejemplo si quieres comprar acciones de Santander clickearias en el item y seleccionarias el numero de acciones, supongamos que la accion esta a " +
@@ -58,6 +49,5 @@ public class BolsaAyuda extends AyudaSubCommand {
         player.sendMessage("    ");
         player.sendMessage("/bolsa dividendo [ticker] " + ChatColor.GOLD + "Si no pones el ticker, te muestra los proximos dividendos para tu cartera de acciones. Si pones el ticker te muestra el proximo dividendo para esa accion.");
         player.sendMessage("    ");
-
     }
 }

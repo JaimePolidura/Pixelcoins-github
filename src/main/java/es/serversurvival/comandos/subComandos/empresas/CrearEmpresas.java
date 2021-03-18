@@ -1,5 +1,8 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.comandos.ComandoUtilidades;
 import es.serversurvival.mySQL.Empresas;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
@@ -8,33 +11,23 @@ import es.serversurvival.validaciones.Validaciones;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static es.serversurvival.validaciones.Validaciones.*;
+import static org.bukkit.ChatColor.DARK_RED;
 
-public class CrearEmpresas extends EmpresasSubCommand {
-    private final String scnombre = "crear";
-    private final String sintaxis = "/empresas crear <nombre> <descripccion...>";
-    private final String ayuda = "Crear una empresa con una descripccion";
+@Command(name = "empresas crear")
+public class CrearEmpresas extends ComandoUtilidades implements CommandRunner {
+    private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /empresas crear <nombre> <descripccion...>";
 
-    public String getSCNombre() {
-        return scnombre;
-    }
-
-    public String getSintaxis() {
-        return sintaxis;
-    }
-
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    public void execute(Player jugadorPlayer, String[] args) {
+    @Override
+    public void execute(CommandSender jugadorPlayer, String[] args) {
         MySQL.conectar();
 
-        ValidationResult result = ValidationsService.startValidating(args.length >= 3, True.of(mensajeUsoIncorrecto()))
-                .andMayThrowException(() -> args[1], mensajeUsoIncorrecto(), NombreEmpresaNoPillado, MaxLength.of(Empresas.CrearEmpresaNombreLonMax, "El nombre no puede ser tan grande"))
-                .andMayThrowException(() -> Funciones.buildStringFromArray(args, 2), mensajeUsoIncorrecto(), MaxLength.of(Empresas.CrearEmpresaDescLonMax, "La descripcion no puede ser tan larga"))
+        ValidationResult result = ValidationsService.startValidating(args.length >= 3, True.of(usoIncorrecto))
+                .andMayThrowException(() -> args[1], usoIncorrecto, NombreEmpresaNoPillado, MaxLength.of(Empresas.CrearEmpresaNombreLonMax, "El nombre no puede ser tan grande"))
+                .andMayThrowException(() -> Funciones.buildStringFromArray(args, 2), usoIncorrecto, MaxLength.of(Empresas.CrearEmpresaDescLonMax, "La descripcion no puede ser tan larga"))
                 .and(empresasMySQL.getEmpresasOwner(jugadorPlayer.getName()).size() + 1 <= Empresas.nMaxEmpresas, True.of("No puedes tener tantas empresas"))
                 .validateAll();
 
@@ -44,7 +37,7 @@ public class CrearEmpresas extends EmpresasSubCommand {
             return;
         }
 
-        empresasMySQL.crearEmpresa(args[1], jugadorPlayer, Funciones.buildStringFromArray(args, 2));
+        empresasMySQL.crearEmpresa(args[1], (Player) jugadorPlayer, Funciones.buildStringFromArray(args, 2));
 
         MySQL.desconectar();
     }
