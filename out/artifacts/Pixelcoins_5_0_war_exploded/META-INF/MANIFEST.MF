@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Created-By: IntelliJ IDEA
-Built-By: jaime
-Build-Jdk: 14.0.1
-Implementation-Title: demo
-Implementation-Version: 5.0
-Implementation-Vendor-Id: es.serversurvival
-Main-Class: ${start-class}
-

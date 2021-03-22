@@ -1,0 +1,22 @@
+name: PixelCoins
+main: es.serversurvival.config.Pixelcoin
+version: 1.0
+commands:
+  dinero:
+    description: Comando para ver tu dinero
+    usage: /<command>
+  pagar:
+    description: pagar dinero a otro jugador
+    usage: /<command> <nombre jugador> <cantidad>
+  topricos:
+    description: mostrar los 3 más ricos del servidor
+    usage: /<command>
+  toppobres:
+    description: mostrar los 3 más pobres del servidor
+    usage: /<command>
+  verdinero:
+    description: ver pixelcoins de los jugadores
+    usage: /<command> <jugador>
+  setdinero:
+    description: fijar dinero de jugador
+    usage: /<command> <nombre jugador> <cantidad a poner>
