@@ -1,25 +1,31 @@
 package es.serversurvival.main;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.security.SecureRandom;
+import java.net.HttpURLConnection;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import es.serversurvival.objetos.mySQL.*;
 import es.serversurvival.objetos.mySQL.tablasObjetos.Deuda;
 import es.serversurvival.objetos.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.objetos.mySQL.tablasObjetos.Jugador;
 import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import net.md_5.bungee.api.ChatColor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 
 public final class Funciones {
 
-    //Conseguir los espacios libres de un jugador
+    private Funciones () {}
+
     public static int espaciosLibres(Inventory inventory) {
         int el = 36;
         for (ItemStack is : inventory.getContents()) {
@@ -32,7 +38,6 @@ public final class Funciones {
         return el;
     }
 
-    //Comparar dos locations
     public static boolean comparar(Location loc1, Location loc2) {
         if (loc1.getBlockX() == loc2.getBlockX() && loc1.getBlockY() == loc2.getBlockY() && loc1.getBlockZ() == loc2.getBlockZ()) {
             return true;
@@ -41,7 +46,6 @@ public final class Funciones {
         }
     }
 
-    //Delvolver con array todos los slots libres que ocupara un numero de bloques
     public static int[] slotsItem(int n, int slotsLibres) {
         int[] arr = new int[slotsLibres];
 
@@ -57,7 +61,6 @@ public final class Funciones {
         return arr;
     }
 
-    //Aumentar cantidad en un %
     public static int interes(int num, int interes) {
         double n = (double) num;
         double i = (double) interes;
@@ -120,97 +123,25 @@ public final class Funciones {
         return (b - a) / a * 100;
     }
 
-    public static HashMap<String, Double> sortByValueCre(HashMap<String, Double> hm) {
-        // Create a list from elements of HashMap
-        List<Map.Entry<String, Double>> list = new LinkedList<Map.Entry<String, Double>>(hm.entrySet());
+    public static<K, V extends Comparable<V>> HashMap<K, V> sortMapByValueDecre(Map<K, V> hm) {
+        List<Map.Entry<K, V>> list = new LinkedList<>(hm.entrySet());
 
-        // Sort the list
-        Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {
-            public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
-                return (o1.getValue()).compareTo(o2.getValue());
-            }
-        });
+        list.sort((o1, o2) -> (o2.getValue().compareTo(o1.getValue())));
 
-        // put data from sorted list to hashmap
-        HashMap<String, Double> temp = new LinkedHashMap<String, Double>();
-        for (Map.Entry<String, Double> aa : list) {
+        HashMap<K, V> temp = new LinkedHashMap<>();
+        for (Map.Entry<K, V> aa : list) {
             temp.put(aa.getKey(), aa.getValue());
         }
         return temp;
     }
 
-    public static HashMap<String, Double> sortByValueDecre(HashMap<String, Double> hm) {
-        // Create a list from elements of HashMap
-        List<Map.Entry<String, Double>> list = new LinkedList<Map.Entry<String, Double>>(hm.entrySet());
-        Collections.reverseOrder();
+    public static<K, V extends Comparable<V>> HashMap<K, V> sortMapByValueCrec(Map<K, V> hm) {
+        List<Map.Entry<K, V>> list = new LinkedList<>(hm.entrySet());
 
-        // Sort the list
-        Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {
-            public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
-                return (o2.getValue()).compareTo(o1.getValue());
-            }
-        });
+        list.sort(Comparator.comparing(Map.Entry::getValue));
 
-        // put data from sorted list to hashmap
-        HashMap<String, Double> temp = new LinkedHashMap<String, Double>();
-        for (Map.Entry<String, Double> aa : list) {
-            temp.put(aa.getKey(), aa.getValue());
-        }
-        return temp;
-    }
-
-    public static HashMap<Integer, Double> sortByValueDecreIntDou(HashMap<Integer, Double> hm) {
-        // Create a list from elements of HashMap
-        List<Map.Entry<Integer, Double>> list = new LinkedList<Map.Entry<Integer, Double>>(hm.entrySet());
-
-        // Sort the list
-        Collections.sort(list, new Comparator<Map.Entry<Integer, Double>>() {
-            public int compare(Map.Entry<Integer, Double> o1, Map.Entry<Integer, Double> o2) {
-                return (o2.getValue()).compareTo(o1.getValue());
-            }
-        });
-
-        // put data from sorted list to hashmap
-        HashMap<Integer, Double> temp = new LinkedHashMap<Integer, Double>();
-        for (Map.Entry<Integer, Double> aa : list) {
-            temp.put(aa.getKey(), aa.getValue());
-        }
-        return temp;
-    }
-
-    public static HashMap<String, Integer> sortByValueDecreInt(HashMap<String, Integer> hm) {
-        // Create a list from elements of HashMap
-        List<Map.Entry<String, Integer>> list = new LinkedList<Map.Entry<String, Integer>>(hm.entrySet());
-
-        // Sort the list
-        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-                return (o2.getValue()).compareTo(o1.getValue());
-            }
-        });
-
-        // put data from sorted list to hashmap
-        HashMap<String, Integer> temp = new LinkedHashMap<String, Integer>();
-        for (Map.Entry<String, Integer> aa : list) {
-            temp.put(aa.getKey(), aa.getValue());
-        }
-        return temp;
-    }
-
-    public static HashMap<String, Integer> sortByValueCreInt(HashMap<String, Integer> hm) {
-        // Create a list from elements of HashMap
-        List<Map.Entry<String, Integer>> list = new LinkedList<Map.Entry<String, Integer>>(hm.entrySet());
-
-        // Sort the list
-        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-                return (o1.getValue()).compareTo(o2.getValue());
-            }
-        });
-
-        // put data from sorted list to hashmap
-        HashMap<String, Integer> temp = new LinkedHashMap<String, Integer>();
-        for (Map.Entry<String, Integer> aa : list) {
+        HashMap<K, V> temp = new LinkedHashMap<>();
+        for (Map.Entry<K, V> aa : list) {
             temp.put(aa.getKey(), aa.getValue());
         }
         return temp;
@@ -225,7 +156,7 @@ public final class Funciones {
         Jugadores j = new Jugadores();
         j.conectar();
 
-        HashMap<String, Double> jugadores = (HashMap<String, Double>) j.getAllJugadoresDinero();
+        List<Jugador> jugadores = j.getAllJugadores();
         HashMap<String, Double> toReturn = new HashMap<>();
 
         Deudas deudas = new Deudas();
@@ -233,44 +164,63 @@ public final class Funciones {
         Empresas empresas = new Empresas();
         LlamadasApi llamadasApi = new LlamadasApi();
 
-        jugadores.forEach((nombre, dinero) -> {
+        jugadores.forEach((jugador) -> {
             double activosTotales = 0;
 
             //Liquidez
-            activosTotales = j.getDinero(nombre);
+            activosTotales = jugador.getPixelcoin();
 
             //Deuas a cobrar
-            activosTotales += deudas.getDeudasAcredor(nombre).stream()
+            activosTotales += deudas.getDeudasAcredor(jugador.getNombre()).stream()
                     .mapToDouble(Deuda::getPixelcoins)
                     .sum();
 
             //Empresas
-            activosTotales += empresas.getEmpresasOwner(nombre).stream()
+            activosTotales += empresas.getEmpresasOwner(jugador.getNombre()).stream()
                     .mapToDouble(Empresa::getPixelcoins)
                     .sum();
 
-            //Inversiones
-            activosTotales += posicionesAbiertas.getPosicionesJugador(nombre).stream()
-                    .mapToDouble(posicion -> llamadasApi.getPrecio(posicion.getNombre()) * posicion.getCantidad())
+            activosTotales += posicionesAbiertas.getPosicionesAbiertasJugador(jugador.getNombre()).stream()
+                    .mapToDouble(posicion -> llamadasApi.getLlamadaAPI(posicion.getNombre()).getPrecio() * posicion.getCantidad())
                     .sum();
 
-            toReturn.put(nombre, activosTotales);
+            toReturn.put(jugador.getNombre(), activosTotales);
         });
 
         if(creciente)
-            return Funciones.sortByValueCre(toReturn);
+            return Funciones.sortMapByValueCrec(toReturn);
         else
-            return Funciones.sortByValueDecre(toReturn);
+            return Funciones.sortMapByValueDecre(toReturn);
     }
 
-    public static String encriptar(String contraPlain, int strength){
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(strength, new SecureRandom());
-        return bCryptPasswordEncoder.encode(contraPlain);
+    public static boolean esDouble(String supuestoDouble) {
+        try{
+            Double.parseDouble(supuestoDouble);
+            return true;
+        }catch (NumberFormatException e) {
+            return false;
+        }
     }
 
-    public static boolean cuincide(String contraPlain, String contraEncrip, int strength){
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(strength, new SecureRandom());
-        return bCryptPasswordEncoder.matches(contraEncrip, contraEncrip);
+    public static boolean esInteger (String supuestoInteger) {
+        try{
+            Integer.parseInt(supuestoInteger);
+            return true;
+        }catch (NumberFormatException e) {
+            return false;
+        }
     }
 
+    public static Object httpResponseToObject (HttpURLConnection connection) throws IOException, ParseException {
+        JSONParser parser = new JSONParser();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        StringBuilder response = new StringBuilder();
+
+        String responseLine = null;
+        while ((responseLine = bufferedReader.readLine()) != null) {
+            response.append(responseLine.trim());
+        }
+
+        return parser.parse(response.toString());
+    }
 }

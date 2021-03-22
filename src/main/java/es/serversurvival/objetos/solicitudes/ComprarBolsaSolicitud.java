@@ -1,7 +1,6 @@
 package es.serversurvival.objetos.solicitudes;
 
 import es.serversurvival.main.Funciones;
-import es.serversurvival.objetos.mySQL.LlamadasApi;
 import es.serversurvival.objetos.mySQL.Transacciones;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;;
 
 public class ComprarBolsaSolicitud extends Solicitud {
+    private Transacciones transaccionesMySQL = new Transacciones();
     private String titulo;
     private String simbolo;
     private String destinatario;
@@ -105,7 +105,7 @@ public class ComprarBolsaSolicitud extends Solicitud {
         }
         int nuevasAcciones = Integer.parseInt(stringBuild.toString());
         cantidad = cantidad + nuevasAcciones;
-
+    
         precioTotal = precioUnidad * cantidad;
 
         if (precioTotal <= 0) {
@@ -135,19 +135,9 @@ public class ComprarBolsaSolicitud extends Solicitud {
     @Override
     public void aceptar() {
         Player player = Bukkit.getPlayer(destinatario);
-        Transacciones t = new Transacciones();
-        t.conectar();
-        t.comprarUnidadBolsa(tipo.toUpperCase(), simbolo, alias, precioUnidad, cantidad, player);
-        t.desconectar();
-
-        LlamadasApi llamadasApi = new LlamadasApi();
-        llamadasApi.conectar();
-        if(!llamadasApi.estaReg(simbolo)){
-            llamadasApi.nuevaLlamada(simbolo, precioUnidad, tipo);
-        }else {
-            llamadasApi.setPrecio(simbolo, precioUnidad);
-        }
-        llamadasApi.desconectar();
+        transaccionesMySQL.conectar();
+        transaccionesMySQL.comprarUnidadBolsa(tipo.toUpperCase(), simbolo, alias, precioUnidad, cantidad, player);
+        transaccionesMySQL.desconectar();
 
         player.closeInventory();
         solicitudes.remove(this);

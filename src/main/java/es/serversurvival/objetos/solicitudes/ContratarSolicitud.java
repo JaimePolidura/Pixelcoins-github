@@ -2,7 +2,6 @@ package es.serversurvival.objetos.solicitudes;
 
 import es.serversurvival.main.Funciones;
 import es.serversurvival.objetos.mySQL.Empleados;
-import es.serversurvival.objetos.mySQL.Empresas;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -15,6 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 
 public class ContratarSolicitud extends Solicitud {
+    private Empleados empleadosMySQL = new Empleados();
     private static String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "    Solicitud Contrato";
     private Inventory inventory;
     private String enviador;
@@ -50,7 +50,7 @@ public class ContratarSolicitud extends Solicitud {
         ItemMeta itemMetaAceptar = aceptar.getItemMeta();
         itemMetaAceptar.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "ACEPTAR");
         ArrayList<String> lore = new ArrayList<>();
-        String nombreTipoSueldo = Empresas.toStringTipoSueldo(tipoSueldo);
+        String nombreTipoSueldo = Empleados.toStringTipoSueldo(tipoSueldo);
         String desc = ChatColor.GOLD + "Solicitud de contrato de la empresa " + this.empresa + " para trabajar como " + this.cargo + " , con un sueldo de " + ChatColor.GREEN + this.sueldo + " PC" + ChatColor.GOLD + "/" + nombreTipoSueldo;
         lore = Funciones.dividirDesc(lore, desc, 40);
         itemMetaAceptar.setLore(lore);
@@ -83,10 +83,9 @@ public class ContratarSolicitud extends Solicitud {
         Player p = Bukkit.getPlayer(enviador);
         Player tp = Bukkit.getPlayer(destinatario);
 
-        Empleados empl = new Empleados();
-        empl.conectar();
-        empl.nuevoEmpleado(destinatario, empresa, sueldo, tipoSueldo, cargo);
-        empl.desconectar();
+        empleadosMySQL.conectar();
+        empleadosMySQL.nuevoEmpleado(destinatario, empresa, sueldo, tipoSueldo, cargo);
+        empleadosMySQL.desconectar();
 
         solicitudes.remove(this);
         tp.closeInventory();

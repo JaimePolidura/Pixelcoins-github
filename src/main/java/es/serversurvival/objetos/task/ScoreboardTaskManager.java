@@ -1,6 +1,7 @@
 package es.serversurvival.objetos.task;
 
 import es.serversurvival.main.Funciones;
+import es.serversurvival.objetos.mySQL.MySQL;
 import es.serversurvival.objetos.scoreboeards.DeudasDisplayScoreboard;
 import es.serversurvival.objetos.scoreboeards.StatsDisplayScoreboard;
 import es.serversurvival.objetos.scoreboeards.TopPlayerDisplayScoreboard;
@@ -14,12 +15,16 @@ import java.util.Collection;
 import java.util.List;
 
 public class ScoreboardTaskManager extends BukkitRunnable {
+    private MySQL mySQL = new MySQL();
     public static final int scoreboardSwitchDelay = 60;
     private static STATE state = STATE.START;
     private DecimalFormat formatea = new DecimalFormat("###,###.##");
 
     private enum STATE {
-        PLAYER_STATS, PLAYER_DEUDAS, TOP_PLAYERS, START;
+        PLAYER_STATS,
+        PLAYER_DEUDAS,
+        TOP_PLAYERS,
+        START;
     }
 
     @Override
@@ -36,18 +41,19 @@ public class ScoreboardTaskManager extends BukkitRunnable {
                 state = STATE.PLAYER_STATS;
                 break;
         }
-        this.updateAll(state);
+
+        updateAll(state);
     }
 
     private void updateAll(STATE state) {
         Scoreboard scoreboard = null;
+        mySQL.conectar();
 
         if (state == STATE.TOP_PLAYERS) {
             scoreboard = new TopPlayerDisplayScoreboard().createScoreboard(Funciones.crearMapaTopPlayers(false));
         }
 
         List<Player> onlinePlayers = (List<Player>) Bukkit.getOnlinePlayers();
-
         for (Player p : onlinePlayers) {
             switch (state) {
                 case PLAYER_STATS:
@@ -59,9 +65,12 @@ public class ScoreboardTaskManager extends BukkitRunnable {
             }
             p.setScoreboard(scoreboard);
         }
+
+        mySQL.desconectar();
     }
 
     public void updateScoreboard(Player p) {
+        mySQL.conectar();
         Scoreboard scoreboard = null;
         switch (state) {
             case PLAYER_STATS:
@@ -74,6 +83,8 @@ public class ScoreboardTaskManager extends BukkitRunnable {
                 scoreboard = new DeudasDisplayScoreboard().createScoreborad(p.getName());
                 break;
         }
+        mySQL.desconectar();
+
         p.setScoreboard(scoreboard);
     }
 }

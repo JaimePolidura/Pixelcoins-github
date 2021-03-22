@@ -5,102 +5,34 @@ import es.serversurvival.objetos.mySQL.tablasObjetos.LlamadaApi;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class LlamadasApi extends MySQL {
     public void nuevaLlamada(String simbolo, double precio, String tipo){
-        try{
-            String consulta = "INSERT INTO llamadasapi (simbolo, precio, tipo) VALUES ('"+simbolo+"','"+precio+"','"+tipo+"')";
-            conexion.createStatement().executeUpdate(consulta);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        executeUpdate("INSERT INTO llamadasapi (simbolo, precio, tipo) VALUES ('"+simbolo+"','"+precio+"','"+tipo+"')");
     }
 
     public void borrarLlamada(String simbolo){
-        try{
-            String consulta = "DELETE FROM llamadasapi WHERE simbolo = ?";
-            PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
-            preparedStatement.setString(1, simbolo);
-            preparedStatement.executeUpdate();
-        }catch (Exception e) {e.printStackTrace();}
-    }
-
-    public double getPrecio(String simbolo){
-        try {
-            String consulta = "SELECT precio FROM llamadasapi WHERE simbolo = ?";
-            PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
-            preparedStatement.setString(1, simbolo);
-            ResultSet rs = preparedStatement.executeQuery();
-
-            while (rs.next()){
-                return rs.getDouble("precio");
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
-    public double getTipo(String simbolo){
-        try {
-            String consulta = "SELECT tipo FROM llamadasapi WHERE simbolo = ?";
-            PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
-            preparedStatement.setString(1, simbolo);
-            ResultSet rs = preparedStatement.executeQuery();
-
-            while (rs.next()){
-                return rs.getDouble("tipo");
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return -1;
+        executeUpdate(String.format("DELETE FROM llamadasapi WHERE simbolo = '%s'", simbolo));
     }
 
     public LlamadaApi getLlamadaAPI(String simbolo){
-        LlamadaApi llamadaApi = null;
-
         try{
-            String consulta = "SELECT * FROM llamadasapi WHERE simbolo = ?";
-            PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
-            preparedStatement.setString(1, simbolo);
-            ResultSet rs = preparedStatement.executeQuery();
-
+            ResultSet rs = executeQuery(String.format("SELECT * FROM llamadasapi WHERE simbolo = '%s'", simbolo));
             while (rs.next()){
-                llamadaApi =  new LlamadaApi(
-                        rs.getString("simbolo"),
-                        rs.getDouble("precio"),
-                        rs.getString("tipo")
-                );
+                return buildLlamadaApiByResultset(rs);
             }
         }catch (Exception e){
             e.printStackTrace();
         }
-        return llamadaApi;
-    }
 
-    public boolean estaReg(String simbolo){
-        try{
-            String consulta = "SELECT precio FROM llamadasapi WHERE simbolo = ?";
-            PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
-            preparedStatement.setString(1, simbolo);
-            ResultSet rs = preparedStatement.executeQuery();
-
-            if (rs.next())
-                return true;
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return false;
+        return null;
     }
 
     public void setPrecio(String simbolo, double precio){
@@ -118,15 +50,10 @@ public class LlamadasApi extends MySQL {
     public List<LlamadaApi> getTodasLlamaasapi(){
         List<LlamadaApi> llamadaApis = new ArrayList<>();
         try{
-            String consulta = "SELECT * FROM llamadasapi";
-            ResultSet rs = conexion.createStatement().executeQuery(consulta);
+            ResultSet rs = executeQuery("SELECT * FROM llamadasapi");
 
             while (rs.next()){
-                llamadaApis.add(new LlamadaApi(
-                        rs.getString("simbolo"),
-                        rs.getDouble("precio"),
-                        rs.getString("tipo")
-                ));
+                llamadaApis.add(buildLlamadaApiByResultset(rs));
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -134,30 +61,37 @@ public class LlamadasApi extends MySQL {
         return llamadaApis;
     }
 
+    public boolean estaReg (String simbolo) {
+        return getLlamadaAPI(simbolo) != null;
+    }
+
     public void actualizarSimbolo(String simbolo){
-        PosicionesAbiertas posicionesAbiertas = new PosicionesAbiertas();
+        PosicionesAbiertas posicionesAbiertasMySQL = new PosicionesAbiertas();
         Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
             conectar();
-
             try{
                 String tipo = this.getLlamadaAPI(simbolo).getTipo();
+                double precio = posicionesAbiertasMySQL.getPrecioActual(simbolo, tipo);
 
-                double precio = posicionesAbiertas.getPrecioActual(simbolo, tipo);
                 this.setPrecio(simbolo, precio);
-            }catch (Exception e){e.printStackTrace();}
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             desconectar();
         },0L);
     }
 
     public synchronized void actualizar(Server server){
-        PosicionesAbiertas posicionesAbiertas = new PosicionesAbiertas();
+        PosicionesAbiertas posicionesAbiertasMySQL = new PosicionesAbiertas();
+        conectar();
+        List<LlamadaApi> llamadaApis = getTodasLlamaasapi();
+        desconectar();
+
         Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
             conectar();
-
-            List<LlamadaApi> llamadaApis = getTodasLlamaasapi();
             llamadaApis.forEach( (llamadaApi) -> {
                 try {
-                    double precio = posicionesAbiertas.getPrecioActual(llamadaApi.getSimbolo(), llamadaApi.getTipo());
+                    double precio = posicionesAbiertasMySQL.getPrecioActual(llamadaApi.getSimbolo(), llamadaApi.getTipo());
                     this.setPrecio(llamadaApi.getSimbolo(), precio);
 
                     server.getConsoleSender().sendMessage(ChatColor.GREEN + "Se ha actualizado el precio de " + llamadaApi.getSimbolo());
@@ -165,8 +99,12 @@ public class LlamadasApi extends MySQL {
                     e.printStackTrace();
                     server.getConsoleSender().sendMessage(ChatColor.DARK_RED + "Error al actualizar el precio de " + llamadaApi.getSimbolo());
                 }
+                desconectar();
             });
-            desconectar();
         }  , 0L);
+    }
+
+    private LlamadaApi buildLlamadaApiByResultset (ResultSet rs) throws SQLException {
+        return new LlamadaApi(rs.getString("simbolo"), rs.getDouble("precio"), rs.getString("tipo"));
     }
 }

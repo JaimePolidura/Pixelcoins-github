@@ -28,7 +28,6 @@ public class AccionesValoresMenu extends Menu implements Clickleable{
         constuirPag1();
         construirPag2();
 
-        //Vamos poniendo las paginas
         paginas.add(new Pagina(1, pag1));
         paginas.add(new Pagina(2, pag2));
 

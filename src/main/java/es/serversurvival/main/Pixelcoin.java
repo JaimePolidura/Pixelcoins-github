@@ -33,17 +33,17 @@ public class Pixelcoin extends JavaPlugin {
 
         //Pago de sueldos de las empresas
         em.conectar();
-        em.pagarSueldos(this.getServer());
+        em.pagarSueldos();
         em.desconectar();
 
         //Pago de las deudas
         d.conectar();
-        d.pagarDeudas(this.getServer());
+        d.pagarDeudas();
         d.desconectar();
 
         //Pago de dividendos de acciones
         posicionesAbiertas.conectar();
-        posicionesAbiertas.pagarDividendos(this);
+        posicionesAbiertas.pagarDividendos();
         posicionesAbiertas.desconectar();
 
         //Iniciamos todas las tareas del plugin en el server

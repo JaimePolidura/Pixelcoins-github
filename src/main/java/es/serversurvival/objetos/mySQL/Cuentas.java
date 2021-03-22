@@ -7,54 +7,9 @@ import org.bukkit.ChatColor;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Cuentas extends MySQL {
-
-    /*public void confirmarCuenta(Cuenta cuenta){
-        try{
-            String consulta = "UPDATE cuentas SET password = ? WHERE id = ?";
-            PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
-            preparedStatement.setString(1, cuenta.getPassword());
-            preparedStatement.setString(2, cuenta.getEmail());
-            preparedStatement.setInt(3, cuenta.getId());
-            preparedStatement.executeUpdate();
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }*/
-
-    public boolean estaRegistradoIdCuenta(int id){
-        try{
-            String consuta = "SELECT id FROM cuentas WHERE id = ?";
-            PreparedStatement preparedStatement = conexion.prepareStatement(consuta);
-            preparedStatement.setInt(1, id);
-            ResultSet rs = preparedStatement.executeQuery();
-
-            if(rs.next()){
-                return true;
-            }
-        }catch (Exception e){e.printStackTrace();}
-        return false;
-    }
-
-    public boolean estaRegJugador(String jugador){
-        try{
-            String consulta = "SELECT id FROM cuentas WHERE username = ?";
-            PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
-            preparedStatement.setString(1, jugador);
-            ResultSet rs = preparedStatement.executeQuery();
-
-            if(rs.next()){
-                return true;
-            }
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return false;
-    }
 
     public Cuenta getCuenta(String jugador){
         try{
@@ -64,11 +19,7 @@ public class Cuentas extends MySQL {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()){
-                return new Cuenta(
-                        rs.getInt("id"),
-                        rs.getString("username"),
-                        rs.getString("password")
-                );
+                return buildCuentaByResultSet(rs);
             }
 
         }catch (Exception e){e.printStackTrace();}
@@ -84,14 +35,26 @@ public class Cuentas extends MySQL {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()){
-                return new Cuenta(
-                        rs.getInt("id"),
-                        rs.getString("username"),
-                        rs.getString("password")
-                );
+                return buildCuentaByResultSet(rs);
             }
         }catch (Exception e){e.printStackTrace();}
 
         return null;
+    }
+
+    public boolean estaRegistradoIdCuenta(int id){
+        return getCuenta(id) != null;
+    }
+
+    public boolean estaRegJugador(String jugador){
+        return getCuenta(jugador) != null;
+    }
+
+    private Cuenta buildCuentaByResultSet (ResultSet rs) throws SQLException {
+        return new Cuenta(
+                rs.getInt("id"),
+                rs.getString("username"),
+                rs.getString("password")
+        );
     }
 }

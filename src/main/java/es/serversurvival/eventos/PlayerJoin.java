@@ -1,9 +1,7 @@
 package es.serversurvival.eventos;
 
 import es.serversurvival.objetos.mySQL.Mensajes;
-import es.serversurvival.objetos.mySQL.Cuentas;
 import es.serversurvival.objetos.mySQL.NumeroCuentas;
-import es.serversurvival.objetos.mySQL.tablasObjetos.Cuenta;
 import es.serversurvival.objetos.mySQL.tablasObjetos.NumeroCuenta;
 import es.serversurvival.objetos.task.ScoreboardTaskManager;
 import org.bukkit.ChatColor;
@@ -13,7 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PlayerJoin implements Listener {
-    private Mensajes m = new Mensajes();
+    private Mensajes mensajesMySQL = new Mensajes();
     private ScoreboardTaskManager sp;
     private NumeroCuentas numeroCuentas = new NumeroCuentas();
 
@@ -21,14 +19,14 @@ public class PlayerJoin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent evento) {
         Player p = evento.getPlayer();
         
-        m.conectar();
-        p.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "Tienes " + m.getNMensajes(p.getName()) + " pendientes " + ChatColor.AQUA + "  /mensajes");
+        mensajesMySQL.conectar();
+        p.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "Tienes " + mensajesMySQL.getMensajesJugador(p.getName()).size() + " pendientes " + ChatColor.AQUA + "  /mensajes");
 
         NumeroCuenta numeroCuenta = numeroCuentas.getNumeroCuenta(p.getName());
         if(numeroCuenta == null){
             numeroCuentas.nuevoNumeroCuenta(p.getName());
         }
-        m.desconectar();
+        mensajesMySQL.desconectar();
 
         sp = new ScoreboardTaskManager();
         sp.updateScoreboard(p);

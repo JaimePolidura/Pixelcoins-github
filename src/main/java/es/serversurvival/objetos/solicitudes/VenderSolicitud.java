@@ -2,9 +2,11 @@ package es.serversurvival.objetos.solicitudes;
 
 import es.serversurvival.main.Funciones;
 import es.serversurvival.objetos.mySQL.Empleados;
+import es.serversurvival.objetos.mySQL.Empresas;
 import es.serversurvival.objetos.mySQL.Mensajes;
 import es.serversurvival.objetos.mySQL.Transacciones;
 import es.serversurvival.objetos.mySQL.tablasObjetos.Empleado;
+import es.serversurvival.objetos.mySQL.tablasObjetos.Empresa;
 import es.serversurvival.objetos.task.ScoreboardTaskManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -80,27 +82,27 @@ public class VenderSolicitud extends Solicitud {
 
     @Override
     public void aceptar() {
-        Empleados emp = new Empleados();
-        Transacciones t = new Transacciones();
+        Empleados empleadosMySQL = new Empleados();
+        Transacciones transaccionesMySQL = new Transacciones();
         Player enviador = Bukkit.getPlayer(this.enviador);
         Player destinatario = Bukkit.getPlayer(this.destinatario);
 
-        emp.conectar();
-        boolean trabaja = emp.trabajaEmpresa(destinatario.getName(), empresa);
+        empleadosMySQL.conectar();
+        boolean trabaja = empleadosMySQL.trabajaEmpresa(destinatario.getName(), empresa);
         if (trabaja) {
-            int id_empleado = emp.getId(destinatario.getName(), empresa);
-            emp.borrarEmplado(id_empleado);
+            int id_empleado = empleadosMySQL.getEmpleado(destinatario.getName(), empresa).getId();
+            empleadosMySQL.borrarEmplado(id_empleado);
         }
-        List<Empleado> empleadosEmpresa = emp.getEmpleadosEmrpesa(empresa);
+        List<Empleado> empleadosEmpresa = empleadosMySQL.getEmpleadosEmrpesa(empresa);
 
         Mensajes men = new Mensajes();
         for (int i = 0; i < empleadosEmpresa.size(); i++) {
             men.nuevoMensaje(empleadosEmpresa.get(i).getEmpleado(), "La empresa en la que trabajas " + empresa + " ha cambiado de owner a " + destinatario.getName());
         }
 
-        t.comprarEmpresa(this.enviador, this.destinatario, empresa, precio, enviador);
-        t.nuevaTransaccion(this.destinatario, this.enviador, precio, empresa, Transacciones.TIPO.EMPRESA_VENTA);
-        emp.desconectar();
+        transaccionesMySQL.comprarEmpresa(this.enviador, this.destinatario, empresa, precio, enviador);
+        transaccionesMySQL.nuevaTransaccion(this.destinatario, this.enviador, precio, empresa, Transacciones.TIPO.EMPRESA_VENTA);
+        empleadosMySQL.desconectar();
         destinatario.sendMessage(ChatColor.GOLD + "Ahora eres dueño de " + ChatColor.DARK_AQUA + empresa + ChatColor.GOLD + " ,la has comprado por " + ChatColor.GREEN + precio + " PC");
         destinatario.playSound(destinatario.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 

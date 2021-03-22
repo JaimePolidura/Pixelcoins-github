@@ -17,7 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmpresasMenu extends Menu{
+    private Empleados empleadosMySQL = new Empleados();
     public DecimalFormat formatea = new DecimalFormat("###,###.##");
+    private Empresas empresasMySQL = new Empresas();
     private Player player;
     private String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "         Empresas";
 
@@ -42,10 +44,64 @@ public class EmpresasMenu extends Menu{
 
     private Inventory buildInv(){
         Inventory inventory = Bukkit.createInventory(null, 54, titulo);
-        Empresas empr = new Empresas();
-        empr.conectar();
+        empresasMySQL.conectar();
 
-        List<Empresa> empresas = empr.getTodasEmpresas();
+        List<Empresa> todasLasEmpresas = empresasMySQL.getTodasEmpresas();
+
+        todasLasEmpresas.forEach( (empresa) -> {
+            ItemStack iconoEmpresa = new ItemStack(Material.getMaterial(empresa.getIcono()), 1);
+            ItemMeta itemMeta = iconoEmpresa.getItemMeta();
+
+            List<String> lore = new ArrayList<>();
+            lore = insertarDatosEmpresa(empresa, lore);
+            lore.add("      ");
+            lore = insertarEmpleados(empresa.getNombre(), lore);
+
+            itemMeta.setLore(lore);
+            itemMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + empresa.getNombre());
+            iconoEmpresa.setItemMeta(itemMeta);
+
+            inventory.addItem(iconoEmpresa);
+        });
+
+        return inventory;
+    }
+
+    private List<String> insertarDatosEmpresa (Empresa empresa, List<String> lore) {
+        lore.add(ChatColor.GOLD + "Owner: " + ChatColor.GOLD + empresa.getOwner());
+        lore.add("     ");
+        lore.add(ChatColor.GOLD + "Pixelcoins: " + ChatColor.GREEN + formatea.format(empresa.getPixelcoins()) + " PC");
+        lore.add(ChatColor.GOLD + "Ingresos: " + ChatColor.GREEN + formatea.format(empresa.getIngresos()) + " PC");
+        lore.add(ChatColor.GOLD + "Gastos: " + ChatColor.GREEN + formatea.format(empresa.getGastos()) + " PC");
+        lore.add(ChatColor.GOLD + "Beneficios: " + ChatColor.GREEN + empresa.getBeneficiosFormateado() + " PC");
+        double margen = Funciones.rentabilidad(empresa.getIngresos(), empresa.getIngresos() - empresa.getGastos());
+        lore.add(ChatColor.GOLD + "Rentabilidad: " + ChatColor.GREEN + ((int) margen) + "%");
+        lore.add("      ");
+        lore.add(ChatColor.GOLD + "Empleados:");
+
+        return lore;
+    }
+
+    private List<String> insertarEmpleados (String nombreEmpresa, List<String> lore) {
+        List<Empleado> empleados = empleadosMySQL.getEmpleadosEmrpesa(nombreEmpresa);
+
+        lore.add(ChatColor.GOLD + "Empleados:");
+        if(empleados.size() != 0){
+            for(int i = 0; i < empleados.size(); i++){
+                lore.add(ChatColor.GOLD + "-" + empleados.get(i).getEmpleado());
+            }
+        }else{
+            lore.add(ChatColor.GOLD + "Sin trabajadores");
+        }
+
+        return lore;
+    }
+
+    /*private Inventory buildInv(){
+        Inventory inventory = Bukkit.createInventory(null, 54, titulo);
+        empresasMySQL.conectar();
+
+        List<Empresa> empresas = empresasMySQL.getTodasEmpresas();
 
         String owner;
         double pixelcoins;
@@ -55,7 +111,6 @@ public class EmpresasMenu extends Menu{
         double margen;
 
         int nRecorridos = 0;
-        ArrayList<String> empleados = null;
         String icono;
         String descripcion;
 
@@ -63,7 +118,6 @@ public class EmpresasMenu extends Menu{
         ItemMeta im = null;
 
         Empleados em = new Empleados();
-        Funciones f = new Funciones();
 
         List<Empleado> empleadosList = new ArrayList<>();
         ArrayList<String> lore = new ArrayList<String>();
@@ -120,7 +174,7 @@ public class EmpresasMenu extends Menu{
             inventory.addItem(item);
         }
         return inventory;
-    }
+    }*/
 
     @Override
     public void closeMenu() {

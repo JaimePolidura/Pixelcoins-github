@@ -6,7 +6,9 @@ import java.util.*;
 
 import es.serversurvival.objetos.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.objetos.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.objetos.mySQL.tablasObjetos.Jugador;
 import es.serversurvival.objetos.task.ScoreboardTaskManager;
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
@@ -14,41 +16,28 @@ import org.bukkit.entity.Player;
 import es.serversurvival.main.Funciones;
 import net.md_5.bungee.api.ChatColor;
 
+/**
+ * 610 -> 300
+ */
 public class Empresas extends MySQL {
     public static final int CrearEmpresaNombreLonMax = 16;
     public static final int nMaxEmpresas = 5;
     public static final int CrearEmpresaDescLonMax = 200;
-    public DecimalFormat formatea = new DecimalFormat("###,###.##");
+    private DecimalFormat formatea = new DecimalFormat("###,###.##");
 
     public Empresa nuevaEmpresa(String nombreEmpresa, String owner, double pixelcoins, double ingresos, double gastos, String icono, String descripcion) {
-        try {
-            String consulta = "INSERT INTO empresas (nombre, owner, pixelcoins, ingresos, gastos, icono, descripcion) VALUES ('" + nombreEmpresa + "','" + owner + "','" + pixelcoins + "','" + ingresos + "','" + gastos + "','" + icono + "','" + descripcion + "')";
-            Statement st2 = (Statement) conexion.createStatement();
-            st2.executeUpdate(consulta);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+        executeUpdate("INSERT INTO empresas (nombre, owner, pixelcoins, ingresos, gastos, icono, descripcion) VALUES ('" + nombreEmpresa + "','" + owner + "','" + pixelcoins + "','" + ingresos + "','" + gastos + "','" + icono + "','" + descripcion + "')");
 
         return getEmpresa(getMaxId());
     }
 
-    public void borrarEmpresa(String nombre) {
-        try {
-            String consulta = "DELETE FROM empresas WHERE nombre = ?";
-            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
-            pst.setString(1, nombre);
-            pst.executeUpdate();
-        } catch (Exception e) {
-
-        }
+    public void borrarEmpresa(String nombreEmpresa) {
+        executeUpdate(String.format("DELETE FROM empresas WHERE nombre = '%s'", nombreEmpresa));
     }
 
     private int getMaxId(){
         try{
-            String consulta = "SELECT id_empresa FROM empresas ORDER BY id_empresa DESC LIMIT 1";
-            ResultSet rs = conexion.prepareStatement(consulta).executeQuery();
-
+            ResultSet rs = executeQuery("SELECT id_empresa FROM empresas ORDER BY id_empresa DESC LIMIT 1");
             while (rs.next()){
                 return rs.getInt("id_empresa");
             }
@@ -57,157 +46,6 @@ public class Empresas extends MySQL {
         }
 
         return -1;
-    }
-
-    private int getNEmpresas(String owner) {
-        int nempresas = 0;
-        try {
-            String consulta = "SELECT nombre FROM empresas WHERE owner = ?";
-            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
-            pst.setString(1, owner);
-            ResultSet rs = pst.executeQuery();
-
-            while (rs.next()) {
-                nempresas++;
-            }
-            rs.close();
-        } catch (SQLException e) {
-
-        }
-        return nempresas;
-    }
-
-    public String getOwner(String nombreEmpresa) {
-        String owner = "";
-        try {
-            String consulta = "SELECT owner FROM empresas WHERE nombre = ?";
-            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
-            pst.setString(1, nombreEmpresa);
-            ResultSet rs = pst.executeQuery();
-
-            while (rs.next()) {
-                owner = rs.getString("owner");
-                break;
-            }
-            rs.close();
-        } catch (SQLException e) {
-
-        }
-        return owner;
-    }
-
-    public double getPixelcoins(String nombreEmpresa) {
-        double pixelcoins = 0;
-        try {
-            String consulta = "SELECT pixelcoins FROM empresas WHERE nombre = ?";
-            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
-            pst.setString(1, nombreEmpresa);
-            ResultSet rs = pst.executeQuery();
-
-            while (rs.next()) {
-                pixelcoins = rs.getDouble("pixelcoins");
-                break;
-            }
-            rs.close();
-        } catch (SQLException e) {
-
-        }
-        return pixelcoins;
-    }
-
-    public double getIngresos(String nombreEmpresa) {
-        double ingresos = 0;
-        try {
-            String consulta = "SELECT ingresos FROM empresas WHERE nombre = ?";
-            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
-            pst.setString(1, nombreEmpresa);
-            ResultSet rs = pst.executeQuery();
-
-            while (rs.next()) {
-                ingresos = rs.getDouble("ingresos");
-                break;
-            }
-            rs.close();
-        } catch (SQLException e) {
-
-        }
-        return ingresos;
-    }
-
-    public double getGastos(String nombreEmpresa) {
-        double gastos = 0;
-        try {
-            String consulta = "SELECT gastos FROM empresas WHERE nombre = ?";
-            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
-            pst.setString(1, nombreEmpresa);
-            ResultSet rs = pst.executeQuery();
-
-            while (rs.next()) {
-                gastos = rs.getDouble("gastos");
-                break;
-            }
-            rs.close();
-        } catch (SQLException e) {
-
-        }
-        return gastos;
-    }
-
-    public String getIcono(String nombreEmpresa) {
-        String icono = "";
-        try {
-            String consulta = "SELECT icono FROM empresas WHERE nombre = ?";
-            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
-            pst.setString(1, nombreEmpresa);
-            ResultSet rs = pst.executeQuery();
-
-            while (rs.next()) {
-                icono = rs.getString("icono");
-                break;
-            }
-            rs.close();
-        } catch (SQLException e) {
-
-        }
-        return icono;
-    }
-
-    public String getNombre(int id){
-        String nombre = null;
-        try {
-            String consulta = "SELECT nombre FROM empresas WHERE id_empresa = ?";
-            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
-            pst.setInt(1, id);
-            ResultSet rs = pst.executeQuery();
-
-            while (rs.next()) {
-                nombre = rs.getString("nombre");
-                break;
-            }
-            rs.close();
-        } catch (SQLException e) {
-
-        }
-        return nombre;
-    }
-
-    public String getDescripcion(String nombreEmpresa) {
-        String descripcion = "";
-        try {
-            String consulta = "SELECT descripcion FROM empresas WHERE nombre = ?";
-            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
-            pst.setString(1, nombreEmpresa);
-            ResultSet rs = pst.executeQuery();
-
-            while (rs.next()) {
-                descripcion = rs.getString("descripcion");
-                break;
-            }
-            rs.close();
-        } catch (SQLException e) {
-
-        }
-        return descripcion;
     }
 
     public void setOwner(String nombreEmpresa, String nuevoOwner) {
@@ -219,7 +57,7 @@ public class Empresas extends MySQL {
             pst.setString(2, nombreEmpresa);
             pst.executeUpdate();
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -232,7 +70,7 @@ public class Empresas extends MySQL {
             pst.setString(2, nombreEmpresa);
             pst.executeUpdate();
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -245,7 +83,7 @@ public class Empresas extends MySQL {
             pst.setString(2, nombreEmpresa);
             pst.executeUpdate();
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -258,7 +96,7 @@ public class Empresas extends MySQL {
             pst.setString(2, nombreEmpresa);
             pst.executeUpdate();
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -271,7 +109,7 @@ public class Empresas extends MySQL {
             pst.setString(2, nombreEmpresa);
             pst.executeUpdate();
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -284,7 +122,7 @@ public class Empresas extends MySQL {
             pst.setString(2, nombreEmpresa);
             pst.executeUpdate();
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -297,27 +135,8 @@ public class Empresas extends MySQL {
             pst.setString(2, nombreEmpresa);
             pst.executeUpdate();
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
-    }
-
-    public boolean esOwner(String jugador, String nombreEmpresa) {
-        boolean es = false;
-        try {
-            String consulta = "SELECT nombre FROM empresas WHERE nombre = ? AND owner = ?";
-            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
-            pst.setString(1, nombreEmpresa);
-            pst.setString(2, jugador);
-            ResultSet rs = pst.executeQuery();
-
-            if (rs.next()) {
-                es = true;
-            }
-            rs.close();
-        } catch (SQLException e) {
-
-        }
-        return es;
     }
 
     public List<Empresa> getEmpresasOwner(String owner) {
@@ -329,111 +148,12 @@ public class Empresas extends MySQL {
             ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                empresas.add(new Empresa(
-                        rs.getInt("id_empresa"),
-                        rs.getString("nombre"),
-                        rs.getString("owner"),
-                        rs.getDouble("pixelcoins"),
-                        rs.getDouble("ingresos"),
-                        rs.getDouble("gastos"),
-                        rs.getString("icono"),
-                        rs.getString("descripcion")
-                ));
+                empresas.add(buildEmpresaByResultset(rs));
             }
-            rs.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return empresas;
-    }
-
-    public boolean estaRegistradoNombre(String nombre) {
-        boolean reg = false;
-        try {
-            String consulta = "SELECT nombre FROM empresas WHERE nombre = ?";
-            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
-            pst.setString(1, nombre);
-            ResultSet rs = pst.executeQuery();
-
-            if (rs.next()) {
-                reg = true;
-            }
-
-            rs.close();
-        } catch (SQLException e) {
-
-        }
-        return reg;
-    }
-
-    public void crearEmpresa(String nombreEmpresa, Player p, String descripcion) {
-        String owner = p.getName();
-        int nempresas = this.getNEmpresas(owner) + 1;
-        boolean reg = this.estaRegistradoNombre(nombreEmpresa);
-        if (nempresas <= nMaxEmpresas) {
-            if (!reg) {
-                this.nuevaEmpresa(nombreEmpresa, owner, 0, 0, 0, "DIAMOND_PICKAXE", descripcion);
-
-                p.sendMessage(ChatColor.GOLD + "Has creado una empresa! " + ChatColor.GOLD + "comandos utiles: " + ChatColor.AQUA + "/empresas depositar, /empresas contratar, /empresas logotipo, /empresas vertodas, /empresas miempresa /empresas editarnombre m?s: /ayuda empresario o /empresas ayuda");
-                p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-                p.getServer().broadcastMessage(ChatColor.GOLD + owner + " ha creado una nueva empresa: " + ChatColor.DARK_AQUA + nombreEmpresa);
-            } else {
-                p.sendMessage(ChatColor.DARK_RED + "El nombre de esa empresa ya esta registrada");
-            }
-        } else {
-            p.sendMessage(ChatColor.DARK_RED + "Solo puedes tener como maximo " + nMaxEmpresas + " empresas a la vez, al menos por ahora xd");
-        }
-        ScoreboardTaskManager sp = new ScoreboardTaskManager();
-        sp.updateScoreboard(p);
-    }
-
-    public void cambiarIcono(String nombreEmpresa, Player p, String icono) {
-        boolean existe = this.estaRegistradoNombre(nombreEmpresa);
-
-        if (!existe) {
-            p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
-            return;
-        }
-        boolean esowner = this.esOwner(p.getName(), nombreEmpresa);
-
-        if (!esowner) {
-            p.sendMessage(ChatColor.DARK_RED + "No eres el dueño de esa empresa");
-            return;
-        }
-        
-        this.setIcono(nombreEmpresa, icono);
-        p.sendMessage(ChatColor.GOLD + "Has cambiado el logotipo a: " + icono);
-        p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-    }
-
-    public void cambiarNombre(Player p, String empresa, String nuevoNombre) {
-        if (!this.estaRegistradoNombre(empresa)) {
-            p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
-            return;
-        }
-        if (this.estaRegistradoNombre(nuevoNombre)) {
-            p.sendMessage(ChatColor.DARK_RED + "Esa nombre ya esta cogido");
-            return;
-        }
-        if (!this.esOwner(p.getName(), empresa)) {
-            p.sendMessage(ChatColor.DARK_RED + "No eres el due?o de esa empresa");
-            return;
-        }
-        Empleados em = new Empleados();
-
-        List<Empleado> empleados = em.getEmpleadosEmrpesa(empresa);
-        em.cambiarEmpresaNombre(empresa, nuevoNombre);
-
-        this.setNombre(empresa, nuevoNombre);
-        p.sendMessage(ChatColor.GOLD + "Has cambiado de nombre a tu empresa!");
-        p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-
-        Mensajes men = new Mensajes();
-        for (int i = 0; i < empleados.size(); i++) {
-            men.nuevoMensaje(empleados.get(i).getEmpleado(), "La empresa en la que trabajas: " + empresa + " ha cambiado a de nombre a " + nuevoNombre);
-        }
-        ScoreboardTaskManager sp = new ScoreboardTaskManager();
-        sp.updateScoreboard(p);
     }
 
     public List<Empresa> getTodasEmpresas() {
@@ -443,18 +163,8 @@ public class Empresas extends MySQL {
             ResultSet rs = conexion.createStatement().executeQuery(consulta);
 
             while (rs.next()) {
-                empresas.add(new Empresa(
-                        rs.getInt("id_empresa"),
-                        rs.getString("nombre"),
-                        rs.getString("owner"),
-                        rs.getDouble("pixelcoins"),
-                        rs.getDouble("ingresos"),
-                        rs.getDouble("gastos"),
-                        rs.getString("icono"),
-                        rs.getString("descripcion")
-                ));
+                empresas.add(buildEmpresaByResultset(rs));
             }
-            rs.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -470,18 +180,8 @@ public class Empresas extends MySQL {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()){
-                toReturn = new Empresa(
-                        rs.getInt("id_empresa"),
-                        rs.getString("nombre"),
-                        rs.getString("owner"),
-                        rs.getDouble("pixelcoins"),
-                        rs.getDouble("ingresos"),
-                        rs.getDouble("gastos"),
-                        rs.getString("icono"),
-                        rs.getString("descripcion")
-                );
+                return buildEmpresaByResultset(rs);
             }
-
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -497,37 +197,55 @@ public class Empresas extends MySQL {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()){
-                toReturn = new Empresa(
-                        rs.getInt("id_empresa"),
-                        rs.getString("nombre"),
-                        rs.getString("owner"),
-                        rs.getDouble("pixelcoins"),
-                        rs.getDouble("ingresos"),
-                        rs.getDouble("gastos"),
-                        rs.getString("icono"),
-                        rs.getString("descripcion")
-                );
+                return buildEmpresaByResultset(rs);
             }
-
         }catch (Exception e){
             e.printStackTrace();
         }
         return toReturn;
     }
 
+    public void crearEmpresa(String nombreEmpresa, Player p, String descripcion) {
+        String owner = p.getName();
+
+        nuevaEmpresa(nombreEmpresa, owner, 0, 0, 0, "DIAMOND_PICKAXE", descripcion);
+
+        p.sendMessage(ChatColor.GOLD + "Has creado una empresa! " + ChatColor.GOLD + "comandos utiles: " + ChatColor.AQUA + "/empresas depositar, /empresas contratar, /empresas logotipo, /empresas vertodas, /empresas miempresa /empresas editarnombre m?s: /ayuda empresario o /empresas ayuda");
+        p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        p.getServer().broadcastMessage(ChatColor.GOLD + owner + " ha creado una nueva empresa: " + ChatColor.DARK_AQUA + nombreEmpresa);
+
+        ScoreboardTaskManager sp = new ScoreboardTaskManager();
+        sp.updateScoreboard(p);
+    }
+
+    public void cambiarIcono(String nombreEmpresa, Player p, String icono) {
+        this.setIcono(nombreEmpresa, icono);
+
+        p.sendMessage(ChatColor.GOLD + "Has cambiado el logotipo a: " + icono);
+        p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+    }
+
+    public void cambiarNombre(Player p, String empresa, String nuevoNombre) {
+        Empleados empleadosMySQL = new Empleados();
+        List<Empleado> empleados = empleadosMySQL.getEmpleadosEmrpesa(empresa);
+
+        empleadosMySQL.cambiarEmpresaNombre(empresa, nuevoNombre);
+        setNombre(empresa, nuevoNombre);
+
+        p.sendMessage(ChatColor.GOLD + "Has cambiado de nombre a tu empresa!");
+        p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+
+        Mensajes mensajesMySQL = new Mensajes();
+        empleados.forEach( (empl) -> {
+            mensajesMySQL.nuevoMensaje(empl.getEmpleado(), "La empresa en la que trabajas: " + empresa + " ha cambiado a de nombre a " + nuevoNombre);
+        });
+
+        ScoreboardTaskManager sp = new ScoreboardTaskManager();
+        sp.updateScoreboard(p);
+    }
+
     public void verEmpresa(Player p, String nombreEmpresa) {
         Empresa empresa = this.getEmpresa(nombreEmpresa);
-
-        if (empresa == null) {
-            p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
-            return;
-        }
-        boolean ow = this.esOwner(p.getName(), nombreEmpresa);
-        if (!empresa.getOwner().equalsIgnoreCase(p.getName())) {
-            p.sendMessage(ChatColor.DARK_RED + "No eres el dueño de la empresa");
-            return;
-        }
-        Funciones f = new Funciones();
 
         String logitipo = empresa.getIcono();
         String descripcion = empresa.getDescripcion();
@@ -535,7 +253,7 @@ public class Empresas extends MySQL {
         double ingresos = empresa.getIngresos();
         double gastos = empresa.getGastos();
         double beneficios = ingresos - gastos;
-        double rentabilidad = f.rentabilidad(ingresos, beneficios);
+        double rentabilidad = Funciones.rentabilidad(ingresos, beneficios);
 
         p.sendMessage(ChatColor.GOLD + "        Estadisticas para " + ChatColor.DARK_AQUA + nombreEmpresa);
         p.sendMessage(ChatColor.GOLD + "Pixelcoins en la empresa: " + ChatColor.GREEN + formatea.format(pixelcoins) + " PC");
@@ -556,74 +274,57 @@ public class Empresas extends MySQL {
         }
 
         p.sendMessage(ChatColor.GOLD + "Empleados:");
-        try {
-            Empleados em = new Empleados();
-            em.conectar();
-            List<Empleado> empleados = em.getEmpleadosEmrpesa(nombreEmpresa);
-            String nombre = "";
-            String cargo = "";
-            String tipoSueldo = "";
-            String nombreTipoSueldo = "";
-            double sueldo = 0;
-            int id_empleado = 0;
-            boolean enc = false;
+        Empleados empleadosMySQL = new Empleados();
+        empleadosMySQL.conectar();
 
-            for (Empleado empleado : empleados) {
-                enc = true;
-                id_empleado = empleado.getId();
-
-                nombre = empleado.getEmpleado();
-                cargo = empleado.getCargo();
-                tipoSueldo = empleado.getTipo();
-                sueldo = empleado.getSueldo();
-
-                nombreTipoSueldo = toStringTipoSueldo(tipoSueldo);
-
-                p.sendMessage(ChatColor.GOLD + " -" + nombre + " cargo: " + cargo + " sueldo: " + ChatColor.GREEN + sueldo + " PC/ " + nombreTipoSueldo);
-            }
-
-            if (!enc) {
-                p.sendMessage(ChatColor.GOLD + "       Sin trabajadores");
-            }
-            em.desconectar();
-        } catch (Exception e) {
-
-        }
+        List<Empleado> empleados = empleadosMySQL.getEmpleadosEmrpesa(nombreEmpresa);
+        empleados.forEach( (empleado) -> {
+            p.sendMessage(ChatColor.GOLD + " -" + empleado.getEmpleado() + " cargo: " + empleado.getCargo() + " sueldo: " + ChatColor.GREEN + formatea.format(empleado.getSueldo()) + " PC/ " + Empleados.toStringTipoSueldo(empleado.getTipo()));
+        });
     }
 
     public void cambiarDescripciom(String nombreEmpresa, String nuevaDescripcion, Player p) {
-        Empresa empresa = this.getEmpresa(nombreEmpresa);
-
-        if (empresa != null) {
-            p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
-            return;
-        }
-        if (!empresa.getOwner().equalsIgnoreCase(p.getName())) {
-            p.sendMessage(ChatColor.DARK_RED + "No eres el dueño de esa empresa");
-            return;
-        }
-
         this.setDescripcion(nombreEmpresa, nuevaDescripcion);
 
         p.sendMessage(ChatColor.GOLD + "Has cambiado la descripccion de tu empresa: " + ChatColor.DARK_AQUA + nombreEmpresa + ChatColor.GOLD + " a ver en " + ChatColor.AQUA + "/empresas vertodas");
     }
 
-    public static String toStringTipoSueldo(String tipoSueldo) {
-        String nombreTipoSueldo = null;
-        switch (tipoSueldo) {
-            case "d":
-                nombreTipoSueldo = "dia";
-                break;
-            case "s":
-                nombreTipoSueldo = "semana";
-                break;
-            case "2s":
-                nombreTipoSueldo = "2 semanas";
-                break;
-            case "m":
-                nombreTipoSueldo = "mes";
-                break;
-        }
-        return nombreTipoSueldo;
+    public void borrarEmpresaManual (String empresaNombre) {
+        ScoreboardTaskManager scoreboardTaskManager = new ScoreboardTaskManager();
+        Transacciones transaccionesMySQL = new Transacciones();
+        Mensajes mensajesMySQL = new Mensajes();
+        Empleados empleadosMySQL = new Empleados();
+        Jugadores jugadoresMySQL = new Jugadores();
+
+        Empresa empresaABorrar = getEmpresa(empresaNombre);
+        Jugador ownerJugador = jugadoresMySQL.getJugador(empresaABorrar.getOwner());
+        List<Empleado> empleados = empleadosMySQL.getEmpleadosEmrpesa(empresaNombre);
+
+        jugadoresMySQL.setPixelcoin(ownerJugador.getNombre(), ownerJugador.getPixelcoin() + empresaABorrar.getPixelcoins());
+        borrarEmpresa(empresaNombre);
+        transaccionesMySQL.nuevaTransaccion(ownerJugador.getNombre(), ownerJugador.getNombre(), empresaABorrar.getPixelcoins(), empresaNombre, Transacciones.TIPO.EMPRESA_BORRAR);
+
+        empleados.forEach( (empleado) -> {
+            empleadosMySQL.borrarEmplado(empleado.getId());
+            Player empleadoPlayer = Bukkit.getPlayer(empleado.getEmpleado());
+
+            if(empleadoPlayer != null){
+                empleadoPlayer.sendMessage(org.bukkit.ChatColor.GOLD + ownerJugador.getNombre() + " ha borrado su empresa donde trabajabas: " + empresaNombre);
+                scoreboardTaskManager.updateScoreboard(empleadoPlayer);
+            }else{
+                mensajesMySQL.nuevoMensaje(empleado.getEmpleado(), "El owner de la empresa en la que trabajas: " + empresaNombre + " la ha borrado, ya no existe");
+            }
+        });
+    }
+
+    private Empresa buildEmpresaByResultset (ResultSet rs) throws SQLException {
+        return new Empresa( rs.getInt("id_empresa"),
+                rs.getString("nombre"),
+                rs.getString("owner"),
+                rs.getDouble("pixelcoins"),
+                rs.getDouble("ingresos"),
+                rs.getDouble("gastos"),
+                rs.getString("icono"),
+                rs.getString("descripcion"));
     }
 }

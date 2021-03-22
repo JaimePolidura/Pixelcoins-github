@@ -1,7 +1,7 @@
 package es.serversurvival.objetos.mySQL;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.*;
+
 public class MySQL {
     public static Connection conexion;
 
@@ -17,7 +17,6 @@ public class MySQL {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             conexion = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbName, user, pass);
-            //conexion = (Connection) DriverManager.getConnection("jdbc:mysql://localhost/db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC/" + dbName, user, pass);
 
             return conexion;
         } catch (Exception e) {
@@ -37,11 +36,39 @@ public class MySQL {
         }
     }
 
-    //Metodo para desconectar
     public void desconectar() {
         try {
             conexion.close();
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected ResultSet executeQuery(String query) {
+        try{
+            ResultSet resultSet = conexion.createStatement().executeQuery(query);
+
+            return resultSet;
+        }catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    protected ResultSet executeQuery(PreparedStatement pst) {
+        try{
+            ResultSet resultSet = pst.executeQuery();
+            return resultSet;
+        }catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    protected void executeUpdate (String consulta) {
+        try{
+            conexion.createStatement().executeUpdate(consulta);
+        }catch (SQLException e){
             e.printStackTrace();
         }
     }

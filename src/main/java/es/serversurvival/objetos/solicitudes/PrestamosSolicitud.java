@@ -24,6 +24,8 @@ public class PrestamosSolicitud extends Solicitud {
     private int pixelcoins;
     private int dias;
     private int interes;
+    private Transacciones transaccionesMySQL = new Transacciones();
+    private Deudas deudasMySQL = new Deudas();
 
     public PrestamosSolicitud(String enviador, String destinatario, int pixelcoins, int dias, int interes) {
         this.enviador = enviador;
@@ -81,13 +83,12 @@ public class PrestamosSolicitud extends Solicitud {
     public void aceptar() {
         Player p = Bukkit.getPlayer(this.enviador);
         Player tp = Bukkit.getPlayer(this.destinatario);
-        Transacciones t = new Transacciones();
-        Deudas d = new Deudas();
 
-        t.conectar();
-        t.realizarTransferencia(enviador, destinatario, pixelcoins, "", Transacciones.TIPO.DEUDAS_PRIMERPAGO, false);
-        d.nuevaDeuda(destinatario, enviador, Funciones.interes(pixelcoins, interes), dias, interes);
-        t.desconectar();
+        transaccionesMySQL.conectar();
+        transaccionesMySQL.realizarTransferencia(enviador, destinatario, pixelcoins, "", Transacciones.TIPO.DEUDAS_PRIMERPAGO, false);
+        deudasMySQL.nuevaDeuda(destinatario, enviador, Funciones.interes(pixelcoins, interes), dias, interes);
+        transaccionesMySQL.desconectar();
+
         ScoreboardTaskManager sp = new ScoreboardTaskManager();
 
         tp.sendMessage(ChatColor.GOLD + "Has aceptado la solicitud de: " + ChatColor.GREEN + formatea.format(pixelcoins) + " PC " + ChatColor.GOLD + "con un interes del: " + ChatColor.GREEN + interes +

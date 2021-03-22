@@ -6,8 +6,11 @@ import java.util.*;
 
 import es.serversurvival.objetos.menus.Menu;
 import es.serversurvival.objetos.menus.OfertasMenu;
+import es.serversurvival.objetos.menus.Refreshcable;
 import es.serversurvival.objetos.mySQL.tablasObjetos.Encantamiento;
+import es.serversurvival.objetos.mySQL.tablasObjetos.Jugador;
 import es.serversurvival.objetos.mySQL.tablasObjetos.Oferta;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -22,343 +25,184 @@ import org.bukkit.plugin.Plugin;
 
 import es.serversurvival.main.Pixelcoin;
 
+/**
+ * 363 -> 193
+ */
 public class Ofertas extends MySQL {
     public final static int maxEspacios = 7;
+    public final static String NOMBRE_ITEM_RETIRAR = ChatColor.RED + "" + ChatColor.BOLD + "CLICK PARA RETIRAR";
+    public final static String NOMBRE_ITEM_COMPRAR = ChatColor.AQUA + "" + ChatColor.BOLD + "CLICK PARA COMPRAR";
+    private final static List<String> bannedItems = Arrays.asList("POTION", "BANNER", "SPLASH_POTION", "LINGERING_POTION");
     private static DecimalFormat formatea = new DecimalFormat("###,###.##");
 
-    private void nuevaOferta(String nombre, String objeto, int cantidad, double precio, int durabilidad) {
-        try {
-            String consulta2 = "INSERT INTO ofertas (nombre, objeto, cantidad, precio, durabilidad) VALUES ('" + nombre + "','" + objeto + "','" + cantidad + "','" + precio + "','" + durabilidad + "')";
-            Statement st2 = conexion.createStatement();
-            st2.executeUpdate(consulta2);
-        } catch (Exception e) {
+    public static boolean estaBaneado (String item) {
+        return bannedItems.stream().anyMatch( (ite) -> ite.equalsIgnoreCase(item));
+    }
 
-        }
+    private void nuevaOferta(String nombre, String objeto, int cantidad, double precio, int durabilidad) {
+        executeUpdate("INSERT INTO ofertas (nombre, objeto, cantidad, precio, durabilidad) VALUES ('" + nombre + "','" + objeto + "','" + cantidad + "','" + precio + "','" + durabilidad + "')");
     }
 
     private void borrarOferta(int id_oferta) {
-        try {
-            String consulta2 = "DELETE FROM ofertas WHERE id_oferta=\"" + id_oferta + "\"      ";
-            Statement st2 = conexion.createStatement();
-            st2.executeUpdate(consulta2);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        executeUpdate("DELETE FROM ofertas WHERE id_oferta=\"" + id_oferta + "\"      ");
     }
 
-    private int getMaxId() {
-        int maxId = 0;
+    public void setPrecio(int id, double precio){
+        executeUpdate("UPDATE ofertas SET precio = '"+precio+"' WHERE id_oferta = '"+id+"'");
+    }
+
+    public void setCantidad(int id, int cantidad) {
+        executeUpdate(String.format("UPDATE ofertas SET cantidad = '%d' WHERE id_oferta = '%d'", cantidad, id));
+    }
+
+    public Oferta getOferta (int id_oferta) {
         try {
-            String consulta = "SELECT id_oferta FROM ofertas ORDER BY id_oferta DESC LIMIT 1 ";
-            Statement st = (Statement) conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
-
-            while (rs.next()) {
-                maxId = rs.getInt("id_oferta");
-                break;
-            }
-            rs.close();
-        } catch (SQLException e) {
-
+            ResultSet rs = executeQuery(String.format("SELECT * FROM ofertas WHERE id_oferta = '%d'", id_oferta));
+            rs.next();
+            return buildOfertaByResultset(rs);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
-        return maxId;
+
+        return null;
     }
 
     public List<Oferta> getTodasOfertas(){
         List<Oferta> ofertas = new ArrayList<>();
         try{
-            String consulta = "SELECT * FROM ofertas";
-            ResultSet rs = conexion.createStatement().executeQuery(consulta);
-
+            ResultSet rs = executeQuery("SELECT * FROM ofertas");
             while (rs.next()){
-                ofertas.add(new Oferta(
-                        rs.getInt("id_oferta"),
-                        rs.getString("nombre"),
-                        rs.getString("objeto"),
-                        rs.getInt("cantidad"),
-                        rs.getDouble("precio"),
-                        rs.getInt("durabilidad")
-                ));
+                ofertas.add(buildOfertaByResultset(rs));
             }
+
         }catch (Exception e){
             e.printStackTrace();
         }
+        return ofertas;
+    }
+
+    public List<Oferta> getOfertasJugador (String nombreJugador){
+        List<Oferta> ofertas = new ArrayList<>();
+        try{
+            ResultSet rs = executeQuery(String.format("SELECT * FROM ofertas WHERE nombre = '%s'", nombreJugador));
+            while (rs.next()){
+                ofertas.add(buildOfertaByResultset(rs));
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         return ofertas;
     }
 
     public void borrarOferta(int id, String nombreJugador) {
-        Encantamientos encan = new Encantamientos();
-        encan.borrarEncantamientosOferta(id);
-        this.borrarOferta(id);
+        Encantamientos encantamientosMySQL = new Encantamientos();
+        Jugadores jugadoresMySQL = new Jugadores();
 
-        int espacios;
-        Jugadores j = new Jugadores();
-        espacios = j.getEspacios(nombreJugador) - 1;
-        j.setEspacios(nombreJugador, espacios);
+        encantamientosMySQL.borrarEncantamientosOferta(id);
+        borrarOferta(id);
+
+        int espacios = jugadoresMySQL.getEspacios(nombreJugador) - 1;
+        jugadoresMySQL.setEspacios(nombreJugador, espacios);
     }
 
-    @SuppressWarnings("deprecation")
-    public void crearOferta(ItemStack is, Player p, double precio) {
-        Plugin plugin = Pixelcoin.getPlugin(Pixelcoin.class);
-        Inventory in = p.getInventory();
-        String nombreJugador = p.getName();
-        String nombreItem = is.getType().toString();
-        int cantidad;
-        int durabilidad;
-        int id_oferta = 0;
-        int espacios = 0;
-        boolean encontrado = false;
-        Jugadores j = new Jugadores();
+    public void crearOferta(ItemStack itemAVender, Player jugadorPlayer, double precio) {
+        Jugadores jugadoresMySQL = new Jugadores();
+        Encantamientos encantamientosMySQL = new Encantamientos();
+        Inventory inventarioJugador = jugadorPlayer.getInventory();
+        String nombreJugador = jugadorPlayer.getName();
 
-        encontrado = j.estaRegistrado(nombreJugador);
-        espacios = j.getEspacios(nombreJugador);
-
-        if (espacios >= maxEspacios && encontrado) {
-            p.sendMessage(ChatColor.DARK_RED + "Solo puedes tener 5 objetos a la vez en la tienda");
-            return;
-        } else {
-            espacios = espacios + 1;
-            if (encontrado) {
-                j.setEspacios(nombreJugador, espacios);
-            } else {
-                j.nuevoJugador(nombreJugador, 0, espacios, 0, 0, 0, 0, 0, 0);
+        Jugador jugador = jugadoresMySQL.getJugador(jugadorPlayer.getName());
+        if(jugador == null){
+            jugadoresMySQL.nuevoJugador(nombreJugador, 0, 1, 0, 0, 0, 0, 0, 0);
+        }else {
+            if (jugador.getEspacios() >= maxEspacios) {
+                jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Solo puedes tener "+maxEspacios+" objetos a la vez en la tienda");
+                return;
+            }else{
+                jugadoresMySQL.setEspacios(nombreJugador, jugador.getEspacios() + 1);
             }
         }
 
-        cantidad = is.getAmount();
-        durabilidad = is.getDurability();
-        Map<Enchantment, Integer> encItem;
+        nuevaOferta(nombreJugador, itemAVender.getType().toString(), itemAVender.getAmount(), precio, itemAVender.getDurability());
 
-        if (is.getType() == Material.ENCHANTED_BOOK) {
-            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) is.getItemMeta();
-            encItem = meta.getStoredEnchants();
-        } else {
-            encItem = is.getEnchantments();
-        }
+        int idOfetaNueva = this.getMaxId();
+        Map<Enchantment, Integer> encantamientos = getEncantamientosDeItem(itemAVender);
+        encantamientosMySQL.insertarEncantamientosDeItem(encantamientos, idOfetaNueva);
 
-        this.nuevaOferta(nombreJugador, nombreItem, cantidad, precio, durabilidad);
+        Menu.refreshAll();
 
-        int slot = p.getInventory().getHeldItemSlot();
-        in.clear(slot);
+        int slot = jugadorPlayer.getInventory().getHeldItemSlot();
+        inventarioJugador.clear(slot);
 
-        p.sendMessage(ChatColor.GOLD + "Se ha a?adido a la tienda. Para retirarlos /tienda y clikc izquierdo en ellos. Ver objetos que tienes en la tienda /listaOfertas");
-        p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_YES, 10, 1);
-        plugin.getServer().broadcastMessage(ChatColor.GOLD + nombreJugador + " ha a?adido un objeto a la tienda por: " + ChatColor.GREEN + formatea.format(precio) + " PC");
-
-        id_oferta = this.getMaxId();
-
-        Enchantment e;
-        String eNombre;
-        int nivel;
-
-        Encantamientos encan = new Encantamientos();
-        for (Map.Entry<Enchantment, Integer> entry : encItem.entrySet()) {
-            eNombre = entry.getKey().getName();
-            nivel = entry.getValue();
-
-            encan.nuevoEncantamiento(eNombre, nivel, id_oferta);
-        }
-
-        Set<Menu> ofertaSet = new HashSet<>();
-        ofertaSet.addAll(Menu.activeMenus);
-
-        ofertaSet.forEach(menu -> {
-            if(menu instanceof OfertasMenu){
-                ((OfertasMenu) menu).refresh();
-            }
-        });
+        jugadorPlayer.sendMessage(ChatColor.GOLD + "Se ha a?adido a la tienda. Para retirarlos /tienda y clikc izquierdo en ellos");
+        jugadorPlayer.playSound(jugadorPlayer.getLocation(), Sound.ENTITY_VILLAGER_YES, 10, 1);
+        Bukkit.getServer().broadcastMessage(ChatColor.GOLD + nombreJugador + " ha a?adido un objeto a la tienda por: " + ChatColor.GREEN + formatea.format(precio) + " PC");
     }
 
-    @SuppressWarnings({"deprecation"})
     public ItemStack getItemOferta(int id) {
-        ItemStack i = null;
-        String objeto = "";
-        int durabilidad = 0;
-        int cantidad = 0;
+        Encantamientos encantamientosMySQL = new Encantamientos();
+        Oferta ofertaAConvertir = getOferta(id);
 
-        objeto = this.getObjeto(id);
-        durabilidad = this.getDurabilidad(id);
-        cantidad = this.getCantidad(id);
+        ItemStack itemAdevolver = new ItemStack(Material.getMaterial(ofertaAConvertir.getObjeto()), ofertaAConvertir.getCantidad());
+        itemAdevolver.setDurability((short) ofertaAConvertir.getDurabilidad());
 
-        i = new ItemStack(Material.getMaterial(objeto), cantidad);
-        i.setDurability((short) durabilidad);
-
-        ItemMeta ime = i.getItemMeta();
-
-        Encantamientos encan = new Encantamientos();
-        List<Encantamiento> encantamientos = encan.getEncantamientosOferta(id);
+        ItemMeta itemMeta = itemAdevolver.getItemMeta();
+        List<Encantamiento> encantamientos = encantamientosMySQL.getEncantamientosOferta(id);
 
         for(Encantamiento encantamiento : encantamientos){
-            ime.addEnchant(
-                    Enchantment.getByName(encantamiento.getEncantamiento()),
-                    encantamiento.getNivel(),
-                    true
-            );
+            Enchantment encantamientoAPoner = Enchantment.getByName(encantamiento.getEncantamiento());
+            int nivel = encantamiento.getNivel();
+
+            itemMeta.addEnchant(encantamientoAPoner, nivel, true);
         }
-        i.setItemMeta(ime);
+        itemAdevolver.setItemMeta(itemMeta);
 
-        return i;
+        return itemAdevolver;
     }
 
-    public List<Oferta> getOfertasJugador (String player){
-        List<Oferta> ofertas = new ArrayList<>();
+    public void retirarOferta(Player jugadorPlayer, int idARetirar) {
+        ItemStack itemARetirar = this.getItemOferta(idARetirar);
 
-        try{
-            String consulta = "SELECT * FROM ofertas WHERE nombre = ?";
-            PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
-            preparedStatement.setString(1, player);
-            ResultSet rs = preparedStatement.executeQuery();
+        borrarOferta(idARetirar, jugadorPlayer.getName());
 
-            while (rs.next()){
-                ofertas.add(new Oferta(
-                        rs.getInt("id_oferta"),
-                        rs.getString("nombre"),
-                        rs.getString("objeto"),
-                        rs.getInt("cantidad"),
-                        rs.getDouble("precio"),
-                        rs.getInt("durabilidad")
-                ));
-            }
-
-        }catch (Exception e){e.printStackTrace();}
-
-        return ofertas;
+        jugadorPlayer.getInventory().addItem(itemARetirar);
+        Menu.refreshAll();
+        jugadorPlayer.sendMessage(ChatColor.GOLD + "Objeto retirado!");
+        jugadorPlayer.playSound(jugadorPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
     }
 
-    public void retirarOferta(Player p, int id) {
-        ItemStack i = this.getItemOferta(id);
-        this.borrarOferta(id, p.getName());
-        p.getInventory().addItem(i);
-
-        OfertasMenu ofertasMenu = (OfertasMenu) Menu.getByPlayer(p);
-        ofertasMenu.refresh();
-
-        p.sendMessage(ChatColor.GOLD + "Objeto retirado!");
-        p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+    private Map<Enchantment, Integer> getEncantamientosDeItem (ItemStack item) {
+        if (item.getType() == Material.ENCHANTED_BOOK) {
+            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
+            return meta.getStoredEnchants();
+        } else {
+            return item.getEnchantments();
+        }
     }
 
-    public int getCantidad(int id) {
-        int cantidad = 0;
-
+    private int getMaxId() {
         try {
-            String consutla = "SELECT cantidad FROM ofertas WHERE id_oferta = ? ";
-            PreparedStatement pst = conexion.prepareStatement(consutla);
-            pst.setInt(1, id);
-            ResultSet rs = pst.executeQuery();
-
+            ResultSet rs = executeQuery("SELECT id_oferta FROM ofertas ORDER BY id_oferta DESC LIMIT 1");
             while (rs.next()) {
-                cantidad = rs.getInt("cantidad");
-                break;
+                return rs.getInt("id_oferta");
             }
-            rs.close();
+
         } catch (SQLException e) {
-
-        }
-        return cantidad;
-    }
-
-    public int getDurabilidad(int id) {
-        int durabilidad = 0;
-
-        try {
-            String consutla = "SELECT durabilidad FROM ofertas WHERE id_oferta = ? ";
-            PreparedStatement pst = conexion.prepareStatement(consutla);
-            pst.setInt(1, id);
-            ResultSet rs = pst.executeQuery();
-
-            while (rs.next()) {
-                durabilidad = rs.getInt("durabilidad");
-                break;
-            }
-            rs.close();
-        } catch (SQLException e) {
-
-        }
-        return durabilidad;
-    }
-
-    public String getNombre(int id) {
-        String name = "";
-
-        try {
-            String consutla = "SELECT nombre FROM ofertas WHERE id_oferta = ? ";
-            PreparedStatement pst = conexion.prepareStatement(consutla);
-            pst.setInt(1, id);
-            ResultSet rs = pst.executeQuery();
-
-            while (rs.next()) {
-                name = rs.getString("nombre");
-                break;
-            }
-            rs.close();
-        } catch (SQLException e) {
-
-        }
-        return name;
-    }
-
-    public void setPrecio(int id, double precio){
-        try{
-            String consulta = "UPDATE ofertas SET precio = ? WHERE id_oferta = ?";
-            PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
-            preparedStatement.setDouble(1, precio);
-            preparedStatement.setInt(2, id);
-            preparedStatement.executeUpdate();
-        }catch (Exception e){
             e.printStackTrace();
         }
+        return -1;
     }
 
-    public void setCantidad(int id, int cantidad) {
-        try {
-            String consulta2 = "UPDATE ofertas SET cantidad = ? WHERE id_oferta = ?";
-            PreparedStatement pst2 = (PreparedStatement) conexion.prepareStatement(consulta2);
-
-            pst2.setInt(1, cantidad);
-            pst2.setInt(2, id);
-            pst2.executeUpdate();
-        } catch (SQLException e) {
-
-        }
-    }
-
-    public String getObjeto(int id) {
-        String objeto = "";
-
-        try {
-            String consutla = "SELECT objeto FROM ofertas WHERE id_oferta = ? ";
-            PreparedStatement pst = conexion.prepareStatement(consutla);
-            pst.setInt(1, id);
-            ResultSet rs = pst.executeQuery();
-
-            while (rs.next()) {
-                objeto = rs.getString("objeto");
-                break;
-            }
-            rs.close();
-        } catch (SQLException e) {
-
-        }
-        return objeto;
-    }
-
-    public double getPrecio(int id) {
-        double precio = 0;
-        try {
-            String consutla = "SELECT precio FROM ofertas WHERE id_oferta = ? ";
-            PreparedStatement pst = conexion.prepareStatement(consutla);
-            pst.setInt(1, id);
-            ResultSet rs = pst.executeQuery();
-
-            while (rs.next()) {
-                precio = rs.getDouble("precio");
-                break;
-            }
-            rs.close();
-        } catch (SQLException e) {
-
-        }
-        return precio;
+    private Oferta buildOfertaByResultset (ResultSet rs) throws SQLException {
+        return new Oferta(
+                rs.getInt("id_oferta"),
+                rs.getString("nombre"),
+                rs.getString("objeto"),
+                rs.getInt("cantidad"),
+                rs.getDouble("precio"),
+                rs.getInt("durabilidad")
+        );
     }
 }

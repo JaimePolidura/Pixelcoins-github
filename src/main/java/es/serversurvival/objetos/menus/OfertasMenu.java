@@ -16,6 +16,8 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 public class OfertasMenu extends Menu implements Clickleable, Refreshcable {
+    private Transacciones transaccionesMySQL = new Transacciones();
+    private Ofertas ofertasMySQL = new Ofertas();
     private Inventory inventory;
     private static DecimalFormat formatea = new DecimalFormat("###,###.##");
     private Player player;
@@ -37,78 +39,61 @@ public class OfertasMenu extends Menu implements Clickleable, Refreshcable {
 
     @Override
     public void onInventoryClick(InventoryClickEvent event) {
-        String inNombre = event.getView().getTitle().toString();
         Player p = (Player) event.getWhoClicked();
+        int slotsLibres = Funciones.espaciosLibres(p.getInventory());
 
-        if (inNombre.equalsIgnoreCase(ChatColor.DARK_RED + "" + ChatColor.BOLD + "            Tienda")) {
-            Funciones f = new Funciones();
-            int slotsLibres = f.espaciosLibres(p.getInventory());
+        if (slotsLibres != 0) {
+            ItemStack itemClicked = event.getCurrentItem();
+            String itemClickckedDisplayName = itemClicked.getItemMeta().getDisplayName();
+            int id = Integer.parseInt(itemClicked.getItemMeta().getLore().get(2));
 
-            if (slotsLibres != 0) {
-                ItemStack i = event.getCurrentItem();
-                String dn = i.getItemMeta().getDisplayName();
-                int id = Integer.parseInt(i.getItemMeta().getLore().get(2));
+            if (itemClickckedDisplayName.equalsIgnoreCase(Ofertas.NOMBRE_ITEM_RETIRAR)) {
+                ofertasMySQL.conectar();
+                ofertasMySQL.retirarOferta(p, id);
+                ofertasMySQL.desconectar();
 
-                if (dn.equalsIgnoreCase(ChatColor.RED + "" + ChatColor.BOLD + "CLICK PARA RETIRAR")) {
-                    Ofertas o = new Ofertas();
-                    o.conectar();
-                    o.retirarOferta(p, id);
-                    this.refresh();
-                    o.desconectar();
-                } else if (dn.equalsIgnoreCase(ChatColor.AQUA + "" + ChatColor.BOLD + "CLICK PARA COMPRAR")) {
-                    Transacciones t = new Transacciones();
-                    t.conectar();
-                    t.realizarVenta(p.getName(), id, p);
-                    this.refresh();
-                    t.desconectar();
-                }
-                event.setCancelled(true);
+                refresh();
+            } else if (itemClickckedDisplayName.equalsIgnoreCase(Ofertas.NOMBRE_ITEM_COMPRAR)) {
+                transaccionesMySQL.conectar();
+                transaccionesMySQL.realizarVenta(p.getName(), id, p);
+                transaccionesMySQL.desconectar();
 
-            } else {
-                p.sendMessage(ChatColor.DARK_RED + "Tienes el inventario llenos :v");
-                event.setCancelled(true);
+                refresh();
             }
+            event.setCancelled(true);
+
+        } else {
+            p.sendMessage(ChatColor.DARK_RED + "Tienes el inventario lleno :v");
         }
     }
 
     private Inventory buildInv(){
         inventory = Bukkit.createInventory(null, 54, titulo);
-        ArrayList<String> lore = new ArrayList<>();
-        String vendedor = "";
-        double precio = 0;
-        int id;
-        ItemStack item = null;
-        ItemMeta im = null;
 
-        Ofertas o = new Ofertas();
-        o.conectar();
-        List<Oferta> ofertas = o.getTodasOfertas();
+        ofertasMySQL.conectar();
+        List<Oferta> ofertas = ofertasMySQL.getTodasOfertas();
 
+        ofertas.forEach((oferta) -> {
+            ItemStack itemStackAInsertar = ofertasMySQL.getItemOferta(oferta.getId_oferta());
+            ItemMeta itemMetaItemStackAInsertar = itemStackAInsertar.getItemMeta();
+            List<String> lore = new ArrayList<>();
 
-        for (Oferta oferta : ofertas) {
-            lore.clear();
-            vendedor = oferta.getNombre();
-            precio = oferta.getPrecio();
-            id = oferta.getId_oferta();
+            lore.add(ChatColor.GOLD + "Precio: " + ChatColor.GREEN + formatea.format(oferta.getPrecio()) + " PC");
+            lore.add(ChatColor.GOLD + "Venderdor: " + oferta.getNombre());
+            lore.add("" + oferta.getId_oferta());
 
-            item = o.getItemOferta(id);
-            im = item.getItemMeta();
-
-            lore.add(ChatColor.GOLD + "Precio: " + ChatColor.GREEN + formatea.format(precio) + " PC");
-            lore.add(ChatColor.GOLD + "Venderdor: " + vendedor);
-            lore.add("" + id);
-
-            im.setLore(lore);
-
-            if (vendedor.equalsIgnoreCase(player.getName())) {
-                im.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "CLICK PARA RETIRAR");
-            } else {
-                im.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "CLICK PARA COMPRAR");
+            if(oferta.getNombre().equalsIgnoreCase(player.getName())){
+                itemMetaItemStackAInsertar.setDisplayName(Ofertas.NOMBRE_ITEM_RETIRAR);
+            }else{
+                itemMetaItemStackAInsertar.setDisplayName(Ofertas.NOMBRE_ITEM_COMPRAR);
             }
-            item.setItemMeta(im);
 
-            inventory.addItem(item);
-        }
+            itemMetaItemStackAInsertar.setLore(lore);
+            itemStackAInsertar.setItemMeta(itemMetaItemStackAInsertar);
+            inventory.addItem(itemStackAInsertar);
+        });
+        ofertasMySQL.desconectar();
+
         return inventory;
     }
 
@@ -131,7 +116,7 @@ public class OfertasMenu extends Menu implements Clickleable, Refreshcable {
         copia.addAll(activeMenus);
 
         copia.forEach(menu -> {
-            if(menu instanceof OfertasMenu){
+            if (menu instanceof OfertasMenu) {
                 refreshSinglePlayer(inventory, (OfertasMenu) menu);
             }
         });

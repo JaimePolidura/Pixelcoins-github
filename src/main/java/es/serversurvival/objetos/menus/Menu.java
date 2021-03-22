@@ -21,4 +21,12 @@ public abstract class Menu {
         }
         return null;
     }
+
+    public static void refreshAll () {
+        activeMenus.forEach( (menu) -> {
+            if(menu instanceof Refreshcable){
+                ((Refreshcable) menu).refresh();
+            }
+        });
+    }
 }

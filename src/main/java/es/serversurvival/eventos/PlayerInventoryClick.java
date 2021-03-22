@@ -18,7 +18,7 @@ public class PlayerInventoryClick implements Listener {
 
         try {
             Menu menu = Menu.getByPlayer(p);
-            if(menu!= null){
+            if(menu != null){
                 e.setCancelled(true);
                 if(menu instanceof Clickleable && menu.titulo().equalsIgnoreCase(inNombre)){
                     ((Clickleable) menu).onInventoryClick(e);
@@ -55,7 +55,7 @@ public class PlayerInventoryClick implements Listener {
                 }
             }
         } catch (Exception exception) {
-            exception.printStackTrace();
+
         }
     }
 }

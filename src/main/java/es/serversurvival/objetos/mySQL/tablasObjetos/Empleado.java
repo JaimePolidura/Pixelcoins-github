@@ -59,6 +59,6 @@ public class Empleado {
     }
 
     public String getFrequenciaPago(){
-        return Empresas.toStringTipoSueldo(tipo);
+        return Empleados.toStringTipoSueldo(tipo);
     }
 }

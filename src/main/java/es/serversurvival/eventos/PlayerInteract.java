@@ -1,10 +1,8 @@
 package es.serversurvival.eventos;
 
-import es.serversurvival.comandos.subComandos.bolsa.ValoresBolsaSubComando;
+import es.serversurvival.comandos.subComandos.bolsa.ValoresBolsa;
 import es.serversurvival.objetos.menus.EmpresasMenu;
 import es.serversurvival.objetos.menus.OfertasMenu;
-import es.serversurvival.objetos.mySQL.Empresas;
-import es.serversurvival.objetos.mySQL.Ofertas;
 import es.serversurvival.objetos.mySQL.Transacciones;
 import es.serversurvival.main.Funciones;
 import org.bukkit.*;
@@ -33,8 +31,6 @@ public class PlayerInteract implements Listener {
     private final Location empresas = new Location(null, -270, 67, -196);
     private final Location bolsa = new Location(null, -245, 67, -196);
 
-    private Funciones f = new Funciones();
-
     @EventHandler
     public void onPlayerInteract(PlayerInteractEntityEvent e) {
         EquipmentSlot es = e.getHand();
@@ -45,9 +41,9 @@ public class PlayerInteract implements Listener {
         if (es.equals(EquipmentSlot.HAND) && en instanceof WitherSkeleton) {
             Transacciones t = new Transacciones();
             ItemStack im = p.getInventory().getItemInMainHand();
-            int espaciosLibres = f.espaciosLibres(p.getInventory());
+            int espaciosLibres = Funciones.espaciosLibres(p.getInventory());
 
-            if (f.comparar(lec, DiaPix)) {
+            if (Funciones.comparar(lec, DiaPix)) {
 
                 if (im.getType() == Material.DIAMOND) {
                     int slot = p.getInventory().getHeldItemSlot();
@@ -59,7 +55,7 @@ public class PlayerInteract implements Listener {
                     p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
                 }
 
-            } else if (f.comparar(lec, DiaBloPix)) {
+            } else if (Funciones.comparar(lec, DiaBloPix)) {
 
                 if (im.getType() == Material.DIAMOND_BLOCK) {
                     int slot = p.getInventory().getHeldItemSlot();
@@ -71,7 +67,7 @@ public class PlayerInteract implements Listener {
                     p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
                 }
 
-            } else if (f.comparar(lec, PixDia)) {
+            } else if (Funciones.comparar(lec, PixDia)) {
 
                 if (espaciosLibres != 0 || (p.getInventory().getItemInMainHand().getType() == Material.DIAMOND && p.getInventory().getItemInMainHand().getAmount() != 64)) {
                     t.conectar();
@@ -82,7 +78,7 @@ public class PlayerInteract implements Listener {
                     p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
                 }
 
-            } else if (f.comparar(lec, MaxPixMaxDia)) {
+            } else if (Funciones.comparar(lec, MaxPixMaxDia)) {
 
                 if (espaciosLibres != 0) {
                     t.conectar();
@@ -93,7 +89,7 @@ public class PlayerInteract implements Listener {
                     p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
                 }
 
-            } else if (f.comparar(lec, CuaPix)) {
+            } else if (Funciones.comparar(lec, CuaPix)) {
 
                 if (im.getType() == Material.QUARTZ_BLOCK) {
                     int slot = p.getInventory().getHeldItemSlot();
@@ -105,7 +101,7 @@ public class PlayerInteract implements Listener {
                     p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
                 }
 
-            } else if (f.comparar(lec, PixCua)) {
+            } else if (Funciones.comparar(lec, PixCua)) {
 
                 if (espaciosLibres != 0 || (p.getInventory().getItemInMainHand().getType() == Material.QUARTZ_BLOCK && p.getInventory().getItemInMainHand().getAmount() != 64)) {
                     t.conectar();
@@ -116,7 +112,7 @@ public class PlayerInteract implements Listener {
                     p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
                 }
 
-            } else if (f.comparar(lec, MaxPixMaxCua)) {
+            } else if (Funciones.comparar(lec, MaxPixMaxCua)) {
 
                 if (espaciosLibres != 0) {
                     t.conectar();
@@ -127,7 +123,7 @@ public class PlayerInteract implements Listener {
                     p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
                 }
 
-            } else if (f.comparar(lec, LapPix)) {
+            } else if (Funciones.comparar(lec, LapPix)) {
                 if (im.getType() == Material.LAPIS_LAZULI) {
                     int slot = p.getInventory().getHeldItemSlot();
                     t.conectar();
@@ -138,7 +134,7 @@ public class PlayerInteract implements Listener {
                     p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
                 }
 
-            } else if (f.comparar(lec, BloLapPix)) {
+            } else if (Funciones.comparar(lec, BloLapPix)) {
                 if (im.getType() == Material.LAPIS_BLOCK) {
                     int slot = p.getInventory().getHeldItemSlot();
                     t.conectar();
@@ -149,7 +145,7 @@ public class PlayerInteract implements Listener {
                     p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
                 }
 
-            } else if (f.comparar(lec, MaxPixMaxLap)) {
+            } else if (Funciones.comparar(lec, MaxPixMaxLap)) {
                 if (espaciosLibres != 0) {
                     t.conectar();
                     t.sacarMaxItem("LAPIS_LAZULI", p);
@@ -159,7 +155,7 @@ public class PlayerInteract implements Listener {
                     p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
                 }
 
-            } else if (f.comparar(lec, PixLap)) {
+            } else if (Funciones.comparar(lec, PixLap)) {
                 if (espaciosLibres != 0 || (p.getInventory().getItemInMainHand().getType() == Material.LAPIS_LAZULI && p.getInventory().getItemInMainHand().getAmount() != 64)) {
                     t.conectar();
                     t.sacarItem(p, "LAPIS_LAZULI");
@@ -177,7 +173,7 @@ public class PlayerInteract implements Listener {
             EmpresasMenu empresasMenu = new EmpresasMenu(p);
             empresasMenu.openMenu();
         } else if (Funciones.comparar(lec, bolsa)) {
-            ValoresBolsaSubComando valoresBolsaSubComando = new ValoresBolsaSubComando();
+            ValoresBolsa valoresBolsaSubComando = new ValoresBolsa();
             valoresBolsaSubComando.execute(p, null);
         }
     }

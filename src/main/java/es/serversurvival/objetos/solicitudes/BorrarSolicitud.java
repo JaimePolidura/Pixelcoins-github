@@ -3,6 +3,7 @@ package es.serversurvival.objetos.solicitudes;
 import es.serversurvival.main.Funciones;
 import es.serversurvival.objetos.mySQL.*;
 import es.serversurvival.objetos.mySQL.tablasObjetos.Empleado;
+import es.serversurvival.objetos.mySQL.tablasObjetos.Empresa;
 import es.serversurvival.objetos.task.ScoreboardTaskManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -72,40 +73,11 @@ public class BorrarSolicitud extends Solicitud {
     @Override
     public void aceptar() {
         Player destinatario = Bukkit.getPlayer(this.destinatario);
-        Empresas empr = new Empresas();
-        Jugadores j = new Jugadores();
-        Transacciones t = new Transacciones();
-        Empleados empl = new Empleados();
-        empl.conectar();
+        Empresas empresasMySQL = new Empresas();
 
-        List<Empleado> empleados = empl.getEmpleadosEmrpesa(empresa);
-        for (int i = 0; i < empleados.size(); i++) {
-            empl.borrarEmplado(empleados.get(i).getId());
-        }
-
-        double liquidez = empr.getPixelcoins(empresa);
-        empr.borrarEmpresa(empresa);
-
-        j.setPixelcoin(destinatario.getName(), j.getDinero(destinatario.getName()) + liquidez);
-        t.nuevaTransaccion(this.destinatario, this.destinatario, liquidez, empresa, Transacciones.TIPO.EMPRESA_BORRAR);
-
-        destinatario.sendMessage(ChatColor.GOLD + "Has borrado tu empresa: " + empresa + ", se ha retirado a tu cuenta un total de " + ChatColor.GREEN + liquidez + " PC");
-
-        Player tp = null;
-        Mensajes men = new Mensajes();
-
-        for (int i = 0; i < empleados.size(); i++) {
-            tp = destinatario.getServer().getPlayer(empleados.get(i).getEmpleado());
-
-            if (tp != null) {
-                tp.sendMessage(ChatColor.GOLD + destinatario.getName() + " ha borrado su empresa donde trabajabas: " + empresa);
-            } else {
-                men.nuevoMensaje(empleados.get(i).getEmpleado(), "El owner de la empresa en la que trabajas: " + empresa + " la ha borrado, ya no existe");
-            }
-        }
-        empl.desconectar();
-        ScoreboardTaskManager sp = new ScoreboardTaskManager();
-        sp.updateScoreboard(destinatario);
+        empresasMySQL.conectar();
+        empresasMySQL.borrarEmpresaManual(empresa);
+        empresasMySQL.desconectar();
 
         solicitudes.remove(this);
         destinatario.closeInventory();

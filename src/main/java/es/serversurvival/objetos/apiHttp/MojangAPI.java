@@ -1,5 +1,6 @@
 package es.serversurvival.objetos.apiHttp;
 
+import es.serversurvival.main.Funciones;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -16,16 +17,7 @@ public class MojangAPI {
         URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + name);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
-        BufferedReader bfr = new BufferedReader(new InputStreamReader(con.getInputStream()));
-
-        StringBuilder response = new StringBuilder();
-        String responseLine = null;
-        while ((responseLine = bfr.readLine()) != null) {
-            response.append(responseLine.trim());
-        }
-
-        JSONParser parser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) parser.parse(response.toString());
+        JSONObject jsonObject = (JSONObject) Funciones.httpResponseToObject(con);
 
         return (String) jsonObject.get("id");
     }
