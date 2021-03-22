@@ -18,9 +18,6 @@ commands:
   verdinero:
     description: ver pixelcoins de los jugadores
     usage: /<command> <jugador>
-  listaOfertas:
-    description: ver todos los objetos que tienes en la tienda
-    usage: /<command>
   tienda:
     description: Comando para ver la tienda
     usage: /<command>
@@ -36,3 +33,78 @@ commands:
   topvendedores:
     description: Ver los 3 jugadores que mas han vendido en la tienda y le han pagado
     usage: /<command>
+  prestar:
+    description: prestar una deuda con un interes y un max de tiempo
+    usage: /<command> <jugador> <dinero> <dias> <interes>
+  aceptar:
+    description: aceptar una peticion
+    usage: /<command>
+  rechazar:
+    description: rechazar una peticion
+    usage: /<command>
+  deudas:
+    description: Ver a los jugadores que te deben y los que debes
+    usage: /<command>
+  topfiables:
+    description: ver los que mas veces han pagado la deuda
+    usage: /<command>
+  topmenosfiables:
+    description: ver los que menos han podido pagar la deuda
+    usage: /<command> <tipoAyuda>
+  crearempresa:
+    description: crear una empresa
+    usage: /<command> <nombre> <description>
+  depositar:
+    description: depositar dinero en tu empresa
+    usage: /<command> <nombre> <pixelcoins>
+  sacar:
+    description: sacar dinero de tu empresa
+    usage: /<command> <nombre> <pixelcoins>
+  logotipo:
+    description: poner logotipo a tu empresa
+    usage: /<command> <nombre>
+  empresas:
+    description: mostar todas las empresas
+    usage: /<command>
+  contratar:
+    description: Contratar a jugadores
+    usage: /<command> <nombreJugador> <empresa> <sueldo> <tipo sueldo> <cargo>
+  despedir:
+    description: despedir a jugadores
+    usage: /<command> <nombreJugador> <empresa> <razon>
+  aceptarTrabajo:
+    description: Aceptar la oferta de trabajar en una empresa
+    usage: /<command>
+  rechazarTrabajo:
+    description: Rechazar la oferta de trabajar en una empresa
+    usage: /<command>
+  irse:
+    description: Irese de una empresa
+    usage: /<command> <empresa>
+  editarEmpleado:
+    description: editar valores del empleado en una empresa
+    usage: /<command> <empresa> <jugador> <tipo> <valor>
+  venderempresa:
+    description: vender una empresa a un jugador
+    usage: /<command> <empresa> <jugador> <precio>
+  aceptarcompra:
+    description: aceptar una solicitud para comprar una empresa a un jugador
+    usage: /<command>
+  rechazarcompra:
+    description: rechazar una compra de empresa a un jugador
+    usage: /<command>
+  miempresa:
+    description: ver las estadisticas de tu empresa
+    usage: /<command> <empresa>
+  mensajes:
+    description: ver tus mensajes pendientes
+    usage: /<command>
+  editarnombre:
+    description: cambiar el nombre de tu empresa
+    usage: /<command> <empresa> <nuevonombre>
+  mistrabajos:
+    description: ver en todo lo que trabajas
+    usage: /<command>
+  borrarempresa:
+    description: borrar tu empresa
+    usage: /<command> <nombre>

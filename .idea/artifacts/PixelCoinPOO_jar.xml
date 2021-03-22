@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="PixelCoinPOO:jar">
+    <output-path>$USER_HOME$/Desktop</output-path>
+    <root id="archive" name="PixelCoinPOO.jar">
+      <element id="module-output" name="PixelCoinPOO" />
+      <element id="file-copy" path="$PROJECT_DIR$/plugin.yml" />
+    </root>
+  </artifact>
+</component>

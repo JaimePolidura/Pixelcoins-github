@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/src/es/serversurvival/clases/Deudas.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/es/serversurvival/clases/Empleados.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/es/serversurvival/clases/Empresas.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/es/serversurvival/clases/Jugador.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/es/serversurvival/clases/Ofertas.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/es/serversurvival/clases/Solicitudes.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/es/serversurvival/clases/Transacciones.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/es/serversurvival/config/Mensajes.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/es/serversurvival/config/Pixelcoin.java" charset="windows-1252" />
+    <file url="PROJECT" charset="windows-1252" />
+  </component>
+</project>
