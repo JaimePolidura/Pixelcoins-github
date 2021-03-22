@@ -1,8 +1,13 @@
 package es.serversurvival.comandos.comandos;
 
 import es.serversurvival.comandos.Comando;
+import es.serversurvival.objetos.menus.OfertasMenu;
 import es.serversurvival.objetos.mySQL.Ofertas;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.InventoryHolder;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TiendaComando extends Comando {
     private final String CNombre = "tienda";
@@ -22,9 +27,7 @@ public class TiendaComando extends Comando {
     }
 
     public void execute(Player p, String[] args) {
-        Ofertas o = new Ofertas();
-        o.conectar();
-        o.mostarOfertas(p);
-        o.desconectar();
+        OfertasMenu ofertasMenu = new OfertasMenu(p);
+        ofertasMenu.openMenu();
     }
 }

@@ -2,13 +2,12 @@ package es.serversurvival.objetos.mySQL;
 
 import java.sql.*;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 
-import es.serversurvival.objetos.mySQL.Encantamientos;
-import es.serversurvival.objetos.mySQL.Jugador;
-import es.serversurvival.objetos.mySQL.MySQL;
-import org.bukkit.Bukkit;
+import es.serversurvival.objetos.menus.Menu;
+import es.serversurvival.objetos.menus.OfertasMenu;
+import es.serversurvival.objetos.mySQL.tablasObjetos.Encantamiento;
+import es.serversurvival.objetos.mySQL.tablasObjetos.Oferta;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -26,7 +25,6 @@ import es.serversurvival.main.Pixelcoin;
 public class Ofertas extends MySQL {
     public final static int maxEspacios = 7;
     private static DecimalFormat formatea = new DecimalFormat("###,###.##");
-    private Inventory tienda = Bukkit.createInventory(null, 54, ChatColor.DARK_RED + "" + ChatColor.BOLD + "            Tienda");
 
     private void nuevaOferta(String nombre, String objeto, int cantidad, double precio, int durabilidad) {
         try {
@@ -67,50 +65,27 @@ public class Ofertas extends MySQL {
         return maxId;
     }
 
-    public void mostarOfertas(Player p) {
-        tienda.clear();
-        String vendedor = "";
-        int id_oferta = 0;
-        double precio = 0;
-        ItemStack item = null;
-        ItemMeta im = null;
-        ArrayList<String> lore = new ArrayList<String>();
-        try {
+    public List<Oferta> getTodasOfertas(){
+        List<Oferta> ofertas = new ArrayList<>();
+        try{
             String consulta = "SELECT * FROM ofertas";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            ResultSet rs = conexion.createStatement().executeQuery(consulta);
 
-            while (rs.next()) {
-                lore.clear();
-                id_oferta = rs.getInt("id_oferta");
-                vendedor = rs.getString("nombre");
-                precio = rs.getDouble("precio");
-
-                item = this.getItemOferta(id_oferta);
-                im = item.getItemMeta();
-
-                lore.add(ChatColor.GOLD + "Precio: " + ChatColor.GREEN + formatea.format(precio) + " PC");
-                lore.add(ChatColor.GOLD + "Venderdor: " + vendedor);
-                lore.add("" + id_oferta);
-
-                im.setLore(lore);
-
-                if (vendedor.equalsIgnoreCase(p.getName())) {
-                    im.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "CLICK PARA RETIRAR");
-                } else {
-                    im.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "CLICK PARA COMPRAR");
-                }
-                item.setItemMeta(im);
-
-                tienda.addItem(item);
+            while (rs.next()){
+                ofertas.add(new Oferta(
+                        rs.getInt("id_oferta"),
+                        rs.getString("nombre"),
+                        rs.getString("objeto"),
+                        rs.getInt("cantidad"),
+                        rs.getDouble("precio"),
+                        rs.getInt("durabilidad")
+                ));
             }
-            p.openInventory(tienda);
-        } catch (SQLException e) {
-            p.sendMessage("wtf");
+        }catch (Exception e){
+            e.printStackTrace();
         }
+        return ofertas;
     }
-
 
     public void borrarOferta(int id, String nombreJugador) {
         Encantamientos encan = new Encantamientos();
@@ -118,7 +93,7 @@ public class Ofertas extends MySQL {
         this.borrarOferta(id);
 
         int espacios;
-        Jugador j = new Jugador();
+        Jugadores j = new Jugadores();
         espacios = j.getEspacios(nombreJugador) - 1;
         j.setEspacios(nombreJugador, espacios);
     }
@@ -134,7 +109,7 @@ public class Ofertas extends MySQL {
         int id_oferta = 0;
         int espacios = 0;
         boolean encontrado = false;
-        Jugador j = new Jugador();
+        Jugadores j = new Jugadores();
 
         encontrado = j.estaRegistrado(nombreJugador);
         espacios = j.getEspacios(nombreJugador);
@@ -184,6 +159,15 @@ public class Ofertas extends MySQL {
 
             encan.nuevoEncantamiento(eNombre, nivel, id_oferta);
         }
+
+        Set<Menu> ofertaSet = new HashSet<>();
+        ofertaSet.addAll(Menu.activeMenus);
+
+        ofertaSet.forEach(menu -> {
+            if(menu instanceof OfertasMenu){
+                ((OfertasMenu) menu).refresh();
+            }
+        });
     }
 
     @SuppressWarnings({"deprecation"})
@@ -203,10 +187,14 @@ public class Ofertas extends MySQL {
         ItemMeta ime = i.getItemMeta();
 
         Encantamientos encan = new Encantamientos();
-        Map<Enchantment, Integer> encantamientos = encan.getEncantamientosOferta(id);
+        List<Encantamiento> encantamientos = encan.getEncantamientosOferta(id);
 
-        for (Map.Entry<Enchantment, Integer> entry : encantamientos.entrySet()) {
-            ime.addEnchant(entry.getKey(), entry.getValue(), true);
+        for(Encantamiento encantamiento : encantamientos){
+            ime.addEnchant(
+                    Enchantment.getByName(encantamiento.getEncantamiento()),
+                    encantamiento.getNivel(),
+                    true
+            );
         }
         i.setItemMeta(ime);
 
@@ -217,8 +205,9 @@ public class Ofertas extends MySQL {
         ItemStack i = this.getItemOferta(id);
         this.borrarOferta(id, p.getName());
         p.getInventory().addItem(i);
-        this.mostarOfertas(p);
-        p.openInventory(tienda);
+
+        OfertasMenu ofertasMenu = (OfertasMenu) Menu.getByPlayer(p);
+        ofertasMenu.refresh();
 
         p.sendMessage(ChatColor.GOLD + "Objeto retirado!");
         p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);

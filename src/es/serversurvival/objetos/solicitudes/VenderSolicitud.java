@@ -4,7 +4,8 @@ import es.serversurvival.main.Funciones;
 import es.serversurvival.objetos.mySQL.Empleados;
 import es.serversurvival.objetos.mySQL.Mensajes;
 import es.serversurvival.objetos.mySQL.Transacciones;
-import es.serversurvival.objetos.task.ScoreboardPlayer;
+import es.serversurvival.objetos.mySQL.tablasObjetos.Empleado;
+import es.serversurvival.objetos.task.ScoreboardTaskManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -16,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class VenderSolicitud extends Solicitud {
     private static String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "solicitud compra empresa";
@@ -89,13 +91,11 @@ public class VenderSolicitud extends Solicitud {
             int id_empleado = emp.getId(destinatario.getName(), empresa);
             emp.borrarEmplado(id_empleado);
         }
-
-        ArrayList<String> empleados = new ArrayList<String>();
-        empleados = emp.getNombreEmpleadosEmpresa(empresa);
+        List<Empleado> empleadosEmpresa = emp.getEmpleadosEmrpesa(empresa);
 
         Mensajes men = new Mensajes();
-        for (int i = 0; i < empleados.size(); i++) {
-            men.nuevoMensaje(empleados.get(i), "La empresa en la que trabajas " + empresa + " ha cambiado de owner a " + destinatario.getName());
+        for (int i = 0; i < empleadosEmpresa.size(); i++) {
+            men.nuevoMensaje(empleadosEmpresa.get(i).getEmpleado(), "La empresa en la que trabajas " + empresa + " ha cambiado de owner a " + destinatario.getName());
         }
 
         t.comprarEmpresa(this.enviador, this.destinatario, empresa, precio, enviador);
@@ -104,7 +104,7 @@ public class VenderSolicitud extends Solicitud {
         destinatario.sendMessage(ChatColor.GOLD + "Ahora eres dueño de " + ChatColor.DARK_AQUA + empresa + ChatColor.GOLD + " ,la has comprado por " + ChatColor.GREEN + precio + " PC");
         destinatario.playSound(destinatario.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
-        ScoreboardPlayer sp = new ScoreboardPlayer();
+        ScoreboardTaskManager sp = new ScoreboardTaskManager();
         if (enviador != null) {
             enviador.sendMessage(ChatColor.GOLD + destinatario.getName() + " te ha comprado " + ChatColor.DARK_AQUA + empresa + ChatColor.GOLD + " por " + ChatColor.GREEN + precio + " PC " + ChatColor.GOLD + ", ahora ya no eres dueño");
             enviador.playSound(enviador.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);

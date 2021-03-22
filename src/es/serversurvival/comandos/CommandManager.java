@@ -71,6 +71,7 @@ public class CommandManager implements CommandExecutor {
         comandos.add(new AyudaBolsaSubComando());
         comandos.add(new BolsaAyuda());
         comandos.add(new VerCarteraBolsaSubComando());
+        comandos.add(new CuentaComando());
 
         subComandos.add(new MisTrabajosEmpleosSubComando());
         subComandos.add(new IrseEmpleosSubComando());

@@ -1,11 +1,13 @@
 package es.serversurvival.objetos.mySQL;
 
 import es.serversurvival.objetos.mySQL.MySQL;
+import es.serversurvival.objetos.mySQL.tablasObjetos.Mensaje;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Mensajes extends MySQL {
 
@@ -20,21 +22,24 @@ public class Mensajes extends MySQL {
         }
     }
 
-    private ArrayList<String> getMensajes(String jugador) {
-        ArrayList<String> mensajes = new ArrayList<String>();
+    public List<Mensaje> getMensajesJugador(String destinatario){
+        List<Mensaje> mensajes = new ArrayList<>();
 
-        try {
-            String consulta = "SELECT mensaje FROM mensajes WHERE destinatario = ? ";
-            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
-            pst.setString(1, jugador);
-            ResultSet rs = pst.executeQuery();
+        try{
+            String consulta = "SELECT * FROM mensajes WHERE destinatario = ?";
+            PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
+            preparedStatement.setString(1, destinatario);
+            ResultSet rs = preparedStatement.executeQuery();
 
-            while (rs.next()) {
-                mensajes.add(rs.getString("mensaje"));
+            while (rs.next()){
+                mensajes.add(new Mensaje(
+                        rs.getInt("id_mensaje"),
+                        rs.getString("destinatario"),
+                        rs.getString("mensaje")
+                ));
             }
-            rs.close();
-        } catch (Exception e) {
-
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return mensajes;
     }
@@ -105,18 +110,17 @@ public class Mensajes extends MySQL {
 
     public void mostrarMensajes(Player p) {
         String jugador = p.getName();
-        boolean tiene = this.tieneMensajes(jugador);
+        List<Mensaje> mensajes = this.getMensajesJugador(jugador);
 
-        if (!tiene) {
+        if (mensajes == null || mensajes != null) {
             p.sendMessage(ChatColor.DARK_RED + "No tienes ningun mensaje pendiente");
             return;
         }
 
-        ArrayList<String> mensajes = this.getMensajes(p.getName());
         p.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "   MENSAJES:");
 
         for (int i = 0; i < mensajes.size(); i++) {
-            p.sendMessage(ChatColor.GOLD + "" + (i + 1) + " " + mensajes.get(i));
+            p.sendMessage(ChatColor.GOLD + "" + (i + 1) + " " + mensajes.get(i).getMensaje());
         }
         this.borrarMensajes(jugador);
     }

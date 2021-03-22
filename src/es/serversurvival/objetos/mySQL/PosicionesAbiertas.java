@@ -2,6 +2,7 @@ package es.serversurvival.objetos.mySQL;
 
 import es.serversurvival.main.Funciones;
 import es.serversurvival.objetos.apiHttp.IEXCloud_API;
+import es.serversurvival.objetos.mySQL.tablasObjetos.PosicionAbierta;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -26,13 +27,13 @@ import java.util.List;
 public class PosicionesAbiertas extends MySQL {
     private static String titulo = ChatColor.DARK_RED + "SELECCIONA Nº DE ACCIONES";
 
-    public void nuevaPosicion(String jugador, String ticker, int nAcciones, double precioApertura) {
+    public void nuevaPosicion(String jugador, String tipo, String nombre, int cantidad, double precioApertura) {
         Date dt = new Date();
         SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
         String fecha = sdf.format(dt);
 
         try {
-            String consulta = "INSERT INTO posicionesabiertas (jugador, ticker, nAcciones, precioApertura, fechaApertura) VALUES ('" + jugador + "','" + ticker + "','" + nAcciones + "','" + precioApertura + "', '" + fecha + "')";
+            String consulta = "INSERT INTO posicionesabiertas (jugador, tipo, nombre, cantidad, precioApertura, fechaApertura) VALUES ('" + jugador + "','"+tipo+"','" + nombre + "','" + cantidad + "','" + precioApertura + "', '" + fecha + "')";
             Statement statement = conexion.createStatement();
             statement.executeUpdate(consulta);
         } catch (Exception e) {
@@ -70,42 +71,61 @@ public class PosicionesAbiertas extends MySQL {
         return nombre;
     }
 
-    public String getTicker(int id) {
-        String ticker = "";
+    public String getTipo(int id) {
+        String tipo = "";
         try {
-            String consulta = "SELECT ticker FROM posicionesabiertas WHERE id = ?";
+            String consulta = "SELECT tipo FROM posicionesabiertas WHERE id = ?";
             PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
             preparedStatement.setInt(1, id);
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                ticker = rs.getString("ticker");
+                tipo = rs.getString("tipo");
                 break;
             }
             rs.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ticker;
+        return tipo;
     }
 
-    public int getNAcciones(int id) {
-        int acciones = 0;
+    public String getNombre(int id) {
+        String nombre = "";
         try {
-            String consulta = "SELECT nAcciones FROM posicionesabiertas WHERE id = ?";
+            String consulta = "SELECT nombre FROM posicionesabiertas WHERE id = ?";
             PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
             preparedStatement.setInt(1, id);
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                acciones = rs.getInt("nAcciones");
+                nombre = rs.getString("nombre");
                 break;
             }
             rs.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return acciones;
+        return nombre;
+    }
+
+    public int getCantidad(int id) {
+        int cantidad = 0;
+        try {
+            String consulta = "SELECT cantidad FROM posicionesabiertas WHERE id = ?";
+            PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
+            preparedStatement.setInt(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                cantidad = rs.getInt("cantidad");
+                break;
+            }
+            rs.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cantidad;
     }
 
     public double getPreciopApertura(int id) {
@@ -146,22 +166,29 @@ public class PosicionesAbiertas extends MySQL {
         return fecha;
     }
 
-    public ArrayList<Integer> getIdsPosicionesJugador(String jugador) {
-        ArrayList<Integer> toReturn = new ArrayList<>();
-        try {
-            String consuta = "SELECT id FROM posicionesabiertas WHERE jugador = ?";
-            PreparedStatement preparedStatement = conexion.prepareStatement(consuta);
+    public List<PosicionAbierta> getPosicionesJugador(String jugador){
+        List<PosicionAbierta> posicionAbiertas = new ArrayList<>();
+        try{
+            String consulta = "SELECT * FROM posicionesabiertas WHERE jugador = ?";
+            PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
             preparedStatement.setString(1, jugador);
-            ResultSet resultSet = preparedStatement.executeQuery();
+            ResultSet rs = preparedStatement.executeQuery();
 
-            while (resultSet.next()) {
-                toReturn.add(resultSet.getInt("id"));
+            while (rs.next()){
+                posicionAbiertas.add(new PosicionAbierta(
+                        rs.getInt("id"),
+                        rs.getString("jugador"),
+                        rs.getString("tipo"),
+                        rs.getString("nombre"),
+                        rs.getInt("cantidad"),
+                        rs.getDouble("precioApertura"),
+                        rs.getString("fechaApertura")
+                ));
             }
-            resultSet.close();
-        } catch (Exception e) {
+        }catch (Exception e){
             e.printStackTrace();
         }
-        return toReturn;
+        return posicionAbiertas;
     }
 
     public boolean existe(int id) {
@@ -182,11 +209,11 @@ public class PosicionesAbiertas extends MySQL {
         return toReturn;
     }
 
-    public void setNAcciones(int id, int NAcciones) {
+    public void setCantidad(int id, int cantidad) {
         try {
-            String consulta = "UPDATE posicionesabiertas SET nAcciones = ? WHERE id = ?";
+            String consulta = "UPDATE posicionesabiertas SET cantidad = ? WHERE id = ?";
             PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
-            preparedStatement.setInt(1, NAcciones);
+            preparedStatement.setInt(1, cantidad);
             preparedStatement.setInt(2, id);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
@@ -194,9 +221,31 @@ public class PosicionesAbiertas extends MySQL {
         }
     }
 
+    public List<PosicionAbierta> getTodasPosicionesAbiertas(){
+        List<PosicionAbierta> toReturn = new ArrayList<>();
+
+        try{
+            String consulta = "SELECT * FROM posicionesabiertas";
+            ResultSet rs = conexion.createStatement().executeQuery(consulta);
+
+            while (rs.next()){
+                toReturn.add(new PosicionAbierta(
+                        rs.getInt("id"),
+                        rs.getString("jugador"),
+                        rs.getString("tipo"),
+                        rs.getString("nombre"),
+                        rs.getInt("cantidad"),
+                        rs.getDouble("precioApertura"),
+                        rs.getString("fechaApertura")
+                ));
+            }
+        }catch (Exception e){e.printStackTrace();}
+        return toReturn;
+    }
+
     public void pagarDividendos(Plugin plugin) {
         try {
-            String consulta = "SELECT ticker, nAcciones, jugador, id FROM posicionesabiertas";
+            String consulta = "SELECT nombre, cantidad, jugador, id FROM posicionesabiertas WHERE tipo = 'ACCIONES'";
             Statement statement = conexion.createStatement();
             ResultSet resultSet = statement.executeQuery(consulta);
 
@@ -212,10 +261,10 @@ public class PosicionesAbiertas extends MySQL {
             Transacciones t = new Transacciones();
 
             while (resultSet.next()) {
-                ticker = resultSet.getString("ticker");
+                ticker = resultSet.getString("nombre");
                 jugador = resultSet.getString("jugador");
                 id = resultSet.getInt("id");
-                nAcciones = resultSet.getInt("nAcciones");
+                nAcciones = resultSet.getInt("cantidad");
 
                 try {
                     jsonArray = IEXCloud_API.getDividendo(ticker, "week");
@@ -235,5 +284,28 @@ public class PosicionesAbiertas extends MySQL {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public double getPrecioActual(String simbolo, String tipo) throws Exception {
+        double precio = -1;
+
+        switch (tipo.toUpperCase()){
+            case "ACCIONES":
+                precio = IEXCloud_API.getOnlyPrice(simbolo);
+                break;
+            case "CRIPTOMONEDAS":
+                precio = IEXCloud_API.getPrecioCriptomoneda(simbolo);
+                break;
+            case "MATERIAS_PRIMAS":
+                precio = IEXCloud_API.getPrecioMateriaPrima(simbolo);
+                break;
+        }
+        return precio;
+    }
+
+    public static enum TIPOS{
+        ACCIONES,
+        CRIPTOMONEDAS,
+        MATERIAS_PRIMAS
     }
 }

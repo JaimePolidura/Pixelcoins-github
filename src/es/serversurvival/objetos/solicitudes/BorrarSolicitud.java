@@ -2,7 +2,8 @@ package es.serversurvival.objetos.solicitudes;
 
 import es.serversurvival.main.Funciones;
 import es.serversurvival.objetos.mySQL.*;
-import es.serversurvival.objetos.task.ScoreboardPlayer;
+import es.serversurvival.objetos.mySQL.tablasObjetos.Empleado;
+import es.serversurvival.objetos.task.ScoreboardTaskManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BorrarSolicitud extends Solicitud {
     private static String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "     Confirmar borrar";
@@ -71,15 +73,15 @@ public class BorrarSolicitud extends Solicitud {
     public void aceptar() {
         Player destinatario = Bukkit.getPlayer(this.destinatario);
         Empresas empr = new Empresas();
-        Jugador j = new Jugador();
+        Jugadores j = new Jugadores();
         Transacciones t = new Transacciones();
         Empleados empl = new Empleados();
         empl.conectar();
 
-        ArrayList<String> empleados = empl.getNombreEmpleadosEmpresa(empresa);
-        ArrayList<Integer> idEmpleados = empl.getidEmpleadosEmpresa(empresa);
-        for (int i = 0; i < idEmpleados.size(); i++) {
-            empl.borrarEmplado(idEmpleados.get(i));
+
+        List<Empleado> empleados = empl.getEmpleadosEmrpesa(empresa);
+        for (int i = 0; i < empleados.size(); i++) {
+            empl.borrarEmplado(empleados.get(i).getId());
         }
 
         double liquidez = empr.getPixelcoins(empresa);
@@ -94,16 +96,16 @@ public class BorrarSolicitud extends Solicitud {
         Mensajes men = new Mensajes();
 
         for (int i = 0; i < empleados.size(); i++) {
-            tp = destinatario.getServer().getPlayer(empleados.get(i));
+            tp = destinatario.getServer().getPlayer(empleados.get(i).getEmpleado());
 
             if (tp != null) {
                 tp.sendMessage(ChatColor.GOLD + destinatario.getName() + " ha borrado su empresa donde trabajabas: " + empresa);
             } else {
-                men.nuevoMensaje(empleados.get(i), "El owner de la empresa en la que trabajas: " + empresa + " la ha borrado, ya no existe");
+                men.nuevoMensaje(empleados.get(i).getEmpleado(), "El owner de la empresa en la que trabajas: " + empresa + " la ha borrado, ya no existe");
             }
         }
         empl.desconectar();
-        ScoreboardPlayer sp = new ScoreboardPlayer();
+        ScoreboardTaskManager sp = new ScoreboardTaskManager();
         sp.updateScoreboard(destinatario);
 
         solicitudes.remove(this);

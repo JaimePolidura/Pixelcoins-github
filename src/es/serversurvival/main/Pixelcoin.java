@@ -2,10 +2,10 @@ package es.serversurvival.main;
 
 import es.serversurvival.comandos.CommandManager;
 import es.serversurvival.eventos.*;
-import es.serversurvival.objetos.apiHttp.IEXCloud_API;
 import es.serversurvival.objetos.mySQL.*;
+import es.serversurvival.objetos.task.LlamadasApiTask;
 import es.serversurvival.objetos.task.MensajeWeb;
-import es.serversurvival.objetos.task.ScoreboardPlayer;
+import es.serversurvival.objetos.task.ScoreboardTaskManager;
 import org.bukkit.ChatColor;
 
 import org.bukkit.command.CommandExecutor;
@@ -13,7 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Pixelcoin extends JavaPlugin {
     private static Pixelcoin plugin;
-    PosicionesAbiertas posicionesAbiertas = new PosicionesAbiertas();
+    private PosicionesAbiertas posicionesAbiertas = new PosicionesAbiertas();
     private Deudas d = new Deudas();
     private Empleados em = new Empleados();
     private MySQL sql = new MySQL();
@@ -26,7 +26,6 @@ public class Pixelcoin extends JavaPlugin {
         getLogger().info("------------Plugin activado -------------");
         getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "------------------------------");
         getServer().getConsoleSender().sendMessage(ChatColor.YELLOW + "       Pixelcoins POO");
-
 
         //Preparamos los comandos y dejamos al server a la escucha de los eventos
         setUpComandos(new CommandManager());
@@ -50,8 +49,10 @@ public class Pixelcoin extends JavaPlugin {
         //Iniciamos todas las tareas del plugin en el server
         MensajeWeb mensajeWeb = new MensajeWeb(this.getServer());
         mensajeWeb.runTaskTimer(this, 0, 20 * MensajeWeb.delay);
-        ScoreboardPlayer sp = new ScoreboardPlayer();
-        sp.runTaskTimer(this, 0, 20 * ScoreboardPlayer.scoreboardSwitchDelay);
+        ScoreboardTaskManager sp = new ScoreboardTaskManager();
+        sp.runTaskTimer(this, 0, 20 * ScoreboardTaskManager.scoreboardSwitchDelay);
+        LlamadasApiTask llamadasApiTask = new LlamadasApiTask();
+        llamadasApiTask.runTaskTimer(this, 0, LlamadasApiTask.delay * 20);
 
         plugin = this;
 
@@ -85,5 +86,5 @@ public class Pixelcoin extends JavaPlugin {
         this.getCommand("empleos").setExecutor(commandExecutor);
         this.getCommand("ayuda").setExecutor(commandExecutor);
         this.getCommand("bolsa").setExecutor(commandExecutor);
-    }
+        this.getCommand("cuenta").setExecutor(commandExecutor);}
 }

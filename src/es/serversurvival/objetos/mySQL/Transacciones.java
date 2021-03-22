@@ -1,13 +1,12 @@
 package es.serversurvival.objetos.mySQL;
 
-import java.lang.management.PlatformLoggingMXBean;
 import java.sql.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import com.sun.media.sound.MidiOutDeviceProvider;
-import es.serversurvival.objetos.mySQL.*;
-import es.serversurvival.objetos.task.ScoreboardPlayer;
+import es.serversurvival.objetos.menus.Menu;
+import es.serversurvival.objetos.menus.OfertasMenu;
+import es.serversurvival.objetos.task.ScoreboardTaskManager;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -23,7 +22,7 @@ import org.bukkit.entity.Player;
 @SuppressWarnings("SpellCheckingInspection")
 public class Transacciones extends MySQL {
     public DecimalFormat formatea = new DecimalFormat("###,###.##");
-    private ScoreboardPlayer sp = new ScoreboardPlayer();
+    private ScoreboardTaskManager sp = new ScoreboardTaskManager();
 
     public static final double DIAMANTE = 750;
     public static final double CUARZO = 20;
@@ -170,7 +169,7 @@ public class Transacciones extends MySQL {
     }
 
     public void realizarVenta(String comprador, int id, Player p) {
-        Jugador j = new Jugador();
+        Jugadores j = new Jugadores();
         Ofertas o = new Ofertas();
         int cantidad = 0;
         double precio = 0;
@@ -200,7 +199,8 @@ public class Transacciones extends MySQL {
             cantidad = cantidad - 1;
             o.setCantidad(id, cantidad);
         }
-        o.mostarOfertas(p);
+        OfertasMenu ofertasMenu = (OfertasMenu) Menu.getByPlayer(p);
+        ofertasMenu.refresh();
 
         p.getInventory().addItem(is);
 
@@ -217,13 +217,12 @@ public class Transacciones extends MySQL {
             p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
             sp.updateScoreboard(vendedorP);
         }
-
         sp.updateScoreboard(p);
     }
 
     //Realizar pago de dos jugadores
     public void realizarTransferencia(String nombrePagador, String nombrePagado, double cantidad, String objeto, TIPO tipo, boolean editarEstadisticas) {
-        Jugador j = new Jugador();
+        Jugadores j = new Jugadores();
 
         //-------------CODIGO-------------
         double dineroPagador = j.getDinero(nombrePagador);
@@ -265,7 +264,7 @@ public class Transacciones extends MySQL {
 
     //Realizar pago manual
     public void realizarPagoManual(String nombrePagador, String nombrePagado, double cantidad, Player p, String objeto, TIPO tipo) {
-        Jugador j = new Jugador();
+        Jugadores j = new Jugadores();
         double dineroPagador = j.getDinero(nombrePagador);
         Player tp = null;
 
@@ -288,7 +287,7 @@ public class Transacciones extends MySQL {
     public void ingresarItem(ItemStack im, Player p, int slot) {
         double pixelcoinsAnadir = 0;
         String tipoIm = im.getType().toString();
-        Jugador j = new Jugador();
+        Jugadores j = new Jugadores();
 
         boolean registrado = j.estaRegistrado(p.getName());
         int cantidad = im.getAmount();
@@ -330,7 +329,7 @@ public class Transacciones extends MySQL {
     }
 
     public void sacarItem(Player p, String tipo) {
-        Jugador j = new Jugador();
+        Jugadores j = new Jugadores();
         Inventory in = p.getInventory();
         try {
             j.conectar();
@@ -401,7 +400,7 @@ public class Transacciones extends MySQL {
     //SacarMaximos items
     public void sacarMaxItem(String tipo, Player p) {
         Funciones f = new Funciones();
-        Jugador j = new Jugador();
+        Jugadores j = new Jugadores();
         int espaciosLibres = f.espaciosLibres(p.getInventory());
         int cambio = 0;
         int convertibles = 0;
@@ -501,7 +500,7 @@ public class Transacciones extends MySQL {
 
     //DEPOSITAR
     public void depositarPixelcoins(Player p, double pixelcoins, String nombreEmpresa) {
-        Jugador j = new Jugador();
+        Jugadores j = new Jugadores();
         Empresas em = new Empresas();
 
         String nombreJugador = p.getName();
@@ -557,7 +556,7 @@ public class Transacciones extends MySQL {
                     "+ del que la empresa tiene");
             return;
         }
-        Jugador j = new Jugador();
+        Jugadores j = new Jugadores();
 
         double pixelcoinsJugador = j.getDinero(nombreJugador);
         em.setPixelcoins(nombreEmpresa, pixelcoinsEmpresa - pixelcoins);
@@ -574,7 +573,7 @@ public class Transacciones extends MySQL {
         Empresas em = new Empresas();
         em.setOwner(empresa, comprador);
 
-        Jugador j = new Jugador();
+        Jugadores j = new Jugadores();
         j.setEstadisticas(vendedor, j.getDinero(vendedor) + precio, j.getNventas(vendedor) + 1, j.getIngresos(vendedor) + precio, j.getGastos(vendedor));
         j.setEstadisticas(comprador, j.getDinero(comprador) - precio, j.getNventas(comprador), j.getIngresos(comprador), j.getGastos(comprador) + precio);
     }
@@ -587,7 +586,7 @@ public class Transacciones extends MySQL {
         em.setPixelcoins(empresa, em.getPixelcoins(empresa) - salario);
         em.setGastos(empresa, em.getGastos(empresa) + salario);
 
-        Jugador j = new Jugador();
+        Jugadores j = new Jugadores();
         j.setEstadisticas(jugador, j.getDinero(jugador) + salario, j.getNventas(jugador), j.getIngresos(jugador) + salario, j.getGastos(jugador));
         this.nuevaTransaccion(jugador, empresa, salario, "", TIPO.EMPRESA_PAGAR_SALARIO);
 
@@ -611,7 +610,7 @@ public class Transacciones extends MySQL {
         }
 
         owner = em.getOwner(empresa);
-        Jugador j = new Jugador();
+        Jugadores j = new Jugadores();
 
         if (j.getDinero(comprador) < precio) {
             p.sendMessage(ChatColor.DARK_RED + "No puedes ir por encima de tus posibilidades");
@@ -640,77 +639,73 @@ public class Transacciones extends MySQL {
                 }
             }
         }
-
         p.sendMessage(ChatColor.GOLD + "Has pagado " + ChatColor.GREEN + precio + " PC " + ChatColor.GOLD + " a la empresa: " + empresa + " por su servicio");
-
 
         this.nuevaTransaccion(comprador, empresa, precio, "", TIPO.EMPRESA_COMPRAR_SERVICIO);
     }
 
-    public void comprarAccion(String ticker, double precioAccion, int nAcciones, Player player) {
+    public void comprarUnidadBolsa(String tipo, String ticker, String alias, double precioUnidad, int cantidad, Player player) {
         PosicionesAbiertas posicionesAbiertas = new PosicionesAbiertas();
-        Jugador j = new Jugador();
+        Jugadores j = new Jugadores();
         j.conectar();
 
-        double precioTotal = precioAccion * nAcciones;
+        double precioTotal = precioUnidad * cantidad;
         double pixelCoinsJugador = j.getDinero(player.getName());
 
         if (precioTotal > pixelCoinsJugador) {
-            player.sendMessage(ChatColor.DARK_RED + "No tienes las suficientes pixelcoins para pagar " + nAcciones + " acciones a " + formatea.format(precioAccion) + " $ -> " + formatea.format(precioTotal) + " PC");
+            player.sendMessage(ChatColor.DARK_RED + "No tienes las suficientes pixelcoins para pagar " + cantidad + " " +  alias + " a " + formatea.format(precioUnidad) + " $ -> " + formatea.format(precioTotal) + " PC");
             return;
         }
         j.setPixelcoin(player.getName(), pixelCoinsJugador - precioTotal);
-        posicionesAbiertas.nuevaPosicion(player.getName(), ticker, nAcciones, precioAccion);
-        this.nuevaTransaccion(player.getName(), ticker, precioTotal, "Accion: " + precioAccion, TIPO.BOLSA_COMPRA);
+        posicionesAbiertas.nuevaPosicion(player.getName(), tipo, ticker, cantidad, precioUnidad);
+        this.nuevaTransaccion(player.getName(), ticker, precioTotal, tipo +  " " + precioUnidad, TIPO.BOLSA_COMPRA);
 
         if (player != null) {
-            player.sendMessage(ChatColor.GOLD + "Has comprado " + formatea.format(nAcciones) + " acciones a " + ChatColor.GREEN + formatea.format(precioAccion) + " PC" + ChatColor.GOLD + " que es un total de " +
+            player.sendMessage(ChatColor.GOLD + "Has comprado " + formatea.format(cantidad)  + " " + alias + " a " + ChatColor.GREEN + formatea.format(precioUnidad) + " PC" + ChatColor.GOLD + " que es un total de " +
                     ChatColor.GREEN + formatea.format(precioTotal) + " PC " + ChatColor.GOLD + " comandos: " + ChatColor.AQUA + "/bolsa vender /bolsa cartera");
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
-            if (nAcciones == 1) {
-                Bukkit.broadcastMessage(ChatColor.GOLD + player.getName() + " ha comprado una accion de " + ticker + " a " + ChatColor.GREEN + precioAccion + "PC");
-            } else {
-                Bukkit.broadcastMessage(ChatColor.GOLD + player.getName() + " ha comprado " + nAcciones + " acciones de " + ticker + " a " + ChatColor.GREEN + precioAccion + "PC");
-            }
+            Bukkit.broadcastMessage(ChatColor.GOLD + player.getName() + " ha comprado " + cantidad + " " + alias +  " de " + ticker + " a " + ChatColor.GREEN + precioUnidad + "PC");
 
         }
         j.desconectar();
     }
 
-    public void venderAccion(double precioPorAccion, int accionesAVender, int idPosiconAbierta, Player player) {
+    public void venderPosicion(double precioPorAccion, int cantidad, int idPosiconAbierta, Player player) {
         PosicionesCerradas posicionesCerradas = new PosicionesCerradas();
         PosicionesAbiertas posicionesAbiertas = new PosicionesAbiertas();
-        Jugador j = new Jugador();
+        Jugadores j = new Jugadores();
 
-        String ticker = posicionesAbiertas.getTicker(idPosiconAbierta);
-        int nAccionesTotlaesEnCartera = posicionesAbiertas.getNAcciones(idPosiconAbierta);
+        String ticker = posicionesAbiertas.getNombre(idPosiconAbierta);
+        int nAccionesTotlaesEnCartera = posicionesAbiertas.getCantidad(idPosiconAbierta);
         double precioApertura = posicionesAbiertas.getPreciopApertura(idPosiconAbierta);
         String fechaApertura = posicionesAbiertas.getFechaApertura(idPosiconAbierta);
-        double revalorizacionTotal = accionesAVender * precioPorAccion;
+        double revalorizacionTotal = cantidad * precioPorAccion;
         double rentabilidad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(precioApertura, precioPorAccion), 3);
+        String tipoPosicion = posicionesAbiertas.getTipo(idPosiconAbierta);
 
         j.setPixelcoin(player.getName(), j.getDinero(player.getName()) + revalorizacionTotal);
-        if (accionesAVender == nAccionesTotlaesEnCartera) {
+        if (cantidad == nAccionesTotlaesEnCartera) {
             posicionesAbiertas.borrarPosicion(idPosiconAbierta);
         } else {
-            posicionesAbiertas.setNAcciones(idPosiconAbierta, nAccionesTotlaesEnCartera - accionesAVender);
+            posicionesAbiertas.setCantidad(idPosiconAbierta, nAccionesTotlaesEnCartera - cantidad);
         }
-        posicionesCerradas.nuevaPosicion(player.getName(), ticker, accionesAVender, precioApertura, fechaApertura, precioPorAccion, idPosiconAbierta);
-        this.nuevaTransaccion(player.getName(), ticker, accionesAVender * precioPorAccion, "", TIPO.BOLSA_VENTA);
+        posicionesCerradas.nuevaPosicion(player.getName(), tipoPosicion, ticker, cantidad, precioApertura, fechaApertura, precioPorAccion);
+
+        this.nuevaTransaccion(player.getName(), ticker, cantidad * precioPorAccion, "", TIPO.BOLSA_VENTA);
 
         if (player != null) {
             if (rentabilidad <= 0) {
-                player.sendMessage(ChatColor.GOLD + "Has vendido " + formatea.format(accionesAVender) + " acciones de " + ticker + " a " + ChatColor.GREEN + formatea.format(precioPorAccion)
-                        + " PC/Accion " + ChatColor.GOLD + " cuando la compraste a " + ChatColor.GREEN + formatea.format(precioApertura) + " PC/Accion " + ChatColor.GOLD + " -> " +
-                        ChatColor.RED + formatea.format(rentabilidad) + "% : " + formatea.format(Funciones.redondeoDecimales(revalorizacionTotal - (accionesAVender * precioApertura), 3)) + " Perdidas PC " + ChatColor.GOLD + " de " + ChatColor.GREEN + formatea.format(revalorizacionTotal) + " PC");
+                player.sendMessage(ChatColor.GOLD + "Has vendido " + formatea.format(cantidad) + " de " + ticker + " a " + ChatColor.GREEN + formatea.format(precioPorAccion)
+                        + " PC/Accion " + ChatColor.GOLD + " cuando la compraste a " + ChatColor.GREEN + formatea.format(precioApertura) + " PC/Unidad " + ChatColor.GOLD + " -> " +
+                        ChatColor.RED + formatea.format(rentabilidad) + "% : " + formatea.format(Funciones.redondeoDecimales(revalorizacionTotal - (cantidad * precioApertura), 3)) + " Perdidas PC " + ChatColor.GOLD + " de " + ChatColor.GREEN + formatea.format(revalorizacionTotal) + " PC");
                 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 10, 1);
                 Bukkit.broadcastMessage(ChatColor.GOLD + player.getName() + " ha alacanzado una rentabilidad del " + ChatColor.RED + formatea.format(Funciones.redondeoDecimales(rentabilidad, 3)) + "% "
                         + ChatColor.GOLD + "de las acciones de " + ticker);
             } else {
-                player.sendMessage(ChatColor.GOLD + "Has vendido " + formatea.format(accionesAVender) + " acciones de " + ticker + " a " + ChatColor.GREEN + formatea.format(precioPorAccion)
-                        + " PC/Accion " + ChatColor.GOLD + " cuando la compraste a " + ChatColor.GREEN + formatea.format(precioApertura) + " PC/Accion " + ChatColor.GOLD + " -> " +
-                        ChatColor.GREEN + formatea.format(rentabilidad) + "% : " + formatea.format(Funciones.redondeoDecimales(revalorizacionTotal - (accionesAVender * precioApertura), 3)) + " Beneficios PC " + ChatColor.GOLD + " de " + ChatColor.GREEN + formatea.format(revalorizacionTotal) + " PC");
+                player.sendMessage(ChatColor.GOLD + "Has vendido " + formatea.format(cantidad) + " de " + ticker + " a " + ChatColor.GREEN + formatea.format(precioPorAccion)
+                        + " PC/Accion " + ChatColor.GOLD + " cuando la compraste a " + ChatColor.GREEN + formatea.format(precioApertura) + " PC/Unidad " + ChatColor.GOLD + " -> " +
+                        ChatColor.GREEN + formatea.format(rentabilidad) + "% : " + formatea.format(Funciones.redondeoDecimales(revalorizacionTotal - (cantidad * precioApertura), 3)) + " Beneficios PC " + ChatColor.GOLD + " de " + ChatColor.GREEN + formatea.format(revalorizacionTotal) + " PC");
                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
                 Bukkit.broadcastMessage(ChatColor.GOLD + player.getName() + " ha alacanzado una rentabilidad del " + ChatColor.GREEN + "+" + formatea.format(Funciones.redondeoDecimales(rentabilidad, 3)) + "% "
                         + ChatColor.GOLD + "de las acciones de " + ticker);
@@ -719,7 +714,7 @@ public class Transacciones extends MySQL {
     }
 
     public void pagaDividendo(String ticker, String nombre, double precioDividendo, int nAcciones) {
-        Jugador j = new Jugador();
+        Jugadores j = new Jugadores();
 
         double aPagar = precioDividendo * nAcciones;
 

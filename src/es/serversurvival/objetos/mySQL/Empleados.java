@@ -6,8 +6,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import com.mysql.fabric.xmlrpc.base.Array;
 import es.serversurvival.main.Funciones;
+import es.serversurvival.objetos.mySQL.tablasObjetos.Empleado;
 import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -28,7 +31,7 @@ public class Empleados extends MySQL {
             Statement st2 = (Statement) conexion.createStatement();
             st2.executeUpdate(consulta);
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -260,49 +263,38 @@ public class Empleados extends MySQL {
         }
     }
 
-    public ArrayList<Integer> getidEmpleadosEmpresa(String nombreEmpresa) {
-        ArrayList<Integer> ids = new ArrayList<Integer>();
+    public List<Empleado> getEmpleadosEmrpesa(String nombreEmpresa){
+        List<Empleado> empleados = new ArrayList<>();
 
         try {
-            String consulta = "SELECT id FROM empleados WHERE empresa = ?";
+            String consulta = "SELECT * FROM empleados WHERE empresa = ?";
             PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
             pst.setString(1, nombreEmpresa);
             ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                ids.add(rs.getInt("id"));
+                empleados.add(new Empleado(
+                        rs.getInt("id"),
+                        rs.getString("empleado"),
+                        rs.getString("empresa"),
+                        rs.getDouble("sueldo"),
+                        rs.getString("cargo"),
+                        rs.getString("tipo"),
+                        rs.getString("fechaPaga")
+                ));
             }
             rs.close();
         } catch (SQLException e) {
-
-        }
-        return ids;
-    }
-
-    public ArrayList<String> getNombreEmpleadosEmpresa(String nombreEmpresa) {
-        ArrayList<String> empleados = new ArrayList<String>();
-
-        try {
-            String consulta = "SELECT empleado FROM empleados WHERE empresa = ?";
-            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
-            pst.setString(1, nombreEmpresa);
-            ResultSet rs = pst.executeQuery();
-
-            while (rs.next()) {
-                empleados.add(rs.getString("empleado"));
-            }
-            rs.close();
-        } catch (SQLException e) {
-
+            e.printStackTrace();
         }
         return empleados;
     }
 
     public void cambiarEmpresaNombre(String empresa, String nuevoNombre) {
-        ArrayList<Integer> ids = this.getidEmpleadosEmpresa(empresa);
+        List<Empleado> empleados = this.getEmpleadosEmrpesa(empresa);
 
-        for (int i = 0; i < ids.size(); i++) {
-            this.setEmpresa(ids.get(i), nuevoNombre);
+        for (int i = 0; i < empleados.size(); i++) {
+            this.setEmpresa(empleados.get(i).getId(), nuevoNombre);
         }
     }
 
@@ -412,33 +404,51 @@ public class Empleados extends MySQL {
         tp2.playSound(tp2.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
     }
 
-    public void mostarTrabajos(Player p) {
+    public List<Empleado> getTrabajosJugador(String jugador){
+        List<Empleado> empleados = new ArrayList<>();
+
         try {
-            String consulta = "SELECT * FROM empleados";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
-            String empresa;
-            String cargo;
-            double sueldo;
-            String tipoSueldo;
-            String ultimaPaga;
+            String consulta = "SELECT * FROM empleados WHERE empleado = ?";
+            PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
+            preparedStatement.setString(1, jugador);
+            ResultSet rs = preparedStatement.executeQuery();
 
-            p.sendMessage(ChatColor.GOLD + "Tus trabajos:");
-            while (rs.next()) {
-                if (rs.getString("empleado").equalsIgnoreCase(p.getName())) {
-                    empresa = rs.getString("empresa");
-                    cargo = rs.getString("cargo");
-                    sueldo = rs.getDouble("sueldo");
-                    tipoSueldo = rs.getString("tipo");
-                    ultimaPaga = rs.getString("fechaPaga");
-                    tipoSueldo = Empresas.toStringTipoSueldo(tipoSueldo);
-
-                    p.sendMessage(ChatColor.GOLD + "   Empresa: " + empresa + " con un sueldo: " + ChatColor.GREEN + sueldo + " PC/" + tipoSueldo + org.bukkit.ChatColor.GOLD + " con el cargo de: " + cargo + " La ultima paga: " + ultimaPaga);
-                }
+            while (rs.next()){
+                empleados.add(new Empleado(
+                        rs.getInt("id"),
+                        rs.getString("empleado"),
+                        rs.getString("empresa"),
+                        rs.getDouble("sueldo"),
+                        rs.getString("cargo"),
+                        rs.getString("tipo"),
+                        rs.getString("fechaPaga")
+                ));
             }
-        } catch (Exception e) {
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return empleados;
+    }
 
+    public void mostarTrabajos(Player p) {
+        List<Empleado> trabajos = this.getTrabajosJugador(p.getName());
+
+        String empresa;
+        String cargo;
+        double sueldo;
+        String tipoSueldo;
+        String ultimaPaga;
+
+        p.sendMessage(ChatColor.GOLD + "Tus trabajos:");
+        for(Empleado trabajo : trabajos) {
+            empresa = trabajo.getEmpresa();
+            cargo = trabajo.getCargo();
+            sueldo = trabajo.getSueldo();
+            tipoSueldo = trabajo.getTipo();
+            ultimaPaga = trabajo.getFechaPaga();
+            tipoSueldo = Empresas.toStringTipoSueldo(tipoSueldo);
+
+            p.sendMessage(ChatColor.GOLD + "   Empresa: " + empresa + " con un sueldo: " + ChatColor.GREEN + sueldo + " PC/" + tipoSueldo + org.bukkit.ChatColor.GOLD + " con el cargo de: " + cargo + " La ultima paga: " + ultimaPaga);
         }
     }
 

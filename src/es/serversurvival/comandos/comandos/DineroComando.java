@@ -1,7 +1,7 @@
 package es.serversurvival.comandos.comandos;
 
 import es.serversurvival.comandos.Comando;
-import es.serversurvival.objetos.mySQL.Jugador;
+import es.serversurvival.objetos.mySQL.Jugadores;
 import org.bukkit.entity.Player;
 
 public class DineroComando extends Comando {
@@ -22,7 +22,7 @@ public class DineroComando extends Comando {
     }
 
     public void execute(Player player, String[] args) {
-        Jugador j = new Jugador();
+        Jugadores j = new Jugadores();
         j.conectar();
         j.mostarPixelcoin(player);
         j.desconectar();

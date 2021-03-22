@@ -14,12 +14,14 @@ public class MySQL {
     private static final String user = "root";
     private static final String pass = "";
 
-    public void conectar() {
+    public Connection conectar() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             conexion = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbName, user, pass);
+            return conexion;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
     }
 

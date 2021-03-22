@@ -1,7 +1,7 @@
 package es.serversurvival.comandos.subComandos.deudas;
 
 import es.serversurvival.main.Funciones;
-import es.serversurvival.objetos.mySQL.Jugador;
+import es.serversurvival.objetos.mySQL.Jugadores;
 import es.serversurvival.objetos.solicitudes.PrestamosSolicitud;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -77,7 +77,7 @@ public class PrestarDeudasSubComando extends DeudasSubCommand {
             p.sendMessage(ChatColor.DARK_RED + "A ese jugador ya le has enviado una solicitud / ya le han enviado una solicitud");
             return;
         }
-        Jugador j = new Jugador();
+        Jugadores j = new Jugadores();
 
         j.conectar();
         double pixelcoins = j.getDinero(p.getName());

@@ -42,3 +42,6 @@ commands:
   bolsa:
     description: comando relacionado con los comandos de la bolsa
     usage: /<command> <subComandos...>
+  cuenta:
+    description: ver todas tu numero de cuenta para iniciar sesion
+    usage: /<command>

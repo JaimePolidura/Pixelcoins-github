@@ -1,5 +1,6 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
+import es.serversurvival.objetos.menus.EmpresasMenu;
 import es.serversurvival.objetos.mySQL.Empresas;
 import org.bukkit.entity.Player;
 
@@ -21,9 +22,7 @@ public class VerTodasEmpresasSubComando extends EmpresasSubCommand {
     }
 
     public void execute(Player p, String[] args) {
-        Empresas empr = new Empresas();
-        empr.conectar();
-        empr.mostrarEmpresas(p);
-        empr.desconectar();
+        EmpresasMenu empresasMenu = new EmpresasMenu(p);
+        empresasMenu.openMenu();
     }
 }

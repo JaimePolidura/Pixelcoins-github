@@ -1,10 +1,12 @@
 package es.serversurvival.comandos.subComandos.bolsa;
 
 import es.serversurvival.objetos.mySQL.PosicionesCerradas;
+import es.serversurvival.objetos.mySQL.tablasObjetos.PosicionCerrada;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EstadiscticasBolsaSubComando extends BolsaSubCommand {
     private final String SCNombre = "estadisticas";
@@ -30,35 +32,46 @@ public class EstadiscticasBolsaSubComando extends BolsaSubCommand {
         player.sendMessage(ChatColor.GOLD + "--------------------------------");
         player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "     ESTADISTICAS");
 
-        ArrayList<Integer> idsMen = posicionesCerradas.getTop3PersonalMenosRentabilidadesID(player.getName());
-        ArrayList<Integer> idsMay = posicionesCerradas.getTop3PersonalRentabilidadesID(player.getName());
+        List<PosicionCerrada> idsMen = posicionesCerradas.getTop3PersonalMenosRentabilidadesID(player.getName());
+        List<PosicionCerrada> idsMay = posicionesCerradas.getTop3PersonalRentabilidadesID(player.getName());
 
         player.sendMessage(ChatColor.GOLD + "Mejores operaciones:");
         int pos = 1;
-        int nAcciones;
+        int cantidad;
         double apertura;
         double cierre;
+        double rentabilidad;
 
-        for (int id : idsMay) {
-            nAcciones = posicionesCerradas.getNAcciones(id);
-            apertura = posicionesCerradas.getPrecioApertura(id);
-            cierre = posicionesCerradas.getPrecioCierre(id);
+        for (PosicionCerrada posicionCerrada : idsMay) {
+            cantidad = posicionCerrada.getCantidad();
+            apertura = posicionCerrada.getPrecioApertura();
+            cierre = posicionCerrada.getPrecioCierre();
+            rentabilidad = posicionCerrada.getRentabilidad();
 
-            player.sendMessage(ChatColor.GOLD + "" + pos + ": " + posicionesCerradas.getTicker(id) + " -> " + ChatColor.GREEN + "+" +
-                    posicionesCerradas.getRentabilidad(id) + "% -> +" + formatea.format((nAcciones * cierre) - (nAcciones * apertura)) + " PC "
-                    + ChatColor.DARK_AQUA + "ID: " + id);
+            if(rentabilidad < 0 ){
+                continue;
+            }
+
+            player.sendMessage(ChatColor.GOLD + "" + pos + ": " + posicionCerrada.getTipo().toLowerCase()  + " -> " + posicionCerrada.getNombre() + " : " + ChatColor.GREEN + "+" +
+                    posicionCerrada.getRentabilidad() + "% -> +" + formatea.format((cantidad * cierre) - (cantidad * apertura)) + " PC "
+                    + ChatColor.DARK_AQUA + "ID: " + posicionCerrada.getId());
             pos++;
         }
         player.sendMessage(ChatColor.GOLD + "Peores operaciones:");
         pos = 1;
-        for (int id : idsMen) {
-            nAcciones = posicionesCerradas.getNAcciones(id);
-            apertura = posicionesCerradas.getPrecioApertura(id);
-            cierre = posicionesCerradas.getPrecioCierre(id);
+        for (PosicionCerrada posicionCerrada : idsMen) {
+            cantidad = posicionCerrada.getCantidad();
+            apertura = posicionCerrada.getPrecioApertura();
+            cierre = posicionCerrada.getPrecioCierre();
+            rentabilidad = posicionCerrada.getRentabilidad();
 
-            player.sendMessage(ChatColor.GOLD + "" + pos + ": " + posicionesCerradas.getTicker(id) + " -> " + ChatColor.RED +
-                    posicionesCerradas.getRentabilidad(id) + "% -> " + formatea.format((nAcciones * cierre) - (nAcciones * apertura)) + " PC "
-                    + ChatColor.DARK_AQUA + "ID:" + id);
+            if(rentabilidad > 0){
+                continue;
+            }
+
+            player.sendMessage(ChatColor.GOLD + "" + pos + ": " + posicionCerrada.getTipo().toLowerCase()  + " -> " + posicionCerrada.getNombre() + " : " + ChatColor.RED +
+                    posicionCerrada.getRentabilidad() + "% -> " + formatea.format((cantidad * cierre) - (cantidad * apertura)) + " PC "
+                    + ChatColor.DARK_AQUA + "ID:" + posicionCerrada.getId());
             pos++;
         }
         player.sendMessage(ChatColor.GOLD + "Si quieres ver todas las operaciones que has hecho y que tienes: " + ChatColor.AQUA + "/bolsa operacionesCerradas /bolsa cartera");

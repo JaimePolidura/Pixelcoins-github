@@ -3,7 +3,7 @@ package es.serversurvival.objetos.solicitudes;
 import es.serversurvival.main.Funciones;
 import es.serversurvival.objetos.mySQL.Deudas;
 import es.serversurvival.objetos.mySQL.Transacciones;
-import es.serversurvival.objetos.task.ScoreboardPlayer;
+import es.serversurvival.objetos.task.ScoreboardTaskManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -88,7 +88,7 @@ public class PrestamosSolicitud extends Solicitud {
         t.realizarTransferencia(enviador, destinatario, pixelcoins, "", Transacciones.TIPO.DEUDAS_PRIMERPAGO, false);
         d.nuevaDeuda(destinatario, enviador, Funciones.interes(pixelcoins, interes), dias, interes);
         t.desconectar();
-        ScoreboardPlayer sp = new ScoreboardPlayer();
+        ScoreboardTaskManager sp = new ScoreboardTaskManager();
 
         tp.sendMessage(ChatColor.GOLD + "Has aceptado la solicitud de: " + ChatColor.GREEN + formatea.format(pixelcoins) + " PC " + ChatColor.GOLD + "con un interes del: " + ChatColor.GREEN + interes +
                 ChatColor.GOLD + " a " + ChatColor.GREEN + dias + ChatColor.GOLD + " dias");

@@ -5,6 +5,9 @@ import java.math.RoundingMode;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import es.serversurvival.objetos.mySQL.*;
+import es.serversurvival.objetos.mySQL.tablasObjetos.Deuda;
+import es.serversurvival.objetos.mySQL.tablasObjetos.Empresa;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -19,7 +22,7 @@ public final class Funciones {
     public static int espaciosLibres(Inventory inventory) {
         int el = 36;
         for (ItemStack is : inventory.getContents()) {
-            if (is == null) {
+            if (is == null || is.getType().toString().equalsIgnoreCase("AIR")) {
                 continue;
             } else {
                 el--;
@@ -138,6 +141,7 @@ public final class Funciones {
     public static HashMap<String, Double> sortByValueDecre(HashMap<String, Double> hm) {
         // Create a list from elements of HashMap
         List<Map.Entry<String, Double>> list = new LinkedList<Map.Entry<String, Double>>(hm.entrySet());
+        Collections.reverseOrder();
 
         // Sort the list
         Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {
@@ -214,5 +218,47 @@ public final class Funciones {
     public static double redondeoDecimales(double numero, int numeroDecimales) {
         BigDecimal redondeado = new BigDecimal(numero).setScale(numeroDecimales, RoundingMode.HALF_EVEN);
         return redondeado.doubleValue();
+    }
+
+    public static Map<String, Double> crearMapaTopPlayers(boolean creciente){
+        Jugadores j = new Jugadores();
+        j.conectar();
+
+        HashMap<String, Double> jugadores = (HashMap<String, Double>) j.getAllJugadoresDinero();
+        HashMap<String, Double> toReturn = new HashMap<>();
+
+        Deudas deudas = new Deudas();
+        PosicionesAbiertas posicionesAbiertas = new PosicionesAbiertas();
+        Empresas empresas = new Empresas();
+        LlamadasApi llamadasApi = new LlamadasApi();
+
+        jugadores.forEach((nombre, dinero) -> {
+            double activosTotales = 0;
+
+            //Liquidez
+            activosTotales = j.getDinero(nombre);
+
+            //Deuas a cobrar
+            activosTotales += deudas.getDeudasAcredor(nombre).stream()
+                    .mapToDouble(Deuda::getPixelcoins)
+                    .sum();
+
+            //Empresas
+            activosTotales += empresas.getEmpresasOwner(nombre).stream()
+                    .mapToDouble(Empresa::getPixelcoins)
+                    .sum();
+
+            //Inversiones
+            activosTotales += posicionesAbiertas.getPosicionesJugador(nombre).stream()
+                    .mapToDouble(posicion -> llamadasApi.getPrecio(posicion.getNombre()) * posicion.getCantidad())
+                    .sum();
+
+            toReturn.put(nombre, activosTotales);
+        });
+
+        if(creciente)
+            return Funciones.sortByValueCre(toReturn);
+        else
+            return Funciones.sortByValueDecre(toReturn);
     }
 }

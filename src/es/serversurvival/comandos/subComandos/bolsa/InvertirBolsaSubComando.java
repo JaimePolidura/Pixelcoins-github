@@ -2,6 +2,8 @@ package es.serversurvival.comandos.subComandos.bolsa;
 
 import es.serversurvival.main.Pixelcoin;
 import es.serversurvival.objetos.apiHttp.IEXCloud_API;
+import es.serversurvival.objetos.mySQL.LlamadasApi;
+import es.serversurvival.objetos.mySQL.PosicionesAbiertas;
 import es.serversurvival.objetos.mySQL.Transacciones;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -51,7 +53,18 @@ public class InvertirBolsaSubComando extends BolsaSubCommand {
                 player.sendMessage(ChatColor.RED + "Cargando...");
                 precioAccion = IEXCloud_API.getOnlyPrice(ticker);
                 Transacciones t = new Transacciones();
-                t.comprarAccion(ticker, precioAccion, nAcciones, player);
+                t.comprarUnidadBolsa(PosicionesAbiertas.TIPOS.ACCIONES.toString(), ticker, "acciones", precioAccion, nAcciones, player);
+
+                LlamadasApi llamadasApi = new LlamadasApi();
+                llamadasApi.conectar();
+
+                if(llamadasApi.estaReg(ticker)){
+                    llamadasApi.setPrecio(ticker, precioAccion);
+                }else{
+                    llamadasApi.nuevaLlamada(ticker, precioAccion, PosicionesAbiertas.TIPOS.ACCIONES.toString());
+                }
+
+                llamadasApi.desconectar();
             } catch (Exception e) {
                 e.printStackTrace();
                 player.sendMessage(ChatColor.DARK_RED + "Ticker no encontrado, los tickers se ven en /bolsa valores o en inernet como en es.investing.com. Solo se puede invertir en acciones que cotizen en Estados Unidos");

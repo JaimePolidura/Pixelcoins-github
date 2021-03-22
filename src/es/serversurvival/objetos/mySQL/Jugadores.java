@@ -2,16 +2,20 @@ package es.serversurvival.objetos.mySQL;
 
 import java.sql.*;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import es.serversurvival.main.Funciones;
 import es.serversurvival.objetos.mySQL.Deudas;
 import es.serversurvival.objetos.mySQL.MySQL;
+import es.serversurvival.objetos.mySQL.tablasObjetos.Jugador;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 
-public class Jugador extends MySQL {
+public class Jugadores extends MySQL {
     public DecimalFormat formatea = new DecimalFormat("###,###.##");
 
     //MostrarDinero
@@ -25,22 +29,51 @@ public class Jugador extends MySQL {
         }
     }
 
+    public Jugador getJugador(String jugador){
+        Jugador toReturn = null;
+
+        try{
+            String consulta = "SELECT * FROM jugadores WHERE nombre = ?";
+            PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
+            preparedStatement.setString(1, jugador);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()){
+                toReturn = new Jugador(
+                        rs.getString("nombre"),
+                        rs.getDouble("pixelcoin"),
+                        rs.getInt("espacios"),
+                        rs.getInt("nventas"),
+                        rs.getDouble("ingresos"),
+                        rs.getDouble("gastos"),
+                        rs.getDouble("beneficios"),
+                        rs.getInt("ninpagos"),
+                        rs.getInt("npagos")
+                );
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return toReturn;
+    }
+
     //MostrarEstadisticas
     public void mostarEstadisticas(Player p) {
         Funciones f = new Funciones();
-        boolean reg = this.estaRegistrado(p.getName());
         Deudas d = new Deudas();
         p.sendMessage("     ");
-        if (reg) {
-            double nventas = this.getNventas(p.getName());
-            double ingresos = this.getIngresos(p.getName());
-            double gastos = this.getGastos(p.getName());
+
+        Jugador jugador = this.getJugador(p.getName());
+        if (jugador != null) {
+            double nventas = jugador.getNventas();
+            double ingresos = jugador.getIngresos();
+            double gastos = jugador.getGastos();
             double beneficios = ingresos - gastos;
             double margen = Funciones.rentabilidad(ingresos, beneficios);
             double precioMedio = Math.round(ingresos / nventas);
 
-            int ninpagos = this.getNinpago(p.getName());
-            int npagos = this.getNpagos(p.getName());
+            int ninpagos = jugador.getNinpagos();
+            int npagos = jugador.getNpagos();
             int deuda = 0;
             int deudaDevolver = 0;
             try {
@@ -490,27 +523,53 @@ public class Jugador extends MySQL {
         }
     }
 
-    public HashMap<String, Double> getTop3PlayersPixelcoins() {
-        HashMap<String, Double> jugadores = new HashMap<>();
-        try {
-            String consulta = "SELECT nombre,pixelcoin FROM jugadores ORDER BY pixelcoin desc LIMIT 3";
-            Statement st = conexion.createStatement();
-            ResultSet rs = st.executeQuery(consulta);
+    public List<Jugador> getAllJugadores(){
+        List<Jugador> jugadors = new ArrayList<>();
+        try{
+            String consulta = "SELECT * FROM jugadores";
+            ResultSet rs = conexion.createStatement().executeQuery(consulta);
 
-            while (rs.next()) {
-                jugadores.put(rs.getString("nombre"), rs.getDouble("pixelcoin"));
+            while (rs.next()){
+                jugadors.add(new Jugador(
+                        rs.getString("nombre"),
+                        rs.getDouble("pixelcoin"),
+                        rs.getInt("espacios"),
+                        rs.getInt("nventas"),
+                        rs.getDouble("ingresos"),
+                        rs.getDouble("gastos"),
+                        rs.getDouble("beneficios"),
+                        rs.getInt("ninpagos"),
+                        rs.getInt("npagos")
+                ));
             }
-            rs.close();
-        } catch (Exception e) {
+        }catch (Exception e){
             e.printStackTrace();
         }
-        return Funciones.sortByValueDecre(jugadores);
+        return jugadors;
     }
 
-    public HashMap<String, Double> getTop3PlayersMenosPixelcoins() {
+    public Map<String, Double> getAllJugadoresDinero(){
+        Map<String, Double> jugadors = new HashMap<>();
+        try{
+            String consulta = "SELECT nombre, pixelcoin FROM jugadores";
+            ResultSet rs = conexion.createStatement().executeQuery(consulta);
+
+            while (rs.next()){
+                jugadors.put(
+                        rs.getString("nombre"),
+                        rs.getDouble("pixelcoin")
+                );
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return jugadors;
+    }
+
+    public HashMap<String, Double> getTop5PlayersMenosPixelcoins() {
         HashMap<String, Double> jugadores = new HashMap<>();
         try {
-            String consulta = "SELECT nombre, pixelcoin FROM jugadores ORDER BY pixelcoin ASC LIMIT 3";
+            String consulta = "SELECT nombre, pixelcoin FROM jugadores ORDER BY pixelcoin ASC LIMIT 5";
             Statement st = conexion.createStatement();
             ResultSet rs = st.executeQuery(consulta);
 
@@ -524,10 +583,10 @@ public class Jugador extends MySQL {
         return Funciones.sortByValueCre(jugadores);
     }
 
-    public HashMap<String, Integer> getTop3PlayersNVentas() {
+    public HashMap<String, Integer> getTop5PlayersNVentas() {
         HashMap<String, Integer> jugadores = new HashMap<>();
         try {
-            String consulta = "SELECT nombre,nventas FROM jugadores ORDER BY nventas DESC LIMIT 3";
+            String consulta = "SELECT nombre,nventas FROM jugadores ORDER BY nventas DESC LIMIT 5";
             Statement st = conexion.createStatement();
             ResultSet rs = st.executeQuery(consulta);
 
@@ -541,10 +600,10 @@ public class Jugador extends MySQL {
         return Funciones.sortByValueDecreInt(jugadores);
     }
 
-    public HashMap<String, Integer> getTop3PlayerFiables() {
+    public HashMap<String, Integer> getTop5PlayerFiables() {
         HashMap<String, Integer> jugadores = new HashMap<>();
         try {
-            String consulta = "SELECT nombre,npagos FROM jugadores ORDER BY npagos DESC LIMIT 3";
+            String consulta = "SELECT nombre,npagos FROM jugadores ORDER BY npagos DESC LIMIT 5";
             Statement st = conexion.createStatement();
             ResultSet rs = st.executeQuery(consulta);
 
@@ -558,10 +617,10 @@ public class Jugador extends MySQL {
         return Funciones.sortByValueDecreInt(jugadores);
     }
 
-    public HashMap<String, Integer> getTop3PlayersMenosFiables() {
+    public HashMap<String, Integer> getTop5PlayersMenosFiables() {
         HashMap<String, Integer> jugadores = new HashMap<>();
         try {
-            String consulta = "SELECT nombre,ninpagos FROM jugadores ORDER BY ninpagos DESC LIMIT 3";
+            String consulta = "SELECT nombre,ninpagos FROM jugadores ORDER BY ninpagos DESC LIMIT 5";
             Statement st = conexion.createStatement();
             ResultSet rs = st.executeQuery(consulta);
 

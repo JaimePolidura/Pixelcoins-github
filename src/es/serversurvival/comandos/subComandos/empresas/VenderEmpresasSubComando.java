@@ -1,7 +1,7 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
 import es.serversurvival.objetos.mySQL.Empresas;
-import es.serversurvival.objetos.mySQL.Jugador;
+import es.serversurvival.objetos.mySQL.Jugadores;
 import es.serversurvival.objetos.solicitudes.VenderSolicitud;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -65,7 +65,7 @@ public class VenderEmpresasSubComando extends EmpresasSubCommand {
         }
         empr.desconectar();
 
-        Jugador j = new Jugador();
+        Jugadores j = new Jugadores();
         j.conectar();
         double pixelcoinsDest = j.getDinero(jugador);
         j.desconectar();

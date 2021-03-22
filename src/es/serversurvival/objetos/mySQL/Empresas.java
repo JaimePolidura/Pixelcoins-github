@@ -4,14 +4,11 @@ import java.sql.*;
 import java.text.DecimalFormat;
 import java.util.*;
 
-import es.serversurvival.objetos.task.ScoreboardPlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
+import es.serversurvival.objetos.mySQL.tablasObjetos.Empleado;
+import es.serversurvival.objetos.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.objetos.task.ScoreboardTaskManager;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 
 import es.serversurvival.main.Funciones;
@@ -53,7 +50,7 @@ public class Empresas extends MySQL {
             ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                nempresas = nempresas + 1;
+                nempresas++;
             }
             rs.close();
         } catch (SQLException e) {
@@ -155,6 +152,25 @@ public class Empresas extends MySQL {
 
         }
         return icono;
+    }
+
+    public String getNombre(int id){
+        String nombre = null;
+        try {
+            String consulta = "SELECT nombre FROM empresas WHERE id_empresa = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                nombre = rs.getString("nombre");
+                break;
+            }
+            rs.close();
+        } catch (SQLException e) {
+
+        }
+        return nombre;
     }
 
     public String getDescripcion(String nombreEmpresa) {
@@ -286,20 +302,29 @@ public class Empresas extends MySQL {
         return es;
     }
 
-    public ArrayList<String> getNombreEmpresasOwner(String owner) {
-        ArrayList<String> empresas = new ArrayList<>();
+    public List<Empresa> getEmpresasOwner(String owner) {
+        List<Empresa> empresas = new ArrayList<>();
         try {
-            String consulta = "SELECT nombre FROM empresas WHERE owner = ?";
+            String consulta = "SELECT * FROM empresas WHERE owner = ?";
             PreparedStatement pst = conexion.prepareStatement(consulta);
             pst.setString(1, owner);
             ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                empresas.add(rs.getString("nombre"));
+                empresas.add(new Empresa(
+                        rs.getInt("id_empresa"),
+                        rs.getString("nombre"),
+                        rs.getString("owner"),
+                        rs.getDouble("pixelcoins"),
+                        rs.getDouble("ingresos"),
+                        rs.getDouble("gastos"),
+                        rs.getString("icono"),
+                        rs.getString("descripcion")
+                ));
             }
             rs.close();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return empresas;
     }
@@ -340,7 +365,7 @@ public class Empresas extends MySQL {
         } else {
             p.sendMessage(ChatColor.DARK_RED + "Solo puedes tener como maximo " + nMaxEmpresas + " empresas a la vez, al menos por ahora xd");
         }
-        ScoreboardPlayer sp = new ScoreboardPlayer();
+        ScoreboardTaskManager sp = new ScoreboardTaskManager();
         sp.updateScoreboard(p);
     }
 
@@ -376,10 +401,9 @@ public class Empresas extends MySQL {
             p.sendMessage(ChatColor.DARK_RED + "No eres el due?o de esa empresa");
             return;
         }
-        ArrayList<String> empleados;
         Empleados em = new Empleados();
 
-        empleados = em.getNombreEmpleadosEmpresa(empresa);
+        List<Empleado> empleados = em.getEmpleadosEmrpesa(empresa);
         em.cambiarEmpresaNombre(empresa, nuevoNombre);
 
         this.setNombre(empresa, nuevoNombre);
@@ -388,132 +412,87 @@ public class Empresas extends MySQL {
 
         Mensajes men = new Mensajes();
         for (int i = 0; i < empleados.size(); i++) {
-            men.nuevoMensaje(empleados.get(i), "La empresa en la que trabajas: " + empresa + " ha cambiado a de nombre a " + nuevoNombre);
+            men.nuevoMensaje(empleados.get(i).getEmpleado(), "La empresa en la que trabajas: " + empresa + " ha cambiado a de nombre a " + nuevoNombre);
         }
-        ScoreboardPlayer sp = new ScoreboardPlayer();
+        ScoreboardTaskManager sp = new ScoreboardTaskManager();
         sp.updateScoreboard(p);
     }
 
-    public void mostrarEmpresas(Player p) {
-        Inventory empresas = Bukkit.createInventory(null, 54, ChatColor.DARK_RED + "" + ChatColor.BOLD + "          Empresas");
-        String nombreEmpresa;
-        String owner;
-        double pixelcoins;
-        double ingresos;
-        double gastos;
-        double beneficios;
-        double margen;
-
-        int nRecorridos = 0;
-        ArrayList<String> empleados = null;
-        String icono;
-        String descripcion;
-
-        ItemStack item = null;
-        ItemMeta im = null;
-
-        Empleados em = new Empleados();
-        Funciones f = new Funciones();
-
-        ArrayList<String> lore = new ArrayList<String>();
+    public List<Empresa> getTodasEmpresas() {
+        List<Empresa> empresas = new ArrayList<>();
         try {
             String consulta = "SELECT * FROM empresas";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            ResultSet rs = conexion.createStatement().executeQuery(consulta);
 
             while (rs.next()) {
-                im = null;
-
-                nombreEmpresa = rs.getString("nombre");
-                owner = rs.getString("owner");
-                pixelcoins = rs.getDouble("pixelcoins");
-                ingresos = rs.getDouble("ingresos");
-                gastos = rs.getDouble("gastos");
-                beneficios = ingresos - gastos;
-                icono = rs.getString("icono");
-                descripcion = rs.getString("descripcion");
-
-                lore.clear();
-
-                margen = Funciones.rentabilidad(ingresos, beneficios);
-
-                item = new ItemStack(Material.getMaterial(icono), 1);
-                im = item.getItemMeta();
-
-                lore.add(ChatColor.GOLD + "Owner: " + ChatColor.GOLD + owner);
-
-                lore = Funciones.dividirDesc(lore, descripcion, 47);
-
-                lore.add("     ");
-                lore.add(ChatColor.GOLD + "Pixelcoins: " + ChatColor.GREEN + formatea.format(pixelcoins) + " PC");
-                lore.add(ChatColor.GOLD + "Ingresos: " + ChatColor.GREEN + formatea.format(ingresos) + " PC");
-                lore.add(ChatColor.GOLD + "Gastos: " + ChatColor.GREEN + formatea.format(gastos) + " PC");
-                lore.add(ChatColor.GOLD + "Beneficios: " + ChatColor.GREEN + formatea.format(beneficios) + " PC");
-                lore.add(ChatColor.GOLD + "Rentabilidad: " + ChatColor.GREEN + ((int) margen) + "%");
-                lore.add("      ");
-                lore.add(ChatColor.GOLD + "Empleados:");
-
-                try {
-                    em.conectar();
-                    empleados = em.getNombreEmpleadosEmpresa(nombreEmpresa);
-                    em.desconectar();
-                } catch (Exception e) {
-
-                }
-
-                for (int i = 0; i < empleados.size(); i++) {
-                    if (empleados.get(0) == null) {
-                        break;
-                    } else {
-                        nRecorridos++;
-                        lore.add(ChatColor.GOLD + "-" + empleados.get(i));
-                    }
-                }
-
-                if (nRecorridos == 0) {
-                    lore.add("  ");
-                    lore.add("Sin trabajadores");
-                }
-
-                im.setLore(lore);
-
-                im.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + nombreEmpresa);
-
-                item.setItemMeta(im);
-
-                empresas.addItem(item);
-
+                empresas.add(new Empresa(
+                        rs.getInt("id_empresa"),
+                        rs.getString("nombre"),
+                        rs.getString("owner"),
+                        rs.getDouble("pixelcoins"),
+                        rs.getDouble("ingresos"),
+                        rs.getDouble("gastos"),
+                        rs.getString("icono"),
+                        rs.getString("descripcion")
+                ));
             }
-            p.openInventory(empresas);
-        } catch (SQLException e) {
-            p.sendMessage("wtf");
+            rs.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return empresas;
     }
 
-    public void verEmpresa(Player p, String empresa) {
-        boolean reg = this.estaRegistradoNombre(empresa);
-        if (!reg) {
+    public Empresa getEmpresa(String empresa){
+        Empresa toReturn = null;
+        try{
+            String consulta = "SELECT * FROM empresas WHERE nombre = ?";
+            PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
+            preparedStatement.setString(1, empresa);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()){
+                toReturn = new Empresa(
+                        rs.getInt("id_empresa"),
+                        rs.getString("nombre"),
+                        rs.getString("owner"),
+                        rs.getDouble("pixelcoins"),
+                        rs.getDouble("ingresos"),
+                        rs.getDouble("gastos"),
+                        rs.getString("icono"),
+                        rs.getString("descripcion")
+                );
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return toReturn;
+    }
+
+    public void verEmpresa(Player p, String nombreEmpresa) {
+        Empresa empresa = this.getEmpresa(nombreEmpresa);
+
+        if (empresa == null) {
             p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
             return;
         }
-        boolean ow = this.esOwner(p.getName(), empresa);
-        if (!ow) {
+        boolean ow = this.esOwner(p.getName(), nombreEmpresa);
+        if (!empresa.getOwner().equalsIgnoreCase(p.getName())) {
             p.sendMessage(ChatColor.DARK_RED + "No eres el dueño de la empresa");
             return;
         }
         Funciones f = new Funciones();
 
-        String logitipo = this.getIcono(empresa);
-        String descripcion = this.getDescripcion(empresa);
-        double pixelcoins = this.getPixelcoins(empresa);
-        double ingresos = this.getIngresos(empresa);
-        double gastos = this.getGastos(empresa);
+        String logitipo = empresa.getIcono();
+        String descripcion = empresa.getDescripcion();
+        double pixelcoins = empresa.getPixelcoins();
+        double ingresos = empresa.getIngresos();
+        double gastos = empresa.getGastos();
         double beneficios = ingresos - gastos;
         double rentabilidad = f.rentabilidad(ingresos, beneficios);
-        ArrayList<String> empleados = new ArrayList<String>();
 
-        p.sendMessage(ChatColor.GOLD + "        Estadisticas para " + ChatColor.DARK_AQUA + empresa);
+        p.sendMessage(ChatColor.GOLD + "        Estadisticas para " + ChatColor.DARK_AQUA + nombreEmpresa);
         p.sendMessage(ChatColor.GOLD + "Pixelcoins en la empresa: " + ChatColor.GREEN + formatea.format(pixelcoins) + " PC");
         p.sendMessage(ChatColor.GOLD + "Ingresos: " + ChatColor.GREEN + formatea.format(ingresos) + " PC");
         p.sendMessage(ChatColor.GOLD + "gastos: " + ChatColor.GREEN + formatea.format(gastos) + " PC");
@@ -535,7 +514,7 @@ public class Empresas extends MySQL {
         try {
             Empleados em = new Empleados();
             em.conectar();
-            empleados = em.getNombreEmpleadosEmpresa(empresa);
+            List<Empleado> empleados = em.getEmpleadosEmrpesa(nombreEmpresa);
             String nombre = "";
             String cargo = "";
             String tipoSueldo = "";
@@ -544,14 +523,14 @@ public class Empresas extends MySQL {
             int id_empleado = 0;
             boolean enc = false;
 
-            for (int i = 0; i < empleados.size(); i++) {
+            for (Empleado empleado : empleados) {
                 enc = true;
-                id_empleado = em.getId(empleados.get(i), empresa);
+                id_empleado = empleado.getId();
 
-                nombre = em.getEmpleado(id_empleado);
-                cargo = em.getCargo(id_empleado);
-                tipoSueldo = em.getTipo(id_empleado);
-                sueldo = em.getSueldo(id_empleado);
+                nombre = empleado.getEmpleado();
+                cargo = empleado.getCargo();
+                tipoSueldo = empleado.getTipo();
+                sueldo = empleado.getSueldo();
 
                 nombreTipoSueldo = toStringTipoSueldo(tipoSueldo);
 
@@ -567,21 +546,21 @@ public class Empresas extends MySQL {
         }
     }
 
-    public void cambiarDescripciom(String empresa, String nuevaDescripcion, Player p) {
-        boolean reg = this.estaRegistradoNombre(empresa);
-        if (!reg) {
+    public void cambiarDescripciom(String nombreEmpresa, String nuevaDescripcion, Player p) {
+        Empresa empresa = this.getEmpresa(nombreEmpresa);
+
+        if (empresa != null) {
             p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
             return;
         }
-        boolean ow = this.esOwner(p.getName(), empresa);
-        if (!ow) {
+        if (!empresa.getOwner().equalsIgnoreCase(p.getName())) {
             p.sendMessage(ChatColor.DARK_RED + "No eres el dueño de esa empresa");
             return;
         }
 
-        this.setDescripcion(empresa, nuevaDescripcion);
+        this.setDescripcion(nombreEmpresa, nuevaDescripcion);
 
-        p.sendMessage(ChatColor.GOLD + "Has cambiado la descripccion de tu empresa: " + ChatColor.DARK_AQUA + empresa + ChatColor.GOLD + " a ver en " + ChatColor.AQUA + "/empresas vertodas");
+        p.sendMessage(ChatColor.GOLD + "Has cambiado la descripccion de tu empresa: " + ChatColor.DARK_AQUA + nombreEmpresa + ChatColor.GOLD + " a ver en " + ChatColor.AQUA + "/empresas vertodas");
     }
 
     public static String toStringTipoSueldo(String tipoSueldo) {

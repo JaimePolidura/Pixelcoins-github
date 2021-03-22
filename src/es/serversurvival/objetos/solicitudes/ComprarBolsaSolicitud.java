@@ -1,7 +1,10 @@
 package es.serversurvival.objetos.solicitudes;
 
 import es.serversurvival.main.Funciones;
+import es.serversurvival.objetos.mySQL.LlamadasApi;
+import es.serversurvival.objetos.mySQL.PosicionesAbiertas;
 import es.serversurvival.objetos.mySQL.Transacciones;
+import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,19 +15,25 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;;
 
-public class ComprarAccionSolicitud extends Solicitud {
-    private static String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "   SELECCIONA ACCIONES";
-    private String ticker;
+public class ComprarBolsaSolicitud extends Solicitud {
+    private String titulo;
+    private String simbolo;
     private String destinatario;
-    private double precioAccion;
+    private double precioUnidad;
     private double precioTotal;
+    private String tipo;
+    private String alias;
     private Inventory inventory;
-    private int nAcciones = 1;
+    private int cantidad = 1;
 
-    public ComprarAccionSolicitud(String ticker, String destinatario, double precioAccion) {
-        this.ticker = ticker;
+    public ComprarBolsaSolicitud(String simbolo, String tipo, String alias, String destinatario, double precioUnidad) {
+        this.alias = alias;
+        this.tipo = tipo;
+        this.simbolo = simbolo;
         this.destinatario = destinatario;
-        this.precioAccion = precioAccion;
+        this.precioUnidad = precioUnidad;
+
+        titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "   SELECCIONA " + alias.toUpperCase();
     }
 
     private Inventory contruirInventario() {
@@ -32,9 +41,9 @@ public class ComprarAccionSolicitud extends Solicitud {
 
         ItemStack comprar = new ItemStack(Material.GREEN_WOOL);
         ItemMeta comprarm = comprar.getItemMeta();
-        comprarm.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "COMPRAR ACCIONES");
+        comprarm.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "COMPRAR " + alias.toUpperCase());
         ArrayList<String> lista = new ArrayList<>();
-        lista.add(ChatColor.GOLD + "Comprar 1 acccion de " + ticker + " a " + ChatColor.GREEN + formatea.format(precioAccion) + " PC");
+        lista.add(ChatColor.GOLD + "Comprar 1 " + alias + " de " + simbolo + " a " + ChatColor.GREEN + formatea.format(precioUnidad) + " PC");
         comprarm.setLore(lista);
         comprar.setItemMeta(comprarm);
 
@@ -88,7 +97,7 @@ public class ComprarAccionSolicitud extends Solicitud {
         return inventory;
     }
 
-    public void updateNAcciones(ItemStack itemStack) {
+    public void updateCantidad(ItemStack itemStack) {
         String name = itemStack.getItemMeta().getDisplayName();
         StringBuilder stringBuild = new StringBuilder();
         for (int i = 0; i < name.length(); i++) {
@@ -97,20 +106,20 @@ public class ComprarAccionSolicitud extends Solicitud {
             }
         }
         int nuevasAcciones = Integer.parseInt(stringBuild.toString());
-        nAcciones = nAcciones + nuevasAcciones;
+        cantidad = cantidad + nuevasAcciones;
 
-        precioTotal = precioAccion * nAcciones;
+        precioTotal = precioUnidad * cantidad;
 
         if (precioTotal <= 0) {
-            nAcciones = nAcciones - nuevasAcciones;
-            precioTotal = precioAccion * nAcciones;
+            cantidad = cantidad - nuevasAcciones;
+            precioTotal = precioUnidad * cantidad;
             return;
         }
         ItemStack comprar = new ItemStack(Material.GREEN_WOOL);
         ItemMeta itemMeta = comprar.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "COMPRAR ACCIONES");
+        itemMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "COMPRAR " + alias.toUpperCase());
         ArrayList<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GOLD + "Comprar " + nAcciones + " accciones de " + ticker + " a " + ChatColor.GREEN + precioAccion + " PC -> total: " + formatea.format(Funciones.redondeoDecimales(precioTotal, 3)) + " PC");
+        lore.add(ChatColor.GOLD + "Comprar " + cantidad + " " +  alias  + " " + simbolo + " a " + ChatColor.GREEN + precioUnidad + " PC -> total: " + formatea.format(Funciones.redondeoDecimales(precioTotal, 3)) + " PC");
         itemMeta.setLore(lore);
         comprar.setItemMeta(itemMeta);
         inventory.setItem(14, comprar);
@@ -130,8 +139,18 @@ public class ComprarAccionSolicitud extends Solicitud {
         Player player = Bukkit.getPlayer(destinatario);
         Transacciones t = new Transacciones();
         t.conectar();
-        t.comprarAccion(ticker, precioAccion, nAcciones, player);
+        t.comprarUnidadBolsa(tipo.toUpperCase(), simbolo, alias, precioUnidad, cantidad, player);
         t.desconectar();
+
+        LlamadasApi llamadasApi = new LlamadasApi();
+        llamadasApi.conectar();
+        if(!llamadasApi.estaReg(simbolo)){
+            llamadasApi.nuevaLlamada(simbolo, precioUnidad, tipo);
+        }else {
+            llamadasApi.setPrecio(simbolo, precioUnidad);
+        }
+        llamadasApi.desconectar();
+
         player.closeInventory();
         solicitudes.remove(this);
     }

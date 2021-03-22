@@ -1,13 +1,16 @@
 package es.serversurvival.objetos.mySQL;
 
 import es.serversurvival.objetos.mySQL.MySQL;
+import es.serversurvival.objetos.mySQL.tablasObjetos.Encantamiento;
 import org.bukkit.enchantments.Enchantment;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Encantamientos extends MySQL {
@@ -48,8 +51,8 @@ public class Encantamientos extends MySQL {
         }
     }
 
-    public Map<Enchantment, Integer> getEncantamientosOferta(int id_oferta) {
-        Map<Enchantment, Integer> enc = new HashMap<>();
+    public List<Encantamiento> getEncantamientosOferta (int id_oferta){
+        List<Encantamiento> encantamientos = new ArrayList<>();
 
         try {
             String consulta = "SELECT * FROM encantamientos WHERE id_oferta = ?";
@@ -58,12 +61,17 @@ public class Encantamientos extends MySQL {
             ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                enc.put(Enchantment.getByName(rs.getString("encantamiento")), rs.getInt("nivel"));
+                encantamientos.add(new Encantamiento(
+                   rs.getInt("id_encantamiento"),
+                   rs.getString("encantamiento"),
+                   rs.getInt("nivel"),
+                   rs.getInt("id_oferta")
+                ));
             }
             rs.close();
         } catch (Exception e) {
 
         }
-        return enc;
+        return encantamientos;
     }
 }

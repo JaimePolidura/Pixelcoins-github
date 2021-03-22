@@ -1,7 +1,7 @@
 package es.serversurvival.comandos.comandos;
 
 import es.serversurvival.comandos.Comando;
-import es.serversurvival.objetos.mySQL.Jugador;
+import es.serversurvival.objetos.mySQL.Jugadores;
 import org.bukkit.entity.Player;
 
 public class EstadisticasComando extends Comando {
@@ -22,7 +22,7 @@ public class EstadisticasComando extends Comando {
     }
 
     public void execute(Player player, String[] args) {
-        Jugador j = new Jugador();
+        Jugadores j = new Jugadores();
         j.conectar();
         j.mostarEstadisticas(player);
         j.desconectar();

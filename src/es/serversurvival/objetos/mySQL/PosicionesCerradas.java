@@ -1,6 +1,7 @@
 package es.serversurvival.objetos.mySQL;
 
 import es.serversurvival.main.Funciones;
+import es.serversurvival.objetos.mySQL.tablasObjetos.PosicionCerrada;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,19 +9,19 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class PosicionesCerradas extends MySQL {
-    public void nuevaPosicion(String jugador, String ticker, int nAcciones, double precioApertura, String fechaApertura, double precioCierre, int idPoscionAbierta) {
+    public void nuevaPosicion(String jugador, String tipo, String nombre,  int cantidad, double precioApertura, String fechaApertura, double precioCierre) {
         Date dt = new Date();
         SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
         String fechaCierre = sdf.format(dt);
-        ticker.toUpperCase();
 
         double rentabilidad = 0;
         rentabilidad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(precioApertura, precioCierre), 3);
 
         try {
-            String consulta = "INSERT INTO posicionescerradas (jugador, ticker, nAcciones, precioApertura, fechaApertura, precioCierre, fechaCierre, rentabilidad, idPosicionabierta) VALUES ('" + jugador + "','" + ticker + "','" + nAcciones + "','" + precioApertura + "', '" + fechaApertura + "','" + precioCierre + "','" + fechaCierre + "','" + rentabilidad + "','" + idPoscionAbierta + "')";
+            String consulta = "INSERT INTO posicionescerradas (jugador, tipo, nombre, cantidad, precioApertura, fechaApertura, precioCierre, fechaCierre, rentabilidad) VALUES ('" + jugador + "','"+tipo+"','" + nombre + "','" + cantidad + "','" + precioApertura + "', '" + fechaApertura + "','" + precioCierre + "','" + fechaCierre + "','" + rentabilidad + "')";
             Statement statement = conexion.createStatement();
             statement.executeUpdate(consulta);
         } catch (Exception e) {
@@ -47,42 +48,61 @@ public class PosicionesCerradas extends MySQL {
         return jugador;
     }
 
-    public String getTicker(int id) {
-        String ticker = "";
+    public String getNombre(int id) {
+        String nombre = "";
         try {
-            String consulta = "SELECT ticker FROM posicionescerradas WHERE id = ?";
+            String consulta = "SELECT nombre FROM posicionescerradas WHERE id = ?";
             PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
             preparedStatement.setInt(1, id);
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                ticker = rs.getString("ticker");
+                nombre = rs.getString("nombre");
                 break;
             }
             rs.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ticker;
+        return nombre;
     }
 
-    public int getNAcciones(int id) {
-        int nAcciones = 0;
+    public String getTipo(int id) {
+        String tipo = "";
         try {
-            String consulta = "SELECT nAcciones FROM posicionescerradas WHERE id = ?";
+            String consulta = "SELECT tipo FROM posicionescerradas WHERE id = ?";
             PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
             preparedStatement.setInt(1, id);
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                nAcciones = rs.getInt("nAcciones");
+                tipo = rs.getString("tipo");
                 break;
             }
             rs.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return nAcciones;
+        return tipo;
+    }
+
+    public int getCantidad(int id) {
+        int cantidad = 0;
+        try {
+            String consulta = "SELECT cantidad FROM posicionescerradas WHERE id = ?";
+            PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
+            preparedStatement.setInt(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                cantidad = rs.getInt("cantidad");
+                break;
+            }
+            rs.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cantidad;
     }
 
     public double getPrecioApertura(int id) {
@@ -180,89 +200,115 @@ public class PosicionesCerradas extends MySQL {
         return rentabilidad;
     }
 
-    public int getIDPosicionAbierta(int id) {
-        int idPosicionabierta = 0;
+    public List<PosicionCerrada> getTop3PersonalRentabilidadesID(String jugador) {
+        ArrayList<PosicionCerrada> posicionCerradas = new ArrayList<>();
         try {
-            String consulta = "SELECT idPosicionabierta FROM posicionescerradas WHERE id = ?";
-            PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
-            preparedStatement.setInt(1, id);
-            ResultSet rs = preparedStatement.executeQuery();
-
-            while (rs.next()) {
-                idPosicionabierta = rs.getInt("idPosicionabierta");
-                break;
-            }
-            rs.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return idPosicionabierta;
-    }
-
-    public ArrayList<Integer> getTop3PersonalRentabilidadesID(String jugador) {
-        ArrayList<Integer> ids = new ArrayList<>();
-        try {
-            String consulta = "SELECT id FROM posicionescerradas WHERE jugador = ? ORDER BY rentabilidad DESC LIMIT 3";
+            String consulta = "SELECT * FROM posicionescerradas WHERE jugador = ? ORDER BY rentabilidad DESC LIMIT 3";
             PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
             preparedStatement.setString(1, jugador);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                ids.add(resultSet.getInt("id"));
+                posicionCerradas.add(new PosicionCerrada(
+                        resultSet.getInt("id"),
+                        resultSet.getString("jugador"),
+                        resultSet.getString("tipo"),
+                        resultSet.getString("nombre"),
+                        resultSet.getInt("cantidad"),
+                        resultSet.getDouble("precioApertura"),
+                        resultSet.getString("fechaApertura"),
+                        resultSet.getDouble("precioCierre"),
+                        resultSet.getString("fechaCierre"),
+                        resultSet.getDouble("rentabilidad")
+                ));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ids;
+        return posicionCerradas;
     }
 
-    public ArrayList<Integer> getTop3PersonalMenosRentabilidadesID(String jugador) {
-        ArrayList<Integer> ids = new ArrayList<>();
+    public List<PosicionCerrada> getTop3PersonalMenosRentabilidadesID(String jugador) {
+        ArrayList<PosicionCerrada> posicionCerradas = new ArrayList<>();
         try {
-            String consulta = "SELECT id FROM posicionescerradas WHERE jugador = ? ORDER BY rentabilidad ASC LIMIT 3";
+            String consulta = "SELECT * FROM posicionescerradas WHERE jugador = ? ORDER BY rentabilidad ASC LIMIT 3";
             PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
             preparedStatement.setString(1, jugador);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                ids.add(resultSet.getInt("id"));
+                posicionCerradas.add(new PosicionCerrada(
+                        resultSet.getInt("id"),
+                        resultSet.getString("jugador"),
+                        resultSet.getString("tipo"),
+                        resultSet.getString("nombre"),
+                        resultSet.getInt("cantidad"),
+                        resultSet.getDouble("precioApertura"),
+                        resultSet.getString("fechaApertura"),
+                        resultSet.getDouble("precioCierre"),
+                        resultSet.getString("fechaCierre"),
+                        resultSet.getDouble("rentabilidad")
+                ));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ids;
+        return posicionCerradas;
     }
 
-    public ArrayList<Integer> getTop3GlobalRentabilidadesID() {
-        ArrayList<Integer> ids = new ArrayList<>();
+    public List<PosicionCerrada> getTop5GlobalRentabilidadesID() {
+        ArrayList<PosicionCerrada> posicionCerradas = new ArrayList<>();
         try {
-            String consulta = "SELECT id FROM posicionescerradas ORDER BY rentabilidad DESC LIMIT 3";
+            String consulta = "SELECT * FROM posicionescerradas ORDER BY rentabilidad DESC LIMIT 5";
             Statement statement = conexion.createStatement();
             ResultSet resultSet = statement.executeQuery(consulta);
 
             while (resultSet.next()) {
-                ids.add(resultSet.getInt("id"));
+                posicionCerradas.add(new PosicionCerrada(
+                        resultSet.getInt("id"),
+                        resultSet.getString("jugador"),
+                        resultSet.getString("tipo"),
+                        resultSet.getString("nombre"),
+                        resultSet.getInt("cantidad"),
+                        resultSet.getDouble("precioApertura"),
+                        resultSet.getString("fechaApertura"),
+                        resultSet.getDouble("precioCierre"),
+                        resultSet.getString("fechaCierre"),
+                        resultSet.getDouble("rentabilidad")
+                ));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ids;
+        return posicionCerradas;
     }
 
-    public ArrayList<Integer> getIdPosiciones(String name) {
-        ArrayList<Integer> ids = new ArrayList<>();
+    public List<PosicionCerrada> getIdPosiciones(String name) {
+        ArrayList<PosicionCerrada> posicionCerradas = new ArrayList<>();
         try {
-            String consulta = "SELECT id FROM posicionescerradas WHERE jugador = ?";
+            String consulta = "SELECT * FROM posicionescerradas WHERE jugador = ?";
             PreparedStatement preparedStatement = conexion.prepareStatement(consulta);
             preparedStatement.setString(1, name);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                ids.add(resultSet.getInt("id"));
+                posicionCerradas.add(new PosicionCerrada(
+                        resultSet.getInt("id"),
+                        resultSet.getString("jugador"),
+                        resultSet.getString("tipo"),
+                        resultSet.getString("nombre"),
+                        resultSet.getInt("cantidad"),
+                        resultSet.getDouble("precioApertura"),
+                        resultSet.getString("fechaApertura"),
+                        resultSet.getDouble("precioCierre"),
+                        resultSet.getString("fechaCierre"),
+                        resultSet.getDouble("rentabilidad")
+                ));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ids;
+        
+        return posicionCerradas;
     }
 }

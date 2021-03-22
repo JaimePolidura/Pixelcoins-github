@@ -2,11 +2,13 @@ package es.serversurvival.comandos.subComandos.bolsa;
 
 import es.serversurvival.main.Funciones;
 import es.serversurvival.objetos.mySQL.PosicionesAbiertas;
+import es.serversurvival.objetos.mySQL.tablasObjetos.PosicionAbierta;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class VerCarteraBolsaSubComando extends BolsaSubCommand {
@@ -41,34 +43,36 @@ public class VerCarteraBolsaSubComando extends BolsaSubCommand {
         posicionesAbiertas.conectar();
 
         double precioApertura;
-        int nAcciones;
+        int cantidad;
         double dineroInvertidoAccion = 0;
         double dineroInvertidoTotal = 0;
-        String ticker;
+        String tipo;
+        String nombre;
 
-        ArrayList<Integer> ids = posicionesAbiertas.getIdsPosicionesJugador(nombreJugadorAVer);
+        List<PosicionAbierta> posicionAbiertasJugador = posicionesAbiertas.getPosicionesJugador(nombreJugadorAVer);
         //Mapa <id accion, dinero Invertido por accion (precio apertura * nºAcciones) ) >
-        HashMap<Integer, Double> acciones = new HashMap<>();
+        HashMap<Integer, Double> posiciones = new HashMap<>();
 
-        for (int id : ids) {
-            precioApertura = posicionesAbiertas.getPreciopApertura(id);
-            nAcciones = posicionesAbiertas.getNAcciones(id);
-            dineroInvertidoAccion = precioApertura * nAcciones;
+        for (PosicionAbierta posicionAbierta : posicionAbiertasJugador) {
+            precioApertura = posicionAbierta.getPrecioApertura();
+            cantidad = posicionAbierta.getCantidad();
+            dineroInvertidoAccion = precioApertura * cantidad;
             dineroInvertidoTotal = dineroInvertidoTotal + dineroInvertidoAccion;
 
-            acciones.put(id, dineroInvertidoAccion);
+            posiciones.put(posicionAbierta.getId(), dineroInvertidoAccion);
         }
-        for (Map.Entry<Integer, Double> entry : acciones.entrySet()) {
+        for (Map.Entry<Integer, Double> entry : posiciones.entrySet()) {
             entry.setValue(Funciones.redondeoDecimales(Funciones.rentabilidad(dineroInvertidoTotal, entry.getValue()), 1));
         }
-        acciones = Funciones.sortByValueDecreIntDou(acciones);
+        posiciones = Funciones.sortByValueDecreIntDou(posiciones);
 
         player.sendMessage(ChatColor.GOLD + "" + "------------------------------");
-        player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "   LAS ACCIONES DE " + nombreJugadorAVer);
+        player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "   LAS CARTERA DE " + nombreJugadorAVer);
         int pos = 1;
-        for (Map.Entry<Integer, Double> entry : acciones.entrySet()) {
-            ticker = posicionesAbiertas.getTicker(entry.getKey());
-            player.sendMessage(ChatColor.GOLD + "" + pos + "º: " + ticker + " con un peso del: " + formatea.format(entry.getValue()) + "%");
+        for (Map.Entry<Integer, Double> entry : posiciones.entrySet()) {
+            tipo = posicionesAbiertas.getTipo(entry.getKey());
+            nombre = posicionesAbiertas.getNombre(entry.getKey());
+            player.sendMessage(ChatColor.GOLD + "" + pos + "º: " + tipo + "( " + nombre + " ) " + "con un peso del: " + formatea.format(entry.getValue()) + "%");
             pos++;
         }
         player.sendMessage(ChatColor.GOLD + "" + "------------------------------");
