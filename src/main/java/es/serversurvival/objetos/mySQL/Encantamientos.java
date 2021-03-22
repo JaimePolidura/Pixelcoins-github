@@ -1,0 +1,73 @@
+package es.serversurvival.objetos.mySQL;
+
+import es.serversurvival.objetos.mySQL.tablasObjetos.Encantamiento;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Encantamientos extends MySQL {
+
+    private void borrarEncatamiento(int id_encantamiento) {
+        try {
+            String consulta2 = "DELETE FROM encantamientos WHERE id_encantamiento=\"" + id_encantamiento + "\"      ";
+            Statement st2 = conexion.createStatement();
+            st2.executeUpdate(consulta2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void nuevoEncantamiento(String encantamiento, int nivel, int id_oferta) {
+        try {
+            String consulta2 = "INSERT INTO encantamientos (encantamiento, nivel, id_oferta) VALUES ('" + encantamiento + "','" + nivel + "','" + id_oferta + "')";
+            Statement st2 = (Statement) conexion.createStatement();
+            st2.executeUpdate(consulta2);
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void borrarEncantamientosOferta(int id_oferta) {
+        try {
+            String consulta = "SELECT id_encantamiento FROM encantamientos WHERE id_oferta = ?";
+            PreparedStatement pst = conexion.prepareStatement(consulta);
+            pst.setInt(1, id_oferta);
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                this.borrarEncatamiento(rs.getInt("id_encantamiento"));
+            }
+            rs.close();
+        } catch (SQLException e) {
+
+        }
+    }
+
+    public List<Encantamiento> getEncantamientosOferta (int id_oferta){
+        List<Encantamiento> encantamientos = new ArrayList<>();
+
+        try {
+            String consulta = "SELECT * FROM encantamientos WHERE id_oferta = ?";
+            PreparedStatement pst = conexion.prepareStatement(consulta);
+            pst.setInt(1, id_oferta);
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                encantamientos.add(new Encantamiento(
+                   rs.getInt("id_encantamiento"),
+                   rs.getString("encantamiento"),
+                   rs.getInt("nivel"),
+                   rs.getInt("id_oferta")
+                ));
+            }
+            rs.close();
+        } catch (Exception e) {
+
+        }
+        return encantamientos;
+    }
+}
