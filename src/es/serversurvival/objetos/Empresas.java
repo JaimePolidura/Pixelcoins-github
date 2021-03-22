@@ -1,12 +1,10 @@
 package es.serversurvival.objetos;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
+import java.util.*;
 
+import es.serversurvival.task.ScoreboardPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -16,10 +14,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 
-import es.serversurvival.config.Funciones;
+import es.serversurvival.main.Funciones;
 import net.md_5.bungee.api.ChatColor;
 
 public class Empresas extends MySQL {
+    public final static int nMaxEmpresas = 5;
     public DecimalFormat formatea = new DecimalFormat("###,###.##");
 
     private void nuevaEmpresa(String nombreEmpresa, String owner, int pixelcoins, int ingresos, int gastos, String icono, String descripcion) {
@@ -32,19 +31,29 @@ public class Empresas extends MySQL {
         }
     }
 
+    public void borrarEmpresa(String nombre) {
+        try {
+            String consulta = "DELETE FROM empresas WHERE nombre = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, nombre);
+            pst.executeUpdate();
+        } catch (Exception e) {
+
+        }
+    }
+
     private int getNEmpresas(String owner) {
         int nempresas = 0;
         try {
-            String consulta = "SELECT * FROM empresas";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT nombre FROM empresas WHERE owner = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, owner);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("owner").equalsIgnoreCase(owner)) {
-                    nempresas = nempresas + 1;
-                }
+                nempresas = nempresas + 1;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -54,17 +63,16 @@ public class Empresas extends MySQL {
     public String getOwner(String nombreEmpresa) {
         String owner = "";
         try {
-            String consulta = "SELECT * FROM empresas";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT owner FROM empresas WHERE nombre = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, nombreEmpresa);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("nombre").equalsIgnoreCase(nombreEmpresa)) {
-                    owner = rs.getString("owner");
-                    break;
-                }
+                owner = rs.getString("owner");
+                break;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -74,17 +82,16 @@ public class Empresas extends MySQL {
     public int getPixelcoins(String nombreEmpresa) {
         int pixelcoins = 0;
         try {
-            String consulta = "SELECT * FROM empresas";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT pixelcoins FROM empresas WHERE nombre = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, nombreEmpresa);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("nombre").equalsIgnoreCase(nombreEmpresa)) {
-                    pixelcoins = rs.getInt("pixelcoins");
-                    break;
-                }
+                pixelcoins = rs.getInt("pixelcoins");
+                break;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -94,17 +101,16 @@ public class Empresas extends MySQL {
     public int getIngresos(String nombreEmpresa) {
         int ingresos = 0;
         try {
-            String consulta = "SELECT * FROM empresas";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT ingresos FROM empresas WHERE nombre = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, nombreEmpresa);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("nombre").equalsIgnoreCase(nombreEmpresa)) {
-                    ingresos = rs.getInt("ingresos");
-                    break;
-                }
+                ingresos = rs.getInt("ingresos");
+                break;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -114,17 +120,16 @@ public class Empresas extends MySQL {
     public int getGastos(String nombreEmpresa) {
         int gastos = 0;
         try {
-            String consulta = "SELECT * FROM empresas";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT gastos FROM empresas WHERE nombre = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, nombreEmpresa);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("nombre").equalsIgnoreCase(nombreEmpresa)) {
-                    gastos = rs.getInt("gastos");
-                    break;
-                }
+                gastos = rs.getInt("gastos");
+                break;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -134,17 +139,16 @@ public class Empresas extends MySQL {
     public String getIcono(String nombreEmpresa) {
         String icono = "";
         try {
-            String consulta = "SELECT * FROM empresas";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT icono FROM empresas WHERE nombre = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, nombreEmpresa);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("nombre").equalsIgnoreCase(nombreEmpresa)) {
-                    icono = rs.getString("icono");
-                    break;
-                }
+                icono = rs.getString("icono");
+                break;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -154,17 +158,16 @@ public class Empresas extends MySQL {
     public String getDescripcion(String nombreEmpresa) {
         String descripcion = "";
         try {
-            String consulta = "SELECT * FROM empresas";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT descripcion FROM empresas WHERE nombre = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, nombreEmpresa);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("nombre").equalsIgnoreCase(nombreEmpresa)) {
-                    descripcion = rs.getString("descripcion");
-                    break;
-                }
+                descripcion = rs.getString("descripcion");
+                break;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -265,50 +268,65 @@ public class Empresas extends MySQL {
     public boolean esOwner(String jugador, String nombreEmpresa) {
         boolean es = false;
         try {
-            String consulta = "SELECT * FROM empresas";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT nombre FROM empresas WHERE nombre = ? AND owner = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, nombreEmpresa);
+            pst.setString(2, jugador);
+            ResultSet rs = pst.executeQuery();
 
-            while (rs.next()) {
-                if (rs.getString("nombre").equalsIgnoreCase(nombreEmpresa) && rs.getString("owner").equalsIgnoreCase(jugador)) {
-                    es = true;
-                    break;
-                }
+            if (rs.next()) {
+                es = true;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
         return es;
     }
 
-    public boolean estaRegistradoNombre(String nombre) {
-        boolean registrado = false;
-
+    public ArrayList<String> getNombreEmpresasOwner(String owner) {
+        ArrayList<String> empresas = new ArrayList<>();
         try {
-            String consulta = "SELECT * FROM empresas";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT nombre FROM empresas WHERE owner = ?";
+            PreparedStatement pst = conexion.prepareStatement(consulta);
+            pst.setString(1, owner);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("nombre").equalsIgnoreCase(nombre)) {
-                    registrado = true;
-                    break;
-                }
+                empresas.add(rs.getString("nombre"));
             }
+            rs.close();
+        } catch (Exception e) {
+
+        }
+        return empresas;
+    }
+
+    public boolean estaRegistradoNombre(String nombre) {
+        boolean reg = false;
+        try {
+            String consulta = "SELECT nombre FROM empresas WHERE nombre = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, nombre);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                reg = true;
+            }
+
+            rs.close();
         } catch (SQLException e) {
 
         }
-        return registrado;
+        return reg;
     }
 
     public void crearEmpresa(String nombreEmpresa, Player p, String descripcion) {
         String owner = p.getName();
         int nempresas = this.getNEmpresas(owner) + 1;
         boolean reg = this.estaRegistradoNombre(nombreEmpresa);
-        if (nempresas <= 3) {
-            if (reg == false) {
+        if (nempresas <= nMaxEmpresas) {
+            if (!reg) {
                 this.nuevaEmpresa(nombreEmpresa, owner, 0, 0, 0, "DIAMOND_PICKAXE", descripcion);
 
                 p.sendMessage(ChatColor.GOLD + "Has creado una empresa! " + ChatColor.GOLD + "comandos utiles: " + ChatColor.AQUA + "/depositar, /contratar, /logotipo, /empresas, /miempresa /editarnombre m?s: /ayuda empresas");
@@ -318,20 +336,22 @@ public class Empresas extends MySQL {
                 p.sendMessage(ChatColor.DARK_RED + "El nombre de esa empresa ya esta registrada");
             }
         } else {
-            p.sendMessage(ChatColor.DARK_RED + "Solo puedes tener como maximo 3 empresas a la vez, al menos por ahora xd");
+            p.sendMessage(ChatColor.DARK_RED + "Solo puedes tener como maximo " + nMaxEmpresas + " empresas a la vez, al menos por ahora xd");
         }
+        ScoreboardPlayer sp = new ScoreboardPlayer();
+        sp.updateScoreboard(p);
     }
 
     public void cambiarIcono(String nombreEmpresa, Player p, String icono) {
         boolean existe = this.estaRegistradoNombre(nombreEmpresa);
 
-        if (existe == false) {
+        if (!existe) {
             p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
             return;
         }
         boolean esowner = this.esOwner(p.getName(), nombreEmpresa);
 
-        if (esowner == false) {
+        if (!esowner) {
             p.sendMessage(ChatColor.DARK_RED + "No eres el due?o de esa empresa");
             return;
         }
@@ -342,28 +362,24 @@ public class Empresas extends MySQL {
     }
 
     public void cambiarNombre(Player p, String empresa, String nuevoNombre) {
-        if (this.estaRegistradoNombre(empresa) == false) {
+        if (!this.estaRegistradoNombre(empresa)) {
             p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
             return;
         }
-        if (this.estaRegistradoNombre(nuevoNombre) == true) {
+        if (this.estaRegistradoNombre(nuevoNombre)) {
             p.sendMessage(ChatColor.DARK_RED + "Esa nombre ya esta cogido");
             return;
         }
-        if (this.esOwner(p.getName(), empresa) == false) {
+        if (!this.esOwner(p.getName(), empresa)) {
             p.sendMessage(ChatColor.DARK_RED + "No eres el due?o de esa empresa");
             return;
         }
-        ArrayList<String> empleados = new ArrayList<String>();
-        try {
-            Empleados em = new Empleados();
-            em.conectar("root", "", "pixelcoins");
-            empleados = em.getNombreEmpleadosEmpresa(empresa);
-            em.cambiarEmpresaNombre(empresa, nuevoNombre);
-            em.desconectar();
-        } catch (Exception e) {
+        ArrayList<String> empleados;
+        Empleados em = new Empleados();
 
-        }
+        empleados = em.getNombreEmpleadosEmpresa(empresa);
+        em.cambiarEmpresaNombre(empresa, nuevoNombre);
+
         this.setNombre(empresa, nuevoNombre);
         p.sendMessage(ChatColor.GOLD + "Has cambiado de nombre a tu empresa!");
         p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
@@ -372,6 +388,8 @@ public class Empresas extends MySQL {
         for (int i = 0; i < empleados.size(); i++) {
             men.nuevoMensaje(empleados.get(i), "La empresa en la que trabajas: " + empresa + " ha cambiado a de nombre a " + nuevoNombre);
         }
+        ScoreboardPlayer sp = new ScoreboardPlayer();
+        sp.updateScoreboard(p);
     }
 
     public void mostrarEmpresas(Player p) {
@@ -384,7 +402,7 @@ public class Empresas extends MySQL {
         int beneficios;
         double beneficiosD;
         double ingresosD;
-        int margen;
+        double margen;
 
         int nRecorridos = 0;
         ArrayList<String> empleados = null;
@@ -421,7 +439,7 @@ public class Empresas extends MySQL {
                 beneficiosD = (double) beneficios;
                 ingresosD = (double) ingresos;
 
-                margen = (int) Math.round((beneficiosD / ingresosD) * 100);
+                margen = f.rentabilidad(ingresosD, beneficiosD);
 
                 item = new ItemStack(Material.getMaterial(icono), 1);
                 im = item.getItemMeta();
@@ -440,7 +458,7 @@ public class Empresas extends MySQL {
                 lore.add(ChatColor.GOLD + "Empleados:");
 
                 try {
-                    em.conectar("root", "", "pixelcoins");
+                    em.conectar();
                     empleados = em.getNombreEmpleadosEmpresa(nombreEmpresa);
                     em.desconectar();
                 } catch (Exception e) {
@@ -478,41 +496,48 @@ public class Empresas extends MySQL {
 
     public void verEmpresa(Player p, String empresa) {
         boolean reg = this.estaRegistradoNombre(empresa);
-        if (reg == false) {
+        if (!reg) {
             p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
             return;
         }
         boolean ow = this.esOwner(p.getName(), empresa);
-        if (ow == false) {
-            p.sendMessage(ChatColor.DARK_RED + "No eres el due?o de la empresa");
+        if (!ow) {
+            p.sendMessage(ChatColor.DARK_RED + "No eres el dueño de la empresa");
             return;
         }
+        Funciones f = new Funciones();
 
         String logitipo = this.getIcono(empresa);
         String descripcion = this.getDescripcion(empresa);
         int pixelcoins = this.getPixelcoins(empresa);
-        int ingresos = this.getIngresos(empresa);
-        int gastos = this.getGastos(empresa);
-        int beneficios = ingresos - gastos;
+        double ingresos = this.getIngresos(empresa);
+        double gastos = this.getGastos(empresa);
+        double beneficios = ingresos - gastos;
+        double rentabilidad = f.rentabilidad(ingresos, beneficios);
         ArrayList<String> empleados = new ArrayList<String>();
 
         p.sendMessage(ChatColor.GOLD + "        Estadisticas para " + ChatColor.DARK_AQUA + empresa);
-        p.sendMessage(ChatColor.GOLD + "Pixelcoins en la empresa: " + ChatColor.GREEN + pixelcoins + " PC");
-        p.sendMessage(ChatColor.GOLD + "Ingresos: " + ChatColor.GREEN + ingresos + " PC");
-        p.sendMessage(ChatColor.GOLD + "gastos: " + ChatColor.GREEN + gastos + " PC");
+        p.sendMessage(ChatColor.GOLD + "Pixelcoins en la empresa: " + ChatColor.GREEN + formatea.format(pixelcoins) + " PC");
+        p.sendMessage(ChatColor.GOLD + "Ingresos: " + ChatColor.GREEN + formatea.format(ingresos) + " PC");
+        p.sendMessage(ChatColor.GOLD + "gastos: " + ChatColor.GREEN + formatea.format(gastos) + " PC");
         if (beneficios < 0) {
-            p.sendMessage(ChatColor.GOLD + "beneficios: " + ChatColor.RED + beneficios + ChatColor.GREEN + " PC");
+            p.sendMessage(ChatColor.GOLD + "beneficios: " + ChatColor.RED + formatea.format(beneficios) + ChatColor.GREEN + " PC");
         } else {
-            p.sendMessage(ChatColor.GOLD + "beneficios: " + ChatColor.GREEN + beneficios + " PC");
+            p.sendMessage(ChatColor.GOLD + "beneficios: " + ChatColor.GREEN + formatea.format(beneficios) + " PC");
         }
         p.sendMessage(ChatColor.GOLD + "logotipo: " + logitipo);
         p.sendMessage(ChatColor.GOLD + "descripcion: " + descripcion);
 
-        p.sendMessage("   ");
+        if (rentabilidad < 0) {
+            p.sendMessage(ChatColor.GOLD + "rentabilidad: " + ChatColor.RED + rentabilidad + "%");
+        } else {
+            p.sendMessage(ChatColor.GOLD + "rentabilidad: " + rentabilidad + "%");
+        }
+
         p.sendMessage(ChatColor.GOLD + "Empleados:");
         try {
             Empleados em = new Empleados();
-            em.conectar("root", "", "pixelcoins");
+            em.conectar();
             empleados = em.getNombreEmpleadosEmpresa(empresa);
             String nombre = "";
             String cargo = "";
@@ -549,7 +574,7 @@ public class Empresas extends MySQL {
                 p.sendMessage(ChatColor.GOLD + " -" + nombre + " cargo: " + cargo + " sueldo: " + ChatColor.GREEN + sueldo + " PC/ " + nombreTipoSueldo);
             }
 
-            if (enc == false) {
+            if (!enc) {
                 p.sendMessage(ChatColor.GOLD + "       Sin trabajadores");
             }
             em.desconectar();
@@ -558,4 +583,20 @@ public class Empresas extends MySQL {
         }
     }
 
+    public void cambiarDescripciom(String empresa, String nuevaDescripcion, Player p) {
+        boolean reg = this.estaRegistradoNombre(empresa);
+        if (!reg) {
+            p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
+            return;
+        }
+        boolean ow = this.esOwner(p.getName(), empresa);
+        if (!ow) {
+            p.sendMessage(ChatColor.DARK_RED + "No eres el dueño de esa empresa");
+            return;
+        }
+
+        this.setDescripcion(empresa, nuevaDescripcion);
+
+        p.sendMessage(ChatColor.GOLD + "Has cambiado la descripccion de tu empresa: " + ChatColor.DARK_AQUA + empresa + ChatColor.GOLD + " a ver en " + ChatColor.AQUA + "/empresas");
+    }
 }

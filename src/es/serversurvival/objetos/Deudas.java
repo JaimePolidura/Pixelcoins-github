@@ -1,19 +1,29 @@
 package es.serversurvival.objetos;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import com.mysql.jdbc.Connection;
+import es.serversurvival.main.Pixelcoin;
+import es.serversurvival.task.ScoreboardPlayer;
 import org.bukkit.Server;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 
 import net.md_5.bungee.api.ChatColor;
+import sun.misc.JavaUtilJarAccess;
+import sun.text.normalizer.CharTrie;
+
+import javax.swing.*;
 
 public class Deudas extends MySQL {
+    private ScoreboardPlayer sp = new ScoreboardPlayer();
+    private DecimalFormat formatea = new DecimalFormat("###,###.##");
 
     public void nuevaDeuda(String deudor, String acredor, int pixelcoins, int tiempo, int interes) {
         java.util.Date dt = new java.util.Date();
@@ -34,16 +44,15 @@ public class Deudas extends MySQL {
         int deuda = 0;
 
         try {
-            String consulta1 = "SELECT * FROM deudas";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta1);
+            String consulta = "SELECT pixelcoins FROM deudas WHERE deudor = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, nombre);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("deudor").equalsIgnoreCase(nombre)) {
-                    deuda = rs.getInt("pixelcoins") + deuda;
-                }
+                deuda = deuda + rs.getInt("pixelcoins");
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -54,16 +63,15 @@ public class Deudas extends MySQL {
         int deuda = 0;
 
         try {
-            String consulta1 = "SELECT * FROM deudas";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta1);
+            String consulta = "SELECT pixelcoins FROM deudas WHERE acredor = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, nombre);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("acredor").equalsIgnoreCase(nombre)) {
-                    deuda = rs.getInt("pixelcoins") + deuda;
-                }
+                deuda = deuda + rs.getInt("pixelcoins");
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -83,6 +91,7 @@ public class Deudas extends MySQL {
             int dias = 0;
             int cuota = 0;
             int interes = 0;
+            int id = 0;
 
             p.sendMessage(ChatColor.GOLD + "Jugadores que te deben: " + ChatColor.AQUA + "(/estadisticas)");
             while (rs.next()) {
@@ -92,8 +101,9 @@ public class Deudas extends MySQL {
                     pixelcoins = rs.getInt("pixelcoins");
                     dias = rs.getInt("tiempo");
                     cuota = rs.getInt("cuota");
+                    id = rs.getInt("id_deuda");
 
-                    p.sendMessage("   " + ChatColor.GOLD + nombret + " " + ChatColor.GREEN + pixelcoins + " PC " + ChatColor.GOLD + "(Con " + interes + " interes aplicado) con cuota " + ChatColor.GREEN + cuota + " PC/dia " + ChatColor.GOLD + " (" + dias + " dias)");
+                    p.sendMessage("   " + ChatColor.GOLD + nombret + " " + ChatColor.GREEN + pixelcoins + " PC " + ChatColor.GOLD + "(Con " + interes + " interes aplicado) con cuota " + ChatColor.GREEN + cuota + " PC/dia " + ChatColor.GOLD + " (" + dias + " dias) " + ChatColor.DARK_AQUA + "id: " + id);
                 }
             }
             p.sendMessage(ChatColor.GOLD + "Jugadores que debes:");
@@ -105,11 +115,12 @@ public class Deudas extends MySQL {
                     pixelcoins = rs.getInt("pixelcoins");
                     dias = rs.getInt("tiempo");
                     cuota = rs.getInt("cuota");
+                    id = rs.getInt("id_deuda");
 
-                    p.sendMessage("   " + ChatColor.GOLD + "Debes a " + nombret + " " + ChatColor.GREEN + pixelcoins + " PC " + ChatColor.GOLD + "(Con " + interes + " interes aplicado) con cuota " + ChatColor.GREEN + cuota + " PC/dia" + ChatColor.GOLD + " (" + dias + " dias)");
+                    p.sendMessage("   " + ChatColor.GOLD + "Debes a " + nombret + " " + ChatColor.GREEN + pixelcoins + " PC " + ChatColor.GOLD + "(Con " + interes + " interes aplicado) con cuota " + ChatColor.GREEN + cuota + " PC/dia" + ChatColor.GOLD + " (" + dias + " dias) " + ChatColor.DARK_AQUA + "id: " + id);
                 }
             }
-
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -117,16 +128,17 @@ public class Deudas extends MySQL {
 
     public int getMaxId() {
         int id = 0;
-
         try {
-            String consulta3 = "SELECT * FROM deudas ORDER BY id_deuda DESC LIMIT 1 ";
+            String consulta3 = "SELECT id_deuda FROM deudas ORDER BY id_deuda DESC LIMIT 1 ";
             Statement st3 = (Statement) conexion.createStatement();
             ResultSet rs3;
             rs3 = st3.executeQuery(consulta3);
 
             while (rs3.next()) {
                 id = rs3.getInt("id_deuda");
+                break;
             }
+            rs3.close();
         } catch (SQLException e) {
 
         }
@@ -136,17 +148,16 @@ public class Deudas extends MySQL {
     public String getDeudor(int id) {
         String deudor = "";
         try {
-            String consulta = "SELECT * FROM deudas";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT deudor FROM deudas WHERE id_deuda = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getInt("id_deuda") == id) {
-                    deudor = rs.getString("deudor");
-                    break;
-                }
+                deudor = rs.getString("deudor");
+                break;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -156,17 +167,16 @@ public class Deudas extends MySQL {
     public String getAcredor(int id) {
         String acredor = "";
         try {
-            String consulta = "SELECT * FROM deudas";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT acredor FROM deudas WHERE id_deuda = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getInt("id_deuda") == id) {
-                    acredor = rs.getString("acredor");
-                    break;
-                }
+                acredor = rs.getString("acredor");
+                break;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -176,17 +186,16 @@ public class Deudas extends MySQL {
     public int getPixelcoins(int id) {
         int pixelcoins = 0;
         try {
-            String consulta = "SELECT * FROM deudas";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT pixelcoins FROM deudas WHERE id_deuda = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getInt("id_deuda") == id) {
-                    pixelcoins = rs.getInt("pixelcoins");
-                    break;
-                }
+                pixelcoins = rs.getInt("pixelcoins");
+                break;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -196,17 +205,16 @@ public class Deudas extends MySQL {
     public int getTiempo(int id) {
         int tiempo = 0;
         try {
-            String consulta = "SELECT * FROM deudas";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT tiempo FROM deudas WHERE id_deuda = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getInt("id_deuda") == id) {
-                    tiempo = rs.getInt("tiempo");
-                    break;
-                }
+                tiempo = rs.getInt("tiempo");
+                break;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -216,17 +224,16 @@ public class Deudas extends MySQL {
     public int getInteres(int id) {
         int interes = 0;
         try {
-            String consulta = "SELECT * FROM deudas";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT interes FROM deudas WHERE id_deuda = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getInt("id_deuda") == id) {
-                    interes = rs.getInt("interes");
-                    break;
-                }
+                interes = rs.getInt("interes");
+                break;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -236,17 +243,16 @@ public class Deudas extends MySQL {
     public int getCuota(int id) {
         int cuota = 0;
         try {
-            String consulta = "SELECT * FROM deudas";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT cuota FROM deudas WHERE id_deuda = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getInt("id_deuda") == id) {
-                    cuota = rs.getInt("cuota");
-                    break;
-                }
+                cuota = rs.getInt("cuota");
+                break;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -256,17 +262,16 @@ public class Deudas extends MySQL {
     public String getFecha(int id) {
         String fecha = "";
         try {
-            String consulta = "SELECT * FROM deudas";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT fecha FROM deudas WHERE id_deuda = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getInt("id_deuda") == id) {
-                    fecha = rs.getString("fecha");
-                    break;
-                }
+                fecha = rs.getString("fecha");
+                break;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -299,7 +304,64 @@ public class Deudas extends MySQL {
         }
     }
 
-    public void pagarDeuda(Server se) {
+    public boolean estaRegistradaId(int id) {
+        boolean reg = false;
+        try {
+            String consulta = "SELECT id_deuda FROM deudas WHERE id_deuda = ?";
+            PreparedStatement pst = conexion.prepareStatement(consulta);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                reg = true;
+                rs.close();
+            }
+        } catch (SQLException e) {
+
+        }
+        return reg;
+    }
+
+    public boolean esAcredorDeDeuda(int id, String acredor) {
+        boolean es = false;
+
+        try {
+            String consulta = "SELECT id_deuda FROM deudas WHERE acredor = ? AND id_deuda = ?";
+            PreparedStatement pst = conexion.prepareStatement(consulta);
+            pst.setString(1, acredor);
+            pst.setInt(2, id);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                es = true;
+            }
+            rs.close();
+        } catch (SQLException e) {
+
+        }
+        return es;
+    }
+
+    public boolean esDeudorDeDeuda(int id, String deudor) {
+        boolean es = false;
+        try {
+            String consulta = "SELECT id_deuda FROM deudas WHERE deudor = ? AND id_deuda = ?";
+            PreparedStatement pst = conexion.prepareStatement(consulta);
+            pst.setString(1, deudor);
+            pst.setInt(2, id);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                es = true;
+            }
+            rs.close();
+        } catch (SQLException e) {
+
+        }
+        return es;
+    }
+
+    public void pagarDeudas(Server se) {
         int idActual = 0;
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -334,13 +396,7 @@ public class Deudas extends MySQL {
                     return;
                 }
                 Jugador j = new Jugador();
-                try {
-                    j.conectar("root", "", "pixelcoins");
-                    pixelcoinsDeudor = j.getDinero(deudor);
-                    j.desconectar();
-                } catch (Exception e) {
-
-                }
+                pixelcoinsDeudor = j.getDinero(deudor);
 
                 int cuincide = fechaHoy.compareTo(fechaActual);
 
@@ -349,25 +405,12 @@ public class Deudas extends MySQL {
                     //Comprobamos que el deudor tenga el dinero suciente para pagar la cuota
                     if (pixelcoinsDeudor >= cuota) {
                         //Realizamos transaccion de dinero
-                        try {
-                            Transacciones t = new Transacciones();
-                            t.conectar("root", "", "pixelcoins");
-                            t.realizarTransferencia(deudor, acredor, cuota, "", "PAGAR_CUOTA", true);
-                            t.desconectar();
-                        } catch (Exception e) {
-                            se.getConsoleSender().sendMessage(ChatColor.DARK_RED + " Error al pagar en deuda id: " + idActual);
-                            return;
-                        }
-                        //Le a?adimos un npago al deudor ya que ha pagado la deuda
-                        try {
-                            j.conectar("root", "", "pixelcoins");
-                            int npagos = j.getNpagos(deudor) + 1;
-                            j.setNpagos(deudor, npagos);
-                            j.desconectar();
-                        } catch (Exception e) {
-                            se.getConsoleSender().sendMessage(ChatColor.DARK_RED + " Error al pagar en deuda id: " + idActual);
-                            return;
-                        }
+                        Transacciones t = new Transacciones();
+                        t.realizarTransferencia(deudor, acredor, cuota, "", Transacciones.TIPO.DEUDAS_PAGAR_DEUDAS, true);
+
+                        //Le añadimos un npago al deudor ya que ha pagado la deuda
+                        int npagos = j.getNpagos(deudor) + 1;
+                        j.setNpagos(deudor, npagos);
 
                         se.getConsoleSender().sendMessage(ChatColor.GREEN + "Se ha pagado en id: " + idActual);
 
@@ -387,20 +430,19 @@ public class Deudas extends MySQL {
                         }
                     } else {
                         //Al no poder pagar la deuda le a?adimos un inpago
-                        try {
-                            j.conectar("root", "", "pixelcoins");
-                            int ninpagos = j.getNinpago(deudor) + 1;
-                            j.setNinpagos(deudor, ninpagos);
-                            j.desconectar();
-                            se.getConsoleSender().sendMessage(ChatColor.GREEN + " No se puede pagar en id: " + idActual + " por falta de pixelcoins");
-                            Mensajes men = new Mensajes();
+                        int ninpagos = j.getNinpago(deudor) + 1;
 
-                            men.nuevoMensaje(acredor, deudor + " no te ha podido pagar ese dia la deuda por falta de pixelcoins");
-                            men.nuevoMensaje(deudor, "no has podido pagar un dia la deuda con " + acredor);
-                        } catch (Exception e) {
-                            se.getConsoleSender().sendMessage(ChatColor.DARK_RED + " Error al pagar en deuda id: " + idActual);
-                            return;
+                        if (!j.estaRegistrado(deudor)) {
+                            j.nuevoJugador(deudor, 0, 0, 0, 0, 0, 0, 1, 0);
+                        } else {
+                            j.setNinpagos(deudor, ninpagos);
                         }
+
+                        se.getConsoleSender().sendMessage(ChatColor.GREEN + " No se puede pagar en id: " + idActual + " por falta de pixelcoins");
+                        Mensajes men = new Mensajes();
+
+                        men.nuevoMensaje(acredor, deudor + " no te ha podido pagar ese dia la deuda por falta de pixelcoins");
+                        men.nuevoMensaje(deudor, "no has podido pagar un dia la deuda con " + acredor);
                         return;
                     }
                 }
@@ -408,5 +450,74 @@ public class Deudas extends MySQL {
         } catch (SQLException e) {
             se.getConsoleSender().sendMessage(ChatColor.DARK_RED + " Error al pagar en deuda id: " + idActual);
         }
+    }
+
+    public void cancelarDeuda(Player p, int id) {
+        if (!this.estaRegistradaId(id)) {
+            p.sendMessage(ChatColor.DARK_RED + "No hay ninguna id con ese numero, la id se ve en comando /deudas");
+            return;
+        }
+
+        if (!this.esAcredorDeDeuda(id, p.getName())) {
+            p.sendMessage(ChatColor.DARK_RED + "No eres el acredor de esa deuda, las id se ven en /deuda");
+            return;
+        }
+
+        String deudor = this.getDeudor(id);
+        int pixelcoinsDeuda = this.getPixelcoins(id);
+
+        this.borrarDeuda(id);
+
+        p.sendMessage(ChatColor.GOLD + "Has cancelado la deuda a " + deudor + "!");
+        p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+
+        Player tp = p.getServer().getPlayer(deudor);
+
+        if (tp != null) {
+            tp.sendMessage(ChatColor.GOLD + p.getName() + " te ha cancelado la deuda de " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC");
+            tp.playSound(tp.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+            sp.updateScoreboard(tp);
+        } else {
+            Mensajes men = new Mensajes();
+            men.nuevoMensaje(deudor, p.getName() + " te ha cencelado la deuda de " + pixelcoinsDeuda + " PC");
+        }
+
+        sp.updateScoreboard(p);
+    }
+
+    public void pagarDeuda(Player p, int id) {
+        if (!this.estaRegistradaId(id)) {
+            p.sendMessage(ChatColor.DARK_RED + "No esta registrada ninguna deuda con esa id, las ids se ven en /deudas");
+            return;
+        }
+        if (!this.esDeudorDeDeuda(id, p.getName())) {
+            p.sendMessage(ChatColor.DARK_RED + "No eres deudor de esa deuda, las ids se ven en el comando /deudas");
+            return;
+        }
+        int pixelcoinsDeuda = this.getPixelcoins(id);
+        String acredor = this.getAcredor(id);
+        Jugador j = new Jugador();
+        if (j.getDinero(p.getName()) < pixelcoinsDeuda) {
+            p.sendMessage(ChatColor.DARK_RED + "No tienes las suficientes pixelcoins para pagar esa deuda, pixelcoins requeridas: " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC");
+            return;
+        }
+        Transacciones t = new Transacciones();
+        t.realizarTransferencia(p.getName(), acredor, pixelcoinsDeuda, " ", Transacciones.TIPO.DEUDAS_PAGAR_TODADEUDA, true);
+        this.borrarDeuda(id);
+
+        p.sendMessage(ChatColor.GOLD + "Has pagado a " + acredor + " toda la deuda: " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC");
+        p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+
+
+        Player tp = p.getServer().getPlayer(acredor);
+        if (tp != null) {
+            tp.sendMessage(ChatColor.GOLD + p.getName() + " ta ha pagado toda la deuda: " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC");
+            tp.playSound(tp.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+            sp.updateScoreboard(tp);
+        } else {
+            Mensajes men = new Mensajes();
+            men.nuevoMensaje(acredor, p.getName() + " ta ha pagado toda la deuda: " + pixelcoinsDeuda + " PC");
+        }
+        sp.updateScoreboard(p);
     }
 }

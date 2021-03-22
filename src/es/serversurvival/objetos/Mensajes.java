@@ -5,6 +5,8 @@ import org.bukkit.entity.Player;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Mensajes extends MySQL {
 
@@ -23,16 +25,15 @@ public class Mensajes extends MySQL {
         ArrayList<String> mensajes = new ArrayList<String>();
 
         try {
-            String consulta = "SELECT * FROM mensajes";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT mensaje FROM mensajes WHERE destinatario = ? ";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, jugador);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("destinatario").equalsIgnoreCase(jugador)) {
-                    mensajes.add(rs.getString("mensaje"));
-                }
+                mensajes.add(rs.getString("mensaje"));
             }
+            rs.close();
         } catch (Exception e) {
 
         }
@@ -40,57 +41,53 @@ public class Mensajes extends MySQL {
     }
 
     private void borrarMensajes(String jugador) {
-        int id;
         try {
-            String consulta = "SELECT * FROM mensajes";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT id_mensaje FROM mensajes WHERE destinatario = ? ";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, jugador);
+            ResultSet rs = pst.executeQuery();
 
+            int id_mensajeActual = 0;
             while (rs.next()) {
-                if (rs.getString("destinatario").equalsIgnoreCase(jugador)) {
-                    id = rs.getInt("id_mensaje");
-                    this.borrarMensaje(id);
-                }
+                id_mensajeActual = rs.getInt("id_mensaje");
+                this.borrarMensaje(id_mensajeActual);
             }
+            rs.close();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
     private boolean tieneMensajes(String jugador) {
-        boolean tiene = false;
+        boolean tieneMensajes = false;
         try {
-            String consulta = "SELECT * FROM mensajes";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT mensaje FROM mensajes WHERE destinatario = ? ";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, jugador);
+            ResultSet rs = pst.executeQuery();
 
-            while (rs.next()) {
-                if (rs.getString("destinatario").equalsIgnoreCase(jugador)) {
-                    tiene = true;
-                    break;
-                }
+            if (rs.next()) {
+                tieneMensajes = true;
             }
+            rs.close();
         } catch (Exception e) {
 
         }
-        return tiene;
+        return tieneMensajes;
     }
 
     public int getNMensajes(String jugador) {
         int nmensajes = 0;
         try {
-            String consulta = "SELECT * FROM mensajes";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT mensaje FROM mensajes WHERE destinatario = ? ";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, jugador);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("destinatario").equalsIgnoreCase(jugador)) {
-                    nmensajes = nmensajes + 1;
-                }
+                nmensajes = nmensajes + 1;
             }
+            rs.close();
         } catch (Exception e) {
 
         }
@@ -99,11 +96,9 @@ public class Mensajes extends MySQL {
 
     public void nuevoMensaje(String jugador, String mensaje) {
         try {
-            conectar("root", "", "pixelcoins");
             String consulta = "INSERT INTO mensajes (destinatario, mensaje) VALUES ('" + jugador + "','" + mensaje + "')";
             Statement st = (Statement) conexion.createStatement();
             st.executeUpdate(consulta);
-            desconectar();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -113,7 +108,7 @@ public class Mensajes extends MySQL {
         String jugador = p.getName();
         boolean tiene = this.tieneMensajes(jugador);
 
-        if (tiene == false) {
+        if (!tiene) {
             p.sendMessage(ChatColor.DARK_RED + "No tienes ningun mensaje pendiente");
             return;
         }

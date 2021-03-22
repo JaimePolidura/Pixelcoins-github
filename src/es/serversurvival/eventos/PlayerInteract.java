@@ -3,7 +3,7 @@ package es.serversurvival.eventos;
 import es.serversurvival.objetos.Empresas;
 import es.serversurvival.objetos.Ofertas;
 import es.serversurvival.objetos.Transacciones;
-import es.serversurvival.config.Funciones;
+import es.serversurvival.main.Funciones;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -48,7 +48,7 @@ public class PlayerInteract implements Listener {
 
                     if (im.getType() == Material.DIAMOND) {
                         int slot = p.getInventory().getHeldItemSlot();
-                        t.conectar("root", "", "pixelcoins");
+                        t.conectar();
                         t.ingresarItem(im, p, slot);
                         t.desconectar();
                     } else {
@@ -60,7 +60,7 @@ public class PlayerInteract implements Listener {
 
                     if (im.getType() == Material.DIAMOND_BLOCK) {
                         int slot = p.getInventory().getHeldItemSlot();
-                        t.conectar("root", "", "pixelcoins");
+                        t.conectar();
                         t.ingresarItem(im, p, slot);
                         t.desconectar();
                     } else {
@@ -71,7 +71,7 @@ public class PlayerInteract implements Listener {
                 } else if (f.comparar(lec, PixDia)) {
 
                     if (espaciosLibres != 0 || (p.getInventory().getItemInMainHand().getType() == Material.DIAMOND && p.getInventory().getItemInMainHand().getAmount() != 64)) {
-                        t.conectar("root", "", "pixelcoins");
+                        t.conectar();
                         t.sacarItem(p, "DIAMOND");
                         t.desconectar();
                     } else {
@@ -82,7 +82,7 @@ public class PlayerInteract implements Listener {
                 } else if (f.comparar(lec, MaxPixMaxDia)) {
 
                     if (espaciosLibres != 0) {
-                        t.conectar("root", "", "pixelcoins");
+                        t.conectar();
                         t.sacarMaxItem("DIAMOND", p);
                         t.desconectar();
                     } else {
@@ -94,7 +94,7 @@ public class PlayerInteract implements Listener {
 
                     if (im.getType() == Material.QUARTZ_BLOCK) {
                         int slot = p.getInventory().getHeldItemSlot();
-                        t.conectar("root", "", "pixelcoins");
+                        t.conectar();
                         t.ingresarItem(im, p, slot);
                         t.desconectar();
                     } else {
@@ -105,7 +105,7 @@ public class PlayerInteract implements Listener {
                 } else if (f.comparar(lec, PixCua)) {
 
                     if (espaciosLibres != 0 || (p.getInventory().getItemInMainHand().getType() == Material.QUARTZ_BLOCK && p.getInventory().getItemInMainHand().getAmount() != 64)) {
-                        t.conectar("root", "", "pixelcoins");
+                        t.conectar();
                         t.sacarItem(p, "QUARTZ_BLOCK");
                         t.desconectar();
                     } else {
@@ -116,7 +116,7 @@ public class PlayerInteract implements Listener {
                 } else if (f.comparar(lec, MaxPixMaxCua)) {
 
                     if (espaciosLibres != 0) {
-                        t.conectar("root", "", "pixelcoins");
+                        t.conectar();
                         t.sacarMaxItem("QUARTZ_BLOCK", p);
                         t.desconectar();
                     } else {
@@ -128,7 +128,7 @@ public class PlayerInteract implements Listener {
 
                     if (im.getType() == Material.LAPIS_LAZULI) {
                         int slot = p.getInventory().getHeldItemSlot();
-                        t.conectar("root", "", "pixelcoins");
+                        t.conectar();
                         t.ingresarItem(im, p, slot);
                         t.desconectar();
                     } else {
@@ -140,7 +140,7 @@ public class PlayerInteract implements Listener {
 
                     if (im.getType() == Material.LAPIS_BLOCK) {
                         int slot = p.getInventory().getHeldItemSlot();
-                        t.conectar("root", "", "pixelcoins");
+                        t.conectar();
                         t.ingresarItem(im, p, slot);
                         t.desconectar();
                     } else {
@@ -151,7 +151,7 @@ public class PlayerInteract implements Listener {
                 } else if (f.comparar(lec, MaxPixMaxLap)) {
 
                     if (espaciosLibres != 0) {
-                        t.conectar("root", "", "pixelcoins");
+                        t.conectar();
                         t.sacarMaxItem("LAPIS_LAZULI", p);
                         t.desconectar();
                     } else {
@@ -162,7 +162,7 @@ public class PlayerInteract implements Listener {
                 } else if (f.comparar(lec, PixLap)) {
 
                     if (espaciosLibres != 0 || (p.getInventory().getItemInMainHand().getType() == Material.LAPIS_LAZULI && p.getInventory().getItemInMainHand().getAmount() != 64)) {
-                        t.conectar("root", "", "pixelcoins");
+                        t.conectar();
                         t.sacarItem(p, "LAPIS_LAZULI");
                         t.desconectar();
                     } else {
@@ -175,7 +175,7 @@ public class PlayerInteract implements Listener {
             if (f.comparar(lec, tienda)) {
                 try {
                     Ofertas o = new Ofertas();
-                    o.conectar("root", "", "pixelcoins");
+                    o.conectar();
                     o.mostarOfertas(p);
                     o.desconectar();
                 } catch (Exception e3) {
@@ -184,7 +184,7 @@ public class PlayerInteract implements Listener {
             } else if (f.comparar(lec, empresas)) {
                 try {
                     Empresas empr = new Empresas();
-                    empr.conectar("root", "", "pixelcoins");
+                    empr.conectar();
                     empr.mostrarEmpresas(p);
                     empr.desconectar();
                 } catch (Exception e1) {

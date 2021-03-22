@@ -1,16 +1,17 @@
 package es.serversurvival.objetos;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import es.serversurvival.config.Funciones;
+import com.mysql.jdbc.Connection;
+import es.serversurvival.main.Funciones;
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -38,17 +39,16 @@ public class Empleados extends MySQL {
     public boolean trabajaEmpresa(String empleado, String nombreEmpresa) {
         boolean trabaja = false;
         try {
-            String consulta = "SELECT * FROM empleados";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT id FROM empleados WHERE empleado = ? AND empresa = ?";
+            PreparedStatement pst = conexion.prepareStatement(consulta);
+            pst.setString(1, empleado);
+            pst.setString(2, nombreEmpresa);
+            ResultSet rs = pst.executeQuery();
 
-            while (rs.next()) {
-                if (rs.getString("empresa").equalsIgnoreCase(nombreEmpresa) && rs.getString("empleado").equalsIgnoreCase(empleado)) {
-                    trabaja = true;
-                    break;
-                }
+            if (rs.next()) {
+                trabaja = true;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -56,19 +56,19 @@ public class Empleados extends MySQL {
     }
 
     public int getId(String empleado, String empresa) {
-        int id = 0;
+        int id = -1;
         try {
-            String consulta = "SELECT * FROM empleados";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT id FROM empleados WHERE empleado = ? AND empresa = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, empleado);
+            pst.setString(2, empresa);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("empresa").equalsIgnoreCase(empresa) && rs.getString("empleado").equalsIgnoreCase(empleado)) {
-                    id = rs.getInt("id_empleado");
-                    break;
-                }
+                id = rs.getInt("id");
+                break;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -78,17 +78,16 @@ public class Empleados extends MySQL {
     public String getEmpleado(int id) {
         String empleado = "";
         try {
-            String consulta = "SELECT * FROM empleados";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT empleado FROM empleados WHERE id = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getInt("id_empleado") == id) {
-                    empleado = rs.getString("empleado");
-                    break;
-                }
+                empleado = rs.getString("empleado");
+                break;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -98,17 +97,16 @@ public class Empleados extends MySQL {
     public String getEmpresa(int id) {
         String empresa = "";
         try {
-            String consulta = "SELECT * FROM empleados";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT empresa FROM empleados WHERE id = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getInt("id_empleado") == id) {
-                    empresa = rs.getString("empresa");
-                    break;
-                }
+                empresa = rs.getString("empresa");
+                break;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -118,17 +116,16 @@ public class Empleados extends MySQL {
     public int getSueldo(int id) {
         int sueldo = 0;
         try {
-            String consulta = "SELECT * FROM empleados";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT sueldo FROM empleados WHERE id = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getInt("id_empleado") == id) {
-                    sueldo = rs.getInt("sueldo");
-                    break;
-                }
+                sueldo = rs.getInt("sueldo");
+                break;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -138,17 +135,16 @@ public class Empleados extends MySQL {
     public String getCargo(int id) {
         String cargo = "";
         try {
-            String consulta = "SELECT * FROM empleados";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT cargo FROM empleados WHERE id = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getInt("id_empleado") == id) {
-                    cargo = rs.getString("cargo");
-                    break;
-                }
+                cargo = rs.getString("cargo");
+                break;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -158,17 +154,16 @@ public class Empleados extends MySQL {
     public String getTipo(int id) {
         String tipo = "";
         try {
-            String consulta = "SELECT * FROM empleados";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT tipo FROM empleados WHERE id = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getInt("id_empleado") == id) {
-                    tipo = rs.getString("tipo");
-                    break;
-                }
+                tipo = rs.getString("tipo");
+                break;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -176,28 +171,27 @@ public class Empleados extends MySQL {
     }
 
     public String getFechaPaga(int id) {
-        String fechaPaga = "";
+        String fecha = "";
         try {
-            String consulta = "SELECT * FROM empleados";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT fechaPaga FROM empleados WHERE id = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getInt("id_empleado") == id) {
-                    fechaPaga = rs.getString("fechaPaga");
-                    break;
-                }
+                fecha = rs.getString("fechaPaga");
+                break;
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
-        return fechaPaga;
+        return fecha;
     }
 
     public void setSueldo(int id, int sueldo) {
         try {
-            String consulta2 = "UPDATE empleados SET sueldo = ? WHERE id_empleado = ?";
+            String consulta2 = "UPDATE empleados SET sueldo = ? WHERE id = ?";
             PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta2);
 
             pst.setInt(1, sueldo);
@@ -210,7 +204,7 @@ public class Empleados extends MySQL {
 
     public void setCargo(int id, String cargo) {
         try {
-            String consulta2 = "UPDATE empleados SET cargo = ? WHERE id_empleado = ?";
+            String consulta2 = "UPDATE empleados SET cargo = ? WHERE id = ?";
             PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta2);
 
             pst.setString(1, cargo);
@@ -223,7 +217,7 @@ public class Empleados extends MySQL {
 
     public void setTipo(int id, String tipo) {
         try {
-            String consulta2 = "UPDATE empleados SET tipo = ? WHERE id_empleado = ?";
+            String consulta2 = "UPDATE empleados SET tipo = ? WHERE id = ?";
             PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta2);
 
             pst.setString(1, tipo);
@@ -236,7 +230,7 @@ public class Empleados extends MySQL {
 
     public void setFechaPaga(int id, String fechaPaga) {
         try {
-            String consulta2 = "UPDATE empleados SET fechaPaga = ? WHERE id_empleado = ?";
+            String consulta2 = "UPDATE empleados SET fechaPaga = ? WHERE id = ?";
             PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta2);
 
             pst.setString(1, fechaPaga);
@@ -249,7 +243,7 @@ public class Empleados extends MySQL {
 
     public void setEmpresa(int id, String empresa) {
         try {
-            String consulta2 = "UPDATE empleados SET empresa = ? WHERE id_empleado = ?";
+            String consulta2 = "UPDATE empleados SET empresa = ? WHERE id = ?";
             PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta2);
 
             pst.setString(1, empresa);
@@ -262,7 +256,7 @@ public class Empleados extends MySQL {
 
     public void borrarEmplado(int id) {
         try {
-            String consulta2 = "DELETE FROM empleados WHERE id_empleado=\"" + id + "\"      ";
+            String consulta2 = "DELETE FROM empleados WHERE id=\"" + id + "\"      ";
             Statement st2 = conexion.createStatement();
             st2.executeUpdate(consulta2);
         } catch (SQLException e) {
@@ -272,19 +266,17 @@ public class Empleados extends MySQL {
 
     public ArrayList<Integer> getidEmpleadosEmpresa(String nombreEmpresa) {
         ArrayList<Integer> ids = new ArrayList<Integer>();
-        String empleado = "";
+
         try {
-            String consulta = "SELECT * FROM empleados";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT id FROM empleados WHERE empresa = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, nombreEmpresa);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("empresa").equalsIgnoreCase(nombreEmpresa)) {
-                    empleado = rs.getString("empleado");
-                    ids.add(this.getId(empleado, nombreEmpresa));
-                }
+                ids.add(rs.getInt("id"));
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -295,16 +287,15 @@ public class Empleados extends MySQL {
         ArrayList<String> empleados = new ArrayList<String>();
 
         try {
-            String consulta = "SELECT * FROM empleados";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT empleado FROM empleados WHERE empresa = ?";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, nombreEmpresa);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("empresa").equalsIgnoreCase(nombreEmpresa)) {
-                    empleados.add(rs.getString("empleado"));
-                }
+                empleados.add(rs.getString("empleado"));
             }
+            rs.close();
         } catch (SQLException e) {
 
         }
@@ -320,32 +311,32 @@ public class Empleados extends MySQL {
     }
 
     public void despedir(String nombreEmpresa, String empleado, String razon, Player p) {
+        Empresas em = new Empresas();
+
         boolean trabaja = this.trabajaEmpresa(empleado, nombreEmpresa);
-        if (trabaja == false) {
+        if (!trabaja) {
             p.sendMessage(ChatColor.DARK_RED + "Creo que ese men no trabaja en tu empresa");
             return;
         }
 
         try {
-            Empresas em = new Empresas();
-            em.conectar("root", "", "pixelcoins");
+            em.conectar();
             boolean reg = em.estaRegistradoNombre(nombreEmpresa);
 
-            if (reg == false) {
+            if (!reg) {
                 p.sendMessage(ChatColor.DARK_RED + "Esa empresa no exsiste");
                 return;
             }
             boolean ow = em.esOwner(p.getName(), nombreEmpresa);
-            if (ow == false) {
-                p.sendMessage(ChatColor.DARK_RED + "No eres due?o de esa empresa");
+            if (!ow) {
+                p.sendMessage(ChatColor.DARK_RED + "No eres owner de esa empresa");
                 return;
             }
-            em.desconectar();
         } catch (Exception e) {
 
         }
-        int id_empleado = this.getId(empleado, nombreEmpresa);
-        this.borrarEmplado(id_empleado);
+        int id_emplado = this.getId(empleado, nombreEmpresa);
+        this.borrarEmplado(id_emplado);
 
         p.sendMessage(ChatColor.GOLD + "Has despedido a: " + empleado);
         Player tp = p.getServer().getPlayer(empleado);
@@ -353,33 +344,33 @@ public class Empleados extends MySQL {
         if (tp.isOnline()) {
             tp.sendMessage(ChatColor.RED + "Has sido despedido de " + nombreEmpresa + " razon: " + razon);
             tp.playSound(tp.getLocation(), Sound.BLOCK_ANVIL_LAND, 10, 1);
+        } else {
+            Mensajes men = new Mensajes();
+            men.nuevoMensaje(empleado, "Has sido despedido de " + nombreEmpresa + " por: " + razon);
         }
+        em.desconectar();
     }
 
     public void irseEmpresa(String nombreEmpresa, Player p) {
         Empresas em = new Empresas();
         String nombreOwner = "";
-        try {
-            em.conectar("root", "", "pixelcoins");
-            boolean reg = em.estaRegistradoNombre(nombreEmpresa);
 
-            if (reg == false) {
-                p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
-                return;
-            }
+        boolean reg = em.estaRegistradoNombre(nombreEmpresa);
 
-            boolean ow = em.esOwner(p.getName(), nombreEmpresa);
-            if (ow == true) {
-                p.sendMessage(ChatColor.DARK_RED + "No puedes irte de tu propia empresa. /venderempresa y si realmente te quieres deshacer de ella: /borrarempresa");
-                return;
-            }
-            nombreOwner = em.getOwner(nombreEmpresa);
-            em.desconectar();
-        } catch (Exception e) {
-
+        if (!reg) {
+            p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
+            return;
         }
+
+        boolean ow = em.esOwner(p.getName(), nombreEmpresa);
+        if (ow) {
+            p.sendMessage(ChatColor.DARK_RED + "No puedes irte de tu propia empresa. /venderempresa y si realmente te quieres deshacer de ella: /borrarempresa");
+            return;
+        }
+        nombreOwner = em.getOwner(nombreEmpresa);
+
         boolean trabaja = this.trabajaEmpresa(p.getName(), nombreEmpresa);
-        if (trabaja == false) {
+        if (!trabaja) {
             p.sendMessage(ChatColor.DARK_RED + "No te puedes ir de una empresa de la que no trabajas");
             return;
         }
@@ -393,10 +384,10 @@ public class Empleados extends MySQL {
         if (tp != null) {
             tp.sendMessage(ChatColor.RED + p.getName() + " Se ha ido de tu empresa: " + nombreEmpresa);
             p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_LAND, 10, 1);
+        } else {
+            Mensajes men = new Mensajes();
+            men.nuevoMensaje(nombreOwner, p.getName() + " se ha ido de tu empresa: " + nombreEmpresa);
         }
-
-        Mensajes men = new Mensajes();
-        men.nuevoMensaje(nombreOwner, p.getName() + " se ha ido de tu empresa: " + nombreEmpresa);
     }
 
     public void contratar(String empleado, String empresa, int sueldo, String tipo, String cargo, Player p, Player tp2) {
@@ -471,62 +462,65 @@ public class Empleados extends MySQL {
 
 
     public void editarSueldo(String tname, String empresa, Player p, String tipo, String valor) {
-        try {
-            Empresas emp = new Empresas();
-            emp.conectar("root", "", "pixelcoins");
-            boolean reg = emp.estaRegistradoNombre(empresa);
-            if (reg == false) {
-                p.sendMessage(ChatColor.DARK_RED + "Esa empresa no exsiste");
-                return;
-            }
-            boolean ow = emp.esOwner(p.getName(), empresa);
-            if (ow == false) {
-                p.sendMessage(ChatColor.DARK_RED + "No eres due?o de eas empresa");
-                return;
-            }
-            emp.desconectar();
-        } catch (Exception e) {
+        Empresas emp = new Empresas();
 
+        boolean reg = emp.estaRegistradoNombre(empresa);
+        if (!reg) {
+            p.sendMessage(ChatColor.DARK_RED + "Esa empresa no exsiste");
+            return;
         }
+        boolean ow = emp.esOwner(p.getName(), empresa);
+        if (!ow) {
+            p.sendMessage(ChatColor.DARK_RED + "No eres due?o de eas empresa");
+            return;
+        }
+
 
         boolean trabaja = this.trabajaEmpresa(tname, empresa);
         Player tp = p.getServer().getPlayer(tname);
-        if (trabaja == false) {
+
+        if (!trabaja) {
             p.sendMessage(ChatColor.DARK_RED + "Ese jugador no trabaja en la empresa");
             return;
         }
         int id = this.getId(tname, empresa);
-        if (tipo.toLowerCase().equalsIgnoreCase("sueldo")) {
+        if (tipo.equalsIgnoreCase("sueldo")) {
             int sueldoAntes = this.getSueldo(id);
+            int valorInt = Integer.parseInt(valor);
+            this.setSueldo(id, valorInt);
 
-            this.setSueldo(id, Integer.parseInt(valor));
+            p.sendMessage(ChatColor.GOLD + "Has cambiado el sueldo a " + tname + " a " + ChatColor.GREEN + formatea.format(valorInt) + " PC" + ChatColor.GOLD + " en la empresa: " + empresa);
             if (tp != null) {
-                tp.sendMessage(ChatColor.GOLD + p.getName() + " te ha cambiado el sueldo de " + empresa + " a " + ChatColor.GREEN + formatea.format(valor) + " PC" + ChatColor.GOLD + " antes tenias: " + ChatColor.GREEN + formatea.format(sueldoAntes) + " PC");
+                tp.sendMessage(ChatColor.GOLD + p.getName() + " te ha cambiado el sueldo de " + empresa + " a " + ChatColor.GREEN + formatea.format(valorInt) + " PC" + ChatColor.GOLD + " antes tenias: " + ChatColor.GREEN + formatea.format(sueldoAntes) + " PC");
                 tp.playSound(tp.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+            } else {
+                Mensajes men = new Mensajes();
+                men.nuevoMensaje(tname, "Se te ha cambiado el sueldo de la empresa: " + empresa + " a " + formatea.format(valorInt) + " PC antes tenias " + sueldoAntes + " PC");
             }
-            p.sendMessage(ChatColor.GOLD + "Has cambiado el sueldo a " + tname + " a " + ChatColor.GREEN + formatea.format(valor) + " PC" + ChatColor.GOLD + " en la empresa: " + empresa);
         } else {
-
+            String tipoString = "";
+            switch (valor) {
+                case "s":
+                    tipoString = "semana";
+                    break;
+                case "2s":
+                    tipoString = "2 por semana";
+                    break;
+                case "m":
+                    tipoString = "mes";
+                    break;
+                case "d":
+                    tipoString = "dia";
+                    break;
+            }
             this.setTipo(id, valor);
             int sueldo = this.getSueldo(id);
             if (tp != null) {
-                String tipoString = "";
-                switch (valor) {
-                    case "s":
-                        tipoString = "semana";
-                        break;
-                    case "2s":
-                        tipoString = "2 por semana";
-                        break;
-                    case "m":
-                        tipoString = "mes";
-                        break;
-                    case "d":
-                        tipoString = "dia";
-                        break;
-                }
                 tp.sendMessage(ChatColor.GOLD + p.getName() + " te ha cambiado el tiempo por por el que cobras el sueldo, ahora cobras " + ChatColor.GREEN + formatea.format(sueldo) + " PC" + ChatColor.GOLD + " por " + tipoString);
                 tp.playSound(tp.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+            } else {
+                Mensajes men = new Mensajes();
+                men.nuevoMensaje(tname, "Se te ha cambiado la frecuencia con la que cobras en la empresa: " + empresa + " " + sueldo + " PC/ " + tipoString);
             }
             p.sendMessage(ChatColor.GOLD + "Has cambiado el tipo de pagado de sueldo de " + tname + " en la empresa " + empresa);
         }
@@ -562,8 +556,7 @@ public class Empleados extends MySQL {
             rs = st.executeQuery(consulta);
 
             while (rs.next()) {
-                id_empleado = rs.getInt("id_empleado");
-                id_empleado = rs.getInt("id_empleado");
+                id_empleado = rs.getInt("id");
                 empleado = rs.getString("empleado");
                 empresa = rs.getString("empresa");
                 tipoSueldo = rs.getString("tipo");
@@ -573,7 +566,6 @@ public class Empleados extends MySQL {
                 actual = sdf.parse(fechaPaga);
                 dif = f.diferenciaDias(hoy, actual);
 
-                t.conectar("root", "", "pixelcoins");
                 switch (tipoSueldo) {
                     case "d":
                         if (dif < 1) {
@@ -598,15 +590,15 @@ public class Empleados extends MySQL {
                 }
                 Mensajes men = new Mensajes();
                 sePago = t.pagarSalario(empleado, empresa, sueldo);
-                if (sePago == false) {
+                if (!sePago) {
                     se.getConsoleSender().sendMessage(ChatColor.RED + "La empresa: " + empresa + " no ha podido pagar " + sueldo + " a " + empleado);
                     men.nuevoMensaje(empleado, "No has podido cobrar tu sueldo por parte de " + empresa + " por que no tiene las suficientes pixelcoins");
                 } else {
                     this.setFechaPaga(id_empleado, fechaHoyString);
                     men.nuevoMensaje(empleado, "Has cobrado " + sueldo + " PC de parte de la empresa: " + empresa);
                     se.getConsoleSender().sendMessage(ChatColor.GREEN + "Se ha pagado " + sueldo + " a " + empleado + " en la empresa: " + empresa);
+
                 }
-                t.desconectar();
             }
         } catch (Exception e) {
 

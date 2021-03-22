@@ -8,7 +8,7 @@ import es.serversurvival.objetos.Mensajes;
 import es.serversurvival.objetos.Ofertas;
 import es.serversurvival.objetos.Jugador;
 import es.serversurvival.objetos.Transacciones;
-import es.serversurvival.config.Funciones;
+import es.serversurvival.main.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -22,8 +22,13 @@ import org.bukkit.inventory.ItemStack;
 
 import java.text.DecimalFormat;
 
+
+@SuppressWarnings("SpellCheckingInspection")
 public class PlayerCommand implements Listener, CommandExecutor {
     private DecimalFormat formatea = new DecimalFormat("###,###.##");
+    public static final int CrearEmpresaNombreLonMax = 16;
+    public static final int CrearEmpresaDescLonMax = 200;
+
     private Jugador j = new Jugador();
     private Ofertas o = new Ofertas();
     private Funciones f = new Funciones();
@@ -36,119 +41,76 @@ public class PlayerCommand implements Listener, CommandExecutor {
 
     @EventHandler
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        Player p = (Player) sender;
+        Player p;
+        try {
+            p = (Player) sender;
+        } catch (Exception e) {
+            return true;
+        }
         String cnombre = cmd.getName();
 
         //		COMANDOS JUGADOR
         switch (cnombre.toLowerCase()) {
-            //DINERO
             case "dinero":
-                try {
-                    j.conectar("root", "", "pixelcoins");
-                    j.mostarPixelcoin(p);
-                    j.desconectar();
-                } catch (Exception e) {
-                    p.sendMessage(ChatColor.DARK_RED + "La base de datos esta apagada, di al admin que no sea vago y que la encienda xd");
-                }
+                j.conectar();
+                j.mostarPixelcoin(p);
+                j.desconectar();
                 break;
 
-            //DEUDAS
             case "deudas":
-                try {
-                    d.conectar("root", "", "pixelcoins");
-                    d.mostarDeudas(p);
-                    d.desconectar();
-                } catch (Exception e) {
-
-                }
+                d.conectar();
+                d.mostarDeudas(p);
+                d.desconectar();
                 break;
 
-            //ESTADISTICAS
             case "estadisticas":
-                try {
-                    j.conectar("root", "", "pixelcoins");
-                    j.mostarEstadisticas(p);
-                    j.desconectar();
-                } catch (Exception e) {
-                    p.sendMessage(ChatColor.DARK_RED + "La base de datos esta apagada dile aladmin que la encienda");
-                }
+                j.conectar();
+                j.mostarEstadisticas(p);
+                j.desconectar();
                 break;
 
-            //TOPRICOS8
             case "topricos":
-                try {
-                    j.conectar("root", "", "pixelcoins");
-                    j.mostarTopRicos(p);
-                    j.desconectar();
-                } catch (Exception e) {
-                    p.sendMessage(e.getMessage());
-                    p.sendMessage(ChatColor.DARK_RED + "Di al admin que encienda la base de datos");
-                }
+                j.conectar();
+                j.mostarTopRicos(p);
+                j.desconectar();
                 break;
 
-            //TOPPOBRES
             case "toppobres":
-                try {
-                    j.conectar("root", "", "pixelcoins");
-                    j.mostarTopPobres(p);
-                    j.desconectar();
-                } catch (Exception e) {
-                    p.sendMessage(ChatColor.DARK_RED + "Di al admin que encienda la base de datos");
-                }
+                j.conectar();
+                j.mostarTopPobres(p);
+                j.desconectar();
                 break;
 
-            //TOPVENDEDORES
             case "topvendedores":
-                try {
-                    j.conectar("root", "", "pixelcoins");
-                    j.mostarTopVendedores(p);
-                    j.desconectar();
-                } catch (Exception e) {
-                    p.sendMessage(ChatColor.DARK_RED + "Di al admin que encienda la base de datos xd");
-                }
+                j.conectar();
+                j.mostarTopVendedores(p);
+                j.desconectar();
                 break;
 
-            //TOPFIABLES
             case "topfiables":
-                try {
-                    j.conectar("root", "", "pixelcoins");
-                    j.mostrarTopFiables(p);
-                    j.desconectar();
-                } catch (Exception e) {
-                    p.sendMessage(ChatColor.DARK_RED + "Di al admin que encienda la base de datos xd");
-                }
-                break;
-            case "topmenosfiables":
-                try {
-                    j.conectar("root", "", "pixelcoins");
-                    j.mostrarTopMenosFiables(p);
-                    j.desconectar();
-                } catch (Exception e) {
-                    p.sendMessage(ChatColor.DARK_RED + "Di al admin que encienda la base de datos xd");
-                }
-                break;
-            //TIENDA
-            case "tienda":
-                try {
-                    o.conectar("root", "", "pixelcoins");
-                    o.mostarOfertas(p);
-                    o.desconectar();
-                } catch (Exception e) {
-                    p.sendMessage(ChatColor.DARK_RED + "Di al admin que abra la base de datos pls");
-                }
+                j.conectar();
+                j.mostrarTopFiables(p);
+                j.desconectar();
                 break;
 
-            //EMPRESAS
-            case "empresas":
-                try {
-                    empr.conectar("root", "", "pixelcoins");
-                    empr.mostrarEmpresas(p);
-                    empr.desconectar();
-                } catch (Exception e) {
-                    p.sendMessage("Error al conectar a la base de datos");
-                }
+            case "topmenosfiables":
+                j.conectar();
+                j.mostrarTopMenosFiables(p);
+                j.desconectar();
                 break;
-            //VENDER
+
+            case "tienda":
+                o.conectar();
+                o.mostarOfertas(p);
+                o.desconectar();
+                break;
+
+            case "empresas":
+                empr.conectar();
+                empr.mostrarEmpresas(p);
+                empr.desconectar();
+                break;
+
             case "vender":
                 //comprobamos: args=1, que no sea pociones,baners o libro encantdo, que sea texto el argumento, y que el precio sea positivo
                 if (args.length == 1) {
@@ -161,13 +123,9 @@ public class PlayerCommand implements Listener, CommandExecutor {
                         try {
                             precio = Integer.parseInt(sprecio);
                             if (precio > 0) {
-                                try {
-                                    o.conectar("root", "", "pixelcoins");
-                                    o.crearOferta(i, p, precio);
-                                    o.desconectar();
-                                } catch (Exception e) {
-                                    p.sendMessage(ChatColor.DARK_RED + "La base de datos esta apagada, di al admin que al encienda");
-                                }
+                                o.conectar();
+                                o.crearOferta(i, p, precio);
+                                o.desconectar();
                             } else {
                                 p.sendMessage(ChatColor.DARK_RED + "A ser posible que los precios no sean negativos ");
                             }
@@ -199,37 +157,34 @@ public class PlayerCommand implements Listener, CommandExecutor {
                         done = true;
                     } catch (NumberFormatException e) {
                         p.sendMessage(ChatColor.DARK_RED + "Introduce un numero, no texto de tal manera: /pagar <nombre del jugador> <cantidad a pagar>");
+                        return true;
                     }
                 } else {
                     p.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: /pagar <nombreDelJugador> <precio>");
+                    return true;
                 }
 
-                //Ha metido 2 argumentos y el segundo es numerico
-                //Comprobamos si el numero que ha metido es superior a 0
-                if (done == true && cantidad > 0) {
+                if (done && cantidad > 0) {
                     String destinatario = "";
+                    Player tp = Bukkit.getServer().getPlayer(tname);
+
                     try {
-                        Player tp = Bukkit.getServer().getPlayer(tname);
-
-                        try {
-                            destinatario = tp.getName();
-                        } catch (Exception e) {
-                            p.sendMessage(ChatColor.DARK_RED + "Solo puedes pagar pixelcoins a jugadores que esten online");
-                            break;
-                        }
-
-                        //Comprobamos que el jugador a pagar este online
-                        if (destinatario.equalsIgnoreCase(p.getName()) == false) {
-                            t.conectar("root", "", "pixelcoins");
-                            t.realizarPagoManual(p.getName(), tp.getName(), cantidad, p, "", "PAGO");
-                            t.desconectar();
-                        } else {
-                            p.sendMessage(ChatColor.DARK_RED + "Tu y yo sabemos que eso no va a pasar xd");
-                        }
+                        destinatario = tp.getName();
                     } catch (Exception e) {
-                        p.sendMessage(ChatColor.DARK_RED + "Error en la base de datos, es posible que no este encendida, comentar al admin");
+                        p.sendMessage(ChatColor.DARK_RED + "Solo puedes pagar pixelcoins a jugadores que esten online");
+                        break;
                     }
-                } else if (done == true && cantidad <= 0) {
+
+                    //Comprobamos que el jugador a pagar este online
+                    if (!destinatario.equalsIgnoreCase(p.getName())) {
+                        t.conectar();
+                        t.realizarPagoManual(p.getName(), tp.getName(), cantidad, p, "", Transacciones.TIPO.JUGADOR_PAGO_MANUAL);
+                        t.desconectar();
+                    } else {
+                        p.sendMessage(ChatColor.DARK_RED + "Tu y yo sabemos que eso no va a pasar xd");
+                        return true;
+                    }
+                } else if (done && cantidad <= 0) {
                     p.sendMessage(ChatColor.DARK_RED + "A ser posible hay que pagar una cantidad de dinero que no sea negativa o que no sea 0");
                 }
                 break;
@@ -242,7 +197,7 @@ public class PlayerCommand implements Listener, CommandExecutor {
                 Player tp = null;
                 String destinatario = "";
 
-                //n� de argumentos
+                //nº de argumentos
                 if (args.length == 3 || args.length == 4) {
                     destinatario = "";
                     tp = Bukkit.getServer().getPlayer(args[0]);
@@ -285,42 +240,33 @@ public class PlayerCommand implements Listener, CommandExecutor {
                     break;
                 }
 
-                try {
-                    s.conectar("root", "", "pixelcoins");
+                s.conectar();
+                boolean regEnviador = s.estRegistradoEnviador(p.getName());
+                boolean regDestinatario = s.estRegistradoDestinatario(destinatario);
+                boolean regEnviadorDes = s.estRegistradoDestinatario(p.getName());
+                boolean regDestinatarioEn = s.estRegistradoEnviador(destinatario);
+                s.desconectar();
 
-                    boolean regEnviador = s.estRegistradoEnviador(p.getName());
-                    boolean regDestinatario = s.estRegistradoDestinatario(destinatario);
-                    s.desconectar();
-                    if (regEnviador) {
-                        p.sendMessage(ChatColor.DARK_RED + "Solo puedes tener una soliciud a la vez");
-                    } else if (regDestinatario) {
-                        p.sendMessage(ChatColor.DARK_RED + destinatario + " ya le han eviado una solicitud, esperar 15s");
-                    } else {
-                        int id_tabla = 0;
-
-                        try {
-                            dinero = f.interes(dinero, interes);
-                            d.conectar("root", "", "pixelcoins");
-                            d.nuevaDeuda(destinatario, p.getName(), dinero, dias, interes);
-                            id_tabla = d.getMaxId();
-                            d.desconectar();
-                        } catch (Exception e) {
-                            p.sendMessage("error.1");
-                            break;
-                        }
-                        s.conectar("root", "", "pixelcoins");
-                        s.nuevaSolicitud(p.getName(), destinatario, 1, id_tabla, p);
-                        s.desconectar();
-
-                        tp.sendMessage(ChatColor.GOLD + p.getName() + " te ha enviado una solicitud para prestarte: " + ChatColor.GREEN + formatea.format(dinero) + " PC" + ChatColor.GOLD + " a " + ChatColor.GREEN + dias + " dias, " + ChatColor.GOLD + "con un interes del: " + ChatColor.GREEN + interes + "% "
-                                + "(" + formatea.format(f.interes(dinero, interes)) + " PC)");
-                        tp.sendMessage("/aceptar" + ChatColor.GOLD + " o " + ChatColor.WHITE + "/rechazar" + ChatColor.GOLD + " Expira en 15 segundos");
-                        tp.playSound(tp.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-                        p.sendMessage(ChatColor.GOLD + "Has enviado una solicitud a " + tp.getName() + " de prestamo, expira en 15s");
-                    }
-                } catch (Exception e) {
-                    p.sendMessage("error");
+                if (regEnviador || regDestinatario || regEnviadorDes || regDestinatarioEn) {
+                    p.sendMessage(ChatColor.DARK_RED + "Solo puedes tener una soliciud a la vez/ya le han enviado una solicitud");
+                    return true;
                 }
+                int id_tabla = 0;
+                d.conectar();
+                d.nuevaDeuda(destinatario, p.getName(), f.interes(dinero, interes), dias, interes);
+                id_tabla = d.getMaxId();
+                d.desconectar();
+
+                s.conectar();
+                s.nuevaSolicitud(p.getName(), destinatario, 1, id_tabla, p);
+                s.desconectar();
+
+                tp.sendMessage(ChatColor.GOLD + p.getName() + " te ha enviado una solicitud para prestarte: " + ChatColor.GREEN + formatea.format(dinero) + " PC" + ChatColor.GOLD + " a " + ChatColor.GREEN + dias + " dias, " + ChatColor.GOLD + "con un interes del: " + ChatColor.GREEN + interes + "% "
+                        + "(" + formatea.format(f.interes(dinero, interes)) + " PC)");
+                tp.sendMessage("/aceptar" + ChatColor.GOLD + " o " + ChatColor.WHITE + "/rechazar" + ChatColor.GOLD + " Expira en 15 segundos");
+                tp.playSound(tp.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+                p.sendMessage(ChatColor.GOLD + "Has enviado una solicitud a " + tp.getName() + " de prestamo, expira en 15s");
+
                 break;
 
             //CONTRATAR
@@ -371,67 +317,46 @@ public class PlayerCommand implements Listener, CommandExecutor {
                     break;
                 }
 
-                try {
-                    empr.conectar("root", "", "pixelcoins");
-                    boolean reg = empr.estaRegistradoNombre(nombreEmpresa);
+                empr.conectar();
+                boolean reg = empr.estaRegistradoNombre(nombreEmpresa);
 
-                    if (reg == false) {
-                        p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
-                        break;
-                    }
-                    boolean ow = empr.esOwner(p.getName(), nombreEmpresa);
-                    if (ow == false) {
-                        p.sendMessage(ChatColor.DARK_RED + "No eres due�o de esa empresa");
-                        break;
-                    }
-                    empr.desconectar();
-                } catch (Exception e) {
-
+                if (!reg) {
+                    p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
+                    break;
                 }
-
-                try {
-                    s.conectar("root", "", "pixelcoins");
-                    boolean reg = s.estRegistradoDestinatario(nombreContratar);
-
-                    if (reg == true) {
-                        p.sendMessage(ChatColor.DARK_RED + "Al jugador ya le han enviado solicitudes");
-                        break;
-                    }
-                    boolean regEnviador = s.estRegistradoEnviador(p.getName());
-                    if (regEnviador == true) {
-                        p.sendMessage(ChatColor.DARK_RED + "Solo puedes tener una solicitud a la vez");
-                        return true;
-                    }
-                    s.desconectar();
-                } catch (Exception e) {
-                    p.sendMessage(ChatColor.DARK_RED + "Error en conectar a la base de datos, hablar con el admin");
+                boolean ow = empr.esOwner(p.getName(), nombreEmpresa);
+                if (!ow) {
+                    p.sendMessage(ChatColor.DARK_RED + "No eres dueño de esa empresa");
+                    break;
                 }
+                empr.desconectar();
+
+
+                s.conectar();
+                boolean regDestinatarioCont = s.estRegistradoDestinatario(nombreContratar);
+                boolean regEnviadorCont = s.estRegistradoEnviador(p.getName());
+                boolean regDestinatarioEnCont = s.estRegistradoDestinatario(p.getName());
+                boolean regEnviadorDesCont = s.estRegistradoEnviador(nombreContratar);
+
+                if (regDestinatarioCont || regEnviadorCont || regDestinatarioEnCont || regEnviadorDesCont) {
+                    p.sendMessage(ChatColor.DARK_RED + "Ya le han enviado una solicutud/solo puedes tener una solicitud a la vez");
+                }
+                s.desconectar();
 
                 int id = 0;
-                try {
-                    empl.conectar("root", "", "pixelcoins");
-
-                    id = empl.getId(nombreContratar, nombreEmpresa);
-
-                    if (id != 0) {
-                        p.sendMessage(ChatColor.DARK_RED + "Ese jugador ya esta contratado / ya le has enviado solicitud");
-                        break;
-                    }
-
-                    empl.contratar(tp2.getName(), nombreEmpresa, sueldo, tipo, cargo, p, tp2);
-                    id = empl.getId(tp2.getName(), nombreEmpresa);
-                    empl.desconectar();
-                } catch (Exception e) {
-                    p.sendMessage(ChatColor.DARK_RED + "Error en conectar a la base de datos, hablar con el admin");
+                empl.conectar();
+                id = empl.getId(nombreContratar, nombreEmpresa);
+                if (id != -1) {
+                    p.sendMessage(ChatColor.DARK_RED + "Ese jugador ya esta contratado / ya le has enviado solicitud");
+                    break;
                 }
+                empl.contratar(tp2.getName(), nombreEmpresa, sueldo, tipo, cargo, p, tp2);
+                id = empl.getId(tp2.getName(), nombreEmpresa);
+                empl.desconectar();
 
-                try {
-                    s.conectar("root", "", "pixelcoins");
-                    s.nuevaSolicitud(p.getName(), nombreContratar, 2, id, p);
-                    s.desconectar();
-                } catch (Exception e) {
-
-                }
+                s.conectar();
+                s.nuevaSolicitud(p.getName(), nombreContratar, 2, id, p);
+                s.desconectar();
 
                 break;
             //CREAREMPRESA
@@ -439,7 +364,7 @@ public class PlayerCommand implements Listener, CommandExecutor {
                 if (args.length >= 2) {
                     String nombre = args[0];
                     int nombreLongitud = nombre.toCharArray().length;
-                    if (nombreLongitud <= 24) {
+                    if (nombreLongitud <= CrearEmpresaNombreLonMax) {
                         String descripcion = "";
                         StringBuffer sb = new StringBuffer();
                         for (int i = 0; i < args.length; i++) {
@@ -450,39 +375,51 @@ public class PlayerCommand implements Listener, CommandExecutor {
                         descripcion = sb.toString();
 
                         int longitudDescripccion = descripcion.toCharArray().length;
-                        if (longitudDescripccion <= 200) {
-                            try {
-                                empr.conectar("root", "", "pixelcoins");
-                                empr.crearEmpresa(nombre, p, descripcion);
-                                empr.desconectar();
-                            } catch (Exception e) {
-
-                            }
+                        if (longitudDescripccion <= CrearEmpresaDescLonMax) {
+                            empr.conectar();
+                            empr.crearEmpresa(nombre, p, descripcion);
+                            empr.desconectar();
                         } else {
-                            p.sendMessage(ChatColor.DARK_RED + "La descripcion solo puede tener como maximo 200 caracteres (incluidos espacios)");
+                            p.sendMessage(ChatColor.DARK_RED + "La descripcion solo puede tener como maximo " + CrearEmpresaDescLonMax + " DescLonMax caracteres (incluidos espacios)");
                         }
 
                     } else {
-                        p.sendMessage(ChatColor.DARK_RED + "El tama�o del nombre de la empresas tiene que tener como maximo 24 caracteres");
+                        p.sendMessage(ChatColor.DARK_RED + "El tamaño del nombre de la empresas tiene que tener como maximo " + CrearEmpresaNombreLonMax + " caracteres");
                     }
                 } else {
                     p.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: /crearempresa <nombre> <descripccion>");
                 }
 
                 break;
+            case "editardescripccion":
+                if (args.length < 2) {
+                    p.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: /editardescripccion <empresa> <descroccpion>");
+                    return true;
+                }
+                String empresa = args[0];
+                String descripcion = "";
+                StringBuffer sb = new StringBuffer();
+                for (int i = 0; i < args.length; i++) {
+                    if (i != 0) {
+                        sb.append(args[i] + " ");
+                    }
+                }
+                descripcion = sb.toString();
+
+                empr.conectar();
+                empr.cambiarDescripciom(empresa, descripcion, p);
+                empr.desconectar();
+                break;
+
             case "depositar":
                 if (args.length == 2) {
                     try {
                         int pixelcoins = Integer.parseInt(args[1]);
                         String nombreEmpresa2 = args[0];
                         if (pixelcoins > 0) {
-                            try {
-                                t.conectar("root", "", "pixelcoins");
-                                t.depositarPixelcoins(p, pixelcoins, nombreEmpresa2);
-                                t.desconectar();
-                            } catch (Exception e) {
-
-                            }
+                            t.conectar();
+                            t.depositarPixelcoins(p, pixelcoins, nombreEmpresa2);
+                            t.desconectar();
                         } else {
                             p.sendMessage(ChatColor.DARK_RED + "Introduce numeros que no sean igual a cero o que no sean negativos");
                         }
@@ -501,13 +438,9 @@ public class PlayerCommand implements Listener, CommandExecutor {
                         int pixelcoins = Integer.parseInt(args[1]);
                         String nombreEmpresa3 = args[0];
                         if (pixelcoins > 0) {
-                            try {
-                                t.conectar("root", "", "pixelcoins");
-                                t.sacarPixelcoins(p, pixelcoins, nombreEmpresa3);
-                                t.desconectar();
-                            } catch (Exception e) {
-
-                            }
+                            t.conectar();
+                            t.sacarPixelcoins(p, pixelcoins, nombreEmpresa3);
+                            t.desconectar();
                         } else {
                             p.sendMessage(ChatColor.DARK_RED + "Introduce numeros que no sean igual a cero o que no sean negativos");
                         }
@@ -523,14 +456,10 @@ public class PlayerCommand implements Listener, CommandExecutor {
             case "logotipo":
                 if (args.length == 1) {
                     String tipo2 = p.getInventory().getItemInMainHand().getType().toString();
-                    if (tipo2.equalsIgnoreCase("AIR") == false) {
-                        try {
-                            empr.conectar("root", "", "pixelcoins");
-                            empr.cambiarIcono(args[0], p, tipo2);
-                            empr.desconectar();
-                        } catch (Exception e) {
-                            p.sendMessage("error al conectar a la base de datos");
-                        }
+                    if (!tipo2.equalsIgnoreCase("AIR")) {
+                        empr.conectar();
+                        empr.cambiarIcono(args[0], p, tipo2);
+                        empr.desconectar();
                     } else {
                         p.sendMessage(ChatColor.DARK_RED + "Tienes que seleccionar un objeto en la mano");
                     }
@@ -559,24 +488,19 @@ public class PlayerCommand implements Listener, CommandExecutor {
                             p.sendMessage(ChatColor.DARK_RED + "A ser posible mete texto no numeros");
                             break;
                         }
-
                         if (sueldoEditar <= 0) {
                             p.sendMessage(ChatColor.DARK_RED + "A ser posible mete numeros que sean superiores a 0");
                             break;
                         }
-                        try {
-                            empl.conectar("root", "", "pixelcoins");
-                            empl.editarSueldo(args[1], args[0], p, args[2], args[3]);
-                            empl.desconectar();
-                        } catch (Exception e) {
-
-                        }
-
+                        empl.conectar();
+                        empl.editarSueldo(args[1], args[0], p, args[2], args[3]);
+                        empl.desconectar();
                         break;
+
                     case "tiposueldo":
                         String tipoSueldo = args[3];
                         tipoSueldo.toLowerCase();
-                        if (tipoSueldo.equalsIgnoreCase("s") == false && tipoSueldo.equalsIgnoreCase("2s") == false && tipoSueldo.equalsIgnoreCase("d") == false && tipoSueldo.equalsIgnoreCase("m") == false) {
+                        if (!tipoSueldo.equalsIgnoreCase("s") && !tipoSueldo.equalsIgnoreCase("2s") && !tipoSueldo.equalsIgnoreCase("d") && !tipoSueldo.equalsIgnoreCase("m")) {
                             p.sendMessage(ChatColor.DARK_RED + "Tipo incorrecto:");
                             p.sendMessage(ChatColor.DARK_RED + "d: el sueldo se paga diariamente");
                             p.sendMessage(ChatColor.DARK_RED + "s: el sueldo se paga cada semana");
@@ -584,15 +508,11 @@ public class PlayerCommand implements Listener, CommandExecutor {
                             p.sendMessage(ChatColor.DARK_RED + "m: el sueldo se paga cada mes");
                             break;
                         }
-                        try {
-                            empl.conectar("root", "", "pixelcoins");
-                            empl.editarSueldo(args[1], args[0], p, args[2], args[3]);
-                            empl.desconectar();
-                        } catch (Exception e) {
-
-                        }
-
+                        empl.conectar();
+                        empl.editarSueldo(args[1], args[0], p, args[2], args[3]);
+                        empl.desconectar();
                         break;
+
                     default:
                         p.sendMessage(ChatColor.DARK_RED + "Tipo incorrecto, tipos:");
                         p.sendMessage(ChatColor.DARK_RED + "sueldo");
@@ -605,15 +525,11 @@ public class PlayerCommand implements Listener, CommandExecutor {
                     p.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: /miempresa <nombrede tu empresa>");
                     return true;
                 }
-                try {
-                    ;
-                    empr.conectar("root", "", "pixelcoins");
-                    empr.verEmpresa(p, args[0]);
-                    empr.desconectar();
-                } catch (Exception e) {
-
-                }
+                empr.conectar();
+                empr.verEmpresa(p, args[0]);
+                empr.desconectar();
                 break;
+
             case "venderempresa":
                 if (args.length != 3) {
                     p.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: /venderempresa <empresa> <jugador> <precio>");
@@ -641,54 +557,45 @@ public class PlayerCommand implements Listener, CommandExecutor {
                     return true;
                 }
 
-                String empresa = args[0];
-                try {
-                    empr.conectar("root", "", "pixelcoins");
-                    boolean reg = empr.estaRegistradoNombre(empresa);
-                    if (reg == false) {
-                        p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
-                        return true;
-                    }
-                    boolean ow = empr.esOwner(p.getName(), empresa);
-                    if (ow == false) {
-                        p.sendMessage(ChatColor.DARK_RED + "No eres due�o de esa empresa");
-                        return true;
-                    }
-                    empr.desconectar();
-                } catch (Exception e) {
-
+                String nombreempresa = args[0];
+                empr.conectar();
+                boolean regVen = empr.estaRegistradoNombre(nombreempresa);
+                if (!regVen) {
+                    p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
+                    return true;
                 }
-                try {
-                    s.conectar("root", "", "pixelcoins");
-                    boolean regEnviador = s.estRegistradoEnviador(p.getName());
-                    if (regEnviador == true) {
-                        p.sendMessage(ChatColor.DARK_RED + "Solo puedes tener una solicitud a la vez, esperar 15s");
-                        return true;
-                    }
-                    boolean regDestinatario = s.estRegistradoEnviador(jugador);
-                    if (regDestinatario == true) {
-                        p.sendMessage(ChatColor.DARK_RED + "Es jugador ya le han enviado una solicitud, esperar unos 15s");
-                        return true;
-                    }
-                    int maxId = 0;
-                    try {
-                        t.conectar("root", "", "pixelcoins");
-                        t.nuevaTransaccion(jugador, p.getName(), precio, empresa, "EMPRESA");
-                        maxId = t.getMaxId();
-                        t.desconectar();
-                    } catch (Exception e) {
-
-                    }
-
-                    s.nuevaSolicitud(p.getName(), jugador, 3, maxId, p);
-                    tp1.sendMessage(ChatColor.GOLD + p.getName() + " te ha enviado una solicitud para que le compres la empresa: " + ChatColor.DARK_AQUA + empresa + " a " + ChatColor.GREEN + precio + " PC " + ChatColor.AQUA + "/aceptarcompra /rechazarcompra");
-                    tp1.playSound(tp1.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 10);
-                    p.sendMessage(ChatColor.GOLD + "Has enviado la solicitud de venta a " + jugador + " , expira en 15s");
-                    s.desconectar();
-                } catch (Exception e) {
-
+                boolean owVen = empr.esOwner(p.getName(), nombreempresa);
+                if (!owVen) {
+                    p.sendMessage(ChatColor.DARK_RED + "No eres dueño de esa empresa");
+                    return true;
                 }
+                empr.desconectar();
+
+                s.conectar();
+                boolean regEnviadorVen = s.estRegistradoEnviador(p.getName());
+                boolean regDestinatarioVen = s.estRegistradoDestinatario(jugador);
+                boolean regEnviadorDesVen = s.estRegistradoDestinatario(p.getName());
+                boolean regDestinatarioEnVen = s.estRegistradoEnviador(jugador);
+
+                if (regEnviadorVen || regDestinatarioVen || regEnviadorDesVen || regDestinatarioEnVen) {
+                    p.sendMessage(ChatColor.DARK_RED + "Solo puedes tener una solicitud a la vez/ya le han enviado una solicitud");
+                    return true;
+                }
+                int maxId = 0;
+
+                t.conectar();
+                t.nuevaTransaccion(jugador, p.getName(), precio, nombreempresa, Transacciones.TIPO.EMPRESA_VENTA);
+                maxId = t.getMaxId();
+                t.desconectar();
+
+                s.conectar();
+                s.nuevaSolicitud(p.getName(), jugador, 3, maxId, p);
+                tp1.sendMessage(ChatColor.GOLD + p.getName() + " te ha enviado una solicitud para que le compres la empresa: " + ChatColor.DARK_AQUA + nombreempresa + " a " + ChatColor.GREEN + precio + " PC " + ChatColor.AQUA + "/aceptarcompra /rechazarcompra");
+                tp1.playSound(tp1.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+                p.sendMessage(ChatColor.GOLD + "Has enviado la solicitud de venta a " + jugador + " , expira en 15s");
+                s.desconectar();
                 break;
+
             case "editarnombre":
                 if (args.length != 2) {
                     p.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: /editarnombre <empresa> <nuevonombre>");
@@ -699,140 +606,107 @@ public class PlayerCommand implements Listener, CommandExecutor {
                     p.sendMessage(ChatColor.DARK_RED + "La longitud maxima del nombre es 24.");
                     break;
                 }
-                try {
-                    empr.conectar("root", "", "pixelcoins");
-                    empr.cambiarNombre(p, args[0], nuevoNombre);
-                    empr.desconectar();
-                } catch (Exception e) {
-
-                }
+                empr.conectar();
+                empr.cambiarNombre(p, args[0], nuevoNombre);
+                empr.desconectar();
                 break;
-            case "aceptar":
-                try {
-                    s.conectar("root", "", "pixelcoins");
-                    s.aceptarSolicitudDeuda(p);
-                    s.desconectar();
-                } catch (Exception e) {
 
-                }
+            case "aceptar":
+                s.conectar();
+                s.aceptarSolicitudDeuda(p);
+                s.desconectar();
+
                 break;
             case "aceptartrabajo":
-                try {
-                    s.conectar("root", "", "pixelcoins");
-                    s.aceptarSolicitudTrabajo(p);
-                    s.desconectar();
-                } catch (Exception e) {
-
-                }
+                s.conectar();
+                s.aceptarSolicitudTrabajo(p);
+                s.desconectar();
                 break;
+
             case "rechazar":
-                try {
-                    s.conectar("root", "", "pixelcoins");
+                s.conectar();
+                boolean regRech = s.estRegistradoDestinatario(p.getName());
 
-                    boolean reg = s.estRegistradoDestinatario(p.getName());
-
-                    if (reg == false) {
-                        p.sendMessage(ChatColor.DARK_RED + "No te han mandado ninguna solicitud");
-                        break;
-                    } else {
-                        s.cancelarSolicitudDeuda(p);
-                    }
-                    s.desconectar();
-                } catch (Exception e) {
-
+                if (regRech == false) {
+                    p.sendMessage(ChatColor.DARK_RED + "No te han mandado ninguna solicitud");
+                    break;
+                } else {
+                    s.cancelarSolicitudDeuda(p);
                 }
+                s.desconectar();
                 break;
+
             case "rechazartrabajo":
-                try {
-                    s.conectar("root", "", "pixelcoins");
+                s.conectar();
+                boolean regRechT = s.estRegistradoDestinatario(p.getName());
 
-                    boolean reg = s.estRegistradoDestinatario(p.getName());
-
-                    if (reg == false) {
-                        p.sendMessage(ChatColor.DARK_RED + "No te han mandado ninguna solicitud");
-                        break;
-                    } else {
-                        s.cancelarSolicitudTrabajo(p);
-                    }
-                    s.desconectar();
-                } catch (Exception e) {
-
+                if (regRechT == false) {
+                    p.sendMessage(ChatColor.DARK_RED + "No te han mandado ninguna solicitud");
+                    break;
+                } else {
+                    s.cancelarSolicitudTrabajo(p);
                 }
+                s.desconectar();
                 break;
+
             case "aceptarcompra":
-                try {
-                    s.conectar("root", "", "pixelcoins");
-                    s.aceptarSolicitudCompra(p);
-                    s.desconectar();
-                } catch (Exception e) {
-
-                }
+                s.conectar();
+                s.aceptarSolicitudCompra(p);
+                s.desconectar();
                 break;
+
             case "mensajes":
-                try {
-                    m.conectar("root", "", "pixelcoins");
-                    m.mostrarMensajes(p);
-                    m.desconectar();
-                } catch (Exception e) {
-
-                }
+                m.conectar();
+                m.mostrarMensajes(p);
+                m.desconectar();
                 break;
+
             case "mistrabajos":
-                try {
-                    empl.conectar("root", "", "pixelcoins");
-                    empl.mostarTrabajos(p);
-                    empl.desconectar();
-                } catch (Exception e) {
-
-                }
+                empl.conectar();
+                empl.mostarTrabajos(p);
+                empl.desconectar();
                 break;
+
             case "rechazarcompra":
-                try {
-                    s.conectar("root", "", "pixelcoins");
-                    boolean reg = s.estRegistradoDestinatario(p.getName());
+                s.conectar();
+                boolean regCom = s.estRegistradoDestinatario(p.getName());
 
-                    if (reg == false) {
-                        p.sendMessage(ChatColor.DARK_RED + "No te han enviador ninguna solicitud");
-                        return true;
-                    }
-                    s.rechazarSolicitudCompra(p);
-                    s.desconectar();
-                } catch (Exception e) {
-
+                if (regCom == false) {
+                    p.sendMessage(ChatColor.DARK_RED + "No te han enviador ninguna solicitud");
+                    return true;
                 }
+                s.rechazarSolicitudCompra(p);
+                s.desconectar();
                 break;
+
             case "irse":
                 if (args.length != 1) {
                     p.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: /irse <nombreEmpresa>");
                     return true;
                 }
-                try {
-                    empl.conectar("root", "", "pixelcoins");
-                    empl.irseEmpresa(args[0], p);
-                    empl.desconectar();
-                } catch (Exception e) {
-
-                }
-
+                empl.conectar();
+                empl.irseEmpresa(args[0], p);
+                empl.desconectar();
                 break;
+
             case "despedir":
                 if (args.length != 3) {
                     p.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: /despedir <empresa> <nombreJugador> <razon>");
                     break;
                 }
-
                 if (args[1].equalsIgnoreCase(p.getName())) {
-                    p.sendMessage(ChatColor.DARK_RED + "No te puuedes despedir a ti mismo");
+                    p.sendMessage(ChatColor.DARK_RED + "No te puedes despedir a ti mismo");
                     return true;
                 }
-                try {
-                    empl.conectar("root", "", "pixelcoins");
-                    empl.despedir(args[0], args[1], args[2], p);
-                    empl.desconectar();
-                } catch (Exception e) {
+                empl.conectar();
+                String empresanombre = args[0];
+                String empleado = args[1];
+                String razon = args[2];
 
-                }
+                empl.despedir(empresanombre, empleado, razon, p);
+                empl.desconectar();
                 break;
+
             case "borrarempresa":
                 if (args.length != 1) {
                     p.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: /borrarempresa <nombre de empresa>");
@@ -841,56 +715,119 @@ public class PlayerCommand implements Listener, CommandExecutor {
                 String empresaNombre = args[0];
                 int pixelcoisnEmpresa = 0;
                 int maxid = 0;
-                try {
-                    empr.conectar("root", "", "pixelcoins");
-                    boolean reg = empr.estaRegistradoNombre(empresaNombre);
 
-                    if (reg == false) {
-                        p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
-                        return true;
-                    }
-                    boolean ow = empr.esOwner(p.getName(), empresaNombre);
-                    if (ow == false) {
-                        p.sendMessage(ChatColor.DARK_RED + "No eres owner de esa empresa");
-                        return true;
-                    }
-                    pixelcoisnEmpresa = empr.getPixelcoins(empresaNombre);
-                    empr.desconectar();
-                } catch (Exception e) {
-
+                empr.conectar();
+                boolean regBo = empr.estaRegistradoNombre(empresaNombre);
+                if (!regBo) {
+                    p.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
+                    return true;
                 }
-                try {
-                    s.conectar("root", "", "pixelcoins");
-                    boolean regEnv = s.estRegistradoEnviador(p.getName());
-                    boolean regDes = s.estRegistradoDestinatario(p.getName());
-
-                    if (regEnv == true) {
-                        p.sendMessage(ChatColor.DARK_RED + "Ya has enviado una solicitud");
-                        return true;
-                    }
-                    if (regDes == true) {
-                        p.sendMessage(ChatColor.DARK_RED + "Ya te has o han enviado una solicitud");
-                        return true;
-                    }
-
-                    try {
-                        t.conectar("root", "", "pixelcoins");
-                        t.nuevaTransaccion(p.getName(), empresaNombre, pixelcoisnEmpresa, "", "BORRAR_EMPRESA");
-                        maxid = t.getMaxId();
-                        t.desconectar();
-                    } catch (Exception e) {
-
-                    }
-
-                    s.nuevaSolicitud(p.getName(), p.getName(), 4, maxid, p);
-                    s.desconectar();
-                } catch (Exception e) {
-
+                boolean owBo = empr.esOwner(p.getName(), empresaNombre);
+                if (!owBo) {
+                    p.sendMessage(ChatColor.DARK_RED + "No eres owner de esa empresa");
+                    return true;
                 }
+                pixelcoisnEmpresa = empr.getPixelcoins(empresaNombre);
+                empr.desconectar();
 
-                p.sendMessage(ChatColor.GOLD + "�Seguro que quires borrar tu empresa? " + ChatColor.AQUA + "/confirmar /cancelar");
+                s.conectar();
+                boolean regEnv = s.estRegistradoEnviador(p.getName());
+                boolean regDes = s.estRegistradoDestinatario(p.getName());
+
+                if (regEnv) {
+                    p.sendMessage(ChatColor.DARK_RED + "Ya has enviado una solicitud");
+                    return true;
+                }
+                if (regDes) {
+                    p.sendMessage(ChatColor.DARK_RED + "Ya te has o han enviado una solicitud");
+                    return true;
+                }
+                s.desconectar();
+
+                t.conectar();
+                t.nuevaTransaccion(p.getName(), p.getName(), pixelcoisnEmpresa, empresaNombre, Transacciones.TIPO.EMPRESA_BORRAR);
+                maxid = t.getMaxId();
+                t.desconectar();
+
+                s.conectar();
+                s.nuevaSolicitud(p.getName(), p.getName(), 4, maxid, p);
+                s.desconectar();
+
+                p.sendMessage(ChatColor.GOLD + "¿Seguro que quires borrar tu empresa? " + ChatColor.AQUA + "/confirmarborrar /cancelarborrar");
                 p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 10);
                 break;
+
+            case "confirmarborrar":
+                s.conectar();
+                s.aceptarSolicitudBorrar(p);
+                s.desconectar();
+                break;
+
+            case "cancelarborrar":
+                s.conectar();
+                s.rechazarSolicitudBorrar(p);
+                s.desconectar();
+                break;
+
+            case "cancelardeuda":
+                if (args.length != 1) {
+                    p.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: /cancelardeuda <id> , la id se ve en el comando /deudas");
+                    return true;
+                }
+                int iddeuda;
+                try {
+                    iddeuda = Integer.parseInt(args[0]);
+                } catch (Exception e) {
+                    p.sendMessage(ChatColor.DARK_RED + "La id debe de ser un numero no texto, la id se puede ver en el comando: /deudas");
+                    return true;
+                }
+                d.conectar();
+                d.cancelarDeuda(p, iddeuda);
+                d.desconectar();
+
+                break;
+            case "pagardeuda":
+                if (args.length != 1) {
+                    p.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: /pagardeuda <id>, la id se ve en el comando /deudas");
+                    return true;
+                }
+                int ideuda;
+                try {
+                    ideuda = Integer.parseInt(args[0]);
+                } catch (Exception e) {
+                    p.sendMessage(ChatColor.DARK_RED + "A ser posible mete numeros no letras, las id se ven el comando /deudas");
+                    return true;
+                }
+                d.conectar();
+                d.pagarDeuda(p, ideuda);
+                d.desconectar();
+                break;
+
+            case "comprar":
+                if (args.length != 2) {
+                    p.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: /comprar <empresa> <precio>");
+                    return true;
+                }
+
+                String nombreempresaa = args[0];
+                String precioS = args[1];
+                int precioI = 0;
+                try {
+                    precioI = Integer.parseInt(precioS);
+                    if (precioI <= 0) {
+                        p.sendMessage(ChatColor.DARK_RED + "A ser posible mete numeros que sean negativos o que no sean ceros");
+                        return true;
+                    }
+                } catch (NumberFormatException e) {
+                    p.sendMessage(ChatColor.DARK_RED + "A ser posible mete numero no texto");
+                    return true;
+                }
+                Transacciones t = new Transacciones();
+                t.conectar();
+                t.comprarServivio(nombreempresaa, precioI, p);
+                t.desconectar();
+                break;
+
             case "ayuda":
                 if (args.length == 0) {
                     this.mostrarAyudas(p);
@@ -914,6 +851,12 @@ public class PlayerCommand implements Listener, CommandExecutor {
                             break;
                         case "deudas":
                             this.ayudaDeuda(p);
+                            break;
+                        case "empresario":
+                            this.ayudaEmpresario(p);
+                            break;
+                        case "empleado":
+                            this.ayudaEmpleado(p);
                             break;
                         default:
                             p.sendMessage("hi");
@@ -951,9 +894,9 @@ public class PlayerCommand implements Listener, CommandExecutor {
         p.sendMessage("          ");
         p.sendMessage("/pagar NombreDelJugador CantidadDePixelcoins" + ChatColor.GOLD + " Pagar a un jugador un cierto numero de pixelcoins");
         p.sendMessage("          ");
-        p.sendMessage("/topricos" + ChatColor.GOLD + " Ver los m�s ricos del servidor");
+        p.sendMessage("/topricos" + ChatColor.GOLD + " Ver los más ricos del servidor");
         p.sendMessage("          ");
-        p.sendMessage("/toppobres" + ChatColor.GOLD + " Ver elos m�s pobres del servidor");
+        p.sendMessage("/toppobres" + ChatColor.GOLD + " Ver elos más pobres del servidor");
         p.sendMessage("          ");
         p.sendMessage("/topfiables" + ChatColor.GOLD + " Ver los jugadores que mas han podido pagar la deuda");
         p.sendMessage("          ");
@@ -968,22 +911,66 @@ public class PlayerCommand implements Listener, CommandExecutor {
     private void ayudaEmpresario(Player p) {
         p.sendMessage("   ");
         p.sendMessage(ChatColor.YELLOW + "Puedes hacer tu propia empresa, contratar a gente, venderla, ganar pixelcoins etc, principales comandos:");
-        p.sendMessage("/crearempresa <nombre> <" + ChatColor.GOLD + "");
+        p.sendMessage("   ");
+        p.sendMessage("/crearempresa <nombre> <descripcion> " + ChatColor.GOLD + "Para crear tu empresa con una descripccion(recomendable poner los precios servicios etc). Solo puedes tener como maximo " + Empresas.nMaxEmpresas);
+        p.sendMessage("   ");
+        p.sendMessage("/logotipo <empresa> " + ChatColor.GOLD + "A la hora de hacer /empresas sirve para poner el propio item que quieres que apareza en el inventario. Para ello selecionas el objeto que quiereas en la mano y pones el comando");
+        p.sendMessage("   ");
+        p.sendMessage("/depositar <empresa> <cantidad>" + ChatColor.GOLD + "Sirve para poner pixelcoins a la empresa de tus pixelcoins, muy importante si quieres pagar a tus empleados");
+        p.sendMessage("   ");
+        p.sendMessage("/sacar <empresa> <cantidad> " + ChatColor.GOLD + "Sirve para sacar las pixelcoins de tu empresa y ponertelas en tu cuenta");
+        p.sendMessage("   ");
+        p.sendMessage("/contratar <jugador> <empresa> <sueldo> <tiposueldo> [cargo] " + ChatColor.GOLD + "Puedes contratar a jugadores a tu propia empresa.");
+        p.sendMessage(ChatColor.GOLD + "      -Sueldo: Pixelcoins que quieres que se le paguen");
+        p.sendMessage(ChatColor.GOLD + "      -Tiposueldo: Frecuencia de pago de las pixelcoins. Puede ser: 'd' (Una vez al dia), 's' (una vez a la semana) '2s' (2 veces a la semana) 'm' (Una vez al mes). Las pixelcoins se sacaran de las pixelcoins que tengan la empresa. En caso de que no tengan las " +
+                "suficientes, se le enviara un mensaje al empleado adviertendole que no se le ha podido pagar las PC. Al jugador se le pagaran automaticamente");
+        p.sendMessage(ChatColor.GOLD + "      -Cargo: nombre del cargo que tendra en la empresa, no es obligatorio ponerlo");
+        p.sendMessage("   ");
+        p.sendMessage("/despedir <empleado> <empresa> <razon> " + ChatColor.GOLD + " Puedes despedir a un jugador de tu empresa con una razon");
+        p.sendMessage("   ");
+        p.sendMessage("/editarempleado <empresa> <jugador> <tipo> <valor>" + ChatColor.GOLD + "Puedes editar un empleado de tu empresa. En cuanto a <tipo> hay varios:");
+        p.sendMessage(ChatColor.GOLD + "     -sueldo: cambiar el sueldo de un empleado. en <valor> el nuevo sueldo");
+        p.sendMessage(ChatColor.GOLD + "     -tiposueldo: cambiar la frecuencia con la que el jugador cobra. En <valor> la nueva frecuencia: d, s, 2s, m");
+        p.sendMessage("   ");
+        p.sendMessage("/venderempresa <empresa> <jugador> <precio> " + ChatColor.GOLD + "Puedes vender tu empresa a un jugador por un precio. Al jugador se le enviara una solicitud para que te la compre");
+        p.sendMessage("   ");
+        p.sendMessage("/miempresa <empresa> " + ChatColor.GOLD + "Ver las estadisticas y los trabajadores de tu empresa");
+        p.sendMessage("   ");
+        p.sendMessage("/editarnombre <empresa> <nuevonombre> " + ChatColor.GOLD + "Cambiar el nombre de tu empresa a uno nuevo");
+        p.sendMessage("   ");
+        p.sendMessage("/borrarempresa <empresa> " + ChatColor.GOLD + "Borrar tu propia empresa, se te enviara una solicitud para confirmar que lo quieres borrars");
+        p.sendMessage("   ");
+        p.sendMessage("/editardescripccion <empresa> <nueva descripcion> " + ChatColor.GOLD + "Editar la descripccion de tu empresa");
+    }
+
+    private void ayudaEmpleado(Player p) {
+        p.sendMessage("   ");
+        p.sendMessage(ChatColor.YELLOW + "Puedes ser contratado por otra empresa y ser pagado");
+        p.sendMessage("   ");
+        p.sendMessage("/empresas " + ChatColor.GOLD + "Ver todas las empresas que han sido creadas");
+        p.sendMessage("   ");
+        p.sendMessage("/irse <empresa> " + ChatColor.GOLD + "Puedes irte de una empresa en la que trabajas");
+        p.sendMessage("   ");
+        p.sendMessage("/mistrabajos " + ChatColor.GOLD + "Ver todos los trabajos en los que trabajas: sueldo, frecuencia de pago, cargo");
+        p.sendMessage("   ");
+        p.sendMessage("/comprar <empresa> <precio> " + ChatColor.GOLD + "Comprar servicio/producto de una empresa en concreto.");
+
+
     }
 
     private void ayudaNormas(Player p) {
         p.sendMessage("          ");
         p.sendMessage(ChatColor.RED + " El incumplimiento de las siguintes normas resultara con un baneo de tiempo: La primera vez que has sido baneado: 1 dia, segunda vez 3 dias y tercera vez 10 dias. Normas:");
         p.sendMessage("          ");
-        p.sendMessage(ChatColor.RED + "1� " + ChatColor.GOLD + "Matar continuamente a alguien de manera que le inpida jugar");
+        p.sendMessage(ChatColor.RED + "1º " + ChatColor.GOLD + "Matar continuamente a alguien de manera que le inpida jugar");
         p.sendMessage("          ");
-        p.sendMessage(ChatColor.RED + "2� " + ChatColor.GOLD + "no insultar en el chat de manera que ofenda al jugador (ofendidito xd)");
+        p.sendMessage(ChatColor.RED + "2º " + ChatColor.GOLD + "no insultar en el chat de manera que ofenda al jugador (ofendidito xd)");
         p.sendMessage("          ");
-        p.sendMessage(ChatColor.RED + "3�" + ChatColor.GOLD + "respetar el territorio de los demas (no expandirse de manera exajerada, no pegar las casas maximo 5 bloques de separacion sin el consentimiento del jugador)");
+        p.sendMessage(ChatColor.RED + "3º" + ChatColor.GOLD + "respetar el territorio de los demas (no expandirse de manera exajerada, no pegar las casas maximo 5 bloques de separacion sin el consentimiento del jugador)");
         p.sendMessage("          ");
-        p.sendMessage(ChatColor.RED + "4� " + ChatColor.GOLD + "no utilizar hacks (xray, kill aura, kurium etc)");
+        p.sendMessage(ChatColor.RED + "4º " + ChatColor.GOLD + "no utilizar hacks (xray, kill aura, kurium etc)");
         p.sendMessage("          ");
-        p.sendMessage(ChatColor.RED + "5� " + ChatColor.GOLD + "no explotar bugs");
+        p.sendMessage(ChatColor.RED + "5º " + ChatColor.GOLD + "no explotar bugs");
         p.sendMessage("          ");
         p.sendMessage(ChatColor.RED + "Si has hecho algo grave que no entra en estas razones seras igualmente baneado");
         p.sendMessage("          ");
@@ -997,8 +984,8 @@ public class PlayerCommand implements Listener, CommandExecutor {
         p.sendMessage("          ");
         p.sendMessage(ChatColor.GOLD + "Para proteger tus cofres/puertas/shulker box etc : " + ChatColor.WHITE + "/cprivate " + ChatColor.GOLD + "y click derecho en ellos");
         p.sendMessage(ChatColor.GOLD + "Para quitarles la proteccion: " + ChatColor.WHITE + "/remove " + ChatColor.GOLD + "y click derecho en ellos");
-        p.sendMessage(ChatColor.GOLD + "Para ponerles contrase�a " + ChatColor.WHITE + "/cpassword <contrase�a> " + ChatColor.GOLD + "y click derecho en ellos " +
-                ChatColor.GOLD + "y para desbloquarlos " + ChatColor.WHITE + "/cunlock <contrase�a> " + ChatColor.GOLD + "y click derecho en ellos");
+        p.sendMessage(ChatColor.GOLD + "Para ponerles contraseña " + ChatColor.WHITE + "/cpassword <contraseña> " + ChatColor.GOLD + "y click derecho en ellos " +
+                ChatColor.GOLD + "y para desbloquarlos " + ChatColor.WHITE + "/cunlock <contraseña> " + ChatColor.GOLD + "y click derecho en ellos");
         p.sendMessage("          ");
         p.sendMessage("/warp <nombre del sitio donde quiere ir>" + ChatColor.GOLD + " Para teletransportarte a un sitio donde quieres ir (/warp para ver los sitios)");
         p.sendMessage("          ");
@@ -1010,11 +997,11 @@ public class PlayerCommand implements Listener, CommandExecutor {
         p.sendMessage("          ");
         p.sendMessage(ChatColor.GOLD + "En la tienda puedes comprar y vender objetos de manera segura y rapida sin requerir de que el vendedor este online. Se accede con /tienda o /warp spawn y clickeando al NPC llamando tienda.");
         p.sendMessage("          ");
-        p.sendMessage("/vender <precio de pixelcoins>" + ChatColor.GOLD + "Con este podras lanzar a la venta el objeto que tengas en la mano a un determinado precio en la tienda, solo podras tener 4 como maximo en la tienda a le vez.");
+        p.sendMessage("/vender <precio de pixelcoins>" + ChatColor.GOLD + "Con este podras lanzar a la venta el objeto que tengas en la mano a un determinado precio en la tienda, solo podras tener " + Ofertas.maxEspacios + " como maximo en la tienda a le vez.");
         p.sendMessage("          ");
         p.sendMessage("/tienda " + ChatColor.GOLD + "Con este comando podras acceder a la tienda");
         p.sendMessage("          ");
-        p.sendMessage(ChatColor.GOLD + " Para comprar objetos tendras que darle click izquierdo y automaticamente se te comprar y se a�adara al inventario.");
+        p.sendMessage(ChatColor.GOLD + " Para comprar objetos tendras que darle click izquierdo y automaticamente se te comprar y se añadara al inventario.");
         p.sendMessage("          ");
         p.sendMessage(ChatColor.GOLD + "Para quitarlos click izquierdo en tus objetos que esten en la venta.");
         p.sendMessage("          ");
@@ -1033,20 +1020,25 @@ public class PlayerCommand implements Listener, CommandExecutor {
         p.sendMessage("   ");
         p.sendMessage(ChatColor.GOLD + "- Si el jugador que se le ha concedido el prestamo no tiene el dinero suficiente para pagarlo, a la minima que tenga pixelcoins y se abra el server se pagara el prestamo. y si le anotara que no ha podigo pagar el prestamo (/topmenosfiables)");
         p.sendMessage("   ");
-        p.sendMessage(ChatColor.GOLD + "Ejmeplo: Si julia presta a jaime 100 pixelcoins a 2 dias y a un interes del 10% (/pagar JaimeTruman 100 2 10): 1� Se le pagara a jaime 100 pixelcoins 2� Cada dia que pase jaime pagara una cuota (110/2 = 55) asi hasta 2 dias, Si Jaime no tiene pixelcoins para pagar un dia pagara el siguinete con la cuota establecida como si nada");
+        p.sendMessage(ChatColor.GOLD + "Ejmeplo: Si julia presta a jaime 100 pixelcoins a 2 dias y a un interes del 10% (/pagar JaimeTruman 100 2 10): 1º Se le pagara a jaime 100 pixelcoins 2º Cada dia que pase jaime pagara una cuota (110/2 = 55) asi hasta 2 dias, Si Jaime no tiene pixelcoins para pagar un dia pagara el siguinete con la cuota establecida como si nada");
         p.sendMessage("     ");
         p.sendMessage("/prestar <nombreJugador> <pixelcoins> <dias> [interes]" + ChatColor.GOLD + " El interes es opcional");
         p.sendMessage("     ");
         p.sendMessage("/deudas" + ChatColor.GOLD + " Ver toda la informacion de las deudas que tienes");
+        p.sendMessage("    ");
+        p.sendMessage("/cancelardeuda <id> " + ChatColor.GOLD + "Cancelar una deuda de un jugador que te deba pixelcoins, la id se vera en " + ChatColor.AQUA + "/deudas");
+        p.sendMessage("    ");
+        p.sendMessage("/pagardeuda <id> " + ChatColor.GOLD + "Pagar toda las pixelcoins al jugador que le debes, la id se vera en " + ChatColor.AQUA + "/deudas");
+        p.sendMessage("          ");
     }
 
     private void ayudaEstadisticas(Player p) {
         p.sendMessage("      ");
         p.sendMessage(ChatColor.GOLD + "Las estadisticas se miden solo de la tienda y por pagamos mediante el comando /pagar");
         p.sendMessage("        ");
-        p.sendMessage("N� Ventas " + ChatColor.GOLD + "El numero de veces que te han comprado en la tienda y te han pagado mediante /pagar");
+        p.sendMessage("Nº Ventas " + ChatColor.GOLD + "El numero de veces que te han comprado en la tienda y te han pagado mediante /pagar");
         p.sendMessage("      ");
-        p.sendMessage("Precio/Venta " + ChatColor.GOLD + "Se calcula: ingresos/n� de ventas. Trata sobre dar el precio medio por el cual vendes en la tienda y te te pagan con /pagar");
+        p.sendMessage("Precio/Venta " + ChatColor.GOLD + "Se calcula: ingresos/nº de ventas. Trata sobre dar el precio medio por el cual vendes en la tienda y te te pagan con /pagar");
         p.sendMessage("      ");
         p.sendMessage("Ingresos " + ChatColor.GOLD + "Es la suma de todo el dinero que te han pagado mediante /pagar y del dinero que te han pagado en la tienda");
         p.sendMessage("         ");
@@ -1060,8 +1052,8 @@ public class PlayerCommand implements Listener, CommandExecutor {
         p.sendMessage("       ");
         p.sendMessage("Pixelcoin que te deben " + ChatColor.GOLD + "El total de dinero que te deben (ayuda deudas o /deudas)");
         p.sendMessage("       ");
-        p.sendMessage("N� inpago" + ChatColor.GOLD + "El total de veces que no has podido pagar la deuda en un dia");
+        p.sendMessage("Nº inpago" + ChatColor.GOLD + "El total de veces que no has podido pagar la deuda en un dia");
         p.sendMessage("       ");
-        p.sendMessage("N� pago " + ChatColor.GOLD + "El total de veces que has pagado la deuda");
+        p.sendMessage("Nº pago " + ChatColor.GOLD + "El total de veces que has pagado la deuda");
     }
 }

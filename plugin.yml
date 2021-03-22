@@ -1,6 +1,6 @@
 name: PixelCoins
-main: es.serversurvival.config.Pixelcoin
-version: 1.1
+main: es.serversurvival.main.Pixelcoin
+version: 1.3
 api-version: "1.14"
 commands:
   dinero:
@@ -15,9 +15,6 @@ commands:
   toppobres:
     description: mostrar los 3 más pobres del servidor
     usage: /<command>
-  verdinero:
-    description: ver pixelcoins de los jugadores
-    usage: /<command> <jugador>
   tienda:
     description: Comando para ver la tienda
     usage: /<command>
@@ -108,3 +105,21 @@ commands:
   borrarempresa:
     description: borrar tu empresa
     usage: /<command> <nombre>
+  confirmarborrar:
+    description: confirmar que vas a borrar tu empresa
+    usage: /<command>
+  cancelarborrar:
+    description: cancelar que vas a borrar tu empresa
+    usage: /<command>
+  comprar:
+    description: comprar un producto/servicio de una empresa
+    usage: /<command> <empresa> <precio>
+  editardescripccion:
+    description: editar la descripccion de tu empresa
+    usage: /<command> <empresa> <descripcion>
+  pagardeuda:
+    description: pagar la deuda completa que debes a un acredor
+    usage: /<command> <id>
+  cancelardeuda:
+    description: cancelar la deuda a un jugador
+    usage: /<command> <id>

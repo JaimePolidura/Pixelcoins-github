@@ -10,16 +10,16 @@ import java.util.logging.Logger;
 public class MySQL {
     public static Connection conexion;
 
-    public void conectar(String user, String pass, String dbName) throws Exception {
+    private static final String dbName = "pixelcoins";
+    private static final String user = "root";
+    private static final String pass = "";
+
+    public void conectar() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             conexion = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbName, user, pass);
-        } catch (ClassNotFoundException e) {
-            Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, e);
-        } catch (SQLException e) {
-            Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, e);
         } catch (Exception e) {
-            Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, e);
+            e.printStackTrace();
         }
     }
 
@@ -27,8 +27,8 @@ public class MySQL {
     public void desconectar() {
         try {
             conexion.close();
-        } catch (SQLException e) {
-            Logger.getLogger(Deudas.class.getName()).log(Level.SEVERE, null, e);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

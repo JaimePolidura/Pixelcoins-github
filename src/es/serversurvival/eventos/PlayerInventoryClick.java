@@ -1,8 +1,9 @@
 package es.serversurvival.eventos;
 
+import es.serversurvival.objetos.Empresas;
 import es.serversurvival.objetos.Ofertas;
 import es.serversurvival.objetos.Transacciones;
-import es.serversurvival.config.Funciones;
+import es.serversurvival.main.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,12 +32,12 @@ public class PlayerInventoryClick implements Listener {
                     //Comprobar si lo que has clickeado es tuyo o de otro jugador
                     if (dn.equalsIgnoreCase(ChatColor.RED + "" + ChatColor.BOLD + "CLICK PARA RETIRAR")) {
                         Ofertas o = new Ofertas();
-                        o.conectar("root", "", "pixelcoins");
+                        o.conectar();
                         o.retirarOferta(p, id);
                         o.desconectar();
                     } else if (dn.equalsIgnoreCase(ChatColor.AQUA + "" + ChatColor.BOLD + "CLICK PARA COMPRAR")) {
                         Transacciones t = new Transacciones();
-                        t.conectar("root", "", "pixelcoins");
+                        t.conectar();
                         t.realizarVenta(p.getName(), id, p);
                         t.desconectar();
                     }
@@ -55,6 +56,14 @@ public class PlayerInventoryClick implements Listener {
         }
 
         if (inNombre.equalsIgnoreCase(ChatColor.DARK_RED + "" + ChatColor.BOLD + "          Empresas")) {
+            try {
+                Empresas em = new Empresas();
+                em.conectar();
+                em.mostrarEmpresas((Player) e.getWhoClicked());
+                em.desconectar();
+            } catch (Exception ex) {
+
+            }
             e.setCancelled(true);
         }
     }

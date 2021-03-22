@@ -1,17 +1,23 @@
 package es.serversurvival.objetos;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import com.google.common.cache.Cache;
+import com.mysql.jdbc.Connection;
+import es.serversurvival.main.Funciones;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 
 public class Jugador extends MySQL {
-
     public DecimalFormat formatea = new DecimalFormat("###,###.##");
 
     //MostrarDinero
@@ -27,6 +33,7 @@ public class Jugador extends MySQL {
 
     //MostrarEstadisticas
     public void mostarEstadisticas(Player p) {
+        Funciones f = new Funciones();
         boolean reg = this.estaRegistrado(p.getName());
         Deudas d = new Deudas();
         p.sendMessage("     ");
@@ -35,7 +42,7 @@ public class Jugador extends MySQL {
             double ingresos = this.getIngresos(p.getName());
             double gastos = this.getGastos(p.getName());
             double beneficios = ingresos - gastos;
-            double margen = Math.round((beneficios / ingresos) * 100);
+            double margen = f.rentabilidad(ingresos, beneficios);
             double precioMedio = Math.round(ingresos / nventas);
 
             int ninpagos = this.getNinpago(p.getName());
@@ -43,7 +50,7 @@ public class Jugador extends MySQL {
             int deuda = 0;
             int deudaDevolver = 0;
             try {
-                d.conectar("root", "", "pixelcoins");
+                d.conectar();
                 deuda = d.getTodaDeudaAcredor(p.getName());
                 deudaDevolver = d.getTodaDeudaDeudor(p.getName());
                 d.desconectar();
@@ -52,7 +59,7 @@ public class Jugador extends MySQL {
             }
 
             p.sendMessage(ChatColor.GOLD + "Tus estadisticas" + ChatColor.AQUA + " (/ayuda estadisticas)");
-            p.sendMessage(ChatColor.GOLD + "N? ventas: " + ChatColor.GREEN + formatea.format(nventas));
+            p.sendMessage(ChatColor.GOLD + "Nunmero de ventas: " + ChatColor.GREEN + formatea.format(nventas));
             p.sendMessage(ChatColor.GOLD + "Precio/venta: " + ChatColor.GREEN + precioMedio + " PC/Venta" + ChatColor.GOLD);
             p.sendMessage(ChatColor.GOLD + "Ingresos:  " + ChatColor.GREEN + formatea.format(ingresos));
             p.sendMessage(ChatColor.GOLD + "Gastos: " + ChatColor.GREEN + formatea.format(gastos));
@@ -104,6 +111,7 @@ public class Jugador extends MySQL {
 
                 p.sendMessage(ChatColor.GOLD + "" + i + "?: " + nombreActual + ":  " + ChatColor.GREEN + formatea.format(cantidadActual) + " PC");
             }
+            rs.close();
         } catch (SQLException e) {
             p.sendMessage(ChatColor.RED + "Error en Jugador.mostarTopRicos, hablar con el admin");
         }
@@ -136,6 +144,7 @@ public class Jugador extends MySQL {
                 }
 
             }
+            rs.close();
         } catch (SQLException e) {
             p.sendMessage(ChatColor.RED + "Error en Jugador.mostarTopPobres, hablar con el admin");
         }
@@ -163,6 +172,7 @@ public class Jugador extends MySQL {
 
                 p.sendMessage(ChatColor.GOLD + "" + i + "?: " + nombreActual + ":  " + ChatColor.GREEN + formatea.format(nventas) + " ventas");
             }
+            rs.close();
         } catch (SQLException e) {
             p.sendMessage(ChatColor.RED + "Error en Jugador.mostarTopPobres, hablar con el admin");
         }
@@ -190,6 +200,7 @@ public class Jugador extends MySQL {
 
                 p.sendMessage(ChatColor.GOLD + "" + i + "?: " + nombreActual + ": " + ChatColor.GREEN + formatea.format(npagos) + " veces");
             }
+            rs.close();
         } catch (SQLException e) {
             p.sendMessage(ChatColor.RED + "Error en Jugador.mostrarTopFiables, hablar con el admin");
         }
@@ -217,6 +228,7 @@ public class Jugador extends MySQL {
 
                 p.sendMessage(ChatColor.GOLD + "" + i + "?: " + nombreActual + ": " + ChatColor.GREEN + formatea.format(ninpagos) + " veces");
             }
+            rs.close();
         } catch (SQLException e) {
             p.sendMessage(ChatColor.RED + "Error en Jugador.mostrarTopMenosFiables, hablar con el admin");
         }
@@ -226,20 +238,20 @@ public class Jugador extends MySQL {
     public int getDinero(String nombre) {
         int dinero = 0;
         try {
-            String consulta = "SELECT * FROM jugadores";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT pixelcoin FROM jugadores WHERE nombre = ? ";
+            PreparedStatement pst = conexion.prepareStatement(consulta);
+            pst.setString(1, nombre);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("nombre").equalsIgnoreCase(nombre)) {
-                    dinero = rs.getInt("pixelcoin");
-                    break;
-                }
+                dinero = rs.getInt("pixelcoin");
+                break;
             }
-        } catch (SQLException e) {
+            rs.close();
+        } catch (Exception e) {
 
         }
+
         return dinero;
     }
 
@@ -247,18 +259,17 @@ public class Jugador extends MySQL {
     public int getEspacios(String nombre) {
         int espacios = 0;
         try {
-            String consulta = "SELECT * FROM jugadores";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT espacios FROM jugadores WHERE nombre = ? ";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, nombre);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("nombre").equalsIgnoreCase(nombre)) {
-                    espacios = rs.getInt("espacios");
-                    break;
-                }
+                espacios = rs.getInt("espacios");
+                break;
             }
-        } catch (SQLException e) {
+            rs.close();
+        } catch (Exception e) {
 
         }
         return espacios;
@@ -268,18 +279,17 @@ public class Jugador extends MySQL {
     public int getNventas(String nombre) {
         int nventas = 0;
         try {
-            String consulta = "SELECT * FROM jugadores";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT nventas FROM jugadores WHERE nombre = ? ";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, nombre);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("nombre").equalsIgnoreCase(nombre)) {
-                    nventas = rs.getInt("nventas");
-                    break;
-                }
+                nventas = rs.getInt("nventas");
+                break;
             }
-        } catch (SQLException e) {
+            rs.close();
+        } catch (Exception e) {
 
         }
         return nventas;
@@ -289,39 +299,36 @@ public class Jugador extends MySQL {
     public int getIngresos(String nombre) {
         int ingresos = 0;
         try {
-            String consulta = "SELECT * FROM jugadores";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT ingresos FROM jugadores WHERE nombre = ? ";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, nombre);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("nombre").equalsIgnoreCase(nombre)) {
-                    ingresos = rs.getInt("ingresos");
-                    break;
-                }
+                ingresos = rs.getInt("ingresos");
+                break;
             }
-        } catch (SQLException e) {
+            rs.close();
+        } catch (Exception e) {
 
         }
         return ingresos;
     }
 
-    //GetGastos
     public int getGastos(String nombre) {
         int gastos = 0;
         try {
-            String consulta = "SELECT * FROM jugadores";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT gastos FROM jugadores WHERE nombre = ? ";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, nombre);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("nombre").equalsIgnoreCase(nombre)) {
-                    gastos = rs.getInt("gastos");
-                    break;
-                }
+                gastos = rs.getInt("gastos");
+                break;
             }
-        } catch (SQLException e) {
+            rs.close();
+        } catch (Exception e) {
 
         }
         return gastos;
@@ -331,18 +338,17 @@ public class Jugador extends MySQL {
     public int getNinpago(String nombre) {
         int ninpagos = 0;
         try {
-            String consulta = "SELECT * FROM jugadores";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT ninpagos FROM jugadores WHERE nombre = ? ";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, nombre);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("nombre").equalsIgnoreCase(nombre)) {
-                    ninpagos = rs.getInt("ninpagos");
-                    break;
-                }
+                ninpagos = rs.getInt("ninpagos");
+                break;
             }
-        } catch (SQLException e) {
+            rs.close();
+        } catch (Exception e) {
 
         }
         return ninpagos;
@@ -352,18 +358,17 @@ public class Jugador extends MySQL {
     public int getNpagos(String nombre) {
         int npagos = 0;
         try {
-            String consulta = "SELECT * FROM jugadores";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT npagos FROM jugadores WHERE nombre = ? ";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, nombre);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("nombre").equalsIgnoreCase(nombre)) {
-                    npagos = rs.getInt("npagos");
-                    break;
-                }
+                npagos = rs.getInt("npagos");
+                break;
             }
-        } catch (SQLException e) {
+            rs.close();
+        } catch (Exception e) {
 
         }
         return npagos;
@@ -373,18 +378,17 @@ public class Jugador extends MySQL {
     public int getBeneficios(String nombre) {
         int beneficios = 0;
         try {
-            String consulta = "SELECT * FROM jugadores";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT beneficios FROM jugadores WHERE nombre = ? ";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, nombre);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                if (rs.getString("nombre").equalsIgnoreCase(nombre)) {
-                    beneficios = rs.getInt("beneficios");
-                    break;
-                }
+                beneficios = rs.getInt("beneficios");
+                break;
             }
-        } catch (SQLException e) {
+            rs.close();
+        } catch (Exception e) {
 
         }
         return beneficios;
@@ -421,20 +425,17 @@ public class Jugador extends MySQL {
     //esta Registrado
     public boolean estaRegistrado(String nombre) {
         boolean registrado = false;
-
         try {
-            String consulta = "SELECT * FROM jugadores";
-            Statement st = conexion.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(consulta);
+            String consulta = "SELECT nombre FROM jugadores WHERE nombre = ? ";
+            PreparedStatement pst = (PreparedStatement) conexion.prepareStatement(consulta);
+            pst.setString(1, nombre);
+            ResultSet rs = pst.executeQuery();
 
-            while (rs.next()) {
-                if (rs.getString("nombre").equalsIgnoreCase(nombre)) {
-                    registrado = true;
-                    break;
-                }
+            if (rs.next()) {
+                registrado = true;
             }
-        } catch (SQLException e) {
+            rs.close();
+        } catch (Exception e) {
 
         }
         return registrado;
@@ -494,5 +495,22 @@ public class Jugador extends MySQL {
         } catch (SQLException e) {
 
         }
+    }
+
+    public ArrayList<String> getTop3PlayersPixelcoins() {
+        ArrayList<String> jugadores = new ArrayList<>();
+        try {
+            String consulta = "SELECT nombre FROM jugadores ORDER BY pixelcoin desc LIMIT 3";
+            Statement st = conexion.createStatement();
+            ResultSet rs = st.executeQuery(consulta);
+
+            while (rs.next()) {
+                jugadores.add(rs.getString("nombre"));
+            }
+            rs.close();
+        } catch (Exception e) {
+
+        }
+        return jugadores;
     }
 }
