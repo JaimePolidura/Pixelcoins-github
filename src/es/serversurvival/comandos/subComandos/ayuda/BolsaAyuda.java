@@ -22,9 +22,11 @@ public class BolsaAyuda extends AyudaSubCommand {
 
     public void execute(Player player, String[] args) {
         player.sendMessage("     ");
-        player.sendMessage(ChatColor.GOLD + "Se pueden invertir en empesas que cotizen en Estados Unidos. Por ejemplo si quieres invertir en 2 acciones de Santander, supongamos que la accion esta a 2,4" +
-                "2,4, tendrias que buscar el ticker de la accion (nombre identificatorio de la accion en este caso Santander es SAN, para buscar los tickers puedes poner el comando /bolsa valores o buscarlo en internet) y poner el comando /invertir <ticker <nº accion> que seria en estea caso" +
-                " que seria en este caso: /invertir SAN 2 y se te anotaria que tienes 2 acciones y se te restaria 4,8 PC.");
+        player.sendMessage(ChatColor.GOLD + "Se puede invertir en acciones de empresas de verdad que cotizen en estados unidos para ello puedes hacer /bolsa valores, se te abrira un menu " +
+                "con diferentes accines de ejemplo por ejemplo si quieres comprar acciones de Santander clickearias en el item y seleccionarias el numero de acciones, supongamos que la accion esta a " +
+                "2,4 y si seleciconas dos acciones te gastarias un total de 4,8 PC y se te anotaria que tienes una accion de santander. Si quieres invertir en otra empresa que no este en la lista no hay" +
+                " ningun problema, necesitas buscar el ticker de la accion (nombre identificatorio de la empresa cotizada ejemplo google: GOOG) y pondrias el comando /bolsa invertir <ticer> <nºAccuibes> hay que re" +
+                "cordar que solo se puede acciones que cotizen en USA");
         player.sendMessage("     ");
         player.sendMessage(ChatColor.GOLD + "Si quieres vender las 2 acciones de Santander por que han subido a 5$, tedrias que poner el comando /bolsa cartera y veras todas tus posiciones" +
                 "abiertas (acciones que tienes) y te señalara la id de tu posicion, pongamos que es 2 ID=2, a continueacion tendrias que poner el comando /bolsa vender <id> <nºAcciones>" +
@@ -35,7 +37,7 @@ public class BolsaAyuda extends AyudaSubCommand {
         player.sendMessage("    ");
         player.sendMessage("/bolsa estadisticas: " + ChatColor.GOLD + "Ver tus mejores y peores operaciones");
         player.sendMessage("    ");
-        player.sendMessage("/bolsa invertir <invertir> <nº acciones>: " + ChatColor.GOLD + "invertir en bolsa con pixelcoins, el nicker nombre identificatorio de la empresa (se ve en /bolsa valores) y nºacciones las que vas a comprar");
+        player.sendMessage("/bolsa invertir <invertir> <nº acciones>: " + ChatColor.GOLD + "invertir en bolsa con pixelcoins, el ticker: nombre identificatorio de la empresa (buscar en internet, sino prueba a buscarlo en /bolsa valores) y nºacciones las que vas a comprar");
         player.sendMessage("    ");
         player.sendMessage("/bolsa precio <ticker> " + ChatColor.GOLD + "Consultar el precio de una accion con el ticker de la empresa");
         player.sendMessage("          ");

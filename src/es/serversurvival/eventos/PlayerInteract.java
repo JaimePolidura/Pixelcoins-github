@@ -1,5 +1,6 @@
 package es.serversurvival.eventos;
 
+import es.serversurvival.comandos.subComandos.bolsa.ValoresBolsaSubComando;
 import es.serversurvival.objetos.mySQL.Empresas;
 import es.serversurvival.objetos.mySQL.Ofertas;
 import es.serversurvival.objetos.mySQL.Transacciones;
@@ -28,6 +29,7 @@ public class PlayerInteract implements Listener {
     private final Location PixLap = new Location(null, -245, 66, -201);
     private final Location tienda = new Location(null, -270, 67, -201);
     private final Location empresas = new Location(null, -270, 67, -196);
+    private final Location bolsa = new Location(null, -245, 67, -196);
 
     private Funciones f = new Funciones();
 
@@ -166,16 +168,19 @@ public class PlayerInteract implements Listener {
                 }
             }
         }
-        if (f.comparar(lec, tienda)) {
+        if (Funciones.comparar(lec, tienda)) {
             Ofertas o = new Ofertas();
             o.conectar();
             o.mostarOfertas(p);
             o.desconectar();
-        } else if (f.comparar(lec, empresas)) {
+        } else if (Funciones.comparar(lec, empresas)) {
             Empresas empr = new Empresas();
             empr.conectar();
             empr.mostrarEmpresas(p);
             empr.desconectar();
+        } else if (Funciones.comparar(lec, bolsa)) {
+            ValoresBolsaSubComando valoresBolsaSubComando = new ValoresBolsaSubComando();
+            valoresBolsaSubComando.execute(p, null);
         }
     }
 }

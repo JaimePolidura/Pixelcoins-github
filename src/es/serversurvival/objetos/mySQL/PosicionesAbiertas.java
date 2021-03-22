@@ -2,21 +2,29 @@ package es.serversurvival.objetos.mySQL;
 
 import es.serversurvival.main.Funciones;
 import es.serversurvival.objetos.apiHttp.IEXCloud_API;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
+import org.bukkit.DyeColor;
+import org.bukkit.Material;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.plugin.Plugin;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.io.DataInput;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class PosicionesAbiertas extends MySQL {
+    private static String titulo = ChatColor.DARK_RED + "SELECCIONA Nº DE ACCIONES";
 
     public void nuevaPosicion(String jugador, String ticker, int nAcciones, double precioApertura) {
         Date dt = new Date();

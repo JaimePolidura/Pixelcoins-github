@@ -1,7 +1,6 @@
 package es.serversurvival.objetos.apiHttp;
 
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.io.BufferedReader;
@@ -30,6 +29,7 @@ public class IEXCloud_API {
         while ((responseLine = bfr.readLine()) != null) {
             response.append(responseLine.trim());
         }
+
         JSONParser parser = new JSONParser();
 
         JSONArray jsonObject = (JSONArray) parser.parse(response.toString());

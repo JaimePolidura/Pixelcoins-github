@@ -92,7 +92,7 @@ public class ValoresBolsaSubComando extends BolsaSubCommand {
                 try {
                     double precioAccion = IEXCloud_API.getOnlyPrice(ticker);
 
-                    precio.add(1, ChatColor.GOLD + "Precio/Accion: " + ChatColor.GREEN + precioAccion + " $");
+                    precio.add(1, ChatColor.GOLD + "Precio/Accion:" + ChatColor.GREEN + " " + precioAccion + " $");
 
                     actualMeta.setLore(precio);
                     actual.setItemMeta(actualMeta);

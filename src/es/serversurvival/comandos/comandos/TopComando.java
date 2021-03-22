@@ -14,7 +14,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
-import org.bukkit.ChatColor;
 
 public class TopComando extends Comando {
     Funciones f = new Funciones();
@@ -109,6 +108,9 @@ public class TopComando extends Comando {
         for (int id : ids) {
             rentabilidad = posicionesCerradas.getRentabilidad(id);
             rentabilidad = Funciones.redondeoDecimales(rentabilidad, 3);
+            if (rentabilidad <= 0) {
+                continue;
+            }
             lore6.add("" + ChatColor.GOLD + pos + "º " + posicionesCerradas.getJugador(id) + ": " + posicionesCerradas.getTicker(id) + ChatColor.GREEN + " +" + rentabilidad + "%");
             pos++;
         }
