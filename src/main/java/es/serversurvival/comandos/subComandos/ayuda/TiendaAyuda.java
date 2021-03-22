@@ -1,6 +1,6 @@
 package es.serversurvival.comandos.subComandos.ayuda;
 
-import es.serversurvival.objetos.mySQL.Ofertas;
+import es.serversurvival.mySQL.Ofertas;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 

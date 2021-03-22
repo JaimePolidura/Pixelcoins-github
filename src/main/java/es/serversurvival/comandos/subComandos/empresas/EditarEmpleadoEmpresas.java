@@ -1,10 +1,9 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
-import es.serversurvival.main.Funciones;
-import es.serversurvival.objetos.mySQL.Empleados;
-import es.serversurvival.objetos.mySQL.Empresas;
-import es.serversurvival.objetos.mySQL.tablasObjetos.Empleado;
-import es.serversurvival.objetos.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.util.Funciones;
+import es.serversurvival.mySQL.Empleados;
+import es.serversurvival.mySQL.tablasObjetos.Empleado;
+import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -66,12 +65,12 @@ public class EditarEmpleadoEmpresas extends EmpresasSubCommand {
         empresasMySQL.conectar();
         Empresa empresaAEditarEmpleado = empresasMySQL.getEmpresa(empresa);
         if(empresaAEditarEmpleado == null){
-            jugadorPlayer.sendMessage(net.md_5.bungee.api.ChatColor.DARK_RED + "Esa empresa no exsiste");
+            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Esa empresa no exsiste");
             empresasMySQL.desconectar();
             return;
         }
         if (!empresaAEditarEmpleado.getOwner().equalsIgnoreCase(jugadorPlayer.getName())) {
-            jugadorPlayer.sendMessage(net.md_5.bungee.api.ChatColor.DARK_RED + "No eres due?o de eas empresa");
+            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "No eres due?o de eas empresa");
             empresasMySQL.desconectar();
             return;
         }

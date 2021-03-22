@@ -1,20 +1,13 @@
 package es.serversurvival.comandos.subComandos.bolsa;
 
-import es.serversurvival.main.Funciones;
-import es.serversurvival.main.Pixelcoin;
-import es.serversurvival.objetos.apiHttp.IEXCloud_API;
-import es.serversurvival.objetos.mySQL.LlamadasApi;
-import es.serversurvival.objetos.mySQL.PosicionesAbiertas;
-import es.serversurvival.objetos.mySQL.Transacciones;
-import es.serversurvival.objetos.mySQL.tablasObjetos.PosicionAbierta;
-import org.bukkit.Bukkit;
+import es.serversurvival.util.Funciones;
+import es.serversurvival.apiHttp.IEXCloud_API;
+import es.serversurvival.mySQL.Transacciones;
+import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.io.IOException;
-
 public class VenderBolsa extends BolsaSubCommand {
-    private Transacciones transaccionesMySQL = new Transacciones();
     private final String SCNombre = "vender";
     private final String sintaxis = "/bolsa vender <id> [numero a vender]";
     private final String ayuda = "Vender acciones, bitcoin, barriles etc con una id que se ven en /bolsa cartera y un numero de acciones a vender";
@@ -86,15 +79,9 @@ public class VenderBolsa extends BolsaSubCommand {
 
         String nombre = posicionAVender.getNombre();
         String tipo = posicionAVender.getTipo();
-        Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
-            try {
-                double precio = getPrecio(tipo, nombre);
-                transaccionesMySQL.venderPosicion(precio, cantidad, id, jugadorPlayer);
-            } catch (Exception e) {
-                jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Ha habido un error, hablar con el admin: " + e.getCause());
-            }
-            posicionesAbiertasMySQL.desconectar();
-        }, 0L);
+
+        transaccionesMySQL.venderPosicion(posicionAVender ,cantidad ,jugadorPlayer);
+        posicionesAbiertasMySQL.desconectar();
     }
 
     private double getPrecio(String tipo, String simbolo) throws Exception {

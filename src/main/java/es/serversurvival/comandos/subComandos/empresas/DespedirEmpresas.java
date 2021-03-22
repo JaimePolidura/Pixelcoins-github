@@ -1,13 +1,11 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
-import es.serversurvival.objetos.mySQL.Empleados;
-import es.serversurvival.objetos.mySQL.Empresas;
-import es.serversurvival.objetos.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.mySQL.Empresas;
+import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class DespedirEmpresas extends EmpresasSubCommand {
-    private Empresas empresasMySQL = new Empresas();
     private final String SCNombre = "despedir";
     private final String sintaxis = "/empresas despedir <empresa> <jugador> <razon>";
     private final String ayuda = "despedir a un jugador de tu propia empresa";
@@ -41,17 +39,17 @@ public class DespedirEmpresas extends EmpresasSubCommand {
         Empresa empresaDondeSeDespide = empresasMySQL.getEmpresa(empresanombre);
         if(empresaDondeSeDespide == null){
             empresasMySQL.desconectar();
-            jugadorPlayer.sendMessage(net.md_5.bungee.api.ChatColor.DARK_RED + "Esa empresa no exsiste");
+            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Esa empresa no exsiste");
             return;
         }
         if (!empresaDondeSeDespide.getOwner().equalsIgnoreCase(jugadorPlayer.getName())) {
             empresasMySQL.desconectar();
-            jugadorPlayer.sendMessage(net.md_5.bungee.api.ChatColor.DARK_RED + "No eres owner de esa empresa");
+            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "No eres owner de esa empresa");
             return;
         }
         if(!empleadosMySQL.trabajaEmpresa(empleado, empresanombre)){
             empresasMySQL.desconectar();
-            jugadorPlayer.sendMessage(net.md_5.bungee.api.ChatColor.DARK_RED + "Creo que ese men no trabaja en tu empresa");
+            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Creo que ese men no trabaja en tu empresa");
             return;
         }
 

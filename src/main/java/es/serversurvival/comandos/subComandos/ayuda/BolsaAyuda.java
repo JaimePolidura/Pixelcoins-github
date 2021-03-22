@@ -33,6 +33,13 @@ public class BolsaAyuda extends AyudaSubCommand {
                 " que seria en este caso: /bolsa vender 5 2 (no tiene por que ser 2 obligatoriamente puedes vender el nº de acciones que tengas en esa posicion) y te sumaria a la cuenta de minecraft un " +
                 "beneficio de 10PC frente a las 4,8 PC que pusiste al principio una rentabilidad algo superior al 50%");
         player.sendMessage("    ");
+        player.sendMessage("/bolsa vendercorto <ticker> <nº acciones> " + ChatColor.GOLD + "En bolsa uno puede ganar dinero cuando el precio de la accion baja." +
+                " Para eso, se le presta unas acciones a cambio de un pequeño interes. El inversor las vende una vez prestadas y cuando bajen de precio las recompra. " +
+                "Por asi decirlo " + "las devuelve enbolsandose la diferencia. No se cobra dividendos. Al venderlo se te cargara a tus ahorros un 5% de todo lo que" +
+                " representa tu venta en corto (precioPorAccion * cantidad vendida)");
+        player.sendMessage("   ");
+        player.sendMessage("/bolsa per <ticker> " + ChatColor.GOLD + "Sirve para ver el ratio per de la accion en concreto mediante un ticker");
+        player.sendMessage("   ");
         player.sendMessage("/bolsa operacionescerradas: " + ChatColor.GOLD + "Ver todas las ventas que has hecho en bolsa y sus estadisticas");
         player.sendMessage("    ");
         player.sendMessage("/bolsa estadisticas: " + ChatColor.GOLD + "Ver tus mejores y peores operaciones");
@@ -48,5 +55,9 @@ public class BolsaAyuda extends AyudaSubCommand {
         player.sendMessage("/bolsa cartera " + ChatColor.GOLD + "Ver todas las posciones que tienes abiertas (acciones) con su id, ganacias perdidas etc");
         player.sendMessage("          ");
         player.sendMessage("/bolsa vercartera <jugador> " + ChatColor.GOLD + "Ver la cartera de acciones de otro jugador y el peso que tiene sus accines en cartera");
+        player.sendMessage("    ");
+        player.sendMessage("/bolsa dividendo [ticker] " + ChatColor.GOLD + "Si no pones el ticker, te muestra los proximos dividendos para tu cartera de acciones. Si pones el ticker te muestra el proximo dividendo para esa accion.");
+        player.sendMessage("    ");
+
     }
 }

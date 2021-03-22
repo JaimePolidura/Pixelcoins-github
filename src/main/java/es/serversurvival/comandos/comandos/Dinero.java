@@ -1,7 +1,8 @@
 package es.serversurvival.comandos.comandos;
 
 import es.serversurvival.comandos.Comando;
-import es.serversurvival.objetos.mySQL.Jugadores;
+import es.serversurvival.mySQL.*;
+import es.serversurvival.util.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -23,10 +24,19 @@ public class Dinero extends Comando {
     }
 
     public void execute(Player player, String[] args) {
-        Jugadores jugadoresMySQL = new Jugadores();
+        String nombreJugador = player.getName();
 
-        jugadoresMySQL.conectar();
-        player.sendMessage(ChatColor.GOLD + "Tienes: " + ChatColor.GREEN + formatea.format(jugadoresMySQL.getDinero(player.getName())) + " PC");
-        jugadoresMySQL.desconectar();
+        MySQL.conectar();
+        double patrimonioJugador = Funciones.getPatrimonioJugador(nombreJugador);
+        double totalAhorrado = jugadoresMySQL.getJugador(nombreJugador).getPixelcoin();
+        MySQL.desconectar();
+
+        patrimonioJugador = patrimonioJugador - totalAhorrado;
+
+        player.sendMessage(ChatColor.GOLD + "Ahorrado (disponible) : " + ChatColor.GREEN + formatea.format(totalAhorrado) + " PC");
+        if(patrimonioJugador != 0){
+            player.sendMessage("             ");
+            player.sendMessage(ChatColor.GOLD + "Tienes: " + ChatColor.GREEN + formatea.format(patrimonioJugador) + " PC " + ChatColor.GOLD + "en otras partes. /perfil o /estadisticas");
+        }
     }
 }

@@ -1,7 +1,7 @@
 name: PixelCoins
 main: es.serversurvival.main.Pixelcoin
-version: 4.0
-api-version: "1.14"
+version: 7.0
+api-version: "1.16"
 commands:
   dinero:
     description: Comando para ver tu dinero
@@ -45,3 +45,9 @@ commands:
   cuenta:
     description: ver todas tu numero de cuenta para iniciar sesion
     usage: /<command>
+  perfil:
+    description: ver tu perfil
+    usage: /<command>
+  venderjugador:
+    description: vender un objeto a un jugador
+    usage: /<command> <jugador> <precio>

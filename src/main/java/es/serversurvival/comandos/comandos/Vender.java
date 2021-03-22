@@ -1,14 +1,16 @@
 package es.serversurvival.comandos.comandos;
 
 import es.serversurvival.comandos.Comando;
-import es.serversurvival.main.Funciones;
-import es.serversurvival.objetos.mySQL.Ofertas;
+import es.serversurvival.mySQL.MySQL;
+import es.serversurvival.util.Funciones;
+import es.serversurvival.mySQL.Ofertas;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.*;
+
 public class Vender extends Comando {
-    Ofertas ofertasMySQL = new Ofertas();
     private final String CNombre = "vender";
     private final String sintaxis = "/vender <precio>";
     private final String ayuda = "vender objetos en la tienda a un precio, para retirarlos en /tienda";
@@ -50,9 +52,22 @@ public class Vender extends Comando {
             p.sendMessage(ChatColor.DARK_RED + "A ser posible que los precios no sean negativos o 0");
             return;
         }
+        if(haSidoComprado(itemAVender)){
+            p.sendMessage(ChatColor.DARK_RED + "No puedes revender objetos que compraste en la tienda");
+            return;
+        }
 
-        ofertasMySQL.conectar();
+        MySQL.conectar();
         ofertasMySQL.crearOferta(itemAVender, p, precio);
-        ofertasMySQL.desconectar();
+        MySQL.desconectar();
+    }
+
+    private boolean haSidoComprado (ItemStack item) {
+        List<String> lore = item.getItemMeta().getLore();
+
+        if(lore == null || lore.size() == 0)
+            return false;
+
+        return lore.get(0).equalsIgnoreCase("Comprado en la tienda");
     }
 }

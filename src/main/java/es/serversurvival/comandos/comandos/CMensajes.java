@@ -1,6 +1,7 @@
 package es.serversurvival.comandos.comandos;
 
 import es.serversurvival.comandos.Comando;
+import es.serversurvival.mySQL.Mensajes;
 import org.bukkit.entity.Player;
 
 public class CMensajes extends Comando {
@@ -21,9 +22,8 @@ public class CMensajes extends Comando {
     }
 
     public void execute(Player p, String[] args) {
-        es.serversurvival.objetos.mySQL.Mensajes m = new es.serversurvival.objetos.mySQL.Mensajes();
-        m.conectar();
-        m.mostrarMensajes(p);
-        m.desconectar();
+        mensajesMySQL.conectar();
+        mensajesMySQL.mostrarMensajesYBorrar(p);
+        mensajesMySQL.desconectar();
     }
 }

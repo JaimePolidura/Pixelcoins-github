@@ -1,13 +1,12 @@
 package es.serversurvival.comandos.subComandos.deudas;
 
-import es.serversurvival.main.Funciones;
-import es.serversurvival.objetos.mySQL.Deudas;
-import es.serversurvival.objetos.mySQL.tablasObjetos.Deuda;
+import es.serversurvival.util.Funciones;
+import es.serversurvival.mySQL.Deudas;
+import es.serversurvival.mySQL.tablasObjetos.Deuda;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class CancelarDeudaDeudas extends DeudasSubCommand {
-    Deudas deudasMySQL = new Deudas();
     private final String scnombre = "cancelar";
     private final String sintaxis = "/deudas cancelar <id>";
     private final String ayuda = "cacelar toda la deuda a un jugador, la id se ve en /deudas ver";
@@ -38,12 +37,12 @@ public class CancelarDeudaDeudas extends DeudasSubCommand {
         Deuda deudaACancelar = deudasMySQL.getDeuda(id_deuda);
         if(deudaACancelar == null){
             deudasMySQL.desconectar();
-            player.sendMessage(net.md_5.bungee.api.ChatColor.DARK_RED + "No hay ninguna id con ese numero, la id se ve en comando /deudas");
+            player.sendMessage(ChatColor.DARK_RED + "No hay ninguna id con ese numero, la id se ve en comando /deudas");
             return;
         }
         if(!deudaACancelar.getAcredor().equalsIgnoreCase(player.getName())){
             deudasMySQL.desconectar();
-            player.sendMessage(net.md_5.bungee.api.ChatColor.DARK_RED + "No eres el acredor de esa deuda, las id se ven en /deuda");
+            player.sendMessage(ChatColor.DARK_RED + "No eres el acredor de esa deuda, las id se ven en /deuda");
             return;
         }
 

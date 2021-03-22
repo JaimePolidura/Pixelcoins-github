@@ -1,7 +1,8 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
-import es.serversurvival.objetos.mySQL.Empresas;
-import es.serversurvival.objetos.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.mySQL.Empresas;
+import es.serversurvival.mySQL.MySQL;
+import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -34,25 +35,25 @@ public class EditarNombreEmpresas extends EmpresasSubCommand {
             return;
         }
 
-        empresasMySQL.conectar();
+        MySQL.conectar();
         Empresa empresaACambiar = empresasMySQL.getEmpresa(nombreEmpresaAEditar);
         if (empresaACambiar == null) {
             jugadorPlauer.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
-            empresasMySQL.desconectar();
+            MySQL.desconectar();
             return;
         }
         if (empresasMySQL.getEmpresa(nuevoNombreEmpresa) != null) {
-            jugadorPlauer.sendMessage(net.md_5.bungee.api.ChatColor.DARK_RED + "Esa nombre ya esta cogido");
-            empresasMySQL.desconectar();
+            jugadorPlauer.sendMessage(ChatColor.DARK_RED + "Esa nombre ya esta cogido");
+            MySQL.desconectar();
             return;
         }
         if (!empresaACambiar.getOwner().equalsIgnoreCase(jugadorPlauer.getName())) {
-            jugadorPlauer.sendMessage(net.md_5.bungee.api.ChatColor.DARK_RED + "No eres el due?o de esa empresa");
-            empresasMySQL.desconectar();
+            jugadorPlauer.sendMessage(ChatColor.DARK_RED + "No eres el due?o de esa empresa");
+            MySQL.desconectar();
             return;
         }
 
         empresasMySQL.cambiarNombre(jugadorPlauer, args[1], nuevoNombreEmpresa);
-        empresasMySQL.desconectar();
+        MySQL.desconectar();
     }
 }

@@ -1,6 +1,6 @@
 package es.serversurvival.comandos.subComandos.bolsa;
 
-import es.serversurvival.objetos.menus.ElegirInversionMenu;
+import es.serversurvival.menus.menus.ElegirInversionMenu;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -23,7 +23,7 @@ public class ValoresBolsa extends BolsaSubCommand {
     }
 
     public void execute(Player player, String[] args) {
-        ElegirInversionMenu elegirInversionMenu = new ElegirInversionMenu(player);
-        elegirInversionMenu.openMenu();
+        ElegirInversionMenu menu = new ElegirInversionMenu(player);
+        menu.openMenu();
     }
 }

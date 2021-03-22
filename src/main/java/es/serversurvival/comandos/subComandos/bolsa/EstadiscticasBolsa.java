@@ -1,7 +1,6 @@
 package es.serversurvival.comandos.subComandos.bolsa;
 
-import es.serversurvival.objetos.mySQL.PosicionesCerradas;
-import es.serversurvival.objetos.mySQL.tablasObjetos.PosicionCerrada;
+import es.serversurvival.mySQL.tablasObjetos.PosicionCerrada;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -37,6 +36,7 @@ public class EstadiscticasBolsa extends BolsaSubCommand {
             if(topOperaicnesMasRentables.get(i).getRentabilidad() >= 0 ){
                 PosicionCerrada operacionCerrada = topOperaicnesMasRentables.get(i);
 
+                String valorNombre = operacionCerrada.getValorNombre();
                 String tipo = operacionCerrada.getTipo();
                 String nombre = operacionCerrada.getNombre();
                 int id = operacionCerrada.getId();
@@ -45,7 +45,7 @@ public class EstadiscticasBolsa extends BolsaSubCommand {
                 double cierre = operacionCerrada.getPrecioCierre();
                 double rentabilidad = operacionCerrada.getRentabilidad();
 
-                player.sendMessage(ChatColor.GOLD + "" + (i+1) + ": " + tipo + " -> " + nombre + " : " + ChatColor.GREEN + "+" + rentabilidad + "% -> +" + formatea.format((cantidad * cierre) - (cantidad * apertura)) + " PC "
+                player.sendMessage(ChatColor.GOLD + "" + (i+1) + "º " + valorNombre + ": " + ChatColor.GREEN + "+" + rentabilidad + "% -> +" + formatea.format((cantidad * cierre) - (cantidad * apertura)) + " PC "
                         + ChatColor.DARK_AQUA + "ID: " + id);
             }
         }
@@ -56,7 +56,7 @@ public class EstadiscticasBolsa extends BolsaSubCommand {
             if(topOpereacionesMenosRentables.get(i).getRentabilidad() < 0){
                 PosicionCerrada operacionCerrada = topOpereacionesMenosRentables.get(i);
 
-                String tipo = operacionCerrada.getTipo();
+                String nombreValor = operacionCerrada.getValorNombre();
                 String nombre = operacionCerrada.getNombre();
                 int id = operacionCerrada.getId();
                 int cantidad = operacionCerrada.getCantidad();
@@ -64,7 +64,7 @@ public class EstadiscticasBolsa extends BolsaSubCommand {
                 double cierre = operacionCerrada.getPrecioCierre();
                 double rentabilidad = operacionCerrada.getRentabilidad();
 
-                player.sendMessage(ChatColor.GOLD + "" + (i + 1) + ": " + tipo  + " -> " + nombre + " : " + ChatColor.RED + rentabilidad + "% -> " + formatea.format((cantidad * cierre) - (cantidad * apertura)) + " PC "
+                player.sendMessage(ChatColor.GOLD + "" + (i + 1) + "º " + nombreValor  + ": " + ChatColor.RED + rentabilidad + "% -> " + formatea.format((cantidad * cierre) - (cantidad * apertura)) + " PC "
                         + ChatColor.DARK_AQUA + "ID:" + id);
             }
         }

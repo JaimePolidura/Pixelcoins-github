@@ -34,5 +34,9 @@ public class JugarAyuda extends AyudaSubCommand {
         p.sendMessage("/warp " + ChatColor.GOLD + " y selecciones donde quieres teletransportarte");
         p.sendMessage("          ");
         p.sendMessage("/sethome " + ChatColor.GOLD + "Para fijar tu casa. " + ChatColor.WHITE + "/home " + ChatColor.GOLD + "Para ir a tu casa");
+        p.sendMessage("          ");
+        p.sendMessage("/back " + ChatColor.GOLD + "Para volver a los sitios donde has muerto");
+        p.sendMessage("          ");
+        p.sendMessage("/perfil " + ChatColor.GOLD + "Para ver todas tus estadisticas");
     }
 }

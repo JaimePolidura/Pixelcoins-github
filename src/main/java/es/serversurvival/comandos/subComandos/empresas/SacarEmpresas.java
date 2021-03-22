@@ -1,8 +1,8 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
-import es.serversurvival.main.Funciones;
-import es.serversurvival.objetos.mySQL.Transacciones;
-import es.serversurvival.objetos.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.util.Funciones;
+import es.serversurvival.mySQL.Transacciones;
+import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -42,23 +42,22 @@ public class SacarEmpresas extends EmpresasSubCommand {
         empresasMySQL.conectar();
         Empresa empresaASacar = empresasMySQL.getEmpresa(nombreEmpresa);
         if (empresaASacar == null) {
-            jugadorPlayer.sendMessage(net.md_5.bungee.api.ChatColor.DARK_RED + "Esa empresa no existe");
+            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
             empresasMySQL.desconectar();
             return;
         }
         if (!empresaASacar.getOwner().equalsIgnoreCase(jugadorPlayer.getName())) {
-            jugadorPlayer.sendMessage(net.md_5.bungee.api.ChatColor.DARK_RED + "No eres due?o de esa empresa");
+            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "No eres due?o de esa empresa");
             empresasMySQL.desconectar();
             return;
         }
         double pixelcoinsEmpresa = empresaASacar.getPixelcoins();
         if (pixelcoinsEmpresa < pixelcoinsASacar) {
-            jugadorPlayer.sendMessage(net.md_5.bungee.api.ChatColor.DARK_RED + "No puedes sacar mas dinero" + "+ del que la empresa tiene");
+            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "No puedes sacar mas dinero" + "+ del que la empresa tiene");
             empresasMySQL.desconectar();
             return;
         }
 
-        Transacciones transaccionesMySQL = new Transacciones();
         transaccionesMySQL.sacarPixelcoinsEmpresa(jugadorPlayer, pixelcoinsASacar, nombreEmpresa);
         empresasMySQL.desconectar();
     }

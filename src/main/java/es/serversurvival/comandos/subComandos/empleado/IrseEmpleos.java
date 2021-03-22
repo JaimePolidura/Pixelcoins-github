@@ -1,13 +1,11 @@
 package es.serversurvival.comandos.subComandos.empleado;
 
-import es.serversurvival.objetos.mySQL.Empresas;
-import es.serversurvival.objetos.mySQL.Jugadores;
-import es.serversurvival.objetos.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.mySQL.Empresas;
+import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class IrseEmpleos extends EmpleosSubCommand {
-    private Empresas empresasMySQL = new Empresas();
     private final String SCNombre = "irse";
     private final String sintaxis = "/empleos irse <empresa>";
     private final String ayuda = "irse de un trabajo";

@@ -1,20 +1,16 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
-import es.serversurvival.main.Funciones;
-import es.serversurvival.objetos.mySQL.Empleados;
-import es.serversurvival.objetos.mySQL.Empresas;
-import es.serversurvival.objetos.mySQL.tablasObjetos.Empleado;
-import es.serversurvival.objetos.mySQL.tablasObjetos.Empresa;
-import es.serversurvival.objetos.solicitudes.ContratarSolicitud;
-import es.serversurvival.objetos.solicitudes.Solicitud;
+import es.serversurvival.util.Funciones;
+import es.serversurvival.menus.MenuManager;
+import es.serversurvival.menus.menus.solicitudes.ContratarSolicitud;
+import es.serversurvival.mySQL.Empleados;
+import es.serversurvival.mySQL.tablasObjetos.Empleado;
+import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.security.IdentityScope;
-
 public class ContratarEmpresas extends EmpresasSubCommand {
-    private Empleados empleadosMySQL = new Empleados();
     private final String SCNombre = "contratar";
     private final String sintaxis = "/empresas contratar <jugador> <empresa> <sueldo> <tipo sueldo (/ayuda empresas)> [cargo]";
     private final String ayuda = "Contratar a un juagdor a tu empresa: <sueldo> cantidad de pixel coins que le vas a pagar, <tipo> frequencia de pago de sueldo (/ayuda empresario), [cargo] es opcional";
@@ -91,12 +87,12 @@ public class ContratarEmpresas extends EmpresasSubCommand {
             p.sendMessage(ChatColor.DARK_RED + "Ese jugador ya esta contratado / ya le has enviado solicitud");
             return;
         }
-        if (Solicitud.haSidoSolicitado(args[1])) {
+        if(MenuManager.getByPlayer(args[1]) != null){
             p.sendMessage(ChatColor.DARK_RED + "A ese jugador ya le han enviado una solicitud/ya le has enviado una solicitud");
             return;
         }
 
-        ContratarSolicitud contratarSolicitud = new ContratarSolicitud(p.getName(), jugadorAContratarPlayer.getName(), args[2], sueldo, args[4], cargo);
-        contratarSolicitud.enviarSolicitud();
+        ContratarSolicitud solicitud = new ContratarSolicitud(p.getName(), jugadorAContratarPlayer.getName(), args[2], sueldo, args[4], cargo);
+        solicitud.enviarSolicitud();
     }
 }

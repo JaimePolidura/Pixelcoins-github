@@ -1,14 +1,14 @@
 package es.serversurvival.comandos.subComandos.deudas;
 
-import es.serversurvival.main.Funciones;
-import es.serversurvival.objetos.mySQL.Jugadores;
-import es.serversurvival.objetos.solicitudes.PrestamosSolicitud;
+import es.serversurvival.mySQL.MySQL;
+import es.serversurvival.util.Funciones;
+import es.serversurvival.menus.MenuManager;
+import es.serversurvival.menus.menus.solicitudes.PrestamoSolicitud;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class PrestarDeudas extends DeudasSubCommand {
-    private Jugadores jugadoresMySQL = new Jugadores();
     private final String scnombre = "prestar";
     private final String sintaxis = "/deudas prestar <jugador> <dinero> <dias> [interes]";
     private final String ayuda = "prestar una deuda en pixelcoins en un plazo de unos diads. /ayuda deudas";
@@ -58,21 +58,22 @@ public class PrestarDeudas extends DeudasSubCommand {
             jugadorQueEndeudaPlayer.sendMessage(ChatColor.DARK_RED + "Introduce valores de tal modo que el dinero sea superior a los dias");
             return;
         }
-        if (PrestamosSolicitud.haSidoSolicitado(jugadorAEndeudarPlayer.getName())) {
+        if(MenuManager.getByPlayer(jugadorAEndeudarPlayer.getName()) != null){
             jugadorQueEndeudaPlayer.sendMessage(ChatColor.DARK_RED + "A ese jugador ya le has enviado una solicitud / ya le han enviado una solicitud");
             return;
         }
 
-        jugadoresMySQL.conectar();
-        double pixelcoins = jugadoresMySQL.getDinero(jugadorQueEndeudaPlayer.getName());
-        int aPrestar = Funciones.interes(dinero, interes);
+        MySQL.conectar();
+        double pixelcoins = jugadoresMySQL.getJugador(jugadorQueEndeudaPlayer.getName()).getPixelcoin();
+        int aPrestar = Funciones.aumentarPorcentaje(dinero, interes);
         if (aPrestar > pixelcoins) {
             jugadorQueEndeudaPlayer.sendMessage(ChatColor.DARK_RED + "No puedes prestar mas dinero del que tienes");
+            MySQL.desconectar();
             return;
         }
-        jugadoresMySQL.desconectar();
+        MySQL.desconectar();
 
-        PrestamosSolicitud prestamosSolicitud = new PrestamosSolicitud(jugadorQueEndeudaPlayer.getName(), jugadorAEndeudarPlayer.getName(), dinero, dias, interes);
-        prestamosSolicitud.enviarSolicitud();
+        PrestamoSolicitud solicitud = new PrestamoSolicitud(jugadorQueEndeudaPlayer.getName(), jugadorAEndeudarPlayer.getName(), dinero, dias, interes);
+        solicitud.enviarSolicitud();
     }
 }

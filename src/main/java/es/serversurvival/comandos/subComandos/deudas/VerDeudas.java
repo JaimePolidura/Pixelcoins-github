@@ -1,6 +1,6 @@
 package es.serversurvival.comandos.subComandos.deudas;
 
-import es.serversurvival.objetos.mySQL.Deudas;
+import es.serversurvival.menus.menus.DeudasMenu;
 import org.bukkit.entity.Player;
 
 public class VerDeudas extends DeudasSubCommand {
@@ -20,9 +20,8 @@ public class VerDeudas extends DeudasSubCommand {
         return ayuda;
     }
 
-    public void execute(Player p, String[] args) {
-        deudasMySQL.conectar();
-        deudasMySQL.mostarDeudas(p);
-        deudasMySQL.desconectar();
+    public void execute(Player player, String[] args) {
+        DeudasMenu menu = new DeudasMenu(player);
+        menu.openMenu();
     }
 }

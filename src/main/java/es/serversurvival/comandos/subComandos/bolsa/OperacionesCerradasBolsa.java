@@ -1,8 +1,7 @@
 package es.serversurvival.comandos.subComandos.bolsa;
 
-import es.serversurvival.main.Funciones;
-import es.serversurvival.objetos.mySQL.PosicionesCerradas;
-import es.serversurvival.objetos.mySQL.tablasObjetos.PosicionCerrada;
+import es.serversurvival.util.Funciones;
+import es.serversurvival.mySQL.tablasObjetos.PosicionCerrada;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 

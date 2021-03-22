@@ -15,8 +15,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class CommandManager implements CommandExecutor {
     private static Set<Comando> comandos = new HashSet<>();
@@ -24,7 +23,6 @@ public class CommandManager implements CommandExecutor {
 
     public CommandManager() {
         comandos.add(new Dinero());
-        comandos.add(new Estadisticas());
         comandos.add(new Pagar());
         comandos.add(new Top());
         comandos.add(new CancelarDeudaDeudas());
@@ -58,7 +56,6 @@ public class CommandManager implements CommandExecutor {
         comandos.add(new EmpresarioAyuda());
         comandos.add(new EmpleoAyuda());
         comandos.add(new DineroAyuda());
-        comandos.add(new EstadisticasAyuda());
         comandos.add(new DeudaAyuda());
         comandos.add(new TiendaAyuda());
         comandos.add(new PrecioBolsa());
@@ -72,6 +69,12 @@ public class CommandManager implements CommandExecutor {
         comandos.add(new BolsaAyuda());
         comandos.add(new VerCarteraBolsa());
         comandos.add(new CCuenta());
+        comandos.add(new Perfil());
+        comandos.add(new VenderJugador());
+        comandos.add(new VenderCorto());
+        comandos.add(new ComprarCorto());
+        comandos.add(new PerBolsa());
+        comandos.add(new DividendoBolsa());
 
         subComandos.add(new MisTrabajosEmpleos());
         subComandos.add(new IrseEmpleos());
@@ -86,6 +89,10 @@ public class CommandManager implements CommandExecutor {
         subComandos.add(new OperacionesCerradasBolsa());
         subComandos.add(new AyudaBolsa());
         subComandos.add(new VerCarteraBolsa());
+        subComandos.add(new VenderCorto());
+        subComandos.add(new ComprarCorto());
+        subComandos.add(new PerBolsa());
+        subComandos.add(new DividendoBolsa());
 
         subComandos.add(new CancelarDeudaDeudas());
         subComandos.add(new PagarDeudaDeudas());
@@ -99,7 +106,6 @@ public class CommandManager implements CommandExecutor {
         subComandos.add(new EmpresarioAyuda());
         subComandos.add(new EmpleoAyuda());
         subComandos.add(new DineroAyuda());
-        subComandos.add(new EstadisticasAyuda());
         subComandos.add(new DeudaAyuda());
         subComandos.add(new BolsaAyuda());
 
@@ -129,6 +135,7 @@ public class CommandManager implements CommandExecutor {
         String cn = command.getName();
 
         Comando comando = this.getComando(cn);
+
         if (comando == null) {
             p.sendMessage(ChatColor.DARK_RED + "Comando no encontrado: /ayuda");
             return true;
@@ -153,6 +160,10 @@ public class CommandManager implements CommandExecutor {
         return true;
     }
 
+    public static Set<SubComando> getSubComandos() {
+        return subComandos;
+    }
+
     private Comando getComando(String cn) {
         for (Comando comando : comandos) {
             if (comando.getCNombre().equalsIgnoreCase(cn)) {
@@ -169,9 +180,5 @@ public class CommandManager implements CommandExecutor {
             }
         }
         return null;
-    }
-
-    public static Set<SubComando> getSubComandos() {
-        return subComandos;
     }
 }

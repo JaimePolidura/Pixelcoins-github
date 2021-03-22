@@ -1,8 +1,8 @@
 package es.serversurvival.comandos.subComandos.bolsa;
 
-import es.serversurvival.main.Funciones;
-import es.serversurvival.objetos.mySQL.PosicionesAbiertas;
-import es.serversurvival.objetos.mySQL.tablasObjetos.PosicionAbierta;
+import es.serversurvival.mySQL.MySQL;
+import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
+import es.serversurvival.util.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -33,20 +33,40 @@ public class VerCarteraBolsa extends BolsaSubCommand {
         }
         String nombreJugadorAVer = args[1];
 
-        posicionesAbiertasMySQL.conectar();
-        double totalInvertido = posicionesAbiertasMySQL.getTotalInvertido(player.getName());
-        HashMap<PosicionAbierta, Integer> carteraDeValoresConPeso = Funciones.sortMapByValueDecre(posicionesAbiertasMySQL.getPosicionesAbiertasConPesoJugador(player.getName(), totalInvertido));
-        posicionesAbiertasMySQL.desconectar();
+        MySQL.conectar();
+        double totalInvertido = posicionesAbiertasMySQL.getAllPixeloinsEnAcciones(nombreJugadorAVer);
+        Map<String, Integer> posicionesConPeso = getPesoCarteraAcciones(nombreJugadorAVer, totalInvertido);
 
         player.sendMessage(ChatColor.GOLD + "" + "------------------------------");
         player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "   LAS CARTERA DE " + nombreJugadorAVer);
-        for(Map.Entry<PosicionAbierta, Integer> entry : carteraDeValoresConPeso.entrySet()){
+        for(Map.Entry<String, Integer> entry : posicionesConPeso.entrySet()){
+            String nombreValor = llamadasApiMySQL.getLlamadaAPI(entry.getKey()).getNombreValor();
+
             if(entry.getValue() == 0){
-                player.sendMessage(ChatColor.GOLD + entry.getKey().getNombre() + " ( " + entry.getKey().getTipo() + " ) peso: 0% - 1% %");
+                player.sendMessage(ChatColor.GOLD + nombreValor + ": 0% - 1% %");
             }else {
-                player.sendMessage(ChatColor.GOLD + entry.getKey().getTipo() + "( " + entry.getKey().getNombre() + " ) peso: " + formatea.format(entry.getValue()) + "%");
+                player.sendMessage(ChatColor.GOLD + nombreValor + ": " + formatea.format(entry.getValue()) + "%");
             }
         }
         player.sendMessage(ChatColor.GOLD + "" + "------------------------------");
+
+        MySQL.desconectar();
+    }
+    
+    private Map<String, Integer> getPesoCarteraAcciones (String jugador, double totalInvertido){
+        Map<PosicionAbierta, Integer> posicionAbiertasPesoSinOrdenar = posicionesAbiertasMySQL.getPosicionesAbiertasConPesoJugador(jugador, totalInvertido);
+        Map<String, Integer> posicionesAbiertasOrednadas = new HashMap<>();
+
+        for(Map.Entry<PosicionAbierta, Integer> entry : posicionAbiertasPesoSinOrdenar.entrySet()){
+            if(posicionesAbiertasOrednadas.get(entry.getKey().getNombre()) != null){
+                posicionesAbiertasOrednadas.put(entry.getKey().getNombre(), posicionesAbiertasOrednadas.get(entry.getKey().getNombre()) + entry.getValue());
+            }else{
+                posicionesAbiertasOrednadas.put(entry.getKey().getNombre(), entry.getValue());
+            }
+        }
+
+        posicionesAbiertasOrednadas = Funciones.sortMapByValueDecre(posicionesAbiertasOrednadas);
+
+        return posicionesAbiertasOrednadas;
     }
 }

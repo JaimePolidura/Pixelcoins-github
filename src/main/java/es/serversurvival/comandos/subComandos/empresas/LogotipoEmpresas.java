@@ -1,7 +1,7 @@
 package es.serversurvival.comandos.subComandos.empresas;
 
-import es.serversurvival.objetos.mySQL.Empresas;
-import es.serversurvival.objetos.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.mySQL.MySQL;
+import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -32,20 +32,20 @@ public class LogotipoEmpresas extends EmpresasSubCommand {
             jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Tienes que seleccionar un objeto en la mano");
         }
 
-        empresasMySQL.conectar();
+        MySQL.conectar();
         Empresa empresaAEditar = empresasMySQL.getEmpresa(args[1]);
         if (empresaAEditar == null) {
-            jugadorPlayer.sendMessage(net.md_5.bungee.api.ChatColor.DARK_RED + "Esa empresa no existe");
-            empresasMySQL.desconectar();
+            jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Esa empresa no existe");
+            MySQL.desconectar();
             return;
         }
         if (!empresaAEditar.getOwner().equalsIgnoreCase(jugadorPlayer.getName())) {
             jugadorPlayer.sendMessage(ChatColor.DARK_RED + "No eres el dueño de esa empresa");
-            empresasMySQL.desconectar();
+            MySQL.desconectar();
             return;
         }
 
         empresasMySQL.cambiarIcono(args[1], jugadorPlayer, nuevoLogotipo);
-        empresasMySQL.desconectar();
+        MySQL.desconectar();
     }
 }

@@ -1,21 +1,27 @@
 package es.serversurvival.comandos.subComandos.bolsa;
 
-import es.serversurvival.main.Funciones;
+import com.oracle.xmlns.internal.webservices.jaxws_databinding.SoapBindingParameterStyle;
+import es.serversurvival.mySQL.*;
+import es.serversurvival.mySQL.enums.VALORES;
+import es.serversurvival.util.Funciones;
 import es.serversurvival.main.Pixelcoin;
-import es.serversurvival.objetos.apiHttp.IEXCloud_API;
-import es.serversurvival.objetos.mySQL.Jugadores;
-import es.serversurvival.objetos.mySQL.LlamadasApi;
-import es.serversurvival.objetos.mySQL.PosicionesAbiertas;
-import es.serversurvival.objetos.mySQL.Transacciones;
+import es.serversurvival.apiHttp.IEXCloud_API;
+import net.minecraft.server.v1_16_R1.Scoreboard;
+import org.apache.commons.lang.ObjectUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Score;
 
+import javax.annotation.Nullable;
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
 
 public class InvertirBolsa extends BolsaSubCommand {
-    private Transacciones transaccionedMySQL = new Transacciones();
-    private Jugadores jugadoresMySQL = new Jugadores();
     private final String SCNombre = "invertir";
     private final String sintaxis = "/bolsa invertir <ticker Ejmeplo amazon: AMZN> <nAcciones>";
     private final String ayuda = "Invertir en acciones con un ticker (Nombre identificatorio de una accion de una empresa, ver en es.investing.com o en /bolsa valores) y las acciones a comprar";
@@ -39,6 +45,9 @@ public class InvertirBolsa extends BolsaSubCommand {
             jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: " + this.sintaxis);
             return;
         }
+
+        File xd = new File("xd");
+
         if(!Funciones.esInteger(args[2])){
             jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Necesitas introducir un numero de acciones a comprar no texto");
             return;
@@ -51,24 +60,33 @@ public class InvertirBolsa extends BolsaSubCommand {
         String ticker = args[1];
 
         Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
-            jugadoresMySQL.conectar();
+            MySQL.conectar();
             try {
                 jugadorPlayer.sendMessage(ChatColor.RED + "Cargando...");
-                precioAccion = IEXCloud_API.getOnlyPrice(ticker);
 
+                if(llamadasApiMySQL.estaReg(ticker)){
+                    precioAccion = llamadasApiMySQL.getLlamadaAPI(ticker).getPrecio();
+                }else {
+                    precioAccion = IEXCloud_API.getOnlyPrice(ticker);
+                }
                 if(jugadoresMySQL.getJugador(jugadorPlayer.getName()).getPixelcoin() < (precioAccion * nAccinesAComprar)){
-                    jugadorPlayer.sendMessage(net.md_5.bungee.api.ChatColor.DARK_RED + "No tienes las suficientes pixelcoins para pagar " + nAccinesAComprar + " " + ticker + " a " + formatea.format(precioAccion) + " $ -> " + formatea.format(precioAccion * nAccinesAComprar) + " PC");
+                    jugadorPlayer.sendMessage(ChatColor.DARK_RED + "No tienes las suficientes pixelcoins para pagar " + nAccinesAComprar + " " + ticker + " a " + formatea.format(precioAccion) + " $ -> " + formatea.format(precioAccion * nAccinesAComprar) + " PC");
                     return;
                 }
+                
+                String nombreValor = IEXCloud_API.getNombreEmpresa(ticker);
+                nombreValor = Funciones.quitarCaracteres(nombreValor, '.', ',');
+                nombreValor = Funciones.quitarPalabrasEntreEspacios(nombreValor, "group", "inc", "co", "corp");
 
-                transaccionedMySQL.comprarUnidadBolsa(PosicionesAbiertas.TIPOS.ACCIONES.toString(), ticker, "acciones", precioAccion, nAccinesAComprar, jugadorPlayer);
+                transaccionesMySQL.comprarUnidadBolsa(VALORES.ACCIONES.toString(), ticker.toUpperCase(), nombreValor,"acciones", precioAccion, nAccinesAComprar, jugadorPlayer);
+                llamadasApiMySQL.actualizarSimbolo(ticker);
 
             }catch (IOException e) {
                 jugadorPlayer.sendMessage(ChatColor.DARK_RED + "Ticker no encontrado, los tickers se ven en /bolsa valores o en inernet como en es.investing.com. Solo se puede invertir en acciones que cotizen en Estados Unidos");
             }catch (Exception e){
                 e.printStackTrace();
             }
-            jugadoresMySQL.desconectar();
+            MySQL.desconectar();
         }, 0L);
     }
 }

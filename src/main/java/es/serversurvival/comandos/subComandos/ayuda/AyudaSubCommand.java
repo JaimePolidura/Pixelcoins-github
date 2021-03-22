@@ -19,7 +19,6 @@ public abstract class AyudaSubCommand extends SubComando {
         p.sendMessage(ChatColor.YELLOW + "/ayuda deuda");
         p.sendMessage(ChatColor.YELLOW + "/ayuda pixelcoins");
         p.sendMessage(ChatColor.YELLOW + "/ayuda tienda");
-        p.sendMessage(ChatColor.YELLOW + "/ayuda estadisticas");
         p.sendMessage(ChatColor.YELLOW + "/ayuda normas");
         p.sendMessage(ChatColor.YELLOW + "/ayuda jugar");
     }

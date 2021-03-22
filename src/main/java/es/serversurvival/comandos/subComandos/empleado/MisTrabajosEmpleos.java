@@ -1,5 +1,6 @@
 package es.serversurvival.comandos.subComandos.empleado;
 
+import es.serversurvival.menus.menus.EmpleosMenu;
 import org.bukkit.entity.Player;
 
 public class MisTrabajosEmpleos extends EmpleosSubCommand {
@@ -20,8 +21,7 @@ public class MisTrabajosEmpleos extends EmpleosSubCommand {
     }
 
     public void execute(Player player, String[] args) {
-        empleadosMySQL.conectar();
-        empleadosMySQL.mostarTrabajos(player);
-        empleadosMySQL.desconectar();
+        EmpleosMenu menu = new EmpleosMenu(player);
+        menu.openMenu();
     }
 }

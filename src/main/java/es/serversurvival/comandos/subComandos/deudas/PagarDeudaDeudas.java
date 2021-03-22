@@ -1,14 +1,12 @@
 package es.serversurvival.comandos.subComandos.deudas;
 
-import es.serversurvival.main.Funciones;
-import es.serversurvival.objetos.mySQL.Deudas;
-import es.serversurvival.objetos.mySQL.Jugadores;
-import es.serversurvival.objetos.mySQL.tablasObjetos.Deuda;
+import es.serversurvival.util.Funciones;
+import es.serversurvival.mySQL.Jugadores;
+import es.serversurvival.mySQL.tablasObjetos.Deuda;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class PagarDeudaDeudas extends DeudasSubCommand {
-    private Jugadores jugadoresMySQL = new Jugadores();
     private String scnombre = "pagar";
     private String sintaxis = "/deudas pagar <id>";
     private String ayuda = "Pagar toda la deuda, la id se ve en /deudas ver";
@@ -48,9 +46,9 @@ public class PagarDeudaDeudas extends DeudasSubCommand {
             playerDeudor.sendMessage(ChatColor.DARK_RED + "No eres deudor de esa deuda, las ids se ven en el comando /deudas");
             return;
         }
-        if (jugadoresMySQL.getDinero(playerDeudor.getName()) < deudaAPagar.getPixelcoins()) {
+        if (jugadoresMySQL.getJugador(playerDeudor.getName()).getPixelcoin() < deudaAPagar.getPixelcoins()) {
             deudasMySQL.desconectar();
-            playerDeudor.sendMessage(ChatColor.DARK_RED + "No tienes las suficientes pixelcoins para pagar esa deuda, pixelcoins requeridas: " + net.md_5.bungee.api.ChatColor.GREEN + formatea.format(deudaAPagar.getPixelcoins()) + " PC");
+            playerDeudor.sendMessage(ChatColor.DARK_RED + "No tienes las suficientes pixelcoins para pagar esa deuda, pixelcoins requeridas: " + ChatColor.GREEN + formatea.format(deudaAPagar.getPixelcoins()) + " PC");
             return;
         }
 

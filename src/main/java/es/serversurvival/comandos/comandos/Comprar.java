@@ -1,7 +1,9 @@
 package es.serversurvival.comandos.comandos;
 
 import es.serversurvival.comandos.Comando;
-import es.serversurvival.objetos.mySQL.Transacciones;
+import es.serversurvival.mySQL.MySQL;
+import es.serversurvival.mySQL.Transacciones;
+import es.serversurvival.util.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -27,24 +29,18 @@ public class Comprar extends Comando {
             p.sendMessage(ChatColor.DARK_RED + "Uso incorrecto: " + this.sintaxis);
             return;
         }
-
-        String nombreempresaa = args[0];
-        String precioS = args[1];
-        double precioD = 0;
-        try {
-            precioD = Double.parseDouble(precioS);
-            if (precioD <= 0) {
-                p.sendMessage(ChatColor.DARK_RED + "A ser posible mete numeros que sean negativos o que no sean ceros");
-                return;
-            }
-        } catch (NumberFormatException e) {
+        if(!Funciones.esDouble(args[1])){
             p.sendMessage(ChatColor.DARK_RED + "A ser posible mete numero no texto");
             return;
         }
+        double precioD = Double.parseDouble(args[1]);
+        if(precioD <= 0){
+            p.sendMessage(ChatColor.DARK_RED + "A ser posible mete numeros que sean negativos o que no sean ceros");
+            return;
+        }
 
-        Transacciones transaccionesMySQL = new Transacciones();
-        transaccionesMySQL.conectar();
-        transaccionesMySQL.comprarServivio(nombreempresaa, precioD, p);
-        transaccionesMySQL.desconectar();
+        MySQL.conectar();
+        transaccionesMySQL.comprarServivio(args[0], precioD, p);
+        MySQL.desconectar();
     }
 }

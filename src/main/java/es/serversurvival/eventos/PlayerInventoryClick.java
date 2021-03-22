@@ -1,61 +1,43 @@
 package es.serversurvival.eventos;
 
-import es.serversurvival.objetos.menus.Clickleable;
-import es.serversurvival.objetos.menus.Menu;
-import es.serversurvival.objetos.solicitudes.ComprarBolsaSolicitud;
-import es.serversurvival.objetos.solicitudes.Solicitud;
+import es.serversurvival.menus.Menu;
+import es.serversurvival.menus.MenuManager;
+import es.serversurvival.menus.menus.CanGoBack;
+import es.serversurvival.menus.menus.Clickable;
+import es.serversurvival.menus.menus.confirmaciones.Confirmacion;
+import es.serversurvival.menus.menus.Paginated;
+import es.serversurvival.menus.menus.solicitudes.Solicitud;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-public class PlayerInventoryClick implements Listener {
-
+public final class PlayerInventoryClick implements Listener {
     @EventHandler
-    public void onPlayerInventoryClick(InventoryClickEvent e) throws Exception {
-        String inNombre = e.getView().getTitle().toString();
-        Player p = (Player) e.getWhoClicked();
+    public void onPlayerInventoryClick(InventoryClickEvent event) {
+        if(event.getCurrentItem() == null || event.getView() == null) return;
 
-        try {
-            Menu menu = Menu.getByPlayer(p);
-            if(menu != null){
-                e.setCancelled(true);
-                if(menu instanceof Clickleable && menu.titulo().equalsIgnoreCase(inNombre)){
-                    ((Clickleable) menu).onInventoryClick(e);
-                }
+        String inNombre = event.getView().getTitle();
+        Player jugadorPlayer = (Player) event.getWhoClicked();
+        String clickedItemName = event.getCurrentItem().getType().toString();
+
+        Menu menu = MenuManager.getByPlayer(jugadorPlayer.getName());
+        if (menu != null) {
+            event.setCancelled(true);
+
+            if(menu instanceof Paginated){
+                ((Paginated) menu).performClick(event.getCurrentItem().getItemMeta().getDisplayName());
             }
 
-            Solicitud solicitud = Solicitud.getByDestinatario(p.getName());
-            if(solicitud != null){
-                String tituloSol = solicitud.getTitulo();
-                if (inNombre.equalsIgnoreCase(tituloSol)) {
-                    solicitud = Solicitud.getByDestinatario(p.getName());
-                    String nombreItem = null;
-                    try {
-                        nombreItem = e.getCurrentItem().getType().toString();
-                    } catch (NullPointerException ex) {
-                        return;
-                    }
-
-                    switch (nombreItem) {
-                        case "GREEN_WOOL":
-                            solicitud.aceptar();
-                            break;
-                        case "RED_WOOL":
-                            solicitud.cancelar();
-                            break;
-                        default:
-                            if (solicitud instanceof ComprarBolsaSolicitud && nombreItem != "AIR") {
-                                ComprarBolsaSolicitud comprarAccionSolicitud = (ComprarBolsaSolicitud) solicitud;
-                                comprarAccionSolicitud.updateCantidad(e.getCurrentItem());
-                                e.setCancelled(true);
-                                return;
-                            }
-                    }
-                }
+            if(menu instanceof CanGoBack && ((CanGoBack) menu).getNameItemGoBack().equalsIgnoreCase(clickedItemName)) {
+                ((CanGoBack) menu).goBack();
+            }else if (menu instanceof Clickable) {
+                ((Clickable) menu).onClick(event);
+            }else if(menu instanceof Solicitud){
+                ((Solicitud) menu).onClick(event);
+            }else if(menu instanceof Confirmacion){
+                ((Confirmacion) menu).onClick(event);
             }
-        } catch (Exception exception) {
-
         }
     }
 }
