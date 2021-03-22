@@ -1,0 +1,30 @@
+package es.serversurvival.comandos.comandos;
+
+import es.serversurvival.comandos.Comando;
+import es.serversurvival.objetos.mySQL.Ofertas;
+import org.bukkit.entity.Player;
+
+public class TiendaComando extends Comando {
+    private final String CNombre = "tienda";
+    private final String sintaxis = "/tienda";
+    private final String ayuda = "mostrar la tienda de objetos";
+
+    public String getCNombre() {
+        return CNombre;
+    }
+
+    public String getSintaxis() {
+        return sintaxis;
+    }
+
+    public String getAyuda() {
+        return ayuda;
+    }
+
+    public void execute(Player p, String[] args) {
+        Ofertas o = new Ofertas();
+        o.conectar();
+        o.mostarOfertas(p);
+        o.desconectar();
+    }
+}

@@ -1,7 +1,7 @@
 package es.serversurvival.eventos;
 
-import es.serversurvival.objetos.Mensajes;
-import es.serversurvival.task.ScoreboardPlayer;
+import es.serversurvival.objetos.mySQL.Mensajes;
+import es.serversurvival.objetos.task.ScoreboardPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,13 +16,10 @@ public class PlayerJoin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent evento) {
         Player p = evento.getPlayer();
 
-        try {
-            m.conectar();
-            p.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "Tienes " + m.getNMensajes(p.getName()) + " pendientes " + ChatColor.AQUA + "  /mensajes");
-            m.desconectar();
-        } catch (Exception e) {
+        m.conectar();
+        p.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "Tienes " + m.getNMensajes(p.getName()) + " pendientes " + ChatColor.AQUA + "  /mensajes");
+        m.desconectar();
 
-        }
         sp = new ScoreboardPlayer();
         sp.updateScoreboard(p);
     }

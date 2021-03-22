@@ -1,6 +1,6 @@
 name: PixelCoins
 main: es.serversurvival.main.Pixelcoin
-version: 1.3
+version: 4.0
 api-version: "1.14"
 commands:
   dinero:
@@ -9,117 +9,36 @@ commands:
   pagar:
     description: pagar dinero a otro jugador
     usage: /<command> <nombre jugador> <cantidad>
-  topricos:
-    description: mostrar los 3 más ricos del servidor
-    usage: /<command>
-  toppobres:
-    description: mostrar los 3 más pobres del servidor
-    usage: /<command>
-  tienda:
-    description: Comando para ver la tienda
-    usage: /<command>
-  vender:
-    description: Comando para vender un objeto en la mano
-    usage: /<command> <precioa vender /item>
-  ayuda:
-    description: mostrar ayuda
-    usage: /<command> <tipoAyuda>
   estadisticas:
     description: Ver todos tus objetos vendidos, gastos, ingresos y beneficios
     usage: /<command>
-  topvendedores:
-    description: Ver los 3 jugadores que mas han vendido en la tienda y le han pagado
-    usage: /<command>
-  prestar:
-    description: prestar una deuda con un interes y un max de tiempo
-    usage: /<command> <jugador> <dinero> <dias> <interes>
-  aceptar:
-    description: aceptar una peticion
-    usage: /<command>
-  rechazar:
-    description: rechazar una peticion
-    usage: /<command>
   deudas:
+    description: Comandos relacionados con las empresas
+    usage: /<command> <subComandos...>
+  top:
     description: Ver a los jugadores que te deben y los que debes
     usage: /<command>
-  topfiables:
-    description: ver los que mas veces han pagado la deuda
+  tienda:
+    description: mostrar la tienda de objetos
     usage: /<command>
-  topmenosfiables:
-    description: ver los que menos han podido pagar la deuda
-    usage: /<command> <tipoAyuda>
-  crearempresa:
-    description: crear una empresa
-    usage: /<command> <nombre> <description>
-  depositar:
-    description: depositar dinero en tu empresa
-    usage: /<command> <nombre> <pixelcoins>
-  sacar:
-    description: sacar dinero de tu empresa
-    usage: /<command> <nombre> <pixelcoins>
-  logotipo:
-    description: poner logotipo a tu empresa
-    usage: /<command> <nombre>
-  empresas:
-    description: mostar todas las empresas
-    usage: /<command>
-  contratar:
-    description: Contratar a jugadores
-    usage: /<command> <nombreJugador> <empresa> <sueldo> <tipo sueldo> <cargo>
-  despedir:
-    description: despedir a jugadores
-    usage: /<command> <nombreJugador> <empresa> <razon>
-  aceptarTrabajo:
-    description: Aceptar la oferta de trabajar en una empresa
-    usage: /<command>
-  rechazarTrabajo:
-    description: Rechazar la oferta de trabajar en una empresa
-    usage: /<command>
-  irse:
-    description: Irese de una empresa
-    usage: /<command> <empresa>
-  editarEmpleado:
-    description: editar valores del empleado en una empresa
-    usage: /<command> <empresa> <jugador> <tipo> <valor>
-  venderempresa:
-    description: vender una empresa a un jugador
-    usage: /<command> <empresa> <jugador> <precio>
-  aceptarcompra:
-    description: aceptar una solicitud para comprar una empresa a un jugador
-    usage: /<command>
-  rechazarcompra:
-    description: rechazar una compra de empresa a un jugador
-    usage: /<command>
-  miempresa:
-    description: ver las estadisticas de tu empresa
-    usage: /<command> <empresa>
+  vender:
+    description: vender objetos en la tienda a un precio, para retirarlos en /tienda
+    usage: /<command> <precio>
   mensajes:
-    description: ver tus mensajes pendientes
+    description: ver todos los mensajes pendientes
     usage: /<command>
-  editarnombre:
-    description: cambiar el nombre de tu empresa
-    usage: /<command> <empresa> <nuevonombre>
-  mistrabajos:
-    description: ver en todo lo que trabajas
-    usage: /<command>
-  borrarempresa:
-    description: borrar tu empresa
-    usage: /<command> <nombre>
-  confirmarborrar:
-    description: confirmar que vas a borrar tu empresa
-    usage: /<command>
-  cancelarborrar:
-    description: cancelar que vas a borrar tu empresa
-    usage: /<command>
+  empresas:
+    description: comandos relacionados con la empresas
+    usage: /<command> <subcommands...>
   comprar:
-    description: comprar un producto/servicio de una empresa
+    description: comprar un servicio de una empresa por pixelcoins
     usage: /<command> <empresa> <precio>
-  editardescripccion:
-    description: editar la descripccion de tu empresa
-    usage: /<command> <empresa> <descripcion>
-  pagardeuda:
-    description: pagar la deuda completa que debes a un acredor
-    usage: /<command> <id>
-  cancelardeuda:
-    description: cancelar la deuda a un jugador
-    usage: /<command> <id>
+  empleos:
+    description: Comandos relacionados con los trabajos
+    usage: /<command> <subComandos...>
+  ayuda:
+    description: ver las ayudas
+    usage: /<command> <ayuda>
+  bolsa:
+    description: comando relacionado con los comandos de la bolsa
+    usage: /<command> <subComandos...>

@@ -1,20 +1,22 @@
 package es.serversurvival.main;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import net.md_5.bungee.api.ChatColor;
 
 
-public class Funciones {
+public final class Funciones {
 
     //Conseguir los espacios libres de un jugador
-    public int espaciosLibres(Inventory inventory) {
+    public static int espaciosLibres(Inventory inventory) {
         int el = 36;
         for (ItemStack is : inventory.getContents()) {
             if (is == null) {
@@ -27,7 +29,7 @@ public class Funciones {
     }
 
     //Comparar dos locations
-    public boolean comparar(Location loc1, Location loc2) {
+    public static boolean comparar(Location loc1, Location loc2) {
         if (loc1.getBlockX() == loc2.getBlockX() && loc1.getBlockY() == loc2.getBlockY() && loc1.getBlockZ() == loc2.getBlockZ()) {
             return true;
         } else {
@@ -36,7 +38,7 @@ public class Funciones {
     }
 
     //Delvolver con array todos los slots libres que ocupara un numero de bloques
-    public int[] slotsItem(int n, int slotsLibres) {
+    public static int[] slotsItem(int n, int slotsLibres) {
         int[] arr = new int[slotsLibres];
 
         for (int i = 0; i < slotsLibres; i++) {
@@ -52,7 +54,7 @@ public class Funciones {
     }
 
     //Aumentar cantidad en un %
-    public int interes(int num, int interes) {
+    public static int interes(int num, int interes) {
         double n = (double) num;
         double i = (double) interes;
 
@@ -62,7 +64,7 @@ public class Funciones {
         return resultado;
     }
 
-    public ArrayList<String> dividirDesc(ArrayList<String> lore, String descripcion, int k) {
+    public static ArrayList<String> dividirDesc(ArrayList<String> lore, String descripcion, int k) {
         char[] descripcionChar = descripcion.toCharArray();
         String a = "";
         int pos = 0;
@@ -99,14 +101,118 @@ public class Funciones {
         return lore;
     }
 
-    public int diferenciaDias(Date d1, Date d2) {
+    public static long diferenciaDias(Date d1, Date d2) {
         long difMil = Math.abs(d1.getTime() - d2.getTime());
         long dif = TimeUnit.DAYS.convert(difMil, TimeUnit.MILLISECONDS);
 
-        return (int) dif;
+        return dif;
     }
 
-    public double rentabilidad(double ingresos, double beneficios) {
+    public static double rentabilidad(double ingresos, double beneficios) {
         return Math.round((beneficios / ingresos) * 100);
+    }
+
+    public static double diferenciaPorcntual(double a, double b) {
+        return (b - a) / a * 100;
+    }
+
+    public static HashMap<String, Double> sortByValueCre(HashMap<String, Double> hm) {
+        // Create a list from elements of HashMap
+        List<Map.Entry<String, Double>> list = new LinkedList<Map.Entry<String, Double>>(hm.entrySet());
+
+        // Sort the list
+        Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {
+            public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
+                return (o1.getValue()).compareTo(o2.getValue());
+            }
+        });
+
+        // put data from sorted list to hashmap
+        HashMap<String, Double> temp = new LinkedHashMap<String, Double>();
+        for (Map.Entry<String, Double> aa : list) {
+            temp.put(aa.getKey(), aa.getValue());
+        }
+        return temp;
+    }
+
+    public static HashMap<String, Double> sortByValueDecre(HashMap<String, Double> hm) {
+        // Create a list from elements of HashMap
+        List<Map.Entry<String, Double>> list = new LinkedList<Map.Entry<String, Double>>(hm.entrySet());
+
+        // Sort the list
+        Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {
+            public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
+                return (o2.getValue()).compareTo(o1.getValue());
+            }
+        });
+
+        // put data from sorted list to hashmap
+        HashMap<String, Double> temp = new LinkedHashMap<String, Double>();
+        for (Map.Entry<String, Double> aa : list) {
+            temp.put(aa.getKey(), aa.getValue());
+        }
+        return temp;
+    }
+
+    public static HashMap<Integer, Double> sortByValueDecreIntDou(HashMap<Integer, Double> hm) {
+        // Create a list from elements of HashMap
+        List<Map.Entry<Integer, Double>> list = new LinkedList<Map.Entry<Integer, Double>>(hm.entrySet());
+
+        // Sort the list
+        Collections.sort(list, new Comparator<Map.Entry<Integer, Double>>() {
+            public int compare(Map.Entry<Integer, Double> o1, Map.Entry<Integer, Double> o2) {
+                return (o2.getValue()).compareTo(o1.getValue());
+            }
+        });
+
+        // put data from sorted list to hashmap
+        HashMap<Integer, Double> temp = new LinkedHashMap<Integer, Double>();
+        for (Map.Entry<Integer, Double> aa : list) {
+            temp.put(aa.getKey(), aa.getValue());
+        }
+        return temp;
+    }
+
+    public static HashMap<String, Integer> sortByValueDecreInt(HashMap<String, Integer> hm) {
+        // Create a list from elements of HashMap
+        List<Map.Entry<String, Integer>> list = new LinkedList<Map.Entry<String, Integer>>(hm.entrySet());
+
+        // Sort the list
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return (o2.getValue()).compareTo(o1.getValue());
+            }
+        });
+
+        // put data from sorted list to hashmap
+        HashMap<String, Integer> temp = new LinkedHashMap<String, Integer>();
+        for (Map.Entry<String, Integer> aa : list) {
+            temp.put(aa.getKey(), aa.getValue());
+        }
+        return temp;
+    }
+
+    public static HashMap<String, Integer> sortByValueCreInt(HashMap<String, Integer> hm) {
+        // Create a list from elements of HashMap
+        List<Map.Entry<String, Integer>> list = new LinkedList<Map.Entry<String, Integer>>(hm.entrySet());
+
+        // Sort the list
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return (o1.getValue()).compareTo(o2.getValue());
+            }
+        });
+
+        // put data from sorted list to hashmap
+        HashMap<String, Integer> temp = new LinkedHashMap<String, Integer>();
+        for (Map.Entry<String, Integer> aa : list) {
+            temp.put(aa.getKey(), aa.getValue());
+        }
+        return temp;
+    }
+
+    public static double redondeoDecimales(double numero, int numeroDecimales) {
+        BigDecimal redondeado = new BigDecimal(numero).setScale(numeroDecimales, RoundingMode.HALF_EVEN);
+        return redondeado.doubleValue();
     }
 }

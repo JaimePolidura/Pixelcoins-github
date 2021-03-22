@@ -1,72 +1,61 @@
 package es.serversurvival.main;
 
-import es.serversurvival.objetos.*;
-import es.serversurvival.eventos.PlayerCommand;
-import es.serversurvival.eventos.PlayerInteract;
-import es.serversurvival.eventos.PlayerInventoryClick;
-import es.serversurvival.eventos.PlayerJoin;
-import es.serversurvival.task.MensajeWeb;
-import es.serversurvival.task.ScoreboardPlayer;
-import org.bukkit.Bukkit;
+import es.serversurvival.comandos.CommandManager;
+import es.serversurvival.eventos.*;
+import es.serversurvival.objetos.apiHttp.IEXCloud_API;
+import es.serversurvival.objetos.mySQL.*;
+import es.serversurvival.objetos.task.MensajeWeb;
+import es.serversurvival.objetos.task.ScoreboardPlayer;
 import org.bukkit.ChatColor;
 
-import org.bukkit.event.Listener;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scoreboard.Score;
 
-public class Pixelcoin extends JavaPlugin implements Listener {
-    private Solicitudes s = new Solicitudes();
+public class Pixelcoin extends JavaPlugin {
+    private static Pixelcoin plugin;
+    PosicionesAbiertas posicionesAbiertas = new PosicionesAbiertas();
     private Deudas d = new Deudas();
     private Empleados em = new Empleados();
     private MySQL sql = new MySQL();
-    private ScoreboardPlayer sp = new ScoreboardPlayer();
 
-    @Override
+    public static Pixelcoin getInstance() {
+        return plugin;
+    }
+
     public void onEnable() {
         getLogger().info("------------Plugin activado -------------");
-        this.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "------------------------------");
-        this.getServer().getConsoleSender().sendMessage(ChatColor.YELLOW + "       Pixelcoins POO");
-        getServer().getPluginManager().registerEvents(this, this);
-        getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
-        getServer().getPluginManager().registerEvents(new PlayerInteract(), this);
-        getServer().getPluginManager().registerEvents(new PlayerInventoryClick(), this);
-        this.setUpCommands(new PlayerCommand());
+        getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "------------------------------");
+        getServer().getConsoleSender().sendMessage(ChatColor.YELLOW + "       Pixelcoins POO");
 
-        try {
-            sql.conectar();
-        } catch (Exception e) {
-            this.getServer().getConsoleSender().sendMessage(ChatColor.DARK_RED + "Error al conectar a la base de datos");
-        }
 
-        try {
-            s.conectar();
-            s.setUp(this.getServer());
-            s.desconectar();
-        } catch (Exception e) {
-            this.getServer().getConsoleSender().sendMessage("[PixelCoins] " + ChatColor.DARK_RED + "Error en borrar las solicitudes (La base de datos puede estar apagada)");
-        }
+        //Preparamos los comandos y dejamos al server a la escucha de los eventos
+        setUpComandos(new CommandManager());
+        setUpListeners();
 
-        try {
-            d.conectar();
-            d.pagarDeudas(this.getServer());
-            d.desconectar();
-        } catch (Exception e) {
-            this.getServer().getConsoleSender().sendMessage("[PixelCoins] " + ChatColor.DARK_RED + "Error en pagar deudas (La base de datos puede estar apagada)");
-        }
+        //Pago de sueldos de las empresas
+        em.conectar();
+        em.pagarSueldos(this.getServer());
+        em.desconectar();
 
-        try {
-            em.conectar();
-            em.pagarSueldos(this.getServer());
-            em.desconectar();
-        } catch (Exception e) {
-            this.getServer().getConsoleSender().sendMessage("[PixelCoins] " + ChatColor.DARK_RED + "Error en pagar sueldos (La base de datos puede estar apagada)");
-        }
+        //Pago de las deudas
+        d.conectar();
+        d.pagarDeudas(this.getServer());
+        d.desconectar();
 
+        //Pago de dividendos de acciones
+        posicionesAbiertas.conectar();
+        posicionesAbiertas.pagarDividendos(this);
+        posicionesAbiertas.desconectar();
+
+        //Iniciamos todas las tareas del plugin en el server
         MensajeWeb mensajeWeb = new MensajeWeb(this.getServer());
         mensajeWeb.runTaskTimer(this, 0, 20 * MensajeWeb.delay);
-
+        ScoreboardPlayer sp = new ScoreboardPlayer();
         sp.runTaskTimer(this, 0, 20 * ScoreboardPlayer.scoreboardSwitchDelay);
-        this.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "------------------------------");
+
+        plugin = this;
+
+        getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "------------------------------");
     }
 
     @Override
@@ -75,47 +64,26 @@ public class Pixelcoin extends JavaPlugin implements Listener {
         getLogger().info("----------- Plugin desactivado -----------");
     }
 
-    private void setUpCommands(PlayerCommand commandEx) {
-        getCommand("dinero").setExecutor(commandEx);
-        getCommand("pagar").setExecutor(commandEx);
-        getCommand("topricos").setExecutor(commandEx);
-        getCommand("toppobres").setExecutor(commandEx);
-        getCommand("tienda").setExecutor(commandEx);
-        getCommand("vender").setExecutor(commandEx);
-        getCommand("ayuda").setExecutor(commandEx);
-        getCommand("estadisticas").setExecutor(commandEx);
-        getCommand("topvendedores").setExecutor(commandEx);
-        getCommand("prestar").setExecutor(commandEx);
-        getCommand("aceptar").setExecutor(commandEx);
-        getCommand("rechazar").setExecutor(commandEx);
-        getCommand("deudas").setExecutor(commandEx);
-        getCommand("topfiables").setExecutor(commandEx);
-        getCommand("topmenosfiables").setExecutor(commandEx);
-        getCommand("crearempresa").setExecutor(commandEx);
-        getCommand("depositar").setExecutor(commandEx);
-        getCommand("sacar").setExecutor(commandEx);
-        getCommand("logotipo").setExecutor(commandEx);
-        getCommand("empresas").setExecutor(commandEx);
-        getCommand("contratar").setExecutor(commandEx);
-        getCommand("despedir").setExecutor(commandEx);
-        getCommand("aceptarTrabajo").setExecutor(commandEx);
-        getCommand("rechazarTrabajo").setExecutor(commandEx);
-        getCommand("irse").setExecutor(commandEx);
-        getCommand("editarEmpleado").setExecutor(commandEx);
-        getCommand("venderempresa").setExecutor(commandEx);
-        getCommand("aceptarcompra").setExecutor(commandEx);
-        getCommand("rechazarcompra").setExecutor(commandEx);
-        getCommand("miempresa").setExecutor(commandEx);
-        getCommand("mensajes").setExecutor(commandEx);
-        getCommand("editarnombre").setExecutor(commandEx);
-        getCommand("mistrabajos").setExecutor(commandEx);
-        getCommand("borrarempresa").setExecutor(commandEx);
-        getCommand("confirmarborrar").setExecutor(commandEx);
-        getCommand("cancelarborrar").setExecutor(commandEx);
-        getCommand("comprar").setExecutor(commandEx);
-        getCommand("editardescripccion").setExecutor(commandEx);
-        getCommand("cancelardeuda").setExecutor(commandEx);
-        getCommand("pagardeuda").setExecutor(commandEx);
+    private void setUpListeners() {
+        getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
+        getServer().getPluginManager().registerEvents(new PlayerInteract(), this);
+        getServer().getPluginManager().registerEvents(new PlayerInventoryClick(), this);
+        getServer().getPluginManager().registerEvents(new PlayerCloseInventory(), this);
     }
 
+    private void setUpComandos(CommandExecutor commandExecutor) {
+        this.getCommand("pagar").setExecutor(commandExecutor);
+        this.getCommand("dinero").setExecutor(commandExecutor);
+        this.getCommand("estadisticas").setExecutor(commandExecutor);
+        this.getCommand("top").setExecutor(commandExecutor);
+        this.getCommand("deudas").setExecutor(commandExecutor);
+        this.getCommand("tienda").setExecutor(commandExecutor);
+        this.getCommand("vender").setExecutor(commandExecutor);
+        this.getCommand("mensajes").setExecutor(commandExecutor);
+        this.getCommand("empresas").setExecutor(commandExecutor);
+        this.getCommand("comprar").setExecutor(commandExecutor);
+        this.getCommand("empleos").setExecutor(commandExecutor);
+        this.getCommand("ayuda").setExecutor(commandExecutor);
+        this.getCommand("bolsa").setExecutor(commandExecutor);
+    }
 }

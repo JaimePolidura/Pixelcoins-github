@@ -1,9 +1,12 @@
 package es.serversurvival.eventos;
 
-import es.serversurvival.objetos.Empresas;
-import es.serversurvival.objetos.Ofertas;
-import es.serversurvival.objetos.Transacciones;
+import es.serversurvival.comandos.comandos.TopComando;
+import es.serversurvival.comandos.subComandos.bolsa.ValoresBolsaSubComando;
+import es.serversurvival.objetos.mySQL.Empresas;
+import es.serversurvival.objetos.mySQL.Ofertas;
+import es.serversurvival.objetos.mySQL.Transacciones;
 import es.serversurvival.main.Funciones;
+import es.serversurvival.objetos.solicitudes.Solicitud;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,12 +17,12 @@ import org.bukkit.inventory.ItemStack;
 public class PlayerInventoryClick implements Listener {
 
     @EventHandler
-    public void onPlayerInventoryClick(InventoryClickEvent e) {
+    public void onPlayerInventoryClick(InventoryClickEvent e) throws Exception {
         String inNombre = e.getView().getTitle().toString();
+        Player p = (Player) e.getWhoClicked();
 
         if (inNombre.equalsIgnoreCase(ChatColor.DARK_RED + "" + ChatColor.BOLD + "            Tienda")) {
             Funciones f = new Funciones();
-            Player p = (Player) e.getWhoClicked();
             int slotsLibres = f.espaciosLibres(p.getInventory());
 
             if (slotsLibres != 0) {
@@ -63,6 +66,40 @@ public class PlayerInventoryClick implements Listener {
                 em.desconectar();
             } catch (Exception ex) {
 
+            }
+            e.setCancelled(true);
+        }
+
+        try {
+            if (inNombre.equalsIgnoreCase(TopComando.titulo) || inNombre.equalsIgnoreCase(ValoresBolsaSubComando.titulo)) {
+                e.setCancelled(true);
+            }
+        } catch (Exception ex) {
+        }
+
+        String tituloSol;
+        try {
+            tituloSol = Solicitud.getByDestinatario(p.getName()).getTitulo();
+        } catch (NullPointerException ex) {
+            return;
+        }
+
+        if (inNombre.equalsIgnoreCase(tituloSol)) {
+            Solicitud solicitud = Solicitud.getByDestinatario(p.getName());
+            String nombreItem = null;
+            try {
+                nombreItem = e.getCurrentItem().getType().toString();
+            } catch (NullPointerException ex) {
+                return;
+            }
+
+            switch (nombreItem) {
+                case "GREEN_WOOL":
+                    solicitud.aceptar();
+                    break;
+                case "RED_WOOL":
+                    solicitud.cancelar();
+                    break;
             }
             e.setCancelled(true);
         }
