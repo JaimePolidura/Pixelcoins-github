@@ -445,4 +445,23 @@ public final class Funciones {
             Mensajes.INSTANCE.nuevoMensaje("", nombreJugador, mensajeOffline);
         }
     }
+
+    public static<K, V> Map<K, List<V>> mergeMapList (List<V> toIteratem, Function<V, K> keyMapper) {
+        Map<K, List<V>> acumulator = new HashMap<>();
+
+        for(V element : toIteratem){
+            K mappedKey = keyMapper.apply(element);
+
+            if(acumulator.get(element) == null){
+                acumulator.put(mappedKey, listOf(element));
+            }else{
+                List<V> listOfValues = acumulator.get(mappedKey);
+                listOfValues.add(element);
+
+                acumulator.put(mappedKey, listOfValues);
+            }
+        }
+
+        return acumulator;
+    }
 }

@@ -1,15 +1,13 @@
 package es.serversurvival.mySQL;
 
 import es.serversurvival.apiHttp.IEXCloud_API;
-import es.serversurvival.main.Pixelcoin;
 import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.tablasObjetos.LlamadaApi;
 import es.serversurvival.util.Funciones;
 import javafx.util.Pair;
-import lombok.SneakyThrows;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

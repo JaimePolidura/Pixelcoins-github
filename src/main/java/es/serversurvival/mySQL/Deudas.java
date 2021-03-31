@@ -72,39 +72,11 @@ public final class Deudas extends MySQL {
     }
 
     public Map<String, List<Deuda>> getAllDeudasAcredorMap () {
-        List<Deuda> deudas = this.getAllDeudas();
-        Map<String, List<Deuda>> mapDeudas = new HashMap<>();
-
-        deudas.forEach(deuda ->{
-            if(mapDeudas.get(deuda.getAcredor()) == null){
-                mapDeudas.put(deuda.getAcredor(), listOf(deuda));
-            }else{
-                List<Deuda> deudasList = mapDeudas.get(deuda.getAcredor());
-                deudasList.add(deuda);
-
-                mapDeudas.replace(deuda.getAcredor(), deudasList);
-            }
-        });
-
-        return mapDeudas;
+        return Funciones.mergeMapList(this.getAllDeudas(), Deuda::getAcredor);
     }
 
     public Map<String, List<Deuda>> getAllDeudasDeudorMap () {
-        List<Deuda> deudas = this.getAllDeudas();
-        Map<String, List<Deuda>> mapDeudas = new HashMap<>();
-
-        deudas.forEach(deuda ->{
-            if(mapDeudas.get(deuda.getDeudor()) == null){
-                mapDeudas.put(deuda.getDeudor(), listOf(deuda));
-            }else{
-                List<Deuda> deudasList = mapDeudas.get(deuda.getDeudor());
-                deudasList.add(deuda);
-
-                mapDeudas.replace(deuda.getDeudor(), deudasList);
-            }
-        });
-
-        return mapDeudas;
+        return Funciones.mergeMapList(this.getAllDeudas(), Deuda::getDeudor);
     }
 
     public void pagarDeudas () {

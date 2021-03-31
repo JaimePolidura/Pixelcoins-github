@@ -3,6 +3,7 @@ package es.serversurvival.comandos.comandos;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.ComandoUtilidades;
+import es.serversurvival.mySQL.MySQL;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -10,8 +11,8 @@ import org.bukkit.entity.Player;
 public class CMensajes extends ComandoUtilidades implements CommandRunner {
     @Override
     public void execute(CommandSender commandSender, String[] strings) {
-        mensajesMySQL.conectar();
+        MySQL.conectar();
         mensajesMySQL.mostrarMensajesYBorrar((Player) commandSender);
-        mensajesMySQL.desconectar();
+        MySQL.desconectar();
     }
 }

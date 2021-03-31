@@ -3,6 +3,7 @@ package es.serversurvival.mySQL;
 
 import es.serversurvival.mySQL.tablasObjetos.TablaObjeto;
 import es.serversurvival.util.Funciones;
+import lombok.SneakyThrows;
 
 import java.sql.*;
 import java.text.DecimalFormat;
@@ -41,46 +42,32 @@ public abstract class MySQL {
     private static final String user = "root";
     private static final String pass = "";
 
+    @SneakyThrows
     public static Connection conectar() {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/" + dbName + "?user=" + user + "&password=" + pass + "&useSSL=false&allowPublicKeyRetrieval=true";
-            conexion = DriverManager.getConnection(url);
+        Class.forName("com.mysql.jdbc.Driver");
+        String url = "jdbc:mysql://localhost:3306/" + dbName + "?user=" + user + "&password=" + pass + "&useSSL=false&allowPublicKeyRetrieval=true";
+        conexion = DriverManager.getConnection(url);
 
-            return conexion;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        return conexion;
     }
 
     public static void setConexion (Connection conex){
         conexion = conex;
     }
 
+    @SneakyThrows
     public static void desconectar() {
-        try {
-            conexion.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        conexion.close();
     }
 
+    @SneakyThrows
     protected ResultSet executeQuery(String query) {
-        try{
-            return conexion.createStatement().executeQuery(query);
-        }catch (SQLException e){
-            e.printStackTrace();
-            return null;
-        }
+        return conexion.createStatement().executeQuery(query);
     }
 
+    @SneakyThrows
     protected void executeUpdate (String consulta) {
-        try{
-            conexion.createStatement().executeUpdate(consulta);
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
+        conexion.createStatement().executeUpdate(consulta);
     }
 
     protected boolean isEmptyFromQuery (String query) {
@@ -94,14 +81,12 @@ public abstract class MySQL {
 
     protected abstract TablaObjeto buildObjectFromResultSet (ResultSet rs) throws SQLException;
 
+    @SneakyThrows
     protected TablaObjeto buildObjectFromQuery(String query) {
-        try{
-            ResultSet rs = executeQuery(query);
-            rs.next();
-            return buildObjectFromResultSet(rs);
-        }catch (SQLException e) {
-            return null;
-        }
+        ResultSet rs = executeQuery(query);
+        rs.next();
+
+        return buildObjectFromResultSet(rs);
     }
 
     protected <T> List<T> buildListFromQuery (String query) {

@@ -1,19 +1,13 @@
 package es.serversurvival.comandos.subComandos.bolsa;
 
-import com.mojang.datafixers.functions.PointFreeRule;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.ComandoUtilidades;
 import es.serversurvival.mySQL.MySQL;
-import es.serversurvival.mySQL.PosicionesAbiertas;
-import es.serversurvival.mySQL.Transacciones;
 import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
-import es.serversurvival.util.Funciones;
-import es.serversurvival.validaciones.misValidaciones.OwnerPosicionAbierta;
 import main.ValidationResult;
 import main.ValidationsService;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

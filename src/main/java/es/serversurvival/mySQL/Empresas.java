@@ -99,21 +99,7 @@ public final class Empresas extends MySQL {
     }
 
     public Map<String, List<Empresa>> getAllEmpresasJugadorMap () {
-        List<Empresa> empresas = this.getTodasEmpresas();
-        Map<String, List<Empresa>> mapEmpresas = new HashMap<>();
-
-        empresas.forEach(empresa -> {
-            if(mapEmpresas.get(empresa.getOwner()) == null){
-                mapEmpresas.put(empresa.getOwner(), listOf(empresa));
-            }else{
-                List<Empresa> empresasList = mapEmpresas.get(empresa.getOwner());
-                empresasList.add(empresa);
-
-                mapEmpresas.replace(empresa.getOwner(), empresasList);
-            }
-        });
-
-        return mapEmpresas;
+        return Funciones.mergeMapList(this.getTodasEmpresas(), Empresa::getOwner);
     }
 
     public void crearEmpresa(String nombreEmpresa, Player player, String descripcion) {

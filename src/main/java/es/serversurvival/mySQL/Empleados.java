@@ -1,15 +1,13 @@
 package es.serversurvival.mySQL;
 
 import java.sql.*;
-import java.text.ParseException;
 import java.util.*;
 import java.util.Date;
 
-import com.mojang.datafixers.types.Func;
 import es.serversurvival.mySQL.enums.TipoSueldo;
-import es.serversurvival.util.Funciones;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.util.Funciones;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -74,21 +72,7 @@ public final class Empleados extends MySQL {
     }
 
     public Map<String, List<Empleado>> getAllEmpleadosEmpresas () {
-        List<Empleado> allEmpleados = this.getAllEmpleados();
-        Map<String, List<Empleado>> toReturn = new HashMap<>();
-
-        allEmpleados.forEach(empleado -> {
-            if(toReturn.get(empleado.getEmpresa()) == null){
-                toReturn.put(empleado.getEmpresa(), listOf(empleado));
-            }else{
-                List<Empleado> empleadosEmpresa = toReturn.get(empleado.getEmpresa());
-                empleadosEmpresa.add(empleado);
-
-                toReturn.replace(empleado.getEmpresa(), empleadosEmpresa);
-            }
-        });
-
-        return toReturn;
+        return Funciones.mergeMapList(this.getAllEmpleados(), Empleado::getEmpresa);
     }
 
     public boolean trabajaEmpresa(String empleado, String nombreEmpresa) {
@@ -106,7 +90,7 @@ public final class Empleados extends MySQL {
         ownerPlayer.sendMessage(ChatColor.GOLD + "Has despedido a: " + empleado);
 
         String mensajeOnline = ChatColor.RED + "Has sido despedido de " + nombreEmpresa + " razon: " + razon;
-        String mensajeOffline = "Has sido despedido de " + nombreEmpresa + " por: " + razon;
+
         enviarMensaje(empleado, mensajeOnline, mensajeOnline, Sound.BLOCK_ANVIL_LAND, 10, 1);
     }
 

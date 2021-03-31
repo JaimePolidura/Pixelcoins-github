@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public final class Encantamientos extends MySQL {
+public final class  Encantamientos extends MySQL {
     public final static Encantamientos INSTANCE = new Encantamientos();
     private Encantamientos () {}
 

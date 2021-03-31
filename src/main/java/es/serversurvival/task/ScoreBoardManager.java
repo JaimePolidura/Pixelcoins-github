@@ -2,16 +2,12 @@ package es.serversurvival.task;
 
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.scoreboeards.*;
-import net.minecraft.server.v1_16_R1.DoubleBlockFinder;
 import org.bukkit.Bukkit;
-import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 
 public final class ScoreBoardManager extends BukkitRunnable {

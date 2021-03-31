@@ -1,13 +1,10 @@
 package es.serversurvival.menus.menus;
 
-import com.mojang.datafixers.optics.profunctors.Closed;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.EmpresasVerTodasInventoryFactory;
-import es.serversurvival.mySQL.Empresas;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
