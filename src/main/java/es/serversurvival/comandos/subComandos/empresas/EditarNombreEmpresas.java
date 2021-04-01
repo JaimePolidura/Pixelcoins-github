@@ -4,7 +4,6 @@ import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
 import es.serversurvival.mySQL.Empresas;
-import es.serversurvival.mySQL.MySQL;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.ChatColor;
@@ -20,7 +19,6 @@ public class EditarNombreEmpresas extends PixelcoinCommand implements CommandRun
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        MySQL.conectar();
 
         ValidationResult result = ValidationsService.startValidating(args.length == 3, True.of(usoIncorrecto))
                 .andMayThrowException(() -> args[1], usoIncorrecto, OwnerDeEmpresa.of(player.getName()), MaxLength.of(Empresas.CrearEmpresaNombreLonMax, "El nombre no puede ser tan largo"))
@@ -32,6 +30,5 @@ public class EditarNombreEmpresas extends PixelcoinCommand implements CommandRun
         else
             empresasMySQL.cambiarNombre((Player) player, args[1], args[2]);
 
-        MySQL.desconectar();
     }
 }

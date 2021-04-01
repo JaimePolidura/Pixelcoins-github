@@ -5,7 +5,6 @@ import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
 import es.serversurvival.main.Pixelcoin;
 import es.serversurvival.apiHttp.IEXCloud_API;
-import es.serversurvival.mySQL.MySQL;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -20,7 +19,6 @@ public class PrecioBolsa extends PixelcoinCommand implements CommandRunner {
         }
         String ticker = args[1];
         Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
-            MySQL.conectar();
             try {
                 double precio;
                 if (llamadasApiMySQL.estaReg(ticker)) {
@@ -34,7 +32,6 @@ public class PrecioBolsa extends PixelcoinCommand implements CommandRunner {
                 //e.printStackTrace();
                 player.sendMessage(ChatColor.DARK_RED + "Ticker: " + ticker + " no encontrado. Para consultarlo /bolsa valores o en es.investing.com. Recuerda que solo se puede acciones que cotizen en EEUU");
             }
-            MySQL.desconectar();
         }, 0L);
     }
 }

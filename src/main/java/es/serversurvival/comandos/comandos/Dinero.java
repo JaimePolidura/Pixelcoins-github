@@ -3,7 +3,6 @@ package es.serversurvival.comandos.comandos;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
-import es.serversurvival.mySQL.*;
 import es.serversurvival.util.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -17,10 +16,8 @@ public class Dinero extends PixelcoinCommand implements CommandRunner{
         Player player = (Player) commandSender;
         String nombreJugador = player.getName();
 
-        MySQL.conectar();
         double patrimonioJugador = Funciones.getPatrimonioJugador(nombreJugador);
         double totalAhorrado = jugadoresMySQL.getJugador(nombreJugador).getPixelcoins();
-        MySQL.desconectar();
 
         patrimonioJugador = patrimonioJugador - totalAhorrado;
 

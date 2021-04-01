@@ -4,7 +4,6 @@ import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
 import es.serversurvival.mySQL.Empresas;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import main.ValidationResult;
 import main.ValidationsService;
@@ -21,7 +20,6 @@ public class EditarDescEmpresas extends PixelcoinCommand implements CommandRunne
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        MySQL.conectar();
 
         ValidationResult result = ValidationsService.startValidating(args.length >= 3, True.of(usoIncorrecto))
                 .andMayThrowException(() -> Funciones.buildStringFromArray(args, 2), usoIncorrecto, MaxLength.of(Empresas.CrearEmpresaDescLonMax, "La descripccino no puede ser tan larga"))
@@ -33,6 +31,5 @@ public class EditarDescEmpresas extends PixelcoinCommand implements CommandRunne
         else
             empresasMySQL.cambiarDescripciom(args[1], Funciones.buildStringFromArray(args, 2), (Player) player);
 
-        MySQL.desconectar();
     }
 }

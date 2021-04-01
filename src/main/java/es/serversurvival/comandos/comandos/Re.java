@@ -4,7 +4,6 @@ import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
 import es.serversurvival.mySQL.ConversacionesWeb;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import main.ValidationResult;
 import main.ValidationsService;
@@ -18,8 +17,6 @@ import static es.serversurvival.validaciones.Validaciones.*;
 public class Re extends PixelcoinCommand implements CommandRunner {
     @Override
     public void execute(CommandSender sender, String[] args) {
-        MySQL.conectar();
-
         String playerName = sender.getName();
 
         ValidationResult result = ValidationsService.startValidating(args.length, Different.of(0,
@@ -34,7 +31,6 @@ public class Re extends PixelcoinCommand implements CommandRunner {
             conversacionesWebMySQL.nuevoMensaje(conversacionesWebMySQL.getConversacionServer(playerName), (Player) sender, Funciones.buildStringFromArray(args));
         }
 
-        MySQL.desconectar();
     }
 
     private boolean existeConversacion (String jugador) {

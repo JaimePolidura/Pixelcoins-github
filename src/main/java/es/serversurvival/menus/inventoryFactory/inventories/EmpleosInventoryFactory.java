@@ -1,7 +1,6 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
-import es.serversurvival.mySQL.Empleados;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
@@ -44,7 +43,6 @@ public class EmpleosInventoryFactory extends InventoryFactory {
     }
 
     private List<ItemStack> buildItemsEmpleos (String jugador) {
-        empleadosMySQL.conectar();
 
         List<Empleado> empleaosJugador = empleadosMySQL.getTrabajosJugador(jugador);
 
@@ -64,7 +62,6 @@ public class EmpleosInventoryFactory extends InventoryFactory {
 
             itemsEmpleos.add(MinecraftUtils.loreDisplayName(Material.valueOf(icono), displayName, lore));
         });
-        empleadosMySQL.desconectar();
 
         return itemsEmpleos;
     }

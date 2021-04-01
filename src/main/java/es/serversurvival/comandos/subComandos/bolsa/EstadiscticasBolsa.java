@@ -14,7 +14,6 @@ public class EstadiscticasBolsa extends PixelcoinCommand implements CommandRunne
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        posicionesCerradasMySQL.conectar();
 
         player.sendMessage(ChatColor.GOLD + "--------------------------------");
         player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "     ESTADISTICAS");
@@ -61,6 +60,5 @@ public class EstadiscticasBolsa extends PixelcoinCommand implements CommandRunne
 
         player.sendMessage(ChatColor.GOLD + "Si quieres ver todas las operaciones que has hecho y que tienes: " + ChatColor.AQUA + "/bolsa operacionesCerradas /bolsa cartera");
         player.sendMessage(ChatColor.GOLD + "--------------------------------");
-        posicionesCerradasMySQL.desconectar();
     }
 }

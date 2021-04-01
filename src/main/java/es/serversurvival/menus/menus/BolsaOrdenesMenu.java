@@ -3,7 +3,6 @@ package es.serversurvival.menus.menus;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.BolsaOrdenesInventoryFactory;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -41,12 +40,10 @@ public class BolsaOrdenesMenu extends Menu implements Clickable{
 
         int id = getIdOrndeFromItem(itemClicked);
         if(id != -1){
-            MySQL.conectar();
 
             ordenesMySQL.cancelarOrden(id, (Player) event.getWhoClicked());
             closeMenu();
 
-            MySQL.desconectar();
         }
     }
 

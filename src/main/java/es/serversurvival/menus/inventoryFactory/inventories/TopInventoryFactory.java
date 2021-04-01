@@ -1,6 +1,5 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
@@ -22,7 +21,6 @@ public class TopInventoryFactory extends InventoryFactory {
     protected Inventory buildInventory(String jugador) {
         Inventory inventory = Bukkit.createInventory(null, 54, titulo);
 
-        MySQL.conectar();
         initInfoJugadores();
 
         inventory.setItem(10, buildTopRicosJugadoresItem());
@@ -33,8 +31,6 @@ public class TopInventoryFactory extends InventoryFactory {
         inventory.setItem(34, buildTopMenosFiablesJugadoresItem());
         inventory.setItem(46, buildItemPeoresOperacioensBolsa());
         inventory.setItem(49, buildMejoresComerciantes());
-
-        MySQL.desconectar();
 
         return inventory;
     }

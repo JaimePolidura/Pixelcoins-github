@@ -4,7 +4,6 @@ import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
 import es.serversurvival.mySQL.Deudas;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.tablasObjetos.Deuda;
 import main.ValidationResult;
 import main.ValidationsService;
@@ -22,7 +21,6 @@ public class PagarDeudaDeudas extends PixelcoinCommand implements CommandRunner 
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        MySQL.conectar();
 
         Supplier<String> supplierPixelcoins = () -> String.valueOf(getDeuda(() -> args[1]).getPixelcoins_restantes());
 
@@ -34,12 +32,10 @@ public class PagarDeudaDeudas extends PixelcoinCommand implements CommandRunner 
 
         if(result.isFailed()){
             player.sendMessage(DARK_RED + result.getMessage());
-            MySQL.desconectar();
             return;
         }
 
         deudasMySQL.pagarDeuda((Player) player, Integer.parseInt(args[1]));
-        MySQL.desconectar();
     }
 
     private boolean esDeudor (Supplier<String> idSupplier, String jugador) {

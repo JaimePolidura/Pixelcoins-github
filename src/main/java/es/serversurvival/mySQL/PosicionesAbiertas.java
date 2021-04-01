@@ -4,12 +4,9 @@ import es.serversurvival.main.Pixelcoin;
 import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.apiHttp.IEXCloud_API;
-import es.serversurvival.mySQL.tablasObjetos.Jugador;
 import es.serversurvival.mySQL.tablasObjetos.LlamadaApi;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import es.serversurvival.util.Funciones;
-import javafx.util.Pair;
-import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -175,7 +172,6 @@ public final class PosicionesAbiertas extends MySQL {
 
     public synchronized void actualizarSplits () {
         Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
-            conectar();
 
             Map<String, JSONObject> infoSplitsPorAccion = new HashMap<>();
             List<LlamadaApi> todasLlamadasApi = llamadasApiMySQL.getTodasLlamadasApiCondicion(LlamadaApi::esTipoAccion);
@@ -189,8 +185,6 @@ public final class PosicionesAbiertas extends MySQL {
                 }
             });
 
-            conectar();
-
             List<PosicionAbierta> posicionAbiertas = getTodasPosicionesAbiertasCondicion(PosicionAbierta::esTipoAccion);
             posicionAbiertas.forEach( (posicionAbierta) -> {
                 JSONObject infoSplit = infoSplitsPorAccion.get(posicionAbierta.getNombre_activo());
@@ -200,7 +194,6 @@ public final class PosicionesAbiertas extends MySQL {
                 }
             });
 
-            desconectar();
         }, 0L);
     }
 
@@ -230,7 +223,6 @@ public final class PosicionesAbiertas extends MySQL {
     }
 
     public void pagarDividendos() {
-        MySQL.conectar();
         Date hoy = new Date();
         List<PosicionAbierta> posicionAbiertas = getTodasPosicionesAbiertas().stream()
                 .filter(PosicionAbierta::esLargo)
@@ -238,9 +230,8 @@ public final class PosicionesAbiertas extends MySQL {
                 .collect(Collectors.toList());
 
         Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
-        conectar();
 
-        for(PosicionAbierta posicionAbierta : posicionAbiertas) {
+            for(PosicionAbierta posicionAbierta : posicionAbiertas) {
             double dividendo;
             Date fechaPagoDividendos;
 
@@ -259,22 +250,18 @@ public final class PosicionesAbiertas extends MySQL {
 
         },0L);
 
-        MySQL.desconectar();
     }
 
     public void mostrarDividendosCarteraEntera (Player player) {
         String nombrePlayer = player.getName();
 
         Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
-            MySQL.conectar();
 
             Map<String, LlamadaApi> mapAllLlamadas = llamadasApiMySQL.getMapOfAllLlamadasApi();
             List<PosicionAbierta> posicionesTickers = getPosicionesAbiertasJugadorCondicion(nombrePlayer, PosicionAbierta::esLargo).stream()
                     .filter(PosicionAbierta::esTipoAccion)
                     .filter(distinctBy(PosicionAbierta::getNombre_activo))
                     .collect(Collectors.toList());
-
-            MySQL.desconectar();
 
             player.sendMessage(ChatColor.GOLD + "------------------------------------");
             player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "     PROXIMOS DIVIDENDOS DE TU CARTERA");
@@ -299,9 +286,7 @@ public final class PosicionesAbiertas extends MySQL {
 
     public void mostrarDividendoEmpresa (Player player, String ticker) {
         Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
-            MySQL.conectar();
             LlamadaApi infoAccion = llamadasApiMySQL.getLlamadaAPI(ticker);
-            MySQL.desconectar();
 
             try{
                 JSONObject jsonDividendos = IEXCloud_API.getProximosDividendos(ticker);

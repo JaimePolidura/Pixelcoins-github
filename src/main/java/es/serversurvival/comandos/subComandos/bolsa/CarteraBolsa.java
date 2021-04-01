@@ -7,7 +7,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @Command(name = "bolsa cartera")
-public class CarteraBolsa implements CommandRunner {
+public class
+CarteraBolsa implements CommandRunner {
     @Override
     public void execute(CommandSender player, String[] args) {
         BolsaCarteraMenu menu = new BolsaCarteraMenu((Player) player);

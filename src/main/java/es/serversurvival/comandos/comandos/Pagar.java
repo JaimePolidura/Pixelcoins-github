@@ -3,7 +3,6 @@ package es.serversurvival.comandos.comandos;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
-import es.serversurvival.mySQL.MySQL;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.command.CommandSender;
@@ -20,7 +19,6 @@ public class Pagar extends PixelcoinCommand implements CommandRunner {
     public void execute(CommandSender sender, String[] args) {
         String senderName = sender.getName();
 
-        MySQL.conectar();
         ValidationResult result = ValidationsService.startValidating(args.length, Same.as(2, "Same"))
                 .andMayThrowException(() -> args[1], "Introduce un numero no texto", PositiveNumber, SuficientesPixelcoins.of(senderName, () -> args[1]))
                 .andMayThrowException(() -> args[0],usoIncorrecto , JugadorRegistrado, NotEqualsIgnoreCase.of(senderName))
@@ -28,11 +26,9 @@ public class Pagar extends PixelcoinCommand implements CommandRunner {
 
         if(result.isFailed()){
             sender.sendMessage(DARK_RED + result.getMessage());
-            MySQL.desconectar();
             return;
         }
 
         transaccionesMySQL.realizarPagoManual(sender.getName(), args[0], Double.parseDouble(args[1]), (Player) sender, "");
-        MySQL.desconectar();
     }
 }

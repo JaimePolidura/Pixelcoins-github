@@ -3,7 +3,6 @@ package es.serversurvival.comandos.subComandos.bolsa;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
-import es.serversurvival.mySQL.*;
 import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.util.Funciones;
 import javafx.util.Pair;
@@ -35,7 +34,6 @@ public class InvertirBolsa extends PixelcoinCommand implements CommandRunner {
         String ticker = args[1];
 
         Funciones.POOL.submit(() -> {
-            MySQL.conectar();
             jugadorPlayer.sendMessage(RED + "Cargando...");
 
             Optional<Pair<String, Double>> valorOpcional = llamadasApiMySQL.getPairNombreValorPrecio(ticker);
@@ -59,7 +57,6 @@ public class InvertirBolsa extends PixelcoinCommand implements CommandRunner {
                 transaccionesMySQL.comprarUnidadBolsa(TipoActivo.ACCIONES, ticker.toUpperCase(), nombreValor,"acciones", precio, nAccinesAComprar, jugadorPlayer.getName());
 
 
-            MySQL.desconectar();
         });
     }
 }

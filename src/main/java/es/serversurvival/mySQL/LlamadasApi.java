@@ -96,7 +96,6 @@ public final class LlamadasApi extends MySQL {
     }
 
     public synchronized void actualizarPrecios (){
-        MySQL.conectar();
         List<LlamadaApi> llamadaApis = getTodasLlamadasApi();
 
         for (LlamadaApi llamadaApi : llamadaApis) {
@@ -105,13 +104,11 @@ public final class LlamadasApi extends MySQL {
             this.setPrecio(llamadaApi.getSimbolo(), precio);
         }
 
-        MySQL.desconectar();
     }
 
     public void mostrarRatioPer (Player player, String ticker) {
         Funciones.POOL.submit(() -> {
             try{
-                conectar();
 
                 Pair<String, Double> pairNombreValorPrecio = this.getPairNombreValorPrecio(ticker).get();
 
@@ -129,7 +126,6 @@ public final class LlamadasApi extends MySQL {
             }catch (Exception e) {
                 player.sendMessage(ChatColor.DARK_RED + "No se ha encontrado la accion. Para buscar el ticker lo pudes hacer en internet o el /bolsa valores. Recuerda que solo se pueden empresas que cotizen en EEUU");
             }
-            desconectar();
         });
     }
 

@@ -1,7 +1,5 @@
 package es.serversurvival.scoreboeards;
 
-import es.serversurvival.mySQL.Jugadores;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.ChatColor;
@@ -21,9 +19,7 @@ public class TopPlayerDisplayScoreboard implements GlobalScoreboard{
         Scoreboard scoreboard = MinecraftUtils.createScoreboard("topjugadores", ChatColor.GOLD + "" + ChatColor.BOLD + "TOP RICOS");
         Objective objective = scoreboard.getObjective("topjugadores");
 
-        MySQL.conectar();
         Map<String, Double> topPlayers = Funciones.crearMapaTopPatrimonioPlayers(false);
-        MySQL.desconectar();
 
         int fila = 0;
         int pos = 1;

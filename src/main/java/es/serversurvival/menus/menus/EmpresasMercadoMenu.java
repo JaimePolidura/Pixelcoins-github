@@ -4,14 +4,10 @@ import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.EmpresasMercadoInventoryFactory;
 import es.serversurvival.menus.menus.confirmaciones.ComprarAccionesServerConfirmacion;
-import es.serversurvival.menus.menus.confirmaciones.ComprarBolsaConfirmacion;
-import es.serversurvival.mySQL.MySQL;
-import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.util.Funciones;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -26,13 +22,10 @@ public class EmpresasMercadoMenu extends Menu implements Clickable, Paginated{
     private List<Page> pages = new ArrayList<>();
 
     public EmpresasMercadoMenu(Player player) {
-        MySQL.conectar();
 
         this.player = player;
         this.inventory = InventoryCreator.createInventoryMenu(inventoryFactory, player.getName());
         this.pages.add(new Page(0, inventory));
-
-        MySQL.desconectar();
 
         openMenu();
     }
@@ -61,7 +54,6 @@ public class EmpresasMercadoMenu extends Menu implements Clickable, Paginated{
         String empresa = loreItemClicked.get(1).split(" ")[1];
 
         if(clikedItem.getType() == Material.RED_BANNER){ //Red banner -> la oferta es del jugador
-            MySQL.conectar();
             ofertasMercadoServerMySQL.cancelarOferta(player, id);
             closeMenu();
         }else if (clikedItem.getType() == Material.BLUE_BANNER || clikedItem.getType() == Material.GREEN_BANNER) {

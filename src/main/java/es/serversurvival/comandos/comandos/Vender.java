@@ -3,7 +3,6 @@ package es.serversurvival.comandos.comandos;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
-import es.serversurvival.mySQL.Ofertas;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.ChatColor;
@@ -23,8 +22,6 @@ public class Vender extends PixelcoinCommand implements CommandRunner {
         Player player = (Player) sender;
         String nombreItemMano = player.getInventory().getItemInMainHand().getType().toString();
         ItemStack itemMano = player.getInventory().getItemInMainHand();
-        
-        Ofertas.conectar();
 
         ValidationResult result = ValidationsService.startValidating(args.length, Same.as(1))
                 .and(nombreItemMano, NotEqualsIgnoreCase.of("AIR", "Tienes que tener un objeto en la mano"), ItemNotBaneadoTienda)
@@ -35,13 +32,11 @@ public class Vender extends PixelcoinCommand implements CommandRunner {
 
         if(result.isFailed()){
             player.sendMessage(ChatColor.DARK_RED + result.getMessage());
-            Ofertas.desconectar();
             return;
         }
 
         ofertasMySQL.crearOferta(itemMano, player, Double.parseDouble(args[0]));
 
-        Ofertas.desconectar();
     }
 
     private boolean haSidoComprado (ItemStack item) {

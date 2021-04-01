@@ -1,18 +1,11 @@
 package es.serversurvival.scoreboeards;
 
-import es.serversurvival.mySQL.LlamadasApi;
-import es.serversurvival.mySQL.MySQL;
-import es.serversurvival.mySQL.PosicionesAbiertas;
 import es.serversurvival.mySQL.tablasObjetos.LlamadaApi;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.util.Funciones;
-import es.serversurvival.util.MinecraftUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.*;
@@ -23,14 +16,11 @@ public class BolsaScoreboard implements SingleScoreboard {
     private Map<String, LlamadaApi> llamadasApiMap;
 
     public BolsaScoreboard () {
-        MySQL.conectar();
         this.llamadasApiMap = llamadasApiMySQL.getMapOfAllLlamadasApi();
-        MySQL.desconectar();
     }
 
     @Override
     public Scoreboard createScoreborad(String jugador) {
-        MySQL.conectar();
 
         Scoreboard scoreboard = createScoreboard("bolsa", ChatColor.GOLD + "" + ChatColor.BOLD + "TUS MEJORES ACCIONES");
         Objective objective = scoreboard.getObjective("bolsa");
@@ -48,8 +38,6 @@ public class BolsaScoreboard implements SingleScoreboard {
             pos--;
             loops++;
         }
-
-        MySQL.desconectar();
 
         addLineToScoreboard(objective, ChatColor.GOLD + "       ", -10);
         addLineToScoreboard(objective, ChatColor.GOLD + "--------------------------", -20);

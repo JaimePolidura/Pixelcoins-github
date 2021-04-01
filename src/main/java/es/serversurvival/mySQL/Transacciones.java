@@ -7,9 +7,7 @@ import java.util.*;
 import es.serversurvival.mySQL.enums.*;
 import es.serversurvival.mySQL.tablasObjetos.*;
 import es.serversurvival.task.ScoreBoardManager;
-import es.serversurvival.util.Funciones;
 import es.serversurvival.util.MinecraftUtils;
-import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -133,7 +131,6 @@ public final class Transacciones extends MySQL {
 
     public double sacarObjeto (Jugador jugador, String material, int pixelcoinsPorItem) {
         Player player= Bukkit.getPlayer(jugador.getNombre());
-        MySQL.conectar();
 
         if(jugador.getPixelcoins() >= pixelcoinsPorItem){
             jugadoresMySQL.setPixelcoin(jugador.getNombre(), jugador.getPixelcoins() - pixelcoinsPorItem);

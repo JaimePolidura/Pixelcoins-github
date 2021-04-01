@@ -3,7 +3,6 @@ package es.serversurvival.comandos.subComandos.bolsa;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
-import es.serversurvival.mySQL.MySQL;
 import javafx.util.Pair;
 import main.ValidationResult;
 import main.ValidationsService;
@@ -35,13 +34,11 @@ public class VenderCortoBolsa extends PixelcoinCommand implements CommandRunner 
         String ticker = args[1];
 
         POOL.submit( () -> {
-            MySQL.conectar();
 
             Optional<Pair<String, Double>> optionalNombrePrecio = llamadasApiMySQL.getPairNombreValorPrecio(ticker);
 
             if(!optionalNombrePrecio.isPresent()){
                 player.sendMessage(DARK_RED + "El nombre que has puesto no existe. Para consultar los tickers: /bolsa valores o en internet");
-                MySQL.desconectar();
                 return;
             }
 
@@ -54,7 +51,6 @@ public class VenderCortoBolsa extends PixelcoinCommand implements CommandRunner 
                 ordenesMySQL.abrirOrdenVentaCorto((Player) player, ticker, Integer.parseInt(args[2]));
             }
 
-            MySQL.desconectar();
         });
     }
 }

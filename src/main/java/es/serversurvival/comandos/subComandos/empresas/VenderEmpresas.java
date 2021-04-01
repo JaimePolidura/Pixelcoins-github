@@ -3,7 +3,6 @@ package es.serversurvival.comandos.subComandos.empresas;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.menus.menus.solicitudes.VenderSolicitud;
 import main.ValidationResult;
 import main.ValidationsService;
@@ -19,7 +18,6 @@ public class VenderEmpresas extends PixelcoinCommand implements CommandRunner {
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        MySQL.conectar();
 
         ValidationResult result = ValidationsService.startValidating(args.length == 4, True.of(usoIncorrecto))
                 .andMayThrowException(() -> args[2], usoIncorrecto, JugadorOnline, NotEqualsIgnoreCase.of(player.getName(), "No te lo puedes vender a ti mismo"))
@@ -34,6 +32,5 @@ public class VenderEmpresas extends PixelcoinCommand implements CommandRunner {
             venderSolicitud.enviarSolicitud();
         }
 
-        MySQL.desconectar();
     }
 }

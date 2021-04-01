@@ -1,6 +1,5 @@
 package es.serversurvival.task;
 
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.scoreboeards.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -44,7 +43,6 @@ public final class ScoreBoardManager extends BukkitRunnable {
     }
 
     private void updateAll(ServerScoreboard serverScoreboard) {
-        MySQL.conectar();
 
         List<Player> onlinePlayers = (List<Player>) Bukkit.getOnlinePlayers();
 
@@ -58,7 +56,6 @@ public final class ScoreBoardManager extends BukkitRunnable {
             onlinePlayers.forEach((player -> player.setScoreboard(scoreboard)));
         }
 
-        MySQL.desconectar();
     }
 
     public void updateScoreboard(Player... players) {
@@ -70,7 +67,6 @@ public final class ScoreBoardManager extends BukkitRunnable {
     }
 
     public void updateScoreboard(Player player) {
-        MySQL.conectar();
         ServerScoreboard actualScoreboard = scoreboards.get(actualIndex);
 
         if(actualScoreboard instanceof SingleScoreboard){
@@ -82,6 +78,5 @@ public final class ScoreBoardManager extends BukkitRunnable {
             onlinePlayers.forEach(ply -> ply.setScoreboard(newScoreboard));
         }
 
-        MySQL.desconectar();
     }
 }

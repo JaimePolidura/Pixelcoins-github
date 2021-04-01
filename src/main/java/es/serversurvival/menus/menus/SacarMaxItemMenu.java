@@ -3,8 +3,6 @@ package es.serversurvival.menus.menus;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.SacarMaxItemInventoryFactory;
-import es.serversurvival.mySQL.MySQL;
-import es.serversurvival.mySQL.Transacciones;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -55,8 +53,6 @@ public class SacarMaxItemMenu extends Menu implements Clickable {
         }
 
         String tipoItemClickeado = itemClickeado.getType().toString();
-        MySQL.conectar();
         transaccionesMySQL.sacarMaxItem(tipoItemClickeado, player);
-        MySQL.desconectar();
     }
 }

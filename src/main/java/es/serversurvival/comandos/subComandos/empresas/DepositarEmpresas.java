@@ -3,7 +3,6 @@ package es.serversurvival.comandos.subComandos.empresas;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
-import es.serversurvival.mySQL.MySQL;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.ChatColor;
@@ -19,7 +18,6 @@ public class DepositarEmpresas extends PixelcoinCommand implements CommandRunner
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        MySQL.conectar();
 
         ValidationResult result = ValidationsService.startValidating(args.length == 3, True.of(usoIncorrecto))
                 .andMayThrowException(() -> args[1], usoIncorrecto, OwnerDeEmpresa.of(player.getName()))
@@ -28,11 +26,9 @@ public class DepositarEmpresas extends PixelcoinCommand implements CommandRunner
 
         if(result.isFailed()){
             player.sendMessage(ChatColor.DARK_RED + result.getMessage());
-            MySQL.desconectar();
             return;
         }
 
         transaccionesMySQL.depositarPixelcoinsEmpresa((Player) player, Double.parseDouble(args[2]), args[1]);
-        MySQL.desconectar();
     }
 }

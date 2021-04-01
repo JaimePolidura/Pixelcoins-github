@@ -1,8 +1,6 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
-import es.serversurvival.mySQL.MySQL;
-import es.serversurvival.mySQL.Transacciones;
 import es.serversurvival.mySQL.enums.CambioPixelcoins;
 import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
@@ -19,9 +17,7 @@ public class SacarMaxItemInventoryFactory extends InventoryFactory {
     protected Inventory buildInventory(String jugador) {
         Inventory inventory = Bukkit.createInventory(null, 27, ChatColor.DARK_RED + "" + ChatColor.BOLD + "ELLIGE ITEM PARA SACR MAX");
 
-        MySQL.conectar();
         double dineroJugador = jugadoresMySQL.getJugador(jugador).getPixelcoins();
-        MySQL.desconectar();
 
         inventory.setItem(4, buildItemInfo());
         inventory.setItem(10, buildItemDiamante(dineroJugador));

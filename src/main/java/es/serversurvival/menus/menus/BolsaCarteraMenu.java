@@ -2,10 +2,8 @@ package es.serversurvival.menus.menus;
 
 import es.serversurvival.menus.menus.confirmaciones.BolsaVenderAccionEmpresaMenu;
 import es.serversurvival.menus.menus.confirmaciones.VenderAccionesConfirmacion;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.enums.TipoPosicion;
-import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.BolsaCarteraInventoryFactory;
@@ -61,7 +59,6 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
             return;
         }
 
-        String clickedItemType = clikedItem.getType().toString();
         if(esDeTipo(clikedItem, BOOK)){
             ElegirInversionMenu menu = new ElegirInversionMenu((Player) event.getWhoClicked());
             return;
@@ -77,9 +74,7 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
         int id = Integer.parseInt(loreItemClicked.get(loreItemClicked.size() - 1).split(" ")[1]);
 
         if(clickedItemType == GREEN_BANNER){
-            MySQL.conectar();
             BolsaVenderAccionEmpresaMenu menu = new BolsaVenderAccionEmpresaMenu(player, posicionesAbiertasMySQL.getPosicionAbierta(id));
-            MySQL.desconectar();
         }else{
             VenderAccionesConfirmacion confirmacion = new VenderAccionesConfirmacion(player, id, tipoPosicion, TipoActivo.ACCIONES, loreItemClicked); //TODO Hay que hacerlo compatible con los demas activos
         }

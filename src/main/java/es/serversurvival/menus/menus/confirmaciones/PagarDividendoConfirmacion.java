@@ -2,21 +2,16 @@ package es.serversurvival.menus.menus.confirmaciones;
 
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static es.serversurvival.util.Funciones.*;
 import static org.bukkit.ChatColor.*;
-import static org.bukkit.Material.GREEN_WOOL;
 
 public class PagarDividendoConfirmacion extends Menu implements AumentoConfirmacion{
     private final Inventory inventory;
@@ -26,7 +21,6 @@ public class PagarDividendoConfirmacion extends Menu implements AumentoConfirmac
     private int dividendoPorAccion;
 
     public PagarDividendoConfirmacion (Player player, String nombreEmpresa) {
-        MySQL.conectar();
 
         this.accionesTotales = ofertasMercadoServerMySQL.getAccionesTotalesParaPagarDividendo(nombreEmpresa);
         this.empresa = empresasMySQL.getEmpresa(nombreEmpresa);
@@ -45,7 +39,6 @@ public class PagarDividendoConfirmacion extends Menu implements AumentoConfirmac
         this.inventory = InventoryCreator.createConfirmacionAumento(titulo, nombreItemAceptar, lore, itemCancelar);
 
         openMenu();
-        MySQL.desconectar();
     }
 
     @Override
@@ -69,9 +62,7 @@ public class PagarDividendoConfirmacion extends Menu implements AumentoConfirmac
 
     @Override
     public void confirmar() {
-        MySQL.conectar();
         transaccionesMySQL.pagarDividendoAccionServer(player, empresa.getNombre(), dividendoPorAccion, accionesTotales * dividendoPorAccion);
-        MySQL.desconectar();
 
         closeMenu();
     }

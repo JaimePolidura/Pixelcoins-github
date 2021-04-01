@@ -4,7 +4,6 @@ import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
 import es.serversurvival.menus.menus.solicitudes.VenderJugadorSolicitud;
-import es.serversurvival.mySQL.MySQL;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.Bukkit;
@@ -23,15 +22,12 @@ public class VenderJugador extends PixelcoinCommand implements CommandRunner {
     public void execute(CommandSender sender, String[] args) {
         Player player = (Player) sender;
 
-        MySQL.conectar();
         ValidationResult result = ValidationsService.startValidating(args.length, Same.as(2))
                 .andMayThrowException(() -> args[0], mensajeUsoIncorrecto, NotEqualsIgnoreCase.of(player.getName()), JugadorOnline, InventarioNoLleno)
                 .andMayThrowException(() -> args[1], mensajeUsoIncorrecto ,PositiveNumber, SuficientesPixelcoins.of(() -> args[0], "El jugador no tiene las suficintes pixelcoins"))
                 .and(player.getInventory().getItemInMainHand(), NotNull)
                 .and(player.getInventory().getItemInMainHand().getType().toString(), NotEqualsIgnoreCase.of("AIR", "No puede ser aire"))
                 .validateAll();
-
-        MySQL.desconectar();
 
         if(result.isFailed()){
             player.sendMessage(DARK_RED + result.getMessage());

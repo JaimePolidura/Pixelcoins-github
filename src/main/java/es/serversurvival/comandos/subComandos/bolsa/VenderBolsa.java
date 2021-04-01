@@ -3,7 +3,6 @@ package es.serversurvival.comandos.subComandos.bolsa;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
@@ -22,7 +21,6 @@ public class VenderBolsa extends PixelcoinCommand implements CommandRunner {
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        MySQL.conectar();
 
         ValidationResult result =ValidationsService.startValidating(args.length != 3 && args.length != 2, False.of(mensajeIncorrecto))
                 .andMayThrowException(() -> args[1], mensajeIncorrecto, NaturalNumber, OwnerPosicionAbierta.de(player.getName(), TipoPosicion.LARGO))
@@ -31,7 +29,6 @@ public class VenderBolsa extends PixelcoinCommand implements CommandRunner {
 
         if(result.isFailed()){
             player.sendMessage(DARK_RED + result.getMessage());
-            MySQL.desconectar();
             return;
         }
 
@@ -55,6 +52,5 @@ public class VenderBolsa extends PixelcoinCommand implements CommandRunner {
             ordenesMySQL.abrirOrdenVentaLargo((Player) player, args[1], cantidad);
         }
 
-        MySQL.desconectar();
     }
 }

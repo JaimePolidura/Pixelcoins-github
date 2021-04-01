@@ -3,10 +3,8 @@ package es.serversurvival.main;
 import es.jaimetruman.commands.CommandMapper;
 import es.serversurvival.eventosMinecraft.*;
 import es.serversurvival.mySQL.*;
-import es.serversurvival.socketWeb.ServerSocketWeb;
 import es.serversurvival.task.*;
 
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import static org.bukkit.ChatColor.*;
@@ -25,14 +23,14 @@ public final class Pixelcoin extends JavaPlugin {
     public void onEnable() {
         plugin = this;
 
+        MySQL.conectar();
+
         getLogger().info("------------Plugin activado -------------");
         getServer().getConsoleSender().sendMessage(GREEN + "------------------------------");
 
-        MySQL.conectar();
         deudasMySQL.pagarDeudas();
         empleadosMySQL.pagarSueldos();
         conversacionesWebMySQL.borrarTodasConversacionesWeb();
-        MySQL.desconectar();
 
         this.setUpCommands();
 

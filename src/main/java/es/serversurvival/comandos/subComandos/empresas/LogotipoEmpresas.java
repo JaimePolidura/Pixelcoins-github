@@ -3,7 +3,6 @@ package es.serversurvival.comandos.subComandos.empresas;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
-import es.serversurvival.mySQL.MySQL;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.ChatColor;
@@ -19,7 +18,6 @@ public class LogotipoEmpresas extends PixelcoinCommand implements CommandRunner 
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        MySQL.conectar();
 
         Player player = (Player) sender;
         String itemTipo = player.getInventory().getItemInMainHand().getType().toString();
@@ -34,6 +32,5 @@ public class LogotipoEmpresas extends PixelcoinCommand implements CommandRunner 
         else
             empresasMySQL.cambiarIcono(args[1], player, itemTipo);
 
-        MySQL.desconectar();
     }
 }

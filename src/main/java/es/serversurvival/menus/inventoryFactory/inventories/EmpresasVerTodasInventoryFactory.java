@@ -1,6 +1,5 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.EmpresasVerTodasMenu;
@@ -8,7 +7,6 @@ import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -23,7 +21,6 @@ public class EmpresasVerTodasInventoryFactory extends InventoryFactory {
     @Override
     protected Inventory buildInventory(String jugadorNombre) {
         Inventory inventory = Bukkit.createInventory(null, 54, EmpresasVerTodasMenu.titulo);
-        MySQL.conectar();
 
         List<Empresa> todasLasEmpresas = empresasMySQL.getTodasEmpresas();
         ItemStack back = buildItemGoBack();

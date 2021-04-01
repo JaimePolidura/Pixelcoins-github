@@ -1,7 +1,6 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import es.serversurvival.util.Funciones;
@@ -30,7 +29,6 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
     protected Inventory buildInventory(String jugador) {
         Inventory inventory = Bukkit.createInventory(null, 54, DARK_RED + "" + BOLD + "      "  + empresa.toUpperCase());
 
-        MySQL.conectar();
         inventory.setItem(0, buildItemInfo());
         inventory.setItem(1, buildItemsEmpresas());
         inventory.setItem(8, buildItemBorrarEmpresa());
@@ -41,7 +39,6 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
         }
 
         List<ItemStack> itemsEmpleados = buildItemsEmpleados();
-        MySQL.desconectar();
 
 
         for(int i = 0; i < itemsEmpleados.size(); i++){

@@ -4,7 +4,6 @@ import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.MenuManager;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.EmpleosInventoryFactory;
-import es.serversurvival.mySQL.Empleados;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -45,13 +44,10 @@ public class EmpleosMenu extends Menu implements Clickable, Refreshcable, CanGoB
             return;
         }
 
-        empleadosMySQL.conectar();
-
         String nombreEmpresa = currentItem.getItemMeta().getLore().get(1).split(" ")[1];
         empleadosMySQL.irseEmpresa(nombreEmpresa, (Player) event.getWhoClicked());
         refresh();
 
-        empleadosMySQL.desconectar();
     }
 
     @Override

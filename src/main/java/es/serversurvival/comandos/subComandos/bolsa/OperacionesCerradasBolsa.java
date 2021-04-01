@@ -14,7 +14,6 @@ import java.util.List;
 public class OperacionesCerradasBolsa extends PixelcoinCommand implements CommandRunner {
 
     public void execute(CommandSender player, String[] args) {
-        posicionesCerradasMySQL.conectar();
         List<PosicionCerrada> posicionCerradas = posicionesCerradasMySQL.getPosicionesCerradasJugador(player.getName());
 
         String nombre;

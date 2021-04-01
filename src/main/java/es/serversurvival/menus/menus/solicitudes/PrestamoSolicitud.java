@@ -75,12 +75,9 @@ public class PrestamoSolicitud extends Menu implements Solicitud {
 
         Player enviadorPlayer = Bukkit.getPlayer(this.enviador);
         Player destinatarioPlayer = Bukkit.getPlayer(this.destinatario);
-        transaccionesMySQL.conectar();
 
         transaccionesMySQL.realizarTransferencia(enviador, destinatario, pixelcoins, "", TipoTransaccion.DEUDAS_PRIMERPAGO);
         deudasMySQL.nuevaDeuda(destinatario, enviador, Funciones.aumentarPorcentaje(pixelcoins, interes), dias, interes);
-
-        transaccionesMySQL.desconectar();
 
 
         destinatarioPlayer.sendMessage(ChatColor.GOLD + "Has aceptado la solicitud de: " + ChatColor.GREEN + formatea.format(pixelcoins) + " PC " + ChatColor.GOLD + "con un interes del: " + ChatColor.GREEN + interes +

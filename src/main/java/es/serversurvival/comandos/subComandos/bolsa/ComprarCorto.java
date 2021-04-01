@@ -3,7 +3,6 @@ package es.serversurvival.comandos.subComandos.bolsa;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import main.ValidationResult;
@@ -11,7 +10,6 @@ import main.ValidationsService;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static es.serversurvival.scoreboeards.SingleScoreboard.posicionesAbiertasMySQL;
 import static es.serversurvival.util.Funciones.*;
 import static es.serversurvival.validaciones.Validaciones.*;
 import static org.bukkit.ChatColor.*;
@@ -22,7 +20,6 @@ public class ComprarCorto extends PixelcoinCommand implements CommandRunner{
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        MySQL.conectar();
         //TODO: Cuando args[1] es 1 no funciona pero con el resto de valores funciona perfectamente, Revisar
         ValidationResult result = ValidationsService.startValidating(args.length, Same.as(3, usoIncorrecto))
                 .andMayThrowException(() -> args[1], usoIncorrecto, OwnerPosicionAbierta.de(player.getName(), TipoPosicion.CORTO))
@@ -30,7 +27,6 @@ public class ComprarCorto extends PixelcoinCommand implements CommandRunner{
                 .validateAll();
 
         if(result.isFailed()){
-            MySQL.desconectar();
             player.sendMessage(DARK_RED + result.getMessage());
             return;
         }
@@ -49,6 +45,5 @@ public class ComprarCorto extends PixelcoinCommand implements CommandRunner{
             ordenesMySQL.abrirOrdenCompraCorto((Player) player, args[2], cantidad);
         }
 
-        MySQL.desconectar();
     }
 }

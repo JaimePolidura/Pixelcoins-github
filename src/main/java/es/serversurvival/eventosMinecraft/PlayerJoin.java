@@ -2,7 +2,6 @@ package es.serversurvival.eventosMinecraft;
 
 import es.serversurvival.mySQL.Jugadores;
 import es.serversurvival.mySQL.Mensajes;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.npc.NPCManager;
 import es.serversurvival.task.ScoreBoardManager;
 import org.bukkit.ChatColor;
@@ -18,14 +17,11 @@ public final class PlayerJoin implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent evento) {
         Player player = evento.getPlayer();
-        MySQL.conectar();
 
         jugadoresMySQL.setUpJugadorUnido(player);
 
         player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "Tienes " + mensajesMySQL.getMensajesJugador(player.getName()).size() +
                 " pendientes " + ChatColor.AQUA + "  /mensajes");
-
-        MySQL.desconectar();
 
         ScoreBoardManager.getInstance().updateScoreboard(player);
         NPCManager.showPlayer(player);

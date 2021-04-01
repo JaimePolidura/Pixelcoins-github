@@ -1,7 +1,6 @@
 package es.serversurvival.menus.menus;
 
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.MenuManager;
@@ -67,13 +66,11 @@ public class OfertasMenu extends Menu implements Clickable, Paginated, Refreshca
 
         String itemClickckedDisplayName = itemClicked.getItemMeta().getDisplayName();
 
-        MySQL.conectar();
         if (itemClickckedDisplayName.equalsIgnoreCase(Ofertas.NOMBRE_ITEM_RETIRAR)) {
             ofertasMySQL.retirarOferta(player, id);
         } else {
             transaccionesMySQL.realizarVenta(player.getName(), id, player);
         }
-        MySQL.desconectar();
     }
 
     @Override

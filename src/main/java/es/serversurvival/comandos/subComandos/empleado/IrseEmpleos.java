@@ -3,7 +3,6 @@ package es.serversurvival.comandos.subComandos.empleado;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
-import es.serversurvival.mySQL.MySQL;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.ChatColor;
@@ -20,7 +19,6 @@ public class IrseEmpleos extends PixelcoinCommand implements CommandRunner {
 
     @Override
     public void execute(CommandSender jugadorPlayer, String[] args) {
-        MySQL.conectar();
 
         ValidationResult result = ValidationsService.startValidating(args.length, Same.as(2, usoIncorrecto))
                 .andMayThrowException(() -> empresasMySQL.getEmpresa(args[1]) != null, usoIncorrecto, True.of("Esa empresa no exsiste"))
@@ -29,12 +27,10 @@ public class IrseEmpleos extends PixelcoinCommand implements CommandRunner {
 
         if(result.isFailed()){
             jugadorPlayer.sendMessage(ChatColor.DARK_RED + result.getMessage());
-            MySQL.desconectar();
             return;
         }
 
         empleadosMySQL.irseEmpresa(args[1], (Player) jugadorPlayer);
-        MySQL.desconectar();
     }
 
     private boolean trabajaEnLaEmpresa (Supplier<String> empresaSupplier, String jugador) {

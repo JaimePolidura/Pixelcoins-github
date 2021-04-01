@@ -1,8 +1,6 @@
 package es.serversurvival.mobs.mobs.withers;
 
 import es.serversurvival.mobs.InteractuableMob;
-import es.serversurvival.mySQL.MySQL;
-import es.serversurvival.mySQL.Transacciones;
 import es.serversurvival.util.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -23,9 +21,7 @@ public class CuarzoPixelcoinsMob extends InteractuableMob {
             return;
         }
 
-        MySQL.conectar();
         transaccionesMySQL.ingresarItem(itemEnMano, player);
-        MySQL.desconectar();
     }
 
     @Override

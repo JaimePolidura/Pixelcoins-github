@@ -2,7 +2,6 @@ package es.serversurvival.menus.inventoryFactory.inventories;
 
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.Paginated;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.Ofertas;
 import es.serversurvival.mySQL.tablasObjetos.Oferta;
 import es.serversurvival.util.MinecraftUtils;
@@ -23,7 +22,6 @@ public class OfertaInventoryFactory extends InventoryFactory {
     protected Inventory buildInventory(String jugador) {
         Inventory inventory = Bukkit.createInventory(null, 54, titulo);
 
-        MySQL.conectar();
         List<Oferta> ofertas = ofertasMySQL.getTodasOfertas();
 
         for(int i = 0; i < ofertas.size(); i++){
@@ -51,8 +49,6 @@ public class OfertaInventoryFactory extends InventoryFactory {
                 itemExcessInventory.add(itemStackAInsertar);
             }
         }
-
-        MySQL.desconectar();
 
         inventory.setItem(53, buildItemInfo());
 

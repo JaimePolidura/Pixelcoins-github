@@ -39,11 +39,6 @@ public abstract class MySQL implements AllMySQLTablesInstances{
     }
 
     @SneakyThrows
-    public static void desconectar() {
-        conexion.close();
-    }
-
-    @SneakyThrows
     protected ResultSet executeQuery(String query) {
         return conexion.createStatement().executeQuery(query);
     }
@@ -52,8 +47,7 @@ public abstract class MySQL implements AllMySQLTablesInstances{
     protected void executeUpdate (String consulta) {
         conexion.createStatement().executeUpdate(consulta);
     }
-    
-    @SneakyThrows
+
     protected boolean isEmptyFromQuery (String query) {
         try{
             return !executeQuery(query).next();

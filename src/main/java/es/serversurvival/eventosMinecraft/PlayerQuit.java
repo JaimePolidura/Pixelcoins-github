@@ -2,7 +2,6 @@ package es.serversurvival.eventosMinecraft;
 
 import es.serversurvival.menus.MenuManager;
 import es.serversurvival.mySQL.ConversacionesWeb;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.tablasObjetos.ConversacionWeb;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,7 +14,6 @@ public final class PlayerQuit implements Listener {
 
         MenuManager.borrarMenu(playerName);
 
-        MySQL.conectar();
         ConversacionesWeb conversacionesWebMySQL = ConversacionesWeb.INSTANCE;
 
         ConversacionWeb conversacionWeb = conversacionesWebMySQL.getConversacionServer(playerName);
@@ -24,6 +22,5 @@ public final class PlayerQuit implements Listener {
             conversacionesWebMySQL.cerrarChat(conversacionWeb);
         }
 
-        MySQL.desconectar();
     }
 }

@@ -3,7 +3,6 @@ package es.serversurvival.comandos.comandos;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
-import es.serversurvival.mySQL.MySQL;
 import main.ValidationResult;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -28,8 +27,6 @@ public class Comprar extends PixelcoinCommand implements CommandRunner {
             return;
         }
 
-        MySQL.conectar();
         transaccionesMySQL.comprarServivio(args[0], Double.parseDouble(args[1]), (Player) sender);
-        MySQL.desconectar();
     }
 }

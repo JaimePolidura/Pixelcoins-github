@@ -2,11 +2,8 @@ package es.serversurvival.menus.menus.confirmaciones;
 
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
-import es.serversurvival.menus.menus.confirmaciones.Confirmacion;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import es.serversurvival.util.MinecraftUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -96,9 +93,7 @@ public class BolsaVenderAccionEmpresaMenu extends Menu implements Confirmacion {
 
     @Override
     public void confirmar() {
-        MySQL.conectar();
         ofertasMercadoServerMySQL.venderOfertaDesdeBolsaCartera(player, posicionAVender, precioVenta);
-        MySQL.desconectar();
         closeMenu();
     }
 

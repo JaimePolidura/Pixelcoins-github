@@ -1,25 +1,20 @@
 package es.serversurvival.menus.menus.confirmaciones;
 
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
-import es.serversurvival.mySQL.tablasObjetos.OfertaMercadoServer;
 import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static es.serversurvival.util.Funciones.*;
 import static org.bukkit.ChatColor.*;
-import static org.bukkit.Material.RED_WOOL;
 
 public class ComprarBolsaConfirmacion extends Menu implements AumentoConfirmacion {
     private final String simbolo;
@@ -51,9 +46,7 @@ public class ComprarBolsaConfirmacion extends Menu implements AumentoConfirmacio
 
         this.inventory = InventoryCreator.createConfirmacionAumento(titulo, tituloAceptar, lore, tituloCancelar);
 
-        MySQL.conectar();
         this.dineroJugador = jugadoresMySQL.getJugador(player.getName()).getPixelcoins();
-        MySQL.desconectar();
 
         openMenu();
     }
@@ -89,8 +82,6 @@ public class ComprarBolsaConfirmacion extends Menu implements AumentoConfirmacio
             return;
         }
 
-        MySQL.conectar();
-
         if(tipoActivo == TipoActivo.ACCIONES_SERVER){
             transaccionesMySQL.comprarOfertaMercadoAccionServer(player, id, cantidadAComprar);
         }else if(mercadoEstaAbierto()){
@@ -99,7 +90,6 @@ public class ComprarBolsaConfirmacion extends Menu implements AumentoConfirmacio
             ordenesMySQL.abrirOrdenCompraLargo(player, simbolo, cantidadAComprar);
         }
 
-        MySQL.desconectar();
         closeMenu();
     }
 

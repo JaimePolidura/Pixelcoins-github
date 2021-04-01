@@ -1,6 +1,5 @@
 package es.serversurvival.menus.menus;
 
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.MenuManager;
@@ -55,15 +54,12 @@ public class DeudasMenu extends Menu implements Clickable, Refreshcable, CanGoBa
         int idAPagar = Integer.parseInt(itemCliqueado.getItemMeta().getLore().get(4).split(" ")[1]);
         String tipoItem = itemCliqueado.getType().toString();
 
-        MySQL.conectar();
-
         if(tipoItem.equalsIgnoreCase("RED_BANNER")){
             pagarDeuda(idAPagar);
         }else{
             cancelarDeuda(idAPagar);
         }
 
-        MySQL.desconectar();
     }
 
     private void pagarDeuda (int id) {

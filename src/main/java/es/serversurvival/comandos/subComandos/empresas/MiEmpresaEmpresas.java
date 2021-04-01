@@ -4,7 +4,6 @@ import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
 import es.serversurvival.menus.menus.EmpresasVerMenu;
-import es.serversurvival.mySQL.MySQL;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.ChatColor;
@@ -20,7 +19,6 @@ public class MiEmpresaEmpresas extends PixelcoinCommand implements CommandRunner
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        MySQL.conectar();
 
         ValidationResult result = ValidationsService.startValidating(args.length == 2, True.of(usoIncorrecto))
                 .andMayThrowException(() -> args[1], usoIncorrecto, OwnerDeEmpresa.of(player.getName()))
@@ -32,6 +30,5 @@ public class MiEmpresaEmpresas extends PixelcoinCommand implements CommandRunner
             EmpresasVerMenu menu = new EmpresasVerMenu((Player) player, args[1]);
         }
 
-        MySQL.desconectar();
     }
 }

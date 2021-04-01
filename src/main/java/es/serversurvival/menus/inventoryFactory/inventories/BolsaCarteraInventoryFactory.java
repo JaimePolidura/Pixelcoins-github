@@ -90,7 +90,6 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
     }
 
     private List<ItemStack> buildItemsPosicionesAbiertas (String jugador) {
-        llamadasApiMySQL.conectar();
         this.liquidezjugador = jugadoresMySQL.getJugador(jugador).getPixelcoins();
         rellenarLlamadasApi();
 
@@ -105,8 +104,6 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         for(PosicionAbierta posicion : jugadorPosServer){
             posicionesAbiertasItems.add(buildItemFromPosicionServer(posicion));
         }
-
-        llamadasApiMySQL.desconectar();
 
         return posicionesAbiertasItems;
     }

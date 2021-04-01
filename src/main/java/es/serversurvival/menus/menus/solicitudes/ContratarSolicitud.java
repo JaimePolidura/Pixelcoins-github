@@ -5,7 +5,6 @@ import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.MenuManager;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
-import es.serversurvival.mySQL.Empleados;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -72,9 +71,7 @@ public class ContratarSolicitud extends Menu implements Solicitud{
         Player enviadorPlayer = Bukkit.getPlayer(enviador);
         Player destinatarioPlayer = Bukkit.getPlayer(destinatario);
 
-        empleadosMySQL.conectar();
         empleadosMySQL.nuevoEmpleado(destinatario, empresa, sueldo, tipoSueldo, cargo);
-        empleadosMySQL.desconectar();
         closeMenu();
 
         if (enviadorPlayer != null) {

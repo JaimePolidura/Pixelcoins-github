@@ -1,6 +1,5 @@
 package es.serversurvival.npc.groups;
 
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.npc.NPCCreator;
 import es.serversurvival.util.Funciones;
 import net.jitse.npclib.api.NPC;
@@ -34,9 +33,7 @@ public class TopNPCGroup extends NPCGroup {
     public void updateAll() {
         clearNPCs();
 
-        MySQL.conectar();
         Map<String, Double> topJugadores = Funciones.crearMapaTopPatrimonioPlayers(false);
-        MySQL.desconectar();
 
         int top = 1;
 

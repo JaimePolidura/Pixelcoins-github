@@ -70,7 +70,6 @@ public class VenderSolicitud extends Menu implements Solicitud {
 
         Player enviador = Bukkit.getPlayer(this.enviador);
 
-        empleadosMySQL.conectar();
         boolean trabaja = empleadosMySQL.trabajaEmpresa(player.getName(), empresa);
         if (trabaja) {
             int id_empleado = empleadosMySQL.getEmpleado(player.getName(), empresa).getId();
@@ -84,7 +83,6 @@ public class VenderSolicitud extends Menu implements Solicitud {
 
         transaccionesMySQL.comprarEmpresa(this.enviador, this.destinatario, empresa, precio, enviador);
         transaccionesMySQL.nuevaTransaccion(this.destinatario, this.enviador, precio, empresa, TipoTransaccion.EMPRESA_VENTA);
-        empleadosMySQL.desconectar();
         player.sendMessage(ChatColor.GOLD + "Ahora eres dueño de " + ChatColor.DARK_AQUA + empresa + ChatColor.GOLD + " ,la has comprado por " + ChatColor.GREEN + precio + " PC");
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 

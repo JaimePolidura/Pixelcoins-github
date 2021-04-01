@@ -2,13 +2,11 @@ package es.serversurvival.menus.menus;
 
 import es.serversurvival.menus.menus.confirmaciones.BorrrarEmpresaConfirmacion;
 import es.serversurvival.menus.menus.confirmaciones.PagarDividendoConfirmacion;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.MenuManager;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.VerEmpresaInventoryFactory;
-import es.serversurvival.mySQL.Empleados;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -71,12 +69,9 @@ public class EmpresasVerMenu extends Menu implements Clickable, Refreshcable, Po
             }
             nombreEmpleadoADespedir = itemClickedao.getItemMeta().getLore().get(1).split(" ")[1];
 
-            MySQL.conectar();
-
             empleadosMySQL.despedir(empresa, nombreEmpleadoADespedir, "Despedido desde el menu", (Player) event.getWhoClicked());
             refresh();
 
-            MySQL.desconectar();
         }
     }
 

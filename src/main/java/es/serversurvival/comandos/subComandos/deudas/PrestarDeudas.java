@@ -3,7 +3,6 @@ package es.serversurvival.comandos.subComandos.deudas;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.MenuManager;
 import es.serversurvival.menus.menus.solicitudes.PrestamoSolicitud;
@@ -23,7 +22,6 @@ public class PrestarDeudas extends PixelcoinCommand implements CommandRunner {
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        MySQL.conectar();
 
         ValidationResult result = ValidationsService.startValidating(args.length == 4 || args.length == 5, True.of(mensajeIncorrecto))
                 .andMayThrowException(() -> args[1], mensajeIncorrecto, JugadorOnline, NotEqualsIgnoreCase.of(player.getName(), "No puedes ser tu mimsmo"))
@@ -37,7 +35,6 @@ public class PrestarDeudas extends PixelcoinCommand implements CommandRunner {
 
         if(result.isFailed()){
             player.sendMessage(DARK_RED + result.getMessage());
-            MySQL.desconectar();
             return;
         }
 
@@ -48,7 +45,6 @@ public class PrestarDeudas extends PixelcoinCommand implements CommandRunner {
 
         PrestamoSolicitud solicitud = new PrestamoSolicitud(player.getName(), Bukkit.getPlayer(args[1]).getName(), Integer.parseInt(args[2]), Integer.parseInt(args[3]), interes);
         solicitud.enviarSolicitud();
-        MySQL.conectar();
     }
 
     public static Supplier<String> pixelcoinsDeudaConIntereses (String[] args) {

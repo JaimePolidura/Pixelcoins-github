@@ -3,7 +3,6 @@ package es.serversurvival.menus.menus.confirmaciones;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.menus.BolsaCarteraMenu;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import es.serversurvival.mySQL.enums.TipoPosicion;
@@ -70,7 +69,6 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion{
 
     @Override
     public void confirmar() {
-        MySQL.conectar();
 
         PosicionAbierta posicionAVender = posicionesAbiertasMySQL.getPosicionAbierta(id);
 
@@ -88,7 +86,6 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion{
         }
 
         closeMenu();
-        MySQL.desconectar();
     }
 
     @Override

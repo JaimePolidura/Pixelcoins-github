@@ -3,7 +3,6 @@ package es.serversurvival.comandos.subComandos.deudas;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
-import es.serversurvival.mySQL.MySQL;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.command.CommandSender;
@@ -18,7 +17,6 @@ public class CancelarDeudaDeudas extends PixelcoinCommand implements CommandRunn
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        MySQL.conectar();
 
         ValidationResult result = ValidationsService.startValidating(args.length, Same.as(2, usoIncorrecto))
                 .andMayThrowException(() -> args[1], usoIncorrecto, NaturalNumber)
@@ -28,12 +26,10 @@ public class CancelarDeudaDeudas extends PixelcoinCommand implements CommandRunn
 
         if(result.isFailed()){
             player.sendMessage(DARK_RED + result.getMessage());
-            MySQL.desconectar();
             return;
         }
 
         deudasMySQL.cancelarDeuda((Player) player, Integer.parseInt(args[1]));
-        MySQL.desconectar();
     }
 
     private boolean existeDeuda (String[] args) {

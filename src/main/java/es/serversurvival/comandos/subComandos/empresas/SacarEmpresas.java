@@ -4,7 +4,6 @@ import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
 import es.serversurvival.mySQL.Empresas;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import main.ValidationResult;
 import main.ValidationsService;
@@ -23,7 +22,6 @@ public class SacarEmpresas extends PixelcoinCommand implements CommandRunner {
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        MySQL.conectar();
 
         ValidationResult result = ValidationsService.startValidating(args.length == 3, True.of(usoIncorrecto))
                 .andMayThrowException(() -> args[1], usoIncorrecto, OwnerDeEmpresa.of(player.getName()))
@@ -38,7 +36,6 @@ public class SacarEmpresas extends PixelcoinCommand implements CommandRunner {
             transaccionesMySQL.sacarPixelcoinsEmpresa((Player) player, pixelcoinsASacar, args[1]);
         }
 
-        MySQL.desconectar();
     }
 
     private boolean suficientesPixelcoinsPredicado (Supplier<String> empresaSupplier, Supplier<String> pixelcoins) {

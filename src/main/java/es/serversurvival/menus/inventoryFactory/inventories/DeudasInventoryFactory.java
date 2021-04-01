@@ -38,10 +38,8 @@ public class DeudasInventoryFactory extends InventoryFactory {
     private List<ItemStack> buildItemsDeudas (String jugador) {
         List<ItemStack> itemsDeLasDeudas = new ArrayList<>();
 
-        deudasMySQL.conectar();
         List<Deuda> deudasJugadorDebe = deudasMySQL.getDeudasDeudor(jugador);
         List<Deuda> deudasJugadorDeben = deudasMySQL.getDeudasAcredor(jugador);
-        deudasMySQL.desconectar();
 
         deudasJugadorDebe.forEach(deuda -> itemsDeLasDeudas.add(buildItemFromDeudaDeudor(deuda)));
         deudasJugadorDeben.forEach(deuda -> itemsDeLasDeudas.add(buildItemFromDeudaAcredor(deuda)));

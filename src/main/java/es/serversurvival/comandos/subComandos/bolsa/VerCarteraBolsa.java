@@ -3,7 +3,6 @@ package es.serversurvival.comandos.subComandos.bolsa;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import es.serversurvival.util.Funciones;
 import org.bukkit.ChatColor;
@@ -22,7 +21,6 @@ public class VerCarteraBolsa extends PixelcoinCommand implements CommandRunner {
         }
         String nombreJugadorAVer = args[1];
 
-        MySQL.conectar();
         double totalInvertido = posicionesAbiertasMySQL.getAllPixeloinsEnAcciones(nombreJugadorAVer);
         Map<String, Integer> posicionesConPeso = getPesoCarteraAcciones(nombreJugadorAVer, totalInvertido);
 
@@ -39,7 +37,6 @@ public class VerCarteraBolsa extends PixelcoinCommand implements CommandRunner {
         }
         player.sendMessage(ChatColor.GOLD + "" + "------------------------------");
 
-        MySQL.desconectar();
     }
 
     private Map<String, Integer> getPesoCarteraAcciones (String jugador, double totalInvertido){

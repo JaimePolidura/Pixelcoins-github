@@ -3,7 +3,6 @@ package es.serversurvival.menus.inventoryFactory.inventories;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.PerfilMenu;
-import es.serversurvival.mySQL.*;
 import es.serversurvival.mySQL.tablasObjetos.*;
 import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
@@ -24,7 +23,6 @@ public class PerfilInventoryFactory extends InventoryFactory {
     protected Inventory buildInventory(String player) {
         Inventory inventory = Bukkit.createInventory(null, 54, PerfilMenu.titulo);
 
-        MySQL.conectar();
         inventory.setItem(10, buildItemWEB(player));
         inventory.setItem(13, buildItemStats(player));
         inventory.setItem(16, buildItemTienda());
@@ -32,7 +30,6 @@ public class PerfilInventoryFactory extends InventoryFactory {
         inventory.setItem(30, buildItemBolsa(player));
         inventory.setItem(32, buildItemEmpresa(player));
         inventory.setItem(34, buildItemEmpleos(player));
-        MySQL.desconectar();
 
         rellenarCristales(inventory);
 
@@ -137,7 +134,6 @@ public class PerfilInventoryFactory extends InventoryFactory {
 
         int nventas = jugador.getNventas();
         int posTopRicps = jugadoresMySQL.getPosicionTopRicos(nombreJugador);
-        MySQL.conectar();
         int posTopVendedores = jugadoresMySQL.getPosicionTopVendedores(nombreJugador);
         List<String> lore = new ArrayList<>();
         lore.add("  ");

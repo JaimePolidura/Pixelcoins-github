@@ -4,7 +4,6 @@ import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
 import es.serversurvival.menus.menus.confirmaciones.BorrrarEmpresaConfirmacion;
-import es.serversurvival.mySQL.MySQL;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.command.CommandSender;
@@ -19,7 +18,6 @@ public class BorrarEmpresas extends PixelcoinCommand implements CommandRunner {
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        MySQL.conectar();
 
         ValidationResult result = ValidationsService.startValidating(args.length, Same.as(2, usoIncorrecto))
                 .andMayThrowException(() -> args[1], usoIncorrecto, OwnerDeEmpresa.of(player.getName()))
@@ -27,7 +25,6 @@ public class BorrarEmpresas extends PixelcoinCommand implements CommandRunner {
 
         if(result.isFailed()){
             player.sendMessage(DARK_RED + result.getMessage());
-            MySQL.desconectar();
             return;
         }
 

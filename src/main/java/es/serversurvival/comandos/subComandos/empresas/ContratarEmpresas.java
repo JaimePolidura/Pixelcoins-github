@@ -3,7 +3,6 @@ package es.serversurvival.comandos.subComandos.empresas;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.enums.TipoSueldo;
 import es.serversurvival.menus.menus.solicitudes.ContratarSolicitud;
 import main.ValidationResult;
@@ -22,7 +21,6 @@ public class ContratarEmpresas extends PixelcoinCommand implements CommandRunner
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        MySQL.conectar();
 
         ValidationResult result = ValidationsService.startValidating(args.length == 5 || args.length == 6, True.of(usoIncorrecto))
                 .andMayThrowException(() -> args[3], usoIncorrecto, NaturalNumber)
@@ -33,7 +31,6 @@ public class ContratarEmpresas extends PixelcoinCommand implements CommandRunner
 
         if(result.isFailed()){
             player.sendMessage(ChatColor.DARK_RED + result.getMessage());
-            MySQL.desconectar();
             return;
         }
 
@@ -51,6 +48,5 @@ public class ContratarEmpresas extends PixelcoinCommand implements CommandRunner
         ContratarSolicitud solicitud = new ContratarSolicitud(player.getName(), jugadorAContratarPlayer.getName(), args[2], sueldo, tipoSueldo, cargo);
         solicitud.enviarSolicitud();
 
-        MySQL.desconectar();
     }
 }

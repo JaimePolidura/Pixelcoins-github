@@ -1,10 +1,8 @@
 package es.serversurvival.menus.menus.confirmaciones;
 
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
-import es.serversurvival.mySQL.Empresas;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -46,9 +44,7 @@ public class BorrrarEmpresaConfirmacion extends Menu implements Confirmacion {
 
     @Override
     public void confirmar() {
-        MySQL.conectar();
         empresasMySQL.borrarEmpresaManual(empresa);
-        MySQL.desconectar();
 
         player.sendMessage(ChatColor.GOLD + "Has borrado tu empresa, has recibido todas las pixelcoins de ello");
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);

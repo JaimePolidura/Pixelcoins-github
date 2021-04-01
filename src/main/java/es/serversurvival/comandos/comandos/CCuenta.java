@@ -3,7 +3,6 @@ package es.serversurvival.comandos.comandos;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.PixelcoinCommand;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.tablasObjetos.Cuenta;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
 import org.bukkit.ChatColor;
@@ -15,7 +14,6 @@ public class CCuenta extends PixelcoinCommand implements CommandRunner {
 
     @Override
     public void execute(CommandSender commandSender, String[] strings) {
-        MySQL.conectar();
 
         Player player = (Player) commandSender;
         Cuenta cuenta = cuentasMySQL.getCuenta(player.getName());
@@ -23,7 +21,6 @@ public class CCuenta extends PixelcoinCommand implements CommandRunner {
 
         if(jugador.getNumero_cuenta() == 0) {
             jugadoresMySQL.setNumeroCuenta(player.getName(), jugadoresMySQL.generearNumeroCuenta());
-            MySQL.desconectar();
             return;
         }
 
@@ -41,6 +38,5 @@ public class CCuenta extends PixelcoinCommand implements CommandRunner {
         player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "http://serversurvival.ddns.net/perfil");
         player.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 
-        MySQL.desconectar();
     }
 }

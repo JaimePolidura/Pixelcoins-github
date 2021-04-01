@@ -3,7 +3,6 @@ package es.serversurvival.menus.menus;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.EmpresasVerTodasInventoryFactory;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -55,8 +54,6 @@ public class EmpresasVerTodasMenu extends Menu implements CanGoBack, Clickable{
             return;
         }
 
-        MySQL.conectar();
-
         String nombreEmpresa = lore.get(1).split(" ")[1].substring(4);
         String displayName = itemClickeado.getItemMeta().getDisplayName();
 
@@ -67,6 +64,5 @@ public class EmpresasVerTodasMenu extends Menu implements CanGoBack, Clickable{
             closeMenu();
         }
 
-        MySQL.desconectar();
     }
 }

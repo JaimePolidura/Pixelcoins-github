@@ -2,17 +2,12 @@ package es.serversurvival.menus.menus.confirmaciones;
 
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
-import es.serversurvival.mySQL.MySQL;
-import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.tablasObjetos.OfertaMercadoServer;
 import es.serversurvival.util.MinecraftUtils;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +29,6 @@ public class ComprarAccionesServerConfirmacion extends Menu implements AumentoCo
     public ComprarAccionesServerConfirmacion(Player player, int id) {
         this.player = player;
 
-        MySQL.conectar();
         OfertaMercadoServer oferta = ofertasMercadoServerMySQL.get(id);
 
         this.oferta = oferta;
@@ -50,7 +44,6 @@ public class ComprarAccionesServerConfirmacion extends Menu implements AumentoCo
 
         this.inventory = InventoryCreator.createConfirmacionAumento(titulo, tituloAceptar, lore, tituloCancelar);
 
-        MySQL.desconectar();
         openMenu();
     }
 
@@ -82,9 +75,7 @@ public class ComprarAccionesServerConfirmacion extends Menu implements AumentoCo
             return;
         }
 
-        MySQL.conectar();
         transaccionesMySQL.comprarOfertaMercadoAccionServer(player, oferta.getId(), this.cantidadAComprar);
-        MySQL.desconectar();
 
         closeMenu();
     }

@@ -4,7 +4,6 @@ import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.MenuManager;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.SacarItemInventoryFactory;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.enums.CambioPixelcoins;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
 import es.serversurvival.task.ScoreBoardManager;
@@ -26,9 +25,7 @@ public class SacarItemMenu extends Menu implements Clickable, Refreshcable {
 
     public SacarItemMenu (Player player) {
         this.player = player;
-        MySQL.conectar();
         this.pixelcoinsJugador = jugadoresMySQL.getJugador(player.getName()).getPixelcoins();
-        MySQL.desconectar();
 
         this.inventory = InventoryCreator.createInventoryMenu(new SacarItemInventoryFactory(pixelcoinsJugador), player.getName());
         openMenu();
@@ -59,8 +56,6 @@ public class SacarItemMenu extends Menu implements Clickable, Refreshcable {
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
             return;
         }
-        
-        MySQL.conectar();
 
         Jugador jugadorASacar = jugadoresMySQL.getJugador(player.getName());
         String tipoItem = itemClickeado.getType().toString();
@@ -71,7 +66,6 @@ public class SacarItemMenu extends Menu implements Clickable, Refreshcable {
         ScoreBoardManager.getInstance().updateScoreboard(player);
 
         refresh();
-        MySQL.desconectar();
     }
 
     @Override

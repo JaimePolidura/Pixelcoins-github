@@ -3,7 +3,6 @@ package es.serversurvival.menus.inventoryFactory.inventories;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.AccionesMenu;
 import es.serversurvival.menus.menus.Paginated;
-import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.tablasObjetos.LlamadaApi;
 import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
@@ -75,9 +74,7 @@ public class AccionesInventoryFactory extends InventoryFactory {
     private List<ItemStack> buildItemsAcciones (Map<String, String> accionesPaginaActual) {
         List<ItemStack> itemStackList = new ArrayList<>();
 
-        MySQL.conectar();
         Map<String, LlamadaApi> acciones = llamadasApiMySQL.getMapOfAllLlamadasApi();
-        MySQL.desconectar();
 
         for (Map.Entry<String, String> entry : accionesPaginaActual.entrySet()) {
             List<String> lore = new ArrayList<>();

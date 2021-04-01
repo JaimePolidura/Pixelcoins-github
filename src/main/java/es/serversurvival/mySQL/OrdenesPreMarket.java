@@ -85,7 +85,6 @@ public final class OrdenesPreMarket extends MySQL{
             return;
         }
 
-        MySQL.conectar();
         List<OrdenPreMarket> todasLasOrdenes = this.getAllOrdenes();
 
         POOL.submit(() -> {
@@ -107,7 +106,6 @@ public final class OrdenesPreMarket extends MySQL{
     }
 
     private void ejecutarOrdenVentaLargo(OrdenPreMarket orden) {
-        MySQL.conectar();
 
         int cantidad = orden.getCantidad();
         String jugador = orden.getJugador();
@@ -119,7 +117,6 @@ public final class OrdenesPreMarket extends MySQL{
     }
 
     private void ejecutarOrdenCompraLargo(OrdenPreMarket orden) {
-        MySQL.conectar();
 
         String ticker = orden.getNombre_activo();
         int cantidad = orden.getCantidad();
@@ -144,11 +141,9 @@ public final class OrdenesPreMarket extends MySQL{
         mensajesMySQL.nuevoMensaje("", jugador, "Se ha ejecutado la orden de: " + orden.getNombre_activo() + " -" + cantidad * precio + " PC");
         borrarOrden(orden.getId());
 
-        MySQL.desconectar();
     }
 
     private void ejecutarOrdenVentaCorto (OrdenPreMarket orden) {
-        MySQL.conectar();
 
         Pair<String, Double> pairNombrePrecio = llamadasApiMySQL.getPairNombreValorPrecio(orden.getNombre_activo()).get();
         double precio = pairNombrePrecio.getValue();
