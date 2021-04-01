@@ -6,13 +6,6 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import java.text.DecimalFormat;
 
-public interface SingleScoreboard extends ServerScoreboard{
-    Empresas empresasMySQL = Empresas.INSTANCE;
-    Jugadores jugadoresMySQL = Jugadores.INSTANCE;
-    PosicionesAbiertas posicionesAbiertasMySQL = PosicionesAbiertas.INSTANCE;
-    LlamadasApi llamadasApiMySQL = LlamadasApi.INSTANCE;
-    Deudas deudasMySQ = Deudas.INSTANCE;
-    DecimalFormat formatea = Funciones.FORMATEA;
-
+public interface SingleScoreboard extends ServerScoreboard, AllMySQLTablesInstances{
     Scoreboard createScoreborad(String player);
 }

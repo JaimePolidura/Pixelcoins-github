@@ -12,8 +12,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public final class PlayerJoin implements Listener {
-    private Mensajes mensajesMySQL = Mensajes.INSTANCE;
-    private Jugadores jugadoresMySQL = Jugadores.INSTANCE;
+    private final Mensajes mensajesMySQL = Mensajes.INSTANCE;
+    private final Jugadores jugadoresMySQL = Jugadores.INSTANCE;
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent evento) {

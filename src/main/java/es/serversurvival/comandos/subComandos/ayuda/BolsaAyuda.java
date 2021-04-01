@@ -2,10 +2,8 @@ package es.serversurvival.comandos.subComandos.ayuda;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.comandos.ComandoUtilidades;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 @Command(name = "ayuda bolsa")
 public class BolsaAyuda implements CommandRunner {

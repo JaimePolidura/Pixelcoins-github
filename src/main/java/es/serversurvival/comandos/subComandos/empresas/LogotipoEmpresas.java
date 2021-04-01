@@ -2,7 +2,7 @@ package es.serversurvival.comandos.subComandos.empresas;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.comandos.ComandoUtilidades;
+import es.serversurvival.comandos.PixelcoinCommand;
 import es.serversurvival.mySQL.MySQL;
 import main.ValidationResult;
 import main.ValidationsService;
@@ -14,7 +14,7 @@ import static es.serversurvival.validaciones.Validaciones.*;
 import static org.bukkit.ChatColor.DARK_RED;
 
 @Command(name = "empresas logotipo")
-public class LogotipoEmpresas extends ComandoUtilidades implements CommandRunner {
+public class LogotipoEmpresas extends PixelcoinCommand implements CommandRunner {
     private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /empresas logotipo <empresa>";
 
     @Override

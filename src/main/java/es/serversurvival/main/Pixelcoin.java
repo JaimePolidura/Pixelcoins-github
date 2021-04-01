@@ -49,7 +49,6 @@ public final class Pixelcoin extends JavaPlugin {
         ActualizarLlamadasApi actualizarPreciosTask = new ActualizarLlamadasApi();
         ActualizarNPCs actualizarNPCs = new ActualizarNPCs();
         SplitAcciones splitAccionesTask = new SplitAcciones();
-        ServerSocketWeb serverSocketWeb = ServerSocketWeb.INSTANCE;
         RabbitMQConsumerTask rabbitMQConsumer = new RabbitMQConsumerTask();
         OrdenesBolsa ordenesBolsaTask = new OrdenesBolsa();
 
@@ -60,11 +59,7 @@ public final class Pixelcoin extends JavaPlugin {
         int cada2Minutos = 20 * 60 * 2;
         int cadaMinuto = 20 * 60;
         int cadaMinutoYMedio = 20 * 60 + 20 * 30;
-        int cada30Segundos = 20 * 30;
-        int cada45Segundos = 20 * 45;
         int cada15Segundos = 20 * 15;
-        int cada5Segundos = 20 * 5;
-        int cada1Segundo = 20;
         int ahora = 0;
 
         ScoreBoardManager.getInstance().runTaskTimer(this, ahora, cadaMinuto);
@@ -93,10 +88,5 @@ public final class Pixelcoin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerInventoryClick(), this);
         getServer().getPluginManager().registerEvents(new PlayerCloseInventory(), this);
         getServer().getPluginManager().registerEvents(new PlayerQuit(), this);
-    }
-
-    @Override
-    public void onDisable() {
-        getLogger().info("----------- Plugin desactivado -----------");
     }
 }

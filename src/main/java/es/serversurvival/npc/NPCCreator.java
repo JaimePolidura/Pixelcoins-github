@@ -17,8 +17,8 @@ import java.util.Arrays;
 
 
 public final class NPCCreator {
-    private static NPCLib libray = new NPCLib(Pixelcoin.getInstance());
-    private static DecimalFormat formatea = Funciones.FORMATEA;
+    private static final NPCLib libray = new NPCLib(Pixelcoin.getInstance());
+    private static final DecimalFormat formatea = Funciones.FORMATEA;
 
     private NPCCreator () {}
 

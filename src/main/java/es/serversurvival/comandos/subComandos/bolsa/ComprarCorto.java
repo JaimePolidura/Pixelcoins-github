@@ -2,7 +2,7 @@ package es.serversurvival.comandos.subComandos.bolsa;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.comandos.ComandoUtilidades;
+import es.serversurvival.comandos.PixelcoinCommand;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
@@ -17,7 +17,7 @@ import static es.serversurvival.validaciones.Validaciones.*;
 import static org.bukkit.ChatColor.*;
 
 @Command(name = "bolsa comprarcorto")
-public class ComprarCorto extends ComandoUtilidades implements CommandRunner{
+public class ComprarCorto extends PixelcoinCommand implements CommandRunner{
     private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /bolsa comprarcorto <id> <cantidad>";
 
     @Override

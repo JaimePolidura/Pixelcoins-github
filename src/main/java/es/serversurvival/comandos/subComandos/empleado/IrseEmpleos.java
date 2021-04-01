@@ -2,11 +2,8 @@ package es.serversurvival.comandos.subComandos.empleado;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.comandos.ComandoUtilidades;
-import es.serversurvival.mySQL.Empresas;
+import es.serversurvival.comandos.PixelcoinCommand;
 import es.serversurvival.mySQL.MySQL;
-import es.serversurvival.mySQL.tablasObjetos.Empresa;
-import es.serversurvival.validaciones.Validaciones;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.ChatColor;
@@ -18,7 +15,7 @@ import java.util.function.Supplier;
 import static es.serversurvival.validaciones.Validaciones.*;
 
 @Command(name = "empleos irse")
-public class IrseEmpleos extends ComandoUtilidades implements CommandRunner {
+public class IrseEmpleos extends PixelcoinCommand implements CommandRunner {
     private final String usoIncorrecto = ChatColor.DARK_RED + "Uso incorrecto: /empleos irse <empresa>";
 
     @Override

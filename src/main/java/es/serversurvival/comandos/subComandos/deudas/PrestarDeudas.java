@@ -2,18 +2,15 @@ package es.serversurvival.comandos.subComandos.deudas;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.comandos.ComandoUtilidades;
+import es.serversurvival.comandos.PixelcoinCommand;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.MenuManager;
 import es.serversurvival.menus.menus.solicitudes.PrestamoSolicitud;
 import main.ValidationResult;
 import main.ValidationsService;
-import main.validators.booleans.False;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.function.Supplier;
 
@@ -21,7 +18,7 @@ import static es.serversurvival.validaciones.Validaciones.*;
 import static org.bukkit.ChatColor.*;
 
 @Command(name = "deudas prestar")
-public class PrestarDeudas extends ComandoUtilidades implements CommandRunner {
+public class PrestarDeudas extends PixelcoinCommand implements CommandRunner {
     private final String mensajeIncorrecto = DARK_RED + "Uso incorrecto: /deudas prestar <jugador> <dinero> <dias> [interes]";
 
     @Override

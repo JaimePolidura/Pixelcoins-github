@@ -2,17 +2,13 @@ package es.serversurvival.comandos.subComandos.bolsa;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.comandos.ComandoUtilidades;
-import es.serversurvival.mySQL.MySQL;
+import es.serversurvival.comandos.PixelcoinCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
-import java.util.Objects;
-
 @Command(name = "bolsa dividendo")
-public class DividendoBolsa extends ComandoUtilidades implements CommandRunner {
+public class DividendoBolsa extends PixelcoinCommand implements CommandRunner {
     @Override
     public void execute(CommandSender player, String[] args) {
         if(args.length > 2){

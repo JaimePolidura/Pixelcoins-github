@@ -5,8 +5,6 @@ import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import lombok.SneakyThrows;
 import org.bukkit.Material;
 
-import java.util.Arrays;
-import java.util.Locale;
 
 public enum TipoActivo {
     ACCIONES(Material.NAME_TAG, "acciones") {
@@ -48,8 +46,8 @@ public enum TipoActivo {
 
     public abstract double getPrecio (String simbolo);
 
-    private Material materialDisplay;
-    private String alias;
+    private final Material materialDisplay;
+    private final String alias;
 
     TipoActivo(Material materialDisplay, String alias) {
         this.materialDisplay = materialDisplay;

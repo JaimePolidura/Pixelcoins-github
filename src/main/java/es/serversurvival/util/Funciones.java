@@ -125,7 +125,7 @@ public final class Funciones {
 
     public static<K, V extends Comparable<V>> HashMap<K, V> sortMapByValueCrec(Map<K, V> hm) {
         List<Map.Entry<K, V>> list = new LinkedList<>(hm.entrySet());
-        list.sort(Comparator.comparing(Map.Entry::getValue));
+        list.sort(Map.Entry.comparingByValue());
 
         HashMap<K, V> temp = new LinkedHashMap<>();
         for (Map.Entry<K, V> aa : list) {
@@ -259,7 +259,6 @@ public final class Funciones {
     public static Object peticionHttp(String link) throws Exception {
         URL url = new URL(link);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        BufferedReader bfr = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
         JSONParser parser = new JSONParser();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -343,7 +342,7 @@ public final class Funciones {
 
         for(int i = 0; i < palabraDivididaEspacios.length; i++){
             boolean haCuincidido = false;
-            
+
             for(int j = 0; j < palabrasAQuitar.length; j++){
 
                 if(palabraDivididaEspacios[i].equalsIgnoreCase(palabrasAQuitar[j])){
@@ -448,7 +447,7 @@ public final class Funciones {
 
     public static<K, V> Map<K, List<V>> mergeMapList (List<V> toIteratem, Function<V, K> keyMapper) {
         Map<K, List<V>> acumulator = new HashMap<>();
-
+        
         for(V element : toIteratem){
             K mappedKey = keyMapper.apply(element);
 

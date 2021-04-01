@@ -2,16 +2,15 @@ package es.serversurvival.comandos.subComandos.bolsa;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.comandos.ComandoUtilidades;
+import es.serversurvival.comandos.PixelcoinCommand;
 import es.serversurvival.mySQL.tablasObjetos.PosicionCerrada;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 
 @Command(name = "bolsa estadisticas")
-public class EstadiscticasBolsa extends ComandoUtilidades implements CommandRunner {
+public class EstadiscticasBolsa extends PixelcoinCommand implements CommandRunner {
 
     @Override
     public void execute(CommandSender player, String[] args) {

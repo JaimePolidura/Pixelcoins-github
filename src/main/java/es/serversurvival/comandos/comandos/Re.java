@@ -2,8 +2,9 @@ package es.serversurvival.comandos.comandos;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.comandos.ComandoUtilidades;
+import es.serversurvival.comandos.PixelcoinCommand;
 import es.serversurvival.mySQL.ConversacionesWeb;
+import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.util.Funciones;
 import main.ValidationResult;
 import main.ValidationsService;
@@ -14,10 +15,10 @@ import org.bukkit.entity.Player;
 import static es.serversurvival.validaciones.Validaciones.*;
 
 @Command(name = "re")
-public class Re extends ComandoUtilidades implements CommandRunner {
+public class Re extends PixelcoinCommand implements CommandRunner {
     @Override
     public void execute(CommandSender sender, String[] args) {
-        conversacionesWebMySQL.conectar();
+        MySQL.conectar();
 
         String playerName = sender.getName();
 
@@ -33,7 +34,7 @@ public class Re extends ComandoUtilidades implements CommandRunner {
             conversacionesWebMySQL.nuevoMensaje(conversacionesWebMySQL.getConversacionServer(playerName), (Player) sender, Funciones.buildStringFromArray(args));
         }
 
-        conversacionesWebMySQL.desconectar();
+        MySQL.desconectar();
     }
 
     private boolean existeConversacion (String jugador) {

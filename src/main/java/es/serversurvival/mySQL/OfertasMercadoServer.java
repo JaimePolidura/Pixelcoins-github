@@ -69,11 +69,10 @@ public final class OfertasMercadoServer extends MySQL{
     }
 
     public void setCantidadOBorrar (int id, int cantidad) {
-        if(this.get(id).getCantidad() > cantidad ){
+        if(this.get(id).getCantidad() > cantidad )
             this.setCantidad(id, cantidad);
-        }else{
+        else
             this.borrar(id);
-        }
     }
 
     public int getAccionesTotales (String empresa) {
@@ -84,7 +83,7 @@ public final class OfertasMercadoServer extends MySQL{
     }
 
     public int getAccionesDeEmpresa (String empresa) {
-        List<OfertaMercadoServer> ofertas = buildListFromQuery("SELECT * FROM ofertasbolsaserver WHERE empresa = '"+empresa+"' AND tipo_ofertante = '"+ EMPRESA+"'");
+        List<OfertaMercadoServer> ofertas = getOfertasEmpresa(empresa, oferta -> oferta.getTipo_ofertante() == EMPRESA);
 
         return getSumaTotalListInteger(ofertas, OfertaMercadoServer::getCantidad);
     }

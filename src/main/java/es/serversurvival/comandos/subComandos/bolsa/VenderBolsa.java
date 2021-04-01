@@ -2,14 +2,13 @@ package es.serversurvival.comandos.subComandos.bolsa;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.comandos.ComandoUtilidades;
+import es.serversurvival.comandos.PixelcoinCommand;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import main.ValidationResult;
 import main.ValidationsService;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -18,7 +17,7 @@ import static es.serversurvival.validaciones.Validaciones.*;
 import static org.bukkit.ChatColor.*;
 
 @Command(name = "bolsa vender")
-public class VenderBolsa extends ComandoUtilidades implements CommandRunner {
+public class VenderBolsa extends PixelcoinCommand implements CommandRunner {
     private final String mensajeIncorrecto = DARK_RED + "Uso incorrecto: /bolsa vender <id> [numero a vender]";
 
     @Override

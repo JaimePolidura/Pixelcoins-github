@@ -131,9 +131,8 @@ public final class OrdenesPreMarket extends MySQL{
         String nombreValor = pairNombrePrecio.getKey();
         double pixelcoinsJugador = jugadoresMySQL.getJugador(jugador).getPixelcoins();
 
-        if(cantidad * precio >= pixelcoinsJugador){
+        if(cantidad * precio >= pixelcoinsJugador)
             cantidad = (int) (pixelcoinsJugador / precio);
-        }
 
         if(cantidad == 0) {
             mensajesMySQL.nuevoMensaje("", jugador, "No se ha podido ejecutar la orden de " + orden.getNombre_activo() + " por que no tenias las suficintes pixelcoins");

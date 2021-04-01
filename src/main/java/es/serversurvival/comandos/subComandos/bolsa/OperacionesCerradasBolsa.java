@@ -2,17 +2,16 @@ package es.serversurvival.comandos.subComandos.bolsa;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.comandos.ComandoUtilidades;
+import es.serversurvival.comandos.PixelcoinCommand;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.mySQL.tablasObjetos.PosicionCerrada;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 
 @Command(name = "bolsa operacionescerradas")
-public class OperacionesCerradasBolsa extends ComandoUtilidades implements CommandRunner {
+public class OperacionesCerradasBolsa extends PixelcoinCommand implements CommandRunner {
 
     public void execute(CommandSender player, String[] args) {
         posicionesCerradasMySQL.conectar();

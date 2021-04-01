@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 
 import static es.serversurvival.util.Funciones.*;
 
-//II 354 -> 236
+//II 354 -> 236 -> 156
 public final class Empleados extends MySQL {
     public final static Empleados INSTANCE = new Empleados();
     private Empleados () {}

@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class TopNPCGroup extends NPCGroup {
     private final int maxNumber = 3;
-    private Map<Integer ,Location> locationMap;
+    private final Map<Integer ,Location> locationMap;
 
     public TopNPCGroup () {
         locationMap = new HashMap<>();
@@ -44,7 +44,6 @@ public class TopNPCGroup extends NPCGroup {
             if(top >= 4) break;
 
             String nombreJugador = entry.getKey();
-            double patrimonioJugador = entry.getValue();
             Location location = locationMap.get(top);
 
             NPC npc = NPCCreator.createTopNPC(nombreJugador, location, entry.getValue(), top);

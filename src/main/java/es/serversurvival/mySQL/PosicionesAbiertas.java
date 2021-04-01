@@ -238,7 +238,8 @@ public final class PosicionesAbiertas extends MySQL {
                 .collect(Collectors.toList());
 
         Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
-        transaccionesMySQL.conectar();
+        conectar();
+
         for(PosicionAbierta posicionAbierta : posicionAbiertas) {
             double dividendo;
             Date fechaPagoDividendos;

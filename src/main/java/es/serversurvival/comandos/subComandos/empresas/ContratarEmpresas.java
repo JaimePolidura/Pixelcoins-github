@@ -2,16 +2,10 @@ package es.serversurvival.comandos.subComandos.empresas;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.comandos.ComandoUtilidades;
+import es.serversurvival.comandos.PixelcoinCommand;
 import es.serversurvival.mySQL.MySQL;
 import es.serversurvival.mySQL.enums.TipoSueldo;
-import es.serversurvival.util.Funciones;
-import es.serversurvival.menus.MenuManager;
 import es.serversurvival.menus.menus.solicitudes.ContratarSolicitud;
-import es.serversurvival.mySQL.Empleados;
-import es.serversurvival.mySQL.tablasObjetos.Empleado;
-import es.serversurvival.mySQL.tablasObjetos.Empresa;
-import es.serversurvival.validaciones.Validaciones;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.Bukkit;
@@ -23,7 +17,7 @@ import static es.serversurvival.validaciones.Validaciones.*;
 import static org.bukkit.ChatColor.DARK_RED;
 
 @Command(name = "empresas contratar")
-public class ContratarEmpresas extends ComandoUtilidades implements CommandRunner {
+public class ContratarEmpresas extends PixelcoinCommand implements CommandRunner {
     private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /empresas contratar <jugador> <empresa> <sueldo> <tipo sueldo (/ayuda empresas)> [cargo]";
 
     @Override

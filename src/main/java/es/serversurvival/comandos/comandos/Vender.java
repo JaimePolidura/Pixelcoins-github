@@ -2,7 +2,7 @@ package es.serversurvival.comandos.comandos;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.comandos.ComandoUtilidades;
+import es.serversurvival.comandos.PixelcoinCommand;
 import es.serversurvival.mySQL.Ofertas;
 import main.ValidationResult;
 import main.ValidationsService;
@@ -16,7 +16,7 @@ import java.util.*;
 import static es.serversurvival.validaciones.Validaciones.*;
 
 @Command(name = "vender")
-public class Vender extends ComandoUtilidades implements CommandRunner {
+public class Vender extends PixelcoinCommand implements CommandRunner {
 
     @Override
     public void execute(CommandSender sender, String[] args) {

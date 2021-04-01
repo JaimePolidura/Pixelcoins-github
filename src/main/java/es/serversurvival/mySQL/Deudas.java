@@ -16,9 +16,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
+import static es.serversurvival.mySQL.enums.TipoTransaccion.*;
 import static es.serversurvival.util.Funciones.*;
 
-// II 325 -> 218
+// II 325 -> 218 -> 190
 public final class Deudas extends MySQL {
     public final static Deudas INSTANCE = new Deudas();
     private Deudas () {}
@@ -81,12 +82,13 @@ public final class Deudas extends MySQL {
 
     public void pagarDeudas () {
         List<Deuda> todasLasDeudas = this.getAllDeudas();
+        Map<String, Jugador> allJugadores = Jugadores.INSTANCE.getMapAllJugadores();
 
         todasLasDeudas.forEach( (deuda) -> {
             Date fechaHoy = formatFehcaDeHoyException();
             Date fechaUltimaPagaBaseDatos = formatFechaDeLaBaseDatosException(deuda.getFecha_ultimapaga());
-            Jugador deudor = jugadoresMySQL.getJugador(deuda.getDeudor());
-            Jugador acredor = jugadoresMySQL.getJugador(deuda.getAcredor());
+            Jugador deudor = allJugadores.get(deuda.getDeudor());
+            Jugador acredor = allJugadores.get(deuda.getAcredor());
 
             boolean esElDiaDeLaPaga = fechaHoy.compareTo(fechaUltimaPagaBaseDatos) != 0;
             if(esElDiaDeLaPaga){
@@ -107,7 +109,7 @@ public final class Deudas extends MySQL {
         int tiempo = deuda.getTiempo_restante();
         int pixelcoinsDeuda = deuda.getPixelcoins_restantes();
 
-        transaccionesMySQL.realizarTransferenciaConEstadisticas(deudorNombre, acredorNombre, cuota, "", TipoTransaccion.DEUDAS_PAGAR_DEUDAS);
+        transaccionesMySQL.realizarTransferenciaConEstadisticas(deudorNombre, acredorNombre, cuota, "", DEUDAS_PAGAR_DEUDAS);
         jugadoresMySQL.setNpagos(deudorNombre, deudor.getNpagos() + 1);
 
         if(tiempo == 1){
@@ -142,7 +144,6 @@ public final class Deudas extends MySQL {
         enviarMensajeYSonido(player, ChatColor.GOLD + "Has cancelado la deuda a " + nombreDeudor + "!", Sound.ENTITY_PLAYER_LEVELUP);
 
         String mensajeOnline = ChatColor.GOLD + player.getName() + " te ha cancelado la deuda de " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC";
-        String mensajeOffline = player.getName() + " te ha cencelado la deuda de " + pixelcoinsDeuda + " PC";
         enviarMensaje(nombreDeudor, mensajeOnline, mensajeOnline, Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
         ScoreBoardManager.getInstance().updateScoreboard(player, Bukkit.getPlayer(nombreDeudor));
@@ -153,7 +154,7 @@ public final class Deudas extends MySQL {
         int pixelcoinsDeuda = deudaAPagar.getPixelcoins_restantes();
         String acredor = deudaAPagar.getAcredor();
 
-        transaccionesMySQL.realizarTransferenciaConEstadisticas(playeDeudor.getName(), acredor, pixelcoinsDeuda, " ", TipoTransaccion.DEUDAS_PAGAR_TODADEUDA);
+        transaccionesMySQL.realizarTransferenciaConEstadisticas(playeDeudor.getName(), acredor, pixelcoinsDeuda, "", DEUDAS_PAGAR_TODADEUDA);
         borrarDeuda(id);
 
         enviarMensajeYSonido(playeDeudor, ChatColor.GOLD + "Has pagado a " + acredor + " toda la deuda: " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC", Sound.ENTITY_PLAYER_LEVELUP);

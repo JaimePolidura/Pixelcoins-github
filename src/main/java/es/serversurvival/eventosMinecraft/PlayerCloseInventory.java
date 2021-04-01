@@ -11,7 +11,6 @@ public final class PlayerCloseInventory implements Listener {
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
-        String titulo = event.getView().getTitle();
         String jugador = event.getPlayer().getName();
 
         Menu menu = MenuManager.getByPlayer(jugador);

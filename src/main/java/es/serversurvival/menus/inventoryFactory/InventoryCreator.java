@@ -1,17 +1,10 @@
 package es.serversurvival.menus.inventoryFactory;
 
-import es.serversurvival.mySQL.tablasObjetos.Empresa;
-import es.serversurvival.util.Funciones;
 import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.bukkit.ChatColor.*;

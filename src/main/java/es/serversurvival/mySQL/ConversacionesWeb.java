@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 public final class ConversacionesWeb extends MySQL{
     public static final ConversacionesWeb INSTANCE = new ConversacionesWeb();
-    private ServerSocketWeb socket = ServerSocketWeb.INSTANCE;
+    private final ServerSocketWeb socket = ServerSocketWeb.INSTANCE;
 
     private ConversacionesWeb () {}
 

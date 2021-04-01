@@ -10,25 +10,8 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public abstract class MySQL {
+public abstract class MySQL implements AllMySQLTablesInstances{
     protected MySQL () {}
-
-    protected DecimalFormat formatea = Funciones.FORMATEA;
-    protected SimpleDateFormat dateFormater = Funciones.DATE_FORMATER;
-
-    protected static Cuentas cuentasMySQL = Cuentas.INSTANCE;
-    protected static Empleados empleadosMySQL = Empleados.INSTANCE;
-    protected static Empresas empresasMySQL = Empresas.INSTANCE;
-    protected static Encantamientos encantamientosMySQL = Encantamientos.INSTANCE;
-    protected static Jugadores jugadoresMySQL = Jugadores.INSTANCE;
-    protected static LlamadasApi llamadasApiMySQL = LlamadasApi.INSTANCE;
-    protected static Mensajes mensajesMySQL = Mensajes.INSTANCE;
-    protected static Ofertas ofertasMySQL = Ofertas.INSTANCE;
-    protected static PosicionesAbiertas posicionesAbiertasMySQL = PosicionesAbiertas.INSTANCE;
-    protected static PosicionesCerradas posicionesCerradasMySQL = PosicionesCerradas.INSTANCE;
-    protected static Transacciones transaccionesMySQL = Transacciones.INSTANCE;
-    protected static Deudas deudasMySQL = Deudas.INSTANCE;
-    protected static OfertasMercadoServer ofertasMercadoServerMySQL = OfertasMercadoServer.INSTANCE;
 
     protected static Connection conexion;
     /** ----------========= LINUX =========----------
@@ -69,11 +52,11 @@ public abstract class MySQL {
     protected void executeUpdate (String consulta) {
         conexion.createStatement().executeUpdate(consulta);
     }
-
+    
+    @SneakyThrows
     protected boolean isEmptyFromQuery (String query) {
         try{
-            ResultSet rs = executeQuery(query);
-            return !rs.next();
+            return !executeQuery(query).next();
         }catch (SQLException e){
             return false;
         }

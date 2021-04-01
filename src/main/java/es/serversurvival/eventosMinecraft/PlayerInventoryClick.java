@@ -18,11 +18,11 @@ public final class PlayerInventoryClick implements Listener {
     public void onPlayerInventoryClick(InventoryClickEvent event) {
         if(event.getCurrentItem() == null || event.getView() == null) return;
 
-        String inNombre = event.getView().getTitle();
         Player jugadorPlayer = (Player) event.getWhoClicked();
         String clickedItemName = event.getCurrentItem().getType().toString();
 
         Menu menu = MenuManager.getByPlayer(jugadorPlayer.getName());
+
         if (menu != null) {
             event.setCancelled(true);
 

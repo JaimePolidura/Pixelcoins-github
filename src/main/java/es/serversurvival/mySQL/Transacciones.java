@@ -66,12 +66,12 @@ public final class Transacciones extends MySQL {
 
         if (cantidad == 1)
             ofertasMySQL.borrarOferta(id);
-         else
+        else
             ofertasMySQL.setCantidad(id, cantidad - 1);
 
         realizarTransferenciaConEstadisticas(comprador, vendedor, precio, objeto, TIENDA_VENTA);
 
-        MinecraftUtils.setLore(itemAComprar, Arrays.asList("Comprado en la tienda"));
+        MinecraftUtils.setLore(itemAComprar, Collections.singletonList("Comprado en la tienda"));
         player.getInventory().addItem(itemAComprar);
 
         enviarMensajeYSonido(player, GOLD + "Has comprado: " + objeto + " , por " + GREEN + formatea.format(precio) + " PC" + GOLD + " .Te quedan: " +
@@ -320,7 +320,6 @@ public final class Transacciones extends MySQL {
         nuevaTransaccion(comprador.getNombre(), empresa, precio, "", EMPRESA_COMPRAR_SERVICIO);
 
         String mensajeOnline = GOLD + comprador.getNombre() + " ha comprado vuestro servicio de la empresa: " + empresa + " por " + GREEN + formatea.format(precio) + " PC";
-        String mensajeOffline = comprador.getNombre() + " ha comprado vuestro servicio de la empresa: " + empresa + " por " + formatea.format(precio) + " PC";
         enviarMensaje(empresaAComprar.getOwner(), mensajeOnline, mensajeOnline);
 
         player.sendMessage(GOLD + "Has pagado " + GREEN + precio + " PC " + GOLD + " a la empresa: " + empresa + " por su servicio");
@@ -335,7 +334,6 @@ public final class Transacciones extends MySQL {
         posicionesAbiertasMySQL.nuevaPosicion(nombrePlayer, tipo, ticker, cantidad, precioUnidad, LARGO);
         nuevaTransaccion(nombrePlayer, ticker, precioTotal, tipo +  " " + precioUnidad, BOLSA_COMPRA);
         llamadasApiMySQL.nuevaLlamadaSiNoEstaReg(ticker, precioUnidad, tipo, nombreValor);
-        llamadasApiMySQL.actualizar(ticker);
 
         enviarMensajeYSonido(player, GOLD + "Has comprado " + formatea.format(cantidad)  + " " + alias + " a " + GREEN + formatea.format(precioUnidad) + " PC" + GOLD + " que es un total de " +
                 GREEN + formatea.format(precioTotal) + " PC " + GOLD + " comandos: " + AQUA + "/bolsa vender /bolsa cartera", Sound.ENTITY_PLAYER_LEVELUP);
@@ -518,7 +516,6 @@ public final class Transacciones extends MySQL {
         nuevaTransaccion(player.getName(), empresa.getNombre(), precioTotalAPagar, "ACCION", EMPRESA_COMPRA_ACCION_EMPRESA);
 
         String mensajeOnline = GOLD + player.getName() + " ha comprado " + cantidadAComprar + " acciones de " + empresa.getNombre() + "."+GREEN+" +" + formatea.format(precioTotalAPagar) + "PC";
-        String mensajeOffline = player.getName() + " ha comprado " + cantidadAComprar + " acciones de " + empresa.getNombre() + ". +" + formatea.format(precioTotalAPagar) + "PC";
 
         enviarMensaje(empresa.getOwner(), mensajeOnline, mensajeOnline);
     }

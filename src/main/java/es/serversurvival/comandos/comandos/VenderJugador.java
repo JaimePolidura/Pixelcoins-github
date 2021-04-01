@@ -2,7 +2,7 @@ package es.serversurvival.comandos.comandos;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.comandos.ComandoUtilidades;
+import es.serversurvival.comandos.PixelcoinCommand;
 import es.serversurvival.menus.menus.solicitudes.VenderJugadorSolicitud;
 import es.serversurvival.mySQL.MySQL;
 import main.ValidationResult;
@@ -16,7 +16,7 @@ import static org.bukkit.ChatColor.*;
 
 
 @Command(name = "venderjugador")
-public class VenderJugador extends ComandoUtilidades implements CommandRunner {
+public class VenderJugador extends PixelcoinCommand implements CommandRunner {
     private final String mensajeUsoIncorrecto = DARK_RED + "/venderjugador <jugador> <precio>";
 
     @Override

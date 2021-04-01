@@ -75,34 +75,6 @@ public final class LlamadasApi extends MySQL {
             nuevaLlamada(ticker, precio, tipo, nombrevalor);
     }
 
-    public Optional<Double> getPrecioAccion (String ticker) {
-        try {
-            double precio;
-            if(estaReg(ticker))
-                precio = getLlamadaAPI(ticker).getPrecio();
-            else
-                precio = IEXCloud_API.getOnlyPrice(ticker);
-
-            return Optional.of(precio);
-        }catch (Exception e) {
-            return Optional.empty();
-        }
-    }
-
-    public Optional<String> getNombreActivo (String ticker) {
-        try {
-            String nombreActivo;
-            if(estaReg(ticker))
-                nombreActivo = getLlamadaAPI(ticker).getNombre_activo();
-            else
-                nombreActivo = IEXCloud_API.getNombreEmpresa(ticker);
-
-            return Optional.of(nombreActivo);
-        }catch (Exception e) {
-            return Optional.empty();
-        }
-    }
-
     public Optional<Pair<String, Double>> getPairNombreValorPrecio (String ticker) {
         try{
             double precio;
@@ -121,20 +93,6 @@ public final class LlamadasApi extends MySQL {
         }catch (Exception e){
             return Optional.empty();
         }
-
-    }
-
-    public void actualizar (String simbolo){
-        Funciones.POOL.submit(() -> {
-            MySQL.conectar();
-
-            String tipo = getLlamadaAPI(simbolo).getTipo_activo();
-            double precio = TipoActivo.valueOf(tipo).getPrecio(simbolo);
-
-            this.setPrecio(simbolo, precio);
-
-            MySQL.desconectar();
-        },0L);
     }
 
     public synchronized void actualizarPrecios (){
@@ -154,7 +112,6 @@ public final class LlamadasApi extends MySQL {
         Funciones.POOL.submit(() -> {
             try{
                 conectar();
-                LlamadaApi accion = getLlamadaAPI(ticker);
 
                 Pair<String, Double> pairNombreValorPrecio = this.getPairNombreValorPrecio(ticker).get();
 

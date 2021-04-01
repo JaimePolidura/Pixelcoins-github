@@ -1,21 +1,13 @@
 package es.serversurvival.scoreboeards;
 
-import es.serversurvival.comandos.subComandos.empresas.MiEmpresaEmpresas;
 import es.serversurvival.util.Funciones;
-import es.serversurvival.mySQL.Empresas;
-import es.serversurvival.mySQL.Jugadores;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import es.serversurvival.util.MinecraftUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
-import java.text.DecimalFormat;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static es.serversurvival.util.MinecraftUtils.addLineToScoreboard;
 
