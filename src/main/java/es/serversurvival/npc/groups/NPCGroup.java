@@ -10,7 +10,6 @@ import java.util.*;
 public abstract class NPCGroup {
     private final List<NPC> npcs = new ArrayList<>();
 
-    public abstract int getMaxNumberNPCs();
     public abstract void updateAll();
 
     public void showAll () {
@@ -21,10 +20,6 @@ public abstract class NPCGroup {
 
     public void showPlayer (Player player) {
         npcs.forEach( npc -> npc.show(player) );
-    }
-
-    public boolean isEmpty () {
-        return npcs.size() == 0;
     }
 
     public void clearNPCs () {

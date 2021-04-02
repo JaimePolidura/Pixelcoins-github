@@ -43,11 +43,10 @@ public class SocketMessagge {
 
         int count = 1;
         for(Map.Entry<String, String> entry : content.entrySet()){
-            if(count == content.size()){
+            if(count == content.size())
                 builder.append(entry.getKey()).append("=").append(entry.getValue());
-            }else{
+            else
                 builder.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
-            }
 
             count++;
         }

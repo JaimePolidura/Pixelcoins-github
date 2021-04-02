@@ -7,7 +7,7 @@ import java.util.function.BiConsumer;
 public final class MenuManager {
     private MenuManager () {}
 
-    private static Map<String, Menu> menus = new HashMap<>();
+    private static final Map<String, Menu> menus = new HashMap<>();
 
     public static void nuevoMenu (String jugador, Menu menu) {
         menus.put(jugador, menu);

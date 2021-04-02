@@ -109,7 +109,6 @@ public final class LlamadasApi extends MySQL {
     public void mostrarRatioPer (Player player, String ticker) {
         Funciones.POOL.submit(() -> {
             try{
-
                 Pair<String, Double> pairNombreValorPrecio = this.getPairNombreValorPrecio(ticker).get();
 
                 String nombreValor = pairNombreValorPrecio.getKey();

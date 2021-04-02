@@ -11,8 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TopNPCGroup extends NPCGroup {
-    private final int maxNumber = 3;
-    private final Map<Integer ,Location> locationMap;
+    private final Map<Integer, Location> locationMap;
 
     public TopNPCGroup () {
         locationMap = new HashMap<>();
@@ -25,26 +24,19 @@ public class TopNPCGroup extends NPCGroup {
     }
 
     @Override
-    public int getMaxNumberNPCs() {
-        return maxNumber;
-    }
-
-    @Override
     public void updateAll() {
         clearNPCs();
 
         Map<String, Double> topJugadores = Funciones.crearMapaTopPatrimonioPlayers(false);
 
         int top = 1;
-
         for(Map.Entry<String, Double> entry : topJugadores.entrySet()){
             if(top >= 4) break;
 
             String nombreJugador = entry.getKey();
             Location location = locationMap.get(top);
 
-            NPC npc = NPCCreator.createTopNPC(nombreJugador, location, entry.getValue(), top);
-            addNPC(npc);
+            addNPC(NPCCreator.createTopNPC(nombreJugador, location, entry.getValue(), top));
 
             top++;
         }

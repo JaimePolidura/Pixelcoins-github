@@ -104,7 +104,6 @@ public final class Transacciones extends MySQL {
         player.sendMessage(GOLD + "Has pagado: " + GREEN + formatea.format(cantidad) + " PC " + GOLD + "a " + nombrePagado);
 
         String mensajeSiEstaOnline = GOLD + nombrePagador + " te ha pagado: " + GREEN + "+" + formatea.format(cantidad) + " PC " + AQUA + "(/estadisticas)";
-        String mensajeSiEstaOffline = nombrePagador + " te ha pagado " + formatea.format(cantidad) + " PC con el comando /pagar";
         enviarMensaje(nombrePagado, mensajeSiEstaOnline, mensajeSiEstaOnline, Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
         ScoreBoardManager.getInstance().updateScoreboard(player, Bukkit.getPlayer(nombrePagado));

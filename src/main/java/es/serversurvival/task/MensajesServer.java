@@ -37,8 +37,7 @@ public class MensajesServer extends BukkitRunnable {
 
     @Override
     public void run() {
-        if(Bukkit.getOnlinePlayers().size() != 0){
+        if(Bukkit.getOnlinePlayers().size() != 0)
             Bukkit.broadcastMessage(mensajes.get(generateRandomNumber()));
-        }
     }
 }

@@ -4,6 +4,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import es.serversurvival.socketWeb.messagges.*;
+import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -18,18 +19,15 @@ public class RabbitMQConsumer {
     private Connection connection;
     private Channel channel;
 
+    @SneakyThrows
     public RabbitMQConsumer () {
         fillSocketMessaggeExecutors();
 
-        try {
-            ConnectionFactory factory = new ConnectionFactory();
-            this.connection = factory.newConnection();
-        } catch (IOException | TimeoutException e) {
-            e.printStackTrace();
-        }
+        ConnectionFactory factory = new ConnectionFactory();
+        this.connection = factory.newConnection();
     }
 
-    public void listenForMessages() throws IOException, TimeoutException {
+    public void listenForMessages() throws IOException {
         Channel channel = connection.createChannel();
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 

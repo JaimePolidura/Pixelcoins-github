@@ -144,7 +144,6 @@ public final class OrdenesPreMarket extends MySQL{
     }
 
     private void ejecutarOrdenVentaCorto (OrdenPreMarket orden) {
-
         Pair<String, Double> pairNombrePrecio = llamadasApiMySQL.getPairNombreValorPrecio(orden.getNombre_activo()).get();
         double precio = pairNombrePrecio.getValue();
         String nombreValor = pairNombrePrecio.getKey();

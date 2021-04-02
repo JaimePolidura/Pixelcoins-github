@@ -59,11 +59,9 @@ public final class ScoreBoardManager extends BukkitRunnable {
     }
 
     public void updateScoreboard(Player... players) {
-        for(Player player : players){
-            if(player != null){
+        for(Player player : players)
+            if(player != null)
                 updateScoreboard(player);
-            }
-        }
     }
 
     public void updateScoreboard(Player player) {

@@ -12,11 +12,6 @@ public class JugadorRegistrado implements Validator {
         this.messageOnFailed = messageOnFailed;
     }
 
-    public JugadorRegistrado(String messageOnFailed, String jugador) {
-        this.messageOnFailed = messageOnFailed;
-        this.jugador = jugador;
-    }
-
     @Override
     public String getMessageOnFailed() {
         return messageOnFailed;

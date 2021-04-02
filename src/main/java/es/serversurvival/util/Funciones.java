@@ -401,8 +401,7 @@ public final class Funciones {
     }
 
     public static boolean mercadoEstaAbierto() {
-        return true;
-        //return !Funciones.esHoyDiaSemana(7, 1) && Funciones.esHoyHora(15, 30, 22, 30);
+        return !Funciones.esHoyDiaSemana(7, 1) && Funciones.esHoyHora(15, 30, 22, 30);
     }
 
     public static boolean mercadoNoEstaAbierto() {

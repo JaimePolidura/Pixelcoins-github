@@ -1,6 +1,7 @@
 package es.serversurvival.main;
 
 import es.jaimetruman.commands.CommandMapper;
+import es.jaimetruman.mobs.MobMapper;
 import es.serversurvival.eventosMinecraft.*;
 import es.serversurvival.mySQL.*;
 import es.serversurvival.task.*;
@@ -9,11 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import static org.bukkit.ChatColor.*;
 
-public final class Pixelcoin extends JavaPlugin {
-    private ConversacionesWeb conversacionesWebMySQL = ConversacionesWeb.INSTANCE;
-    private Deudas deudasMySQL = Deudas.INSTANCE;
-    private Empleados empleadosMySQL = Empleados.INSTANCE;
-
+public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstances{
     private static Pixelcoin plugin;
 
     public static Pixelcoin getInstance() {
@@ -33,6 +30,7 @@ public final class Pixelcoin extends JavaPlugin {
         conversacionesWebMySQL.borrarTodasConversacionesWeb();
 
         this.setUpCommands();
+        this.setUpMobMapper();
 
         getServer().getConsoleSender().sendMessage(GREEN + "------------------------------");
         setUpListeners();
@@ -80,9 +78,12 @@ public final class Pixelcoin extends JavaPlugin {
         );
     }
 
+    private void setUpMobMapper(){
+        MobMapper.create("es.serversurvival.mobs", this);
+    }
+
     private void setUpListeners() {
         getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
-        getServer().getPluginManager().registerEvents(new PlayerInteract(), this);
         getServer().getPluginManager().registerEvents(new PlayerInventoryClick(), this);
         getServer().getPluginManager().registerEvents(new PlayerCloseInventory(), this);
         getServer().getPluginManager().registerEvents(new PlayerQuit(), this);
