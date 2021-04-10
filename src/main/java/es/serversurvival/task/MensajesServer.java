@@ -1,5 +1,8 @@
 package es.serversurvival.task;
 
+import es.jaimetruman.task.BukkitTimeUnit;
+import es.jaimetruman.task.Task;
+import es.jaimetruman.task.TaskRunner;
 import es.serversurvival.util.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -8,7 +11,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MensajesServer extends BukkitRunnable {
+@Task(period = 10 * BukkitTimeUnit.MINUTE)
+public class MensajesServer implements TaskRunner {
     public static final int delay = 1200;
     private List<String> mensajes;
 

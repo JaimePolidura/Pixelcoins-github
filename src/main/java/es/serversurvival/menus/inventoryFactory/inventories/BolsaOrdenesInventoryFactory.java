@@ -1,5 +1,6 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.mySQL.tablasObjetos.OrdenPreMarket;
 import es.serversurvival.util.MinecraftUtils;
@@ -40,7 +41,6 @@ public class BolsaOrdenesInventoryFactory extends InventoryFactory {
 
     private ItemStack buildItemOrden (OrdenPreMarket orden) {
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA CANCELAR";
-        Material material = Material.NAME_TAG;
         List<String> lore = new ArrayList<>();
         lore.add("  ");
         lore.add(ChatColor.GOLD + "Ticker: " + orden.getNombre_activo());
@@ -50,7 +50,7 @@ public class BolsaOrdenesInventoryFactory extends InventoryFactory {
         lore.add("  ");
         lore.add("" + orden.getId());
 
-        return MinecraftUtils.loreDisplayName(material, displayName, lore);
+        return ItemBuilder.of(Material.NAME_TAG).title(displayName).lore(lore).build();
     }
 
     private ItemStack buildInfo () {
@@ -62,6 +62,6 @@ public class BolsaOrdenesInventoryFactory extends InventoryFactory {
         lore.add("añade una orden de compra/venta. Cuando el mercado");
         lore.add("abre se ejecuta");
 
-        return MinecraftUtils.loreDisplayName(Material.PAPER, displayName, lore);
+        return ItemBuilder.of(Material.PAPER).title(displayName).lore(lore).build();
     }
 }

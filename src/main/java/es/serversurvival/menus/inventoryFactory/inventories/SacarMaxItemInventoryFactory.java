@@ -1,5 +1,6 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.mySQL.enums.CambioPixelcoins;
 import es.serversurvival.util.MinecraftUtils;
@@ -20,49 +21,31 @@ public class SacarMaxItemInventoryFactory extends InventoryFactory {
         double dineroJugador = jugadoresMySQL.getJugador(jugador).getPixelcoins();
 
         inventory.setItem(4, buildItemInfo());
-        inventory.setItem(10, buildItemDiamante(dineroJugador));
-        inventory.setItem(13, buildItemLapis(dineroJugador));
-        inventory.setItem(16, buildItemCuarzo(dineroJugador));
+        inventory.setItem(10, buildItem(dineroJugador, "DIAMANTES", Material.DIAMOND_BLOCK, CambioPixelcoins.DIAMANTE));
+        inventory.setItem(13, buildItem(dineroJugador, "LAPISLAZULI", Material.LAPIS_BLOCK, CambioPixelcoins.LAPISLAZULI));
+        inventory.setItem(16, buildItem(dineroJugador, "CUARZO", Material.QUARTZ_BLOCK, CambioPixelcoins.CUARZO));
 
         return inventory;
     }
 
     private ItemStack buildItemInfo () {
-        List<String> lore = new ArrayList<>();
-        lore.add("Puedes convertir todas tus pixelcoins");
-        lore.add("en el mayor numero posible de diamantes");
-        lore.add("cuerzo o lapislazuli");
+        List<String> lore = new ArrayList<String>() {{
+            add("Puedes convertir todas tus pixelcoins");
+            add("en el mayor numero posible de diamantes");
+            add("cuerzo o lapislazuli");
+        }};
 
-        return MinecraftUtils.lore(Material.PAPER, lore);
+        return ItemBuilder.of(Material.PAPER).lore(lore).build();
     }
 
-    private ItemStack buildItemLapis (double dineroJugador) {
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR MAXIMO DE LAPISLAZULI";
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.BLUE + "1 DE LAPISLAZULI -> " + ChatColor.GREEN + CambioPixelcoins.LAPISLAZULI + " PC");
-        lore.add("    ");
-        lore.add("Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(dineroJugador));
+    private ItemStack buildItem (double pixelcoins, String item, Material material, int cambioPixelcoins) {
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR MAXIMO DE " + item;
+        List<String> lore = new ArrayList<String>() {{
+            add(ChatColor.BLUE + "1 DE "+item+" -> " + ChatColor.GREEN + cambioPixelcoins + " PC");
+            add("    ");
+            add("Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(pixelcoins));
+        }};
 
-        return MinecraftUtils.loreDisplayName(Material.LAPIS_LAZULI, displayName, lore);
-    }
-
-    private ItemStack buildItemCuarzo (double dineroJugador) {
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR MAXIMO DE CUARZO";
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "1 BLOQUE DE CUARZO -> " + ChatColor.GREEN + CambioPixelcoins.CUARZO + " PC");
-        lore.add("    ");
-        lore.add("Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(dineroJugador));
-
-        return MinecraftUtils.loreDisplayName(Material.QUARTZ_BLOCK, displayName, lore);
-    }
-
-    private ItemStack buildItemDiamante (double dineroJugador) {
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR MAXIMO DE DIAMANTES";
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.AQUA + "1 DIAMANTE -> " + ChatColor.GREEN + CambioPixelcoins.DIAMANTE);
-        lore.add("    ");
-        lore.add("Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(dineroJugador));
-
-        return MinecraftUtils.loreDisplayName(Material.DIAMOND_BLOCK, displayName, lore);
+        return ItemBuilder.of(material).title(displayName).lore(lore).build();
     }
 }

@@ -1,5 +1,6 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.CriptomonedasMenu;
 import es.serversurvival.util.MinecraftUtils;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CriptomonedasInventoryFactory extends InventoryFactory {
-    private Map<String, String> criptomonedas = new HashMap<>();
+    private final Map<String, String> criptomonedas = new HashMap<>();
 
     public CriptomonedasInventoryFactory() {
         criptomonedas.put("BTCUSD", "Bitcoin");
@@ -34,7 +35,7 @@ public class CriptomonedasInventoryFactory extends InventoryFactory {
             lore.add(ChatColor.GOLD + "Simbolo: " + entry.getKey());
             lore.add(ChatColor.RED + "Cargando...");
 
-            inventory.addItem(MinecraftUtils.loreDisplayName(Material.GOLD_BLOCK, displayName, lore));
+            ItemBuilder.of(Material.GOLD_BLOCK).title(displayName).lore(lore).buildAddInventory(inventory);
         }
 
         List<String> infoLore = new ArrayList<>();
@@ -44,8 +45,7 @@ public class CriptomonedasInventoryFactory extends InventoryFactory {
 
         String displayName = ChatColor.AQUA + "" + ChatColor.BOLD + "INFO";
 
-        ItemStack infoItem = MinecraftUtils.loreDisplayName(Material.PAPER, displayName, infoLore);
-        inventory.setItem(4, infoItem);
+        ItemBuilder.of(Material.PAPER).title(displayName).lore(infoLore).buildAddInventory(inventory, 4);
 
         return inventory;
     }

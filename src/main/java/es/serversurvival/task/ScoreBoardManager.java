@@ -1,5 +1,8 @@
 package es.serversurvival.task;
 
+import es.jaimetruman.task.BukkitTimeUnit;
+import es.jaimetruman.task.Task;
+import es.jaimetruman.task.TaskRunner;
 import es.serversurvival.scoreboeards.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -9,11 +12,11 @@ import org.bukkit.scoreboard.Scoreboard;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class ScoreBoardManager extends BukkitRunnable {
-    private List<ServerScoreboard> scoreboards;
+@Task(period = BukkitTimeUnit.MINUTE)
+public final class ScoreBoardManager implements TaskRunner {
+    private final List<ServerScoreboard> scoreboards;
     private int actualIndex;
 
-    public static final int scoreboardSwitchDelay = 60;
     private static ScoreBoardManager instance;
 
     private ScoreBoardManager() {

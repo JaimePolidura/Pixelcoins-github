@@ -1,5 +1,6 @@
 package es.serversurvival.menus.inventoryFactory;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.menus.menus.Paginated;
 import es.serversurvival.mySQL.*;
 import es.serversurvival.util.Funciones;
@@ -16,15 +17,14 @@ public abstract class InventoryFactory implements AllMySQLTablesInstances {
     protected abstract Inventory buildInventory (String jugador);
 
     protected ItemStack buildItemGoBack () {
-        ItemStack back = new ItemStack(Material.RED_WOOL);
-        ItemMeta backMeta = back.getItemMeta();
-        backMeta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "<--");
-
-        back.setItemMeta(backMeta);
-        return back;
+        return ItemBuilder.of(Material.RED_WOOL)
+                .title(ChatColor.RED + "" + ChatColor.BOLD + "<--")
+                .build();
     }
 
     protected ItemStack buildItemFordward () {
-        return MinecraftUtils.displayname(Material.GREEN_WOOL, Paginated.ITEM_NAME_GOFORDWARD);
+        return ItemBuilder.of(Material.GREEN_WOOL)
+                .title(Paginated.ITEM_NAME_GOFORDWARD)
+                .build();
     }
 }

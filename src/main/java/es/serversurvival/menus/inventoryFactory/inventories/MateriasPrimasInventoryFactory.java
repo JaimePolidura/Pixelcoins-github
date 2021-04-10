@@ -1,5 +1,6 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.MateriasPrimasMenu;
 import es.serversurvival.util.MinecraftUtils;
@@ -37,7 +38,7 @@ public class MateriasPrimasInventoryFactory extends InventoryFactory {
             lore.add(ChatColor.GOLD + "Simbolo: " + entry.getKey());
             lore.add(ChatColor.RED + "Cargando...");
 
-            inventory.addItem(MinecraftUtils.loreDisplayName(icono, displayName, lore));
+            ItemBuilder.of(icono).title(displayName).lore(lore).buildAddInventory(inventory);
         }
 
         List<String> infoLore = new ArrayList<>();
@@ -45,7 +46,7 @@ public class MateriasPrimasInventoryFactory extends InventoryFactory {
         infoLore.add("                  ");
         infoLore.add("AVISO: ¡Estas materias primas van con unos 15 minutos aproximadamente de retraso! ");
 
-        inventory.setItem(4, MinecraftUtils.loreDisplayName(Material.PAPER, ChatColor.AQUA + "" + ChatColor.BOLD + "INFO", infoLore));
+        ItemBuilder.of(Material.PAPER).title(ChatColor.AQUA + "" + ChatColor.BOLD + "INFO").lore(infoLore).buildAddInventory(inventory, 4);
 
         return inventory;
     }

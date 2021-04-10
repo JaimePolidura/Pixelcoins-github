@@ -1,5 +1,6 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.tablasObjetos.LlamadaApi;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
@@ -37,7 +38,6 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         ItemStack valores = buildItemValores();
         ItemStack back = buildItemGoBack();
         List<ItemStack> posicionesAbiertasItems = buildItemsPosicionesAbiertas(jugador);
-        ItemStack resultado = buildItemResultado();
 
         inventory.setItem(0, info);
         inventory.setItem(1, valores);
@@ -135,10 +135,11 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         String displayName = posicionAbierta.getTipo_posicion() == LARGO ?
                 GOLD + "" + BOLD + UNDERLINE + "CLICK PARA VENDER" :
                 GOLD + "" + BOLD + UNDERLINE + "CLICK PARA COMPRAR " + RED + "" + BOLD + "(CORTO)";
-        Material material = TipoActivo.getMaterialFor(posicionAbierta);
-        List<String> lore = buildLoreFromPosicionAbierta(posicionAbierta);
 
-        return MinecraftUtils.loreDisplayName(material, displayName, lore);
+        return ItemBuilder.of(TipoActivo.getMaterialFor(posicionAbierta))
+                .title(displayName)
+                .lore(buildLoreFromPosicionAbierta(posicionAbierta))
+                .build();
     }
 
     private ItemStack buildItemFromPosicionServer(PosicionAbierta posicion) {
@@ -148,13 +149,14 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         lore.add(GOLD + "Activo: " + posicion.getNombre_activo()); //14
         lore.add(GOLD + "Cantidad: " + posicion.getCantidad() + " " + posicion.getTipo_activo().getAlias());
         lore.add(GOLD + "Precio apertura: " + GREEN + formatea.format(posicion.getPrecio_apertura()));
+
         lore.add(GOLD + "Valor total de compra: " + GREEN + formatea.format(posicion.getPrecio_apertura() * posicion.getCantidad()));
         lore.add("    ");
         lore.add(GOLD + "Fecha de compra: " + posicion.getFecha_apertura());
         lore.add("   ");
         lore.add(GOLD + "ID: " + posicion.getId());
 
-        return MinecraftUtils.loreDisplayName(Material.GREEN_BANNER, displayName, lore);
+        return ItemBuilder.of(Material.GREEN_BANNER).title(displayName).lore(lore).build();
     }
 
     private List<String> buildLoreFromPosicionAbierta (PosicionAbierta posicion) {
@@ -237,14 +239,14 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         lore.add("Mas info en /bolsa ayuda o /ayuda bolsa o en:");
         lore.add("http://serversurvival.ddns.net/perfil");
 
-        return MinecraftUtils.loreDisplayName(Material.PAPER, displayName, lore);
+        return ItemBuilder.of(Material.PAPER).title(displayName).lore(lore).build();
     }
 
     private ItemStack buildItemResultado() {
-        List<String> lore = buildLoreFromResultado();
-        String displayname = GOLD + "" + BOLD + "REUSLTADO";
-
-        return MinecraftUtils.loreDisplayName(Material.WRITABLE_BOOK, displayname, lore);
+        return ItemBuilder.of(Material.WRITABLE_BOOK)
+                .title(GOLD + "" + BOLD + "REUSLTADO")
+                .lore(buildLoreFromResultado())
+                .build();
     }
 
     private List<String> buildLoreFromResultado () {
@@ -268,6 +270,6 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
     private ItemStack buildItemValores () {
         String displayName = GOLD + "" + BOLD + "" + UNDERLINE + "CLICK PARA COMPRAR VALORES";
 
-        return MinecraftUtils.displayname(Material.BOOK, displayName);
+        return ItemBuilder.of(Material.BOOK).title(displayName).build();
     }
 }

@@ -1,5 +1,6 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.BolsaCarteraMenu;
 import es.serversurvival.mySQL.enums.TipoOfertante;
@@ -110,7 +111,7 @@ public class EmpresasMercadoInventoryFactory extends InventoryFactory {
         lore.add("  ");
         lore.add("" + ofertaAccion.getId());
 
-        return MinecraftUtils.loreDisplayName(material, displayname, lore);
+        return ItemBuilder.of(material).title(displayname).lore(lore).build();
     }
 
     private ItemStack buildItemInfo () {
@@ -121,6 +122,6 @@ public class EmpresasMercadoInventoryFactory extends InventoryFactory {
         lore.add("Aqui es donde se pueden comprar y");
         lore.add("vender las acciones de las empresas");
 
-        return MinecraftUtils.loreDisplayName(Material.PAPER, displayName, lore);
+        return ItemBuilder.of(Material.PAPER).title(displayName).lore(lore).build();
     }
 }

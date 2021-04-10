@@ -1,6 +1,8 @@
 package es.serversurvival.menus.inventoryFactory;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.util.MinecraftUtils;
+import net.minecraft.server.v1_16_R1.ItemBanner;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
@@ -19,14 +21,14 @@ public class InventoryCreator {
     public static Inventory createConfirmacionAumento (String titulo, String tituloAceptar, List<String> loreAceptar, String tituloCancel) {
         Inventory inventory = Bukkit.createInventory(null, 27, titulo);
 
-        inventory.setItem(14, MinecraftUtils.loreDisplayName(GREEN_WOOL, tituloAceptar, loreAceptar));
-        inventory.setItem(12, MinecraftUtils.displayname(RED_WOOL, tituloCancel));
-        inventory.setItem(15, MinecraftUtils.displayname(LIGHT_GRAY_BANNER, GREEN + "+1"));
-        inventory.setItem(16, MinecraftUtils.displayname(LIGHT_GRAY_BANNER, GREEN + "+5"));
-        inventory.setItem(17, MinecraftUtils.displayname(LIGHT_GRAY_BANNER, GREEN + "+10"));
-        inventory.setItem(11, MinecraftUtils.displayname(LIGHT_GRAY_BANNER, RED + "-1"));
-        inventory.setItem(10, MinecraftUtils.displayname(LIGHT_GRAY_BANNER, RED + "-5"));
-        inventory.setItem(9, MinecraftUtils.displayname(LIGHT_GRAY_BANNER, RED + "-10"));
+        ItemBuilder.of(GREEN_WOOL).title(tituloAceptar).lore(loreAceptar).buildAddInventory(inventory, 14);
+        ItemBuilder.of(GREEN_WOOL).title(tituloCancel).buildAddInventory(inventory, 12);
+        ItemBuilder.of(LIGHT_GRAY_BANNER).title(GREEN + "+1").buildAddInventory(inventory, 15);
+        ItemBuilder.of(LIGHT_GRAY_BANNER).title(GREEN + "+5").buildAddInventory(inventory, 16);
+        ItemBuilder.of(LIGHT_GRAY_BANNER).title(GREEN + "+10").buildAddInventory(inventory, 17);
+        ItemBuilder.of(LIGHT_GRAY_BANNER).title(RED + "-1").buildAddInventory(inventory, 11);
+        ItemBuilder.of(LIGHT_GRAY_BANNER).title(RED + "-5").buildAddInventory(inventory, 10);
+        ItemBuilder.of(LIGHT_GRAY_BANNER).title(RED + "-10").buildAddInventory(inventory, 9);
 
         return inventory;
     }
@@ -35,8 +37,8 @@ public class InventoryCreator {
                                              String nombreItemCancelar, List<String> loreItemCancelar){
         Inventory inventory = Bukkit.createInventory(null, InventoryType.HOPPER, titulo);
 
-        inventory.setItem(0, MinecraftUtils.loreDisplayName(GREEN_WOOL, nombreItemAceptar, loreItemAceptar));
-        inventory.setItem(4, MinecraftUtils.loreDisplayName(RED_WOOL, nombreItemCancelar, loreItemCancelar));
+        ItemBuilder.of(GREEN_WOOL).title(nombreItemAceptar).lore(loreItemAceptar).buildAddInventory(inventory, 0);
+        ItemBuilder.of(RED_WOOL).title(nombreItemCancelar).lore(loreItemCancelar).buildAddInventory(inventory, 4);
 
         return inventory;
     }

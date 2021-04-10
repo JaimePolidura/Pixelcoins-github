@@ -1,5 +1,6 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.EmpresasVerTodasMenu;
@@ -40,7 +41,7 @@ public class EmpresasVerTodasInventoryFactory extends InventoryFactory {
             lore.add("      ");
             lore = insertarEmpleados(empresa.getNombre(), lore);
 
-            inventory.addItem(MinecraftUtils.loreDisplayName(icono, displayName, lore));
+            ItemBuilder.of(icono).title(displayName).lore(lore).buildAddInventory(inventory);
         });
 
         inventory.setItem(53, back);
@@ -72,8 +73,8 @@ public class EmpresasVerTodasInventoryFactory extends InventoryFactory {
 
         lore.add(GOLD + "Empleados:");
         if(empleados.size() != 0){
-            for(int i = 0; i < empleados.size(); i++){
-                lore.add(GOLD + "-" + empleados.get(i).getJugador());
+            for (Empleado empleado : empleados) {
+                lore.add(GOLD + "-" + empleado.getJugador());
             }
         }else{
             lore.add(GOLD + "Sin trabajadores");

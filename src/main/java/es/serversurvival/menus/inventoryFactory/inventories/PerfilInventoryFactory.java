@@ -1,10 +1,10 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.PerfilMenu;
 import es.serversurvival.mySQL.tablasObjetos.*;
-import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PerfilInventoryFactory extends InventoryFactory {
-    private List<Integer> posicionesCristales = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46 , 47, 48, 49, 50, 51, 52, 53);
+    private final List<Integer> posicionesCristales = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46 , 47, 48, 49, 50, 51, 52, 53);
 
     @Override
     protected Inventory buildInventory(String player) {
@@ -37,7 +37,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildItemTienda () {
-        return MinecraftUtils.displayname(Material.CHEST, ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER LA TIENDA");
+        return ItemBuilder.of(Material.CHEST).title(ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER LA TIENDA").build();
     }
 
     private ItemStack buildItemEmpleos (String jugador) {
@@ -50,7 +50,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
             lore.add(ChatColor.GOLD + emp.getEmpresa() + " " + ChatColor.GREEN + formatea.format(emp.getSueldo()) + " PC " + ChatColor.GOLD + "/ " + emp.getTipo_sueldo().nombre);
         });
 
-        return MinecraftUtils.loreDisplayName(Material.GOLDEN_APPLE, displayName, lore);
+        return ItemBuilder.of(Material.GOLDEN_APPLE).title(displayName).lore(lore).build();
     }
 
     private ItemStack buildItemEmpresa (String jugador) {
@@ -63,7 +63,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
             lore.add(ChatColor.GOLD + "- " + empresa.getNombre() + " ( " + ChatColor.GREEN + formatea.format(empresa.getPixelcoins()) + " PC" +  ChatColor.GOLD + ")");
         });
 
-        return MinecraftUtils.loreDisplayName(Material.GOLD_BLOCK, displayName, lore);
+        return ItemBuilder.of(Material.GOLD_BLOCK).title(displayName).lore(lore).build();
     }
 
     private ItemStack buildItemBolsa (String jugador) {
@@ -86,7 +86,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
             }
         }
 
-        return MinecraftUtils.loreDisplayName(Material.BOOK, displayName, lore);
+        return ItemBuilder.of(Material.BOOK).title(displayName).lore(lore).build();
     }
     
     private ItemStack buildItemDeudas (String jugador) {
@@ -95,12 +95,13 @@ public class PerfilInventoryFactory extends InventoryFactory {
         double totalQueLeDeben = deudasMySQL.getDeudasAcredor(jugador).stream().mapToInt(Deuda::getPixelcoins_restantes).sum();
         double totalQueDebe = deudasMySQL.getDeudasDeudor(jugador).stream().mapToInt(Deuda::getPixelcoins_restantes).sum();
 
-        List<String> lore = new ArrayList<>();
-        lore.add("   ");
-        lore.add(ChatColor.GOLD + "Total que debes: " + ChatColor.GREEN + totalQueDebe + " PC");
-        lore.add(ChatColor.GOLD + "Total que te deben: " + ChatColor.GREEN + totalQueLeDeben + " PC");
+        List<String> lore = new ArrayList<String>() {{
+            add("    ");
+            add(ChatColor.GOLD + "Total que debes: " + ChatColor.GREEN + totalQueDebe + " PC");
+            add(ChatColor.GOLD + "Total que te deben: " + ChatColor.GREEN + totalQueLeDeben + " PC");
+        }};
 
-        return MinecraftUtils.loreDisplayName(Material.DIAMOND_SWORD, displayName, lore);
+        return ItemBuilder.of(Material.DIAMOND_SWORD).title(displayName).lore(lore).build();
     }
 
     private ItemStack buildItemStats (String nombreJugador) {
@@ -194,7 +195,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
         lore.add(ChatColor.DARK_AQUA + "Con la web podras acceder a todas tus estadisticas");
         lore.add(ChatColor.DARK_AQUA + "y comprar acciones, realizar transacciones etc.");
 
-        return MinecraftUtils.loreDisplayName(Material.PAPER, displayName, lore);
+        return ItemBuilder.of(Material.PAPER).title(displayName).lore(lore).build();
     }
 
     private void rellenarCristales (Inventory inventory) {

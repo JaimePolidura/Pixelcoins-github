@@ -1,5 +1,6 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.AccionesMenu;
 import es.serversurvival.menus.menus.Paginated;
@@ -8,6 +9,7 @@ import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -18,8 +20,8 @@ import java.util.List;
 import java.util.Map;
 
 public class AccionesInventoryFactory extends InventoryFactory {
-    private HashMap<String, String> accionesPagina1 = new HashMap<>();
-    private HashMap<String, String> accionesPagina2 = new HashMap<>();
+    private final HashMap<String, String> accionesPagina1 = new HashMap<>();
+    private final HashMap<String, String> accionesPagina2 = new HashMap<>();
 
     public AccionesInventoryFactory() {
         buildPagina1();
@@ -54,21 +56,15 @@ public class AccionesInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buidItemNextPage () {
-        ItemStack nextPage = new ItemStack(Material.GREEN_WOOL);
-        ItemMeta itemMetaNextPage = nextPage.getItemMeta();
-        itemMetaNextPage.setDisplayName(Paginated.ITEM_NAME_GOFORDWARD);
-        nextPage.setItemMeta(itemMetaNextPage);
-
-        return nextPage;
+        return ItemBuilder.of(Material.GREEN_WOOL)
+                .title(Paginated.ITEM_NAME_GOFORDWARD)
+                .build();
     }
 
     private ItemStack buildItemBackPage () {
-        ItemStack backpage = new ItemStack(Material.RED_WOOL);
-        ItemMeta itemMetaNextPage = backpage.getItemMeta();
-        itemMetaNextPage.setDisplayName(Paginated.ITEM_NAME_GOBACK);
-        backpage.setItemMeta(itemMetaNextPage);
-
-        return backpage;
+        return ItemBuilder.of(Material.RED_WOOL)
+                .title(Paginated.ITEM_NAME_GOBACK)
+                .build();
     }
 
     private List<ItemStack> buildItemsAcciones (Map<String, String> accionesPaginaActual) {
@@ -90,7 +86,7 @@ public class AccionesInventoryFactory extends InventoryFactory {
                 lore.add(ChatColor.GOLD + "Precio/Accion:" + ChatColor.GREEN + " " + formatea.format(accion.getPrecio())  + " PC");
             }
 
-            ItemStack accionItem = MinecraftUtils.loreDisplayName(Material.BOOK, displayName, lore);
+            ItemStack accionItem = ItemBuilder.of(Material.BOOK).title(displayName).lore(lore).build();
 
             itemStackList.add(accionItem);
         }
@@ -111,7 +107,7 @@ public class AccionesInventoryFactory extends InventoryFactory {
 
         String displayname = ChatColor.AQUA + "" + ChatColor.BOLD + "INFO";
 
-        return MinecraftUtils.loreDisplayName(Material.PAPER, displayname, infolore);
+        return ItemBuilder.of(Material.PAPER).title(displayname).lore(infolore).build();
     }
 
     public void buildPagina1 () {

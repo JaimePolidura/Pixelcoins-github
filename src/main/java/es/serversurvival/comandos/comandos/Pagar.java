@@ -13,7 +13,7 @@ import static org.bukkit.ChatColor.*;
 
 @Command(name = "pagar")
 public class Pagar extends PixelcoinCommand implements CommandRunner {
-    private final String usoIncorrecto = DARK_RED +"/pagar <jugador> <pixelcoins>";
+    private final String usoIncorrecto = DARK_RED + "/pagar <jugador> <pixelcoins>";
 
     @Override
     public void execute(CommandSender sender, String[] args) {

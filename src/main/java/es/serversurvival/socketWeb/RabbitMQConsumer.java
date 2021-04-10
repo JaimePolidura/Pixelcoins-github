@@ -17,7 +17,6 @@ public class RabbitMQConsumer {
     private final String QUEUE_NAME = "chat";
     private final ServerSocketWeb socket = ServerSocketWeb.INSTANCE;
     private Connection connection;
-    private Channel channel;
 
     @SneakyThrows
     public RabbitMQConsumer () {

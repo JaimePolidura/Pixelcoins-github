@@ -284,12 +284,8 @@ public final class Funciones {
     }
 
     public static boolean esDeTipo (ItemStack item, Material... tipos) {
-        for(Material material : tipos){
-            if (item.getType() == material)
-                return true;
-        }
-
-        return false;
+        return Arrays.stream(tipos)
+                .anyMatch(mat -> mat == item.getType());
     }
 
     public static boolean esDeTipoItem(ItemStack item, String...tipos) {
@@ -313,7 +309,7 @@ public final class Funciones {
     }
 
     public static int generateRandomNumber (int from, int to) {
-        return (int)(Math.random() * (to - from + 1) + from);
+        return (int) (Math.random() * (to - from + 1) + from);
     }
 
     public static String quitarCaracteres (String palabra, char... caracteres) {
@@ -322,7 +318,7 @@ public final class Funciones {
         for(int i = 0; i < palabra.length(); i++) {
             boolean cuincide = false;
 
-            for (int j = 0; j < caracteres.length; j++) {
+            for (int j = caracteres.length - 1; j >= 0; j--) {
                 if (palabra.charAt(i) == caracteres[j]) {
                     cuincide = true;
                     break;
@@ -380,9 +376,7 @@ public final class Funciones {
     }
 
     public static<E> List<E> listOf (E... elements) {
-        List<E> list = new ArrayList<>();
-
-        list.addAll(Arrays.asList(elements));
+        List<E> list = new ArrayList<>(Arrays.asList(elements));
 
         return list;
     }

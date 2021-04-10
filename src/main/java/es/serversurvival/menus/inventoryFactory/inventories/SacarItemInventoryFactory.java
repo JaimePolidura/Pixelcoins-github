@@ -1,5 +1,6 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.mySQL.enums.CambioPixelcoins;
 import es.serversurvival.util.MinecraftUtils;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SacarItemInventoryFactory extends InventoryFactory {
-    private double pixelcoinsJugador;
+    private final double pixelcoinsJugador;
 
     public SacarItemInventoryFactory (double pixelcoinsJugador) {
         this.pixelcoinsJugador = pixelcoinsJugador;
@@ -23,14 +24,13 @@ public class SacarItemInventoryFactory extends InventoryFactory {
     protected Inventory buildInventory(String jugador) {
         Inventory inventory = Bukkit.createInventory(null, 27, ChatColor.DARK_RED + "" + ChatColor.BOLD + "   ELIGE ITEM PARA SACAR");
 
-        double dineroJugador = jugadoresMySQL.getJugador(jugador).getPixelcoins();
-
         inventory.setItem(4, buildItemInfo());
-        inventory.setItem(9, buildItemDiamante(dineroJugador));
-        inventory.setItem(11, buildItemDiamanteBloque(dineroJugador));
-        inventory.setItem(13, buildItemLapis(dineroJugador));
-        inventory.setItem(15, buildItemLapisBloque(dineroJugador));
-        inventory.setItem(17, buildItemCuarzo(dineroJugador));
+
+        inventory.setItem(9, buildItem("DIAMANTE", CambioPixelcoins.DIAMANTE, Material.DIAMOND));
+        inventory.setItem(11, buildItem("BLOQUE DE DIAMANTE", CambioPixelcoins.DIAMANTE * 9, Material.DIAMOND_BLOCK));
+        inventory.setItem(13, buildItem("LAPISLAZULI", CambioPixelcoins.LAPISLAZULI, Material.LAPIS_LAZULI));
+        inventory.setItem(15, buildItem("BLOQUE DE LAPISLAZULI", CambioPixelcoins.LAPISLAZULI * 9, Material.LAPIS_BLOCK));
+        inventory.setItem(17, buildItem("CUARZO", CambioPixelcoins.CUARZO, Material.QUARTZ_BLOCK));
 
         return inventory;
     }
@@ -42,57 +42,16 @@ public class SacarItemInventoryFactory extends InventoryFactory {
         lore.add("puedes intercambiarlas por estos");
         lore.add("bloques y viceversa");
 
-        return MinecraftUtils.loreDisplayName(Material.PAPER, displayName, lore);
+        return ItemBuilder.of(Material.PAPER).title(displayName).lore(lore).build();
     }
 
-    private ItemStack buildItemDiamante (double dineroJugador) {
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR UN DIAMANTE";
+    public ItemStack buildItem (String itemACambiar, double cambio, Material itemMaterial) {
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR UN " + itemACambiar;
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.AQUA + "1 DIAMANTE -> " + ChatColor.GREEN + CambioPixelcoins.DIAMANTE);
+        lore.add(ChatColor.AQUA + "1 "+itemACambiar+" -> " + ChatColor.GREEN + cambio);
         lore.add("    ");
-        lore.add(ChatColor.GOLD +"Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(dineroJugador));
+        lore.add(ChatColor.GOLD +"Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(pixelcoinsJugador));
 
-        return MinecraftUtils.loreDisplayName(Material.DIAMOND, displayName, lore);
-    }
-
-    private ItemStack buildItemDiamanteBloque (double dineroJugador) {
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR UN BLOQUE DE DIAMANTE";
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.AQUA + "1 BLOQUE DE DIAMANTE -> " + ChatColor.GREEN + CambioPixelcoins.DIAMANTE * 9 + " PC");
-        lore.add("    ");
-        lore.add(ChatColor.GOLD + "Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(dineroJugador));
-
-        return MinecraftUtils.loreDisplayName(Material.DIAMOND_BLOCK, displayName, lore);
-
-    }
-
-    private ItemStack buildItemCuarzo (double dineroJugador) {
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR UN BLOQUE DE CUARZO";
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "1 BLOQUE DE CUARZO -> " + ChatColor.GREEN + CambioPixelcoins.CUARZO + " PC");
-        lore.add("    ");
-        lore.add(ChatColor.GOLD + "Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(dineroJugador));
-
-        return MinecraftUtils.loreDisplayName(Material.QUARTZ_BLOCK, displayName, lore);
-    }
-
-    private ItemStack buildItemLapis (double dineroJugador) {
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR LAPISLAZULI";
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.DARK_BLUE + "1 DE LAPISLAZULI -> " + ChatColor.GREEN + CambioPixelcoins.LAPISLAZULI + " PC");
-        lore.add("    ");
-        lore.add(ChatColor.GOLD + "Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(dineroJugador));
-
-        return MinecraftUtils.loreDisplayName(Material.LAPIS_LAZULI, displayName, lore);
-    }
-
-    private ItemStack buildItemLapisBloque (double dineroJugador) {
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR UN BLOQUE DE LAPISLAZULI";
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.BLUE + "1 BLOQUE DE LAPISLAZULI -> " + ChatColor.GREEN + CambioPixelcoins.LAPISLAZULI * 9 + " PC");
-        lore.add("    ");
-        lore.add(ChatColor.GOLD + "Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(dineroJugador));
-
-        return MinecraftUtils.loreDisplayName(Material.LAPIS_BLOCK, displayName, lore);
+        return ItemBuilder.of(itemMaterial).title(displayName).lore(lore).build();
     }
 }

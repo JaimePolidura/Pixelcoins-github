@@ -1,5 +1,6 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.Paginated;
 import es.serversurvival.mySQL.Ofertas;
@@ -79,8 +80,8 @@ public class OfertaInventoryFactory extends InventoryFactory {
 
         inventory.setItem(53, buildItemInfo());
         if(addFordwardItem){
-            inventory.setItem(51, buildItemBack());
-            inventory.setItem(52, buildItemFordward());
+            ItemBuilder.of(Material.RED_WOOL).title(Paginated.ITEM_NAME_GOBACK).buildAddInventory(inventory, 51);
+            ItemBuilder.of(Material.GREEN_WOOL).title(Paginated.ITEM_NAME_GOFORDWARD).buildAddInventory(inventory, 52);
         }else{
             inventory.setItem(52, buildItemGoBack());
         }
@@ -94,14 +95,6 @@ public class OfertaInventoryFactory extends InventoryFactory {
         lore.add("el item con la mano y 2) pon el comando:");
         lore.add("/vender <precio>");
 
-        return MinecraftUtils.loreDisplayName(Material.PAPER, ChatColor.GOLD + "" + ChatColor.BOLD + "INFO", lore);
-    }
-
-    private ItemStack buildItemBack () {
-        return MinecraftUtils.displayname(Material.RED_WOOL, Paginated.ITEM_NAME_GOBACK);
-    }
-
-    public ItemStack buildItemFordward () {
-        return MinecraftUtils.displayname(Material.GREEN_WOOL, Paginated.ITEM_NAME_GOFORDWARD);
+        return ItemBuilder.of(Material.PAPER).title(ChatColor.GOLD + "" + ChatColor.BOLD + "INFO").lore(lore).build();
     }
 }

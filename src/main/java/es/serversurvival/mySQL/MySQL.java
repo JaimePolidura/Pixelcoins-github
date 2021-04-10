@@ -58,12 +58,15 @@ public abstract class MySQL implements AllMySQLTablesInstances{
 
     protected abstract TablaObjeto buildObjectFromResultSet (ResultSet rs) throws SQLException;
 
-    @SneakyThrows
     protected TablaObjeto buildObjectFromQuery(String query) {
-        ResultSet rs = executeQuery(query);
-        rs.next();
+        try {
+            ResultSet rs = executeQuery(query);
+            rs.next();
+            return buildObjectFromResultSet(rs);
 
-        return buildObjectFromResultSet(rs);
+        } catch (SQLException throwables) {
+            return null;
+        }
     }
 
     protected <T> List<T> buildListFromQuery (String query) {

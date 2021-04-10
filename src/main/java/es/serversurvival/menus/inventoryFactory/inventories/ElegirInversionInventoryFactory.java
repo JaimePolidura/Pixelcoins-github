@@ -1,5 +1,6 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.ElegirInversionMenu;
 import es.serversurvival.util.MinecraftUtils;
@@ -18,9 +19,9 @@ public class ElegirInversionInventoryFactory extends InventoryFactory {
     private Inventory buildInventory () {
         Inventory inventory = Bukkit.createInventory(null, InventoryType.HOPPER, ElegirInversionMenu.titulo);
 
-        inventory.setItem(0, MinecraftUtils.displayname(Material.PAPER, ChatColor.GOLD + "" + ChatColor.BOLD + "Acciones"));
-        inventory.setItem(2, MinecraftUtils.displayname(Material.GOLD_INGOT, ChatColor.GOLD + "" + ChatColor.BOLD + "Criptomonedas"));
-        inventory.setItem(4, MinecraftUtils.displayname(Material.CHARCOAL, ChatColor.GOLD + "" + ChatColor.BOLD + "Materias primas"));
+        ItemBuilder.of(Material.PAPER).title(ChatColor.GOLD + "" + ChatColor.BOLD + "Acciones").buildAddInventory(inventory, 0);
+        ItemBuilder.of(Material.GOLD_INGOT).title(ChatColor.GOLD + "" + ChatColor.BOLD + "Criptomonedas").buildAddInventory(inventory, 2);
+        ItemBuilder.of(Material.CHARCOAL).title(ChatColor.GOLD + "" + ChatColor.BOLD + "Materias primas").buildAddInventory(inventory, 4);
 
         return inventory;
     }

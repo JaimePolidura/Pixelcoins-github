@@ -1,5 +1,6 @@
 package es.serversurvival.menus.menus.confirmaciones;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
@@ -70,7 +71,7 @@ public class ComprarBolsaConfirmacion extends Menu implements AumentoConfirmacio
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GOLD + "Comprar " + cantidadAComprar + " " +  alias  + " " + simbolo + " a " + ChatColor.GREEN + precioUnidad + " PC -> total: " + formatea.format(redondeoDecimales(precioTotal, 3)) + " PC");
 
-        this.inventory.setItem(14, MinecraftUtils.loreDisplayName(Material.GREEN_WOOL, displayName, lore));
+        ItemBuilder.of(Material.GREEN_WOOL).title(displayName).lore(lore).buildAddInventory(inventory, 14);
     }
 
     @Override

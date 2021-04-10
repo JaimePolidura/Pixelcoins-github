@@ -1,5 +1,6 @@
 package es.serversurvival.menus.menus.confirmaciones;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
@@ -77,7 +78,7 @@ public class BolsaVenderAccionEmpresaMenu extends Menu implements Confirmacion {
         lore.add(GOLD + "Vender 1 accion de " + empresa + " a " + GREEN + formatea.format(precioVenta) + " PC");
         lore.add(GOLD + "Compraste estas acciones a " + GREEN + formatea.format(precioApertura) + " PC");
 
-        this.inventory.setItem(14, MinecraftUtils.loreDisplayName(Material.GREEN_WOOL, displayName, lore));
+        ItemBuilder.of(Material.GREEN_WOOL).title(displayName).lore(lore).buildAddInventory(inventory, 14);
     }
 
 

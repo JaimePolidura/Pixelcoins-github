@@ -1,5 +1,6 @@
 package es.serversurvival.menus.menus.confirmaciones;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.mySQL.tablasObjetos.OfertaMercadoServer;
@@ -63,7 +64,7 @@ public class ComprarAccionesServerConfirmacion extends Menu implements AumentoCo
         List<String> lore = new ArrayList<>();
         lore.add(GOLD + "Comprar " + nuevaCantidad + " acciones " + nombreEmpresa + " a " + GREEN + oferta.getPrecio() + " PC -> total: " + formatea.format(redondeoDecimales(precioTotal, 3)) + " PC");
 
-        this.inventory.setItem(14, MinecraftUtils.loreDisplayName(Material.GREEN_WOOL, displayName, lore));
+        ItemBuilder.of(Material.GREEN_WOOL).title(displayName).lore(lore).buildAddInventory(inventory, 14);
     }
 
     @Override

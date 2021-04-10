@@ -7,6 +7,7 @@ import es.serversurvival.apiHttp.IEXCloud_API;
 import es.serversurvival.mySQL.tablasObjetos.LlamadaApi;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import es.serversurvival.util.Funciones;
+import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -197,28 +198,25 @@ public final class PosicionesAbiertas extends MySQL {
         }, 0L);
     }
 
+    @SneakyThrows
     private void realizarSplit(PosicionAbierta pos, JSONObject infoSplit) {
-        try{
-            Date fechaHoy = new Date();
-            Date dateSplit = dateFormater.parse((String) infoSplit.get("date"));
+        Date fechaHoy = new Date();
+        Date dateSplit = dateFormater.parse((String) infoSplit.get("date"));
 
-            int denominador = (int) infoSplit.get("fromFactor");
-            int numerador = (int) infoSplit.get("toFactor");
+        int denominador = (int) infoSplit.get("fromFactor");
+        int numerador = (int) infoSplit.get("toFactor");
 
-            if (diferenciaDias(fechaHoy, dateSplit) == 0) {
-                int cantidadDeAccionesConvertibles = pos.getCantidad() - (pos.getCantidad() % denominador);
-                int accionesSobrantes = pos.getCantidad() % denominador;
-                int accionesConvertidas = (cantidadDeAccionesConvertibles / denominador) * numerador;
+        if (diferenciaDias(fechaHoy, dateSplit) == 0) {
+            int cantidadDeAccionesConvertibles = pos.getCantidad() - (pos.getCantidad() % denominador);
+            int accionesSobrantes = pos.getCantidad() % denominador;
+            int accionesConvertidas = (cantidadDeAccionesConvertibles / denominador) * numerador;
 
-                double precioAperturaConvertido = pos.getPrecio_apertura() / (numerador / denominador);
+            double precioAperturaConvertido = pos.getPrecio_apertura() / (numerador / denominador);
 
-                this.setCantidad(pos.getId(), accionesConvertidas + accionesSobrantes);
-                this.setPrecioApertura(pos.getId(), precioAperturaConvertido);
+            this.setCantidad(pos.getId(), accionesConvertidas + accionesSobrantes);
+            this.setPrecioApertura(pos.getId(), precioAperturaConvertido);
 
-                Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Se ha actualizado el split de " + pos.getNombre_activo());
-            }
-        }catch (ParseException e) {
-            e.printStackTrace();
+            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Se ha actualizado el split de " + pos.getNombre_activo());
         }
     }
 
@@ -230,26 +228,23 @@ public final class PosicionesAbiertas extends MySQL {
                 .collect(Collectors.toList());
 
         Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
-
             for(PosicionAbierta posicionAbierta : posicionAbiertas) {
-            double dividendo;
-            Date fechaPagoDividendos;
+                double dividendo;
+                Date fechaPagoDividendos;
 
-            try {
-                JSONObject jsonDeLosDividendos = this.getJSONDividendos(posicionAbierta.getNombre_activo());
-                dividendo = getCantidadDePagoDeDividendoDesdeJSON(jsonDeLosDividendos);
-                fechaPagoDividendos = getFechaPagoDividendosJSON(jsonDeLosDividendos);
-            } catch (Exception e) {
-                continue;
-            }
+                try {
+                    JSONObject jsonDeLosDividendos = this.getJSONDividendos(posicionAbierta.getNombre_activo());
+                    dividendo = getCantidadDePagoDeDividendoDesdeJSON(jsonDeLosDividendos);
+                    fechaPagoDividendos = getFechaPagoDividendosJSON(jsonDeLosDividendos);
+                } catch (Exception e) {
+                    continue;
+                }
 
-            if (diferenciaDias(hoy, fechaPagoDividendos) == 0) {
-                transaccionesMySQL.pagaDividendo(posicionAbierta.getNombre_activo(), posicionAbierta.getJugador(), dividendo, posicionAbierta.getCantidad());
-            }
-        }
-
+                if (diferenciaDias(hoy, fechaPagoDividendos) == 0) {
+                    transaccionesMySQL.pagaDividendo(posicionAbierta.getNombre_activo(), posicionAbierta.getJugador(), dividendo, posicionAbierta.getCantidad());
+                }
+         }
         },0L);
-
     }
 
     public void mostrarDividendosCarteraEntera (Player player) {

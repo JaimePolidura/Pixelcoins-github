@@ -1,4 +1,4 @@
-package es.serversurvival.eventosMinecraft;
+package es.serversurvival.eventos;
 
 import es.serversurvival.mySQL.Jugadores;
 import es.serversurvival.mySQL.Mensajes;

@@ -1,4 +1,4 @@
-package es.serversurvival.eventosMinecraft;
+package es.serversurvival.eventos;
 
 import es.serversurvival.menus.MenuManager;
 import es.serversurvival.mySQL.ConversacionesWeb;

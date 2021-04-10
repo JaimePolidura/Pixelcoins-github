@@ -1,10 +1,13 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
 import es.serversurvival.mySQL.tablasObjetos.PosicionCerrada;
 import es.serversurvival.util.MinecraftUtils;
+import lombok.AllArgsConstructor;
+import net.minecraft.server.v1_16_R1.ItemBanner;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -48,7 +51,7 @@ public class TopInventoryFactory extends InventoryFactory {
             pos++;
         }
 
-        return MinecraftUtils.loreDisplayName(Material.GOLD_BLOCK, displayName, lore);
+        return ItemBuilder.of(Material.GOLD_BLOCK).title(displayName).lore(lore).build();
     }
 
     private ItemStack buildTopPobresJugadoresItem () {
@@ -66,7 +69,7 @@ public class TopInventoryFactory extends InventoryFactory {
             pos++;
         }
 
-        return MinecraftUtils.loreDisplayName(Material.DIRT, displayName, lore);
+        return ItemBuilder.of(Material.DIRT).title(displayName).lore(lore).build();
     }
 
     private ItemStack buildTopVendedoresJugadoresItem () {
@@ -82,7 +85,7 @@ public class TopInventoryFactory extends InventoryFactory {
             pos++;
         }
 
-        return MinecraftUtils.loreDisplayName(Material.GOLD_INGOT, displayName, lore);
+        return ItemBuilder.of(Material.GOLD_INGOT).title(displayName).lore(lore).build();
     }
 
     private ItemStack buildTopFiablesJugadoresItem () {
@@ -98,7 +101,7 @@ public class TopInventoryFactory extends InventoryFactory {
             pos++;
         }
 
-        return MinecraftUtils.loreDisplayName(Material.GREEN_WOOL, displayName, lore);
+        return ItemBuilder.of(Material.GREEN_WOOL).title(displayName).lore(lore).build();
     }
 
     private ItemStack buildTopMenosFiablesJugadoresItem () {
@@ -114,7 +117,7 @@ public class TopInventoryFactory extends InventoryFactory {
             pos++;
         }
 
-        return MinecraftUtils.loreDisplayName(Material.RED_WOOL, displayName, lore);
+        return ItemBuilder.of(Material.RED_WOOL).title(displayName).lore(lore).build();
     }
 
     private ItemStack buildItemTopOperacionesBolsa () {
@@ -135,7 +138,7 @@ public class TopInventoryFactory extends InventoryFactory {
             }
         }
 
-        return MinecraftUtils.loreDisplayName(Material.DIAMOND_BLOCK, displayName, lore);
+        return ItemBuilder.of(Material.DIAMOND_BLOCK).title(displayName).lore(lore).build();
     }
 
     private ItemStack buildItemPeoresOperacioensBolsa() {
@@ -154,7 +157,7 @@ public class TopInventoryFactory extends InventoryFactory {
             }
         }
 
-        return MinecraftUtils.loreDisplayName(Material.COAL_BLOCK, displayName, lore);
+        return ItemBuilder.of(Material.COAL_BLOCK).title(displayName).lore(lore).build();
     }
 
     private ItemStack buildMejoresComerciantes () {
@@ -176,7 +179,7 @@ public class TopInventoryFactory extends InventoryFactory {
         lore.add(ChatColor.GOLD + "En otras palabras de cada 100 Pixelcoins que tienes");
         lore.add(ChatColor.GOLD + "Cuantas las has conseguido comerciando");
 
-        return MinecraftUtils.loreDisplayName(Material.EMERALD, displayName, lore);
+        return ItemBuilder.of(Material.EMERALD).title(displayName).lore(lore).build();
     }
 
     private List<PosicionCerrada> getNotDuplicatedElements (List<PosicionCerrada> list) {

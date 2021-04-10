@@ -1,5 +1,6 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
@@ -24,8 +25,8 @@ public class AyudaMenuInventoryFactory extends InventoryFactory {
 
         return inventory;
     }
-    
+
     private ItemStack buildItemAyuda (String tiposAyuda) {
-        return MinecraftUtils.displayname(Material.WRITABLE_BOOK, ChatColor.GOLD + "" + ChatColor.BOLD + tiposAyuda);
+        return ItemBuilder.of(Material.WRITABLE_BOOK).title(ChatColor.GOLD + "" + ChatColor.BOLD + tiposAyuda).build();
     }
 }

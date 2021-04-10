@@ -1,5 +1,6 @@
 package es.serversurvival.menus.menus.confirmaciones;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
@@ -57,7 +58,7 @@ public class PagarDividendoConfirmacion extends Menu implements AumentoConfirmac
         loreAcepatr.add(GOLD + "Que seria un gasto de " + GREEN + formatea.format(accionesTotales * dividendoPorAccion) + " PC");
         loreAcepatr.add(GOLD + "La empresa tiene " + GREEN + formatea.format(empresa.getPixelcoins()) + " PC " + GOLD + "en caja");
 
-        this.inventory.setItem(14, MinecraftUtils.loreDisplayName(Material.GREEN_WOOL, nombreItemAceptar, loreAcepatr));
+        ItemBuilder.of(Material.GREEN_WOOL).title(nombreItemAceptar).lore(loreAcepatr).buildAddInventory(inventory, 14);
     }
 
     @Override

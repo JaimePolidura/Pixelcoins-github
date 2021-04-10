@@ -1,5 +1,6 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.util.MinecraftUtils;
@@ -39,11 +40,10 @@ public class EmpleosInventoryFactory extends InventoryFactory {
         lore.add("Mas info en /ayuda empleo o en:");
         lore.add("http://serversurvival.ddns.net");
 
-        return MinecraftUtils.loreDisplayName(Material.PAPER, ChatColor.GOLD + "" + ChatColor.BOLD + "INFO", lore);
+        return ItemBuilder.of(Material.PAPER).title(ChatColor.GOLD + "" + ChatColor.BOLD + "INFO").lore(lore).build();
     }
 
     private List<ItemStack> buildItemsEmpleos (String jugador) {
-
         List<Empleado> empleaosJugador = empleadosMySQL.getTrabajosJugador(jugador);
 
         List<ItemStack> itemsEmpleos = new ArrayList<>();
@@ -60,7 +60,8 @@ public class EmpleosInventoryFactory extends InventoryFactory {
             lore.add("   ");
             lore.add(ChatColor.GOLD + "ID: " + empleado.getId());
 
-            itemsEmpleos.add(MinecraftUtils.loreDisplayName(Material.valueOf(icono), displayName, lore));
+
+            itemsEmpleos.add(ItemBuilder.of(Material.valueOf(icono)).title(displayName).lore(lore).build());
         });
 
         return itemsEmpleos;

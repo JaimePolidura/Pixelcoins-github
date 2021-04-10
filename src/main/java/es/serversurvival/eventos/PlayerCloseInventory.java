@@ -1,4 +1,4 @@
-package es.serversurvival.eventosMinecraft;
+package es.serversurvival.eventos;
 
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.MenuManager;

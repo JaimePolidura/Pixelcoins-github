@@ -1,5 +1,6 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.DeudasMenu;
 import es.serversurvival.mySQL.tablasObjetos.Deuda;
@@ -56,7 +57,7 @@ public class DeudasInventoryFactory extends InventoryFactory {
         lore.add(ChatColor.GOLD + "Vence en: " + deuda.getTiempo_restante() + " dias");
         lore.add(ChatColor.GOLD + "ID: " + deuda.getId());
 
-        return MinecraftUtils.loreDisplayName(Material.RED_BANNER, displayName, lore);
+        return ItemBuilder.of(Material.RED_BANNER).lore(lore).title(displayName).build();
     }
 
     private ItemStack buildItemFromDeudaAcredor (Deuda deuda) {
@@ -68,7 +69,7 @@ public class DeudasInventoryFactory extends InventoryFactory {
         lore.add(ChatColor.GOLD + "Vence en: " + deuda.getTiempo_restante() + " dias");
         lore.add(ChatColor.GOLD + "ID: " + deuda.getId());
 
-        return MinecraftUtils.loreDisplayName(Material.GREEN_BANNER, displayName, lore);
+        return ItemBuilder.of(Material.GREEN_BANNER).lore(lore).title(displayName).build();
     }
 
     private ItemStack buildItemInfo () {
@@ -88,6 +89,6 @@ public class DeudasInventoryFactory extends InventoryFactory {
         lore.add("Mas info en /deudas ayuda o en la web");
         lore.add("http://serversurvival.ddns.net/perfil");
 
-        return MinecraftUtils.loreDisplayName(Material.PAPER, displayName, lore);
+        return ItemBuilder.of(Material.PAPER).lore(lore).title(displayName).build();
     }
 }

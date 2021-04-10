@@ -1,5 +1,6 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
+import es.jaimetruman.ItemBuilder;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
@@ -81,13 +82,13 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
         lore.add("Mas info en /ayuda empresario o:");
         lore.add("http://serversurvival.ddns.net/perfil");
 
-        return MinecraftUtils.loreDisplayName(Material.WRITABLE_BOOK, displayName, lore);
+        return ItemBuilder.of(Material.WRITABLE_BOOK).title(displayName).lore(lore).build();
     }
 
     private ItemStack buildItemBorrarEmpresa () {
         String displayName = RED + "" + BOLD + "" + UNDERLINE + "CLICK PARA BORRAR LA EMPRESA";
 
-        return MinecraftUtils.loreDisplayName(Material.BARRIER, displayName, Arrays.asList("   "));
+        return ItemBuilder.of(Material.BARRIER).title(displayName).build();
     }
 
     public ItemStack buildItemInfo () {
@@ -108,7 +109,7 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
         lore.add("Para mas info: /ayuda empresario o");
         lore.add("http://serversurvival.ddns.net/perfil");
 
-        return MinecraftUtils.loreDisplayName(Material.PAPER, displayName, lore);
+        return ItemBuilder.of(Material.PAPER).title(displayName).build();
     }
 
     private List<ItemStack> buildItemsEmpleados () {
@@ -116,11 +117,6 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
         List<Empleado> empleados = empleadosMySQL.getEmpleadosEmrpesa(empresa);
 
         empleados.forEach( (empleado) -> {
-            ItemStack empleadoItem = new ItemStack(Material.PLAYER_HEAD);
-            SkullMeta empleadoMeta = (SkullMeta) empleadoItem.getItemMeta();
-
-            empleadoMeta.setDisplayName(RED + "" + BOLD + "" + UNDERLINE + "CLICK PARA DESPEDIR");
-
             List<String> lore = new ArrayList<>();
             lore.add("   ");
             lore.add(GOLD + "Empleado: " + empleado.getJugador());
@@ -135,17 +131,13 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
             lore.add("/empresas editarempleado " + empresa + " " + empleado.getJugador());
             lore.add("  tiposueldo <tipo (ver en info)>");
 
-            empleadoMeta.setLore(lore);
-            empleadoItem.setItemMeta(empleadoMeta);
-
-            itemsEmpleados.add(empleadoItem);
+            itemsEmpleados.add(ItemBuilder.of(Material.PLAYER_HEAD).lore(lore).title(RED + "" + BOLD + "" + UNDERLINE + "CLICK PARA DESPEDIR").build());
         });
 
         return itemsEmpleados;
     }
 
     private ItemStack buildItemAccionistas () {
-        Material material = Material.NETHERITE_SCRAP;
         String displayName = GOLD + "" + BOLD + "ACCIONISTAS";
         List<String> lore = new ArrayList<>();
         Map<String, Integer> jugadoresAccionistas = ofertasMercadoServerMySQL.getAccionistasEmpresaServer(empresa);
@@ -159,15 +151,14 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
 
         });
 
-        return MinecraftUtils.loreDisplayName(material, displayName, lore);
+        return ItemBuilder.of(Material.NETHERITE_SCRAP).title(displayName).lore(lore).build();
     }
 
     private ItemStack buildItemDividendo () {
-        Material material = Material.GOLD_INGOT;
         String displayName = GOLD + "" + BOLD + "REPARTIR DIVIDENDO";
         List<String> lore = new ArrayList<>();
         lore.add(GOLD + "Repartir pixelcoins por cada accion");
 
-        return MinecraftUtils.loreDisplayName(material, displayName, lore);
+        return ItemBuilder.of(Material.GOLD_INGOT).title(displayName).lore(lore).build();
     }
 }
