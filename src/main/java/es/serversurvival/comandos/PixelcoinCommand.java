@@ -6,5 +6,4 @@ import es.serversurvival.util.Funciones;
 import java.text.DecimalFormat;
 
 public class PixelcoinCommand implements AllMySQLTablesInstances{
-
 }

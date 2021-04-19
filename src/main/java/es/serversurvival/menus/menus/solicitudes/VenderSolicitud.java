@@ -82,16 +82,13 @@ public class VenderSolicitud extends Menu implements Solicitud {
         }
 
         transaccionesMySQL.comprarEmpresa(this.enviador, this.destinatario, empresa, precio, enviador);
-        transaccionesMySQL.nuevaTransaccion(this.destinatario, this.enviador, precio, empresa, TipoTransaccion.EMPRESA_VENTA);
         player.sendMessage(ChatColor.GOLD + "Ahora eres dueño de " + ChatColor.DARK_AQUA + empresa + ChatColor.GOLD + " ,la has comprado por " + ChatColor.GREEN + precio + " PC");
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
         if (enviador != null) {
             enviador.sendMessage(ChatColor.GOLD + player.getName() + " te ha comprado " + ChatColor.DARK_AQUA + empresa + ChatColor.GOLD + " por " + ChatColor.GREEN + precio + " PC " + ChatColor.GOLD + ", ahora ya no eres dueño");
             enviador.playSound(enviador.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-            ScoreBoardManager.getInstance().updateScoreboard(enviador);
         }
-        ScoreBoardManager.getInstance().updateScoreboard(player);
 
         closeMenu();
     }

@@ -83,6 +83,7 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
     @Override
     public void goFordward() {
         if(weAreInTheLasPage()){
+            System.out.println("1");
             Inventory newInventory = bolsaCarteraInventoryFactory.buildInventoryExecess();
             this.inventory = newInventory;
             pages.add(new Page(currentIndex + 1, newInventory));

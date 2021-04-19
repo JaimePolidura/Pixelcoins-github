@@ -1,25 +1,29 @@
 package es.serversurvival.task;
 
+import es.jaime.EventListener;
 import es.jaimetruman.task.BukkitTimeUnit;
 import es.jaimetruman.task.Task;
 import es.jaimetruman.task.TaskRunner;
+import es.serversurvival.mySQL.eventos.TransaccionEvent;
 import es.serversurvival.scoreboeards.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 @Task(period = BukkitTimeUnit.MINUTE)
-public final class ScoreBoardManager implements TaskRunner {
+public final class ScoreBoardManager implements TaskRunner, Listener {
     private final List<ServerScoreboard> scoreboards;
     private int actualIndex;
 
-    private static ScoreBoardManager instance;
-
-    private ScoreBoardManager() {
+    public ScoreBoardManager() {
         this.scoreboards = new ArrayList<>();
         scoreboards.add(new StatsDisplayScoreboard());
         scoreboards.add(new TopPlayerDisplayScoreboard());
@@ -27,11 +31,14 @@ public final class ScoreBoardManager implements TaskRunner {
         scoreboards.add(new BolsaScoreboard());
     }
 
-    public static ScoreBoardManager getInstance () {
-        if(instance == null)
-            instance = new ScoreBoardManager();
+    @EventListener
+    public void onPixelcoinTransaccion (TransaccionEvent event) {
+        update(Bukkit.getPlayer(event.getComprador()), Bukkit.getPlayer(event.getVendedor()));
+    }
 
-        return instance;
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent evento) {
+        update(evento.getPlayer());
     }
 
     @Override
@@ -42,42 +49,35 @@ public final class ScoreBoardManager implements TaskRunner {
             this.actualIndex++;
         }
 
-        updateAll(scoreboards.get(actualIndex));
+        update(Bukkit.getOnlinePlayers());
     }
 
-    private void updateAll(ServerScoreboard serverScoreboard) {
-
-        List<Player> onlinePlayers = (List<Player>) Bukkit.getOnlinePlayers();
-
-        if(serverScoreboard instanceof SingleScoreboard){
-            SingleScoreboard singleScoreboard = (SingleScoreboard) serverScoreboard;
-            onlinePlayers.forEach(player -> player.setScoreboard(singleScoreboard.createScoreborad(player.getName())));
-
-        }else{
-            GlobalScoreboard globalScoreboard = (GlobalScoreboard) serverScoreboard;
-            Scoreboard scoreboard = globalScoreboard.createScorebord();
-            onlinePlayers.forEach((player -> player.setScoreboard(scoreboard)));
-        }
-
+    public void update (Player... players) {
+        update(Arrays.asList(players));
     }
 
-    public void updateScoreboard(Player... players) {
-        for(Player player : players)
-            if(player != null)
-                updateScoreboard(player);
-    }
-
-    public void updateScoreboard(Player player) {
+    public void update (Collection<? extends Player> players) {
         ServerScoreboard actualScoreboard = scoreboards.get(actualIndex);
 
-        if(actualScoreboard instanceof SingleScoreboard){
-            Scoreboard newScoreboard = ((SingleScoreboard) actualScoreboard).createScoreborad(player.getName());
-            player.setScoreboard(newScoreboard);
+        if(actualScoreboard instanceof GlobalScoreboard){
+            updateGlobalScoreboard(actualScoreboard);
         }else{
-            List<Player> onlinePlayers = (List<Player>) Bukkit.getOnlinePlayers();
-            Scoreboard newScoreboard = ((GlobalScoreboard) actualScoreboard).createScorebord();
-            onlinePlayers.forEach(ply -> ply.setScoreboard(newScoreboard));
+            updateSingleScoreboard(actualScoreboard, players);
         }
+    }
 
+    private void updateGlobalScoreboard (ServerScoreboard actualScoreboard) {
+        List<Player> onlinePlayers = (List<Player>) Bukkit.getOnlinePlayers();
+        Scoreboard newScoreboard = ((GlobalScoreboard) actualScoreboard).createScorebord();
+        onlinePlayers.forEach(ply -> ply.setScoreboard(newScoreboard));
+    }
+
+    private void updateSingleScoreboard (ServerScoreboard actualScoreboard, Collection<? extends Player> players) {
+        players.forEach(player -> {
+            if(player != null){
+                Scoreboard newScoreboard = ((SingleScoreboard) actualScoreboard).createScoreborad(player.getName());
+                player.setScoreboard(newScoreboard);
+            }
+        });
     }
 }

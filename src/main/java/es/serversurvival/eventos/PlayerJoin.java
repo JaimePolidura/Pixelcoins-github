@@ -23,7 +23,6 @@ public final class PlayerJoin implements Listener {
         player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "Tienes " + mensajesMySQL.getMensajesJugador(player.getName()).size() +
                 " pendientes " + ChatColor.AQUA + "  /mensajes");
 
-        ScoreBoardManager.getInstance().updateScoreboard(player);
         NPCManager.showPlayer(player);
     }
 }

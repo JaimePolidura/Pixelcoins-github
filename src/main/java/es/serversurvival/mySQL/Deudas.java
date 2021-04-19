@@ -145,8 +145,6 @@ public final class Deudas extends MySQL {
 
         String mensajeOnline = ChatColor.GOLD + player.getName() + " te ha cancelado la deuda de " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC";
         enviarMensaje(nombreDeudor, mensajeOnline, mensajeOnline, Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-
-        ScoreBoardManager.getInstance().updateScoreboard(player, Bukkit.getPlayer(nombreDeudor));
     }
 
     public void pagarDeuda(Player playeDeudor, int id) {
@@ -162,8 +160,6 @@ public final class Deudas extends MySQL {
         String mensajeOnline = ChatColor.GOLD + playeDeudor.getName() + " ta ha pagado toda la deuda: " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC";
         String mensajeOffline = playeDeudor.getName() + " ta ha pagado toda la deuda: " + pixelcoinsDeuda + " PC";
         enviarMensaje(acredor, mensajeOnline, mensajeOffline, Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-
-        ScoreBoardManager.getInstance().updateScoreboard(playeDeudor, Bukkit.getPlayer(acredor));
     }
 
     @SneakyThrows

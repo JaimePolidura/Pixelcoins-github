@@ -5,9 +5,7 @@ import es.serversurvival.mySQL.enums.TipoOfertante;
 import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.mySQL.tablasObjetos.OfertaMercadoServer;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
-import es.serversurvival.util.Funciones;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
@@ -17,11 +15,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static es.serversurvival.mySQL.enums.TipoActivo.ACCIONES_SERVER;
 import static es.serversurvival.mySQL.enums.TipoOfertante.*;
 import static es.serversurvival.util.Funciones.*;
 import static org.bukkit.ChatColor.*;

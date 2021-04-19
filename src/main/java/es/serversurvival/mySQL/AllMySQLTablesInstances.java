@@ -6,7 +6,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
 public interface AllMySQLTablesInstances {
-    SimpleDateFormat dateFormater = Funciones.DATE_FORMATER;
+    SimpleDateFormat dateFormater = Funciones.DATE_FORMATER_LEGACY;
     DecimalFormat formatea = Funciones.FORMATEA;
 
     Cuentas cuentasMySQL = Cuentas.INSTANCE;

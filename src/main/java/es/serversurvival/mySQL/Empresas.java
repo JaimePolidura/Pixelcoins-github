@@ -3,6 +3,8 @@ package es.serversurvival.mySQL;
 import java.sql.*;
 import java.util.*;
 
+import es.serversurvival.main.Pixelcoin;
+import es.serversurvival.mySQL.eventos.TransaccionEvent;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
@@ -16,6 +18,8 @@ import org.bukkit.entity.Player;
 
 import es.serversurvival.util.Funciones;
 
+import static es.serversurvival.mySQL.enums.TipoTransaccion.*;
+import static es.serversurvival.mySQL.enums.TipoTransaccion.EMPRESA_DIVIDENDO_ACCION;
 import static es.serversurvival.util.Funciones.*;
 
 /**
@@ -110,8 +114,6 @@ public final class Empresas extends MySQL {
         player.sendMessage(ChatColor.GOLD + "Has creado una empresa! " + ChatColor.GOLD + "comandos utiles: " + ChatColor.AQUA + "/empresas depositar, /empresas contratar, /empresas logotipo, /empresas vertodas, /empresas miempresa /empresas editarnombre m?s: /ayuda empresario o /empresas ayuda");
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
         player.getServer().broadcastMessage(ChatColor.GOLD + owner + " ha creado una nueva empresa: " + ChatColor.DARK_AQUA + nombreEmpresa);
-
-        ScoreBoardManager.getInstance().updateScoreboard(player);
     }
 
     public void cambiarIcono(String nombreEmpresa, Player player, String icono) {
@@ -130,8 +132,6 @@ public final class Empresas extends MySQL {
         empleados.forEach( (empl) -> {
             mensajesMySQL.nuevoMensaje("", empl.getJugador(), "La empresa en la que trabajas: " + empresa + " ha cambiado a de nombre a " + nuevoNombre);
         });
-
-        ScoreBoardManager.getInstance().updateScoreboard(player);
     }
 
     public void cambiarDescripciom(String nombreEmpresa, String nuevaDescripcion, Player player) {
@@ -147,7 +147,8 @@ public final class Empresas extends MySQL {
 
         jugadoresMySQL.setPixelcoin(ownerJugador.getNombre(), ownerJugador.getPixelcoins() + empresaABorrar.getPixelcoins());
         borrarEmpresa(empresaNombre);
-        transaccionesMySQL.nuevaTransaccion(ownerJugador.getNombre(), ownerJugador.getNombre(), empresaABorrar.getPixelcoins(), empresaNombre, TipoTransaccion.EMPRESA_BORRAR);
+
+        Pixelcoin.publish(new TransaccionEvent(ownerJugador.getNombre(), ownerJugador.getNombre(), empresaABorrar.getPixelcoins(), empresaNombre, EMPRESA_BORRAR));
 
         empleados.forEach( (empleado) -> {
             String mensajeOnline = ChatColor.GOLD + ownerJugador.getNombre() + " ha borrado su empresa donde trabajabas: " + empresaNombre;

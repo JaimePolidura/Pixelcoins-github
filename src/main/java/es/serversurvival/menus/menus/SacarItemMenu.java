@@ -63,8 +63,6 @@ public class SacarItemMenu extends Menu implements Clickable, Refreshcable {
         double pixelcoinsSacadas = CambioPixelcoins.sacarItem(jugadorASacar, tipoItem);
         this.pixelcoinsJugador = pixelcoinsJugador - pixelcoinsSacadas;
 
-        ScoreBoardManager.getInstance().updateScoreboard(player);
-
         refresh();
     }
 

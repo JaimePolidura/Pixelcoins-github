@@ -15,12 +15,9 @@ import static es.serversurvival.util.MinecraftUtils.*;
 public class BolsaScoreboard implements SingleScoreboard {
     private Map<String, LlamadaApi> llamadasApiMap;
 
-    public BolsaScoreboard () {
-        this.llamadasApiMap = llamadasApiMySQL.getMapOfAllLlamadasApi();
-    }
-
     @Override
     public Scoreboard createScoreborad(String jugador) {
+        this.llamadasApiMap = llamadasApiMySQL.getMapOfAllLlamadasApi();
 
         Scoreboard scoreboard = createScoreboard("bolsa", ChatColor.GOLD + "" + ChatColor.BOLD + "TUS MEJORES ACCIONES");
         Objective objective = scoreboard.getObjective("bolsa");

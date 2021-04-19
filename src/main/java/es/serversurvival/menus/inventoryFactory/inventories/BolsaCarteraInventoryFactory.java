@@ -1,14 +1,18 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
 import es.jaimetruman.ItemBuilder;
+import es.serversurvival.menus.menus.Paginated;
 import es.serversurvival.mySQL.enums.TipoActivo;
+import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.mySQL.tablasObjetos.LlamadaApi;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.BolsaCarteraMenu;
 import es.serversurvival.mySQL.PosicionesAbiertas;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
+import es.serversurvival.util.Funciones;
 import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -43,76 +47,79 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         inventory.setItem(1, valores);
         inventory.setItem(8, buildItemResultado());
 
-        for(int i = 0; i < posicionesAbiertasItems.size(); i++){
-            if(i < 43){
+        for (int i = 0; i < posicionesAbiertasItems.size(); i++) {
+            if (i < 43) {
                 inventory.setItem(i + 9, posicionesAbiertasItems.get(i));
-            }else{
+            } else {
                 itemExcessInventory.add(posicionesAbiertasItems.get(i));
             }
         }
 
-        if(itemExcessInventory.size() > 0){
+        if (itemExcessInventory.size() > 0) {
             inventory.setItem(52, back);
             inventory.setItem(53, buildItemFordward());
-        }else{
+        } else {
             inventory.setItem(53, back);
         }
 
         return inventory;
     }
 
-    public Inventory buildInventoryExecess () {
+    public Inventory buildInventoryExecess() {
         Inventory inventory = Bukkit.createInventory(null, 54, BolsaCarteraMenu.titulo);
+        System.out.println("2");
 
         List<ItemStack> copyOfItemExcessList = new ArrayList<>(itemExcessInventory);
         itemExcessInventory.clear();
 
         boolean addFordwardItem = false;
 
-        for(int i = 0; i < copyOfItemExcessList.size(); i++){
-            if(i < 51){
+        for (int i = 0; i < copyOfItemExcessList.size(); i++) {
+            if (i < 51) {
                 inventory.addItem(copyOfItemExcessList.get(i));
-            }else{
+            } else {
                 itemExcessInventory.add(copyOfItemExcessList.get(i));
                 addFordwardItem = true;
             }
         }
 
         inventory.setItem(53, buildItemInfo());
-        if(addFordwardItem){
+        if (addFordwardItem) {
             inventory.setItem(51, buildItemGoBack());
             inventory.setItem(52, buildItemFordward());
-        }else{
+        } else {
             inventory.setItem(52, buildItemGoBack());
         }
 
         return inventory;
     }
 
-    private List<ItemStack> buildItemsPosicionesAbiertas (String jugador) {
+    private List<ItemStack> buildItemsPosicionesAbiertas(String jugador) {
+        List<ItemStack> posicionesAbiertasItems = new ArrayList<>();
+
+        List<PosicionAbierta> posicionAbiertasJugador = posicionesAbiertasMySQL.getPosicionesAbiertasJugador(jugador);
         this.liquidezjugador = jugadoresMySQL.getJugador(jugador).getPixelcoins();
         rellenarLlamadasApi();
+        rellenarPosicionesAbiertasPeso(posicionAbiertasJugador, getTotalInvertido(posicionAbiertasJugador));
 
-        List<PosicionAbierta> jugadorPosNoServer = posicionesAbiertasMySQL.getPosicionesAbiertasJugadorCondicion(jugador, PosicionAbierta::noEsTipoAccionServer);
-        List<PosicionAbierta> jugadorPosServer = posicionesAbiertasMySQL.getPosicionesAbiertasJugadorCondicion(jugador, PosicionAbierta::esTipoAccionServer);
-        rellenarPosicionesAbiertasPeso(jugadorPosNoServer, getTotalInvertido(jugadorPosNoServer));
-
-        List<ItemStack> posicionesAbiertasItems = new ArrayList<>();
-        for (PosicionAbierta posicion : jugadorPosNoServer) {
-            posicionesAbiertasItems.add(buildItemFromPosicionNoServer(posicion));
-        }
-        for(PosicionAbierta posicion : jugadorPosServer){
-            posicionesAbiertasItems.add(buildItemFromPosicionServer(posicion));
+        for (PosicionAbierta posicion : posicionAbiertasJugador) {
+            if (posicion.getTipo_posicion() == LARGO) {
+                posicionesAbiertasItems.add(buildPosicionAbiertaLarga(posicion));
+            } else {
+                posicionesAbiertasItems.add(buildPosicionAbiertaCorto(posicion));
+            }
         }
 
         return posicionesAbiertasItems;
     }
 
-    private void rellenarLlamadasApi () {
+    private void rellenarLlamadasApi() {
         List<LlamadaApi> llamadaApisList = llamadasApiMySQL.getTodasLlamadasApi();
         Map<String, LlamadaApi> llamadaApiMap = new HashMap<>();
 
-        llamadaApisList.forEach( (llamada) -> llamadaApiMap.put(llamada.getSimbolo(), llamada));
+        llamadaApisList.forEach((llamada) -> {
+            llamadaApiMap.put(llamada.getSimbolo(), llamada);
+        });
 
         this.llamadasApis = llamadaApiMap;
     }
@@ -120,105 +127,110 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
     private void rellenarPosicionesAbiertasPeso(List<PosicionAbierta> posicionesJugador, double totalInverito) {
         Map<String, Integer> posicionesAbiertasConPeso = new HashMap<>();
 
-        posicionesJugador.forEach( (posicion) -> {
-            posicionesAbiertasConPeso.put(posicion.getNombre_activo(), (int) rentabilidad(totalInverito, posicion.getCantidad() * llamadasApis.get(posicion.getNombre_activo()).getPrecio()));
+        posicionesJugador.forEach((posicion) -> {
+            posicionesAbiertasConPeso.put(posicion.getNombre_activo(), (int) Funciones.rentabilidad(totalInverito, posicion.getCantidad() * llamadasApis.get(posicion.getNombre_activo()).getPrecio()));
         });
 
         this.posicionesAbiertasPeso = posicionesAbiertasConPeso;
     }
 
-    private double getTotalInvertido (List<PosicionAbierta> posicionAbiertas) {
-        return getSumaTotalListDouble(posicionAbiertas, pos -> pos.getCantidad() * llamadasApis.get(pos.getNombre_activo()).getPrecio());
+    private double getTotalInvertido(List<PosicionAbierta> posicionAbiertas) {
+        return posicionAbiertas.stream()
+                .mapToDouble((pos) -> pos.getCantidad() * llamadasApis.get(pos.getNombre_activo()).getPrecio())
+                .sum();
     }
 
-    private ItemStack buildItemFromPosicionNoServer(PosicionAbierta posicionAbierta) {
-        String displayName = posicionAbierta.getTipo_posicion() == LARGO ?
-                GOLD + "" + BOLD + UNDERLINE + "CLICK PARA VENDER" :
-                GOLD + "" + BOLD + UNDERLINE + "CLICK PARA COMPRAR " + RED + "" + BOLD + "(CORTO)";
-
-        return ItemBuilder.of(TipoActivo.getMaterialFor(posicionAbierta))
-                .title(displayName)
-                .lore(buildLoreFromPosicionAbierta(posicionAbierta))
+    public ItemStack buildItemFordward() {
+        return ItemBuilder.of(Material.GREEN_WOOL)
+                .title(Paginated.ITEM_NAME_GOFORDWARD)
                 .build();
     }
 
-    private ItemStack buildItemFromPosicionServer(PosicionAbierta posicion) {
-        String displayName = GOLD + "" + BOLD + UNDERLINE + "CLICK PARA VENDER";
-        List<String> lore = new ArrayList<>();
-        lore.add("   ");
-        lore.add(GOLD + "Activo: " + posicion.getNombre_activo()); //14
-        lore.add(GOLD + "Cantidad: " + posicion.getCantidad() + " " + posicion.getTipo_activo().getAlias());
-        lore.add(GOLD + "Precio apertura: " + GREEN + formatea.format(posicion.getPrecio_apertura()));
-
-        lore.add(GOLD + "Valor total de compra: " + GREEN + formatea.format(posicion.getPrecio_apertura() * posicion.getCantidad()));
-        lore.add("    ");
-        lore.add(GOLD + "Fecha de compra: " + posicion.getFecha_apertura());
-        lore.add("   ");
-        lore.add(GOLD + "ID: " + posicion.getId());
-
-        return ItemBuilder.of(Material.GREEN_BANNER).title(displayName).lore(lore).build();
-    }
-
-    private List<String> buildLoreFromPosicionAbierta (PosicionAbierta posicion) {
+    private ItemStack buildPosicionAbiertaLarga(PosicionAbierta posicion) {
         LlamadaApi llamada = llamadasApis.get(posicion.getNombre_activo());
 
         double precioAcutal = llamada.getPrecio();
-        double perdidasOBeneficios = posicion.getTipo_posicion() == LARGO ?
-                posicion.getCantidad() * (precioAcutal - posicion.getPrecio_apertura()) :
-                posicion.getCantidad() * (posicion.getPrecio_apertura() - precioAcutal);
-
-        double rentabilidad = posicion.getTipo_posicion() == LARGO ?
-                redondeoDecimales(diferenciaPorcntual(posicion.getPrecio_apertura(), precioAcutal), 2) :
-                Math.abs(redondeoDecimales(diferenciaPorcntual(posicion.getPrecio_apertura() ,precioAcutal), 2));
-
+        double perdidasOBeneficios = posicion.getCantidad() * (precioAcutal - posicion.getPrecio_apertura());
+        double rentabilidad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(posicion.getPrecio_apertura(), precioAcutal), 2);
         double peso = posicionesAbiertasPeso.get(posicion.getNombre_activo());
         List<String> lore = new ArrayList<>();
         lore.add("   ");
-        lore.add(GOLD + "Activo: " + llamada.getNombre_activo());
+        lore.add(GOLD + "Empresa: " + llamada.getNombre_activo());
 
-        if(!PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()).equalsIgnoreCase(posicion.getNombre_activo())) {
-            lore.add(GOLD + "Simbolo: " + posicion.getNombre_activo() + " (" + PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()) + ")");
-        }else {
-            lore.add(GOLD + "Simbolo: " + posicion.getNombre_activo() + " " + posicion.getTipo_activo().getAlias());
+        if (!PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()).equalsIgnoreCase(posicion.getNombre_activo())) {
+            lore.add(GOLD + "Ticker: " + posicion.getNombre_activo() + " (" + PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()) + ")");
+        } else {
+            lore.add(GOLD + "Ticker: " + posicion.getNombre_activo() + " (Acciones) ");
         }
         lore.add(GOLD + "Peso en cartera: " + peso + "%");
         lore.add("   ");
-
-        if (posicion.getTipo_posicion() == LARGO) {
-            lore.add(GOLD + posicion.getTipo_activo().getAliasUpperFirst() + " compradas: " + posicion.getCantidad());
-        } else {
-            lore.add(GOLD + "Acciones vendidas: " + posicion.getCantidad());
-        }
-
-        lore.add(GOLD + "Precio apertura: " + GREEN +formatea.format(posicion.getPrecio_apertura()) + " PC");
+        lore.add(GOLD + "Acciones compradas: " + posicion.getCantidad());
+        lore.add(GOLD + "Precio apertura: " + GREEN + formatea.format(posicion.getPrecio_apertura()) + " PC");
         lore.add(GOLD + "Precio actual: " + GREEN + formatea.format(precioAcutal));
-        if(perdidasOBeneficios >= 0){
+        if (perdidasOBeneficios >= 0) {
             lore.add(GOLD + "Beneficios totales: " + GREEN + "+" + formatea.format(perdidasOBeneficios) + " PC");
             lore.add(GOLD + "Rentabilidad: " + GREEN + "+" + rentabilidad + "%");
-        }else{
+        } else {
             lore.add(GOLD + "Perdidas totales: " + RED + formatea.format(perdidasOBeneficios) + " PC");
             lore.add(GOLD + "Rentabilidad: " + RED + rentabilidad + "%");
         }
         lore.add(GOLD + "Valor total: " + GREEN + formatea.format(precioAcutal * posicion.getCantidad()) + " PC");
         lore.add("   ");
-
-        if(posicion.getTipo_posicion() == LARGO){
-            this.valorTotal = valorTotal + (precioAcutal * posicion.getCantidad());
-            this.resultadoTotal = resultadoTotal + perdidasOBeneficios;
-            lore.add(GOLD + "Fecha de compra: " + posicion.getFecha_apertura());
-        }else{
-            this.valorTotal = valorTotal + perdidasOBeneficios;
-            this.resultadoTotal = resultadoTotal + perdidasOBeneficios;
-            lore.add(GOLD + "Fecha de venta: " + posicion.getFecha_apertura());
-        }
-
+        lore.add(GOLD + "Fecha de compra: " + posicion.getPrecio_apertura());
         lore.add(GOLD + "ID: " + posicion.getId());
 
-        return lore;
+        this.valorTotal = valorTotal + (precioAcutal * posicion.getCantidad());
+        this.resultadoTotal = resultadoTotal + perdidasOBeneficios;
+
+        return ItemBuilder.of(Material.NAME_TAG)
+                .title(GOLD + "" + BOLD + UNDERLINE + "CLICK PARA VENDER")
+                .lore(lore)
+                .build();
     }
 
-    private ItemStack buildItemInfo () {
-        String displayName = GOLD + "" + BOLD + "INFO";
+    private ItemStack buildPosicionAbiertaCorto(PosicionAbierta posicion) {
+        LlamadaApi llamada = llamadasApis.get(posicion.getNombre_activo());
+
+        double precioAcutal = llamada.getPrecio();
+        double perdidasOBeneficios = posicion.getCantidad() * (posicion.getPrecio_apertura() - precioAcutal);
+        double rentabilidad = Math.abs(Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(posicion.getPrecio_apertura(), precioAcutal), 2));
+
+        double peso = posicionesAbiertasPeso.get(posicion.getNombre_activo());
+        List<String> lore = new ArrayList<>();
+        lore.add("   ");
+        lore.add(GOLD + "Empresa: " + llamada.getNombre_activo());
+
+        if (!PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()).equalsIgnoreCase(posicion.getNombre_activo())) {
+            lore.add(GOLD + "Ticker: " + posicion.getNombre_activo() + " (" + PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()) + ")");
+        } else {
+            lore.add(GOLD + "Ticker: " + posicion.getNombre_activo() + " (Acciones) ");
+        }
+        lore.add(GOLD + "Peso en cartera: " + peso + "%");
+        lore.add("   ");
+        lore.add(GOLD + "Acciones vendidas: " + posicion.getCantidad());
+        lore.add(GOLD + "Precio apertura: " + GREEN + formatea.format(posicion.getPrecio_apertura()) + " PC");
+        lore.add(GOLD + "Precio actual: " + GREEN + formatea.format(precioAcutal));
+        if (perdidasOBeneficios >= 0) {
+            lore.add(GOLD + "Beneficios totales: " + GREEN + "+" + formatea.format(perdidasOBeneficios) + " PC");
+            lore.add(GOLD + "Rentabilidad: " + GREEN + "+" + rentabilidad + "%");
+        } else {
+            lore.add(GOLD + "Perdidas totales: " + RED + formatea.format(perdidasOBeneficios) + " PC");
+            lore.add(GOLD + "Rentabilidad: " + RED + rentabilidad + "%");
+        }
+        lore.add(GOLD + "Valor total: " + GREEN + formatea.format(precioAcutal * posicion.getCantidad()) + " PC");
+        lore.add("   ");
+        lore.add(GOLD + "Fecha de compra: " + posicion.getFecha_apertura());
+        lore.add(GOLD + "ID: " + posicion.getId());
+
+        this.resultadoTotal = resultadoTotal + perdidasOBeneficios;
+
+        return ItemBuilder.of(Material.REDSTONE_TORCH)
+                .title(GOLD + "" + BOLD + UNDERLINE + "CLICK PARA COMPRAR " + RED + "" + BOLD + "(CORTO)")
+                .lore(lore)
+                .build();
+    }
+
+    private ItemStack buildItemInfo() {
         List<String> lore = new ArrayList<>();
         lore.add("Puedes comprar valores en la bolsa");
         lore.add("que cotizen en Estados Unidos");
@@ -237,39 +249,38 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         lore.add("la web y en el comando /bolsa cartera");
         lore.add("   ");
         lore.add("Mas info en /bolsa ayuda o /ayuda bolsa o en:");
-        lore.add("http://serversurvival.ddns.net/perfil");
+        lore.add("http://serversurvival2.ddns.net/perfil");
 
-        return ItemBuilder.of(Material.PAPER).title(displayName).lore(lore).build();
-    }
-
-    private ItemStack buildItemResultado() {
-        return ItemBuilder.of(Material.WRITABLE_BOOK)
-                .title(GOLD + "" + BOLD + "REUSLTADO")
-                .lore(buildLoreFromResultado())
+        return ItemBuilder.of(Material.PAPER)
+                .title(GOLD + "" + BOLD + "INFO")
+                .lore(lore)
                 .build();
     }
 
-    private List<String> buildLoreFromResultado () {
+    private ItemStack buildItemResultado() {
         List<String> lore = new ArrayList<>();
-        lore.add(GOLD + "Estas al " + redondeoDecimales(rentabilidad(liquidezjugador + valorTotal, valorTotal),1)  + " % invertido");
+        lore.add(GOLD + "Estas al " + Funciones.redondeoDecimales(Funciones.rentabilidad(liquidezjugador + valorTotal, valorTotal), 1) + " % invertido");
         lore.add(GOLD + "Valor total: " + GREEN + formatea.format(valorTotal) + " PC");
-        if(resultadoTotal >= 0)
+        if (resultadoTotal >= 0)
             lore.add(GOLD + "Beneficios: " + GREEN + formatea.format(resultadoTotal) + " PC");
         else
             lore.add(GOLD + "Perdidas: " + RED + formatea.format(resultadoTotal) + " PC");
 
-        double rentabilidad = rentabilidad(valorTotal, resultadoTotal);
-        if(rentabilidad > 0)
-            lore.add(GOLD + "Estas ganando un: " + GREEN + "+" +  rentabilidad + " %");
+        double rentabilidad = Funciones.rentabilidad(valorTotal, resultadoTotal);
+        if (rentabilidad > 0)
+            lore.add(GOLD + "Estas ganando un: " + GREEN + "+" + rentabilidad + " %");
         else
             lore.add(GOLD + "Estas perdiendo un: " + RED + rentabilidad + " %");
 
-        return lore;
+        return ItemBuilder.of(Material.WRITABLE_BOOK)
+                .title(GOLD + "" + BOLD + "REUSLTADO")
+                .lore(lore)
+                .build();
     }
 
-    private ItemStack buildItemValores () {
-        String displayName = GOLD + "" + BOLD + "" + UNDERLINE + "CLICK PARA COMPRAR VALORES";
-
-        return ItemBuilder.of(Material.BOOK).title(displayName).build();
+    private ItemStack buildItemValores() {
+        return ItemBuilder.of(Material.BOOK)
+                .title(GOLD + "" + BOLD + "" + UNDERLINE + "CLICK PARA COMPRAR VALORES")
+                .build();
     }
 }

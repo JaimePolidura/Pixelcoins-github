@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Function;
@@ -32,7 +33,8 @@ import org.json.simple.parser.JSONParser;
 
 public final class Funciones {
     public static final DecimalFormat FORMATEA = new DecimalFormat("###,###.##");
-    public static final SimpleDateFormat DATE_FORMATER = new SimpleDateFormat("yyyy-MM-dd");
+    public static final SimpleDateFormat DATE_FORMATER_LEGACY = new SimpleDateFormat("yyyy-MM-dd");
+    public static final DateTimeFormatter DATE_FORMATER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final ExecutorService POOL = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     private Funciones () {}
@@ -395,7 +397,8 @@ public final class Funciones {
     }
 
     public static boolean mercadoEstaAbierto() {
-        return !Funciones.esHoyDiaSemana(7, 1) && Funciones.esHoyHora(15, 30, 22, 30);
+        //return !Funciones.esHoyDiaSemana(7, 1) && Funciones.esHoyHora(15, 30, 22, 30);
+        return true;
     }
 
     public static boolean mercadoNoEstaAbierto() {
