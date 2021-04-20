@@ -55,8 +55,6 @@ public class InvertirBolsa extends PixelcoinCommand implements CommandRunner {
                 ordenesMySQL.abrirOrdenCompraLargo((Player) jugadorPlayer, ticker, nAccinesAComprar);
             else
                 transaccionesMySQL.comprarUnidadBolsa(TipoActivo.ACCIONES, ticker.toUpperCase(), nombreValor,"acciones", precio, nAccinesAComprar, jugadorPlayer.getName());
-
-
         });
     }
 }

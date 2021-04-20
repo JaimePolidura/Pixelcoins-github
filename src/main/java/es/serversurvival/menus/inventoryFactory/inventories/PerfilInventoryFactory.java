@@ -1,6 +1,7 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
 import es.jaimetruman.ItemBuilder;
+import es.serversurvival.mySQL.tablasObjetos.Jugador;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.menus.menus.PerfilMenu;
@@ -20,7 +21,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
     private final List<Integer> posicionesCristales = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46 , 47, 48, 49, 50, 51, 52, 53);
 
     @Override
-    protected Inventory buildInventory(String player) {
+    protected Inventory buildInventory(java.lang.String player) {
         Inventory inventory = Bukkit.createInventory(null, 54, PerfilMenu.titulo);
 
         inventory.setItem(10, buildItemWEB(player));
@@ -40,23 +41,23 @@ public class PerfilInventoryFactory extends InventoryFactory {
         return ItemBuilder.of(Material.CHEST).title(ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER LA TIENDA").build();
     }
 
-    private ItemStack buildItemEmpleos (String jugador) {
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TUS EMPLEOS";
+    private ItemStack buildItemEmpleos (java.lang.String jugador) {
+        java.lang.String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TUS EMPLEOS";
 
-        List<String> lore = new ArrayList<>();
+        List<java.lang.String> lore = new ArrayList<>();
         lore.add("  ");
         List<Empleado> empleos = empleadosMySQL.getTrabajosJugador(jugador);
         empleos.forEach( (emp) -> {
-            lore.add(ChatColor.GOLD + emp.getEmpresa() + " " + ChatColor.GREEN + formatea.format(emp.getSueldo()) + " PC " + ChatColor.GOLD + "/ " + emp.getTipo_sueldo().nombre);
+            lore.add(ChatColor.GOLD + "" + emp.getEmpresa() + " " + ChatColor.GREEN + formatea.format(emp.getSueldo()) + " PC " + ChatColor.GOLD + "/ " + emp.getTipo_sueldo().nombre);
         });
 
         return ItemBuilder.of(Material.GOLDEN_APPLE).title(displayName).lore(lore).build();
     }
 
-    private ItemStack buildItemEmpresa (String jugador) {
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TUS EMPRESAS";
+    private ItemStack buildItemEmpresa (java.lang.String jugador) {
+        java.lang.String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TUS EMPRESAS";
 
-        List<String> lore = new ArrayList<>();
+        List<java.lang.String> lore = new ArrayList<>();
         lore.add("  ");
         List<Empresa> empresas = empresasMySQL.getEmpresasOwner(jugador);
         empresas.forEach( (empresa) -> {
@@ -66,11 +67,11 @@ public class PerfilInventoryFactory extends InventoryFactory {
         return ItemBuilder.of(Material.GOLD_BLOCK).title(displayName).lore(lore).build();
     }
 
-    private ItemStack buildItemBolsa (String jugador) {
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK VER TUS ACCIONES";
+    private ItemStack buildItemBolsa (java.lang.String jugador) {
+        java.lang.String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK VER TUS ACCIONES";
 
         List<PosicionCerrada> posicionCerradas = posicionesCerradasMySQL.getPosicionesCerradasJugador(jugador);
-        List<String> lore = new ArrayList<>();
+        List<java.lang.String> lore = new ArrayList<>();
         lore.add("   ");
         lore.add(ChatColor.GOLD + "Tus posiciones cerradas:");
 
@@ -78,10 +79,10 @@ public class PerfilInventoryFactory extends InventoryFactory {
             PosicionCerrada pos = posicionCerradas.get(i);
 
             if(pos.getRentabilidad() >= 0){
-                lore.add(ChatColor.GOLD + pos.getSimbolo() + " -> " + ChatColor.GREEN + pos.getRentabilidadString()
+                lore.add(ChatColor.GOLD + "" + pos.getSimbolo() + " -> " + ChatColor.GREEN + pos.getRentabilidadString()
                         + "% : " +  ( (int) ((pos.getCantidad() * pos.getPrecio_apertura()) -  pos.getCantidad() * pos.getPrecio_cierre())) + " PC");
             }else{
-                lore.add(ChatColor.GOLD + pos.getSimbolo() + " -> " + ChatColor.RED + pos.getRentabilidadString()
+                lore.add(ChatColor.GOLD + "" + pos.getSimbolo() + " -> " + ChatColor.RED + pos.getRentabilidadString()
                         + "% : " +  ( (int) ((pos.getCantidad() * pos.getPrecio_apertura()) -  pos.getCantidad() * pos.getPrecio_cierre())) + " PC");
             }
         }
@@ -89,13 +90,13 @@ public class PerfilInventoryFactory extends InventoryFactory {
         return ItemBuilder.of(Material.BOOK).title(displayName).lore(lore).build();
     }
     
-    private ItemStack buildItemDeudas (String jugador) {
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TUS DEUDAS";
+    private ItemStack buildItemDeudas (java.lang.String jugador) {
+        java.lang.String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TUS DEUDAS";
 
         double totalQueLeDeben = deudasMySQL.getDeudasAcredor(jugador).stream().mapToInt(Deuda::getPixelcoins_restantes).sum();
         double totalQueDebe = deudasMySQL.getDeudasDeudor(jugador).stream().mapToInt(Deuda::getPixelcoins_restantes).sum();
 
-        List<String> lore = new ArrayList<String>() {{
+        List<java.lang.String> lore = new ArrayList<java.lang.String>() {{
             add("    ");
             add(ChatColor.GOLD + "Total que debes: " + ChatColor.GREEN + totalQueDebe + " PC");
             add(ChatColor.GOLD + "Total que te deben: " + ChatColor.GREEN + totalQueLeDeben + " PC");
@@ -104,7 +105,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
         return ItemBuilder.of(Material.DIAMOND_SWORD).title(displayName).lore(lore).build();
     }
 
-    private ItemStack buildItemStats (String nombreJugador) {
+    private ItemStack buildItemStats (java.lang.String nombreJugador) {
         ItemStack stats = new ItemStack(Material.PLAYER_HEAD);
 
         SkullMeta metaStats = (SkullMeta) stats.getItemMeta();
@@ -136,7 +137,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
         int nventas = jugador.getNventas();
         int posTopRicps = jugadoresMySQL.getPosicionTopRicos(nombreJugador);
         int posTopVendedores = jugadoresMySQL.getPosicionTopVendedores(nombreJugador);
-        List<String> lore = new ArrayList<>();
+        List<java.lang.String> lore = new ArrayList<>();
         lore.add("  ");
         lore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "       TUS ESTADISTICAS");
         lore.add("   ");
@@ -176,9 +177,9 @@ public class PerfilInventoryFactory extends InventoryFactory {
         return stats;
     }
 
-    private ItemStack buildItemWEB (String jugador) {
-        String displayName = ChatColor.AQUA + "" + ChatColor.BOLD + "      WEB http://serversurvival.ddns.net";
-        List<String> lore = new ArrayList<>();
+    private ItemStack buildItemWEB (java.lang.String jugador) {
+        java.lang.String displayName = ChatColor.AQUA + "" + ChatColor.BOLD + "      WEB http://serversurvival.ddns.net";
+        List<java.lang.String> lore = new ArrayList<>();
         lore.add("  ");
 
         Cuenta cuenta = cuentasMySQL.getCuenta(jugador);

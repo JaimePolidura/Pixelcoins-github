@@ -1,0 +1,19 @@
+package es.serversurvival.mySQL.eventos.empresas;
+
+import es.serversurvival.mySQL.enums.TipoTransaccion;
+import es.serversurvival.mySQL.eventos.TransactionEvent;
+import es.serversurvival.mySQL.tablasObjetos.Transaccion;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+public final class EmpresaServerAccionCompradaEvento extends TransactionEvent {
+    @Getter private final String jugador;
+    @Getter private final String empresa;
+    @Getter private final double pixelcoins;
+
+    @Override
+    public Transaccion buildTransaccion() {
+        return new Transaccion(-1, formatFecha(), jugador, empresa, (int) pixelcoins, "", TipoTransaccion.EMPRESA_COMPRA_ACCION_JUGADOR);
+    }
+}

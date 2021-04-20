@@ -1,5 +1,6 @@
 package es.serversurvival.mySQL.tablasObjetos;
 
+import es.serversurvival.mySQL.enums.TipoTransaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,5 +12,5 @@ public final class Transaccion implements TablaObjeto {
     @Getter private final String vendedor;
     @Getter private final int cantidad;
     @Getter private final String objeto;
-    @Getter private final String tipo;
+    @Getter private final TipoTransaccion tipo;
 }

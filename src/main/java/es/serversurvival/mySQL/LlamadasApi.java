@@ -1,7 +1,9 @@
 package es.serversurvival.mySQL;
 
+import es.jaime.EventListener;
 import es.serversurvival.apiHttp.IEXCloud_API;
 import es.serversurvival.mySQL.enums.TipoActivo;
+import es.serversurvival.mySQL.eventos.bolsa.PosicionAbiertaEvento;
 import es.serversurvival.mySQL.tablasObjetos.LlamadaApi;
 import es.serversurvival.util.Funciones;
 import javafx.util.Pair;
@@ -20,7 +22,11 @@ import java.util.stream.Collectors;
  */
 public final class LlamadasApi extends MySQL {
     public final static LlamadasApi INSTANCE = new LlamadasApi();
-    private LlamadasApi () {}
+
+    @EventListener
+    public void onOpenedPosition (PosicionAbiertaEvento event) {
+        this.nuevaLlamadaSiNoEstaReg(event.getTicker(), event.getPrecioUnidad(), event.getTipoActivo(), event.getNombreValor());
+    }
 
     public void nuevaLlamada(String simbolo, double precio, TipoActivo tipo, String nombreValor){
         executeUpdate("INSERT INTO llamadasapi (simbolo, precio, tipo_activo, nombre_activo) VALUES ('"+simbolo+"','"+precio+"','"+tipo.toString()+"','"+nombreValor+"')");
@@ -70,9 +76,9 @@ public final class LlamadasApi extends MySQL {
             borrarLlamada(ticker);
     }
 
-    public void nuevaLlamadaSiNoEstaReg(String ticker, double precio, TipoActivo tipo, String nombrevalor) {
+    public void nuevaLlamadaSiNoEstaReg(String ticker, double precio, TipoActivo tipoactivo, String nombrevalor) {
         if(!estaReg(ticker))
-            nuevaLlamada(ticker, precio, tipo, nombrevalor);
+            nuevaLlamada(ticker, precio, tipoactivo, nombrevalor);
     }
 
     public Optional<Pair<String, Double>> getPairNombreValorPrecio (String ticker) {

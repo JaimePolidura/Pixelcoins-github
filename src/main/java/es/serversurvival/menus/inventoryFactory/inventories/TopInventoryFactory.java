@@ -5,9 +5,6 @@ import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
 import es.serversurvival.mySQL.tablasObjetos.PosicionCerrada;
-import es.serversurvival.util.MinecraftUtils;
-import lombok.AllArgsConstructor;
-import net.minecraft.server.v1_16_R1.ItemBanner;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -17,11 +14,11 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
 public class TopInventoryFactory extends InventoryFactory {
-    public static final String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "              TOP";
+    public static final java.lang.String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "              TOP";
     private List<InfoJugador> infoJugadores = new ArrayList<>();
 
     @Override
-    protected Inventory buildInventory(String jugador) {
+    protected Inventory buildInventory(java.lang.String jugador) {
         Inventory inventory = Bukkit.createInventory(null, 54, titulo);
 
         initInfoJugadores();
@@ -39,12 +36,12 @@ public class TopInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildTopRicosJugadoresItem () {
-        Map<String, Double> listaRicos = Funciones.crearMapaTopPatrimonioPlayers(false);
-        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP RICOS";
+        Map<java.lang.String, Double> listaRicos = Funciones.crearMapaTopPatrimonioPlayers(false);
+        java.lang.String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP RICOS";
 
-        List<String> lore = new ArrayList<>();
+        List<java.lang.String> lore = new ArrayList<>();
         int pos = 1;
-        for(Map.Entry<String, Double> entry : listaRicos.entrySet()){
+        for(Map.Entry<java.lang.String, Double> entry : listaRicos.entrySet()){
             if(pos == 6) break;
 
             lore.add(ChatColor.GOLD + "" + pos + "º " + entry.getKey() + ": " + ChatColor.GREEN + formatea.format(entry.getValue()) + " PC");
@@ -55,13 +52,13 @@ public class TopInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildTopPobresJugadoresItem () {
-        Map<String, Double> listaRicos = Funciones.crearMapaTopPatrimonioPlayers(true);
+        Map<java.lang.String, Double> listaRicos = Funciones.crearMapaTopPatrimonioPlayers(true);
 
-        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP POBRES";
+        java.lang.String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP POBRES";
 
-        List<String> lore = new ArrayList<>();
+        List<java.lang.String> lore = new ArrayList<>();
         int pos = 1;
-        for(Map.Entry<String, Double> entry : listaRicos.entrySet()){
+        for(Map.Entry<java.lang.String, Double> entry : listaRicos.entrySet()){
             if(pos == 6) break;
             if(entry.getValue() == 0) continue;
 
@@ -74,8 +71,8 @@ public class TopInventoryFactory extends InventoryFactory {
 
     private ItemStack buildTopVendedoresJugadoresItem () {
         List<Jugador> listaVendedores = jugadoresMySQL.getTopVendedores();
-        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP VENDEDORES";
-        List<String> lore = new ArrayList<>();
+        java.lang.String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP VENDEDORES";
+        List<java.lang.String> lore = new ArrayList<>();
 
         int pos = 1;
         for(Jugador vendedor : listaVendedores){
@@ -90,8 +87,8 @@ public class TopInventoryFactory extends InventoryFactory {
 
     private ItemStack buildTopFiablesJugadoresItem () {
         List<Jugador> listaFiables = jugadoresMySQL.getTopFiables();
-        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP MENOS MOROSOS";
-        List<String> lore = new ArrayList<>();
+        java.lang.String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP MENOS MOROSOS";
+        List<java.lang.String> lore = new ArrayList<>();
 
         int pos = 1;
         for(Jugador fiabe : listaFiables){
@@ -106,8 +103,8 @@ public class TopInventoryFactory extends InventoryFactory {
 
     private ItemStack buildTopMenosFiablesJugadoresItem () {
         List<Jugador> listaMenosFiables = jugadoresMySQL.getTopMenosFiables();
-        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP MOROSOS";
-        List<String> lore = new ArrayList<>();
+        java.lang.String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP MOROSOS";
+        List<java.lang.String> lore = new ArrayList<>();
 
         int pos = 1;
         for(Jugador noFiable : listaMenosFiables){
@@ -121,10 +118,10 @@ public class TopInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildItemTopOperacionesBolsa () {
-        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP MEJORES OPERAIONES BOLSA";
+        java.lang.String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP MEJORES OPERAIONES BOLSA";
         List<PosicionCerrada> posicionCerradasNotDuplicadas = posicionesCerradasMySQL.getTopRentabilidades();
         posicionCerradasNotDuplicadas = getNotDuplicatedElements(posicionCerradasNotDuplicadas);
-        List<String> lore = new ArrayList<>();
+        List<java.lang.String> lore = new ArrayList<>();
 
         for(int i = 0; i < 5; i++){
             double rentabilidad = Funciones.redondeoDecimales(posicionCerradasNotDuplicadas.get(i).getRentabilidad(), 3);
@@ -142,10 +139,10 @@ public class TopInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildItemPeoresOperacioensBolsa() {
-        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP PEORES OPERAIONES BOLSA";
+        java.lang.String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP PEORES OPERAIONES BOLSA";
         List<PosicionCerrada> posicionCerradasNotDuplicadas = posicionesCerradasMySQL.getPeoresRentabilidades();
         posicionCerradasNotDuplicadas = getNotDuplicatedElements(posicionCerradasNotDuplicadas);
-        List<String> lore = new ArrayList<>();
+        List<java.lang.String> lore = new ArrayList<>();
 
         for(int i = 0; i < 5; i++){
             double rentabilidad = Funciones.redondeoDecimales(posicionCerradasNotDuplicadas.get(i).getRentabilidad(), 3);
@@ -161,9 +158,9 @@ public class TopInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildMejoresComerciantes () {
-        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP COMERCIANTES MAS INTENSIVOS (MENOS MINAN)";
+        java.lang.String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP COMERCIANTES MAS INTENSIVOS (MENOS MINAN)";
         infoJugadores.sort( (inf1, inf2) -> Double.compare(inf2.porcentajePatrimonioIngresos, inf1.porcentajePatrimonioIngresos) );
-        List<String> lore = new ArrayList<>();
+        List<java.lang.String> lore = new ArrayList<>();
 
         for (int i = 0; i < 5; i++) {
             if(infoJugadores.get(i).porcentajePatrimonioIngresos > 0){
@@ -213,10 +210,10 @@ public class TopInventoryFactory extends InventoryFactory {
 
     private void initInfoJugadores () {
         List<Jugador> jugadores = jugadoresMySQL.getAllJugadores();
-        Map<String, Double> mapPatrimonio = Funciones.crearMapaTopPatrimonioPlayers(false);
+        Map<java.lang.String, Double> mapPatrimonio = Funciones.crearMapaTopPatrimonioPlayers(false);
 
         for (Jugador jugador : jugadores) {
-            String nombreJugador = jugador.getNombre();
+            java.lang.String nombreJugador = jugador.getNombre();
             double patrimonio = mapPatrimonio.get(nombreJugador);
 
             infoJugadores.add(new InfoJugador(nombreJugador, jugador, patrimonio));
@@ -224,12 +221,12 @@ public class TopInventoryFactory extends InventoryFactory {
     }
 
     private static class InfoJugador {
-        String nombre;
+        java.lang.String nombre;
         Jugador jugador;
         double patrimonio;
         double porcentajePatrimonioIngresos;
 
-        public InfoJugador (String nombre, Jugador jugador, double patrimonio) {
+        public InfoJugador (java.lang.String nombre, Jugador jugador, double patrimonio) {
             this.jugador = jugador;
             this.nombre = nombre;
             this.patrimonio = patrimonio;

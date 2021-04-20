@@ -1,6 +1,5 @@
 package es.serversurvival.mySQL.tablasObjetos;
 
-import es.serversurvival.mySQL.Empleados;
 import es.serversurvival.mySQL.enums.TipoSueldo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

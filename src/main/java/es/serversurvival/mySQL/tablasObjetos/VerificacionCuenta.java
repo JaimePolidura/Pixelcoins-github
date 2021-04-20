@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public final class VerificacionCuenta implements TablaObjeto{
-    @Getter private final String jugador;
+    @Getter private final Jugador jugador;
     @Getter private final int numero;
 }

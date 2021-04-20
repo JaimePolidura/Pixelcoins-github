@@ -6,7 +6,6 @@ import java.util.*;
 import es.serversurvival.mySQL.tablasObjetos.Encantamiento;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
 import es.serversurvival.mySQL.tablasObjetos.Oferta;
-import es.serversurvival.util.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

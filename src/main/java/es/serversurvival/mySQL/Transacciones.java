@@ -7,8 +7,16 @@ import java.util.*;
 import es.jaime.EventListener;
 import es.serversurvival.main.Pixelcoin;
 import es.serversurvival.mySQL.enums.*;
-import es.serversurvival.mySQL.eventos.TransaccionEvent;
+import es.serversurvival.mySQL.eventos.bolsa.*;
+import es.serversurvival.mySQL.eventos.TransactionEvent;
+import es.serversurvival.mySQL.eventos.empresas.*;
+import es.serversurvival.mySQL.eventos.jugadores.JugadorPagoManualEvento;
+import es.serversurvival.mySQL.eventos.tienda.ItemCompradoEvento;
+import es.serversurvival.mySQL.eventos.withers.ItemIngresadoEvento;
+import es.serversurvival.mySQL.eventos.withers.ItemSacadoEvento;
+import es.serversurvival.mySQL.eventos.withers.ItemSacadoMaxEvento;
 import es.serversurvival.mySQL.tablasObjetos.*;
+import es.serversurvival.mySQL.tablasObjetos.Jugador;
 import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -17,7 +25,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.checkerframework.framework.qual.Unused;
 
 import static es.serversurvival.mySQL.enums.CambioPixelcoins.*;
 import static es.serversurvival.mySQL.enums.TipoActivo.*;
@@ -31,19 +38,18 @@ import static org.bukkit.ChatColor.*;
  */
 public final class Transacciones extends MySQL {
     public static final Transacciones INSTANCE = new Transacciones();
-    private Transacciones () {}
 
     @EventListener
-    public void onTransaction (TransaccionEvent event) {
-        String fecha = event.getTimeOnCreated().format(DATE_FORMATER);
+    public void onTransaction (TransactionEvent event) {
+        Transaccion transaccion = event.buildTransaccion();
 
-        nuevaTransaccion(event.getComprador(), event.getVendedor(), event.getCantidad(), event.getObjeto(), event.getTipoTransaccion());
+        nuevaTransaccion(transaccion);
     }
 
-    private void nuevaTransaccion(String comprador, String vendedor, double cantidad, String objeto, TipoTransaccion tipoTransaccion) {
-        String fecha = dateFormater.format(new Date());
+    private void nuevaTransaccion(Transaccion transaccion) {
+        String fecha = transaccion.getFecha();
 
-        executeUpdate("INSERT INTO transacciones (fecha, comprador, vendedor, cantidad, objeto, tipo) VALUES ('" + fecha + "','" + comprador + "','" + vendedor + "','" + cantidad + "','" + objeto + "','" + tipoTransaccion.toString() + "')");
+        executeUpdate("INSERT INTO transacciones (fecha, comprador, vendedor, cantidad, objeto, tipo) VALUES ('" + fecha + "','" + transaccion.getComprador() + "','" + transaccion.getVendedor() + "','" + transaccion.getCantidad() + "','" + transaccion.getObjeto() + "','" + transaccion.getTipo().toString() + "')");
     }
 
     public List<Transaccion> getTransaccionesPagaEmpresa (String jugador) {
@@ -79,6 +85,8 @@ public final class Transacciones extends MySQL {
 
         realizarTransferenciaConEstadisticas(comprador, vendedor, precio, objeto, TIENDA_VENTA);
 
+        Pixelcoin.publish(new ItemCompradoEvento(vendedor, comprador, objeto, cantidad, precio));
+
         MinecraftUtils.setLore(itemAComprar, Collections.singletonList("Comprado en la tienda"));
         player.getInventory().addItem(itemAComprar);
 
@@ -94,8 +102,6 @@ public final class Transacciones extends MySQL {
 
         jugadoresMySQL.setPixelcoin(nombrePagado, pagado.getPixelcoins() + cantidad);
         jugadoresMySQL.setPixelcoin(nombrePagador, pagador.getPixelcoins() - cantidad);
-
-        Pixelcoin.publish(new TransaccionEvent(nombrePagador, nombrePagado, cantidad, objeto, tipo));
     }
 
     public void realizarTransferenciaConEstadisticas (String nombrePagador, String nombrePagado, double cantidad, String objeto, TipoTransaccion tipo) {
@@ -104,12 +110,12 @@ public final class Transacciones extends MySQL {
 
         jugadoresMySQL.setEstadisticas(nombrePagado, pagado.getPixelcoins() + cantidad, pagado.getNventas() + 1, pagado.getIngresos() + cantidad, pagado.getGastos());
         jugadoresMySQL.setEstadisticas(nombrePagador, pagador.getPixelcoins() - cantidad, pagador.getNventas(), pagador.getIngresos(), pagador.getGastos() + cantidad);
-
-        Pixelcoin.publish(new TransaccionEvent(nombrePagador, nombrePagado, cantidad, objeto, tipo));
     }
 
     public void realizarPagoManual(String nombrePagador, String nombrePagado, double cantidad, Player player, String objeto) {
         realizarTransferenciaConEstadisticas(nombrePagador, nombrePagado, cantidad, objeto, JUGADOR_PAGO_MANUAL);
+
+        Pixelcoin.publish(new JugadorPagoManualEvento(nombrePagador, nombrePagado, cantidad));
 
         player.sendMessage(GOLD + "Has pagado: " + GREEN + formatea.format(cantidad) + " PC " + GOLD + "a " + nombrePagado);
 
@@ -129,20 +135,20 @@ public final class Transacciones extends MySQL {
 
         player.getInventory().clear(player.getInventory().getHeldItemSlot());
 
-        Pixelcoin.publish(new TransaccionEvent(player.getName(), "", pixelcoinsAnadir, nombreItem, WITHERS_INGRESAR));
+        Pixelcoin.publish(new ItemIngresadoEvento(player.getName(), pixelcoinsAnadir, nombreItem));
 
         enviarMensajeYSonido(player, GOLD + "Se ha a?adido: " + GREEN + formatea.format(pixelcoinsAnadir) + " PC " + GOLD + "Ahora tienes: " +
                 GREEN + formatea.format(pixelcoinsAnadir + dineroActual) + "PC", Sound.ENTITY_PLAYER_LEVELUP);
     }
 
-    public double sacarObjeto (Jugador jugador, String material, int pixelcoinsPorItem) {
+    public double sacarObjeto (Jugador jugador, String itemNombre, int pixelcoinsPorItem) {
         Player player= Bukkit.getPlayer(jugador.getNombre());
 
         if(jugador.getPixelcoins() >= pixelcoinsPorItem){
             jugadoresMySQL.setPixelcoin(jugador.getNombre(), jugador.getPixelcoins() - pixelcoinsPorItem);
-            player.getInventory().addItem(new ItemStack(Material.getMaterial(material), 1));
+            player.getInventory().addItem(new ItemStack(Material.getMaterial(itemNombre), 1));
 
-            Pixelcoin.publish(new TransaccionEvent(player.getName(), "", pixelcoinsPorItem, material, WITHERS_SACAR));
+            Pixelcoin.publish(new ItemSacadoEvento(player.getName(), itemNombre, pixelcoinsPorItem));
 
             enviarMensajeYSonido(player, GOLD + "Has convertido las pixelcoins" + RED + "-" + pixelcoinsPorItem + " PC " + GOLD +
                     "Quedan " + GREEN + formatea.format(jugador.getPixelcoins() - pixelcoinsPorItem) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
@@ -192,7 +198,7 @@ public final class Transacciones extends MySQL {
         int coste = (DIAMANTE * bloquesAnadidos * 9) + (DIAMANTE * diamantesAnadidos);
         jugadoresMySQL.setPixelcoin(player.getName(), dineroJugador - coste);
 
-        Pixelcoin.publish(new TransaccionEvent(player.getName(), "", coste, "DIAMOND", WITHERS_SACARMAX));
+        Pixelcoin.publish(new ItemSacadoMaxEvento(player.getName(), "DIAMOND", coste));
 
         enviarMensajeYSonido(player , GOLD + "Se ha a?adio: " + AQUA + "+" + bloquesAnadidos + " bloques " + "+" + diamantesAnadidos + " diamantes. " + RED + "-" + formatea.format(coste)
                 + GOLD + " Quedan: " + GREEN + formatea.format(dineroJugador - coste) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
@@ -223,7 +229,7 @@ public final class Transacciones extends MySQL {
         int coste = (LAPISLAZULI * bloquesAnadidos * 9) + (LAPISLAZULI * diamantesAnadidos);
         jugadoresMySQL.setPixelcoin(player.getName(), dineroJugador - coste);
 
-        Pixelcoin.publish(new TransaccionEvent(player.getName(), "", coste, "LAPIS_LAZULI", WITHERS_SACARMAX));
+        Pixelcoin.publish(new ItemSacadoMaxEvento(player.getName(), "LAPIS_LAZULI", coste));
 
         enviarMensajeYSonido(player, GOLD + "Se ha a?adio: " + BLUE + "+" + bloquesAnadidos + " bloques " + "+" + diamantesAnadidos + " Lapislazuli. " + RED + "-" + formatea.format(coste)
                 + GOLD + " Quedan: " + GREEN + formatea.format(dineroJugador - coste) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
@@ -245,7 +251,7 @@ public final class Transacciones extends MySQL {
         int coste = (CUARZO * bloquesAnadidos);
         jugadoresMySQL.setPixelcoin(player.getName(), pixelcoinsJugador - coste);
 
-        Pixelcoin.publish(new TransaccionEvent(player.getName(), "", coste, "QUARTZ_BLOCK", WITHERS_SACARMAX));
+        Pixelcoin.publish(new ItemSacadoMaxEvento(player.getName(), "QUARTZ_BLOCK", coste));
 
         enviarMensajeYSonido(player, GOLD + "Se ha a?adio: " + GRAY + "+" + bloquesAnadidos + " bloques de cuarzo " + RED + "-" + formatea.format(coste)
                 + GOLD + " Quedan: " + GREEN + formatea.format(pixelcoinsJugador - coste) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
@@ -261,7 +267,7 @@ public final class Transacciones extends MySQL {
         empresasMySQL.setPixelcoins(nombreEmpresa, pixelcoinsEmpresa + pixelcoins);
         jugadoresMySQL.setEstadisticas(nombreJugador, pixelcoinsJugador - pixelcoins, jugador.getNventas(), jugador.getIngresos(), jugador.getGastos());
 
-        Pixelcoin.publish(new TransaccionEvent(nombreJugador, nombreEmpresa, pixelcoins, "", EMPRESA_DEPOSITAR));
+        Pixelcoin.publish(new PixelcoinsDepositadasEvento(nombreJugador, nombreEmpresa, pixelcoins));
 
         enviarMensajeYSonido(player, GOLD + "Has metido " + GREEN + formatea.format(pixelcoins) + " PC" + GOLD + " en tu empresa: " + DARK_AQUA + nombreEmpresa +
                 GOLD + " ahora tiene: " + GREEN + formatea.format(pixelcoinsEmpresa + pixelcoins) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
@@ -277,7 +283,7 @@ public final class Transacciones extends MySQL {
         empresasMySQL.setPixelcoins(nombreEmpresa, pixelcoinsEmpresa - pixelcoins);
         jugadoresMySQL.setEstadisticas(nombreJugador, pixelcoinsJugador + pixelcoins, jugadorQueSaca.getNventas(), jugadorQueSaca.getIngresos(), jugadorQueSaca.getGastos());
 
-        Pixelcoin.publish(new TransaccionEvent(nombreEmpresa, nombreJugador, pixelcoins, "", EMPRESA_SACAR));
+        Pixelcoin.publish(new PixelcoinsSacadasEvento(nombreJugador, nombreEmpresa, pixelcoins));
 
         enviarMensajeYSonido(player, GOLD + "Has sacado " + GREEN + formatea.format(pixelcoins) + " PC" + GOLD + " de tu empresa: " + DARK_AQUA + nombreEmpresa +
                 GOLD + " ahora tiene: " + GREEN + formatea.format(pixelcoinsEmpresa - pixelcoins) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
@@ -291,7 +297,7 @@ public final class Transacciones extends MySQL {
         jugadoresMySQL.setEstadisticas(vendedor, jugadorVendedor.getPixelcoins() + precio, jugadorVendedor.getNventas() + 1, jugadorVendedor.getIngresos() + precio, jugadorVendedor.getGastos());
         jugadoresMySQL.setEstadisticas(comprador, jugadorComprador.getPixelcoins() - precio, jugadorComprador.getNventas(), jugadorComprador.getIngresos(), jugadorComprador.getGastos() + precio);
 
-        Pixelcoin.publish(new TransaccionEvent(comprador, vendedor, precio, "", EMPRESA_VENTA));
+        Pixelcoin.publish(new EmpresaVendidaEvento(jugadorComprador.getNombre(), jugadorVendedor.getNombre(), empresa, precio));
     }
 
     public boolean pagarSalario(String jugador, String empresa, double salario) {
@@ -306,7 +312,7 @@ public final class Transacciones extends MySQL {
         Jugador empleadoAPagar = jugadoresMySQL.getJugador(jugador);
         jugadoresMySQL.setEstadisticas(jugador, empleadoAPagar.getPixelcoins() + salario, empleadoAPagar.getNventas(), empleadoAPagar.getIngresos() + salario, empleadoAPagar.getGastos());
 
-        Pixelcoin.publish(new TransaccionEvent(jugador, empresa, salario, "", EMPRESA_PAGAR_SALARIO));
+        Pixelcoin.publish(new SalarioPagadoEvento(jugador, empresa, salario));
 
         return true;
     }
@@ -328,7 +334,7 @@ public final class Transacciones extends MySQL {
         empresasMySQL.setPixelcoins(empresa, empresaAComprar.getPixelcoins() + precio);
         empresasMySQL.setIngresos(empresa, empresaAComprar.getIngresos() + precio);
 
-        Pixelcoin.publish(new TransaccionEvent(comprador.getNombre(), empresa, precio, "", EMPRESA_COMPRAR_SERVICIO));
+        Pixelcoin.publish(new ServicioCompradoEvento(comprador.getNombre(), empresa, precio));
 
         String mensajeOnline = GOLD + comprador.getNombre() + " ha comprado vuestro servicio de la empresa: " + empresa + " por " + GREEN + formatea.format(precio) + " PC";
         enviarMensaje(empresaAComprar.getOwner(), mensajeOnline, mensajeOnline);
@@ -336,20 +342,19 @@ public final class Transacciones extends MySQL {
         player.sendMessage(GOLD + "Has pagado " + GREEN + precio + " PC " + GOLD + " a la empresa: " + empresa + " por su servicio");
     }
 
-    public void comprarUnidadBolsa (TipoActivo tipo, String ticker, String nombreValor, String alias, double precioUnidad, int cantidad, String nombrePlayer) {
+    public void comprarUnidadBolsa (TipoActivo tipoActivo, String ticker, String nombreValor, String alias, double precioUnidad, int cantidad, String nombrePlayer) {
         Player player = Bukkit.getPlayer(nombrePlayer);
         Jugador comprador = jugadoresMySQL.getJugador(nombrePlayer);
         double precioTotal = precioUnidad * cantidad;
 
         jugadoresMySQL.setPixelcoin(nombrePlayer, comprador.getPixelcoins() - precioTotal);
-        posicionesAbiertasMySQL.nuevaPosicion(nombrePlayer, tipo, ticker, cantidad, precioUnidad, LARGO);
-        llamadasApiMySQL.nuevaLlamadaSiNoEstaReg(ticker, precioUnidad, tipo, nombreValor);
-
-        Pixelcoin.publish(new TransaccionEvent(nombrePlayer, ticker, precioTotal, tipo +  " " + precioUnidad, BOLSA_COMPRA));
+        posicionesAbiertasMySQL.nuevaPosicion(nombrePlayer, tipoActivo, ticker, cantidad, precioUnidad, LARGO);
 
         enviarMensajeYSonido(player, GOLD + "Has comprado " + formatea.format(cantidad)  + " " + alias + " a " + GREEN + formatea.format(precioUnidad) + " PC" + GOLD + " que es un total de " +
                 GREEN + formatea.format(precioTotal) + " PC " + GOLD + " comandos: " + AQUA + "/bolsa vender /bolsa cartera", Sound.ENTITY_PLAYER_LEVELUP);
         Bukkit.broadcastMessage(GOLD + player.getName() + " ha comprado " + cantidad + " " + alias +  " de " + nombreValor + " a " + GREEN + precioUnidad + "PC");
+
+        Pixelcoin.publish(new PosicionCompraLargoEvento(comprador.getNombre(), precioUnidad, cantidad, cantidad*precioUnidad, ticker, tipoActivo, nombreValor));
     }
 
     public void venderEnCortoBolsa (String playerName, String ticker, String nombreValor, int cantidad, double precioPorAccion) {
@@ -366,9 +371,8 @@ public final class Transacciones extends MySQL {
 
         jugadoresMySQL.setEstadisticas(player.getName(), jugador.getPixelcoins() - comision, jugador.getNventas(), jugador.getIngresos(), jugador.getGastos() + comision);
         posicionesAbiertasMySQL.nuevaPosicion(player.getName(), ACCIONES, ticker, cantidad, precioPorAccion, CORTO);
-        llamadasApiMySQL.nuevaLlamadaSiNoEstaReg(ticker, precioPorAccion, ACCIONES, nombreValor);
-
-        Pixelcoin.publish(new TransaccionEvent(player.getName(), ticker, comision, "ACCIONES" +  " " + precioPorAccion, BOLSA_CORTO_VENTA));
+                
+        Pixelcoin.publish(new PosicionVentaCortoEvento(playerName, precioPorAccion, cantidad, comision, ticker, ACCIONES, nombreValor));
 
         enviarMensajeYSonido( player, GOLD + "Te has puesto corto en " + nombreValor + " en " + cantidad + " cada una a " + GREEN + formatea.format(precioPorAccion) + " PC " + GOLD +
                 "Para recomprar las acciones: /bolsa comprarcorto <id>. /bolsa cartera" + GOLD + "Ademas se te ha cobrado un 5% del valor total de la venta (" + GREEN  + formatea.format(valorTotal) + " PC"
@@ -406,7 +410,7 @@ public final class Transacciones extends MySQL {
         llamadasApiMySQL.borrarLlamadaSiNoEsUsada(ticker);
         posicionesCerradasMySQL.nuevaPosicion(nombreJugador, posicionAVender.getTipo_activo(), ticker, cantidad, precioApertura, fechaApertura, precioPorAccion, nombreValor, rentabilidad, LARGO);
 
-        Pixelcoin.publish(new TransaccionEvent(ticker, nombreJugador, cantidad * precioPorAccion, "", BOLSA_VENTA));
+        Pixelcoin.publish(new PosicionVentaLargoEvento(nombreJugador, precioPorAccion, cantidad, precioPorAccion*cantidad, ticker, posicionAVender.getTipo_activo(), nombreValor));
 
         String mensajeAEnviarAlJugador;
         if (rentabilidad <= 0) {
@@ -456,7 +460,7 @@ public final class Transacciones extends MySQL {
         llamadasApiMySQL.borrarLlamadaSiNoEsUsada(ticker);
         posicionesCerradasMySQL.nuevaPosicion(playername, posicionAComprar.getTipo_activo(), ticker, cantidad, precioApertura, fechaApertura, precioPorAccion, nombreValor, rentabilidad, CORTO);
 
-        Pixelcoin.publish(new TransaccionEvent(ticker, playername, cantidad * precioPorAccion, "", BOLSA_CORTO_COMPRA));
+        Pixelcoin.publish(new PosicionCompraCortoEvento(playername, precioPorAccion, cantidad, revalorizacionTotal, ticker, ACCIONES, nombreValor));
 
         String mensaje;
         if (rentabilidad <= 0)
@@ -479,7 +483,7 @@ public final class Transacciones extends MySQL {
 
         jugadoresMySQL.setPixelcoin(nombre, jugadoresMySQL.getJugador(nombre).getPixelcoins() + aPagar);
 
-        Pixelcoin.publish(new TransaccionEvent(ticker, nombre, aPagar, "", BOLSA_DIVIDENDO));
+        Pixelcoin.publish(new DividendoPagadoEvento(nombre, ticker, aPagar));
 
         mensajesMySQL.nuevoMensaje("",nombre, "Has cobrado " + precioDividendo + " PC en dividendos por parte de la empresa " + ticker);
     }
@@ -495,8 +499,6 @@ public final class Transacciones extends MySQL {
         posicionesAbiertasMySQL.setJugador(jugadorACambiar, nuevoNombre);
         posicionesCerradasMySQL.setJugador(jugadorACambiar, nuevoNombre);
         setCompradorVendedor(jugadorACambiar, nuevoNombre);
-
-        Pixelcoin.publish(new TransaccionEvent(nuevoNombre, nuevoNombre, 0, "", BASEDATOS_CAMBIAR_NOMBRE));
     }
 
     public void comprarOfertaMercadoAccionServer (Player player, int idOfeta, int cantidadAComprar) {
@@ -522,6 +524,8 @@ public final class Transacciones extends MySQL {
         enviarMensajeYSonido(player, GOLD + "Has comprado " + formatea.format(cantidadAComprar)  + " acciones a " + GREEN + formatea.format(oferta.getPrecio()) + " PC" + GOLD + " que es un total de " +
                 GREEN + formatea.format(precioTotalAPagar) + " PC " + GOLD + " comandos: " + AQUA + "/bolsa vender /bolsa cartera", Sound.ENTITY_PLAYER_LEVELUP);
         Bukkit.broadcastMessage(GOLD + player.getName() + " ha comprado " + cantidadAComprar + " acciones de la empresa del server: " + oferta.getEmpresa() + " a " + GREEN + oferta.getPrecio() + "PC");
+
+        Pixelcoin.publish(new EmpresaServerAccionCompradaEvento(player.getName(), oferta.getEmpresa(), precioTotalAPagar));
     }
     
     private void comprarAccionServerAEmpresa (Player player, OfertaMercadoServer oferta, int cantidadAComprar, double precioTotalAPagar) {
@@ -529,8 +533,6 @@ public final class Transacciones extends MySQL {
 
         empresasMySQL.setPixelcoins(empresa.getNombre(), empresa.getPixelcoins() + precioTotalAPagar);
         empresasMySQL.setIngresos(empresa.getNombre(), empresa.getIngresos() + precioTotalAPagar);
-
-        Pixelcoin.publish(new TransaccionEvent(player.getName(), empresa.getNombre(), precioTotalAPagar, "ACCION", EMPRESA_COMPRA_ACCION_EMPRESA));
 
         String mensajeOnline = GOLD + player.getName() + " ha comprado " + cantidadAComprar + " acciones de " + empresa.getNombre() + "."+GREEN+" +" + formatea.format(precioTotalAPagar) + "PC";
 
@@ -546,8 +548,6 @@ public final class Transacciones extends MySQL {
             jugadoresMySQL.setEstadisticas(jugadorVendedor.getNombre(), jugadorVendedor.getPixelcoins() + precioTotalAPagar, jugadorVendedor.getNventas(), jugadorVendedor.getIngresos(), jugadorVendedor.getGastos() + beneficiosPerdidas);
         else
             jugadoresMySQL.setEstadisticas(jugadorVendedor.getNombre(), jugadorVendedor.getPixelcoins() + precioTotalAPagar, jugadorVendedor.getNventas(), jugadorVendedor.getIngresos() + beneficiosPerdidas, jugadorVendedor.getGastos());
-
-        Pixelcoin.publish(new TransaccionEvent(player.getName(), oferta.getJugador(), precioTotalAPagar, "ACCION", EMPRESA_COMPRA_ACCION_JUGADOR));
 
         posicionesCerradasMySQL.nuevaPosicion(oferta.getJugador(), ACCIONES_SERVER, oferta.getEmpresa(), cantidadAComprar, oferta.getPrecio_apertura(), oferta.getFecha(), oferta.getPrecio(), oferta.getEmpresa(), rentabilidad, LARGO);
 
@@ -591,7 +591,7 @@ public final class Transacciones extends MySQL {
 
         jugadoresMySQL.setEstadisticas(jugador.getNombre(), jugador.getPixelcoins() + dividendo, jugador.getNventas(), jugador.getIngresos() + dividendo, jugador.getGastos());
 
-        Pixelcoin.publish(new TransaccionEvent(jugador.getNombre(), nombreEmpresa, cantidad * dividendoPorAccion, "", EMPRESA_DIVIDENDO_ACCION));
+        Pixelcoin.publish(new EmpresaServerDividendoPagadoEvento(jugador.getNombre(), nombreEmpresa, dividendo));
     }
 
     @Override
@@ -603,7 +603,7 @@ public final class Transacciones extends MySQL {
                 rs.getString("vendedor"),
                 rs.getInt("cantidad"),
                 rs.getString("objeto"),
-                rs.getString("tipo")
+                TipoTransaccion.valueOf(rs.getString("tipo"))
         );
     }
 }

@@ -4,8 +4,6 @@ import es.serversurvival.mySQL.Transacciones;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
 import org.bukkit.entity.Player;
 
-import java.util.function.BiConsumer;
-
 public enum CambioPixelcoins {
     DIAMOND(CambioPixelcoins.DIAMANTE, Transacciones.INSTANCE::sacarMaxItemDiamond),
     DIAMOND_BLOCK(CambioPixelcoins.DIAMANTE * 9, Transacciones.INSTANCE::sacarMaxItemDiamond),
@@ -25,19 +23,19 @@ public enum CambioPixelcoins {
         this.functionStrategy = functionStrategy;
     }
 
-    public static int getCambioTotal (String nombreItem, int cantidad) {
+    public static int getCambioTotal (java.lang.String nombreItem, int cantidad) {
         return CambioPixelcoins.valueOf(nombreItem).cambio * cantidad;
     }
 
-    public static double sacarItem (Jugador jugador, String item) {
+    public static double sacarItem (Jugador jugador, java.lang.String item) {
         return Transacciones.INSTANCE.sacarObjeto(jugador, item, CambioPixelcoins.getCambioTotal(item, 1));
     }
 
-    public static boolean suficientesPixelcoins (String material, int cantidad, double pixelcoinsJugador) {
+    public static boolean suficientesPixelcoins (java.lang.String material, int cantidad, double pixelcoinsJugador) {
         return pixelcoinsJugador >= CambioPixelcoins.valueOf(material).cambio * cantidad;
     }
 
-    public static void sacarMaxItem (String tipo, Jugador jugador, Player player) {
+    public static void sacarMaxItem (java.lang.String tipo, Jugador jugador, Player player) {
         CambioPixelcoins.valueOf(tipo).functionStrategy.sacar(jugador, player);
     }
     

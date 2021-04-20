@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 public class CCuenta extends PixelcoinCommand implements CommandRunner {
 
     @Override
-    public void execute(CommandSender commandSender, String[] strings) {
+    public void execute(CommandSender commandSender, java.lang.String[] strings) {
 
         Player player = (Player) commandSender;
         Cuenta cuenta = cuentasMySQL.getCuenta(player.getName());

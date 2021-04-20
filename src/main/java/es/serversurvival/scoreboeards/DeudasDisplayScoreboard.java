@@ -9,7 +9,7 @@ import static es.serversurvival.util.MinecraftUtils.*;
 
 public class DeudasDisplayScoreboard implements SingleScoreboard {
     @Override
-    public Scoreboard createScoreborad(String jugador) {
+    public Scoreboard createScoreborad(java.lang.String jugador) {
         Scoreboard scoreboard = createScoreboard("deudas", ChatColor.GOLD + "" + ChatColor.BOLD + "DEUDAS");
         Objective objective = scoreboard.getObjective("deudas");
 

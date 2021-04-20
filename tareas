@@ -1,0 +1,3 @@
+1º Al comprar una accoion en largo o venderla en corto, al estar en un hilo separado no se actualiza bien la scoreboard al publicar el evento.
+Se queda bloqueado por alguna razon
+

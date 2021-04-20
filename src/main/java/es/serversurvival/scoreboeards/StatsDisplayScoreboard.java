@@ -15,18 +15,26 @@ public class StatsDisplayScoreboard implements SingleScoreboard {
 
     @Override
     public Scoreboard createScoreborad(String jugador) {
+        System.out.println("1");
+
         Scoreboard scoreboard = MinecraftUtils.createScoreboard("dinero", ChatColor.GOLD + "" + ChatColor.BOLD + "JUGADOR");
+        System.out.println("2");
+
         Objective objective = scoreboard.getObjective("dinero");
 
+        System.out.println("3");
         double dineroJugador = jugadoresMySQL.getJugador(jugador).getPixelcoins();
+        System.out.println("4");
 
         addLineToScoreboard(objective, ChatColor.GOLD + "Tus ahorros: " + ChatColor.GREEN + formatea.format(Math.round(dineroJugador)) + " PC", 1);
         addLineToScoreboard(objective, "     ", 0);
         addLineToScoreboard(objective, ChatColor.GOLD + "-------Empresas-----", -2);
+        System.out.println("5");
 
         List<Empresa> empresas = sortEmpresaByPixelcoins(empresasMySQL.getEmpresasOwner(jugador));
         for(int i = 0; i < empresas.size(); i++){
             Empresa empresa = empresas.get(i);
+            System.out.println("6");
 
             String mensaje = ChatColor.GOLD + "- " + empresa.getNombre() + " (" + ChatColor.GREEN + formatea.format(empresa.getPixelcoins()) + " PC ";
             mensaje = mensaje + calcularRentabilidadEmpresaYFormatear(empresa);
@@ -34,6 +42,7 @@ public class StatsDisplayScoreboard implements SingleScoreboard {
 
             addLineToScoreboard(objective, mensaje, i - 100);
         }
+        System.out.println("7");
 
         return scoreboard;
     }
