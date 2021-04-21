@@ -9,13 +9,13 @@ import lombok.Getter;
 import static es.serversurvival.mySQL.enums.TipoTransaccion.*;
 
 @AllArgsConstructor
-public final class ServicioCompradoEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
-    @Getter private final String comprador;
+public final class EmpresaBorradaEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
+    @Getter private final String jugador;
     @Getter private final String empresa;
-    @Getter private final double precio;
+    @Getter private final double pixelcoins;
 
     @Override
     public Transaccion buildTransaccion() {
-        return new Transaccion(-1, formatFecha(), comprador, empresa, (int) precio, "", EMPRESA_COMPRAR_SERVICIO);
+        return new Transaccion(-1, formatFecha(), jugador, jugador, (int) pixelcoins, "", EMPRESA_BORRAR);
     }
 }

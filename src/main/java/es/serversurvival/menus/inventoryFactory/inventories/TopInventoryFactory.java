@@ -1,6 +1,7 @@
 package es.serversurvival.menus.inventoryFactory.inventories;
 
 import es.jaimetruman.ItemBuilder;
+import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
@@ -12,6 +13,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+
+import static es.serversurvival.mySQL.enums.TipoPosicion.*;
 
 public class TopInventoryFactory extends InventoryFactory {
     public static final java.lang.String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "              TOP";
@@ -127,7 +130,7 @@ public class TopInventoryFactory extends InventoryFactory {
             double rentabilidad = Funciones.redondeoDecimales(posicionCerradasNotDuplicadas.get(i).getRentabilidad(), 3);
 
             if(rentabilidad > 0){
-                if(posicionCerradasNotDuplicadas.get(i).getTipo_posicion().equalsIgnoreCase("CORTO")){
+                if(posicionCerradasNotDuplicadas.get(i).getTipo_posicion() == TipoPosicion.CORTO){
                     lore.add("" + ChatColor.GOLD + (i + 1)  + "º (CORTO) " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.GREEN + " +" + rentabilidad + "%");
                 }else{
                     lore.add("" + ChatColor.GOLD + (i + 1)  + "º " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.GREEN + " +" + rentabilidad + "%");
@@ -147,7 +150,7 @@ public class TopInventoryFactory extends InventoryFactory {
         for(int i = 0; i < 5; i++){
             double rentabilidad = Funciones.redondeoDecimales(posicionCerradasNotDuplicadas.get(i).getRentabilidad(), 3);
 
-            if(posicionCerradasNotDuplicadas.get(i).getTipo_posicion().equalsIgnoreCase("CORTO")){
+            if(posicionCerradasNotDuplicadas.get(i).getTipo_posicion() == CORTO){
                 lore.add("" + ChatColor.GOLD + (i + 1)  + "º (CORTO) " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.RED + " " + rentabilidad + "%");
             }else{
                 lore.add("" + ChatColor.GOLD + (i + 1)  + "º " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.RED + " " + rentabilidad + "%");

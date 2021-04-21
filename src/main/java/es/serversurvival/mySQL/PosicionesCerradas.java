@@ -1,9 +1,9 @@
 package es.serversurvival.mySQL;
 
-import es.serversurvival.menus.menus.Clickable;
+import es.jaime.EventListener;
 import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.enums.TipoPosicion;
-import es.serversurvival.util.Funciones;
+import es.serversurvival.mySQL.eventos.bolsa.PosicionCerradaEvento;
 import es.serversurvival.mySQL.tablasObjetos.PosicionCerrada;
 
 import java.sql.ResultSet;
@@ -16,9 +16,17 @@ import java.util.*;
  */
 public final class PosicionesCerradas extends MySQL {
     public final static PosicionesCerradas INSTANCE = new PosicionesCerradas();
-    private PosicionesCerradas () {}
 
-    public void nuevaPosicion(String jugador, TipoActivo tipoActivo, String nombre,  int cantidad, double precioApertura, String fechaApertura, double precioCierre, String valorNombre, double rentabilidad, TipoPosicion tipoPosicion) {
+    @EventListener
+    public void onPosicionCerrada (PosicionCerradaEvento evento) {
+        System.out.println("posicionescerradas");
+
+        PosicionCerrada pos = evento.buildPosicionCerrada();
+
+        nuevaPosicion(pos.getJugador(), pos.getTipo_activo(), pos.getSimbolo(), pos.getCantidad(), pos.getPrecio_apertura(), pos.getFecha_apertura(), pos.getPrecio_cierre(), pos.getNombre_activo(), pos.getRentabilidad(), pos.getTipo_posicion());
+    }
+
+    private void nuevaPosicion(String jugador, TipoActivo tipoActivo, String nombre,  int cantidad, double precioApertura, String fechaApertura, double precioCierre, String valorNombre, double rentabilidad, TipoPosicion tipoPosicion) {
         String fechaCierre = dateFormater.format(new Date());
 
         executeUpdate("INSERT INTO posicionescerradas (jugador, tipo_activo, simbolo, cantidad, precio_apertura, fecha_apertura, precio_cierre, fecha_cierre, rentabilidad, nombre_activo, tipo_posicion) VALUES ('" + jugador + "','"+tipoActivo.toString()+"','" + nombre + "','" + cantidad + "','" + precioApertura + "', '" + fechaApertura + "','" + precioCierre + "','" + fechaCierre + "','" + rentabilidad + "','"+valorNombre+"', '"+tipoPosicion.toString()+"')");
@@ -53,7 +61,7 @@ public final class PosicionesCerradas extends MySQL {
         return new PosicionCerrada(
                 rs.getInt("id"),
                 rs.getString("jugador"),
-                rs.getString("tipo_activo"),
+                TipoActivo.valueOf(rs.getString("tipo_activo")),
                 rs.getString("simbolo"),
                 rs.getInt("cantidad"),
                 rs.getDouble("precio_apertura"),
@@ -62,7 +70,7 @@ public final class PosicionesCerradas extends MySQL {
                 rs.getString("fecha_cierre"),
                 rs.getDouble("rentabilidad"),
                 rs.getString("nombre_activo"),
-                rs.getString("tipo_posicion")
+                TipoPosicion.valueOf(rs.getString("tipo_posicion"))
         );
     }
 }

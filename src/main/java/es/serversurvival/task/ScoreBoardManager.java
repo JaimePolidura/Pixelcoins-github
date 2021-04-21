@@ -1,11 +1,10 @@
 package es.serversurvival.task;
 
 import es.jaime.EventListener;
-import es.jaimetruman.task.BukkitTimeUnit;
-import es.jaimetruman.task.Task;
-import es.jaimetruman.task.TaskRunner;
 import es.serversurvival.main.Pixelcoin;
-import es.serversurvival.mySQL.eventos.TransactionEvent;
+import es.serversurvival.mySQL.eventos.EventoTipoTransaccion;
+import es.serversurvival.mySQL.eventos.PixelcoinsEvento;
+import es.serversurvival.mySQL.tablasObjetos.Transaccion;
 import es.serversurvival.scoreboeards.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -20,11 +19,11 @@ import java.util.List;
 
 public final class ScoreBoardManager implements Listener {
     
-    @EventListener
-    public void onPixelcoinTransaccion (TransactionEvent event) {
-        update(Bukkit.getPlayer(event.getComprador()), Bukkit.getPlayer(event.getVendedor()));
-        System.out.println(event.getComprador());
-        System.out.println(event.getVendedor());
+    @EventListener({EventoTipoTransaccion.class})
+    public void onPixelcoinTransaccion (PixelcoinsEvento event) {
+        Transaccion transaccion = ((EventoTipoTransaccion) event).buildTransaccion();
+
+        update(Bukkit.getPlayer(transaccion.getComprador()), Bukkit.getPlayer(transaccion.getVendedor()));
     }
 
     @EventHandler
@@ -42,10 +41,8 @@ public final class ScoreBoardManager implements Listener {
         System.out.println(actualScoreboard.getClass().getName());
 
         if(actualScoreboard instanceof GlobalScoreboard){
-            System.out.println("global");
             updateGlobalScoreboard(actualScoreboard);
         }else{
-            System.out.println("single");
             updateSingleScoreboard(actualScoreboard, players);
         }
     }

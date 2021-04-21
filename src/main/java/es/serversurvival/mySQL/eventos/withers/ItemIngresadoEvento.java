@@ -1,13 +1,14 @@
 package es.serversurvival.mySQL.eventos.withers;
 
 import es.serversurvival.mySQL.enums.TipoTransaccion;
-import es.serversurvival.mySQL.eventos.TransactionEvent;
+import es.serversurvival.mySQL.eventos.EventoTipoTransaccion;
+import es.serversurvival.mySQL.eventos.PixelcoinsEvento;
 import es.serversurvival.mySQL.tablasObjetos.Transaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public final class ItemIngresadoEvento extends TransactionEvent {
+public final class ItemIngresadoEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
     @Getter private final String jugador;
     @Getter private final double pixelcoins;
     @Getter private final String nombreitem;

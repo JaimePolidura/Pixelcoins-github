@@ -7,8 +7,9 @@ import java.util.*;
 import es.jaime.EventListener;
 import es.serversurvival.main.Pixelcoin;
 import es.serversurvival.mySQL.enums.*;
+import es.serversurvival.mySQL.eventos.EventoTipoTransaccion;
+import es.serversurvival.mySQL.eventos.PixelcoinsEvento;
 import es.serversurvival.mySQL.eventos.bolsa.*;
-import es.serversurvival.mySQL.eventos.TransactionEvent;
 import es.serversurvival.mySQL.eventos.empresas.*;
 import es.serversurvival.mySQL.eventos.jugadores.JugadorPagoManualEvento;
 import es.serversurvival.mySQL.eventos.tienda.ItemCompradoEvento;
@@ -39,9 +40,11 @@ import static org.bukkit.ChatColor.*;
 public final class Transacciones extends MySQL {
     public static final Transacciones INSTANCE = new Transacciones();
 
-    @EventListener
-    public void onTransaction (TransactionEvent event) {
-        Transaccion transaccion = event.buildTransaccion();
+    @EventListener({EventoTipoTransaccion.class})
+    public void onTransaction (PixelcoinsEvento event) {
+        System.out.println("transacciones");
+
+        Transaccion transaccion = (((EventoTipoTransaccion) event).buildTransaccion());
 
         nuevaTransaccion(transaccion);
     }
@@ -407,10 +410,7 @@ public final class Transacciones extends MySQL {
 
         String nombreValor = llamadasApiMySQL.getLlamadaAPI(ticker).getNombre_activo();
 
-        llamadasApiMySQL.borrarLlamadaSiNoEsUsada(ticker);
-        posicionesCerradasMySQL.nuevaPosicion(nombreJugador, posicionAVender.getTipo_activo(), ticker, cantidad, precioApertura, fechaApertura, precioPorAccion, nombreValor, rentabilidad, LARGO);
-
-        Pixelcoin.publish(new PosicionVentaLargoEvento(nombreJugador, precioPorAccion, cantidad, precioPorAccion*cantidad, ticker, posicionAVender.getTipo_activo(), nombreValor));
+        Pixelcoin.publish(new PosicionVentaLargoEvento(nombreJugador, ticker, nombreValor, precioApertura, fechaApertura, precioPorAccion, cantidad, rentabilidad, posicionAVender.getTipo_activo()));
 
         String mensajeAEnviarAlJugador;
         if (rentabilidad <= 0) {
@@ -457,10 +457,8 @@ public final class Transacciones extends MySQL {
             posicionesAbiertasMySQL.setCantidad(idPosiconAbierta, nAccionesTotlaesEnCartera - cantidad);
 
         String nombreValor = llamadasApiMySQL.getLlamadaAPI(ticker).getNombre_activo();
-        llamadasApiMySQL.borrarLlamadaSiNoEsUsada(ticker);
-        posicionesCerradasMySQL.nuevaPosicion(playername, posicionAComprar.getTipo_activo(), ticker, cantidad, precioApertura, fechaApertura, precioPorAccion, nombreValor, rentabilidad, CORTO);
 
-        Pixelcoin.publish(new PosicionCompraCortoEvento(playername, precioPorAccion, cantidad, revalorizacionTotal, ticker, ACCIONES, nombreValor));
+        Pixelcoin.publish(new PosicionCompraCortoEvento(playername, ticker, nombreValor, precioApertura, fechaApertura, precioPorAccion, cantidad, rentabilidad, ACCIONES));
 
         String mensaje;
         if (rentabilidad <= 0)
@@ -549,7 +547,6 @@ public final class Transacciones extends MySQL {
         else
             jugadoresMySQL.setEstadisticas(jugadorVendedor.getNombre(), jugadorVendedor.getPixelcoins() + precioTotalAPagar, jugadorVendedor.getNventas(), jugadorVendedor.getIngresos() + beneficiosPerdidas, jugadorVendedor.getGastos());
 
-        posicionesCerradasMySQL.nuevaPosicion(oferta.getJugador(), ACCIONES_SERVER, oferta.getEmpresa(), cantidadAComprar, oferta.getPrecio_apertura(), oferta.getFecha(), oferta.getPrecio(), oferta.getEmpresa(), rentabilidad, LARGO);
 
         String mensajeOnline = beneficiosPerdidas >= 0 ?
                 GOLD + player.getName() + " te ha comprado " + cantidadAComprar + " acciones de " + oferta.getEmpresa() + " con unos beneficios de " + GREEN + "+" + formatea.format(beneficiosPerdidas) + " PC +" + formatea.format(rentabilidad):

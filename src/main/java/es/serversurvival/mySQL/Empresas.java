@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.*;
 
 import es.serversurvival.main.Pixelcoin;
-import es.serversurvival.mySQL.eventos.TransactionEvent;
+import es.serversurvival.mySQL.eventos.empresas.EmpresaBorradaEvento;
 import es.serversurvival.mySQL.tablasObjetos.Empleado;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
@@ -15,7 +15,6 @@ import org.bukkit.entity.Player;
 
 import es.serversurvival.util.Funciones;
 
-import static es.serversurvival.mySQL.enums.TipoTransaccion.*;
 import static es.serversurvival.util.Funciones.*;
 
 /**
@@ -144,11 +143,11 @@ public final class Empresas extends MySQL {
         jugadoresMySQL.setPixelcoin(ownerJugador.getNombre(), ownerJugador.getPixelcoins() + empresaABorrar.getPixelcoins());
         borrarEmpresa(empresaNombre);
 
-        Pixelcoin.publish(new TransactionEvent(ownerJugador.getNombre(), ownerJugador.getNombre(), empresaABorrar.getPixelcoins(), empresaNombre, EMPRESA_BORRAR));
+        Pixelcoin.publish(new EmpresaBorradaEvento(ownerJugador.getNombre(), empresaNombre, empresaABorrar.getPixelcoins()));
 
         empleados.forEach( (empleado) -> {
-            java.lang.String mensajeOnline = ChatColor.GOLD + ownerJugador.getNombre() + " ha borrado su empresa donde trabajabas: " + empresaNombre;
-            java.lang.String mensajeOffline = "El owner de la empresa en la que trabajas: " + empresaNombre + " la ha borrado, ya no existe";
+            String mensajeOnline = ChatColor.GOLD + ownerJugador.getNombre() + " ha borrado su empresa donde trabajabas: " + empresaNombre;
+            String mensajeOffline = "El owner de la empresa en la que trabajas: " + empresaNombre + " la ha borrado, ya no existe";
 
             enviarMensaje(empleado.getJugador(), mensajeOnline, mensajeOffline);
         });

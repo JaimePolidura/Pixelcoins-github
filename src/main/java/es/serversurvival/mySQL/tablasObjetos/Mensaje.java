@@ -6,7 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public final class Mensaje implements TablaObjeto {
     @Getter private final int id;
-    @Getter private final Jugador enviador;
-    @Getter private final Jugador destinatario;
-    @Getter private final Jugador mensaje;
+    @Getter private final String enviador;
+    @Getter private final String destinatario;
+    @Getter private final String mensaje;
 }

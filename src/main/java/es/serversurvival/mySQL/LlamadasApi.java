@@ -4,6 +4,7 @@ import es.jaime.EventListener;
 import es.serversurvival.apiHttp.IEXCloud_API;
 import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.eventos.bolsa.PosicionAbiertaEvento;
+import es.serversurvival.mySQL.eventos.bolsa.PosicionCerradaEvento;
 import es.serversurvival.mySQL.tablasObjetos.LlamadaApi;
 import es.serversurvival.util.Funciones;
 import javafx.util.Pair;
@@ -26,6 +27,11 @@ public final class LlamadasApi extends MySQL {
     @EventListener
     public void onOpenedPosition (PosicionAbiertaEvento event) {
         this.nuevaLlamadaSiNoEstaReg(event.getTicker(), event.getPrecioUnidad(), event.getTipoActivo(), event.getNombreValor());
+    }
+
+    @EventListener
+    public void onClosedPosition (PosicionCerradaEvento evento) {
+        this.borrarLlamadaSiNoEsUsada(evento.getTicker());
     }
 
     public void nuevaLlamada(String simbolo, double precio, TipoActivo tipo, String nombreValor){
@@ -105,11 +111,10 @@ public final class LlamadasApi extends MySQL {
         List<LlamadaApi> llamadaApis = getTodasLlamadasApi();
 
         for (LlamadaApi llamadaApi : llamadaApis) {
-            double precio = TipoActivo.valueOf(llamadaApi.getTipo_activo()).getPrecio(llamadaApi.getSimbolo());
+            double precio = llamadaApi.getTipo_activo().getPrecio(llamadaApi.getSimbolo());
 
             this.setPrecio(llamadaApi.getSimbolo(), precio);
         }
-
     }
 
     public void mostrarRatioPer (Player player, String ticker) {
@@ -136,6 +141,9 @@ public final class LlamadasApi extends MySQL {
 
     @Override
     protected LlamadaApi buildObjectFromResultSet(ResultSet rs) throws SQLException {
-        return new LlamadaApi(rs.getString("simbolo"), rs.getDouble("precio"), rs.getString("tipo_activo"), rs.getString("nombre_activo"));
+        return new LlamadaApi(rs.getString("simbolo"),
+                rs.getDouble("precio"),
+                TipoActivo.valueOf(rs.getString("tipo_activo")),
+                rs.getString("nombre_activo"));
     }
 }

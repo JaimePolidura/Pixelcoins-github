@@ -26,7 +26,7 @@ public class EstadiscticasBolsa extends PixelcoinCommand implements CommandRunne
                 PosicionCerrada operacionCerrada = topOperaicnesMasRentables.get(i);
 
                 String valorNombre = operacionCerrada.getSimbolo();
-                String tipo = operacionCerrada.getTipo_activo();
+                String tipo = operacionCerrada.getTipo_activo().toString();
                 String nombre = operacionCerrada.getNombre_activo();
                 int id = operacionCerrada.getId();
                 int cantidad = operacionCerrada.getCantidad();

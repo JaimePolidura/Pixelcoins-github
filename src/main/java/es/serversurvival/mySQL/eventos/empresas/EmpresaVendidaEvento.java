@@ -1,6 +1,7 @@
 package es.serversurvival.mySQL.eventos.empresas;
 
-import es.serversurvival.mySQL.eventos.TransactionEvent;
+import es.serversurvival.mySQL.eventos.EventoTipoTransaccion;
+import es.serversurvival.mySQL.eventos.PixelcoinsEvento;
 import es.serversurvival.mySQL.tablasObjetos.Transaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +9,7 @@ import lombok.Getter;
 import static es.serversurvival.mySQL.enums.TipoTransaccion.*;
 
 @AllArgsConstructor
-public final class EmpresaVendidaEvento extends TransactionEvent {
+public final class EmpresaVendidaEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
     @Getter private final String comprador;
     @Getter private final String vendedor;
     @Getter private final String empresa;

@@ -1,11 +1,11 @@
 package es.serversurvival.mySQL.eventos.bolsa;
 
 import es.serversurvival.mySQL.enums.TipoActivo;
-import es.serversurvival.mySQL.enums.TipoTransaccion;
-import es.serversurvival.mySQL.eventos.TransactionEvent;
+import es.serversurvival.mySQL.eventos.EventoTipoTransaccion;
+import es.serversurvival.mySQL.eventos.PixelcoinsEvento;
 import lombok.Getter;
 
-public abstract class PosicionAbiertaEvento extends TransactionEvent {
+public abstract class PosicionAbiertaEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
     @Getter protected final String comprador;
     @Getter protected final String ticker;
     @Getter protected final int cantidadPosicion;

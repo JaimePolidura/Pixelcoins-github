@@ -2,16 +2,31 @@ package es.serversurvival.mySQL.eventos.bolsa;
 
 import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.enums.TipoTransaccion;
+import es.serversurvival.mySQL.tablasObjetos.PosicionCerrada;
 import es.serversurvival.mySQL.tablasObjetos.Transaccion;
+import lombok.Getter;
 
-public final class PosicionVentaLargoEvento extends PosicionAbiertaEvento{
-    public PosicionVentaLargoEvento(String comprador, double precioUnidad, int cantidad, double precioTotal, String ticker,
-                                    TipoActivo tipoActivo, String nombreValor) {
-        super(comprador, precioUnidad, cantidad, precioTotal, ticker, tipoActivo, nombreValor);
+import static es.serversurvival.mySQL.enums.TipoPosicion.*;
+
+public final class PosicionVentaLargoEvento extends PosicionCerradaEvento{
+    @Getter private final double valorTotal;
+    @Getter private final double resultado;
+
+    public PosicionVentaLargoEvento(String vendedor, String ticker, String nombreValor, double precioApertura,
+                                    String fechaApertura, double precioCierre, int cantidad, double rentabilidad, TipoActivo tipoActivo) {
+        super(vendedor, ticker, nombreValor, precioApertura, fechaApertura, precioCierre, cantidad, rentabilidad, tipoActivo);
+
+        this.valorTotal = precioCierre * cantidad;
+        this.resultado = (precioCierre - precioApertura) * cantidad;
     }
 
     @Override
     public Transaccion buildTransaccion() {
-        return new Transaccion(-1, formatFecha(), ticker, comprador, (int) precioTotal, ticker, TipoTransaccion.BOLSA_VENTA);
+        return new Transaccion(-1, formatFecha(), ticker, vendedor, (int) valorTotal, "", TipoTransaccion.BOLSA_VENTA);
+    }
+
+    @Override
+    public PosicionCerrada buildPosicionCerrada() {
+        return new PosicionCerrada(-1, vendedor, tipoActivo, nombreValor, cantidad, precioApertura, fechaApertura, precioCierre, formatFecha(), rentabilidad, ticker, LARGO);
     }
 }
