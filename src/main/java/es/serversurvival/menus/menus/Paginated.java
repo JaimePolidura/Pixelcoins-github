@@ -22,7 +22,6 @@ public interface Paginated extends CanGoBack, CanGoFordward {
         if(nombreItem.equalsIgnoreCase(getNameItemGoBack())){
             goBack();
         }else if(nombreItem.equalsIgnoreCase(getNameItemGoFordward())){
-            System.out.println("hola");
             goFordward();
         }
     }

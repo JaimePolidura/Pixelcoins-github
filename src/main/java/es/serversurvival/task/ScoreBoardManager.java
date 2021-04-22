@@ -18,7 +18,7 @@ import java.util.Collection;
 import java.util.List;
 
 public final class ScoreBoardManager implements Listener {
-    
+
     @EventListener({EventoTipoTransaccion.class})
     public void onPixelcoinTransaccion (PixelcoinsEvento event) {
         Transaccion transaccion = ((EventoTipoTransaccion) event).buildTransaccion();
@@ -37,8 +37,6 @@ public final class ScoreBoardManager implements Listener {
 
     public void update (Collection<? extends Player> players) {
         ServerScoreboard actualScoreboard = Pixelcoin.scoreboardUpdater().getActualScoreboard();
-
-        System.out.println(actualScoreboard.getClass().getName());
 
         if(actualScoreboard instanceof GlobalScoreboard){
             updateGlobalScoreboard(actualScoreboard);

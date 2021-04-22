@@ -16,8 +16,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 public final class PlayerInventoryClick implements Listener {
     @EventHandler
     public void onPlayerInventoryClick(InventoryClickEvent event) {
-        System.out.println("hola");
-
         if(event.getCurrentItem() == null || event.getView() == null) return;
 
         Player jugadorPlayer = (Player) event.getWhoClicked();

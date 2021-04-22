@@ -19,8 +19,6 @@ public final class PosicionesCerradas extends MySQL {
 
     @EventListener
     public void onPosicionCerrada (PosicionCerradaEvento evento) {
-        System.out.println("posicionescerradas");
-
         PosicionCerrada pos = evento.buildPosicionCerrada();
 
         nuevaPosicion(pos.getJugador(), pos.getTipo_activo(), pos.getSimbolo(), pos.getCantidad(), pos.getPrecio_apertura(), pos.getFecha_apertura(), pos.getPrecio_cierre(), pos.getNombre_activo(), pos.getRentabilidad(), pos.getTipo_posicion());

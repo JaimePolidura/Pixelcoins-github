@@ -12,6 +12,7 @@ import org.bukkit.inventory.Inventory;
 
 import java.util.*;
 
+import static es.serversurvival.mySQL.enums.TipoPosicion.*;
 import static es.serversurvival.util.Funciones.*;
 import static es.serversurvival.util.Funciones.mercadoEstaAbierto;
 import static org.bukkit.ChatColor.*;
@@ -72,16 +73,16 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion{
 
         PosicionAbierta posicionAVender = posicionesAbiertasMySQL.getPosicionAbierta(id);
 
-        if(mercadoEstaAbierto() && tipoPosicion == TipoPosicion.LARGO){
+        if(mercadoEstaAbierto() && tipoPosicion == LARGO){
             transaccionesMySQL.venderPosicion(posicionAVender, posicionAVender.getCantidad(), player.getName());
 
-        }else if (mercadoEstaAbierto() && tipoPosicion == TipoPosicion.CORTO) {
+        }else if (mercadoEstaAbierto() && tipoPosicion == CORTO) {
             transaccionesMySQL.comprarPosicionCorto(posicionAVender, posicionAVender.getCantidad(), player.getName());
 
-        }else if (mercadoNoEstaAbierto() && tipoPosicion == TipoPosicion.LARGO) {
+        }else if (mercadoNoEstaAbierto() && tipoPosicion == LARGO) {
             ordenesMySQL.abrirOrdenVentaLargo(player, String.valueOf(id), posicionAVender.getCantidad());
 
-        }else if (mercadoNoEstaAbierto() && tipoPosicion == TipoPosicion.CORTO) {
+        }else if (mercadoNoEstaAbierto() && tipoPosicion == CORTO) {
             ordenesMySQL.abrirOrdenCompraCorto(player, String.valueOf(id), posicionAVender.getCantidad());
         }
 

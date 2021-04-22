@@ -67,7 +67,6 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
 
     public Inventory buildInventoryExecess() {
         Inventory inventory = Bukkit.createInventory(null, 54, BolsaCarteraMenu.titulo);
-        System.out.println("2");
 
         List<ItemStack> copyOfItemExcessList = new ArrayList<>(itemExcessInventory);
         itemExcessInventory.clear();

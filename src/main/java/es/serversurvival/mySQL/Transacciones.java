@@ -42,8 +42,6 @@ public final class Transacciones extends MySQL {
 
     @EventListener({EventoTipoTransaccion.class})
     public void onTransaction (PixelcoinsEvento event) {
-        System.out.println("transacciones");
-
         Transaccion transaccion = (((EventoTipoTransaccion) event).buildTransaccion());
 
         nuevaTransaccion(transaccion);
