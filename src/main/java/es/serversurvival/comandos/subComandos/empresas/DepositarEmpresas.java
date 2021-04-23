@@ -29,6 +29,6 @@ public class DepositarEmpresas extends PixelcoinCommand implements CommandRunner
             return;
         }
 
-        transaccionesMySQL.depositarPixelcoinsEmpresa((Player) player, Double.parseDouble(args[2]), args[1]);
+        transaccionesMySQL.depositarPixelcoinsEmpresa(player.getName(), Double.parseDouble(args[2]), args[1]);
     }
 }

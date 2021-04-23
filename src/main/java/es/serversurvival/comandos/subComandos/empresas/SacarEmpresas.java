@@ -33,7 +33,7 @@ public class SacarEmpresas extends PixelcoinCommand implements CommandRunner {
             player.sendMessage(ChatColor.DARK_RED + result.getMessage());
         }else{
             double pixelcoinsASacar = Double.parseDouble(args[2]);
-            transaccionesMySQL.sacarPixelcoinsEmpresa((Player) player, pixelcoinsASacar, args[1]);
+            transaccionesMySQL.sacarPixelcoinsEmpresa(player.getName(), pixelcoinsASacar, args[1]);
         }
 
     }

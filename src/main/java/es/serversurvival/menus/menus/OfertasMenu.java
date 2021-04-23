@@ -1,12 +1,16 @@
 package es.serversurvival.menus.menus;
 
 import es.serversurvival.menus.inventoryFactory.InventoryFactory;
+import es.serversurvival.mySQL.tablasObjetos.Jugador;
+import es.serversurvival.mySQL.tablasObjetos.Oferta;
 import es.serversurvival.util.Funciones;
 import es.serversurvival.menus.Menu;
 import es.serversurvival.menus.MenuManager;
 import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.menus.inventoryFactory.inventories.OfertaInventoryFactory;
 import es.serversurvival.mySQL.Ofertas;
+import es.serversurvival.util.MinecraftUtils;
+import io.vavr.control.Try;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -14,6 +18,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+
+import static org.bukkit.ChatColor.DARK_RED;
 
 public class OfertasMenu extends Menu implements Clickable, Paginated, RefreshcableOnPaginated {
     private OfertaInventoryFactory inventoryFactory = new OfertaInventoryFactory();
@@ -56,11 +62,16 @@ public class OfertasMenu extends Menu implements Clickable, Paginated, Refreshca
             player.sendMessage(ChatColor.DARK_RED + "Tienes el inventario lleno :v");
             return;
         }
+        Try<Integer> idTry =  Try.of(() -> Integer.parseInt(itemClicked.getItemMeta().getLore().get(2)));
+        if(idTry.isFailure()){
+            return;
+        }
+        int id = idTry.get();
+        Jugador jugador = jugadoresMySQL.getJugador(player.getName());
+        Oferta ofertaAComprar = ofertasMySQL.getOferta(id);
 
-        int id;
-        try{
-            id = Integer.parseInt(itemClicked.getItemMeta().getLore().get(2));
-        }catch (Exception e) {
+        if (jugador.getPixelcoins() < ofertaAComprar.getPrecio()) {
+            player.sendMessage(DARK_RED + "No puedes comprar por encima de tu dinero");
             return;
         }
 
@@ -69,7 +80,9 @@ public class OfertasMenu extends Menu implements Clickable, Paginated, Refreshca
         if (itemClickckedDisplayName.equalsIgnoreCase(Ofertas.NOMBRE_ITEM_RETIRAR)) {
             ofertasMySQL.retirarOferta(player, id);
         } else {
-            transaccionesMySQL.realizarVenta(player.getName(), id, player);
+            transaccionesMySQL.realizarVenta(player.getName(), id);
+            MinecraftUtils.setLore(itemClicked, Collections.singletonList("Comprado en la tienda"));
+            player.getInventory().addItem(itemClicked);
         }
     }
 

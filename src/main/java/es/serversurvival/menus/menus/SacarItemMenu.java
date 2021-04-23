@@ -7,6 +7,7 @@ import es.serversurvival.menus.inventoryFactory.inventories.SacarItemInventoryFa
 import es.serversurvival.mySQL.enums.CambioPixelcoins;
 import es.serversurvival.mySQL.tablasObjetos.Jugador;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -16,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Map;
 
 import static es.serversurvival.util.Funciones.*;
+import static org.bukkit.ChatColor.DARK_RED;
 
 public class SacarItemMenu extends Menu implements Clickable, Refreshcable {
     private Player player;
@@ -57,10 +59,18 @@ public class SacarItemMenu extends Menu implements Clickable, Refreshcable {
         }
 
         Jugador jugadorASacar = jugadoresMySQL.getJugador(player.getName());
-        java.lang.String tipoItem = itemClickeado.getType().toString();
+        String tipoItem = itemClickeado.getType().toString();
+        double cambioPixelcoins = CambioPixelcoins.getCambioTotal(tipoItem, 1); //Pixelcoins a sacar
 
-        double pixelcoinsSacadas = CambioPixelcoins.sacarItem(jugadorASacar, tipoItem);
-        this.pixelcoinsJugador = pixelcoinsJugador - pixelcoinsSacadas;
+        if(jugadorASacar.getPixelcoins() >= cambioPixelcoins){
+            enviarMensajeYSonido(player, DARK_RED + "Necesitas tener minimo " + cambioPixelcoins + " pixelcoins para convertirlo", Sound.ENTITY_VILLAGER_NO);
+            return;
+        }
+
+        CambioPixelcoins.sacarItem(jugadorASacar, tipoItem);
+        player.getInventory().addItem(new ItemStack(Material.getMaterial(tipoItem), 1));
+
+        this.pixelcoinsJugador = pixelcoinsJugador - cambioPixelcoins;
 
         refresh();
     }

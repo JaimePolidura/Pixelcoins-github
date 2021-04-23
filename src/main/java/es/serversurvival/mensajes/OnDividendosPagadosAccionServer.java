@@ -1,0 +1,23 @@
+package es.serversurvival.mensajes;
+
+import es.jaime.EventListener;
+import es.serversurvival.mySQL.eventos.empresas.EmpresaServerDividendoPagadoEvento;
+import es.serversurvival.util.Funciones;
+
+import java.text.DecimalFormat;
+
+import static es.serversurvival.util.Funciones.enviarMensaje;
+import static org.bukkit.ChatColor.GOLD;
+import static org.bukkit.ChatColor.GREEN;
+
+public final class OnDividendosPagadosAccionServer {
+    private final DecimalFormat formatea = Funciones.FORMATEA;
+
+    @EventListener
+    public void onDividendosPagados (EmpresaServerDividendoPagadoEvento e) {
+        String mensajeOnline = GOLD + "Has cobrado " + GREEN + "%s PC" + GOLD + " en dividendo de la empresa " + e.getEmpresa();
+        String mensajeOffline = GOLD + "Has cobrado %s PC en dividendo de la empresa " + e.getEmpresa();
+
+        enviarMensaje(e.getJugador(), String.format(mensajeOnline, formatea.format(e.getPixelcoins())), String.format(mensajeOffline, formatea.format(e.getPixelcoins())));
+    }
+}

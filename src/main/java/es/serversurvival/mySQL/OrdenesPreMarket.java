@@ -2,9 +2,11 @@ package es.serversurvival.mySQL;
 
 import es.serversurvival.mySQL.enums.AccionOrden;
 import es.serversurvival.mySQL.enums.TipoActivo;
+import es.serversurvival.mySQL.tablasObjetos.Jugador;
 import es.serversurvival.mySQL.tablasObjetos.OrdenPreMarket;
 import es.serversurvival.mySQL.tablasObjetos.PosicionAbierta;
 import javafx.util.Pair;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -15,6 +17,7 @@ import java.util.List;
 
 import static es.serversurvival.util.Funciones.*;
 import static es.serversurvival.util.Funciones.enviarMensajeYSonido;
+import static org.bukkit.ChatColor.DARK_RED;
 
 public final class OrdenesPreMarket extends MySQL{
     public final static OrdenesPreMarket INSTANCE = new OrdenesPreMarket();
@@ -147,6 +150,17 @@ public final class OrdenesPreMarket extends MySQL{
         Pair<String, Double> pairNombrePrecio = llamadasApiMySQL.getPairNombreValorPrecio(orden.getNombre_activo()).get();
         double precio = pairNombrePrecio.getValue();
         String nombreValor = pairNombrePrecio.getKey();
+
+        Player player = Bukkit.getPlayer(orden.getJugador());
+        Jugador jugador = jugadoresMySQL.getJugador(orden.getJugador());
+        double dineroJugador = jugador.getPixelcoins();
+        double valorTotal = pairNombrePrecio.getValue() * orden.getCantidad();
+        double comision = redondeoDecimales(reducirPorcentaje(valorTotal, 100 - PosicionesAbiertas.PORCENTAJE_CORTO), 2);
+
+        if(comision > dineroJugador){
+            player.sendMessage(DARK_RED + "No tienes el dinero suficiente para esa operacion");
+            return;
+        }
 
         transaccionesMySQL.venderEnCortoBolsa(orden.getJugador(), orden.getNombre_activo(), nombreValor, orden.getCantidad(), precio);
         borrarOrden(orden.getId());

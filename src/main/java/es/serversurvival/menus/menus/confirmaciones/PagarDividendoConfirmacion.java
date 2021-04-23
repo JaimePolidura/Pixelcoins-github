@@ -6,12 +6,14 @@ import es.serversurvival.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.mySQL.tablasObjetos.Empresa;
 import es.serversurvival.util.MinecraftUtils;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static es.serversurvival.util.Funciones.enviarMensajeYSonido;
 import static org.bukkit.ChatColor.*;
 
 public class PagarDividendoConfirmacion extends Menu implements AumentoConfirmacion{
@@ -64,6 +66,8 @@ public class PagarDividendoConfirmacion extends Menu implements AumentoConfirmac
     @Override
     public void confirmar() {
         transaccionesMySQL.pagarDividendoAccionServer(player, empresa.getNombre(), dividendoPorAccion, accionesTotales * dividendoPorAccion);
+
+        enviarMensajeYSonido(player, GOLD + "Se han pagado todos los dividendos", Sound.ENTITY_PLAYER_LEVELUP);
 
         closeMenu();
     }

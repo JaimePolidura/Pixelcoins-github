@@ -1,6 +1,6 @@
 package es.serversurvival.mySQL;
 
-import es.serversurvival.main.Pixelcoin;
+import es.jaime.EventListener;
 import es.serversurvival.mySQL.enums.TipoActivo;
 import es.serversurvival.mySQL.enums.TipoPosicion;
 import es.serversurvival.apiHttp.IEXCloud_API;
@@ -10,7 +10,6 @@ import es.serversurvival.util.Funciones;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -171,31 +170,28 @@ public final class PosicionesAbiertas extends MySQL {
         return posicionesAbiertasConPeso;
     }
 
-    public synchronized void actualizarSplits () {
-        Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
+    public void actualizarSplits () {
+        Map<String, JSONObject> infoSplitsPorAccion = new HashMap<>();
+        List<LlamadaApi> todasLlamadasApi = llamadasApiMySQL.getTodasLlamadasApiCondicion(LlamadaApi::esTipoAccion);
 
-            Map<String, JSONObject> infoSplitsPorAccion = new HashMap<>();
-            List<LlamadaApi> todasLlamadasApi = llamadasApiMySQL.getTodasLlamadasApiCondicion(LlamadaApi::esTipoAccion);
+        todasLlamadasApi.forEach( (llamada) -> {
+            try {
+                JSONObject infoSplit = IEXCloud_API.getSplitInfoEmpresa(llamada.getSimbolo());
+                infoSplitsPorAccion.put(llamada.getNombre_activo(), infoSplit);
+            } catch (Exception ignored) {
+                //IGNORED
+            }
+        });
 
-            todasLlamadasApi.forEach( (llamada) -> {
-                try {
-                    JSONObject infoSplit = IEXCloud_API.getSplitInfoEmpresa(llamada.getSimbolo());
-                    infoSplitsPorAccion.put(llamada.getNombre_activo(), infoSplit);
-                } catch (Exception ignored) {
-                    //IGNORED
-                }
-            });
+        List<PosicionAbierta> posicionAbiertas = getTodasPosicionesAbiertasCondicion(PosicionAbierta::esTipoAccion);
+        posicionAbiertas.forEach( (posicionAbierta) -> {
+            JSONObject infoSplit = infoSplitsPorAccion.get(posicionAbierta.getNombre_activo());
 
-            List<PosicionAbierta> posicionAbiertas = getTodasPosicionesAbiertasCondicion(PosicionAbierta::esTipoAccion);
-            posicionAbiertas.forEach( (posicionAbierta) -> {
-                JSONObject infoSplit = infoSplitsPorAccion.get(posicionAbierta.getNombre_activo());
+            if(infoSplit != null){
+                realizarSplit(posicionAbierta, infoSplit);
+            }
+        });
 
-                if(infoSplit != null){
-                    realizarSplit(posicionAbierta, infoSplit);
-                }
-            });
-
-        }, 0L);
     }
 
     @SneakyThrows
@@ -227,86 +223,22 @@ public final class PosicionesAbiertas extends MySQL {
                 .filter(PosicionAbierta::esTipoAccion)
                 .collect(Collectors.toList());
 
-        Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
-            for(PosicionAbierta posicionAbierta : posicionAbiertas) {
-                double dividendo;
-                Date fechaPagoDividendos;
+        for(PosicionAbierta posicionAbierta : posicionAbiertas) {
+            double dividendo;
+            Date fechaPagoDividendos;
 
-                try {
-                    JSONObject jsonDeLosDividendos = this.getJSONDividendos(posicionAbierta.getNombre_activo());
-                    dividendo = getCantidadDePagoDeDividendoDesdeJSON(jsonDeLosDividendos);
-                    fechaPagoDividendos = getFechaPagoDividendosJSON(jsonDeLosDividendos);
-                } catch (Exception e) {
-                    continue;
-                }
-
-                if (diferenciaDias(hoy, fechaPagoDividendos) == 0) {
-                    transaccionesMySQL.pagaDividendo(posicionAbierta.getNombre_activo(), posicionAbierta.getJugador(), dividendo, posicionAbierta.getCantidad());
-                }
-         }
-        },0L);
-    }
-
-    public void mostrarDividendosCarteraEntera (Player player) {
-        String nombrePlayer = player.getName();
-
-        Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
-
-            Map<String, LlamadaApi> mapAllLlamadas = llamadasApiMySQL.getMapOfAllLlamadasApi();
-            List<PosicionAbierta> posicionesTickers = getPosicionesAbiertasJugadorCondicion(nombrePlayer, PosicionAbierta::esLargo).stream()
-                    .filter(PosicionAbierta::esTipoAccion)
-                    .filter(distinctBy(PosicionAbierta::getNombre_activo))
-                    .collect(Collectors.toList());
-
-            player.sendMessage(ChatColor.GOLD + "------------------------------------");
-            player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "     PROXIMOS DIVIDENDOS DE TU CARTERA");
-            player.sendMessage("           ");
-            for (PosicionAbierta posicion : posicionesTickers) {
-                try {
-                    JSONObject jsonDividendos = IEXCloud_API.getProximosDividendos(posicion.getNombre_activo());
-
-                    Date fehcaPago = getFechaPagoDividendosJSON(jsonDividendos);
-                    double cantidadDePago = Double.parseDouble((String) jsonDividendos.get("amount"));
-        
-                    player.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + mapAllLlamadas.get(posicion.getNombre_activo()).getNombre_activo() + ChatColor.RESET + ChatColor.GOLD  + ": Proximo dividendo: " +
-                            dateFormater.format(fehcaPago) + " a " + ChatColor.GREEN + formatea.format(cantidadDePago) + " PC" + ChatColor.GOLD +
-                            "/Accion ( " + ChatColor.BOLD + ( (int) rentabilidad(mapAllLlamadas.get(posicion.getNombre_activo()).getPrecio(), cantidadDePago) )  + "%" + ChatColor.RESET + "" + ChatColor.GOLD + " )");
-                } catch (Exception ignored) {
-                    //IGNORED
-                }
+            try {
+                JSONObject jsonDeLosDividendos = this.getJSONDividendos(posicionAbierta.getNombre_activo());
+                dividendo = getCantidadDePagoDeDividendoDesdeJSON(jsonDeLosDividendos);
+                fechaPagoDividendos = getFechaPagoDividendosJSON(jsonDeLosDividendos);
+            } catch (Exception e) {
+                continue;
             }
-            player.sendMessage(ChatColor.GOLD + "------------------------------------");
-        }, 0L);
-    }
 
-    public void mostrarDividendoEmpresa (Player player, String ticker) {
-        Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
-            LlamadaApi infoAccion = llamadasApiMySQL.getLlamadaAPI(ticker);
-
-            try{
-                JSONObject jsonDividendos = IEXCloud_API.getProximosDividendos(ticker);
-                Date fechaPago = getFechaPagoDividendosJSON(jsonDividendos);
-                double cantidadAPagar = Double.parseDouble((String) jsonDividendos.get("amount"));
-
-                String nombreEmpresa;
-                double precioPorAccion;
-
-                if(infoAccion == null){
-                    nombreEmpresa = IEXCloud_API.getNombreEmpresa(ticker);
-                    precioPorAccion = IEXCloud_API.getOnlyPrice(ticker);
-                }else{
-                    nombreEmpresa = infoAccion.getNombre_activo();
-                    precioPorAccion = infoAccion.getPrecio();
-                }
-
-                player.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + nombreEmpresa + ChatColor.RESET + ChatColor.GOLD  + ": Proximo dividendo: " +
-                        dateFormater.format(fechaPago) + " a " + ChatColor.GREEN + formatea.format(cantidadAPagar) + " PC" + ChatColor.GOLD +
-                        "/Accion ( " + ChatColor.BOLD + ( (int) rentabilidad(precioPorAccion, cantidadAPagar) )  + "%" + ChatColor.RESET + "" + ChatColor.GOLD + " )");
-
-            }catch (Exception e) {
-                player.sendMessage(ChatColor.DARK_RED + "No se ha encontrado ningun dividendo proximamante para esa accion");
+            if (diferenciaDias(hoy, fechaPagoDividendos) == 0) {
+                transaccionesMySQL.pagaDividendo(posicionAbierta.getNombre_activo(), posicionAbierta.getJugador(), dividendo, posicionAbierta.getCantidad());
             }
-        }, 0L);
+        }
     }
 
     private double getCantidadDePagoDeDividendoDesdeJSON(JSONObject json) {
