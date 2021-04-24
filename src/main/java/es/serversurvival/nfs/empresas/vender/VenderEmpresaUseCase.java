@@ -1,0 +1,19 @@
+package es.serversurvival.nfs.empresas.vender;
+
+import es.serversurvival.legacy.main.Pixelcoin;
+import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.legacy.mySQL.eventos.empresas.EmpresaVendidaEvento;
+import es.serversurvival.nfs.jugadores.mySQL.Jugadores;
+
+public final class VenderEmpresaUseCase implements AllMySQLTablesInstances {
+    public static final VenderEmpresaUseCase INSTANCE = new VenderEmpresaUseCase();
+
+    public void vender (String vendedor, String comprador, double pixelcoins, String nombreEmpresa) {
+        empresasMySQL.setOwner(nombreEmpresa, comprador);
+
+        //TODO desacoplar
+        Jugadores.INSTANCE.realizarTransferenciaConEstadisticas(comprador, vendedor, pixelcoins);
+
+        Pixelcoin.publish(new EmpresaVendidaEvento(comprador, vendedor, nombreEmpresa, pixelcoins));
+    }
+}

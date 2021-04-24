@@ -1,0 +1,20 @@
+package es.serversurvival.nfs.empresas.sacar;
+
+import es.serversurvival.legacy.main.Pixelcoin;
+import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.legacy.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.legacy.mySQL.tablasObjetos.Jugador;
+
+public final class SacarPixelcoinsUseCase implements AllMySQLTablesInstances {
+    public static final SacarPixelcoinsUseCase INSTANCE = new SacarPixelcoinsUseCase();
+
+    public void sacar (String jugador, String empresa, double pixelcoins) {
+        Empresa empresaASacar = empresasMySQL.getEmpresa(empresa);
+        Jugador jugadorQueSaca = jugadoresMySQL.getJugador(jugador);
+        double pixelcoinsEmpresa = empresaASacar.getPixelcoins();
+
+        empresasMySQL.setPixelcoins(empresa, pixelcoinsEmpresa - pixelcoins);
+
+        Pixelcoin.publish(new PixelcoinsSacadasEvento(jugadorQueSaca, empresaASacar, pixelcoins));
+    }
+}
