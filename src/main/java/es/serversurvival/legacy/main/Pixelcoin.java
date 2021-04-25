@@ -7,11 +7,10 @@ import es.jaimetruman.Mapper;
 import es.jaimetruman.task.BukkitTimeUnit;
 import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
 import es.serversurvival.legacy.mySQL.MySQL;
-import es.serversurvival.legacy.task.RabbitMQConsumerTask;
+import es.serversurvival.nfs.webconnection.RabbitMQConsumerTask;
 import es.serversurvival.legacy.task.ScoreBoardManager;
 import es.serversurvival.legacy.task.ScoreboardUpdater;
 
-import io.vavr.control.Try;
 import org.bukkit.plugin.java.JavaPlugin;
 
 

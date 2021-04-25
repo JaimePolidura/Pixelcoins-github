@@ -2,11 +2,11 @@ package es.serversurvival.legacy.menus.menus;
 
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.comandos.subComandos.ayuda.*;
-import es.serversurvival.legacy.comandos.subComandos.ayuda.*;
 import es.serversurvival.legacy.menus.Menu;
 import es.serversurvival.legacy.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.legacy.menus.inventoryFactory.inventories.AyudaMenuInventoryFactory;
 import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.ayuda.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;

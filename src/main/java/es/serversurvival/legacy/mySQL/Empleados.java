@@ -63,7 +63,7 @@ public final class Empleados extends MySQL {
         return buildListFromQuery("SELECT * FROM empleados");
     }
 
-    public List<Empleado> getEmpleadosEmrpesa(String nombreEmpresa){
+    public List<es.serversurvival.nfs.empleados.mysql.Empleado> getEmpleadosEmrpesa(String nombreEmpresa){
         return buildListFromQuery("SELECT * FROM empleados WHERE empresa = '"+nombreEmpresa+"'");
     }
 
@@ -98,11 +98,6 @@ public final class Empleados extends MySQL {
         Empresa empresaAIRse = empresasMySQL.getEmpresa(nombreEmpresa);
         borrarEmplado(getEmpleado(player.getName(), nombreEmpresa).getId());
 
-        player.sendMessage(ChatColor.GOLD + "Te has ido de: " + nombreEmpresa);
-
-        String mensajeOnline = ChatColor.RED + player.getName() + " Se ha ido de tu empresa: " + nombreEmpresa;
-        String mensajeOffline = player.getName() + " se ha ido de tu empresa: " + nombreEmpresa;
-        enviarMensaje(empresaAIRse.getOwner(), mensajeOnline, mensajeOffline, Sound.BLOCK_ANVIL_LAND, 10, 1);
     }
 
     public void pagarSueldos() {

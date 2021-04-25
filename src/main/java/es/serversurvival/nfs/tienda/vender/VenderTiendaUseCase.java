@@ -12,6 +12,9 @@ import java.util.Map;
 
 
 public final class VenderTiendaUseCase implements AllMySQLTablesInstances {
+    public static final VenderTiendaUseCase INSTANCE = new VenderTiendaUseCase();
+
+    private VenderTiendaUseCase () {}
 
     public void crearOferta(ItemStack itemAVender, Player player, double precio) {
         Inventory inventarioJugador = player.getInventory();

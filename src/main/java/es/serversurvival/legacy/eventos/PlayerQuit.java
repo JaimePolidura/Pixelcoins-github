@@ -1,8 +1,8 @@
 package es.serversurvival.legacy.eventos;
 
 import es.serversurvival.legacy.menus.MenuManager;
-import es.serversurvival.legacy.mySQL.ConversacionesWeb;
-import es.serversurvival.legacy.mySQL.tablasObjetos.ConversacionWeb;
+import es.serversurvival.nfs.webconnection.conversacionesweb.mysql.ConversacionesWeb;
+import es.serversurvival.nfs.webconnection.conversacionesweb.mysql.ConversacionWeb;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;

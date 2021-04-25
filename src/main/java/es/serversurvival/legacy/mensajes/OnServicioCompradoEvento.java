@@ -1,7 +1,7 @@
 package es.serversurvival.legacy.mensajes;
 
 import es.jaime.EventListener;
-import es.serversurvival.legacy.mySQL.eventos.empresas.ServicioCompradoEvento;
+import es.serversurvival.nfs.empresas.comprarservicio.EmpresaServicioCompradoEvento;
 import es.serversurvival.legacy.mySQL.tablasObjetos.Empresa;
 import es.serversurvival.legacy.util.Funciones;
 import org.bukkit.Bukkit;
@@ -17,7 +17,7 @@ public final class OnServicioCompradoEvento {
     private final DecimalFormat formatea = Funciones.FORMATEA;
 
     @EventListener
-    public void onServicioComprado (ServicioCompradoEvento evento) {
+    public void onServicioComprado (EmpresaServicioCompradoEvento evento) {
         Player player = Bukkit.getPlayer(evento.getComprador());
         Empresa empresa = evento.getEmpresa();
 

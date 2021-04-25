@@ -1,6 +1,8 @@
 package es.serversurvival.legacy.mySQL;
 
 import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.webconnection.conversacionesweb.mysql.ConversacionesWeb;
+import es.serversurvival.nfs.cuentaweb.Cuentas;
 import es.serversurvival.nfs.mensajes.mysql.Mensajes;
 
 import java.text.DecimalFormat;

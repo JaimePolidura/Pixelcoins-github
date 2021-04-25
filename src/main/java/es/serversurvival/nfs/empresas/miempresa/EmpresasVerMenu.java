@@ -4,6 +4,7 @@ import es.serversurvival.legacy.menus.Menu;
 import es.serversurvival.legacy.menus.MenuManager;
 import es.serversurvival.legacy.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.legacy.menus.menus.*;
+import es.serversurvival.nfs.empleados.misempleos.EmpleosMenu;
 import es.serversurvival.nfs.empresas.borrar.BorrrarEmpresaConfirmacion;
 import es.serversurvival.legacy.menus.menus.confirmaciones.PagarDividendoConfirmacion;
 import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;

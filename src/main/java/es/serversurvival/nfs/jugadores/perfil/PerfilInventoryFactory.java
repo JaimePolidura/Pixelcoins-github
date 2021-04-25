@@ -4,6 +4,7 @@ import es.jaimetruman.ItemBuilder;
 import es.serversurvival.legacy.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.legacy.mySQL.tablasObjetos.*;
 import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.cuentaweb.Cuenta;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

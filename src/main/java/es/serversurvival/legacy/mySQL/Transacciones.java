@@ -18,8 +18,10 @@ import es.serversurvival.legacy.mySQL.eventos.withers.ItemSacadoMaxEvento;
 import es.serversurvival.legacy.mySQL.tablasObjetos.*;
 import es.serversurvival.legacy.main.Pixelcoin;
 import es.serversurvival.legacy.mySQL.tablasObjetos.Jugador;
+import es.serversurvival.nfs.empresas.comprarservicio.EmpresaServicioCompradoEvento;
 import es.serversurvival.nfs.empresas.depositar.PixelcoinsDepositadasEvento;
 import es.serversurvival.nfs.empresas.sacar.PixelcoinsSacadasEvento;
+import es.serversurvival.nfs.empresas.tasks.SueldoPagadoEvento;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -254,7 +256,7 @@ public final class Transacciones extends MySQL {
         Jugador empleadoAPagar = jugadoresMySQL.getJugador(jugador);
         jugadoresMySQL.setEstadisticas(jugador, empleadoAPagar.getPixelcoins() + salario, empleadoAPagar.getNventas(), empleadoAPagar.getIngresos() + salario, empleadoAPagar.getGastos());
 
-        Pixelcoin.publish(new SalarioPagadoEvento(jugador, empresa, salario));
+        Pixelcoin.publish(new SueldoPagadoEvento(jugador, empresa, salario));
 
         return true;
     }
@@ -267,7 +269,7 @@ public final class Transacciones extends MySQL {
         empresasMySQL.setPixelcoins(empresa, empresaAComprar.getPixelcoins() + precio);
         empresasMySQL.setIngresos(empresa, empresaAComprar.getIngresos() + precio);
 
-        Pixelcoin.publish(new ServicioCompradoEvento(comprador.getNombre(), empresaAComprar, precio));
+        Pixelcoin.publish(new EmpresaServicioCompradoEvento(comprador.getNombre(), empresaAComprar, precio));
     }
 
     public void comprarUnidadBolsa (TipoActivo tipoActivo, String ticker, String nombreValor, String alias, double precioUnidad, int cantidad, String nombrePlayer) {

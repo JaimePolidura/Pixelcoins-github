@@ -20,6 +20,7 @@ import static es.serversurvival.legacy.util.Funciones.enviarMensajeYSonido;
 
 @Command("vender")
 public class VenderCommand extends PixelcoinCommand implements CommandRunner {
+    private final VenderTiendaUseCase useCase = VenderTiendaUseCase.INSTANCE;
 
     @Override
     public void execute(CommandSender sender, String[] args) {
@@ -42,8 +43,8 @@ public class VenderCommand extends PixelcoinCommand implements CommandRunner {
         double precio = Double.parseDouble(args[0]);
         Inventory inventarioJugador = player.getInventory();
 
-        ofertasMySQL.crearOferta(itemMano, player, Double.parseDouble(args[0]));
-        
+        useCase.crearOferta(itemMano, player, precio);
+
         inventarioJugador.clear(player.getInventory().getHeldItemSlot());
 
         enviarMensajeYSonido(player, ChatColor.GOLD + "Se ha añadido a la tienda. Para retirarlos /tienda y clikc izquierdo en ellos", Sound.ENTITY_VILLAGER_YES);
