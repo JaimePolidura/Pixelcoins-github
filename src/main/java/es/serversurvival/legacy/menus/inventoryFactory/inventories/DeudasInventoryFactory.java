@@ -1,7 +1,7 @@
 package es.serversurvival.legacy.menus.inventoryFactory.inventories;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Deuda;
+import es.serversurvival.nfs.deudas.mysql.Deuda;
 import es.serversurvival.legacy.menus.inventoryFactory.InventoryFactory;
 import es.serversurvival.nfs.deudas.ver.DeudasMenu;
 import org.bukkit.Bukkit;

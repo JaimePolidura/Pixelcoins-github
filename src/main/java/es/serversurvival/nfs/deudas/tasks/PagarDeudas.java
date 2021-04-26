@@ -3,7 +3,7 @@ package es.serversurvival.nfs.deudas.tasks;
 import es.jaimetruman.task.BukkitTimeUnit;
 import es.jaimetruman.task.Task;
 import es.jaimetruman.task.TaskRunner;
-import es.serversurvival.legacy.mySQL.Deudas;
+import es.serversurvival.nfs.deudas.mysql.Deudas;
 
 @Task(BukkitTimeUnit.DAY)
 public final class PagarDeudas implements TaskRunner {

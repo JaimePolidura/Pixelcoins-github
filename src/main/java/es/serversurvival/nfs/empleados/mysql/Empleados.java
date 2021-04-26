@@ -1,29 +1,25 @@
 package es.serversurvival.nfs.empleados.mysql;
 
+import java.sql.*;
+import java.util.*;
+import java.util.Date;
+
 import es.serversurvival.legacy.mySQL.MySQL;
 import es.serversurvival.legacy.mySQL.enums.TipoSueldo;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Empleado;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Empresa;
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.empresas.mysql.Empresa;
+import es.serversurvival.nfs.utils.Funciones;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import static es.serversurvival.legacy.util.Funciones.diferenciaDias;
-import static es.serversurvival.legacy.util.Funciones.enviarMensaje;
+import static es.serversurvival.nfs.utils.Funciones.*;
 
 //II 354 -> 236 -> 156
 public final class Empleados extends MySQL {
     public final static Empleados INSTANCE = new Empleados();
-    private Empleados() {}
+    private Empleados () {}
 
     public void nuevoEmpleado(String empleado, String empresa, double sueldo, TipoSueldo tipo, String cargo) {
         String fechaPaga = dateFormater.format(new Date());
@@ -67,7 +63,7 @@ public final class Empleados extends MySQL {
         return buildListFromQuery("SELECT * FROM empleados");
     }
 
-    public List<Empleado> getEmpleadosEmrpesa(String nombreEmpresa){
+    public List<es.serversurvival.nfs.empleados.mysql.Empleado> getEmpleadosEmrpesa(String nombreEmpresa){
         return buildListFromQuery("SELECT * FROM empleados WHERE empresa = '"+nombreEmpresa+"'");
     }
 
@@ -102,11 +98,6 @@ public final class Empleados extends MySQL {
         Empresa empresaAIRse = empresasMySQL.getEmpresa(nombreEmpresa);
         borrarEmplado(getEmpleado(player.getName(), nombreEmpresa).getId());
 
-        player.sendMessage(ChatColor.GOLD + "Te has ido de: " + nombreEmpresa);
-
-        String mensajeOnline = ChatColor.RED + player.getName() + " Se ha ido de tu empresa: " + nombreEmpresa;
-        String mensajeOffline = player.getName() + " se ha ido de tu empresa: " + nombreEmpresa;
-        enviarMensaje(empresaAIRse.getOwner(), mensajeOnline, mensajeOffline, Sound.BLOCK_ANVIL_LAND, 10, 1);
     }
 
     public void pagarSueldos() {

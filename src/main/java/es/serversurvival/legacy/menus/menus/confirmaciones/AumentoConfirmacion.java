@@ -1,6 +1,6 @@
 package es.serversurvival.legacy.menus.menus.confirmaciones;
 
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.utils.Funciones;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 

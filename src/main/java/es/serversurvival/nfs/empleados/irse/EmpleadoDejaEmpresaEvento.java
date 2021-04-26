@@ -1,7 +1,7 @@
 package es.serversurvival.nfs.empleados.irse;
 
 import es.serversurvival.legacy.mySQL.eventos.PixelcoinsEvento;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.nfs.empresas.mysql.Empresa;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

@@ -2,9 +2,7 @@ package es.serversurvival.nfs.empresas.vender;
 
 import es.serversurvival.legacy.menus.Menu;
 import es.serversurvival.legacy.menus.menus.solicitudes.Solicitud;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Empleado;
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.utils.Funciones;
 import es.serversurvival.legacy.menus.inventoryFactory.InventoryCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

@@ -1,7 +1,7 @@
 package es.serversurvival.nfs.tienda.vertienda.usecases;
 
-import es.serversurvival.legacy.mySQL.Ofertas;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Oferta;
+import es.serversurvival.nfs.tienda.mySQL.ofertas.Ofertas;
+import es.serversurvival.nfs.tienda.mySQL.ofertas.Oferta;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

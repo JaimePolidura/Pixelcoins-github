@@ -4,7 +4,7 @@ import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.legacy.comandos.PixelcoinCommand;
 import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Jugador;
+import es.serversurvival.nfs.jugadores.mySQL.Jugador;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

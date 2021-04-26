@@ -1,7 +1,7 @@
 package es.serversurvival.legacy.mySQL.enums;
 
-import es.serversurvival.legacy.mySQL.Transacciones;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Jugador;
+import es.serversurvival.nfs.transacciones.mySQL.Transacciones;
+import es.serversurvival.nfs.jugadores.mySQL.Jugador;
 
 public enum CambioPixelcoins {
     DIAMOND(CambioPixelcoins.DIAMANTE, Transacciones.INSTANCE::sacarMaxItemDiamond),

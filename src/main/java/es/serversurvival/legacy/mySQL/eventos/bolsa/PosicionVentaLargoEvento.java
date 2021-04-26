@@ -1,9 +1,9 @@
 package es.serversurvival.legacy.mySQL.eventos.bolsa;
 
-import es.serversurvival.legacy.mySQL.enums.TipoActivo;
+import es.serversurvival.nfs.bolsa.llamadasapi.TipoActivo;
 import es.serversurvival.legacy.mySQL.enums.TipoTransaccion;
 import es.serversurvival.legacy.mySQL.tablasObjetos.PosicionCerrada;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Transaccion;
+import es.serversurvival.nfs.transacciones.mySQL.Transaccion;
 import lombok.Getter;
 
 import static es.serversurvival.legacy.mySQL.enums.TipoPosicion.*;

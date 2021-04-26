@@ -3,7 +3,7 @@ package es.serversurvival.nfs.tienda.vender;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.legacy.comandos.PixelcoinCommand;
-import es.serversurvival.legacy.validaciones.Validaciones;
+import es.serversurvival.nfs.utils.validaciones.Validaciones;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.Bukkit;
@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-import static es.serversurvival.legacy.util.Funciones.enviarMensajeYSonido;
+import static es.serversurvival.nfs.utils.Funciones.enviarMensajeYSonido;
 
 @Command("vender")
 public class VenderCommand extends PixelcoinCommand implements CommandRunner {

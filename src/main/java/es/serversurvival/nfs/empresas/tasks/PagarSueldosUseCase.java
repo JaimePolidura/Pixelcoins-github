@@ -1,16 +1,15 @@
 package es.serversurvival.nfs.empresas.tasks;
 
-import es.serversurvival.legacy.main.Pixelcoin;
+import es.serversurvival.nfs.Pixelcoin;
 import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
 import es.serversurvival.legacy.mySQL.enums.TipoSueldo;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Empresa;
-import es.serversurvival.nfs.empleados.mysql.Empleado;
+import es.serversurvival.nfs.empresas.mysql.Empresa;
 import lombok.SneakyThrows;
 
 import java.util.Date;
 import java.util.List;
 
-import static es.serversurvival.legacy.util.Funciones.diferenciaDias;
+import static es.serversurvival.nfs.utils.Funciones.diferenciaDias;
 
 public final class PagarSueldosUseCase implements AllMySQLTablesInstances {
     public static final PagarSueldosUseCase INSTANCE = new PagarSueldosUseCase();

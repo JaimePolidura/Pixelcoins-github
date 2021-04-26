@@ -1,9 +1,9 @@
 package es.serversurvival.nfs.empleados.irse;
 
-import es.serversurvival.legacy.main.Pixelcoin;
+import es.serversurvival.nfs.Pixelcoin;
 import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Empleado;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.nfs.empleados.mysql.Empleado;
+import es.serversurvival.nfs.empresas.mysql.Empresa;
 
 public final class IrseEmpresaUseCase implements AllMySQLTablesInstances {
     public static final IrseEmpresaUseCase INSTANCE = new IrseEmpresaUseCase();

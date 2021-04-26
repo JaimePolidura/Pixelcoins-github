@@ -3,13 +3,12 @@ package es.serversurvival.nfs.empresas.despedir;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.legacy.comandos.PixelcoinCommand;
-import es.serversurvival.legacy.validaciones.Validaciones;
+import es.serversurvival.nfs.utils.validaciones.Validaciones;
 import es.serversurvival.nfs.empleados.despedir.DespedirEmpleadoUseCase;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import static org.bukkit.ChatColor.DARK_RED;
 

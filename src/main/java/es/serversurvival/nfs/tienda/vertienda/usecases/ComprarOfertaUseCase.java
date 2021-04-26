@@ -1,11 +1,10 @@
 package es.serversurvival.nfs.tienda.vertienda.usecases;
 
-import es.serversurvival.legacy.main.Pixelcoin;
+import es.serversurvival.nfs.Pixelcoin;
 import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
 import es.serversurvival.legacy.mySQL.eventos.tienda.ItemCompradoEvento;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Jugador;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Oferta;
-import es.serversurvival.nfs.jugadores.mySQL.Jugadores;
+import es.serversurvival.nfs.jugadores.mySQL.Jugador;
+import es.serversurvival.nfs.tienda.mySQL.ofertas.Oferta;
 import org.bukkit.inventory.ItemStack;
 
 public final class ComprarOfertaUseCase implements AllMySQLTablesInstances {

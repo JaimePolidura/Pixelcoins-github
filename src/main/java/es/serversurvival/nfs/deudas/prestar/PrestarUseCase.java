@@ -1,9 +1,8 @@
 package es.serversurvival.nfs.deudas.prestar;
 
-import es.serversurvival.legacy.main.Pixelcoin;
+import es.serversurvival.nfs.Pixelcoin;
 import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.legacy.util.Funciones;
-import es.serversurvival.nfs.jugadores.mySQL.Jugadores;
+import es.serversurvival.nfs.utils.Funciones;
 
 public final class PrestarUseCase implements AllMySQLTablesInstances {
     public static final PrestarUseCase INSTANCE = new PrestarUseCase();

@@ -2,12 +2,12 @@ package es.serversurvival.legacy.menus.menus.confirmaciones;
 
 import es.serversurvival.legacy.menus.Menu;
 import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.legacy.mySQL.enums.TipoActivo;
+import es.serversurvival.nfs.bolsa.llamadasapi.TipoActivo;
 import es.serversurvival.legacy.mySQL.enums.TipoPosicion;
-import es.serversurvival.legacy.mySQL.tablasObjetos.PosicionAbierta;
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.bolsa.posicionesabiertas.mysql.PosicionAbierta;
+import es.serversurvival.nfs.utils.Funciones;
 import es.serversurvival.legacy.menus.inventoryFactory.InventoryCreator;
-import es.serversurvival.legacy.menus.menus.BolsaCarteraMenu;
+import es.serversurvival.nfs.bolsa.cartera.BolsaCarteraMenu;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;

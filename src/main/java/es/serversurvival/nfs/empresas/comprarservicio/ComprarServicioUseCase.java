@@ -1,8 +1,8 @@
 package es.serversurvival.nfs.empresas.comprarservicio;
 
-import es.serversurvival.legacy.main.Pixelcoin;
+import es.serversurvival.nfs.Pixelcoin;
 import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.nfs.empresas.mysql.Empresa;
 
 public final class ComprarServicioUseCase implements AllMySQLTablesInstances {
     public static final ComprarServicioUseCase INSTANCE = new ComprarServicioUseCase();

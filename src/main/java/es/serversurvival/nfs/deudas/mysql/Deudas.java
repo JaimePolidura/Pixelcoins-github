@@ -1,75 +1,72 @@
 package es.serversurvival.nfs.deudas.mysql;
 
-import es.serversurvival.legacy.mySQL.Jugadores;
+import java.sql.*;
+import java.util.*;
+import java.util.Date;
+
+import es.serversurvival.nfs.jugadores.mySQL.Jugadores;
 import es.serversurvival.legacy.mySQL.MySQL;
 import es.serversurvival.legacy.mySQL.enums.TipoTransaccion;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Deuda;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Jugador;
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.jugadores.mySQL.Jugador;
+import es.serversurvival.nfs.utils.Funciones;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import static es.serversurvival.legacy.util.Funciones.*;
+import static es.serversurvival.nfs.utils.Funciones.*;
 
 // II 325 -> 218 -> 190
 public final class Deudas extends MySQL {
     public final static Deudas INSTANCE = new Deudas();
-    private Deudas() {}
+    private Deudas () {}
 
-    public void nuevaDeuda(String deudor, String acredor, int pixelcoins, int tiempo, int interes) {
-        String fechaHoy = dateFormater.format(new Date());
+    public void nuevaDeuda(java.lang.String deudor, java.lang.String acredor, int pixelcoins, int tiempo, int interes) {
+        java.lang.String fechaHoy = dateFormater.format(new Date());
         int cuota = (int) Math.round((double) pixelcoins / tiempo);
 
         executeUpdate("INSERT INTO deudas (deudor, acredor, pixelcoins_restantes, tiempo_restante, interes, cuota, fecha_ultimapaga) VALUES ('" + deudor + "','" + acredor + "','" + pixelcoins + "','" + tiempo + "','" + interes + "','" + cuota + "','" + fechaHoy + "')");
     }
 
     public Deuda getDeuda(int id){
-        return (Deuda) buildObjectFromQuery(String.format("SELECT * FROM deudas WHERE id = '%d'", id));
+        return (Deuda) buildObjectFromQuery(java.lang.String.format("SELECT * FROM deudas WHERE id = '%d'", id));
     }
 
-    public List<Deuda> getDeudasAcredor(String jugador){
-        return buildListFromQuery(String.format("SELECT * FROM deudas WHERE acredor = '%s'", jugador));
+    public List<Deuda> getDeudasAcredor(java.lang.String jugador){
+        return buildListFromQuery(java.lang.String.format("SELECT * FROM deudas WHERE acredor = '%s'", jugador));
     }
 
-    public List<Deuda> getDeudasDeudor(String jugador){
-        return buildListFromQuery(String.format("SELECT * FROM deudas WHERE deudor = '%s'", jugador));
+    public List<Deuda> getDeudasDeudor(java.lang.String jugador){
+        return buildListFromQuery(java.lang.String.format("SELECT * FROM deudas WHERE deudor = '%s'", jugador));
     }
 
     public List<Deuda> getAllDeudas () {
         return buildListFromQuery("SELECT * FROM deudas");
     }
 
-    public void setPagoDeuda(int id, int pixelcoins, int tiempo, String fecha) {
+    public void setPagoDeuda(int id, int pixelcoins, int tiempo, java.lang.String fecha) {
         executeUpdate("UPDATE deudas SET pixelcoins_restantes = '"+pixelcoins+"', tiempo_restante = '"+tiempo+"', fecha_ultimapaga = '"+fecha+"' WHERE id = '"+id+"'");
     }
 
-    public void setAcredorDeudor (String nombre, String nuevoNombre) {
+    public void setAcredorDeudor (java.lang.String nombre, java.lang.String nuevoNombre) {
         executeUpdate("UPDATE deudas SET acredor = '"+nuevoNombre+"' WHERE acredor = '"+nombre+"'");
         executeUpdate("UPDATE deudas SET deudor = '"+nuevoNombre+"' WHERE deudor = '"+nombre+"'");
     }
 
     public void borrarDeuda(int id) {
-        executeUpdate(String.format("DELETE FROM deudas WHERE id = '%d'", id));
+        executeUpdate(java.lang.String.format("DELETE FROM deudas WHERE id = '%d'", id));
     }
 
-    public boolean esDeudorDeDeuda(int id, String deudor) {
+    public boolean esDeudorDeDeuda(int id, java.lang.String deudor) {
         return !isEmptyFromQuery("SELECT * FROM deudas WHERE id = '"+id+"' AND deudor = '"+deudor+"'");
     }
 
-    public int getAllPixelcoinsDeudasAcredor (String jugador) {
+    public int getAllPixelcoinsDeudasAcredor (java.lang.String jugador) {
         return getSumaTotalListInteger( getDeudasAcredor(jugador), Deuda::getPixelcoins_restantes);
     }
 
-    public int getAllPixelcoinsDeudasDeudor (String jugador) {
+    public int getAllPixelcoinsDeudasDeudor (java.lang.String jugador) {
         return getSumaTotalListInteger( getDeudasDeudor(jugador), Deuda::getPixelcoins_restantes);
     }
 
@@ -83,7 +80,7 @@ public final class Deudas extends MySQL {
 
     public void pagarDeudas () {
         List<Deuda> todasLasDeudas = this.getAllDeudas();
-        Map<String, Jugador> allJugadores = Jugadores.INSTANCE.getMapAllJugadores();
+        Map<java.lang.String, Jugador> allJugadores = Jugadores.INSTANCE.getMapAllJugadores();
 
         todasLasDeudas.forEach( (deuda) -> {
             Date fechaHoy = formatFehcaDeHoyException();
@@ -103,8 +100,8 @@ public final class Deudas extends MySQL {
     }
 
     private void pagarDeudaYBorrarSiEsNecesario (Deuda deuda, Jugador acredor, Jugador deudor) {
-        String deudorNombre = deudor.getNombre();
-        String acredorNombre = acredor.getNombre();
+        java.lang.String deudorNombre = deudor.getNombre();
+        java.lang.String acredorNombre = acredor.getNombre();
         int cuota = deuda.getCouta();
         int id = deuda.getId();
         int tiempo = deuda.getTiempo_restante();
@@ -136,35 +133,38 @@ public final class Deudas extends MySQL {
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + " No se puede pagar en id: " + id + " por falta de pixelcoins");
     }
 
-    public void cancelarDeuda(Player player, int id) {
+    public Deuda cancelarDeuda(Player player, int id) {
         Deuda deudaACancelar = getDeuda(id);
-        String nombreDeudor = deudaACancelar.getDeudor();
+        java.lang.String nombreDeudor = deudaACancelar.getDeudor();
         int pixelcoinsDeuda = deudaACancelar.getPixelcoins_restantes();
         borrarDeuda(id);
 
         enviarMensajeYSonido(player, ChatColor.GOLD + "Has cancelado la deuda a " + nombreDeudor + "!", Sound.ENTITY_PLAYER_LEVELUP);
 
-        String mensajeOnline = ChatColor.GOLD + player.getName() + " te ha cancelado la deuda de " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC";
+        java.lang.String mensajeOnline = ChatColor.GOLD + player.getName() + " te ha cancelado la deuda de " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC";
         enviarMensaje(nombreDeudor, mensajeOnline, mensajeOnline, Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+
+        return deudaACancelar;
     }
 
-    public void pagarDeuda(Player playeDeudor, int id) {
+    public Deuda pagarDeuda(Player playeDeudor, int id) {
         Deuda deudaAPagar = getDeuda(id);
         int pixelcoinsDeuda = deudaAPagar.getPixelcoins_restantes();
-        String acredor = deudaAPagar.getAcredor();
+        java.lang.String acredor = deudaAPagar.getAcredor();
 
         transaccionesMySQL.realizarTransferenciaConEstadisticas(playeDeudor.getName(), acredor, pixelcoinsDeuda, "", TipoTransaccion.DEUDAS_PAGAR_TODADEUDA);
         borrarDeuda(id);
 
         enviarMensajeYSonido(playeDeudor, ChatColor.GOLD + "Has pagado a " + acredor + " toda la deuda: " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
 
-        String mensajeOnline = ChatColor.GOLD + playeDeudor.getName() + " ta ha pagado toda la deuda: " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC";
-        String mensajeOffline = playeDeudor.getName() + " ta ha pagado toda la deuda: " + pixelcoinsDeuda + " PC";
+        java.lang.String mensajeOnline = ChatColor.GOLD + playeDeudor.getName() + " ta ha pagado toda la deuda: " + ChatColor.GREEN + formatea.format(pixelcoinsDeuda) + " PC";
+        java.lang.String mensajeOffline = playeDeudor.getName() + " ta ha pagado toda la deuda: " + pixelcoinsDeuda + " PC";
         enviarMensaje(acredor, mensajeOnline, mensajeOffline, Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        return deudaAPagar;
     }
 
     @SneakyThrows
-    private Date formatFechaDeLaBaseDatosException (String fecha) {
+    private Date formatFechaDeLaBaseDatosException (java.lang.String fecha) {
         return dateFormater.parse(fecha);
     }
 

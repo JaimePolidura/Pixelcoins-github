@@ -1,10 +1,10 @@
 package es.serversurvival.legacy.mySQL;
 
-import es.serversurvival.legacy.mySQL.enums.TipoActivo;
+import es.serversurvival.nfs.bolsa.llamadasapi.TipoActivo;
 import es.serversurvival.legacy.mySQL.enums.TipoOfertante;
 import es.serversurvival.legacy.mySQL.enums.TipoPosicion;
 import es.serversurvival.legacy.mySQL.tablasObjetos.OfertaMercadoServer;
-import es.serversurvival.legacy.mySQL.tablasObjetos.PosicionAbierta;
+import es.serversurvival.nfs.bolsa.posicionesabiertas.mysql.PosicionAbierta;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static es.serversurvival.legacy.util.Funciones.*;
+import static es.serversurvival.nfs.utils.Funciones.*;
 import static org.bukkit.ChatColor.*;
 
 public final class OfertasMercadoServer extends MySQL{

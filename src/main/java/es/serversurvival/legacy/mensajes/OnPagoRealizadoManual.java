@@ -2,14 +2,14 @@ package es.serversurvival.legacy.mensajes;
 
 import es.jaime.EventListener;
 import es.serversurvival.legacy.mySQL.eventos.jugadores.JugadorPagoManualEvento;
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.utils.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
 
-import static es.serversurvival.legacy.util.Funciones.enviarMensaje;
+import static es.serversurvival.nfs.utils.Funciones.enviarMensaje;
 import static org.bukkit.ChatColor.*;
 
 public final class OnPagoRealizadoManual  {

@@ -4,7 +4,7 @@ import es.jaimetruman.ItemBuilder;
 import es.serversurvival.legacy.menus.Menu;
 import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
 import es.serversurvival.legacy.mySQL.tablasObjetos.OfertaMercadoServer;
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.utils.Funciones;
 import es.serversurvival.legacy.menus.inventoryFactory.InventoryCreator;
 import org.bukkit.Material;
 import org.bukkit.Sound;

@@ -1,8 +1,8 @@
 package es.serversurvival.nfs.deudas.cancelar;
 
-import es.serversurvival.legacy.main.Pixelcoin;
+import es.serversurvival.nfs.Pixelcoin;
 import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Deuda;
+import es.serversurvival.nfs.deudas.mysql.Deuda;
 import org.bukkit.entity.Player;
 
 

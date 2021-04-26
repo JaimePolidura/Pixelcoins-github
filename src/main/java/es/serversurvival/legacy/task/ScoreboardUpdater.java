@@ -2,7 +2,7 @@ package es.serversurvival.legacy.task;
 
 
 import es.serversurvival.legacy.scoreboeards.*;
-import es.serversurvival.legacy.main.Pixelcoin;
+import es.serversurvival.nfs.Pixelcoin;
 import es.serversurvival.scoreboeards.*;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;

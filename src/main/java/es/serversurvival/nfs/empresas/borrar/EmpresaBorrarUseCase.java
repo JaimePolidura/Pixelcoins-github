@@ -1,8 +1,8 @@
 package es.serversurvival.nfs.empresas.borrar;
 
-import es.serversurvival.legacy.main.Pixelcoin;
+import es.serversurvival.nfs.Pixelcoin;
 import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.nfs.empresas.mysql.Empresa;
 
 public final class EmpresaBorrarUseCase implements AllMySQLTablesInstances {
     public static final EmpresaBorrarUseCase INSTANCE = new EmpresaBorrarUseCase();

@@ -1,8 +1,8 @@
 package es.serversurvival.legacy.npc;
 
-import es.serversurvival.legacy.apiHttp.MojangAPI;
-import es.serversurvival.legacy.main.Pixelcoin;
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.utils.apiHttp.MojangAPI;
+import es.serversurvival.nfs.Pixelcoin;
+import es.serversurvival.nfs.utils.Funciones;
 import lombok.SneakyThrows;
 import net.jitse.npclib.NPCLib;
 import net.jitse.npclib.api.NPC;

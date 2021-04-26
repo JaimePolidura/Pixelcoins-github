@@ -1,6 +1,16 @@
 package es.serversurvival.legacy.mySQL;
 
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.bolsa.ordenespremarket.mysql.OrdenesPreMarket;
+import es.serversurvival.nfs.bolsa.llamadasapi.LlamadasApi;
+import es.serversurvival.nfs.utils.Funciones;
+import es.serversurvival.nfs.deudas.mysql.Deudas;
+import es.serversurvival.nfs.empleados.mysql.Empleados;
+import es.serversurvival.nfs.empresas.mysql.Empresas;
+import es.serversurvival.nfs.jugadores.mySQL.Jugadores;
+import es.serversurvival.nfs.bolsa.posicionesabiertas.mysql.PosicionesAbiertas;
+import es.serversurvival.nfs.tienda.mySQL.encantamientos.Encantamientos;
+import es.serversurvival.nfs.tienda.mySQL.ofertas.Ofertas;
+import es.serversurvival.nfs.transacciones.mySQL.Transacciones;
 import es.serversurvival.nfs.webconnection.conversacionesweb.mysql.ConversacionesWeb;
 import es.serversurvival.nfs.cuentaweb.Cuentas;
 import es.serversurvival.nfs.mensajes.mysql.Mensajes;

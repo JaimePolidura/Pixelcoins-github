@@ -1,11 +1,11 @@
 package es.serversurvival.nfs.empleados.despedir;
 
 import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Empleado;
+import es.serversurvival.nfs.empleados.mysql.Empleado;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 
-import static es.serversurvival.legacy.util.Funciones.enviarMensaje;
+import static es.serversurvival.nfs.utils.Funciones.enviarMensaje;
 
 public final class DespedirEmpleadoUseCase implements AllMySQLTablesInstances {
     public static final DespedirEmpleadoUseCase INSTANCE = new DespedirEmpleadoUseCase();

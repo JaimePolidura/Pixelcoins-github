@@ -3,7 +3,7 @@ package es.serversurvival.legacy.task;
 import es.jaimetruman.task.BukkitTimeUnit;
 import es.jaimetruman.task.Task;
 import es.jaimetruman.task.TaskRunner;
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.utils.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 

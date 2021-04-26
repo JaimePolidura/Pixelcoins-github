@@ -2,14 +2,14 @@ package es.serversurvival.legacy.mensajes;
 
 import es.jaime.EventListener;
 import es.serversurvival.nfs.empresas.comprarservicio.EmpresaServicioCompradoEvento;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Empresa;
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.empresas.mysql.Empresa;
+import es.serversurvival.nfs.utils.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
 
-import static es.serversurvival.legacy.util.Funciones.enviarMensaje;
+import static es.serversurvival.nfs.utils.Funciones.enviarMensaje;
 import static org.bukkit.ChatColor.GOLD;
 import static org.bukkit.ChatColor.GREEN;
 

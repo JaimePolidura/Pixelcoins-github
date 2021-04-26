@@ -1,15 +1,15 @@
 package es.serversurvival.legacy.scoreboeards;
 
-import es.serversurvival.legacy.mySQL.tablasObjetos.Empresa;
-import es.serversurvival.legacy.util.Funciones;
-import es.serversurvival.legacy.util.MinecraftUtils;
+import es.serversurvival.nfs.empresas.mysql.Empresa;
+import es.serversurvival.nfs.utils.Funciones;
+import es.serversurvival.nfs.utils.MinecraftUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.List;
 
-import static es.serversurvival.legacy.util.MinecraftUtils.addLineToScoreboard;
+import static es.serversurvival.nfs.utils.MinecraftUtils.addLineToScoreboard;
 
 public class StatsDisplayScoreboard implements SingleScoreboard {
 

@@ -2,8 +2,8 @@ package es.serversurvival.nfs.deudas.prestar;
 
 import es.serversurvival.legacy.mySQL.eventos.EventoTipoTransaccion;
 import es.serversurvival.legacy.mySQL.eventos.PixelcoinsEvento;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Transaccion;
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.transacciones.mySQL.Transaccion;
+import es.serversurvival.nfs.utils.Funciones;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

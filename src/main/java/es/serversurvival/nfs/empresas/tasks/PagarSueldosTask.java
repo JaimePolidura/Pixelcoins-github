@@ -3,7 +3,7 @@ package es.serversurvival.nfs.empresas.tasks;
 import es.jaimetruman.task.Task;
 import es.jaimetruman.task.TaskRunner;
 import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Empresa;
+import es.serversurvival.nfs.empresas.mysql.Empresa;
 
 import java.util.List;
 

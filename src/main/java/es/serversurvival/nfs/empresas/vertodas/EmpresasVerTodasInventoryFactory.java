@@ -1,11 +1,10 @@
 package es.serversurvival.nfs.empresas.vertodas;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Empleado;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Empresa;
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.empleados.mysql.Empleado;
+import es.serversurvival.nfs.empresas.mysql.Empresa;
+import es.serversurvival.nfs.utils.Funciones;
 import es.serversurvival.legacy.menus.inventoryFactory.InventoryFactory;
-import es.serversurvival.nfs.empresas.vertodas.EmpresasVerTodasMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;

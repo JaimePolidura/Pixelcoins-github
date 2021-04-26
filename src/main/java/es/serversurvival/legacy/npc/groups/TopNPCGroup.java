@@ -1,6 +1,6 @@
 package es.serversurvival.legacy.npc.groups;
 
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.utils.Funciones;
 import es.serversurvival.legacy.npc.NPCCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

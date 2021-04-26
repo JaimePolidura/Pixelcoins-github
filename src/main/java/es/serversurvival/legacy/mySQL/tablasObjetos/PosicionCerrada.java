@@ -1,6 +1,6 @@
 package es.serversurvival.legacy.mySQL.tablasObjetos;
 
-import es.serversurvival.legacy.mySQL.enums.TipoActivo;
+import es.serversurvival.nfs.bolsa.llamadasapi.TipoActivo;
 import es.serversurvival.legacy.mySQL.enums.TipoPosicion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

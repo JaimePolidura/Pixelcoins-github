@@ -1,6 +1,6 @@
 package es.serversurvival.legacy.mySQL.eventos.bolsa;
 
-import es.serversurvival.legacy.mySQL.tablasObjetos.Transaccion;
+import es.serversurvival.nfs.transacciones.mySQL.Transaccion;
 import es.serversurvival.legacy.mySQL.enums.TipoTransaccion;
 import es.serversurvival.legacy.mySQL.eventos.EventoTipoTransaccion;
 import es.serversurvival.legacy.mySQL.eventos.PixelcoinsEvento;

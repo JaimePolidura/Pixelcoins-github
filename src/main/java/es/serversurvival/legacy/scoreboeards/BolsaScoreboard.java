@@ -1,16 +1,16 @@
 package es.serversurvival.legacy.scoreboeards;
 
 import es.serversurvival.legacy.mySQL.enums.TipoPosicion;
-import es.serversurvival.legacy.mySQL.tablasObjetos.LlamadaApi;
-import es.serversurvival.legacy.mySQL.tablasObjetos.PosicionAbierta;
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.bolsa.llamadasapi.LlamadaApi;
+import es.serversurvival.nfs.bolsa.posicionesabiertas.mysql.PosicionAbierta;
+import es.serversurvival.nfs.utils.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.*;
 
-import static es.serversurvival.legacy.util.MinecraftUtils.*;
+import static es.serversurvival.nfs.utils.MinecraftUtils.*;
 
 public class BolsaScoreboard implements SingleScoreboard {
     private Map<String, LlamadaApi> llamadasApiMap;

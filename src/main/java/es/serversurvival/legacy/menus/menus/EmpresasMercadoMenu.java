@@ -5,7 +5,7 @@ import es.serversurvival.legacy.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.legacy.menus.inventoryFactory.inventories.EmpresasMercadoInventoryFactory;
 import es.serversurvival.legacy.menus.menus.confirmaciones.ComprarAccionesServerConfirmacion;
 import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.utils.Funciones;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;

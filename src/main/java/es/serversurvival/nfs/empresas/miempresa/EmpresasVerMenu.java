@@ -8,7 +8,7 @@ import es.serversurvival.nfs.empleados.misempleos.EmpleosMenu;
 import es.serversurvival.nfs.empresas.borrar.BorrrarEmpresaConfirmacion;
 import es.serversurvival.legacy.menus.menus.confirmaciones.PagarDividendoConfirmacion;
 import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.utils.Funciones;
 import es.serversurvival.nfs.empresas.vertodas.EmpresasVerTodasMenu;
 import es.serversurvival.nfs.jugadores.perfil.PerfilMenu;
 import org.bukkit.Bukkit;

@@ -1,7 +1,7 @@
 package es.serversurvival.legacy.scoreboeards;
 
-import es.serversurvival.legacy.util.Funciones;
-import es.serversurvival.legacy.util.MinecraftUtils;
+import es.serversurvival.nfs.utils.Funciones;
+import es.serversurvival.nfs.utils.MinecraftUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;

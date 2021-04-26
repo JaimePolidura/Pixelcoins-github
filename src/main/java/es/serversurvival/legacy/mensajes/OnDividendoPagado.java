@@ -3,7 +3,7 @@ package es.serversurvival.legacy.mensajes;
 import es.jaime.EventListener;
 import es.serversurvival.nfs.mensajes.mysql.Mensajes;
 import es.serversurvival.legacy.mySQL.eventos.bolsa.DividendoPagadoEvento;
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.utils.Funciones;
 
 import java.text.DecimalFormat;
 

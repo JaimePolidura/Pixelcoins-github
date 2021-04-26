@@ -1,6 +1,6 @@
 package es.serversurvival.legacy.mySQL.eventos.bolsa;
 
-import es.serversurvival.legacy.mySQL.enums.TipoActivo;
+import es.serversurvival.nfs.bolsa.llamadasapi.TipoActivo;
 import es.serversurvival.legacy.mySQL.eventos.EventoTipoPosicionCerrada;
 import es.serversurvival.legacy.mySQL.eventos.EventoTipoTransaccion;
 import es.serversurvival.legacy.mySQL.eventos.PixelcoinsEvento;

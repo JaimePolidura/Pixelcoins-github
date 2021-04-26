@@ -3,6 +3,7 @@ package es.serversurvival.nfs.jugadores.perfil;
 import es.serversurvival.legacy.menus.Menu;
 import es.serversurvival.legacy.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.legacy.menus.menus.*;
+import es.serversurvival.nfs.bolsa.cartera.BolsaCarteraMenu;
 import es.serversurvival.nfs.deudas.ver.DeudasMenu;
 import es.serversurvival.nfs.empleados.misempleos.EmpleosMenu;
 import es.serversurvival.nfs.empresas.vertodas.EmpresasVerTodasMenu;

@@ -1,7 +1,7 @@
 package es.serversurvival.legacy.mySQL.eventos;
 
 import es.jaime.Event;
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.utils.Funciones;
 
 /**
  * Evento base para el resto de eventos de todo el plugin

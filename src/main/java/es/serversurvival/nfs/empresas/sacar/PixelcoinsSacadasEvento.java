@@ -2,9 +2,9 @@ package es.serversurvival.nfs.empresas.sacar;
 
 import es.serversurvival.legacy.mySQL.eventos.EventoTipoTransaccion;
 import es.serversurvival.legacy.mySQL.eventos.PixelcoinsEvento;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Empresa;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Jugador;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Transaccion;
+import es.serversurvival.nfs.empresas.mysql.Empresa;
+import es.serversurvival.nfs.jugadores.mySQL.Jugador;
+import es.serversurvival.nfs.transacciones.mySQL.Transaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

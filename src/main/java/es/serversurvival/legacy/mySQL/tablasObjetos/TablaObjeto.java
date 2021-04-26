@@ -1,6 +1,6 @@
 package es.serversurvival.legacy.mySQL.tablasObjetos;
 
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.utils.Funciones;
 
 import java.text.DecimalFormat;
 

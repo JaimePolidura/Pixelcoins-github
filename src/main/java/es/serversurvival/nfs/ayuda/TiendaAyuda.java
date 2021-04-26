@@ -2,7 +2,7 @@ package es.serversurvival.nfs.ayuda;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.legacy.mySQL.Ofertas;
+import es.serversurvival.nfs.tienda.mySQL.ofertas.Ofertas;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 

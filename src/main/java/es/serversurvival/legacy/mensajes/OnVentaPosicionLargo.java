@@ -2,14 +2,14 @@ package es.serversurvival.legacy.mensajes;
 
 import es.jaime.EventListener;
 import es.serversurvival.legacy.mySQL.eventos.bolsa.PosicionVentaLargoEvento;
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.utils.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 
 import java.text.DecimalFormat;
 
-import static es.serversurvival.legacy.util.Funciones.enviarMensajeYSonido;
-import static es.serversurvival.legacy.util.Funciones.redondeoDecimales;
+import static es.serversurvival.nfs.utils.Funciones.enviarMensajeYSonido;
+import static es.serversurvival.nfs.utils.Funciones.redondeoDecimales;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.GOLD;
 

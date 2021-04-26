@@ -1,9 +1,9 @@
 package es.serversurvival.nfs.empresas.depositar;
 
-import es.serversurvival.legacy.main.Pixelcoin;
+import es.serversurvival.nfs.Pixelcoin;
 import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Empresa;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Jugador;
+import es.serversurvival.nfs.empresas.mysql.Empresa;
+import es.serversurvival.nfs.jugadores.mySQL.Jugador;
 
 public final class DepositarPixelcoinsUseCase implements AllMySQLTablesInstances {
     public static final DepositarPixelcoinsUseCase INSTANCE = new DepositarPixelcoinsUseCase();

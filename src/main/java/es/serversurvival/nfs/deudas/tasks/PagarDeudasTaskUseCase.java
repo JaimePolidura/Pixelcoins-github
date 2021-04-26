@@ -1,11 +1,11 @@
 package es.serversurvival.nfs.deudas.tasks;
 
-import es.serversurvival.legacy.main.Pixelcoin;
+import es.serversurvival.nfs.Pixelcoin;
 import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.legacy.mySQL.Jugadores;
+import es.serversurvival.nfs.jugadores.mySQL.Jugadores;
 import es.serversurvival.legacy.mySQL.enums.TipoTransaccion;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Deuda;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Jugador;
+import es.serversurvival.nfs.deudas.mysql.Deuda;
+import es.serversurvival.nfs.jugadores.mySQL.Jugador;
 import lombok.SneakyThrows;
 
 import java.util.Date;

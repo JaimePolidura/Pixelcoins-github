@@ -2,8 +2,7 @@ package es.serversurvival.nfs.empresas.borrar;
 
 import es.serversurvival.legacy.menus.Menu;
 import es.serversurvival.legacy.menus.menus.confirmaciones.Confirmacion;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.utils.Funciones;
 import es.serversurvival.legacy.menus.inventoryFactory.InventoryCreator;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;

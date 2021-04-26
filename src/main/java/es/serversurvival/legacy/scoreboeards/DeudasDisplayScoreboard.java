@@ -1,11 +1,11 @@
 package es.serversurvival.legacy.scoreboeards;
 
-import es.serversurvival.legacy.mySQL.tablasObjetos.Jugador;
+import es.serversurvival.nfs.jugadores.mySQL.Jugador;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
-import static es.serversurvival.legacy.util.MinecraftUtils.*;
+import static es.serversurvival.nfs.utils.MinecraftUtils.*;
 
 public class DeudasDisplayScoreboard implements SingleScoreboard {
     @Override

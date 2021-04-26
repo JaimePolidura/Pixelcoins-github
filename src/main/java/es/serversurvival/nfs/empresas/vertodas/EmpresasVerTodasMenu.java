@@ -5,7 +5,7 @@ import es.serversurvival.legacy.menus.inventoryFactory.InventoryCreator;
 import es.serversurvival.legacy.menus.menus.CanGoBack;
 import es.serversurvival.legacy.menus.menus.Clickable;
 import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.utils.Funciones;
 import es.serversurvival.nfs.empresas.miempresa.EmpresasVerMenu;
 import es.serversurvival.nfs.jugadores.perfil.PerfilMenu;
 import org.bukkit.ChatColor;

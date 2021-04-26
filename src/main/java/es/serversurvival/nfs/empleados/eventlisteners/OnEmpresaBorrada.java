@@ -2,13 +2,13 @@ package es.serversurvival.nfs.empleados.eventlisteners;
 
 import es.jaime.EventListener;
 import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.legacy.mySQL.tablasObjetos.Empleado;
+import es.serversurvival.nfs.empleados.mysql.Empleado;
 import es.serversurvival.nfs.empresas.borrar.EmpresaBorradaEvento;
 import org.bukkit.ChatColor;
 
 import java.util.List;
 
-import static es.serversurvival.legacy.util.Funciones.enviarMensaje;
+import static es.serversurvival.nfs.utils.Funciones.enviarMensaje;
 
 public final class OnEmpresaBorrada implements AllMySQLTablesInstances {
     @EventListener

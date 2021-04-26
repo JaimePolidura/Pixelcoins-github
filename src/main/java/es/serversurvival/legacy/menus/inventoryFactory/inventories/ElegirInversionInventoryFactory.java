@@ -2,7 +2,7 @@ package es.serversurvival.legacy.menus.inventoryFactory.inventories;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival.legacy.menus.inventoryFactory.InventoryFactory;
-import es.serversurvival.legacy.menus.menus.ElegirInversionMenu;
+import es.serversurvival.nfs.bolsa.valores.ElegirInversionMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

@@ -1,6 +1,6 @@
 package es.serversurvival.legacy.eventos;
 
-import es.serversurvival.legacy.mySQL.Jugadores;
+import es.serversurvival.nfs.jugadores.mySQL.Jugadores;
 import es.serversurvival.nfs.mensajes.mysql.Mensajes;
 import es.serversurvival.legacy.npc.NPCManager;
 import org.bukkit.ChatColor;

@@ -1,7 +1,7 @@
 package es.serversurvival.legacy.mySQL;
 
 import es.jaime.EventListener;
-import es.serversurvival.legacy.mySQL.enums.TipoActivo;
+import es.serversurvival.nfs.bolsa.llamadasapi.TipoActivo;
 import es.serversurvival.legacy.mySQL.enums.TipoPosicion;
 import es.serversurvival.legacy.mySQL.eventos.bolsa.PosicionCerradaEvento;
 import es.serversurvival.legacy.mySQL.tablasObjetos.PosicionCerrada;

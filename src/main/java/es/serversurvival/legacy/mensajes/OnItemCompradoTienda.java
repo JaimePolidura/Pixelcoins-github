@@ -2,15 +2,15 @@ package es.serversurvival.legacy.mensajes;
 
 import es.jaime.EventListener;
 import es.serversurvival.legacy.mySQL.eventos.tienda.ItemCompradoEvento;
-import es.serversurvival.legacy.util.Funciones;
+import es.serversurvival.nfs.utils.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
 
-import static es.serversurvival.legacy.util.Funciones.enviarMensajeYSonido;
-import static es.serversurvival.legacy.util.Funciones.enviarMensajeYSonidoSiOnline;
+import static es.serversurvival.nfs.utils.Funciones.enviarMensajeYSonido;
+import static es.serversurvival.nfs.utils.Funciones.enviarMensajeYSonidoSiOnline;
 import static org.bukkit.ChatColor.GOLD;
 import static org.bukkit.ChatColor.GREEN;
 
