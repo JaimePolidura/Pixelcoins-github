@@ -1,11 +1,11 @@
 package es.serversurvival.nfs.bolsa.posicionesabiertas.vendercorto;
 
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.legacy.mySQL.eventos.bolsa.PosicionVentaCortoEvento;
 import es.serversurvival.nfs.Pixelcoin;
 
-import static es.serversurvival.legacy.mySQL.enums.TipoPosicion.*;
-import static es.serversurvival.nfs.bolsa.llamadasapi.TipoActivo.*;
+import static es.serversurvival.nfs.bolsa.posicionescerradas.mysql.TipoPosicion.*;
+import static es.serversurvival.nfs.bolsa.llamadasapi.mysql.TipoActivo.*;
 import static es.serversurvival.nfs.bolsa.posicionesabiertas.mysql.PosicionesAbiertas.*;
 import static es.serversurvival.nfs.utils.Funciones.redondeoDecimales;
 import static es.serversurvival.nfs.utils.Funciones.reducirPorcentaje;

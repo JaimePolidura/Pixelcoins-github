@@ -1,7 +1,7 @@
 package es.serversurvival.nfs.empleados.eventlisteners;
 
 import es.jaime.EventListener;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.nfs.empleados.mysql.Empleado;
 import es.serversurvival.nfs.empresas.borrar.EmpresaBorradaEvento;
 import org.bukkit.ChatColor;

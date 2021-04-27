@@ -1,9 +1,9 @@
 package es.serversurvival.nfs.empresas.borrar;
 
-import es.serversurvival.legacy.menus.Menu;
-import es.serversurvival.legacy.menus.menus.confirmaciones.Confirmacion;
+import es.serversurvival.nfs.shared.menus.Menu;
+import es.serversurvival.nfs.shared.menus.confirmaciones.Confirmacion;
 import es.serversurvival.nfs.utils.Funciones;
-import es.serversurvival.legacy.menus.inventoryFactory.InventoryCreator;
+import es.serversurvival.nfs.shared.menus.inventory.InventoryCreator;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

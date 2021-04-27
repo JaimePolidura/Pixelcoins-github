@@ -1,6 +1,6 @@
 package es.serversurvival.nfs.empresas.tasks;
 
-import es.serversurvival.legacy.mySQL.eventos.PixelcoinsEvento;
+import es.serversurvival.nfs.shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.nfs.empresas.mysql.Empresa;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,8 +1,8 @@
 package es.serversurvival.nfs.jugadores.perfil;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival.legacy.menus.inventoryFactory.InventoryFactory;
-import es.serversurvival.legacy.mySQL.tablasObjetos.*;
+import es.serversurvival.nfs.shared.menus.inventory.InventoryFactory;
+import es.serversurvival.nfs.bolsa.posicionescerradas.mysql.PosicionCerrada;
 import es.serversurvival.nfs.utils.Funciones;
 import es.serversurvival.nfs.cuentaweb.Cuenta;
 import es.serversurvival.nfs.deudas.mysql.Deuda;

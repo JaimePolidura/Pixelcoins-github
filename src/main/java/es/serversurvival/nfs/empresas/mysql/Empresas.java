@@ -3,7 +3,7 @@ package es.serversurvival.nfs.empresas.mysql;
 import java.sql.*;
 import java.util.*;
 
-import es.serversurvival.legacy.mySQL.MySQL;
+import es.serversurvival.nfs.shared.mysql.MySQL;
 import es.serversurvival.nfs.empresas.borrar.EmpresaBorradaEvento;
 import es.serversurvival.nfs.empleados.mysql.Empleado;
 import es.serversurvival.nfs.jugadores.mySQL.Jugador;

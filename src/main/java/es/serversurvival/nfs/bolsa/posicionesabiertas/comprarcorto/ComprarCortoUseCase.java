@@ -1,9 +1,9 @@
 package es.serversurvival.nfs.bolsa.posicionesabiertas.comprarcorto;
 
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.legacy.mySQL.eventos.bolsa.PosicionCompraCortoEvento;
 import es.serversurvival.nfs.Pixelcoin;
-import es.serversurvival.nfs.bolsa.llamadasapi.TipoActivo;
+import es.serversurvival.nfs.bolsa.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.nfs.bolsa.posicionesabiertas.mysql.PosicionAbierta;
 
 import static es.serversurvival.nfs.utils.Funciones.diferenciaPorcntual;

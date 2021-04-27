@@ -1,7 +1,7 @@
 package es.serversurvival.nfs.bolsa.ordenespremarket.mysql;
 
-import es.serversurvival.legacy.mySQL.MySQL;
-import es.serversurvival.nfs.bolsa.llamadasapi.TipoActivo;
+import es.serversurvival.nfs.shared.mysql.MySQL;
+import es.serversurvival.nfs.bolsa.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.nfs.jugadores.mySQL.Jugador;
 import es.serversurvival.nfs.bolsa.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.nfs.bolsa.posicionesabiertas.mysql.PosicionesAbiertas;

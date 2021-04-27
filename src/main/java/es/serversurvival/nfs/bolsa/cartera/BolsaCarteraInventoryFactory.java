@@ -2,12 +2,12 @@ package es.serversurvival.nfs.bolsa.cartera;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival.nfs.bolsa.posicionesabiertas.mysql.PosicionesAbiertas;
-import es.serversurvival.legacy.mySQL.enums.TipoPosicion;
-import es.serversurvival.nfs.bolsa.llamadasapi.LlamadaApi;
+import es.serversurvival.nfs.bolsa.posicionescerradas.mysql.TipoPosicion;
+import es.serversurvival.nfs.bolsa.llamadasapi.mysql.LlamadaApi;
 import es.serversurvival.nfs.bolsa.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.nfs.utils.Funciones;
-import es.serversurvival.legacy.menus.menus.Paginated;
-import es.serversurvival.legacy.menus.inventoryFactory.InventoryFactory;
+import es.serversurvival.nfs.shared.menus.Paginated;
+import es.serversurvival.nfs.shared.menus.inventory.InventoryFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;

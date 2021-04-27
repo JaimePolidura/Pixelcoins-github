@@ -1,7 +1,7 @@
 package es.serversurvival.nfs.deudas.ver;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival.legacy.menus.inventoryFactory.InventoryFactory;
+import es.serversurvival.nfs.shared.menus.inventory.InventoryFactory;
 import es.serversurvival.nfs.deudas.mysql.Deuda;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

@@ -1,14 +1,14 @@
 package es.serversurvival.nfs.bolsa.valores;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival.legacy.menus.Menu;
-import es.serversurvival.legacy.menus.menus.confirmaciones.AumentoConfirmacion;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.nfs.bolsa.llamadasapi.TipoActivo;
+import es.serversurvival.nfs.shared.menus.Menu;
+import es.serversurvival.nfs.shared.menus.AumentoConfirmacion;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival.nfs.bolsa.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.nfs.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
 import es.serversurvival.nfs.bolsa.posicionesabiertas.comprarlargo.AbrirPosicionLargoUseCase;
 import es.serversurvival.nfs.utils.Funciones;
-import es.serversurvival.legacy.menus.inventoryFactory.InventoryCreator;
+import es.serversurvival.nfs.shared.menus.inventory.InventoryCreator;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;

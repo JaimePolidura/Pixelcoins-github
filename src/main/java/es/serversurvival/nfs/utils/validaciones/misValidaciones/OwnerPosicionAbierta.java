@@ -1,7 +1,7 @@
 package es.serversurvival.nfs.utils.validaciones.misValidaciones;
 
 import es.serversurvival.nfs.bolsa.posicionesabiertas.mysql.PosicionesAbiertas;
-import es.serversurvival.legacy.mySQL.enums.TipoPosicion;
+import es.serversurvival.nfs.bolsa.posicionescerradas.mysql.TipoPosicion;
 import main.ValidationResult;
 import main.validators.Validator;
 

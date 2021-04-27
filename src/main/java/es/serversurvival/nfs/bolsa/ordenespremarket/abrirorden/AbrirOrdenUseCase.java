@@ -1,6 +1,6 @@
 package es.serversurvival.nfs.bolsa.ordenespremarket.abrirorden;
 
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.nfs.bolsa.ordenespremarket.mysql.AccionOrden;
 
 public final class AbrirOrdenUseCase implements AllMySQLTablesInstances {

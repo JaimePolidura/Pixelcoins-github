@@ -1,13 +1,14 @@
 package es.serversurvival.legacy.mySQL.eventos.bolsa;
 
-import es.serversurvival.nfs.bolsa.llamadasapi.TipoActivo;
-import es.serversurvival.legacy.mySQL.tablasObjetos.PosicionCerrada;
+import es.serversurvival.nfs.bolsa.llamadasapi.mysql.TipoActivo;
+import es.serversurvival.nfs.bolsa.posicionescerradas.mysql.PosicionCerrada;
+import es.serversurvival.nfs.shared.eventospixelcoins.PosicionCerradaEvento;
 import es.serversurvival.nfs.transacciones.mySQL.Transaccion;
 
-import static es.serversurvival.legacy.mySQL.enums.TipoPosicion.CORTO;
-import static es.serversurvival.legacy.mySQL.enums.TipoTransaccion.*;
+import static es.serversurvival.nfs.bolsa.posicionescerradas.mysql.TipoPosicion.CORTO;
+import static es.serversurvival.nfs.transacciones.mySQL.TipoTransaccion.*;
 
-public final class PosicionCompraCortoEvento extends PosicionCerradaEvento{
+public final class PosicionCompraCortoEvento extends PosicionCerradaEvento {
     protected final double revalorizacionTotal;
 
     public PosicionCompraCortoEvento(String vendedor, String ticker, String nombreValor, double precioApertura, String fechaApertura,

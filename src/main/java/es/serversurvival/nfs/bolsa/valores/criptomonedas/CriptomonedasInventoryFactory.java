@@ -1,7 +1,7 @@
 package es.serversurvival.nfs.bolsa.valores.criptomonedas;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival.legacy.menus.inventoryFactory.InventoryFactory;
+import es.serversurvival.nfs.shared.menus.inventory.InventoryFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

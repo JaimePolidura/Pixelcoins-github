@@ -2,9 +2,9 @@ package es.serversurvival.nfs.bolsa.venderlargo;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.legacy.comandos.PixelcoinCommand;
-import es.serversurvival.nfs.bolsa.llamadasapi.TipoActivo;
-import es.serversurvival.legacy.mySQL.enums.TipoPosicion;
+import es.serversurvival.nfs.shared.comandos.PixelcoinCommand;
+import es.serversurvival.nfs.bolsa.llamadasapi.mysql.TipoActivo;
+import es.serversurvival.nfs.bolsa.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.nfs.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
 import es.serversurvival.nfs.bolsa.posicionesabiertas.venderlargo.CerrarPosicionUseCase;
 import es.serversurvival.nfs.bolsa.posicionesabiertas.mysql.PosicionAbierta;

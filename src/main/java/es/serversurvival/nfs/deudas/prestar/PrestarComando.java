@@ -2,8 +2,8 @@ package es.serversurvival.nfs.deudas.prestar;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.legacy.comandos.PixelcoinCommand;
-import es.serversurvival.legacy.menus.MenuManager;
+import es.serversurvival.nfs.shared.comandos.PixelcoinCommand;
+import es.serversurvival.nfs.shared.menus.MenuManager;
 import es.serversurvival.nfs.utils.Funciones;
 import es.serversurvival.nfs.utils.validaciones.Validaciones;
 import main.ValidationResult;

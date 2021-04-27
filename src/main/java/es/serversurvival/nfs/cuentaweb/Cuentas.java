@@ -1,7 +1,7 @@
 package es.serversurvival.nfs.cuentaweb;
 
 
-import es.serversurvival.legacy.mySQL.MySQL;
+import es.serversurvival.nfs.shared.mysql.MySQL;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

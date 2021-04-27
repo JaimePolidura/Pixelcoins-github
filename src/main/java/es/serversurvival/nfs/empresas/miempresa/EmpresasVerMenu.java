@@ -1,13 +1,11 @@
 package es.serversurvival.nfs.empresas.miempresa;
 
-import es.serversurvival.legacy.menus.Menu;
-import es.serversurvival.legacy.menus.MenuManager;
-import es.serversurvival.legacy.menus.inventoryFactory.InventoryCreator;
-import es.serversurvival.legacy.menus.menus.*;
+import es.serversurvival.nfs.shared.menus.*;
+import es.serversurvival.nfs.shared.menus.inventory.InventoryCreator;
 import es.serversurvival.nfs.empleados.misempleos.EmpleosMenu;
 import es.serversurvival.nfs.empresas.borrar.BorrrarEmpresaConfirmacion;
-import es.serversurvival.legacy.menus.menus.confirmaciones.PagarDividendoConfirmacion;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.nfs.empresas.pagardividendos.PagarDividendoConfirmacion;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.nfs.utils.Funciones;
 import es.serversurvival.nfs.empresas.vertodas.EmpresasVerTodasMenu;
 import es.serversurvival.nfs.jugadores.perfil.PerfilMenu;

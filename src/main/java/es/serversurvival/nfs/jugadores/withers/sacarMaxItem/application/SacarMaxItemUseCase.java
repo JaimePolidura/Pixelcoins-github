@@ -1,8 +1,8 @@
 package es.serversurvival.nfs.jugadores.withers.sacarMaxItem.application;
 
 import es.serversurvival.nfs.Pixelcoin;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.legacy.mySQL.enums.CambioPixelcoins;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival.nfs.jugadores.withers.CambioPixelcoins;
 import es.serversurvival.legacy.mySQL.eventos.withers.ItemSacadoMaxEvento;
 import es.serversurvival.nfs.jugadores.mySQL.Jugador;
 import org.bukkit.Bukkit;
@@ -11,8 +11,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import static es.serversurvival.legacy.mySQL.enums.CambioPixelcoins.*;
-import static es.serversurvival.legacy.mySQL.enums.CambioPixelcoins.CUARZO;
+import static es.serversurvival.nfs.jugadores.withers.CambioPixelcoins.*;
+import static es.serversurvival.nfs.jugadores.withers.CambioPixelcoins.CUARZO;
 import static es.serversurvival.nfs.utils.Funciones.getEspaciosOcupados;
 import static es.serversurvival.nfs.utils.Funciones.slotsItem;
 

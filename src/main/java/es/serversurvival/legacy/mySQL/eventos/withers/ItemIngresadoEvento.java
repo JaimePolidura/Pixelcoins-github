@@ -1,8 +1,8 @@
 package es.serversurvival.legacy.mySQL.eventos.withers;
 
-import es.serversurvival.legacy.mySQL.enums.TipoTransaccion;
-import es.serversurvival.legacy.mySQL.eventos.EventoTipoTransaccion;
-import es.serversurvival.legacy.mySQL.eventos.PixelcoinsEvento;
+import es.serversurvival.nfs.transacciones.mySQL.TipoTransaccion;
+import es.serversurvival.nfs.shared.eventospixelcoins.EventoTipoTransaccion;
+import es.serversurvival.nfs.shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.nfs.jugadores.mySQL.Jugador;
 import es.serversurvival.nfs.transacciones.mySQL.Transaccion;
 import lombok.AllArgsConstructor;

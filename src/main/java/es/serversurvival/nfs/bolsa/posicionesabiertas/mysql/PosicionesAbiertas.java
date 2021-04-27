@@ -1,9 +1,9 @@
 package es.serversurvival.nfs.bolsa.posicionesabiertas.mysql;
 
-import es.serversurvival.legacy.mySQL.MySQL;
-import es.serversurvival.nfs.bolsa.llamadasapi.TipoActivo;
-import es.serversurvival.legacy.mySQL.enums.TipoPosicion;
-import es.serversurvival.nfs.bolsa.llamadasapi.LlamadaApi;
+import es.serversurvival.nfs.shared.mysql.MySQL;
+import es.serversurvival.nfs.bolsa.llamadasapi.mysql.TipoActivo;
+import es.serversurvival.nfs.bolsa.posicionescerradas.mysql.TipoPosicion;
+import es.serversurvival.nfs.bolsa.llamadasapi.mysql.LlamadaApi;
 import es.serversurvival.nfs.utils.apiHttp.IEXCloud_API;
 import es.serversurvival.nfs.utils.Funciones;
 import lombok.SneakyThrows;

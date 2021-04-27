@@ -1,7 +1,6 @@
 package es.serversurvival.nfs.empleados.mysql;
 
-import es.serversurvival.legacy.mySQL.enums.TipoSueldo;
-import es.serversurvival.legacy.mySQL.tablasObjetos.TablaObjeto;
+import es.serversurvival.nfs.shared.mysql.TablaObjeto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

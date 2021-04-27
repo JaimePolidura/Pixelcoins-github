@@ -1,13 +1,12 @@
 package es.serversurvival.nfs.deudas.ver;
 
-import es.serversurvival.legacy.menus.Menu;
-import es.serversurvival.legacy.menus.MenuManager;
-import es.serversurvival.legacy.menus.inventoryFactory.InventoryCreator;
-import es.serversurvival.legacy.menus.inventoryFactory.inventories.DeudasInventoryFactory;
-import es.serversurvival.legacy.menus.menus.CanGoBack;
-import es.serversurvival.legacy.menus.menus.Clickable;
-import es.serversurvival.legacy.menus.menus.Refreshcable;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.nfs.shared.menus.Menu;
+import es.serversurvival.nfs.shared.menus.MenuManager;
+import es.serversurvival.nfs.shared.menus.inventory.InventoryCreator;
+import es.serversurvival.nfs.shared.menus.CanGoBack;
+import es.serversurvival.nfs.shared.menus.Clickable;
+import es.serversurvival.nfs.shared.menus.Refreshcable;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.nfs.deudas.mysql.Deuda;
 import es.serversurvival.nfs.utils.Funciones;
 import es.serversurvival.nfs.jugadores.perfil.PerfilMenu;

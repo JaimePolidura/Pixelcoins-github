@@ -1,7 +1,7 @@
 package es.serversurvival.nfs.empresas.crear;
 
 import es.serversurvival.nfs.Pixelcoin;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
 
 public final class CrearEmpresaUseCase implements AllMySQLTablesInstances {
     public static final CrearEmpresaUseCase INSTANCE = new CrearEmpresaUseCase();

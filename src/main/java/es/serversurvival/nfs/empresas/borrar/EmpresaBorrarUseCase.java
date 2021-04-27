@@ -1,7 +1,7 @@
 package es.serversurvival.nfs.empresas.borrar;
 
 import es.serversurvival.nfs.Pixelcoin;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.nfs.empresas.mysql.Empresa;
 
 public final class EmpresaBorrarUseCase implements AllMySQLTablesInstances {

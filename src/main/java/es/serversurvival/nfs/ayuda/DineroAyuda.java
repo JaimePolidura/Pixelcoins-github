@@ -2,7 +2,7 @@ package es.serversurvival.nfs.ayuda;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.legacy.mySQL.enums.CambioPixelcoins;
+import es.serversurvival.nfs.jugadores.withers.CambioPixelcoins;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 

@@ -1,10 +1,10 @@
 package es.serversurvival.nfs.empleados.contratar;
 
-import es.serversurvival.legacy.menus.Menu;
-import es.serversurvival.legacy.menus.MenuManager;
-import es.serversurvival.legacy.menus.inventoryFactory.InventoryCreator;
-import es.serversurvival.legacy.menus.menus.solicitudes.Solicitud;
-import es.serversurvival.legacy.mySQL.enums.TipoSueldo;
+import es.serversurvival.nfs.shared.menus.Menu;
+import es.serversurvival.nfs.shared.menus.MenuManager;
+import es.serversurvival.nfs.shared.menus.inventory.InventoryCreator;
+import es.serversurvival.nfs.shared.menus.solicitudes.Solicitud;
+import es.serversurvival.nfs.empleados.mysql.TipoSueldo;
 import es.serversurvival.nfs.utils.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

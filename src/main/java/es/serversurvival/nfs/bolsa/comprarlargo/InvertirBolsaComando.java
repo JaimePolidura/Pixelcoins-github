@@ -2,8 +2,8 @@ package es.serversurvival.nfs.bolsa.comprarlargo;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.legacy.comandos.PixelcoinCommand;
-import es.serversurvival.nfs.bolsa.llamadasapi.TipoActivo;
+import es.serversurvival.nfs.shared.comandos.PixelcoinCommand;
+import es.serversurvival.nfs.bolsa.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.nfs.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
 import es.serversurvival.nfs.bolsa.posicionesabiertas.comprarlargo.AbrirPosicionLargoUseCase;
 import es.serversurvival.nfs.utils.Funciones;

@@ -1,8 +1,8 @@
 package es.serversurvival.nfs.bolsa.posicionesabiertas.mysql;
 
-import es.serversurvival.legacy.mySQL.enums.TipoPosicion;
-import es.serversurvival.nfs.bolsa.llamadasapi.TipoActivo;
-import es.serversurvival.legacy.mySQL.tablasObjetos.TablaObjeto;
+import es.serversurvival.nfs.bolsa.posicionescerradas.mysql.TipoPosicion;
+import es.serversurvival.nfs.bolsa.llamadasapi.mysql.TipoActivo;
+import es.serversurvival.nfs.shared.mysql.TablaObjeto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

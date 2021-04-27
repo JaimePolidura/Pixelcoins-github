@@ -2,8 +2,7 @@ package es.serversurvival.nfs.mensajes.ver;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.legacy.comandos.PixelcoinCommand;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.nfs.shared.comandos.PixelcoinCommand;
 import es.serversurvival.nfs.mensajes.mysql.Mensaje;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

@@ -5,11 +5,11 @@ import es.jaime.EventBus;
 import es.jaime.impl.EventBusSynch;
 import es.jaimetruman.Mapper;
 import es.jaimetruman.task.BukkitTimeUnit;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.legacy.mySQL.MySQL;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival.nfs.shared.mysql.MySQL;
 import es.serversurvival.nfs.webconnection.RabbitMQConsumerTask;
-import es.serversurvival.legacy.task.ScoreBoardManager;
-import es.serversurvival.legacy.task.ScoreboardUpdater;
+import es.serversurvival.nfs.shared.scoreboards.ScoreBoardManager;
+import es.serversurvival.nfs.shared.scoreboards.ScoreboardUpdateTask;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,7 +20,7 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
     private static Pixelcoin plugin;
     private final ScoreBoardManager scoreBoardManager;
     private final EventBus eventBus;
-    private ScoreboardUpdater updater;
+    private ScoreboardUpdateTask updater;
 
     public Pixelcoin () {
         plugin = this;
@@ -41,7 +41,7 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
         return plugin.scoreBoardManager;
     }
 
-    public static ScoreboardUpdater scoreboardUpdater() {
+    public static ScoreboardUpdateTask scoreboardUpdater() {
         return plugin.updater;
     }
 
@@ -67,7 +67,7 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
     }
 
     private void setUpScoreboardUpdater () {
-        ScoreboardUpdater updater = new ScoreboardUpdater();
+        ScoreboardUpdateTask updater = new ScoreboardUpdateTask();
         updater.runTaskTimer(this, BukkitTimeUnit.MINUTE, BukkitTimeUnit.MINUTE);
 
         this.updater = updater;

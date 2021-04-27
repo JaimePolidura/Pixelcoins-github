@@ -1,6 +1,6 @@
 package es.serversurvival.nfs.webconnection.conversacionesweb.mysql;
 
-import es.serversurvival.legacy.mySQL.MySQL;
+import es.serversurvival.nfs.shared.mysql.MySQL;
 import es.serversurvival.nfs.webconnection.ServerSocketWeb;
 import es.serversurvival.nfs.webconnection.socketmessages.SocketMessagge;
 import org.bukkit.ChatColor;

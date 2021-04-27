@@ -2,7 +2,7 @@ package es.serversurvival.nfs.bolsa.vercarterajugador;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.legacy.comandos.PixelcoinCommand;
+import es.serversurvival.nfs.shared.comandos.PixelcoinCommand;
 import es.serversurvival.nfs.bolsa.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.nfs.utils.Funciones;
 import org.bukkit.ChatColor;

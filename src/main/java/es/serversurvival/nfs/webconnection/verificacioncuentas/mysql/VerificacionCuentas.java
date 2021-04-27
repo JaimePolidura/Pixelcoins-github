@@ -1,6 +1,6 @@
 package es.serversurvival.nfs.webconnection.verificacioncuentas.mysql;
 
-import es.serversurvival.legacy.mySQL.MySQL;
+import es.serversurvival.nfs.shared.mysql.MySQL;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

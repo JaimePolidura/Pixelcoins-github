@@ -1,14 +1,15 @@
 package es.serversurvival.legacy.mySQL.eventos.bolsa;
 
-import es.serversurvival.nfs.bolsa.llamadasapi.TipoActivo;
-import es.serversurvival.legacy.mySQL.enums.TipoTransaccion;
-import es.serversurvival.legacy.mySQL.tablasObjetos.PosicionCerrada;
+import es.serversurvival.nfs.bolsa.llamadasapi.mysql.TipoActivo;
+import es.serversurvival.nfs.shared.eventospixelcoins.PosicionCerradaEvento;
+import es.serversurvival.nfs.transacciones.mySQL.TipoTransaccion;
+import es.serversurvival.nfs.bolsa.posicionescerradas.mysql.PosicionCerrada;
 import es.serversurvival.nfs.transacciones.mySQL.Transaccion;
 import lombok.Getter;
 
-import static es.serversurvival.legacy.mySQL.enums.TipoPosicion.*;
+import static es.serversurvival.nfs.bolsa.posicionescerradas.mysql.TipoPosicion.*;
 
-public final class PosicionVentaLargoEvento extends PosicionCerradaEvento{
+public final class PosicionVentaLargoEvento extends PosicionCerradaEvento {
     @Getter private final double valorTotal;
     @Getter private final double resultado;
 

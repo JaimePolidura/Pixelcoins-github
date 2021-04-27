@@ -1,7 +1,7 @@
 package es.serversurvival.nfs.empresas.editarnombre;
 
 import es.serversurvival.nfs.Pixelcoin;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
 
 public final class EditarNombreUseCase implements AllMySQLTablesInstances {
     public static final EditarNombreUseCase INSTANCE = new EditarNombreUseCase();

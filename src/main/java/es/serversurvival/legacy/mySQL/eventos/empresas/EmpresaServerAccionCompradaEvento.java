@@ -1,10 +1,9 @@
 package es.serversurvival.legacy.mySQL.eventos.empresas;
 
-import es.serversurvival.legacy.mySQL.enums.TipoTransaccion;
-import es.serversurvival.legacy.mySQL.eventos.EventoTipoTransaccion;
-import es.serversurvival.legacy.mySQL.eventos.PixelcoinsEvento;
-import es.serversurvival.nfs.empresas.mysql.Empresa;
-import es.serversurvival.legacy.mySQL.tablasObjetos.OfertaMercadoServer;
+import es.serversurvival.nfs.transacciones.mySQL.TipoTransaccion;
+import es.serversurvival.nfs.shared.eventospixelcoins.EventoTipoTransaccion;
+import es.serversurvival.nfs.shared.eventospixelcoins.PixelcoinsEvento;
+import es.serversurvival.nfs.bolsa.ofertasmercadoserver.mysql.OfertaMercadoServer;
 import es.serversurvival.nfs.transacciones.mySQL.Transaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,10 +14,10 @@ public final class EmpresaServerAccionCompradaEvento extends PixelcoinsEvento im
     @Getter private final double pixelcoins;
     @Getter private final int cantidad;
     @Getter private final OfertaMercadoServer oferta;
-    @Getter private final Empresa empresa;
+    @Getter private final String empresaNombre;
 
     @Override
     public Transaccion buildTransaccion() {
-        return new Transaccion(-1, formatFecha(), jugador, empresa.getNombre(), (int) pixelcoins, "", TipoTransaccion.EMPRESA_COMPRA_ACCION_JUGADOR);
+        return new Transaccion(-1, formatFecha(), jugador, empresaNombre, (int) pixelcoins, "", TipoTransaccion.EMPRESA_COMPRA_ACCION_JUGADOR);
     }
 }

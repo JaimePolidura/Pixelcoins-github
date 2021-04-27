@@ -2,8 +2,8 @@ package es.serversurvival.nfs.bolsa.estadisticas;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.legacy.comandos.PixelcoinCommand;
-import es.serversurvival.legacy.mySQL.tablasObjetos.PosicionCerrada;
+import es.serversurvival.nfs.shared.comandos.PixelcoinCommand;
+import es.serversurvival.nfs.bolsa.posicionescerradas.mysql.PosicionCerrada;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 

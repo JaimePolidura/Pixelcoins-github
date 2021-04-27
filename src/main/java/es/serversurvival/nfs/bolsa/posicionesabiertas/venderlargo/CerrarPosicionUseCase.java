@@ -1,6 +1,6 @@
 package es.serversurvival.nfs.bolsa.posicionesabiertas.venderlargo;
 
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.legacy.mySQL.eventos.bolsa.PosicionVentaLargoEvento;
 import es.serversurvival.nfs.Pixelcoin;
 import es.serversurvival.nfs.bolsa.posicionesabiertas.mysql.PosicionAbierta;

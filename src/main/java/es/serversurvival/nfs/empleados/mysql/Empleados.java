@@ -4,8 +4,7 @@ import java.sql.*;
 import java.util.*;
 import java.util.Date;
 
-import es.serversurvival.legacy.mySQL.MySQL;
-import es.serversurvival.legacy.mySQL.enums.TipoSueldo;
+import es.serversurvival.nfs.shared.mysql.MySQL;
 import es.serversurvival.nfs.empresas.mysql.Empresa;
 import es.serversurvival.nfs.utils.Funciones;
 import lombok.SneakyThrows;

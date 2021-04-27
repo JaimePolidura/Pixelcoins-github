@@ -1,7 +1,7 @@
 package es.serversurvival.nfs.tienda.vertienda.usecases;
 
 import es.serversurvival.nfs.Pixelcoin;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.legacy.mySQL.eventos.tienda.ItemCompradoEvento;
 import es.serversurvival.nfs.jugadores.mySQL.Jugador;
 import es.serversurvival.nfs.tienda.mySQL.ofertas.Oferta;

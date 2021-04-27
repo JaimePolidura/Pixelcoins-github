@@ -3,7 +3,7 @@ package es.serversurvival.nfs.jugadores.mySQL;
 import java.sql.*;
 import java.util.*;
 
-import es.serversurvival.legacy.mySQL.MySQL;
+import es.serversurvival.nfs.shared.mysql.MySQL;
 import es.serversurvival.nfs.utils.Funciones;
 import org.bukkit.entity.Player;
 

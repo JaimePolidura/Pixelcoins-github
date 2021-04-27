@@ -1,8 +1,8 @@
 package es.serversurvival.nfs.bolsa.posicionesabiertas.comprarlargo;
 
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.nfs.bolsa.llamadasapi.TipoActivo;
-import es.serversurvival.legacy.mySQL.enums.TipoPosicion;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival.nfs.bolsa.llamadasapi.mysql.TipoActivo;
+import es.serversurvival.nfs.bolsa.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.legacy.mySQL.eventos.bolsa.PosicionCompraLargoEvento;
 import es.serversurvival.nfs.Pixelcoin;
 

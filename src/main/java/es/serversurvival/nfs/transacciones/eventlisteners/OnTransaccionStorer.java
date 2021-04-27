@@ -1,8 +1,8 @@
 package es.serversurvival.nfs.transacciones.eventlisteners;
 
 import es.jaime.EventListener;
-import es.serversurvival.legacy.mySQL.eventos.EventoTipoTransaccion;
-import es.serversurvival.legacy.mySQL.eventos.PixelcoinsEvento;
+import es.serversurvival.nfs.shared.eventospixelcoins.EventoTipoTransaccion;
+import es.serversurvival.nfs.shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.nfs.transacciones.mySQL.Transaccion;
 
 public final class OnTransaccionStorer {

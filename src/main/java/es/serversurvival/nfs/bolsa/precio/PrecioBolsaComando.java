@@ -2,7 +2,7 @@ package es.serversurvival.nfs.bolsa.precio;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.legacy.comandos.PixelcoinCommand;
+import es.serversurvival.nfs.shared.comandos.PixelcoinCommand;
 import es.serversurvival.nfs.Pixelcoin;
 import es.serversurvival.nfs.utils.apiHttp.IEXCloud_API;
 import org.bukkit.Bukkit;

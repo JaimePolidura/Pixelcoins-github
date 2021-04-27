@@ -1,7 +1,7 @@
 package es.serversurvival.nfs.jugadores.withers.sacarItem.application;
 
 import es.serversurvival.nfs.Pixelcoin;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.legacy.mySQL.eventos.withers.ItemSacadoEvento;
 import es.serversurvival.nfs.jugadores.mySQL.Jugador;
 

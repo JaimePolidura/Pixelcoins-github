@@ -1,10 +1,11 @@
 package es.serversurvival.legacy.mySQL.eventos.bolsa;
 
-import es.serversurvival.nfs.bolsa.llamadasapi.TipoActivo;
+import es.serversurvival.nfs.bolsa.llamadasapi.mysql.TipoActivo;
+import es.serversurvival.nfs.shared.eventospixelcoins.PosicionAbiertaEvento;
 import es.serversurvival.nfs.transacciones.mySQL.Transaccion;
 import lombok.Getter;
 
-import static es.serversurvival.legacy.mySQL.enums.TipoTransaccion.*;
+import static es.serversurvival.nfs.transacciones.mySQL.TipoTransaccion.*;
 
 
 public final class PosicionCompraLargoEvento extends PosicionAbiertaEvento {

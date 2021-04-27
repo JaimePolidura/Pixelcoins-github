@@ -1,7 +1,7 @@
 package es.serversurvival.nfs.empresas.depositar;
 
 import es.serversurvival.nfs.Pixelcoin;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.nfs.empresas.mysql.Empresa;
 import es.serversurvival.nfs.jugadores.mySQL.Jugador;
 

@@ -3,7 +3,7 @@ package es.serversurvival.nfs.tienda.mySQL.ofertas;
 import java.sql.*;
 import java.util.*;
 
-import es.serversurvival.legacy.mySQL.MySQL;
+import es.serversurvival.nfs.shared.mysql.MySQL;
 import es.serversurvival.nfs.tienda.mySQL.encantamientos.Encantamiento;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

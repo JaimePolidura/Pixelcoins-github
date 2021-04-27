@@ -1,8 +1,8 @@
 package es.serversurvival.nfs.tienda.vertienda;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival.legacy.menus.inventoryFactory.InventoryFactory;
-import es.serversurvival.legacy.menus.menus.Paginated;
+import es.serversurvival.nfs.shared.menus.inventory.InventoryFactory;
+import es.serversurvival.nfs.shared.menus.Paginated;
 import es.serversurvival.nfs.tienda.mySQL.ofertas.Ofertas;
 import es.serversurvival.nfs.tienda.mySQL.ofertas.Oferta;
 import es.serversurvival.nfs.utils.MinecraftUtils;

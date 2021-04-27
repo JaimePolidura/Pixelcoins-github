@@ -1,9 +1,9 @@
 package es.serversurvival.nfs.bolsa.valores.acciones;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival.nfs.bolsa.llamadasapi.LlamadaApi;
-import es.serversurvival.legacy.menus.inventoryFactory.InventoryFactory;
-import es.serversurvival.legacy.menus.menus.Paginated;
+import es.serversurvival.nfs.bolsa.llamadasapi.mysql.LlamadaApi;
+import es.serversurvival.nfs.shared.menus.inventory.InventoryFactory;
+import es.serversurvival.nfs.shared.menus.Paginated;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

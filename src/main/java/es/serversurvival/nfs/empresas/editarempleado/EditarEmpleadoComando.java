@@ -2,7 +2,7 @@ package es.serversurvival.nfs.empresas.editarempleado;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.legacy.comandos.PixelcoinCommand;
+import es.serversurvival.nfs.shared.comandos.PixelcoinCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 

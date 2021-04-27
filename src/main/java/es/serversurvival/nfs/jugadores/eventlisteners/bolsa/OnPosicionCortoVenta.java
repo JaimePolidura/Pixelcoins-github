@@ -1,7 +1,7 @@
 package es.serversurvival.nfs.jugadores.eventlisteners.bolsa;
 
 import es.jaime.EventListener;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.legacy.mySQL.eventos.bolsa.PosicionVentaCortoEvento;
 import es.serversurvival.nfs.jugadores.mySQL.Jugador;
 

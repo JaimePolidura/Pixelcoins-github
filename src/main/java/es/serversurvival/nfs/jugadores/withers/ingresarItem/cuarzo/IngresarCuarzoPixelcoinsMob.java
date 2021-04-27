@@ -2,7 +2,7 @@ package es.serversurvival.nfs.jugadores.withers.ingresarItem.cuarzo;
 
 import es.jaimetruman.mobs.Mob;
 import es.jaimetruman.mobs.OnPlayerInteractMob;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.nfs.utils.Funciones;
 import es.serversurvival.nfs.jugadores.withers.ingresarItem.IngresarItemUseCase;
 import org.bukkit.ChatColor;

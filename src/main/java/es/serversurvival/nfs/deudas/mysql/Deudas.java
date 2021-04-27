@@ -5,8 +5,8 @@ import java.util.*;
 import java.util.Date;
 
 import es.serversurvival.nfs.jugadores.mySQL.Jugadores;
-import es.serversurvival.legacy.mySQL.MySQL;
-import es.serversurvival.legacy.mySQL.enums.TipoTransaccion;
+import es.serversurvival.nfs.shared.mysql.MySQL;
+import es.serversurvival.nfs.transacciones.mySQL.TipoTransaccion;
 import es.serversurvival.nfs.jugadores.mySQL.Jugador;
 import es.serversurvival.nfs.utils.Funciones;
 import lombok.SneakyThrows;

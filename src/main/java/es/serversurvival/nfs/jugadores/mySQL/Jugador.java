@@ -1,6 +1,6 @@
 package es.serversurvival.nfs.jugadores.mySQL;
 
-import es.serversurvival.legacy.mySQL.tablasObjetos.TablaObjeto;
+import es.serversurvival.nfs.shared.mysql.TablaObjeto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

@@ -2,7 +2,7 @@ package es.serversurvival.nfs.deudas.cancelar;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.legacy.comandos.PixelcoinCommand;
+import es.serversurvival.nfs.shared.comandos.PixelcoinCommand;
 import es.serversurvival.nfs.deudas.mysql.Deuda;
 import es.serversurvival.nfs.utils.validaciones.Validaciones;
 import io.vavr.control.Try;

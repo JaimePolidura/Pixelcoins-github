@@ -1,7 +1,6 @@
 package es.serversurvival.nfs.mensajes.mysql;
 
-import es.serversurvival.legacy.mySQL.MySQL;
-import org.bukkit.ChatColor;
+import es.serversurvival.nfs.shared.mysql.MySQL;
 import org.bukkit.entity.Player;
 import java.sql.*;
 import java.util.List;

@@ -1,13 +1,13 @@
 package es.serversurvival.nfs.deudas.prestar;
 
-import es.serversurvival.legacy.mySQL.eventos.EventoTipoTransaccion;
-import es.serversurvival.legacy.mySQL.eventos.PixelcoinsEvento;
+import es.serversurvival.nfs.shared.eventospixelcoins.EventoTipoTransaccion;
+import es.serversurvival.nfs.shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.nfs.transacciones.mySQL.Transaccion;
 import es.serversurvival.nfs.utils.Funciones;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import static es.serversurvival.legacy.mySQL.enums.TipoTransaccion.*;
+import static es.serversurvival.nfs.transacciones.mySQL.TipoTransaccion.*;
 
 @AllArgsConstructor
 public final class PixelcoinsPrestadasEvento extends PixelcoinsEvento implements EventoTipoTransaccion {

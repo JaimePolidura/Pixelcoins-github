@@ -1,6 +1,6 @@
 package es.serversurvival.nfs.empresas.editarnombre;
 
-import es.serversurvival.legacy.mySQL.eventos.PixelcoinsEvento;
+import es.serversurvival.nfs.shared.eventospixelcoins.PixelcoinsEvento;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

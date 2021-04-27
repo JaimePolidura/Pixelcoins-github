@@ -1,7 +1,7 @@
 package es.serversurvival.nfs.empresas.vender;
 
 import es.serversurvival.nfs.Pixelcoin;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.legacy.mySQL.eventos.empresas.EmpresaVendidaEvento;
 
 public final class VenderEmpresaUseCase implements AllMySQLTablesInstances {

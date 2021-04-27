@@ -5,12 +5,13 @@ import java.sql.SQLException;
 import java.util.*;
 
 import es.jaime.EventListener;
-import es.serversurvival.legacy.mySQL.MySQL;
+import es.serversurvival.nfs.shared.mysql.MySQL;
+import es.serversurvival.nfs.bolsa.ofertasmercadoserver.mysql.OfertaMercadoServer;
+import es.serversurvival.nfs.bolsa.ofertasmercadoserver.mysql.TipoOfertante;
 import es.serversurvival.nfs.bolsa.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.nfs.bolsa.posicionesabiertas.mysql.PosicionesAbiertas;
-import es.serversurvival.legacy.mySQL.enums.*;
-import es.serversurvival.legacy.mySQL.eventos.EventoTipoTransaccion;
-import es.serversurvival.legacy.mySQL.eventos.PixelcoinsEvento;
+import es.serversurvival.nfs.shared.eventospixelcoins.EventoTipoTransaccion;
+import es.serversurvival.nfs.shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.legacy.mySQL.eventos.bolsa.*;
 import es.serversurvival.legacy.mySQL.eventos.empresas.*;
 import es.serversurvival.legacy.mySQL.eventos.jugadores.JugadorPagoManualEvento;
@@ -18,15 +19,16 @@ import es.serversurvival.legacy.mySQL.eventos.tienda.ItemCompradoEvento;
 import es.serversurvival.legacy.mySQL.eventos.withers.ItemIngresadoEvento;
 import es.serversurvival.legacy.mySQL.eventos.withers.ItemSacadoEvento;
 import es.serversurvival.legacy.mySQL.eventos.withers.ItemSacadoMaxEvento;
-import es.serversurvival.legacy.mySQL.tablasObjetos.*;
 import es.serversurvival.nfs.Pixelcoin;
+import es.serversurvival.nfs.bolsa.posicionescerradas.mysql.TipoPosicion;
+import es.serversurvival.nfs.jugadores.withers.CambioPixelcoins;
 import es.serversurvival.nfs.jugadores.mySQL.Jugador;
 import es.serversurvival.nfs.empresas.comprarservicio.EmpresaServicioCompradoEvento;
 import es.serversurvival.nfs.empresas.depositar.PixelcoinsDepositadasEvento;
 import es.serversurvival.nfs.empresas.mysql.Empresa;
 import es.serversurvival.nfs.empresas.sacar.PixelcoinsSacadasEvento;
-import es.serversurvival.nfs.empresas.tasks.SueldoPagadoEvento;
-import es.serversurvival.nfs.bolsa.llamadasapi.TipoActivo;
+import es.serversurvival.nfs.bolsa.llamadasapi.mysql.TipoActivo;
+import es.serversurvival.nfs.shared.mysql.TablaObjeto;
 import es.serversurvival.nfs.tienda.mySQL.ofertas.Oferta;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -35,7 +37,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import static es.serversurvival.legacy.mySQL.enums.CambioPixelcoins.*;
+import static es.serversurvival.nfs.jugadores.withers.CambioPixelcoins.*;
 import static es.serversurvival.nfs.utils.Funciones.*;
 
 /**
@@ -262,8 +264,6 @@ public final class Transacciones extends MySQL {
         Jugador empleadoAPagar = jugadoresMySQL.getJugador(jugador);
         jugadoresMySQL.setEstadisticas(jugador, empleadoAPagar.getPixelcoins() + salario, empleadoAPagar.getNventas(), empleadoAPagar.getIngresos() + salario, empleadoAPagar.getGastos());
 
-        Pixelcoin.publish(new SueldoPagadoEvento(jugador, empresa, salario));
-
         return true;
     }
 
@@ -338,7 +338,6 @@ public final class Transacciones extends MySQL {
         String ticker = posicionAComprar.getNombre_activo();
         int nAccionesTotlaesEnCartera = posicionAComprar.getCantidad();
         double precioApertura = posicionAComprar.getPrecio_apertura();
-        String fechaApertura = posicionAComprar.getFecha_apertura();
         double revalorizacionTotal = cantidad * (precioApertura - precioPorAccion);
         double rentabilidad = redondeoDecimales(diferenciaPorcntual(precioPorAccion, precioApertura), 3);
         Jugador compradorJugador = jugadoresMySQL.getJugador(playername);
@@ -356,7 +355,6 @@ public final class Transacciones extends MySQL {
 
         String nombreValor = llamadasApiMySQL.getLlamadaAPI(ticker).getNombre_activo();
 
-        Pixelcoin.publish(new PosicionCompraCortoEvento(playername, ticker, nombreValor, precioApertura, fechaApertura, precioPorAccion, cantidad, rentabilidad, TipoActivo.ACCIONES));
     }
 
     public void pagaDividendo(String ticker, String nombre, double precioDividendo, int nAcciones) {

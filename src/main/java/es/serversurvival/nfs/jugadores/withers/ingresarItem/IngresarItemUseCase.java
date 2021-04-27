@@ -1,13 +1,13 @@
 package es.serversurvival.nfs.jugadores.withers.ingresarItem;
 
 import es.serversurvival.nfs.Pixelcoin;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.legacy.mySQL.eventos.withers.ItemIngresadoEvento;
 import es.serversurvival.nfs.jugadores.mySQL.Jugador;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import static es.serversurvival.legacy.mySQL.enums.CambioPixelcoins.getCambioTotal;
+import static es.serversurvival.nfs.jugadores.withers.CambioPixelcoins.getCambioTotal;
 
 public final class IngresarItemUseCase implements AllMySQLTablesInstances {
     public void ingresarItem(ItemStack itemAIngresar, Player player) {

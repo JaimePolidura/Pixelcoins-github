@@ -1,9 +1,8 @@
 package es.serversurvival.nfs.bolsa.valores;
 
-import es.serversurvival.legacy.menus.Menu;
-import es.serversurvival.legacy.menus.inventoryFactory.InventoryCreator;
-import es.serversurvival.legacy.menus.inventoryFactory.inventories.ElegirInversionInventoryFactory;
-import es.serversurvival.legacy.menus.menus.Clickable;
+import es.serversurvival.nfs.shared.menus.Menu;
+import es.serversurvival.nfs.shared.menus.inventory.InventoryCreator;
+import es.serversurvival.nfs.shared.menus.Clickable;
 import es.serversurvival.nfs.bolsa.valores.acciones.AccionesMenu;
 import es.serversurvival.nfs.bolsa.valores.criptomonedas.CriptomonedasMenu;
 import es.serversurvival.nfs.bolsa.valores.materiasprimas.MateriasPrimasMenu;

@@ -1,6 +1,6 @@
 package es.serversurvival.nfs.empleados.despedir;
 
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.nfs.empleados.mysql.Empleado;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;

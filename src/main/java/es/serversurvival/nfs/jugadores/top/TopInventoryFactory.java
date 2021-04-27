@@ -1,10 +1,10 @@
 package es.serversurvival.nfs.jugadores.top;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival.legacy.menus.inventoryFactory.InventoryFactory;
-import es.serversurvival.legacy.mySQL.enums.TipoPosicion;
+import es.serversurvival.nfs.shared.menus.inventory.InventoryFactory;
+import es.serversurvival.nfs.bolsa.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.nfs.jugadores.mySQL.Jugador;
-import es.serversurvival.legacy.mySQL.tablasObjetos.PosicionCerrada;
+import es.serversurvival.nfs.bolsa.posicionescerradas.mysql.PosicionCerrada;
 import es.serversurvival.nfs.utils.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

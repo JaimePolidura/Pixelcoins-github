@@ -1,13 +1,13 @@
 package es.serversurvival.nfs.bolsa.valores.materiasprimas;
 
-import es.serversurvival.legacy.menus.menus.Clickable;
-import es.serversurvival.legacy.menus.menus.PostLoading;
+import es.serversurvival.nfs.shared.menus.Clickable;
+import es.serversurvival.nfs.shared.menus.PostLoading;
 import es.serversurvival.nfs.utils.apiHttp.IEXCloud_API;
 import es.serversurvival.nfs.Pixelcoin;
-import es.serversurvival.legacy.menus.Menu;
-import es.serversurvival.legacy.menus.inventoryFactory.InventoryCreator;
+import es.serversurvival.nfs.shared.menus.Menu;
+import es.serversurvival.nfs.shared.menus.inventory.InventoryCreator;
 import es.serversurvival.nfs.bolsa.valores.ComprarBolsaConfirmacion;
-import es.serversurvival.nfs.bolsa.llamadasapi.TipoActivo;
+import es.serversurvival.nfs.bolsa.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.nfs.utils.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

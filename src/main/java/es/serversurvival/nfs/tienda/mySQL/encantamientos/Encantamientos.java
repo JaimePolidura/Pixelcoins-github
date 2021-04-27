@@ -1,6 +1,6 @@
 package es.serversurvival.nfs.tienda.mySQL.encantamientos;
 
-import es.serversurvival.legacy.mySQL.MySQL;
+import es.serversurvival.nfs.shared.mysql.MySQL;
 import org.bukkit.enchantments.Enchantment;
 
 import java.sql.ResultSet;

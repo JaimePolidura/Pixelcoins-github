@@ -4,7 +4,7 @@ import es.jaimetruman.ItemBuilder;
 import es.serversurvival.nfs.empleados.mysql.Empleado;
 import es.serversurvival.nfs.empresas.mysql.Empresa;
 import es.serversurvival.nfs.utils.Funciones;
-import es.serversurvival.legacy.menus.inventoryFactory.InventoryFactory;
+import es.serversurvival.nfs.shared.menus.inventory.InventoryFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;

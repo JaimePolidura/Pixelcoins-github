@@ -1,8 +1,8 @@
 package es.serversurvival.nfs.empresas.tasks;
 
 import es.serversurvival.nfs.Pixelcoin;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
-import es.serversurvival.legacy.mySQL.enums.TipoSueldo;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival.nfs.empleados.mysql.TipoSueldo;
 import es.serversurvival.nfs.empresas.mysql.Empresa;
 import lombok.SneakyThrows;
 

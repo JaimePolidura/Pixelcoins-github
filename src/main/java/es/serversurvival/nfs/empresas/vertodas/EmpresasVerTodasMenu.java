@@ -1,10 +1,10 @@
 package es.serversurvival.nfs.empresas.vertodas;
 
-import es.serversurvival.legacy.menus.Menu;
-import es.serversurvival.legacy.menus.inventoryFactory.InventoryCreator;
-import es.serversurvival.legacy.menus.menus.CanGoBack;
-import es.serversurvival.legacy.menus.menus.Clickable;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.nfs.shared.menus.Menu;
+import es.serversurvival.nfs.shared.menus.inventory.InventoryCreator;
+import es.serversurvival.nfs.shared.menus.CanGoBack;
+import es.serversurvival.nfs.shared.menus.Clickable;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.nfs.utils.Funciones;
 import es.serversurvival.nfs.empresas.miempresa.EmpresasVerMenu;
 import es.serversurvival.nfs.jugadores.perfil.PerfilMenu;

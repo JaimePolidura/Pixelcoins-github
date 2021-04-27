@@ -1,7 +1,7 @@
 package es.serversurvival.nfs.deudas.pagar;
 
 import es.serversurvival.nfs.Pixelcoin;
-import es.serversurvival.legacy.mySQL.AllMySQLTablesInstances;
+import es.serversurvival.nfs.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.nfs.deudas.mysql.Deuda;
 
 public final class PagarDeudaUseCase implements AllMySQLTablesInstances {

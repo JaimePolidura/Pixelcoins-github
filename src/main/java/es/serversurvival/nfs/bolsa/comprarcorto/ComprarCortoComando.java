@@ -2,8 +2,8 @@ package es.serversurvival.nfs.bolsa.comprarcorto;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.legacy.comandos.PixelcoinCommand;
-import es.serversurvival.legacy.mySQL.enums.TipoPosicion;
+import es.serversurvival.nfs.shared.comandos.PixelcoinCommand;
+import es.serversurvival.nfs.bolsa.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.nfs.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
 import es.serversurvival.nfs.bolsa.posicionesabiertas.comprarcorto.ComprarCortoUseCase;
 import es.serversurvival.nfs.bolsa.posicionesabiertas.mysql.PosicionAbierta;
@@ -12,7 +12,6 @@ import es.serversurvival.nfs.utils.validaciones.Validaciones;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import static org.bukkit.ChatColor.*;
 

@@ -1,6 +1,6 @@
 package es.serversurvival.nfs.utils.validaciones.misValidaciones;
 
-import es.serversurvival.legacy.menus.MenuManager;
+import es.serversurvival.nfs.shared.menus.MenuManager;
 import main.ValidationResult;
 import main.validators.Validator;
 
