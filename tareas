@@ -1,1 +1,5 @@
 1º Desacoplar el comando top y perfil. Idea: Añadir a otra carpeta fuera de jugadores
+
+2º Hacer el caso de uso de pagar dividendos de una accion de una empresa del server. Esta se hace en el menu de ver empresas
+
+3º Hay que mejorar el metodo de pagar dividendos de una empresa: tiene errores logicos y hay que desacoplarlo
