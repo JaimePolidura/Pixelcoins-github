@@ -55,7 +55,7 @@ public class ComprarCortoComando extends PixelcoinCommand implements CommandRunn
     }
 
     @EventListener
-    private void sendMessageOnComplete(PosicionCompraCortoEvento e) {
+    public void sendMessageOnComplete(PosicionCompraCortoEvento e) {
         String mensaje;
         double revalorizacionTotal =  (e.getPrecioApertura() - e.getPrecioCierre()) * e.getCantidad();
 
@@ -74,6 +74,5 @@ public class ComprarCortoComando extends PixelcoinCommand implements CommandRunn
 
         Bukkit.broadcastMessage(GOLD + player.getName() + " ha alacanzado una rentabilidad del " + GREEN + "+" + formatea.format(Funciones.redondeoDecimales(e.getRentabilidad(), 3)) + "% "
                 + GOLD + "de las acciones de " + e.getNombreValor() + " (" + e.getTicker() + "), poniendose en " + BOLD  + "CORTO");
-
     }
 }

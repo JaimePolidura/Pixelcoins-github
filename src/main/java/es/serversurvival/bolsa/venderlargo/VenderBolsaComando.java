@@ -5,7 +5,7 @@ import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.bolsa.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
-import es.serversurvival.bolsa.posicionesabiertas.venderlargo.CerrarPosicionUseCase;
+import es.serversurvival.bolsa.posicionesabiertas.venderlargo.VenderLargoUseCase;
 import es.serversurvival.bolsa.posicionesabiertas.venderlargo.PosicionVentaLargoEvento;
 import es.serversurvival.bolsa.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.shared.comandos.PixelcoinCommand;
@@ -23,7 +23,7 @@ import static org.bukkit.ChatColor.*;
 @Command("bolsa vender")
 public class VenderBolsaComando extends PixelcoinCommand implements CommandRunner {
     private final String mensajeIncorrecto = DARK_RED + "Uso incorrecto: /bolsa vender <id> [numero a vender]";
-    private final CerrarPosicionUseCase venderUseCase = CerrarPosicionUseCase.INSTANCE;
+    private final VenderLargoUseCase venderUseCase = VenderLargoUseCase.INSTANCE;
     private final AbrirOrdenUseCase abrirOrdenUseCase = AbrirOrdenUseCase.INSTANCE;
 
     @Override

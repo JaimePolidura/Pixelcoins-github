@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class VenderJugadorSolicitud extends Menu implements Solicitud {
+    private final VenderJugadorUseCase useCase = VenderJugadorUseCase.INSTANCE;
+
     private boolean isClicked = false;
 
     private final Inventory inventory;
@@ -74,7 +76,7 @@ public class VenderJugadorSolicitud extends Menu implements Solicitud {
     public void aceptar() {
         isClicked = true;
 
-        AllMySQLTablesInstances.transaccionesMySQL.realizarTransferenciaConEstadisticas(jugadorAVender.getName(), jugadorVendedor.getName(), precio, itemAVender.getType().toString(), TipoTransaccion.JUGADOR_VENDER);
+        useCase.vender(jugadorAVender.getName(), jugadorVendedor.getName(), precio, itemAVender.getType().toString());
 
         jugadorAVender.getInventory().addItem(itemAVender);
         jugadorVendedor.getInventory().clear(slotItemVender);

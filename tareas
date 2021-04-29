@@ -3,3 +3,7 @@
 2º Hacer el caso de uso de pagar dividendos de una accion de una empresa del server. Esta se hace en el menu de ver empresas
 
 3º Hay que mejorar el metodo de pagar dividendos de una empresa: tiene errores logicos y hay que desacoplarlo
+
+4º Añadir que se pueden poner ordenes premarket cada vez que se opere en corto cuando el mercado este cerrado
+
+5º A la hora de hacer una transaccion de cualquier tipo, hay en algunos casos que no hay mensaje de feedback. Arreglarlo

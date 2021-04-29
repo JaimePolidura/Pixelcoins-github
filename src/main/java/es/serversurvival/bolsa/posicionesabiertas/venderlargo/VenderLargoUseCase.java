@@ -7,10 +7,10 @@ import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
 import static es.serversurvival.utils.Funciones.diferenciaPorcntual;
 import static es.serversurvival.utils.Funciones.redondeoDecimales;
 
-public final class CerrarPosicionUseCase implements AllMySQLTablesInstances {
-    public static final CerrarPosicionUseCase INSTANCE = new CerrarPosicionUseCase();
+public final class VenderLargoUseCase implements AllMySQLTablesInstances {
+    public static final VenderLargoUseCase INSTANCE = new VenderLargoUseCase();
 
-    private CerrarPosicionUseCase () {}
+    private VenderLargoUseCase() {}
     
     public void venderPosicion(PosicionAbierta posicionAVender, int cantidad, String nombreJugador) {
         int idPosiconAbierta = posicionAVender.getId();

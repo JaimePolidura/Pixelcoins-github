@@ -1,6 +1,8 @@
 package es.serversurvival.deudas.ver;
 
+import es.serversurvival.deudas.cancelar.CancelarDeudaUseCase;
 import es.serversurvival.deudas.mysql.Deuda;
+import es.serversurvival.deudas.pagarTodo.PagarDeudaCompletaUseCase;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
 import es.serversurvival.shared.menus.Menu;
 import es.serversurvival.shared.menus.MenuManager;
@@ -22,6 +24,9 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Map;
 
 public class DeudasMenu extends Menu implements Clickable, Refreshcable, CanGoBack {
+    private final PagarDeudaCompletaUseCase PagarDeudaUseCase = PagarDeudaCompletaUseCase.INSTANCE;
+    private final CancelarDeudaUseCase cancelarDeudaUseCase = CancelarDeudaUseCase.INSTANCE;
+
     public final static String tiulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "          TUS DEUDAS";
     private Player player;
     private Inventory inventory;
@@ -78,7 +83,8 @@ public class DeudasMenu extends Menu implements Clickable, Refreshcable, CanGoBa
             return;
         }
 
-        AllMySQLTablesInstances.deudasMySQL.pagarDeuda(jugadorQueVaAPagar, id);
+        PagarDeudaUseCase.pagarDeuda(deudaAPagar.getId());
+
         refresh();
     }
 
@@ -86,7 +92,8 @@ public class DeudasMenu extends Menu implements Clickable, Refreshcable, CanGoBa
         Deuda deudaACancelar = AllMySQLTablesInstances.deudasMySQL.getDeuda(id);
         Player jugadorQueVaACancelar = Bukkit.getPlayer(deudaACancelar.getAcredor());
 
-        AllMySQLTablesInstances.deudasMySQL.cancelarDeuda(jugadorQueVaACancelar, id);
+        cancelarDeudaUseCase.cancelarDeuda(jugadorQueVaACancelar, id);
+
         refresh();
     }
 

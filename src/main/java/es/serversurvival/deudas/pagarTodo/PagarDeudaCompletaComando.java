@@ -1,4 +1,4 @@
-package es.serversurvival.deudas.pagar;
+package es.serversurvival.deudas.pagarTodo;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
@@ -20,8 +20,8 @@ import static es.serversurvival.utils.Funciones.enviarMensaje;
 import static org.bukkit.ChatColor.DARK_RED;
 
 @Command("deudas pagar")
-public class PagarDeudaComando extends PixelcoinCommand implements CommandRunner {
-    private final PagarDeudaUseCase usecase = PagarDeudaUseCase.INSTANCE;
+public class PagarDeudaCompletaComando extends PixelcoinCommand implements CommandRunner {
+    private final PagarDeudaCompletaUseCase usecase = PagarDeudaCompletaUseCase.INSTANCE;
     private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /deudas pagar <id>";
 
     @Override
@@ -39,7 +39,7 @@ public class PagarDeudaComando extends PixelcoinCommand implements CommandRunner
             return;
         }
 
-        Deuda deudaPagada = usecase.pagarDeuda(player.getName(), Integer.parseInt(args[1]));
+        Deuda deudaPagada = usecase.pagarDeuda(Integer.parseInt(args[1]));
 
         Funciones.enviarMensajeYSonido((Player) player, ChatColor.GOLD + "Has pagado a " + deudaPagada.getAcredor() + " toda la deuda: "
                 + ChatColor.GREEN + formatea.format(deudaPagada.getPixelcoins_restantes()) + " PC", Sound.ENTITY_PLAYER_LEVELUP);

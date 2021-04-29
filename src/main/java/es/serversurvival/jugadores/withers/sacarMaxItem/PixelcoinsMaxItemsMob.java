@@ -1,4 +1,4 @@
-package es.serversurvival.jugadores.withers.sacarMaxItem.infrastrocture;
+package es.serversurvival.jugadores.withers.sacarMaxItem;
 
 import es.jaimetruman.mobs.Mob;
 import es.jaimetruman.mobs.OnPlayerInteractMob;

@@ -1,7 +1,7 @@
-package es.serversurvival.jugadores.withers.sacarMaxItem.domain;
+package es.serversurvival.jugadores.withers.sacarMaxItem;
 
 import es.serversurvival.jugadores.mySQL.Jugador;
-import es.serversurvival.jugadores.withers.sacarMaxItem.application.SacarMaxItemUseCase;
+import es.serversurvival.jugadores.withers.sacarItem.SacarItemUseCase;
 import es.serversurvival.transacciones.mySQL.Transacciones;
 
 public enum CambioPixelcoins {
@@ -28,7 +28,7 @@ public enum CambioPixelcoins {
     }
 
     public static void sacarItem (Jugador jugador, String item) {
-        Transacciones.INSTANCE.sacarObjeto(jugador, item, CambioPixelcoins.getCambioTotal(item, 1));
+        SacarItemUseCase.INSTANCE.sacarItem(jugador, item, CambioPixelcoins.getCambioTotal(item, 1));
     }
 
     public static boolean suficientesPixelcoins (String material, int cantidad, double pixelcoinsJugador) {

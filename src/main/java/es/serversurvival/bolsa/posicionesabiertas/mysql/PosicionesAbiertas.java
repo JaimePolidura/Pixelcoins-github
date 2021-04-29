@@ -166,55 +166,6 @@ public final class PosicionesAbiertas extends MySQL {
         return posicionesAbiertasConPeso;
     }
 
-    public void actualizarSplits () {
-        Map<String, JSONObject> infoSplitsPorAccion = new HashMap<>();
-        List<LlamadaApi> todasLlamadasApi = llamadasApiMySQL.getTodasLlamadasApiCondicion(LlamadaApi::esTipoAccion);
-
-        todasLlamadasApi.forEach( (llamada) -> {
-            try {
-                JSONObject infoSplit = IEXCloud_API.getSplitInfoEmpresa(llamada.getSimbolo());
-                infoSplitsPorAccion.put(llamada.getNombre_activo(), infoSplit);
-            } catch (Exception ignored) {
-                //IGNORED
-            }
-        });
-
-        List<PosicionAbierta> posicionAbiertas = getTodasPosicionesAbiertasCondicion(PosicionAbierta::esTipoAccion);
-        posicionAbiertas.forEach( (posicionAbierta) -> {
-            JSONObject infoSplit = infoSplitsPorAccion.get(posicionAbierta.getNombre_activo());
-
-            if(infoSplit != null){
-                realizarSplit(posicionAbierta, infoSplit);
-            }
-        });
-
-    }
-
-    @SneakyThrows
-    private void realizarSplit(PosicionAbierta pos, JSONObject infoSplit) {
-        Date fechaHoy = new Date();
-        Date dateSplit = dateFormater.parse((String) infoSplit.get("date"));
-
-        int denominador = (int) infoSplit.get("fromFactor");
-        int numerador = (int) infoSplit.get("toFactor");
-
-        if (diferenciaDias(fechaHoy, dateSplit) == 0) {
-            int cantidadDeAccionesConvertibles = pos.getCantidad() - (pos.getCantidad() % denominador);
-            int accionesSobrantes = pos.getCantidad() % denominador;
-            int accionesConvertidas = (cantidadDeAccionesConvertibles / denominador) * numerador;
-
-            double precioAperturaConvertido = pos.getPrecio_apertura() / (numerador / denominador);
-
-            this.setCantidad(pos.getId(), accionesConvertidas + accionesSobrantes);
-            this.setPrecioApertura(pos.getId(), precioAperturaConvertido);
-
-            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Se ha actualizado el split de " + pos.getNombre_activo());
-        }
-    }
-
-
-
-
 
     @Override
     protected PosicionAbierta buildObjectFromResultSet(ResultSet rs) throws SQLException {

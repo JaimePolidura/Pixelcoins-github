@@ -1,7 +1,12 @@
 package es.serversurvival.bolsa.cartera;
 
 import es.serversurvival.bolsa.llamadasapi.mysql.TipoActivo;
+import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
+import es.serversurvival.bolsa.posicionesabiertas.comprarcorto.ComprarCortoUseCase;
+import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.ComprarLargoUseCase;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
+import es.serversurvival.bolsa.posicionesabiertas.vendercorto.VenderCortoUseCase;
+import es.serversurvival.bolsa.posicionesabiertas.venderlargo.VenderLargoUseCase;
 import es.serversurvival.bolsa.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.shared.menus.Menu;
 import es.serversurvival.shared.menus.confirmaciones.Confirmacion;
@@ -17,11 +22,15 @@ import java.util.*;
 import static org.bukkit.ChatColor.*;
 
 public class VenderAccionesConfirmacion extends Menu implements Confirmacion {
-    private Inventory inventory;
-    private Player player;
-    private TipoPosicion tipoPosicion;
-    private TipoActivo tipoActivo;
-    private int id;
+    private final VenderLargoUseCase venderLargoUseCase = VenderLargoUseCase.INSTANCE;
+    private final ComprarCortoUseCase comprarCortoUseCase = ComprarCortoUseCase.INSTANCE;
+    private final AbrirOrdenUseCase abrirOrdenUseCase = AbrirOrdenUseCase.INSTANCE;
+
+    private final Inventory inventory;
+    private final Player player;
+    private final TipoPosicion tipoPosicion;
+    private final TipoActivo tipoActivo;
+    private final int id;
 
     public VenderAccionesConfirmacion (Player player, int id, TipoPosicion tipoPosicion, TipoActivo tipoActivo, List<String> loreItemClicked) {
         this.player = player;
@@ -32,7 +41,7 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion {
         String titulo = DARK_RED + "" + BOLD + "     ¿Quieres vender?";
         String tituloItemVender = GREEN + "" + BOLD + "VENDER";
         String tituloItemCancelar = RED + "" + BOLD + "CANCELAR";
-        List<String> loreCancelar = Arrays.asList("");
+        List<String> loreCancelar = Collections.singletonList("");
         List<String> loreVender;
 
         if(tipoActivo == TipoActivo.ACCIONES_SERVER){
@@ -69,20 +78,19 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion {
 
     @Override
     public void confirmar() {
-
-        PosicionAbierta posicionAVender = AllMySQLTablesInstances.posicionesAbiertasMySQL.getPosicionAbierta(id);
+        PosicionAbierta posicion = AllMySQLTablesInstances.posicionesAbiertasMySQL.getPosicionAbierta(id);
 
         if(Funciones.mercadoEstaAbierto() && tipoPosicion == TipoPosicion.LARGO){
-            AllMySQLTablesInstances.transaccionesMySQL.venderPosicion(posicionAVender, posicionAVender.getCantidad(), player.getName());
+            venderLargoUseCase.venderPosicion(posicion, posicion.getCantidad(), player.getName());
 
         }else if (Funciones.mercadoEstaAbierto() && tipoPosicion == TipoPosicion.CORTO) {
-            AllMySQLTablesInstances.transaccionesMySQL.comprarPosicionCorto(posicionAVender, posicionAVender.getCantidad(), player.getName());
+            comprarCortoUseCase.comprarPosicionCorto(posicion, posicion.getCantidad(), player.getName());
 
         }else if (Funciones.mercadoNoEstaAbierto() && tipoPosicion == TipoPosicion.LARGO) {
-            AllMySQLTablesInstances.ordenesMySQL.abrirOrdenVentaLargo(player, String.valueOf(id), posicionAVender.getCantidad());
+            abrirOrdenUseCase.abrirOrdenCompraLargo(player.getName(), posicion.getNombre_activo(), posicion.getCantidad());
 
         }else if (Funciones.mercadoNoEstaAbierto() && tipoPosicion == TipoPosicion.CORTO) {
-            AllMySQLTablesInstances.ordenesMySQL.abrirOrdenCompraCorto(player, String.valueOf(id), posicionAVender.getCantidad());
+            abrirOrdenUseCase.abrirOrdenCompraCorto(player.getName(), posicion.getNombre_activo(), posicion.getCantidad());
         }
 
         closeMenu();

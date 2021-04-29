@@ -39,10 +39,12 @@ public class OfertasMenu extends Menu implements Clickable, Paginated, Refreshca
 
     private OfertaInventoryFactory inventoryFactory = new OfertaInventoryFactory();
 
-    private final Player player;
+    private Player player;
     private Inventory inventory;
     private int currentIndex;
     private List<Page> pages;
+
+    public OfertasMenu () {}
 
     public OfertasMenu(Player player) {
         this.inventory = InventoryCreator.createInventoryMenu(inventoryFactory, player.getName());

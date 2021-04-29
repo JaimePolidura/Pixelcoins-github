@@ -6,7 +6,7 @@ import es.serversurvival.shared.menus.Menu;
 import es.serversurvival.shared.menus.AumentoConfirmacion;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
-import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.AbrirPosicionLargoUseCase;
+import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.ComprarLargoUseCase;
 import es.serversurvival.utils.Funciones;
 import es.serversurvival.shared.menus.inventory.InventoryCreator;
 import org.bukkit.ChatColor;
@@ -90,7 +90,7 @@ public class ComprarBolsaConfirmacion extends Menu implements AumentoConfirmacio
             //TODO
             AllMySQLTablesInstances.transaccionesMySQL.comprarOfertaMercadoAccionServer(player, id, cantidadAComprar);
         }else if(Funciones.mercadoEstaAbierto()){
-            AbrirPosicionLargoUseCase.INSTANCE.abrir(tipoActivo, simbolo, nombreValor, alias, precioUnidad, cantidadAComprar, player.getName());
+            ComprarLargoUseCase.INSTANCE.abrir(tipoActivo, simbolo, nombreValor, alias, precioUnidad, cantidadAComprar, player.getName());
         }else{
             AbrirOrdenUseCase.INSTANCE.abrirOrdenCompraLargo(player.getName(), simbolo, cantidadAComprar);
         }

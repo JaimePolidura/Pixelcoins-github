@@ -1,8 +1,6 @@
 package es.serversurvival.utils.validaciones;
 
-import es.serversurvival.nfs.utils.validaciones.misValidaciones.*;
 import es.serversurvival.utils.validaciones.misValidaciones.*;
-import es.serversurvival.validaciones.misValidaciones.*;
 import main.validators.NotNull;
 import main.validators.booleans.False;
 import main.validators.booleans.True;

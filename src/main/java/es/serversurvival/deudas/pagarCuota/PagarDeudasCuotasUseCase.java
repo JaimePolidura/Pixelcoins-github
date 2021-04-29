@@ -1,6 +1,8 @@
-package es.serversurvival.deudas.tasks;
+package es.serversurvival.deudas.pagarCuota;
 
 import es.serversurvival.deudas.mysql.Deuda;
+import es.serversurvival.deudas.tasks.DeudaCuotaNoPagadaEvento;
+import es.serversurvival.deudas.tasks.DeudaCuotaPagadaEvento;
 import es.serversurvival.jugadores.mySQL.Jugador;
 import es.serversurvival.jugadores.mySQL.Jugadores;
 import es.serversurvival.Pixelcoin;
@@ -12,7 +14,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public final class PagarDeudasTaskUseCase implements AllMySQLTablesInstances {
+public final class PagarDeudasCuotasUseCase implements AllMySQLTablesInstances {
+    public static final PagarDeudasCuotasUseCase INSTANCE = new PagarDeudasCuotasUseCase();
+
+    private PagarDeudasCuotasUseCase () {}
+
     public void pagarDeudas () {
         List<Deuda> todasLasDeudas = deudasMySQL.getAllDeudas();
         Map<String, Jugador> allJugadores = Jugadores.INSTANCE.getMapAllJugadores();
@@ -41,8 +47,6 @@ public final class PagarDeudasTaskUseCase implements AllMySQLTablesInstances {
         int id = deuda.getId();
         int tiempo = deuda.getTiempo_restante();
         int pixelcoinsDeuda = deuda.getPixelcoins_restantes();
-
-        transaccionesMySQL.realizarTransferenciaConEstadisticas(deudorNombre, acredorNombre, cuota, "", TipoTransaccion.DEUDAS_PAGAR_CUOTA);
 
         if(tiempo == 1){
             deudasMySQL.borrarDeuda(id);

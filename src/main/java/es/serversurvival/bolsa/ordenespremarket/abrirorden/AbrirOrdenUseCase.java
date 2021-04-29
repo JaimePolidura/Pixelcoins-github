@@ -11,4 +11,8 @@ public final class AbrirOrdenUseCase implements AllMySQLTablesInstances {
     public void abrirOrdenCompraLargo(String playerName, String ticker, int cantidad) {
         ordenesMySQL.nuevaOrden(playerName, ticker, cantidad, AccionOrden.LARGO_COMPRA);
     }
+
+    public void abrirOrdenCompraCorto(String playerName, String ticker, int cantidad) {
+        ordenesMySQL.nuevaOrden(playerName, ticker, cantidad, AccionOrden.CORTO_VENTA);
+    }
 }

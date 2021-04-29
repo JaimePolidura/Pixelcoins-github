@@ -1,4 +1,4 @@
-package es.serversurvival.deudas.tasks;
+package es.serversurvival.deudas.pagarCuota;
 
 import es.jaimetruman.task.BukkitTimeUnit;
 import es.jaimetruman.task.Task;
@@ -6,11 +6,11 @@ import es.jaimetruman.task.TaskRunner;
 import es.serversurvival.deudas.mysql.Deudas;
 
 @Task(BukkitTimeUnit.DAY)
-public final class PagarDeudas implements TaskRunner {
-    private final Deudas deudasMySQL = Deudas.INSTANCE;
+public final class PagarDeudasCuotasTask implements TaskRunner {
+    private final PagarDeudasCuotasUseCase useCase = PagarDeudasCuotasUseCase.INSTANCE;
 
     @Override
     public void run() {
-        deudasMySQL.pagarDeudas();
+        useCase.pagarDeudas();
     }
 }

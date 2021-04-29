@@ -1,14 +1,16 @@
 package es.serversurvival.jugadores.withers;
 
 import es.serversurvival.jugadores.mySQL.Jugador;
+import es.serversurvival.jugadores.withers.sacarItem.SacarItemUseCase;
+import es.serversurvival.jugadores.withers.sacarMaxItem.SacarMaxItemUseCase;
 import es.serversurvival.transacciones.mySQL.Transacciones;
 
 public enum CambioPixelcoins {
-    DIAMOND(CambioPixelcoins.DIAMANTE, Transacciones.INSTANCE::sacarMaxItemDiamond),
-    DIAMOND_BLOCK(CambioPixelcoins.DIAMANTE * 9, Transacciones.INSTANCE::sacarMaxItemDiamond),
-    LAPIS_LAZULI(CambioPixelcoins.LAPISLAZULI, Transacciones.INSTANCE::sacarMaxItemLapisLazuli),
-    LAPIS_BLOCK(CambioPixelcoins.LAPISLAZULI * 9, Transacciones.INSTANCE::sacarMaxItemLapisLazuli),
-    QUARTZ_BLOCK(CambioPixelcoins.CUARZO, Transacciones.INSTANCE::sacarMaxItemQuartzBlock);
+    DIAMOND(CambioPixelcoins.DIAMANTE, SacarMaxItemUseCase.INSTANCE::sacarMaxItemDiamond),
+    DIAMOND_BLOCK(CambioPixelcoins.DIAMANTE * 9, SacarMaxItemUseCase.INSTANCE::sacarMaxItemDiamond),
+    LAPIS_LAZULI(CambioPixelcoins.LAPISLAZULI, SacarMaxItemUseCase.INSTANCE::sacarMaxItemLapisLazuli),
+    LAPIS_BLOCK(CambioPixelcoins.LAPISLAZULI * 9, SacarMaxItemUseCase.INSTANCE::sacarMaxItemLapisLazuli),
+    QUARTZ_BLOCK(CambioPixelcoins.CUARZO, SacarMaxItemUseCase.INSTANCE::sacarMaxItemQuartzBlock);
 
     public static final int DIAMANTE = 290;
     public static final int CUARZO = 12;
@@ -27,7 +29,7 @@ public enum CambioPixelcoins {
     }
 
     public static void sacarItem (Jugador jugador, String item) {
-        Transacciones.INSTANCE.sacarObjeto(jugador, item, CambioPixelcoins.getCambioTotal(item, 1));
+        SacarItemUseCase.INSTANCE.sacarItem(jugador, item, CambioPixelcoins.getCambioTotal(item, 1));
     }
 
     public static boolean suficientesPixelcoins (String material, int cantidad, double pixelcoinsJugador) {

@@ -1,4 +1,4 @@
-package es.serversurvival.bolsa.posicionesabiertas.tasks;
+package es.serversurvival.bolsa.posicionesabiertas.splitAcciones;
 
 import es.jaimetruman.task.BukkitTimeUnit;
 import es.jaimetruman.task.Task;
@@ -7,9 +7,10 @@ import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionesAbiertas;
 
 @Task(value = BukkitTimeUnit.DAY, delay = BukkitTimeUnit.MINUTE)
 public class SplitAccionesTask implements TaskRunner {
-    private final PosicionesAbiertas posicionesAbiertasMySQL = PosicionesAbiertas.INSTANCE;
+    private final SplitAccionesUseCase useCase = SplitAccionesUseCase.INSTANCE;
 
     @Override
     public void run() {
+        useCase.actualizarSplits();
     }
 }

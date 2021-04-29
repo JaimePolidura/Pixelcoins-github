@@ -1,8 +1,7 @@
-package es.serversurvival.jugadores.withers.sacarMaxItem.infrastrocture;
+package es.serversurvival.jugadores.withers.sacarMaxItem;
 
 import es.serversurvival.jugadores.mySQL.Jugador;
 import es.serversurvival.jugadores.withers.CambioPixelcoins;
-import es.serversurvival.jugadores.withers.sacarMaxItem.application.SacarMaxItemUseCase;
 import es.serversurvival.shared.menus.Menu;
 import es.serversurvival.shared.menus.inventory.InventoryCreator;
 import es.serversurvival.shared.menus.Clickable;

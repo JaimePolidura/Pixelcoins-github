@@ -60,112 +60,6 @@ public final class Transacciones extends MySQL {
         executeUpdate("UPDATE transacciones SET vendedor = '"+nuevoJugador+"' WHERE vendedor = '"+jugador+"'");
     }
 
-    public void sacarObjeto (Jugador jugador, String itemNombre, int pixelcoinsPorItem) {
-        jugadoresMySQL.setPixelcoin(jugador.getNombre(), jugador.getPixelcoins() - pixelcoinsPorItem);
-
-        Pixelcoin.publish(new ItemSacadoEvento(jugador, itemNombre, pixelcoinsPorItem));
-    }
-
-    public void sacarMaxItemDiamond (Jugador jugador, String playerName) {
-        int dineroJugador = (int) jugador.getPixelcoins();
-        Player player = Bukkit.getPlayer(playerName);
-
-        int convertibles = dineroJugador - (dineroJugador % DIAMANTE);
-        int items = (convertibles / DIAMANTE) % 9;
-        int bloques = ((convertibles / DIAMANTE) - items) / 9;
-
-        int bloquesAnadidos = 0;
-        int[] slotsBloques = slotsItem(bloques, 36 - getEspaciosOcupados(player.getInventory()));
-        Inventory inventoryJugador = player.getInventory();
-
-        for (int i = 0; i < slotsBloques.length; i++) {
-            bloquesAnadidos = bloquesAnadidos + slotsBloques[i];
-            inventoryJugador.addItem(new ItemStack(Material.getMaterial("DIAMOND_BLOCK"), slotsBloques[i]));
-        }
-        int[] slotsDiamantes = slotsItem(items, 36 - getEspaciosOcupados(inventoryJugador));
-        int diamantesAnadidos = 0;
-        for (int i = 0; i < slotsDiamantes.length; i++) {
-            diamantesAnadidos = diamantesAnadidos + slotsDiamantes[i];
-            inventoryJugador.addItem(new ItemStack(Material.getMaterial("DIAMOND"), slotsDiamantes[i]));
-        }
-
-        int coste = (DIAMANTE * bloquesAnadidos * 9) + (DIAMANTE * diamantesAnadidos);
-        jugadoresMySQL.setPixelcoin(player.getName(), dineroJugador - coste);
-
-        Pixelcoin.publish(new ItemSacadoMaxEvento(jugador, "DIAMOND", coste));
-    }
-
-    public void sacarMaxItemLapisLazuli (Jugador jugador, String playerName) {
-        int dineroJugador = (int) jugador.getPixelcoins();
-        Player player = Bukkit.getPlayer(playerName);
-
-        int convertibles = dineroJugador - (dineroJugador % LAPISLAZULI);
-        int items = (convertibles / LAPISLAZULI) % 9;
-        int bloques = ((convertibles / LAPISLAZULI) - items) / 9;
-
-        int bloquesAnadidos = 0;
-        int[] slotsBloques = slotsItem(bloques, 36 - getEspaciosOcupados(player.getInventory()));
-        Inventory inventoryJugador = player.getInventory();
-
-        for (int i = 0; i < slotsBloques.length; i++) {
-            bloquesAnadidos = bloquesAnadidos + slotsBloques[i];
-            inventoryJugador.addItem(new ItemStack(Material.getMaterial("LAPIS_BLOCK"), slotsBloques[i]));
-        }
-        int[] slotsDiamantes = slotsItem(items, 36 - getEspaciosOcupados(inventoryJugador));
-        int diamantesAnadidos = 0;
-        for (int i = 0; i < slotsDiamantes.length; i++) {
-            diamantesAnadidos = diamantesAnadidos + slotsDiamantes[i];
-            inventoryJugador.addItem(new ItemStack(Material.getMaterial("LAPIS_LAZULI"), slotsDiamantes[i]));
-        }
-
-        int coste = (LAPISLAZULI * bloquesAnadidos * 9) + (LAPISLAZULI * diamantesAnadidos);
-        jugadoresMySQL.setPixelcoin(player.getName(), dineroJugador - coste);
-
-        Pixelcoin.publish(new ItemSacadoMaxEvento(jugador, "LAPIS_LAZULI", coste));
-    }
-
-    public void sacarMaxItemQuartzBlock (Jugador jugador, String playerName) {
-        int pixelcoinsJugador = (int) jugador.getPixelcoins();
-        Player player = Bukkit.getPlayer(playerName);
-
-        int bloques = (pixelcoinsJugador - (pixelcoinsJugador % CUARZO)) / CUARZO;
-
-        int[] slotsBloques = slotsItem(bloques, 36 - getEspaciosOcupados(player.getInventory()));
-        int bloquesAnadidos = 0;
-        Inventory jugadorInventory = player.getInventory();
-        for (int i = 0; i < slotsBloques.length; i++) {
-            bloquesAnadidos = bloquesAnadidos + slotsBloques[i];
-            jugadorInventory.addItem(new ItemStack(Material.getMaterial("QUARTZ_BLOCK"), slotsBloques[i]));
-        }
-
-        int coste = (CUARZO * bloquesAnadidos);
-        jugadoresMySQL.setPixelcoin(player.getName(), pixelcoinsJugador - coste);
-
-        Pixelcoin.publish(new ItemSacadoMaxEvento(jugador, "QUARTZ_BLOCK", coste));
-    }
-
-    public void comprarUnidadBolsa (TipoActivo tipoActivo, String ticker, String nombreValor, String alias, double precioUnidad, int cantidad, String nombrePlayer) {
-        Player player = Bukkit.getPlayer(nombrePlayer);
-        Jugador comprador = jugadoresMySQL.getJugador(nombrePlayer);
-        double precioTotal = precioUnidad * cantidad;
-
-        jugadoresMySQL.setPixelcoin(nombrePlayer, comprador.getPixelcoins() - precioTotal);
-        posicionesAbiertasMySQL.nuevaPosicion(nombrePlayer, tipoActivo, ticker, cantidad, precioUnidad, TipoPosicion.LARGO);
-
-        Pixelcoin.publish(new PosicionCompraLargoEvento(comprador.getNombre(), precioUnidad, cantidad, cantidad*precioUnidad, ticker, tipoActivo, nombreValor, alias));
-    }
-
-    public void venderEnCortoBolsa (String playerName, String ticker, String nombreValor, int cantidad, double precioPorAccion) {
-        Jugador jugador = jugadoresMySQL.getJugador(playerName);
-        double valorTotal = precioPorAccion * cantidad;
-        double comision = redondeoDecimales(reducirPorcentaje(valorTotal, 100 - PosicionesAbiertas.PORCENTAJE_CORTO), 2);
-
-        jugadoresMySQL.setEstadisticas(playerName, jugador.getPixelcoins() - comision, jugador.getNventas(), jugador.getIngresos(), jugador.getGastos() + comision);
-        posicionesAbiertasMySQL.nuevaPosicion(playerName, TipoActivo.ACCIONES, ticker, cantidad, precioPorAccion, TipoPosicion.CORTO);
-
-        Pixelcoin.publish(new PosicionVentaCortoEvento(playerName, precioPorAccion, cantidad, comision, ticker, TipoActivo.ACCIONES, nombreValor));
-    }
-
     public void venderPosicion(PosicionAbierta posicionAVender, int cantidad, String nombreJugador) {
         Player player = Bukkit.getPlayer(nombreJugador);
         int idPosiconAbierta = posicionAVender.getId();
@@ -252,7 +146,7 @@ public final class Transacciones extends MySQL {
             comprarAccionServerAJugador(player, oferta, cantidadAComprar, precioTotalAPagar);
         }
 
-        Pixelcoin.publish(new EmpresaServerAccionCompradaEvento(player.getName(), precioTotalAPagar, cantidadAComprar, oferta, empresaAComprar));
+        Pixelcoin.publish(new EmpresaServerAccionCompradaEvento(player.getName(), precioTotalAPagar, cantidadAComprar, oferta, empresaAComprar.getNombre()));
     }
     
     private void comprarAccionServerAEmpresa (Player player, OfertaMercadoServer oferta, int cantidadAComprar, double precioTotalAPagar) {

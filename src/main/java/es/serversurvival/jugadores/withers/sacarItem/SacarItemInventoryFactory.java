@@ -1,4 +1,4 @@
-package es.serversurvival.jugadores.withers.sacarItem.infrastrocture;
+package es.serversurvival.jugadores.withers.sacarItem;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival.jugadores.withers.CambioPixelcoins;

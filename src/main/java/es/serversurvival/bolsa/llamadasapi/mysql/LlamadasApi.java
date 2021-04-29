@@ -1,6 +1,7 @@
 package es.serversurvival.bolsa.llamadasapi.mysql;
 
 import es.jaime.EventListener;
+import es.serversurvival.bolsa.ordenespremarket.ejecutarordenes.OrdenNoEjecutadoEvento;
 import es.serversurvival.shared.mysql.MySQL;
 import es.serversurvival.utils.apiHttp.IEXCloud_API;
 import es.serversurvival.shared.eventospixelcoins.PosicionAbiertaEvento;
@@ -28,6 +29,11 @@ public final class LlamadasApi extends MySQL {
     @EventListener
     public void onClosedPosition (PosicionCerradaEvento evento) {
         this.borrarLlamadaSiNoEsUsada(evento.getTicker());
+    }
+
+    @EventListener
+    public void onOrdenNoEjecutada (OrdenNoEjecutadoEvento evento) {
+        llamadasApiMySQL.borrarLlamadaSiNoEsUsada(evento.getOrden().getNombre_activo());
     }
 
     public void nuevaLlamada(String simbolo, double precio, TipoActivo tipo, String nombreValor){

@@ -5,10 +5,10 @@ import es.serversurvival.bolsa.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
 
-public final class AbrirPosicionLargoUseCase implements AllMySQLTablesInstances {
-    public static final AbrirPosicionLargoUseCase INSTANCE = new AbrirPosicionLargoUseCase();
+public final class ComprarLargoUseCase implements AllMySQLTablesInstances {
+    public static final ComprarLargoUseCase INSTANCE = new ComprarLargoUseCase();
 
-    private AbrirPosicionLargoUseCase() {}
+    private ComprarLargoUseCase() {}
 
     public void abrir (TipoActivo tipoActivo, String ticker, String nombreValor, String alias, double precioUnidad, int cantidad, String nombrePlayer) {
         posicionesAbiertasMySQL.nuevaPosicion(nombrePlayer, tipoActivo, ticker, cantidad, precioUnidad, TipoPosicion.LARGO);

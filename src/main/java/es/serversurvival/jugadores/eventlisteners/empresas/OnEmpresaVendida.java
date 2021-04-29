@@ -7,6 +7,6 @@ import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
 public final class OnEmpresaVendida implements AllMySQLTablesInstances {
     @EventListener
     public void on (EmpresaVendedidaEvento evento) {
-        jugadoresMySQL.realizarTransferenciaConEstadisticas(comprador, vendedor, pixelcoins);
+        jugadoresMySQL.realizarTransferenciaConEstadisticas(evento.getComprador(), evento.getVendedor(), evento.getPixelcoins());
     }
 }

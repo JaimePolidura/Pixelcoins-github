@@ -81,7 +81,7 @@ public final class Jugadores extends MySQL {
         return buildListFromQuery("SELECT * FROM jugadores ORDER BY ninpagos DESC");
     }
 
-    public void realizarTransferencia (String nombrePagador, String nombrePagado, double cantidad, String objeto, TipoTransaccion tipo) {
+    public void realizarTransferencia (String nombrePagador, String nombrePagado, double cantidad) {
         Jugador pagador = jugadoresMySQL.getJugador(nombrePagador);
         Jugador pagado = jugadoresMySQL.getJugador(nombrePagado);
 
@@ -89,7 +89,7 @@ public final class Jugadores extends MySQL {
         jugadoresMySQL.setPixelcoin(nombrePagador, pagador.getPixelcoins() - cantidad);
     }
 
-    public void realizarTransferenciaConEstadisticas (String nombrePagador, String nombrePagado, double cantidad, String objeto, TipoTransaccion tipo) {
+    public void realizarTransferenciaConEstadisticas (String nombrePagador, String nombrePagado, double cantidad) {
         Jugador pagador = jugadoresMySQL.getJugador(nombrePagador);
         Jugador pagado = jugadoresMySQL.getJugador(nombrePagado);
 
