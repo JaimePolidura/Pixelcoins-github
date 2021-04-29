@@ -18,7 +18,6 @@ public final class RetirarOfertaUseCase {
 
         ItemStack itemARetirar = ofertasMySQL.getItemOferta(ofertaARetirar);
 
-
         this.ofertasMySQL.borrarOferta(idARetirar);
 
         return itemARetirar;

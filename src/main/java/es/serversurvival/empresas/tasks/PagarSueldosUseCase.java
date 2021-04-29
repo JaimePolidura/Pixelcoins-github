@@ -45,7 +45,7 @@ public final class PagarSueldosUseCase implements AllMySQLTablesInstances {
         //TODO Desacoplar
         mensajesMySQL.nuevoMensaje("", empleado.getJugador(), "Has cobrado " + empleado.getSueldo() + " PC de parte de la empresa: " + empleado.getEmpresa());
 
-        Pixelcoin.publish(new SueldoPagadoEvento(empresa.getNombre(), empleado.getId(), empresa.getNombre(), empleado.getSueldo()));
+        Pixelcoin.publish(new SueldoPagadoEvento(empleado.getJugador(), empleado.getId(), empresa.getNombre(), empleado.getSueldo()));
     }
 
     @SneakyThrows

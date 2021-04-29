@@ -11,6 +11,7 @@ import es.serversurvival.webconnection.RabbitMQConsumerTask;
 import es.serversurvival.shared.scoreboards.ScoreBoardManager;
 import es.serversurvival.shared.scoreboards.ScoreboardUpdateTask;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
@@ -18,15 +19,12 @@ import static org.bukkit.ChatColor.*;
 
 public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstances {
     private static Pixelcoin plugin;
-    private final ScoreBoardManager scoreBoardManager;
-    private final EventBus eventBus;
+    private ScoreBoardManager scoreBoardManager;
+    private EventBus eventBus;
     private ScoreboardUpdateTask updater;
 
     public Pixelcoin () {
         plugin = this;
-
-        this.scoreBoardManager = new ScoreBoardManager();
-        this.eventBus = new EventBusSynch("es.serversurvival");
     }
 
     public static Pixelcoin getInstance() {
@@ -49,6 +47,9 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
     public void onEnable() {
         MySQL.conectar();
 
+        this.scoreBoardManager = new ScoreBoardManager();
+        this.eventBus = new EventBusSynch("es.serversurvival");
+
         conversacionesWebMySQL.borrarTodasConversacionesWeb();
 
         getLogger().info("------------Plugin activado -------------");
@@ -67,10 +68,10 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
     }
 
     private void setUpScoreboardUpdater () {
-        ScoreboardUpdateTask updater = new ScoreboardUpdateTask();
+        this.updater = new ScoreboardUpdateTask();
         updater.runTaskTimer(this, BukkitTimeUnit.MINUTE, BukkitTimeUnit.MINUTE);
 
-        this.updater = updater;
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, updater, BukkitTimeUnit.MINUTE, BukkitTimeUnit.MINUTE);
     }
 
     private void setUpCommandsMobListenersTask() {

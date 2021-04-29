@@ -64,7 +64,7 @@ public class SacarItemMenu extends Menu implements Clickable, Refreshcable {
         String tipoItem = itemClickeado.getType().toString();
         double cambioPixelcoins = CambioPixelcoins.getCambioTotal(tipoItem, 1); //Pixelcoins a sacar
 
-        if(jugadorASacar.getPixelcoins() >= cambioPixelcoins){
+        if(jugadorASacar.getPixelcoins() < cambioPixelcoins){
             Funciones.enviarMensajeYSonido(player, DARK_RED + "Necesitas tener minimo " + cambioPixelcoins + " pixelcoins para convertirlo", Sound.ENTITY_VILLAGER_NO);
             return;
         }

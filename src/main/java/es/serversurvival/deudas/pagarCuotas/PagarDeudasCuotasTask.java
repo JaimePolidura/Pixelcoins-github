@@ -1,9 +1,8 @@
-package es.serversurvival.deudas.pagarCuota;
+package es.serversurvival.deudas.pagarCuotas;
 
 import es.jaimetruman.task.BukkitTimeUnit;
 import es.jaimetruman.task.Task;
 import es.jaimetruman.task.TaskRunner;
-import es.serversurvival.deudas.mysql.Deudas;
 
 @Task(BukkitTimeUnit.DAY)
 public final class PagarDeudasCuotasTask implements TaskRunner {

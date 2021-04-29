@@ -7,3 +7,5 @@
 4º Añadir que se pueden poner ordenes premarket cada vez que se opere en corto cuando el mercado este cerrado
 
 5º A la hora de hacer una transaccion de cualquier tipo, hay en algunos casos que no hay mensaje de feedback. Arreglarlo
+
+6º Hacer el refactor de dateformatter en funciones y el de esTipoItem a que reciba objetos tipo material en los parametros en lugar de strings

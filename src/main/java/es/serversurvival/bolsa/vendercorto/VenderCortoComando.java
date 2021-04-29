@@ -3,6 +3,7 @@ package es.serversurvival.bolsa.vendercorto;
 import es.jaime.EventListener;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.Pixelcoin;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionesAbiertas;
 import es.serversurvival.bolsa.posicionesabiertas.vendercorto.PosicionVentaCortoEvento;
 import es.serversurvival.jugadores.mySQL.Jugador;
@@ -43,7 +44,7 @@ public class VenderCortoComando extends PixelcoinCommand implements CommandRunne
         int numeroAccionesAVender = Integer.parseInt(args[2]);
         String ticker = args[1];
 
-        Funciones.POOL.submit( () -> {
+        Bukkit.getScheduler().runTask(Pixelcoin.getInstance(), () -> {
             Optional<Pair<String, Double>> optionalNombrePrecio = llamadasApiMySQL.getPairNombreValorPrecio(ticker);
 
             if(!optionalNombrePrecio.isPresent()){

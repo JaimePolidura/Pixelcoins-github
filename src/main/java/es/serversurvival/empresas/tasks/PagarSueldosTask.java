@@ -1,5 +1,6 @@
 package es.serversurvival.empresas.tasks;
 
+import es.jaimetruman.task.BukkitTimeUnit;
 import es.jaimetruman.task.Task;
 import es.jaimetruman.task.TaskRunner;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
@@ -9,7 +10,7 @@ import java.util.List;
 
 import static es.jaimetruman.task.BukkitTimeUnit.*;
 
-@Task(DAY)
+@Task(value = DAY, delay = 20*SECOND)
 public final class PagarSueldosTask implements TaskRunner, AllMySQLTablesInstances {
     private final PagarSueldosUseCase useCase = PagarSueldosUseCase.INSTANCE;
 

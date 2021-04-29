@@ -12,7 +12,7 @@ public final class ComprarOfertaUseCase implements AllMySQLTablesInstances {
 
     private ComprarOfertaUseCase () {}
 
-    public void realizarVenta(String comprador, int id) {
+    public ItemStack realizarVenta(String comprador, int id) {
         Oferta ofertaAComprar = ofertasMySQL.getOferta(id);
         Jugador jugadorComprador = jugadoresMySQL.getJugador(comprador);
 
@@ -21,7 +21,7 @@ public final class ComprarOfertaUseCase implements AllMySQLTablesInstances {
         String objeto = ofertaAComprar.getObjeto();
         double precio = ofertaAComprar.getPrecio();
 
-        ItemStack itemAComprar = ofertasMySQL.getItemOferta(ofertasMySQL.getOferta(id));
+        ItemStack itemAComprar = ofertasMySQL.getItemOferta(ofertaAComprar);
         itemAComprar.setAmount(1);
 
         if (cantidad == 1)
@@ -33,5 +33,7 @@ public final class ComprarOfertaUseCase implements AllMySQLTablesInstances {
         Jugadores.INSTANCE.realizarTransferenciaConEstadisticas(comprador, vendedor, precio);
 
         Pixelcoin.publish(new ItemCompradoEvento(vendedor, comprador, objeto, cantidad, precio));
+
+        return itemAComprar;
     }
 }

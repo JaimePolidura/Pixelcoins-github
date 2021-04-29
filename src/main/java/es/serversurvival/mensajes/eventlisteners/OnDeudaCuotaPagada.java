@@ -2,7 +2,7 @@ package es.serversurvival.mensajes.eventlisteners;
 
 import es.jaime.EventListener;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.deudas.tasks.DeudaCuotaPagadaEvento;
+import es.serversurvival.deudas.pagarCuotas.DeudaCuotaPagadaEvento;
 
 public final class OnDeudaCuotaPagada implements AllMySQLTablesInstances {
     @EventListener

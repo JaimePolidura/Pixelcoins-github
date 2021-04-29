@@ -8,8 +8,10 @@ import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.utils.Funciones;
 import main.ValidationResult;
 import main.ValidationsService;
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import static es.serversurvival.utils.Funciones.enviarMensaje;
 import static org.bukkit.ChatColor.*;
@@ -43,8 +45,18 @@ public class PagarComando extends PixelcoinCommand implements CommandRunner {
 
         this.pagarUseCase.realizarPagoManual(sender.getName(), args[0], Double.parseDouble(args[1]));
 
-        sender.sendMessage(GOLD + "Has pagado: " + GREEN + AllMySQLTablesInstances.formatea.format(pixelcoins) + " PC " + GOLD + "a " + pagado);
-        String mensajeSiEstaOnline = GOLD + pagador + " te ha pagado: " + GREEN + "+" + AllMySQLTablesInstances.formatea.format(pixelcoins) + " PC " + AQUA + "(/estadisticas)";
+
+        sendMessage((Player) sender, pagado, pixelcoins);
+    }
+
+    private void sendMessage (Player pagador, String pagado, double pixelcoins) {
+        pagador.sendMessage(GOLD + "Has pagado: " + GREEN + AllMySQLTablesInstances.formatea.format(pixelcoins) + " PC " + GOLD + "a " + pagado);
+        String mensajeSiEstaOnline = GOLD + pagador.getName() + " te ha pagado: " + GREEN + "+" + AllMySQLTablesInstances.formatea.format(pixelcoins) + " PC " + AQUA + "(/estadisticas)";
         Funciones.enviarMensaje(pagado, mensajeSiEstaOnline, mensajeSiEstaOnline, Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+
+        String mensajeOnline = GOLD + pagador.getName() + " te ha pagado " + GREEN + formatea.format(pixelcoins) + "PC!";
+        String mensajeOffline = pagador.getName() + " te ha pagado " + formatea.format(pixelcoins) + "PC!";
+
+        Funciones.enviarMensaje(pagado, mensajeOnline, mensajeOffline);
     }
 }

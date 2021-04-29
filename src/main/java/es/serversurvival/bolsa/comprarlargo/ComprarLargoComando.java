@@ -2,6 +2,7 @@ package es.serversurvival.bolsa.comprarlargo;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.Pixelcoin;
 import es.serversurvival.bolsa.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.shared.comandos.PixelcoinCommand;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
@@ -38,7 +39,7 @@ public class ComprarLargoComando extends PixelcoinCommand implements CommandRunn
         int nAccinesAComprar = Integer.parseInt(args[2]);
         String ticker = args[1];
 
-        Funciones.POOL.submit(() -> {
+        Bukkit.getScheduler().runTask(Pixelcoin.getInstance(), () -> {
             player.sendMessage(RED + "Cargando...");
 
             Optional<Pair<String, Double>> valorOpcional = llamadasApiMySQL.getPairNombreValorPrecio(ticker);
@@ -56,7 +57,7 @@ public class ComprarLargoComando extends PixelcoinCommand implements CommandRunn
                 return;
             }
 
-            if(!Funciones.mercadoEstaAbierto()) {
+            if(Funciones.mercadoNoEstaAbierto()) {
                 AbrirOrdenUseCase.INSTANCE.abrirOrdenCompraLargo(player.getName(), ticker, nAccinesAComprar);
 
                 Funciones.enviarMensajeYSonido((Player) player, ChatColor.GOLD + "Se ha abierto una orden. Cuando el mercado este abierto se ejecutara. " +
@@ -71,6 +72,10 @@ public class ComprarLargoComando extends PixelcoinCommand implements CommandRunn
                         + " acciones a " + GREEN + formatea.format(precio) + " PC" + GOLD + " que es un total de " + GREEN +
                         formatea.format(precio) + " PC " + GOLD + " comandos: " + AQUA + "/bolsa vender /bolsa cartera", Sound.ENTITY_PLAYER_LEVELUP);
             }
+        });
+
+        Funciones.POOL.execute(() -> {
+
         });
     }
 }

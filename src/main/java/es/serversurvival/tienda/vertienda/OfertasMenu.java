@@ -95,13 +95,16 @@ public class OfertasMenu extends Menu implements Clickable, Paginated, Refreshca
         String itemClickckedDisplayName = itemClicked.getItemMeta().getDisplayName();
 
         if (itemClickckedDisplayName.equalsIgnoreCase(Ofertas.NOMBRE_ITEM_RETIRAR)) {
-            retirarOfertaUseCase.retirarOferta(id);
-        } else {
-            comprarOfertaUseCase.realizarVenta(player.getName(), id);
+            ItemStack itemRetirado = retirarOfertaUseCase.retirarOferta(id);
+            player.getInventory().addItem(itemRetirado);
 
-            MinecraftUtils.setLore(itemClicked, Collections.singletonList("Comprado en la tienda"));
-            player.getInventory().addItem(itemClicked);
-            player.sendMessage(GOLD + "Has retirado un item");
+            player.sendMessage(GOLD + "Has retirado " + itemRetirado.getType().toString() + " de la tienda");
+        } else {
+            ItemStack itemComprado = comprarOfertaUseCase.realizarVenta(player.getName(), id);
+
+            MinecraftUtils.setLore(itemComprado, Collections.singletonList("Comprado en la tienda"));
+            player.getInventory().addItem(itemComprado);
+            player.sendMessage(GOLD + "Has comprado " + itemComprado.getType().toString());
         }
     }
 

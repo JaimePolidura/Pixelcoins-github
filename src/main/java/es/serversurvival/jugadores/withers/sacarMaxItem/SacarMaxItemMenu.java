@@ -8,6 +8,7 @@ import es.serversurvival.shared.menus.Clickable;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.utils.Funciones;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -46,7 +47,7 @@ public class SacarMaxItemMenu extends Menu implements Clickable {
         if(itemClickeado == null || itemClickeado.getType().toString().equalsIgnoreCase("AIR")){
             return;
         }
-        if(Funciones.noEsDeTipoItem(itemClickeado, "DIAMOND_BLOCK", "QUARTZ_BLOCK", "LAPIS_LAZULI")) {
+        if(Funciones.noEsDeTipoItem(itemClickeado, "DIAMOND_BLOCK", "QUARTZ_BLOCK", "LAPIS_BLOCK")) {
             return;
         }
 

@@ -8,35 +8,14 @@ import es.serversurvival.bolsa.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa.ofertasmercadoserver.comprar.EmpresaServerAccionCompradaEvento;
 import es.serversurvival.bolsa.ofertasmercadoserver.mysql.OfertaMercadoServer;
 import es.serversurvival.bolsa.ofertasmercadoserver.mysql.TipoOfertante;
-import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.PosicionCompraLargoEvento;
-import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
-import es.serversurvival.bolsa.posicionesabiertas.vendercorto.PosicionVentaCortoEvento;
-import es.serversurvival.bolsa.posicionesabiertas.venderlargo.PosicionVentaLargoEvento;
 import es.serversurvival.bolsa.posicionescerradas.mysql.TipoPosicion;
-import es.serversurvival.empresas.comprarservicio.EmpresaServicioCompradoEvento;
-import es.serversurvival.empresas.depositar.PixelcoinsDepositadasEvento;
 import es.serversurvival.empresas.mysql.Empresa;
-import es.serversurvival.empresas.sacar.PixelcoinsSacadasEvento;
 import es.serversurvival.jugadores.mySQL.Jugador;
-import es.serversurvival.jugadores.pagar.JugadorPagoManualEvento;
-import es.serversurvival.jugadores.withers.ingresarItem.ItemIngresadoEvento;
-import es.serversurvival.jugadores.withers.sacarItem.ItemSacadoEvento;
-import es.serversurvival.jugadores.withers.sacarMaxItem.ItemSacadoMaxEvento;
 import es.serversurvival.shared.mysql.MySQL;
-import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionesAbiertas;
-import es.serversurvival.tienda.comprar.ItemCompradoEvento;
 import es.serversurvival.Pixelcoin;
-import es.serversurvival.jugadores.withers.CambioPixelcoins;
-import es.serversurvival.shared.mysql.TablaObjeto;
-import es.serversurvival.tienda.mySQL.ofertas.Oferta;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import static es.serversurvival.jugadores.withers.CambioPixelcoins.*;
 import static es.serversurvival.utils.Funciones.*;
 
 /**
@@ -58,63 +37,6 @@ public final class Transacciones extends MySQL {
     public void setCompradorVendedor (String jugador, String nuevoJugador) {
         executeUpdate("UPDATE transacciones SET comprador = '"+nuevoJugador+"' WHERE comprador = '"+jugador+"'");
         executeUpdate("UPDATE transacciones SET vendedor = '"+nuevoJugador+"' WHERE vendedor = '"+jugador+"'");
-    }
-
-    public void venderPosicion(PosicionAbierta posicionAVender, int cantidad, String nombreJugador) {
-        Player player = Bukkit.getPlayer(nombreJugador);
-        int idPosiconAbierta = posicionAVender.getId();
-        double precioPorAccion = llamadasApiMySQL.getLlamadaAPI(posicionAVender.getNombre_activo()).getPrecio();
-
-        String ticker = posicionAVender.getNombre_activo();
-        int nAccionesTotlaesEnCartera = posicionAVender.getCantidad();
-        double precioApertura = posicionAVender.getPrecio_apertura();
-        String fechaApertura = posicionAVender.getFecha_apertura();
-        double revalorizacionTotal = cantidad * precioPorAccion;
-        double rentabilidad = redondeoDecimales(diferenciaPorcntual(precioApertura, precioPorAccion), 3);
-
-        Jugador vendedor = jugadoresMySQL.getJugador(nombreJugador);
-        double beneficiosPerdidas = revalorizacionTotal - (cantidad * precioApertura);
-
-        if(beneficiosPerdidas >= 0)
-            jugadoresMySQL.setEstadisticas(nombreJugador, vendedor.getPixelcoins() + revalorizacionTotal, vendedor.getNventas(), vendedor.getIngresos() + beneficiosPerdidas, vendedor.getGastos());
-        else
-            jugadoresMySQL.setEstadisticas(nombreJugador, vendedor.getPixelcoins() + revalorizacionTotal, vendedor.getNventas(), vendedor.getIngresos(), vendedor.getGastos() + beneficiosPerdidas);
-
-        if (cantidad == nAccionesTotlaesEnCartera)
-            posicionesAbiertasMySQL.borrarPosicionAbierta(idPosiconAbierta);
-        else
-            posicionesAbiertasMySQL.setCantidad(idPosiconAbierta, nAccionesTotlaesEnCartera - cantidad);
-
-        String nombreValor = llamadasApiMySQL.getLlamadaAPI(ticker).getNombre_activo();
-
-        Pixelcoin.publish(new PosicionVentaLargoEvento(nombreJugador, ticker, nombreValor, precioApertura, fechaApertura, precioPorAccion, cantidad, rentabilidad, posicionAVender.getTipo_activo()));
-    }
-
-    public void comprarPosicionCorto (PosicionAbierta posicionAComprar, int cantidad, String playername) {
-        Player player = Bukkit.getPlayer(playername);
-        int idPosiconAbierta = posicionAComprar.getId();
-        double precioPorAccion = llamadasApiMySQL.getLlamadaAPI(posicionAComprar.getNombre_activo()).getPrecio();
-
-        String ticker = posicionAComprar.getNombre_activo();
-        int nAccionesTotlaesEnCartera = posicionAComprar.getCantidad();
-        double precioApertura = posicionAComprar.getPrecio_apertura();
-        double revalorizacionTotal = cantidad * (precioApertura - precioPorAccion);
-        double rentabilidad = redondeoDecimales(diferenciaPorcntual(precioPorAccion, precioApertura), 3);
-        Jugador compradorJugador = jugadoresMySQL.getJugador(playername);
-
-        double pixelcoinsJugador = compradorJugador.getPixelcoins();
-        if(0 > pixelcoinsJugador + revalorizacionTotal)
-            jugadoresMySQL.setEstadisticas(playername, pixelcoinsJugador + revalorizacionTotal, compradorJugador.getNventas(), compradorJugador.getIngresos(), compradorJugador.getGastos() + revalorizacionTotal);
-        else
-            jugadoresMySQL.setEstadisticas(playername, pixelcoinsJugador + revalorizacionTotal, compradorJugador.getNventas(), compradorJugador.getIngresos() + revalorizacionTotal, compradorJugador.getGastos());
-
-        if (cantidad == nAccionesTotlaesEnCartera)
-            posicionesAbiertasMySQL.borrarPosicionAbierta(idPosiconAbierta);
-        else
-            posicionesAbiertasMySQL.setCantidad(idPosiconAbierta, nAccionesTotlaesEnCartera - cantidad);
-
-        String nombreValor = llamadasApiMySQL.getLlamadaAPI(ticker).getNombre_activo();
-
     }
 
     public void cambiarNombreJugadorRegistros (String jugadorACambiar, String nuevoNombre) {

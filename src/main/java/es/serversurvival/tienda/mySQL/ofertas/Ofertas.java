@@ -109,7 +109,7 @@ public final class Ofertas extends MySQL {
         return itemToConvert;
     }
 
-    private ItemStack rellenarEncantamientoLibro (ItemStack itemToConvert, List<Encantamiento> encantamientos) {
+    private void rellenarEncantamientoLibro (ItemStack itemToConvert, List<Encantamiento> encantamientos) {
         EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemToConvert.getItemMeta();
 
         for(Encantamiento enchantment : encantamientos){
@@ -120,10 +120,9 @@ public final class Ofertas extends MySQL {
         }
         itemToConvert.setItemMeta(meta);
 
-        return itemToConvert;
     }
 
-    private ItemStack rellenarEncantamiento (ItemStack itemToConvert, List<Encantamiento> encantamientos) {
+    private void rellenarEncantamiento (ItemStack itemToConvert, List<Encantamiento> encantamientos) {
         ItemMeta itemMeta = itemToConvert.getItemMeta();
         for(Encantamiento encantamiento : encantamientos){
             Enchantment encantamientoAPoner = Enchantment.getByName(encantamiento.getEncantamiento());
@@ -133,7 +132,6 @@ public final class Ofertas extends MySQL {
         }
         itemToConvert.setItemMeta(itemMeta);
 
-        return itemToConvert;
     }
 
     public ItemStack retirarOferta(Player player, int idARetirar) {

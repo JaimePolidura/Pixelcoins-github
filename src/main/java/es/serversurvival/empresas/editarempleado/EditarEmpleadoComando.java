@@ -6,7 +6,7 @@ import es.serversurvival.shared.comandos.PixelcoinCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import static org.bukkit.ChatColor.DARK_RED;
+import static org.bukkit.ChatColor.*;
 
 @Command("empresas editarempleado")
 public class EditarEmpleadoComando extends PixelcoinCommand implements CommandRunner {
@@ -15,8 +15,8 @@ public class EditarEmpleadoComando extends PixelcoinCommand implements CommandRu
     @Override
     public void execute(CommandSender player, String[] args) {
         if(args.length >= 3)
-            player.sendMessage(ChatColor.GOLD + "Para editar empleados: http://serversurvival.ddns.net/profile/empresas/info/" + args[2] + " /cuenta para registrarse");
+            player.sendMessage(ChatColor.GOLD + "Para editar empleados: http://serversurvival.ddns.net/profile/empresas/info/" + args[2] +AQUA+" /cuenta" +GOLD+ "para registrarse");
         else
-            player.sendMessage(ChatColor.GOLD + "Para editar empleados: http://serversurvival.ddns.net/profile/empresas /cuenta para registrarse");
+            player.sendMessage(ChatColor.GOLD + "Para editar empleados: http://serversurvival.ddns.net/profile/empresas "+AQUA+" /cuenta" +GOLD+ "para registrarse");
     }
 }
