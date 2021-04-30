@@ -4,6 +4,8 @@ import es.jaime.EventListener;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.bolsa.llamadasapi.mysql.TipoActivo;
+import es.serversurvival.bolsa.ofertasmercadoserver.mysql.TipoOfertante;
+import es.serversurvival.bolsa.ordenespremarket.mysql.AccionOrden;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.bolsa.posicionesabiertas.venderlargo.VenderLargoUseCase;
 import es.serversurvival.bolsa.posicionesabiertas.venderlargo.PosicionVentaLargoEvento;
@@ -18,6 +20,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 
+import static es.serversurvival.utils.validaciones.Validaciones.*;
 import static org.bukkit.ChatColor.*;
 
 @Command("bolsa vender")
@@ -28,9 +31,9 @@ public class VenderBolsaComando extends PixelcoinCommand implements CommandRunne
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        ValidationResult result =ValidationsService.startValidating(args.length != 3 && args.length != 2, Validaciones.False.of(mensajeIncorrecto))
-                .andMayThrowException(() -> args[1], mensajeIncorrecto, Validaciones.NaturalNumber, Validaciones.OwnerPosicionAbierta.de(player.getName(), TipoPosicion.LARGO))
-                .andIfExists(() -> args[2], Validaciones.NaturalNumber)
+        ValidationResult result =ValidationsService.startValidating(args.length != 3 && args.length != 2, False.of(mensajeIncorrecto))
+                .andMayThrowException(() -> args[1], mensajeIncorrecto, NaturalNumber, OwnerPosicionAbierta.de(player.getName(), TipoPosicion.LARGO))
+                .andIfExists(() -> args[2], NaturalNumber)
                 .validateAll();
 
         if(result.isFailed()){
@@ -52,10 +55,11 @@ public class VenderBolsaComando extends PixelcoinCommand implements CommandRunne
             return;
         }
 
+
         if(Funciones.mercadoEstaAbierto()){
             venderUseCase.venderPosicion(posicionAVender, cantidad, player.getName());
         }else{
-            abrirOrdenUseCase.abrirOrdenCompraLargo(player.getName(), args[1], cantidad);
+            abrirOrdenUseCase.abrirOrden(player.getName(), args[1], cantidad, AccionOrden.LARGO_VENTA);
             player.sendMessage(GOLD + "Has abierto una orden, se ejecutara cuando el mercado este abierto");
         }
     }

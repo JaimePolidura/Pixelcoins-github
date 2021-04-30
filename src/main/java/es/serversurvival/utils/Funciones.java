@@ -82,7 +82,7 @@ public final class Funciones {
         return aumentarPorcentaje(numero, -porcentaje);
     }
 
-    public static List<java.lang.String> dividirDesc (java.lang.String sentence, Integer k){
+    public static List<String> dividirDesc (String sentence, Integer k){
         int totalLines = (sentence.length() / k);
         if(sentence.length() % k != 0){
             totalLines++;
@@ -90,7 +90,7 @@ public final class Funciones {
 
         int beginIndex = 0;
         int endIndex = k;
-        List<java.lang.String> toReturn = new ArrayList<>();
+        List<String> toReturn = new ArrayList<>();
 
         for(int i = 0; i < totalLines; i++){
             if((i + 1) == totalLines){
@@ -149,7 +149,7 @@ public final class Funciones {
         return redondeado.doubleValue();
     }
 
-    public static Map<java.lang.String, Double> crearMapaTopPatrimonioPlayers (boolean creciente) {
+    public static Map<String, Double> crearMapaTopPatrimonioPlayers (boolean creciente) {
         Deudas deudasMySQL = Deudas.INSTANCE;
         Jugadores jugadoresMySQL = Jugadores.INSTANCE;
         PosicionesAbiertas posicionesAbiertasMySQL = PosicionesAbiertas.INSTANCE;
@@ -157,14 +157,14 @@ public final class Funciones {
         LlamadasApi llamadasApiMySQL = LlamadasApi.INSTANCE;
 
         List<Jugador> allJugadordes = jugadoresMySQL.getAllJugadores();
-        Map<java.lang.String, LlamadaApi> mapAllLlamadas = llamadasApiMySQL.getMapOfAllLlamadasApi();
-        Map<java.lang.String, List<Deuda>> mapDeudasAcredor = deudasMySQL.getAllDeudasAcredorMap();
-        Map<java.lang.String, List<Deuda>> mapDeudasDeudor = deudasMySQL.getAllDeudasDeudorMap();
-        Map<java.lang.String, List<Empresa>> mapEmpresasJugador = empresasMySQL.getAllEmpresasJugadorMap();
-        Map<java.lang.String, List<PosicionAbierta>> mapPosicionesLargo = posicionesAbiertasMySQL.getAllPosicionesAbiertasMap(PosicionAbierta::noEsTipoAccionServerYLargo);
-        Map<java.lang.String, List<PosicionAbierta>> mapPosicionesCorto = posicionesAbiertasMySQL.getAllPosicionesAbiertasMap(PosicionAbierta::esCorto);
+        Map<String, LlamadaApi> mapAllLlamadas = llamadasApiMySQL.getMapOfAllLlamadasApi();
+        Map<String, List<Deuda>> mapDeudasAcredor = deudasMySQL.getAllDeudasAcredorMap();
+        Map<String, List<Deuda>> mapDeudasDeudor = deudasMySQL.getAllDeudasDeudorMap();
+        Map<String, List<Empresa>> mapEmpresasJugador = empresasMySQL.getAllEmpresasJugadorMap();
+        Map<String, List<PosicionAbierta>> mapPosicionesLargo = posicionesAbiertasMySQL.getAllPosicionesAbiertasMap(PosicionAbierta::noEsTipoAccionServerYLargo);
+        Map<String, List<PosicionAbierta>> mapPosicionesCorto = posicionesAbiertasMySQL.getAllPosicionesAbiertasMap(PosicionAbierta::esCorto);
 
-        HashMap<java.lang.String, Double> toReturn = new HashMap<>();
+        HashMap<String, Double> toReturn = new HashMap<>();
 
         allJugadordes.forEach((jugador) -> {
             double activosTotales = 0;
@@ -217,55 +217,11 @@ public final class Funciones {
             return Funciones.sortMapByValueDecre(toReturn);
     }
 
-    public static double getPatrimonioJugador(java.lang.String nombreJugador){
-        Jugadores jugadoresMySQL = Jugadores.INSTANCE;
-        Deudas deudas = Deudas.INSTANCE;
-        PosicionesAbiertas posicionesAbiertas = PosicionesAbiertas.INSTANCE;
-        Empresas empresas = Empresas.INSTANCE;
-        LlamadasApi llamadasApi = LlamadasApi.INSTANCE;
-
-        Map<java.lang.String, LlamadaApi> mapAllLlamadas = llamadasApi.getMapOfAllLlamadasApi();
-
-        Jugador jugador = jugadoresMySQL.getJugador(nombreJugador);
-
-        double patrimonio = 0;
-
-        //Liquidez
-        patrimonio = jugador.getPixelcoins();
-
-        //Deuas a cobrar
-        patrimonio += deudas.getDeudasAcredor(jugador.getNombre()).stream()
-                .mapToDouble(Deuda::getPixelcoins_restantes)
-                .sum();
-
-        //Deudas a pagar
-        patrimonio -= deudas.getDeudasDeudor(jugador.getNombre()).stream()
-                .mapToInt(Deuda::getPixelcoins_restantes)
-                .sum();
-
-        //Empresas
-        patrimonio += empresas.getEmpresasOwner(jugador.getNombre()).stream()
-                .mapToDouble(Empresa::getPixelcoins)
-                .sum();
-
-        //Bolsa
-        List<PosicionAbierta> posicionAbiertasJugador = posicionesAbiertas.getPosicionesAbiertasJugadorCondicion(jugador.getNombre(), PosicionAbierta::noEsTipoAccionServer);
-
-        patrimonio += posicionAbiertasJugador.stream()
-                .filter(PosicionAbierta::esLargo)
-                .mapToDouble(pos -> (mapAllLlamadas.get(pos.getNombre_activo()).getPrecio() * pos.getCantidad()))
-                .sum();
-
-        patrimonio += posicionAbiertasJugador.stream()
-                .filter(PosicionAbierta::esCorto)
-                .mapToDouble(pos -> (pos.getPrecio_apertura() - mapAllLlamadas.get(pos.getNombre_activo()).getPrecio()) * pos.getCantidad())
-                .sum();
-
-
-        return patrimonio;
+    public static double getPatrimonioJugador(String nombreJugador){
+        return crearMapaTopPatrimonioPlayers(false).get(nombreJugador);
     }
 
-    public static Object peticionHttp(java.lang.String link) throws Exception {
+    public static Object peticionHttp(String link) throws Exception {
         URL url = new URL(link);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -273,7 +229,7 @@ public final class Funciones {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         StringBuilder response = new StringBuilder();
 
-        java.lang.String responseLine;
+        String responseLine;
         while ((responseLine = bufferedReader.readLine()) != null) {
             response.append(responseLine.trim());
         }
@@ -281,14 +237,14 @@ public final class Funciones {
         return parser.parse(response.toString());
     }
 
-    public static boolean cuincideNombre (java.lang.String nombre, java.lang.String... items){
-        List<java.lang.String> bannedNamesList = Arrays.asList(items);
+    public static boolean cuincideNombre (String nombre, String... items){
+        List<String> bannedNamesList = Arrays.asList(items);
 
         return bannedNamesList.stream()
                 .anyMatch( (name) -> name.equalsIgnoreCase(nombre));
     }
 
-    public static boolean noCuincideNombre (java.lang.String nombre, java.lang.String... items){
+    public static boolean noCuincideNombre (String nombre, String... items){
         return !cuincideNombre(nombre, items);
     }
 
@@ -297,11 +253,11 @@ public final class Funciones {
                 .anyMatch(mat -> mat == item.getType());
     }
 
-    public static boolean esDeTipoItem(ItemStack item, java.lang.String...tipos) {
+    public static boolean esDeTipoItem(ItemStack item, String...tipos) {
         return cuincideNombre(item.getType().toString(), tipos);
     }
 
-    public static boolean noEsDeTipoItem(ItemStack item, java.lang.String...tipos) {
+    public static boolean noEsDeTipoItem(ItemStack item, String...tipos) {
         return !cuincideNombre(item.getType().toString(), tipos);
     }
 
@@ -321,7 +277,7 @@ public final class Funciones {
         return (int) (Math.random() * (to - from + 1) + from);
     }
 
-    public static java.lang.String quitarCaracteres (java.lang.String palabra, char... caracteres) {
+    public static String quitarCaracteres (String palabra, char... caracteres) {
         StringBuilder stringBuilder = new StringBuilder();
 
         for(int i = 0; i < palabra.length(); i++) {
@@ -341,8 +297,8 @@ public final class Funciones {
         return stringBuilder.toString();
     }
 
-    public static java.lang.String quitarPalabrasEntreEspacios (java.lang.String palabra, java.lang.String... palabrasAQuitar) {
-        java.lang.String[] palabraDivididaEspacios = palabra.split(" ");
+    public static String quitarPalabrasEntreEspacios (String palabra, String... palabrasAQuitar) {
+        String[] palabraDivididaEspacios = palabra.split(" ");
         StringBuilder stringBuilder = new StringBuilder();
 
         for(int i = 0; i < palabraDivididaEspacios.length; i++){
@@ -370,7 +326,7 @@ public final class Funciones {
         return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 
-    public static java.lang.String buildStringFromArray (java.lang.String[] array, int startIndex) {
+    public static String buildStringFromArray (String[] array, int startIndex) {
         StringBuilder builder = new StringBuilder();
 
         for(int i = startIndex; i < array.length; i++){
@@ -384,10 +340,9 @@ public final class Funciones {
         return builder.toString();
     }
 
+    @SafeVarargs
     public static<E> List<E> listOf (E... elements) {
-        List<E> list = new ArrayList<>(Arrays.asList(elements));
-
-        return list;
+        return new ArrayList<>(Arrays.asList(elements));
     }
     
     public static boolean esHoyDiaSemana (int... diaSemanas) {
@@ -404,19 +359,18 @@ public final class Funciones {
     }
 
     public static boolean mercadoEstaAbierto() {
-        //return !Funciones.esHoyDiaSemana(7, 1) && Funciones.esHoyHora(15, 30, 22, 30);
-        return true;
+        return !Funciones.esHoyDiaSemana(7, 1) && Funciones.esHoyHora(15, 30, 22, 30);
     }
 
     public static boolean mercadoNoEstaAbierto() {
         return !mercadoEstaAbierto();
     }
 
-    public static java.lang.String buildStringFromArray (java.lang.String[] array) {
+    public static String buildStringFromArray (String[] array) {
         return buildStringFromArray(array, 0);
     }
 
-    public static void enviarMensajeYSonidoSiOnline(java.lang.String jugador, java.lang.String mensaje, Sound sound) {
+    public static void enviarMensajeYSonidoSiOnline(String jugador, String mensaje, Sound sound) {
         Player player = Bukkit.getPlayer(jugador);
         if(player != null){
             player.sendMessage(mensaje);
@@ -424,12 +378,12 @@ public final class Funciones {
         }
     }
 
-    public static void enviarMensajeYSonido (Player player, java.lang.String mensaje, Sound sound) {
+    public static void enviarMensajeYSonido (Player player, String mensaje, Sound sound) {
         player.sendMessage(mensaje);
         player.playSound(player.getLocation(), sound, 10, 1);
     }
 
-    public static void enviarMensaje (java.lang.String nombreJugador, java.lang.String mensajeOnline, java.lang.String mensajeOffline) {
+    public static void enviarMensaje (String nombreJugador, String mensajeOnline, String mensajeOffline) {
         Player player = Bukkit.getPlayer(nombreJugador);
         if(player != null){
             player.sendMessage(mensajeOnline);
@@ -438,7 +392,7 @@ public final class Funciones {
         }
     }
 
-    public static void enviarMensaje (java.lang.String nombreJugador, java.lang.String mensajeOnline, java.lang.String mensajeOffline, Sound sound, int v1, int v2) {
+    public static void enviarMensaje (String nombreJugador, String mensajeOnline, String mensajeOffline, Sound sound, int v1, int v2) {
         Player player = Bukkit.getPlayer(nombreJugador);
         if (player != null) {
             player.sendMessage(mensajeOnline);

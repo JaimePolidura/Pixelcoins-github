@@ -3,6 +3,7 @@ package es.serversurvival.bolsa.comprarcorto;
 import es.jaime.EventListener;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.bolsa.ordenespremarket.mysql.AccionOrden;
 import es.serversurvival.bolsa.posicionesabiertas.comprarcorto.PosicionCompraCortoEvento;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.bolsa.posicionescerradas.mysql.TipoPosicion;
@@ -50,7 +51,7 @@ public class ComprarCortoComando extends PixelcoinCommand implements CommandRunn
         if(Funciones.mercadoEstaAbierto()){
             comprarCortoUseCase.comprarPosicionCorto(posicionAComprar, cantidad, player.getName());
         }else{
-            abrirOrdenUseCase.abrirOrdenCompraLargo(player.getName(), args[1], cantidad);
+            abrirOrdenUseCase.abrirOrden(player.getName(), args[1], cantidad, AccionOrden.CORTO_COMPRA);
         }
     }
 

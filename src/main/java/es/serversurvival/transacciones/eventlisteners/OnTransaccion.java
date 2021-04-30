@@ -1,4 +1,4 @@
-package es.serversurvival.transacciones;
+package es.serversurvival.transacciones.eventlisteners;
 
 import es.jaime.EventListener;
 import es.serversurvival.shared.eventospixelcoins.EventoTipoTransaccion;

@@ -78,16 +78,6 @@ public final class Deudas extends MySQL {
         return Funciones.mergeMapList(this.getAllDeudas(), Deuda::getDeudor);
     }
 
-    @SneakyThrows
-    private Date formatFechaDeLaBaseDatosException (java.lang.String fecha) {
-        return dateFormater.parse(fecha);
-    }
-
-    @SneakyThrows
-    private Date formatFehcaDeHoyException () {
-        return dateFormater.parse(dateFormater.format(new Date()));
-    }
-
     @Override
     protected Deuda buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new Deuda(

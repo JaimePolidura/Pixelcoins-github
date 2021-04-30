@@ -80,20 +80,6 @@ public final class Ofertas extends MySQL {
         return bannedItems.stream().anyMatch( (ite) -> ite.equalsIgnoreCase(item));
     }
 
-    public void crearOferta(ItemStack itemAVender, Player player, double precio) {
-        Inventory inventarioJugador = player.getInventory();
-        String nombreJugador = player.getName();
-        int idOfetaNueva = nuevaOferta(nombreJugador, itemAVender.getType().toString(), itemAVender.getAmount(), precio, itemAVender.getDurability());
-
-        Map<Enchantment, Integer> encantamientos = getEncantamientosDeItem(itemAVender);
-        encantamientosMySQL.insertarEncantamientosDeItem(encantamientos, idOfetaNueva);
-        inventarioJugador.clear(player.getInventory().getHeldItemSlot());
-
-        enviarMensajeYSonido(player, ChatColor.GOLD + "Se ha añadido a la tienda. Para retirarlos /tienda y clikc izquierdo en ellos", Sound.ENTITY_VILLAGER_YES);
-
-        Bukkit.getServer().broadcastMessage(ChatColor.GOLD + nombreJugador + " ha añadido un objeto a la tienda por: " + ChatColor.GREEN + formatea.format(precio) + " PC " + ChatColor.AQUA + "/tienda");
-    }
-
     public ItemStack getItemOferta(Oferta oferta) {
         ItemStack itemToConvert = new ItemStack(Material.getMaterial(oferta.getObjeto()), oferta.getCantidad());
         itemToConvert.setDurability((short) oferta.getDurabilidad());

@@ -28,13 +28,6 @@ public final class Mensajes extends MySQL {
         executeUpdate(String.format("DELETE FROM mensajes WHERE destinatario = '%s'", jugador));
     }
 
-    public void mostrarMensajesYBorrar(Player player) {
-        String jugador = player.getName();
-        List<Mensaje> mensajes = getMensajesJugador(jugador);
-
-        borrarMensajes(jugador);
-    }
-
     @Override
     protected Mensaje buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new Mensaje(rs.getInt("id"),

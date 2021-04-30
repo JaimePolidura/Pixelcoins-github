@@ -4,6 +4,7 @@ import es.jaime.EventListener;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.Pixelcoin;
+import es.serversurvival.bolsa.ordenespremarket.mysql.AccionOrden;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionesAbiertas;
 import es.serversurvival.bolsa.posicionesabiertas.vendercorto.PosicionVentaCortoEvento;
 import es.serversurvival.jugadores.mySQL.Jugador;
@@ -67,7 +68,7 @@ public class VenderCortoComando extends PixelcoinCommand implements CommandRunne
             if(Funciones.mercadoEstaAbierto()){
                 venderCortoUseCase.venderEnCortoBolsa(player.getName(), ticker, nombreValor, numeroAccionesAVender, precioAccion);
             }else{
-                abrirOrdenUseCase.abrirOrdenCompraLargo(player.getName(), ticker, numeroAccionesAVender);
+                abrirOrdenUseCase.abrirOrden(player.getName(), ticker, numeroAccionesAVender, AccionOrden.CORTO_VENTA);
 
                 player.sendMessage(GOLD + "Has abierto una orden, se ejecutara cuando el mercado este abierto");
             }

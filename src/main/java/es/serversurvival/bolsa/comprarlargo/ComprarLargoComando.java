@@ -4,6 +4,7 @@ import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival.bolsa.llamadasapi.mysql.TipoActivo;
+import es.serversurvival.bolsa.ordenespremarket.mysql.AccionOrden;
 import es.serversurvival.shared.comandos.PixelcoinCommand;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
 import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.ComprarLargoUseCase;
@@ -58,7 +59,7 @@ public class ComprarLargoComando extends PixelcoinCommand implements CommandRunn
             }
 
             if(Funciones.mercadoNoEstaAbierto()) {
-                AbrirOrdenUseCase.INSTANCE.abrirOrdenCompraLargo(player.getName(), ticker, nAccinesAComprar);
+                AbrirOrdenUseCase.INSTANCE.abrirOrden(player.getName(), ticker, nAccinesAComprar, AccionOrden.LARGO_COMPRA);
 
                 Funciones.enviarMensajeYSonido((Player) player, ChatColor.GOLD + "Se ha abierto una orden. Cuando el mercado este abierto se ejecutara. " +
                         ChatColor.AQUA + "/bolsa ordenes", Sound.ENTITY_PLAYER_LEVELUP);

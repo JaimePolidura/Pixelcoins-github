@@ -1,16 +1,20 @@
 package es.serversurvival.bolsa.ordenespremarket.verordenes;
 
+import es.serversurvival.bolsa.ordenespremarket.cancelarorden.CancelarOrdenUseCase;
 import es.serversurvival.shared.menus.Menu;
 import es.serversurvival.shared.menus.inventory.InventoryCreator;
 import es.serversurvival.shared.menus.Clickable;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.utils.Funciones;
+import io.vavr.control.Try;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class BolsaOrdenesMenu extends Menu implements Clickable {
+    private final CancelarOrdenUseCase cancelarOrdenUseCase = CancelarOrdenUseCase.INSTANCE;
+
     private final Inventory inventory;
     private final Player player;
 
@@ -39,20 +43,16 @@ public class BolsaOrdenesMenu extends Menu implements Clickable {
             return;
         }
 
-        int id = getIdOrndeFromItem(itemClicked);
-        if(id != -1){
+        Try<Integer> idTry = getIdOrdenFromItem(itemClicked);
+        if(idTry.isSuccess()){
+            cancelarOrdenUseCase.cancelar(idTry.get());
+            player.sendMessage(ChatColor.RED + "Has cancelado la orden");
 
-            AllMySQLTablesInstances.ordenesMySQL.cancelarOrden(id, (Player) event.getWhoClicked());
             closeMenu();
-
         }
     }
 
-    private int getIdOrndeFromItem (ItemStack item) {
-        try {
-            return Integer.parseInt(item.getItemMeta().getLore().get(5));
-        } catch (Exception e){
-            return -1;
-        }
+    private Try<Integer> getIdOrdenFromItem(ItemStack item) {
+        return Try.of(() -> Integer.parseInt(item.getItemMeta().getLore().get(5)));
     }
 }

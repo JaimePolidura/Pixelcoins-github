@@ -58,6 +58,10 @@ public final class OfertasMercadoServer extends MySQL {
         executeUpdate("UPDATE ofertasbolsaserver SET cantidad = '"+cantidad+"' WHERE id = '"+id+"'");
     }
 
+    public void cambiarNombreJugador (String antiguoNombre, String nuevoNombre) {
+        executeUpdate("UPDATE ofertasbolsaserver SET jugador = '"+nuevoNombre+"' WHERE jugador = '"+antiguoNombre+"' AND tipo_ofertante = 'JUGADOR'");
+    }
+
     public void borrar (int id) {
         executeUpdate("DELETE FROM ofertasbolsaserver WHERE id = '"+id+"'");
     }
@@ -104,27 +108,6 @@ public final class OfertasMercadoServer extends MySQL {
         });
 
         return sortMapByValueDecre(accionistasPeso);
-    }
-
-    /**
-     * Hay que hacer que el jugador puede ejercer un precio de venta
-     */
-    public void venderOfertaDesdeBolsaCartera (Player player, PosicionAbierta posicionAVender, double precio) {
-        nueva(player.getName(), posicionAVender.getNombre_activo(), precio, posicionAVender.getCantidad(), TipoOfertante.JUGADOR, posicionAVender.getPrecio_apertura());
-        posicionesAbiertasMySQL.borrarPosicionAbierta(posicionAVender.getId());
-            
-        enviarMensajeYSonido(player, GOLD + "Al ser un accion de una empresa del servidor de minecraft. Se ha puesta la oferta de venta en el mercado de acciones. Para consultar el mercado: " + AQUA + "/empresas mercado",
-                Sound.ENTITY_PLAYER_LEVELUP);
-        Bukkit.broadcastMessage(GOLD + player.getName() + " ha subido acciones de la empresa del servidor: " + posicionAVender.getNombre_activo() + AQUA + " /empresas mercado");
-    }
-
-    public void cancelarOferta (Player player, int id) {
-        OfertaMercadoServer oferta = this.get(id);
-        this.borrar(id);
-        posicionesAbiertasMySQL.nuevaPosicion(player.getName(), TipoActivo.ACCIONES_SERVER, oferta.getEmpresa(), oferta.getCantidad(), oferta.getPrecio_apertura(), TipoPosicion.LARGO);
-
-        enviarMensajeYSonido(player, GOLD + "Has cancelado tu oferta en el mercado. Ahora vuelves a tener esas acciones en tu cartera: " + AQUA + "/bolsa cartera",
-                Sound.ENTITY_PLAYER_LEVELUP);
     }
 
     public int getAccionesTotalesParaPagarDividendo (String empresa) {

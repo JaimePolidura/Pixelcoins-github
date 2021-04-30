@@ -1,23 +1,10 @@
 package es.serversurvival.bolsa.ordenespremarket.mysql;
 
-import es.serversurvival.bolsa.llamadasapi.mysql.TipoActivo;
-import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
-import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionesAbiertas;
-import es.serversurvival.jugadores.mySQL.Jugador;
 import es.serversurvival.shared.mysql.MySQL;
-import javafx.util.Pair;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-
-import static es.serversurvival.utils.Funciones.*;
-import static es.serversurvival.utils.Funciones.enviarMensajeYSonido;
-import static org.bukkit.ChatColor.DARK_RED;
 
 public final class OrdenesPreMarket extends MySQL {
     public final static OrdenesPreMarket INSTANCE = new OrdenesPreMarket();
@@ -40,47 +27,12 @@ public final class OrdenesPreMarket extends MySQL {
         return (OrdenPreMarket) buildObjectFromQuery("SELECT * FROM ordenespremarket WHERE jugador = '"+owner+"' AND nombre_activo = '"+ticker+"'");
     }
 
+    public void cambiarNombreJugador (String antiguoNombre, String nuevoNombre) {
+        executeUpdate("UPDATE ordenespremarket SET jugador = '"+nuevoNombre+"' WHERE jugador = '"+antiguoNombre+"'");
+    }
+
     public void borrarOrden(int id) {
         executeUpdate("DELETE FROM ordenespremarket WHERE id = '"+id+"'");
-    }
-
-    public void abrirOrdenCompraLargo(Player player, String ticker, int cantidad) {
-        nuevaOrden(player.getName(), ticker, cantidad, AccionOrden.LARGO_COMPRA);
-
-        enviarMensajeYSonido(player, ChatColor.GOLD + "Se ha abierto una orden. Cuando el mercado este abierto se ejecutara. " +
-                ChatColor.AQUA + "/bolsa ordenes", Sound.ENTITY_PLAYER_LEVELUP);
-    }
-
-    public void abrirOrdenVentaLargo(Player player, String id, int cantidad) {
-        if(getOrdenTicker(player.getName(), id) != null){
-            enviarMensajeYSonido(player,ChatColor.DARK_RED + "Ya tienes esa orden alistada. /bolsa ordenes", Sound.ENTITY_VILLAGER_NO);
-            return;
-        }
-
-        nuevaOrden(player.getName(), id, cantidad, AccionOrden.LARGO_VENTA);
-
-        enviarMensajeYSonido(player, ChatColor.GOLD + "Se ha abierto una orden. Cuando el mercado este abierto se ejecutara. " +
-                ChatColor.AQUA + "/bolsa ordenes", Sound.ENTITY_PLAYER_LEVELUP);
-    }
-
-    public void abrirOrdenVentaCorto (Player player, String ticker, int cantidad){
-        nuevaOrden(player.getName(), ticker, cantidad, AccionOrden.CORTO_VENTA);
-
-        enviarMensajeYSonido(player, ChatColor.GOLD + "Se ha abierto una orden. Cuando el mercado este abierto se ejecutara. " +
-                ChatColor.AQUA + "/bolsa ordenes", Sound.ENTITY_PLAYER_LEVELUP);
-    }
-
-    public void abrirOrdenCompraCorto (Player player, String id, int cantidad){
-        nuevaOrden(player.getName(), id, cantidad, AccionOrden.CORTO_COMPRA);
-
-        enviarMensajeYSonido(player,ChatColor.GOLD + "Se ha abierto una orden. Cuando el mercado este abierto se ejecutara. " +
-                ChatColor.AQUA + "/bolsa ordenes", Sound.ENTITY_PLAYER_LEVELUP);
-    }
-
-    public void cancelarOrden (int id, Player player) {
-        borrarOrden(id);
-
-        player.sendMessage(ChatColor.RED + "Has cancelado la orden");
     }
 
     @Override

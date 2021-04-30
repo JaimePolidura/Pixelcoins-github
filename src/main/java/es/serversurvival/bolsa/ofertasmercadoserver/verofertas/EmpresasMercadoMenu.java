@@ -1,14 +1,15 @@
 package es.serversurvival.bolsa.ofertasmercadoserver.verofertas;
 
+import es.serversurvival.bolsa.ofertasmercadoserver.cancelar.CancelarOfertaAccionServerUseCase;
 import es.serversurvival.bolsa.ofertasmercadoserver.comprar.ComprarAccionesServerConfirmacion;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
 import es.serversurvival.shared.menus.Menu;
 import es.serversurvival.shared.menus.inventory.InventoryCreator;
 import es.serversurvival.shared.menus.Clickable;
 import es.serversurvival.shared.menus.Paginated;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.utils.Funciones;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -17,7 +18,13 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+import static es.serversurvival.utils.Funciones.enviarMensajeYSonido;
+import static org.bukkit.ChatColor.AQUA;
+import static org.bukkit.ChatColor.GOLD;
+
 public class EmpresasMercadoMenu extends Menu implements Clickable, Paginated {
+    private final CancelarOfertaAccionServerUseCase cancelarOfertaUseaCase = CancelarOfertaAccionServerUseCase.INSTANCE;
+
     private EmpresasMercadoInventoryFactory inventoryFactory = new EmpresasMercadoInventoryFactory();
     private Inventory inventory;
     private final Player player;
@@ -57,7 +64,11 @@ public class EmpresasMercadoMenu extends Menu implements Clickable, Paginated {
         String empresa = loreItemClicked.get(1).split(" ")[1];
 
         if(clikedItem.getType() == Material.RED_BANNER){ //Red banner -> la oferta es del jugador
-            AllMySQLTablesInstances.ofertasMercadoServerMySQL.cancelarOferta(player, id);
+            cancelarOfertaUseaCase.cancelar(player.getName(), id);
+
+            enviarMensajeYSonido(player, GOLD + "Has cancelado tu oferta en el mercado. Ahora vuelves a tener esas acciones en tu cartera: " + AQUA + "/bolsa cartera",
+                    Sound.ENTITY_PLAYER_LEVELUP);
+
             closeMenu();
         }else if (clikedItem.getType() == Material.BLUE_BANNER || clikedItem.getType() == Material.GREEN_BANNER) {
             ComprarAccionesServerConfirmacion conrimracin = new ComprarAccionesServerConfirmacion(player, id);

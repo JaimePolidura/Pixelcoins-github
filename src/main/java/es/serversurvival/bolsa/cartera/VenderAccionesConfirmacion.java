@@ -2,6 +2,7 @@ package es.serversurvival.bolsa.cartera;
 
 import es.serversurvival.bolsa.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
+import es.serversurvival.bolsa.ordenespremarket.mysql.AccionOrden;
 import es.serversurvival.bolsa.posicionesabiertas.comprarcorto.ComprarCortoUseCase;
 import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.ComprarLargoUseCase;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
@@ -87,10 +88,10 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion {
             comprarCortoUseCase.comprarPosicionCorto(posicion, posicion.getCantidad(), player.getName());
 
         }else if (Funciones.mercadoNoEstaAbierto() && tipoPosicion == TipoPosicion.LARGO) {
-            abrirOrdenUseCase.abrirOrdenCompraLargo(player.getName(), posicion.getNombre_activo(), posicion.getCantidad());
+            abrirOrdenUseCase.abrirOrden(player.getName(), posicion.getNombre_activo(), posicion.getCantidad(), AccionOrden.LARGO_VENTA);
 
         }else if (Funciones.mercadoNoEstaAbierto() && tipoPosicion == TipoPosicion.CORTO) {
-            abrirOrdenUseCase.abrirOrdenCompraCorto(player.getName(), posicion.getNombre_activo(), posicion.getCantidad());
+            abrirOrdenUseCase.abrirOrden(player.getName(), posicion.getNombre_activo(), posicion.getCantidad(), AccionOrden.CORTO_COMPRA);
         }
 
         closeMenu();

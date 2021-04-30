@@ -1,5 +1,6 @@
 package es.serversurvival.empresas.vertodas;
 
+import es.serversurvival.empresas.solicitarservicio.SolicitarServicioUseCase;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
 import es.serversurvival.shared.menus.Menu;
 import es.serversurvival.shared.menus.inventory.InventoryCreator;
@@ -10,13 +11,18 @@ import es.serversurvival.utils.Funciones;
 import es.serversurvival.empresas.miempresa.EmpresasVerMenu;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
+import static es.serversurvival.utils.Funciones.enviarMensajeYSonido;
+
 public class EmpresasVerTodasMenu extends Menu implements CanGoBack, Clickable {
+    private final SolicitarServicioUseCase solicitarServico = SolicitarServicioUseCase.INSTANCE;
+
     public static final String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "        EMPRESAS";
     private Inventory inventory;
     private Player player;
@@ -64,7 +70,10 @@ public class EmpresasVerTodasMenu extends Menu implements CanGoBack, Clickable {
         if(displayName.equalsIgnoreCase(ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TU EMPRESA")){
             EmpresasVerMenu menu = new EmpresasVerMenu(player, nombreEmpresa);
         }else{
-            AllMySQLTablesInstances.empresasMySQL.solicitarServicio((Player) event.getWhoClicked(), nombreEmpresa);
+            solicitarServico.solicitar(event.getWhoClicked().getName(), nombreEmpresa);
+
+            enviarMensajeYSonido(player, ChatColor.GOLD + "Has solicitado el servicio", Sound.ENTITY_PLAYER_LEVELUP);
+
             closeMenu();
         }
 

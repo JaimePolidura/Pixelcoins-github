@@ -82,32 +82,6 @@ public final class Empleados extends MySQL {
         executeUpdate("UPDATE empleados SET empresa = '"+nuevoNombre+"' WHERE empresa = '"+empresa+"'");
     }
 
-    public void despedir(String nombreEmpresa, String empleado, String razon, Player ownerPlayer) {
-        int id_emplado = getEmpleado(empleado, nombreEmpresa).getId();
-        borrarEmplado(id_emplado);
-
-        ownerPlayer.sendMessage(ChatColor.GOLD + "Has despedido a: " + empleado);
-
-        String mensajeOnline = ChatColor.RED + "Has sido despedido de " + nombreEmpresa + " razon: " + razon;
-
-        enviarMensaje(empleado, mensajeOnline, mensajeOnline, Sound.BLOCK_ANVIL_LAND, 10, 1);
-    }
-
-    public void irseEmpresa (String nombreEmpresa, Player player) {
-        Empresa empresaAIRse = empresasMySQL.getEmpresa(nombreEmpresa);
-        borrarEmplado(getEmpleado(player.getName(), nombreEmpresa).getId());
-    }
-
-    @SneakyThrows
-    private Date formatFechaDeLaBaseDatosException (String fecha) {
-        return dateFormater.parse(fecha);
-    }
-
-    @SneakyThrows
-    private Date formatFehcaDeHoyException () {
-        return dateFormater.parse(dateFormater.format(new Date()));
-    }
-
     @Override
     protected Empleado buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new Empleado( rs.getInt("id"),

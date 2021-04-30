@@ -34,8 +34,6 @@ public final class PagarDividendosEmpresaServerUseCase implements AllMySQLTables
     private void pagarDividendoAccionAJugador (Jugador jugador, int cantidad, double dividendoPorAccion, String nombreEmpresa) {
         double dividendo = cantidad * dividendoPorAccion;
 
-        jugadoresMySQL.setEstadisticas(jugador.getNombre(), jugador.getPixelcoins() + dividendo, jugador.getNventas(), jugador.getIngresos() + dividendo, jugador.getGastos());
-
         Pixelcoin.publish(new EmpresaServerDividendoPagadoEvento(jugador.getNombre(), nombreEmpresa, dividendo));
     }
 }

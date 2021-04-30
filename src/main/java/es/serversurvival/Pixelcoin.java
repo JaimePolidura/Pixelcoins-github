@@ -78,11 +78,8 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
         String onWrongCommand = DARK_RED + "Comando no encontrado /ayuda";
         String onWrongSender = DARK_RED + "Necesitas estar en el servidor para ejecutar el comando";
 
-        Mapper.build("es.serversurvival", this)
-                .commandMapper(onWrongCommand, onWrongSender)
-                .mobMapper()
-                .eventListenerMapper()
-                .taskMapper()
+        Mapper.build(this)
+                .all(onWrongCommand, onWrongSender)
                 .startScanning();
     }
 }

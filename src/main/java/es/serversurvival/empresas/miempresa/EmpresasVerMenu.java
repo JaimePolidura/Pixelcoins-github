@@ -1,5 +1,6 @@
 package es.serversurvival.empresas.miempresa;
 
+import es.serversurvival.empleados.despedir.DespedirEmpleadoUseCase;
 import es.serversurvival.empleados.misempleos.EmpleosMenu;
 import es.serversurvival.empresas.borrar.BorrrarEmpresaConfirmacion;
 import es.serversurvival.empresas.pagardividendos.PagarDividendoConfirmacion;
@@ -20,6 +21,8 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.Map;
 
 public class EmpresasVerMenu extends Menu implements Clickable, Refreshcable, PostLoading, CanGoBack {
+    private final DespedirEmpleadoUseCase despedirEmpleadoUseCase = DespedirEmpleadoUseCase.INSTANCE;
+
     private Inventory inventory;
     private String empresa;
     private Player player;
@@ -71,9 +74,9 @@ public class EmpresasVerMenu extends Menu implements Clickable, Refreshcable, Po
             }
             nombreEmpleadoADespedir = itemClickedao.getItemMeta().getLore().get(1).split(" ")[1];
 
-            AllMySQLTablesInstances.empleadosMySQL.despedir(empresa, nombreEmpleadoADespedir, "Despedido desde el menu", (Player) event.getWhoClicked());
-            refresh();
+            despedirEmpleadoUseCase.despedir(nombreEmpleadoADespedir, empresa, "Despedido desde el menu");
 
+            refresh();
         }
     }
 

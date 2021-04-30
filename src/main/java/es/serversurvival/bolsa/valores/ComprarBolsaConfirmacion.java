@@ -2,6 +2,8 @@ package es.serversurvival.bolsa.valores;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival.bolsa.llamadasapi.mysql.TipoActivo;
+import es.serversurvival.bolsa.ofertasmercadoserver.comprar.ComprarOfertaMercadoUseCase;
+import es.serversurvival.bolsa.ordenespremarket.mysql.AccionOrden;
 import es.serversurvival.shared.menus.Menu;
 import es.serversurvival.shared.menus.AumentoConfirmacion;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
@@ -21,6 +23,10 @@ import java.util.List;
 import static org.bukkit.ChatColor.*;
 
 public class ComprarBolsaConfirmacion extends Menu implements AumentoConfirmacion {
+    private final ComprarOfertaMercadoUseCase comprarOfertaUseCase = ComprarOfertaMercadoUseCase.INSTANCE;
+    private final ComprarLargoUseCase comprarLargoUseCase = ComprarLargoUseCase.INSTANCE;
+    private final AbrirOrdenUseCase abrirOrdenUseCase = AbrirOrdenUseCase.INSTANCE;
+
     private final String simbolo;
     private double precioUnidad;
     private double precioTotal;
@@ -88,11 +94,11 @@ public class ComprarBolsaConfirmacion extends Menu implements AumentoConfirmacio
 
         if(tipoActivo == TipoActivo.ACCIONES_SERVER){
             //TODO
-            AllMySQLTablesInstances.transaccionesMySQL.comprarOfertaMercadoAccionServer(player, id, cantidadAComprar);
+            comprarOfertaUseCase.comprarOfertaMercadoAccionServer(player.getName(), id, cantidadAComprar);
         }else if(Funciones.mercadoEstaAbierto()){
-            ComprarLargoUseCase.INSTANCE.abrir(tipoActivo, simbolo, nombreValor, alias, precioUnidad, cantidadAComprar, player.getName());
+            comprarLargoUseCase.abrir(tipoActivo, simbolo, nombreValor, alias, precioUnidad, cantidadAComprar, player.getName());
         }else{
-            AbrirOrdenUseCase.INSTANCE.abrirOrdenCompraLargo(player.getName(), simbolo, cantidadAComprar);
+            abrirOrdenUseCase.abrirOrden(player.getName(), simbolo, cantidadAComprar, AccionOrden.LARGO_COMPRA);
         }
 
         closeMenu();
