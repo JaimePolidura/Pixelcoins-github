@@ -23,10 +23,6 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
     private EventBus eventBus;
     private ScoreboardUpdateTask updater;
 
-    public Pixelcoin () {
-        plugin = this;
-    }
-
     public static Pixelcoin getInstance() {
         return plugin;
     }
@@ -45,6 +41,8 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
 
     @Override
     public void onEnable() {
+        plugin = this;
+
         MySQL.conectar();
 
         this.scoreBoardManager = new ScoreBoardManager();
@@ -70,8 +68,6 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
     private void setUpScoreboardUpdater () {
         this.updater = new ScoreboardUpdateTask();
         updater.runTaskTimer(this, BukkitTimeUnit.MINUTE, BukkitTimeUnit.MINUTE);
-
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, updater, BukkitTimeUnit.MINUTE, BukkitTimeUnit.MINUTE);
     }
 
     private void setUpCommandsMobListenersTask() {

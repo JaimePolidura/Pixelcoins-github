@@ -106,39 +106,6 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         return posicionesAbiertasItems;
     }
 
-    private void rellenarLlamadasApi() {
-        List<LlamadaApi> llamadaApisList = llamadasApiMySQL.getTodasLlamadasApi();
-        Map<String, LlamadaApi> llamadaApiMap = new HashMap<>();
-
-        llamadaApisList.forEach((llamada) -> {
-            llamadaApiMap.put(llamada.getSimbolo(), llamada);
-        });
-
-        this.llamadasApis = llamadaApiMap;
-    }
-
-    private void rellenarPosicionesAbiertasPeso(List<PosicionAbierta> posicionesJugador, double totalInverito) {
-        Map<String, Integer> posicionesAbiertasConPeso = new HashMap<>();
-
-        posicionesJugador.forEach((posicion) -> {
-            posicionesAbiertasConPeso.put(posicion.getNombre_activo(), (int) Funciones.rentabilidad(totalInverito, posicion.getCantidad() * llamadasApis.get(posicion.getNombre_activo()).getPrecio()));
-        });
-
-        this.posicionesAbiertasPeso = posicionesAbiertasConPeso;
-    }
-
-    private double getTotalInvertido(List<PosicionAbierta> posicionAbiertas) {
-        return posicionAbiertas.stream()
-                .mapToDouble((pos) -> pos.getCantidad() * llamadasApis.get(pos.getNombre_activo()).getPrecio())
-                .sum();
-    }
-
-    public ItemStack buildItemFordward() {
-        return ItemBuilder.of(Material.GREEN_WOOL)
-                .title(Paginated.ITEM_NAME_GOFORDWARD)
-                .build();
-    }
-
     private ItemStack buildPosicionAbiertaLarga(PosicionAbierta posicion) {
         LlamadaApi llamada = llamadasApis.get(posicion.getNombre_activo());
 
@@ -220,6 +187,40 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         return ItemBuilder.of(Material.REDSTONE_TORCH)
                 .title(GOLD + "" + BOLD + UNDERLINE + "CLICK PARA COMPRAR " + RED + "" + BOLD + "(CORTO)")
                 .lore(lore)
+                .build();
+    }
+
+    private void rellenarLlamadasApi() {
+        List<LlamadaApi> llamadaApisList = llamadasApiMySQL.getTodasLlamadasApi();
+        Map<String, LlamadaApi> llamadaApiMap = new HashMap<>();
+
+        llamadaApisList.forEach((llamada) -> {
+            llamadaApiMap.put(llamada.getSimbolo(), llamada);
+        });
+
+        this.llamadasApis = llamadaApiMap;
+    }
+
+    private void rellenarPosicionesAbiertasPeso(List<PosicionAbierta> posicionesJugador, double totalInverito) {
+        Map<String, Integer> posicionesAbiertasConPeso = new HashMap<>();
+
+        posicionesJugador.forEach((posicion) -> {
+            posicionesAbiertasConPeso.put(posicion.getNombre_activo(),
+                    (int) Funciones.rentabilidad(totalInverito, posicion.getCantidad() * llamadasApis.get(posicion.getNombre_activo()).getPrecio()));
+        });
+
+        this.posicionesAbiertasPeso = posicionesAbiertasConPeso;
+    }
+
+    private double getTotalInvertido(List<PosicionAbierta> posicionAbiertas) {
+        return posicionAbiertas.stream()
+                .mapToDouble((pos) -> pos.getCantidad() * llamadasApis.get(pos.getNombre_activo()).getPrecio())
+                .sum();
+    }
+
+    public ItemStack buildItemFordward() {
+        return ItemBuilder.of(Material.GREEN_WOOL)
+                .title(Paginated.ITEM_NAME_GOFORDWARD)
                 .build();
     }
 

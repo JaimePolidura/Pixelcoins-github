@@ -67,7 +67,7 @@ public final class Ofertas extends MySQL {
     public Oferta getOferta (int id) {
         return (Oferta) buildObjectFromQuery(String.format("SELECT * FROM ofertas WHERE id = '%d'", id));
     }
-    
+
     public List<Oferta> getTodasOfertas(){
         return buildListFromQuery("SELECT * FROM ofertas");
     }
@@ -118,25 +118,6 @@ public final class Ofertas extends MySQL {
         }
         itemToConvert.setItemMeta(itemMeta);
 
-    }
-
-    public ItemStack retirarOferta(Player player, int idARetirar) {
-        borrarOferta(idARetirar);
-
-        ItemStack itemARetirar = this.getItemOferta(getOferta(idARetirar));
-        player.getInventory().addItem(itemARetirar);
-
-        enviarMensajeYSonido(player, ChatColor.GOLD + "Objeto retirado!", Sound.ENTITY_PLAYER_LEVELUP);
-        return itemARetirar;
-    }
-
-    private Map<Enchantment, Integer> getEncantamientosDeItem (ItemStack item) {
-        if (item.getType() == Material.ENCHANTED_BOOK) {
-            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
-            return meta.getStoredEnchants();
-        } else {
-            return item.getEnchantments();
-        }
     }
 
     @Override

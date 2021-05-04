@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class TopInventoryFactory extends InventoryFactory {
     public static final String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "              TOP";
@@ -122,7 +123,11 @@ public class TopInventoryFactory extends InventoryFactory {
 
     private ItemStack buildItemTopOperacionesBolsa () {
         String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP MEJORES OPERAIONES BOLSA";
-        List<PosicionCerrada> posicionCerradasNotDuplicadas = posicionesCerradasMySQL.getTopRentabilidades();
+
+        List<PosicionCerrada> posicionCerradasNotDuplicadas = posicionesCerradasMySQL.getTopRentabilidades().stream()
+                .filter(pos -> pos.getTipo_posicion() == TipoPosicion.LARGO)
+                .collect(Collectors.toList());
+
         posicionCerradasNotDuplicadas = getNotDuplicatedElements(posicionCerradasNotDuplicadas);
         List<String> lore = new ArrayList<>();
 
@@ -131,9 +136,11 @@ public class TopInventoryFactory extends InventoryFactory {
 
             if(rentabilidad > 0){
                 if(posicionCerradasNotDuplicadas.get(i).getTipo_posicion() == TipoPosicion.CORTO){
-                    lore.add("" + ChatColor.GOLD + (i + 1)  + "º (CORTO) " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.GREEN + " +" + rentabilidad + "%");
+                    lore.add("" + ChatColor.GOLD + (i + 1)  + "º (CORTO) " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": "
+                            + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.GREEN + " +" + rentabilidad + "%");
                 }else{
-                    lore.add("" + ChatColor.GOLD + (i + 1)  + "º " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.GREEN + " +" + rentabilidad + "%");
+                    lore.add("" + ChatColor.GOLD + (i + 1)  + "º " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": "
+                            + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.GREEN + " +" + rentabilidad + "%");
                 }
             }
         }

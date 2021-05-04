@@ -25,7 +25,7 @@ import java.util.Optional;
 
 import static org.bukkit.ChatColor.*;
 
-@Command("bolsa vendercorto")
+@Command(value = "bolsa vendercorto", isAsyncn = true)
 public class VenderCortoComando extends PixelcoinCommand implements CommandRunner {
     private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /bolsa vendercorto <ticker> <nº acciones>";
     private final VenderCortoUseCase venderCortoUseCase = VenderCortoUseCase.INSTANCE;
@@ -44,35 +44,32 @@ public class VenderCortoComando extends PixelcoinCommand implements CommandRunne
 
         int numeroAccionesAVender = Integer.parseInt(args[2]);
         String ticker = args[1];
+        Optional<Pair<String, Double>> optionalNombrePrecio = llamadasApiMySQL.getPairNombreValorPrecio(ticker);
 
-        Bukkit.getScheduler().runTask(Pixelcoin.getInstance(), () -> {
-            Optional<Pair<String, Double>> optionalNombrePrecio = llamadasApiMySQL.getPairNombreValorPrecio(ticker);
+        if(!optionalNombrePrecio.isPresent()){
+            player.sendMessage(DARK_RED + "El nombre que has puesto no existe. Para consultar los tickers: /bolsa valores o en internet");
+            return;
+        }
+        Jugador jugador = jugadoresMySQL.getJugador(player.getName());
+        double dineroJugador = jugador.getPixelcoins();
+        double valorTotal = optionalNombrePrecio.get().getValue() * numeroAccionesAVender;
+        double comision = Funciones.redondeoDecimales(Funciones.reducirPorcentaje(valorTotal, 100 - PosicionesAbiertas.PORCENTAJE_CORTO), 2);
 
-            if(!optionalNombrePrecio.isPresent()){
-                player.sendMessage(DARK_RED + "El nombre que has puesto no existe. Para consultar los tickers: /bolsa valores o en internet");
-                return;
-            }
-            Jugador jugador = jugadoresMySQL.getJugador(player.getName());
-            double dineroJugador = jugador.getPixelcoins();
-            double valorTotal = optionalNombrePrecio.get().getValue() * numeroAccionesAVender;
-            double comision = Funciones.redondeoDecimales(Funciones.reducirPorcentaje(valorTotal, 100 - PosicionesAbiertas.PORCENTAJE_CORTO), 2);
+        if(comision > dineroJugador){
+            player.sendMessage(DARK_RED + "No tienes el dinero suficiente para esa operacion");
+            return;
+        }
 
-            if(comision > dineroJugador){
-                player.sendMessage(DARK_RED + "No tienes el dinero suficiente para esa operacion");
-                return;
-            }
+        String nombreValor = optionalNombrePrecio.get().getKey();
+        double precioAccion = optionalNombrePrecio.get().getValue();
 
-            String nombreValor = optionalNombrePrecio.get().getKey();
-            double precioAccion = optionalNombrePrecio.get().getValue();
+        if(Funciones.mercadoEstaAbierto()){
+            venderCortoUseCase.venderEnCortoBolsa(player.getName(), ticker, nombreValor, numeroAccionesAVender, precioAccion);
+        }else{
+            abrirOrdenUseCase.abrirOrden(player.getName(), ticker, numeroAccionesAVender, AccionOrden.CORTO_VENTA);
 
-            if(Funciones.mercadoEstaAbierto()){
-                venderCortoUseCase.venderEnCortoBolsa(player.getName(), ticker, nombreValor, numeroAccionesAVender, precioAccion);
-            }else{
-                abrirOrdenUseCase.abrirOrden(player.getName(), ticker, numeroAccionesAVender, AccionOrden.CORTO_VENTA);
-
-                player.sendMessage(GOLD + "Has abierto una orden, se ejecutara cuando el mercado este abierto");
-            }
-        });
+            player.sendMessage(GOLD + "Has abierto una orden, se ejecutara cuando el mercado este abierto");
+        }
     }
 
     @EventListener

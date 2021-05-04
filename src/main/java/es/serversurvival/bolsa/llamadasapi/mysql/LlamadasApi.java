@@ -21,21 +21,6 @@ import java.util.stream.Collectors;
 public final class LlamadasApi extends MySQL {
     public final static LlamadasApi INSTANCE = new LlamadasApi();
 
-    @EventListener
-    public void onOpenedPosition (PosicionAbiertaEvento event) {
-        this.nuevaLlamadaSiNoEstaReg(event.getTicker(), event.getPrecioUnidad(), event.getTipoActivo(), event.getNombreValor());
-    }
-
-    @EventListener
-    public void onClosedPosition (PosicionCerradaEvento evento) {
-        this.borrarLlamadaSiNoEsUsada(evento.getTicker());
-    }
-
-    @EventListener
-    public void onOrdenNoEjecutada (OrdenNoEjecutadoEvento evento) {
-        llamadasApiMySQL.borrarLlamadaSiNoEsUsada(evento.getOrden().getNombre_activo());
-    }
-
     public void nuevaLlamada(String simbolo, double precio, TipoActivo tipo, String nombreValor){
         executeUpdate("INSERT INTO llamadasapi (simbolo, precio, tipo_activo, nombre_activo) VALUES ('"+simbolo+"','"+precio+"','"+tipo.toString()+"','"+nombreValor+"')");
     }
@@ -58,7 +43,7 @@ public final class LlamadasApi extends MySQL {
         Map<String, LlamadaApi> mapLlamadas = new HashMap<>();
 
         List<LlamadaApi> llamadaApiList = getTodasLlamadasApi();
-        llamadaApiList.forEach( llamada -> mapLlamadas.put(llamada.getSimbolo(), llamada) );
+        llamadaApiList.forEach(llamada -> mapLlamadas.put(llamada.getSimbolo(), llamada) );
 
         return mapLlamadas;
     }
@@ -109,15 +94,6 @@ public final class LlamadasApi extends MySQL {
         }
     }
 
-    public synchronized void actualizarPrecios (){
-        List<LlamadaApi> llamadaApis = getTodasLlamadasApi();
-
-        for (LlamadaApi llamadaApi : llamadaApis) {
-            double precio = llamadaApi.getTipo_activo().getPrecio(llamadaApi.getSimbolo());
-
-            this.setPrecio(llamadaApi.getSimbolo(), precio);
-        }
-    }
 
     @Override
     protected LlamadaApi buildObjectFromResultSet(ResultSet rs) throws SQLException {

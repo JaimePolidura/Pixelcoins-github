@@ -1,19 +1,14 @@
-package es.serversurvival.shared.eventosminecraft;
+package es.serversurvival.shared.menus.eventlisteners;
 
-import es.serversurvival.shared.menus.Menu;
-import es.serversurvival.shared.menus.MenuManager;
-import es.serversurvival.shared.menus.CanGoBack;
-import es.serversurvival.shared.menus.Clickable;
-import es.serversurvival.shared.menus.AumentoConfirmacion;
+import es.serversurvival.shared.menus.*;
 import es.serversurvival.shared.menus.confirmaciones.Confirmacion;
-import es.serversurvival.shared.menus.Paginated;
 import es.serversurvival.shared.menus.solicitudes.Solicitud;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-public final class PlayerInventoryClick implements Listener {
+public final class OnPlayerInventoryClick implements Listener {
     @EventHandler
     public void onPlayerInventoryClick(InventoryClickEvent event) {
         if(event.getCurrentItem() == null || event.getView() == null) return;

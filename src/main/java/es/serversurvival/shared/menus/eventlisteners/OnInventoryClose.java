@@ -1,4 +1,4 @@
-package es.serversurvival.shared.eventosminecraft;
+package es.serversurvival.shared.menus.eventlisteners;
 
 import es.serversurvival.shared.menus.Menu;
 import es.serversurvival.shared.menus.MenuManager;
@@ -7,8 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
-public final class PlayerCloseInventory implements Listener {
-
+public final class OnInventoryClose implements Listener {
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
         String jugador = event.getPlayer().getName();

@@ -12,6 +12,7 @@ import org.bukkit.inventory.Inventory;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class AyudaMenu extends Menu implements Clickable {
     private Inventory inventory;
@@ -39,12 +40,12 @@ public class AyudaMenu extends Menu implements Clickable {
             return;
         }
 
-        String tipoAyuda = getTipoAyuda(event.getCurrentItem().getItemMeta().getDisplayName());
-        if(tipoAyuda != null){
-            CommandRunner ayudaSubCommand = getCommandOfAyuda(tipoAyuda);
+        Optional<String> tipoAyuda = getTipoAyuda(event.getCurrentItem().getItemMeta().getDisplayName());
+        if(!tipoAyuda.isPresent()){
+            CommandRunner ayudaSubCommand = getCommandOfAyuda(tipoAyuda.get());
             ayudaSubCommand.execute(event.getWhoClicked(), null);
 
-            ((Player) event.getWhoClicked()).performCommand("/ayuda " + tipoAyuda.toLowerCase());
+            ((Player) event.getWhoClicked()).performCommand("/ayuda " + tipoAyuda.get().toLowerCase());
             event.getWhoClicked().closeInventory();
         }
     }
@@ -72,13 +73,11 @@ public class AyudaMenu extends Menu implements Clickable {
         }
     }
 
-    private String getTipoAyuda (String title) {
+    private Optional<String> getTipoAyuda (String title) {
         List<String> ayudas = Arrays.asList("JUGAR", "PIXELCOINS", "NORMAS", "TIENDA", "DEUDA", "EMPRESARIO", "EMPLEO");
 
-        for(String ayuda : ayudas)
-            if (title.endsWith(ayuda))
-                return ayuda;
-
-        return null;
+        return ayudas.stream()
+                .filter(title::endsWith)
+                .findAny();
     }
 }

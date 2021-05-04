@@ -1,8 +1,10 @@
 package es.serversurvival.bolsa.posicionesabiertas.mysql;
 
 import es.serversurvival.bolsa.llamadasapi.mysql.LlamadaApi;
+import es.serversurvival.bolsa.llamadasapi.mysql.LlamadasApi;
 import es.serversurvival.bolsa.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa.posicionescerradas.mysql.TipoPosicion;
+import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.shared.mysql.MySQL;
 import es.serversurvival.utils.apiHttp.IEXCloud_API;
 import es.serversurvival.utils.Funciones;
@@ -14,10 +16,12 @@ import org.json.simple.JSONObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static es.serversurvival.utils.Funciones.*;
+import static java.lang.Math.abs;
 
 /**
  * 405 -> 246
@@ -103,18 +107,6 @@ public final class PosicionesAbiertas extends MySQL {
         return buildListFromQuery("SELECT * FROM posicionesabiertas WHERE jugador = '"+jugador+"' AND tipo_activo = 'ACCIONES_SERVER'");
     }
 
-    public double getAllPixeloinsEnAcciones (String jugador) {
-        List<PosicionAbierta> posLargas = getPosicionesAbiertasJugadorCondicion(jugador, PosicionAbierta::noEsTipoAccionServerYLargo);
-        List<PosicionAbierta> posCortas = getPosicionesAbiertasJugadorCondicion(jugador, PosicionAbierta::esCorto);
-
-        Map<String, LlamadaApi> llamadasApiMap = llamadasApiMySQL.getMapOfAllLlamadasApi();
-
-        double pixelcoinsEnLargos = getSumaTotalListDouble(posLargas, pos -> llamadasApiMap.get(pos.getNombre_activo()).getPrecio() * pos.getCantidad());
-        double pixelcoinsEnCortos = getSumaTotalListDouble(posCortas, pos -> (pos.getPrecio_apertura() - llamadasApiMap.get(pos.getNombre_activo()).getPrecio()) * pos.getCantidad());
-
-        return pixelcoinsEnLargos + pixelcoinsEnCortos;
-    }
-
     public Map<String, List<PosicionAbierta>> getAllPosicionesAbiertasMap (Predicate<? super PosicionAbierta> condition) {
         List<PosicionAbierta> posicionAbiertas = this.getTodasPosicionesAbiertas().stream()
                 .filter(condition)
@@ -123,49 +115,65 @@ public final class PosicionesAbiertas extends MySQL {
         return Funciones.mergeMapList(posicionAbiertas, PosicionAbierta::getJugador);
     }
 
-    public static String getNombreSimbolo(String simbolo){
-        String toReturn = "";
+    public static String getNombreSimbolo (String ticker) {
+        String nombreSimbolo = MateriasPrimas.getNombreValor(ticker);
 
-        switch (simbolo){
-            case "BTCUSD":
-                toReturn = "Bitcoin";
-                break;
-            case "LTCUSD":
-                toReturn = "Litecoin";
-                break;
-            case "ETHUSD":
-                toReturn = "Etherium";
-                break;
-            case "DJFUELUSGULF":
-                toReturn = "Queroseno";
-                break;
-            case "DCOILBRENTEU":
-                toReturn =  "Petroleo";
-                break;
-            case "DHHNGSP":
-                toReturn =  "Gas natural";
-                break;
-            case "GASDESW":
-                toReturn = "Diesel";
-                break;
-            default:
-                toReturn = simbolo;
+        if(nombreSimbolo.equalsIgnoreCase(ticker)){
+            nombreSimbolo = Criptomonedas.getNombreValor(ticker);
         }
 
-        return toReturn;
+        return nombreSimbolo;
+    }
+
+    public double getAllPixeloinsEnAcciones (String jugador) {
+        List<PosicionAbierta> posLargas = getPosicionesAbiertasJugadorCondicion(jugador, PosicionAbierta::noEsTipoAccionServerYLargo);
+        List<PosicionAbierta> posCortas = getPosicionesAbiertasJugadorCondicion(jugador, PosicionAbierta::esCorto);
+
+        Map<String, LlamadaApi> llamadasApiMap = llamadasApiMySQL.getMapOfAllLlamadasApi();
+
+        double pixelcoinsEnLargos =
+                getSumaTotalListDouble(posLargas, pos -> llamadasApiMap.get(pos.getNombre_activo()).getPrecio() * pos.getCantidad());
+        double pixelcoinsEnCortos =
+                getSumaTotalListDouble(posCortas, pos -> (pos.getPrecio_apertura() - llamadasApiMap.get(pos.getNombre_activo()).getPrecio()) * pos.getCantidad());
+
+        return pixelcoinsEnLargos + pixelcoinsEnCortos;
     }
 
     public Map<PosicionAbierta, Integer> getPosicionesAbiertasConPesoJugador(String jugador, double totalInverito) {
         List<PosicionAbierta> posicionAbiertasJugador = getPosicionesAbiertasJugadorCondicion(jugador, PosicionAbierta::noEsTipoAccionServer);
+
         Map<PosicionAbierta, Integer> posicionesAbiertasConPeso = new HashMap<>();
 
         posicionAbiertasJugador.forEach( (posicion) -> {
-            posicionesAbiertasConPeso.put(posicion, (int) rentabilidad(totalInverito, posicion.getCantidad() * llamadasApiMySQL.getLlamadaAPI(posicion.getNombre_activo()).getPrecio()));
+            posicionesAbiertasConPeso.put(posicion, (int)
+                    rentabilidad(totalInverito, posicion.getCantidad() * llamadasApiMySQL.getLlamadaAPI(posicion.getNombre_activo()).getPrecio()));
         });
 
         return posicionesAbiertasConPeso;
     }
 
+    public Map<PosicionAbierta, Double> calcularTopPosicionesAbiertas (String jugador) {
+        List<PosicionAbierta> posicionAbiertas = AllMySQLTablesInstances.posicionesAbiertasMySQL.getPosicionesAbiertasJugadorCondicion
+                (jugador, PosicionAbierta::noEsTipoAccionServerYLargo);
+
+        Map<PosicionAbierta, Double> posicionAbiertasConRentabilidad = new HashMap<>();
+
+        for (PosicionAbierta posicion : posicionAbiertas) {
+            double precioInicial = posicion.getPrecio_apertura();
+            double precioActual = LlamadasApi.INSTANCE.getLlamadaAPI(posicion.getNombre_activo()).getPrecio();
+            double rentabildad;
+
+            if(posicion.getTipo_posicion() == TipoPosicion.LARGO){
+                rentabildad = redondeoDecimales(diferenciaPorcntual(precioInicial, precioActual), 2);
+            }else{
+                rentabildad = abs(redondeoDecimales(diferenciaPorcntual(precioActual, precioInicial), 2));
+            }
+
+            posicionAbiertasConRentabilidad.put(posicion, rentabildad);
+        }
+
+        return sortMapByValueDecre(posicionAbiertasConRentabilidad);
+    }
 
     @Override
     protected PosicionAbierta buildObjectFromResultSet(ResultSet rs) throws SQLException {

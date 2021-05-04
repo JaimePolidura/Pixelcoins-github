@@ -2,6 +2,7 @@ package es.serversurvival.bolsa.cartera;
 
 import es.serversurvival.bolsa.llamadasapi.mysql.LlamadaApi;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
+import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionesAbiertas;
 import es.serversurvival.bolsa.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.shared.scoreboards.SingleScoreboard;
 import es.serversurvival.utils.Funciones;
@@ -12,7 +13,9 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.*;
 
+import static es.serversurvival.utils.Funciones.*;
 import static es.serversurvival.utils.MinecraftUtils.*;
+import static java.lang.Math.*;
 
 public class BolsaScoreboard implements SingleScoreboard {
     private Map<String, LlamadaApi> llamadasApiMap;
@@ -24,7 +27,7 @@ public class BolsaScoreboard implements SingleScoreboard {
         Scoreboard scoreboard = createScoreboard("bolsa", ChatColor.GOLD + "" + ChatColor.BOLD + "TUS MEJORES ACCIONES");
         Objective objective = scoreboard.getObjective("bolsa");
 
-        Map<PosicionAbierta, Double> posicionAbiertas = calcularTopPosicionesAbiertas(jugador);
+        Map<PosicionAbierta, Double> posicionAbiertas = PosicionesAbiertas.INSTANCE.calcularTopPosicionesAbiertas(jugador);
         int loops = 0;
         int pos = 0;
         for(Map.Entry<PosicionAbierta, Double> entry : posicionAbiertas.entrySet()){
@@ -44,27 +47,6 @@ public class BolsaScoreboard implements SingleScoreboard {
         addLineToScoreboard(objective, ChatColor.GOLD + "Tus acciones /bolsa cartera", -40);
 
         return scoreboard;
-    }
-
-    private Map<PosicionAbierta, Double> calcularTopPosicionesAbiertas (String jugador) {
-        List<PosicionAbierta> posicionAbiertas = AllMySQLTablesInstances.posicionesAbiertasMySQL.getPosicionesAbiertasJugadorCondicion(jugador, PosicionAbierta::noEsTipoAccionServerYLargo);
-        Map<PosicionAbierta, Double> posicionAbiertasConRentabilidad = new HashMap<>();
-
-        for (PosicionAbierta posicion : posicionAbiertas) {
-            double precioInicial = posicion.getPrecio_apertura();
-            double precioActual = llamadasApiMap.get(posicion.getNombre_activo()).getPrecio();
-            double rentabildad;
-
-            if(posicion.getTipo_posicion() == TipoPosicion.LARGO){
-                rentabildad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(precioInicial, precioActual), 2);
-            }else{
-                rentabildad = Math.abs(Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(precioActual, precioInicial), 2));
-            }
-
-            posicionAbiertasConRentabilidad.put(posicion, rentabildad);
-        }
-
-        return Funciones.sortMapByValueDecre(posicionAbiertasConRentabilidad);
     }
 
     private String buildLinea (PosicionAbierta posicion, Double rentabilidad) {

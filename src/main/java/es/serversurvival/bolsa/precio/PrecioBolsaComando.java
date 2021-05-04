@@ -9,7 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-@Command("bolsa precio")
+@Command(value = "bolsa precio", isAsyncn = true)
 public class PrecioBolsaComando extends PixelcoinCommand implements CommandRunner {
     @Override
     public void execute(CommandSender player, String[] args) {
@@ -18,20 +18,19 @@ public class PrecioBolsaComando extends PixelcoinCommand implements CommandRunne
             return;
         }
         String ticker = args[1];
-        Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
-            try {
-                double precio;
-                if (llamadasApiMySQL.estaReg(ticker)) {
-                    precio = llamadasApiMySQL.getLlamadaAPI(ticker).getPrecio();
-                }else {
-                    precio = IEXCloud_API.getOnlyPrice(ticker);
-                }
 
-                player.sendMessage(ChatColor.GOLD + "El precio es: " + ChatColor.GREEN + precio + " $");
-            } catch (Exception e) {
-                //e.printStackTrace();
-                player.sendMessage(ChatColor.DARK_RED + "Ticker: " + ticker + " no encontrado. Para consultarlo /bolsa valores o en es.investing.com. Recuerda que solo se puede acciones que cotizen en EEUU");
+        try {
+            double precio;
+            if (llamadasApiMySQL.estaReg(ticker)) {
+                precio = llamadasApiMySQL.getLlamadaAPI(ticker).getPrecio();
+            }else {
+                precio = IEXCloud_API.getOnlyPrice(ticker);
             }
-        }, 0L);
+
+            player.sendMessage(ChatColor.GOLD + "El precio es: " + ChatColor.GREEN + precio + " $");
+        } catch (Exception e) {
+            //e.printStackTrace();
+            player.sendMessage(ChatColor.DARK_RED + "Ticker: " + ticker + " no encontrado. Para consultarlo /bolsa valores o en es.investing.com. Recuerda que solo se puede acciones que cotizen en EEUU");
+        }
     }
 }

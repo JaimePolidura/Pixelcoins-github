@@ -13,10 +13,8 @@ import java.util.List;
 public class EstadiscticasBolsaComando extends PixelcoinCommand implements CommandRunner {
     @Override
     public void execute(CommandSender player, String[] args) {
-
         player.sendMessage(ChatColor.GOLD + "--------------------------------");
         player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "     ESTADISTICAS");
-
 
         List<PosicionCerrada> topOperaicnesMasRentables = posicionesCerradasMySQL.getPosicionesCerradasTopRentabilidad(player.getName(), 3);
         player.sendMessage(ChatColor.GOLD + "Mejores operaciones:");;

@@ -6,8 +6,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 public class TopMenu extends Menu {
-    private Player player;
-    private Inventory inventory;
+    private final Player player;
+    private final Inventory inventory;
 
     public TopMenu(Player player) {
         this.inventory = InventoryCreator.createInventoryMenu(new TopInventoryFactory(), player.getName());

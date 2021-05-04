@@ -1,6 +1,7 @@
 package es.serversurvival.shared.scoreboards;
 
 import es.jaime.EventListener;
+import es.jaime.Priority;
 import es.serversurvival.shared.eventospixelcoins.EventoTipoTransaccion;
 import es.serversurvival.shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.transacciones.mySQL.Transaccion;
@@ -17,7 +18,7 @@ import java.util.Collection;
 import java.util.List;
 
 public final class ScoreBoardManager implements Listener {
-    @EventListener({EventoTipoTransaccion.class})
+    @EventListener(value = {EventoTipoTransaccion.class}, pritority = Priority.LOWEST)
     public void onPixelcoinTransaccion (PixelcoinsEvento event) {
         Transaccion transaccion = ((EventoTipoTransaccion) event).buildTransaccion();
 

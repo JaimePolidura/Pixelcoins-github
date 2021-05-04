@@ -1,12 +1,7 @@
 package es.serversurvival.bolsa.ofertasmercadoserver.mysql;
 
-import es.serversurvival.bolsa.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
-import es.serversurvival.bolsa.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.shared.mysql.MySQL;
-import org.bukkit.Bukkit;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,7 +13,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static es.serversurvival.utils.Funciones.*;
-import static org.bukkit.ChatColor.*;
 
 public final class OfertasMercadoServer extends MySQL {
     private OfertasMercadoServer() {}

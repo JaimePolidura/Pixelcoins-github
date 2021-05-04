@@ -1,18 +1,15 @@
-package es.serversurvival.shared.eventosminecraft;
+package es.serversurvival.webconnection.conversacionesweb.eventlisteners;
 
-import es.serversurvival.shared.menus.MenuManager;
-import es.serversurvival.webconnection.conversacionesweb.mysql.ConversacionesWeb;
 import es.serversurvival.webconnection.conversacionesweb.mysql.ConversacionWeb;
+import es.serversurvival.webconnection.conversacionesweb.mysql.ConversacionesWeb;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public final class PlayerQuit implements Listener {
+public final class OnPlayerQuitEvent implements Listener {
     @EventHandler
     public void onPlayerQuit (PlayerQuitEvent event) {
         String playerName = event.getPlayer().getName();
-
-        MenuManager.borrarMenu(playerName);
 
         ConversacionesWeb conversacionesWebMySQL = ConversacionesWeb.INSTANCE;
 
@@ -21,6 +18,5 @@ public final class PlayerQuit implements Listener {
         if(conversacionWeb != null){
             conversacionesWebMySQL.cerrarChat(conversacionWeb);
         }
-
     }
 }
