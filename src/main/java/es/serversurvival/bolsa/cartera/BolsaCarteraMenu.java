@@ -23,11 +23,11 @@ import static org.bukkit.Material.*;
 
 public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
     public static final String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + " TU CARTERA DE ACCIONES";
-    private BolsaCarteraInventoryFactory bolsaCarteraInventoryFactory = new BolsaCarteraInventoryFactory();
-    private Player player;
+    private final BolsaCarteraInventoryFactory bolsaCarteraInventoryFactory = new BolsaCarteraInventoryFactory();
+    private final Player player;
     private Inventory inventory;
     private int currentIndex;
-    private List<Page> pages;
+    private final List<Page> pages;
 
     public BolsaCarteraMenu(Player jugador) {
         this.player = jugador;

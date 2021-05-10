@@ -1,9 +1,12 @@
 package es.serversurvival.bolsa.comprarlargo;
 
+import es.jaime.EventListener;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival.bolsa.llamadasapi.mysql.TipoActivo;
+import es.serversurvival.bolsa.ordenespremarket.abrirorden.OrdenAbiertaEvento;
+import es.serversurvival.bolsa.ordenespremarket.abrirorden.OrdenNoAbiertaEvento;
 import es.serversurvival.bolsa.ordenespremarket.mysql.AccionOrden;
 import es.serversurvival.shared.comandos.PixelcoinCommand;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
@@ -22,6 +25,7 @@ import org.bukkit.entity.Player;
 import java.util.Optional;
 
 import static org.bukkit.ChatColor.*;
+import static org.bukkit.Sound.*;
 
 @Command(value = "bolsa invertir", isAsyncn = true)
 public class ComprarLargoComando extends PixelcoinCommand implements CommandRunner {
@@ -58,10 +62,7 @@ public class ComprarLargoComando extends PixelcoinCommand implements CommandRunn
         }
 
         if(Funciones.mercadoNoEstaAbierto()) {
-            AbrirOrdenUseCase.INSTANCE.abrirOrden(player.getName(), ticker, nAccinesAComprar, AccionOrden.LARGO_COMPRA);
-
-            Funciones.enviarMensajeYSonido((Player) player, ChatColor.GOLD + "Se ha abierto una orden. Cuando el mercado este abierto se ejecutara. " +
-                    ChatColor.AQUA + "/bolsa ordenes", Sound.ENTITY_PLAYER_LEVELUP);
+            AbrirOrdenUseCase.INSTANCE.abrirOrden(player.getName(), ticker, nAccinesAComprar, AccionOrden.LARGO_COMPRA, -1);
         } else {
             ComprarLargoUseCase.INSTANCE.abrir(TipoActivo.ACCIONES, ticker.toUpperCase(), nombreValor, "acciones", precio, nAccinesAComprar, player.getName());
 
@@ -70,7 +71,7 @@ public class ComprarLargoComando extends PixelcoinCommand implements CommandRunn
 
             Funciones.enviarMensajeYSonido(Bukkit.getPlayer(player.getName()), GOLD + "Has comprado " + formatea.format(nAccinesAComprar)
                     + " acciones a " + GREEN + formatea.format(precio) + " PC" + GOLD + " que es un total de " + GREEN +
-                    formatea.format(precio) + " PC " + GOLD + " comandos: " + AQUA + "/bolsa vender /bolsa cartera", Sound.ENTITY_PLAYER_LEVELUP);
+                    formatea.format(precio) + " PC " + GOLD + " comandos: " + AQUA + "/bolsa vender /bolsa cartera", ENTITY_PLAYER_LEVELUP);
         }
     }
 }

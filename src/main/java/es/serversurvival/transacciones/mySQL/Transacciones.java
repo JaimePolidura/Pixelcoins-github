@@ -2,15 +2,23 @@ package es.serversurvival.transacciones.mySQL;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import es.serversurvival.shared.mysql.MySQL;
+import es.serversurvival.utils.Funciones;
 
 /**
  * 792 -> 600 -> 497 -> 47 (xd)
  */
 public final class Transacciones extends MySQL {
     public static final Transacciones INSTANCE = new Transacciones();
+
+    public void nuevaTransaccion(String comprador, String vendedor, double pixelcoins, String objeto, TipoTransaccion tipo) {
+        String fecha = LocalDateTime.now().format(Funciones.DATE_FORMATER);
+
+        executeUpdate("INSERT INTO transacciones (fecha, comprador, vendedor, cantidad, objeto, tipo) VALUES ('" + fecha + "','" + comprador + "','" + vendedor + "','" + pixelcoins + "','" + objeto + "','" + tipo.toString() + "')");
+    }
 
     public void nuevaTransaccion(Transaccion transaccion) {
         String fecha = transaccion.getFecha();

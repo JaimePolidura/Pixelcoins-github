@@ -20,6 +20,7 @@ import org.bukkit.inventory.Inventory;
 
 import java.util.*;
 
+import static es.serversurvival.bolsa.ordenespremarket.mysql.AccionOrden.*;
 import static org.bukkit.ChatColor.*;
 
 public class VenderAccionesConfirmacion extends Menu implements Confirmacion {
@@ -88,10 +89,10 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion {
             comprarCortoUseCase.comprarPosicionCorto(posicion, posicion.getCantidad(), player.getName());
 
         }else if (Funciones.mercadoNoEstaAbierto() && tipoPosicion == TipoPosicion.LARGO) {
-            abrirOrdenUseCase.abrirOrden(player.getName(), posicion.getNombre_activo(), posicion.getCantidad(), AccionOrden.LARGO_VENTA);
+            abrirOrdenUseCase.abrirOrden(player.getName(), posicion.getNombre_activo(), posicion.getCantidad(), LARGO_VENTA, posicion.getId());
 
         }else if (Funciones.mercadoNoEstaAbierto() && tipoPosicion == TipoPosicion.CORTO) {
-            abrirOrdenUseCase.abrirOrden(player.getName(), posicion.getNombre_activo(), posicion.getCantidad(), AccionOrden.CORTO_COMPRA);
+            abrirOrdenUseCase.abrirOrden(player.getName(), posicion.getNombre_activo(), posicion.getCantidad(), CORTO_COMPRA, posicion.getId());
         }
 
         closeMenu();

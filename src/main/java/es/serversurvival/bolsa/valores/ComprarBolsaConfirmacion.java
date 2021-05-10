@@ -98,7 +98,7 @@ public class ComprarBolsaConfirmacion extends Menu implements AumentoConfirmacio
         }else if(Funciones.mercadoEstaAbierto()){
             comprarLargoUseCase.abrir(tipoActivo, simbolo, nombreValor, alias, precioUnidad, cantidadAComprar, player.getName());
         }else{
-            abrirOrdenUseCase.abrirOrden(player.getName(), simbolo, cantidadAComprar, AccionOrden.LARGO_COMPRA);
+            abrirOrdenUseCase.abrirOrden(player.getName(), simbolo, cantidadAComprar, AccionOrden.LARGO_COMPRA, -1);
         }
 
         closeMenu();

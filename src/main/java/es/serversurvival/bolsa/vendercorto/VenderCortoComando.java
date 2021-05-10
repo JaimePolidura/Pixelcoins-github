@@ -66,9 +66,7 @@ public class VenderCortoComando extends PixelcoinCommand implements CommandRunne
         if(Funciones.mercadoEstaAbierto()){
             venderCortoUseCase.venderEnCortoBolsa(player.getName(), ticker, nombreValor, numeroAccionesAVender, precioAccion);
         }else{
-            abrirOrdenUseCase.abrirOrden(player.getName(), ticker, numeroAccionesAVender, AccionOrden.CORTO_VENTA);
-
-            player.sendMessage(GOLD + "Has abierto una orden, se ejecutara cuando el mercado este abierto");
+            abrirOrdenUseCase.abrirOrden(player.getName(), ticker, numeroAccionesAVender, AccionOrden.CORTO_VENTA, -1);
         }
     }
 

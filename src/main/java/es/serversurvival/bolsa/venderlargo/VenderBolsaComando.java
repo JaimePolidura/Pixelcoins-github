@@ -5,6 +5,8 @@ import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.bolsa.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa.ofertasmercadoserver.mysql.TipoOfertante;
+import es.serversurvival.bolsa.ordenespremarket.abrirorden.OrdenAbiertaEvento;
+import es.serversurvival.bolsa.ordenespremarket.abrirorden.OrdenNoAbiertaEvento;
 import es.serversurvival.bolsa.ordenespremarket.mysql.AccionOrden;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.bolsa.posicionesabiertas.venderlargo.VenderLargoUseCase;
@@ -19,9 +21,12 @@ import main.ValidationsService;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import static es.serversurvival.utils.validaciones.Validaciones.*;
 import static org.bukkit.ChatColor.*;
+import static org.bukkit.Sound.ENTITY_PLAYER_LEVELUP;
+import static org.bukkit.Sound.ENTITY_VILLAGER_NO;
 
 @Command("bolsa vender")
 public class VenderBolsaComando extends PixelcoinCommand implements CommandRunner {
@@ -55,12 +60,10 @@ public class VenderBolsaComando extends PixelcoinCommand implements CommandRunne
             return;
         }
 
-
         if(Funciones.mercadoEstaAbierto()){
             venderUseCase.venderPosicion(posicionAVender, cantidad, player.getName());
         }else{
-            abrirOrdenUseCase.abrirOrden(player.getName(), args[1], cantidad, AccionOrden.LARGO_VENTA);
-            player.sendMessage(GOLD + "Has abierto una orden, se ejecutara cuando el mercado este abierto");
+            abrirOrdenUseCase.abrirOrden(player.getName(), args[1], cantidad, AccionOrden.LARGO_VENTA, posicionAVender.getId());
         }
     }
 

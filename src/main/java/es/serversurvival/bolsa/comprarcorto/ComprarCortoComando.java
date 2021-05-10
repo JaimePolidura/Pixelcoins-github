@@ -3,6 +3,8 @@ package es.serversurvival.bolsa.comprarcorto;
 import es.jaime.EventListener;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
+import es.serversurvival.bolsa.ordenespremarket.abrirorden.OrdenAbiertaEvento;
+import es.serversurvival.bolsa.ordenespremarket.abrirorden.OrdenNoAbiertaEvento;
 import es.serversurvival.bolsa.ordenespremarket.mysql.AccionOrden;
 import es.serversurvival.bolsa.posicionesabiertas.comprarcorto.PosicionCompraCortoEvento;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
@@ -20,6 +22,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static org.bukkit.ChatColor.*;
+import static org.bukkit.Sound.ENTITY_PLAYER_LEVELUP;
+import static org.bukkit.Sound.ENTITY_VILLAGER_NO;
 
 @Command("bolsa comprarcorto")
 public class ComprarCortoComando extends PixelcoinCommand implements CommandRunner{
@@ -51,7 +55,7 @@ public class ComprarCortoComando extends PixelcoinCommand implements CommandRunn
         if(Funciones.mercadoEstaAbierto()){
             comprarCortoUseCase.comprarPosicionCorto(posicionAComprar, cantidad, player.getName());
         }else{
-            abrirOrdenUseCase.abrirOrden(player.getName(), args[1], cantidad, AccionOrden.CORTO_COMPRA);
+            abrirOrdenUseCase.abrirOrden(player.getName(), args[1], cantidad, AccionOrden.CORTO_COMPRA, posicionAComprar.getId());
         }
     }
 
