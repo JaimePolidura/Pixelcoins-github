@@ -1,11 +1,13 @@
 package es.serversurvival.bolsa.llamadasapi.mysql;
 
-import es.jaime.EventListener;
-import es.serversurvival.bolsa.ordenespremarket.ejecutarordenes.OrdenNoEjecutadoEvento;
+import es.jaimetruman.delete.Delete;
+import es.jaimetruman.insert.Insert;
+import es.jaimetruman.select.Select;
+import es.jaimetruman.select.SelectOptionInitial;
+import es.jaimetruman.update.Update;
+import es.jaimetruman.update.UpdateOptionInitial;
 import es.serversurvival.shared.mysql.MySQL;
-import es.serversurvival.utils.apiHttp.IEXCloud_API;
-import es.serversurvival.shared.eventospixelcoins.PosicionAbiertaEvento;
-import es.serversurvival.shared.eventospixelcoins.PosicionCerradaEvento;
+import es.serversurvival.shared.utils.apiHttp.IEXCloud_API;
 import javafx.util.Pair;
 
 
@@ -21,16 +23,28 @@ import java.util.stream.Collectors;
 public final class LlamadasApi extends MySQL {
     public final static LlamadasApi INSTANCE = new LlamadasApi();
 
+    private final SelectOptionInitial select;
+    private final UpdateOptionInitial update;
+
+    private LlamadasApi () {
+        this.select = Select.from("llamadasapi");
+        this.update = Update.table("llamadasapi");
+    }
+
     public void nuevaLlamada(String simbolo, double precio, TipoActivo tipo, String nombreValor){
-        executeUpdate("INSERT INTO llamadasapi (simbolo, precio, tipo_activo, nombre_activo) VALUES ('"+simbolo+"','"+precio+"','"+tipo.toString()+"','"+nombreValor+"')");
+        String insertQuery = Insert.table("llamadasapi")
+                .fields("simbolo", "precio", "tipo_activo", "nombre_activo")
+                .values(simbolo, precio, tipo.toString(), nombreValor);
+
+        executeUpdate(insertQuery);
     }
 
     public LlamadaApi getLlamadaAPI(String simbolo) {
-        return (LlamadaApi) buildObjectFromQuery("SELECT * FROM llamadasapi WHERE simbolo = '"+simbolo+"'");
+        return (LlamadaApi) buildObjectFromQuery(select.where("simbolo").equal(simbolo));
     }
 
     public List<LlamadaApi> getTodasLlamadasApi(){
-        return buildListFromQuery("SELECT * FROM llamadasapi");
+        return buildListFromQuery(select);
     }
 
     public List<LlamadaApi> getTodasLlamadasApiCondicion (Predicate<? super LlamadaApi> condicion) {
@@ -49,15 +63,15 @@ public final class LlamadasApi extends MySQL {
     }
 
     public void borrarLlamada(String simbolo){
-        executeUpdate(String.format("DELETE FROM llamadasapi WHERE simbolo = '%s'", simbolo));
+        executeUpdate(Delete.from("llamadasapi").where("simbolo").equal(simbolo));
     }
 
     public void setPrecio(String simbolo, double precio){
-        executeUpdate("UPDATE llamadasapi SET precio = '"+precio+"' WHERE simbolo = '"+simbolo+"'");
+        executeUpdate(update.set("precio", precio).where("simbolo").equal(simbolo));
     }
 
     public void setNombreValor(String simbolo, String nombreValor){
-        executeUpdate("UPDATE llamadasapi SET nombre_activo = '"+nombreValor+"' WHERE simbolo = '"+simbolo+"'");
+        executeUpdate(update.set("nombre_activo", nombreValor).where("simbolo").equal(simbolo));
     }
 
     public boolean estaReg (String simbolo) {
@@ -93,7 +107,6 @@ public final class LlamadasApi extends MySQL {
             return Optional.empty();
         }
     }
-
 
     @Override
     protected LlamadaApi buildObjectFromResultSet(ResultSet rs) throws SQLException {

@@ -1,4 +1,4 @@
-package es.serversurvival.utils.validaciones.misValidaciones;
+package es.serversurvival.shared.utils.validaciones.misValidaciones;
 
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionesAbiertas;
 import es.serversurvival.bolsa.posicionescerradas.mysql.TipoPosicion;

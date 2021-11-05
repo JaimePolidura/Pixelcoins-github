@@ -5,7 +5,7 @@ import es.serversurvival.bolsa.llamadasapi.mysql.LlamadaApi;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionesAbiertas;
 import es.serversurvival.bolsa.posicionescerradas.mysql.TipoPosicion;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import es.serversurvival.shared.menus.Paginated;
 import es.serversurvival.shared.menus.inventory.InventoryFactory;
 import org.bukkit.Bukkit;

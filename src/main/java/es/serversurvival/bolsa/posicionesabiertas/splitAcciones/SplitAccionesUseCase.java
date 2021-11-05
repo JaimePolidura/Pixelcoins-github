@@ -3,10 +3,8 @@ package es.serversurvival.bolsa.posicionesabiertas.splitAcciones;
 import es.serversurvival.bolsa.llamadasapi.mysql.LlamadaApi;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.utils.apiHttp.IEXCloud_API;
+import es.serversurvival.shared.utils.apiHttp.IEXCloud_API;
 import lombok.SneakyThrows;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.json.simple.JSONObject;
 
 import java.util.Date;
@@ -14,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static es.serversurvival.utils.Funciones.diferenciaDias;
+import static es.serversurvival.shared.utils.Funciones.diferenciaDias;
 
 public final class SplitAccionesUseCase implements AllMySQLTablesInstances {
     public static final SplitAccionesUseCase INSTANCE = new SplitAccionesUseCase();

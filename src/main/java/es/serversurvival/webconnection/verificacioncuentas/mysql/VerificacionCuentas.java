@@ -1,5 +1,8 @@
 package es.serversurvival.webconnection.verificacioncuentas.mysql;
 
+import es.jaimetruman.delete.Delete;
+import es.jaimetruman.insert.Insert;
+import es.jaimetruman.select.Select;
 import es.serversurvival.shared.mysql.MySQL;
 
 import java.sql.ResultSet;
@@ -15,15 +18,17 @@ public final class VerificacionCuentas extends MySQL {
             removeVerificacionCuenta(jugador);
         }
 
-        executeUpdate("INSERT INTO verificacioncuentas (jugador, numero) VALUES ('"+jugador+"', '"+numero+"')");
+        executeUpdate(Insert.table("verificacioncuentas")
+                .fields("jugador", "numero")
+                .values(jugador, numero));
     }
 
     public void removeVerificacionCuenta (String jugador) {
-        executeUpdate("DELETE FROM verificacioncuentas WHERE jugador = '"+jugador+"'");
+        executeUpdate(Delete.from("verificacioncuentas").where("jugador").equal(jugador));
     }
 
     public VerificacionCuenta getVerificacionCuenta (String jugador) {
-        return (VerificacionCuenta) buildObjectFromQuery("SELECT * FROM verificacioncuentas WHERE jugador = '"+jugador+"'");
+        return (VerificacionCuenta) buildObjectFromQuery(Select.from("verificacioncuentas").where("jugador").equal(jugador));
     }
 
     @Override

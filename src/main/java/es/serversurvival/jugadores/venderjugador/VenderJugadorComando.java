@@ -3,7 +3,7 @@ package es.serversurvival.jugadores.venderjugador;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.shared.comandos.PixelcoinCommand;
-import es.serversurvival.utils.validaciones.Validaciones;
+import es.serversurvival.shared.utils.validaciones.Validaciones;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.Bukkit;

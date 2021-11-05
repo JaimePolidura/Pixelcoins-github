@@ -4,9 +4,6 @@ import es.jaime.EventListener;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.bolsa.llamadasapi.mysql.TipoActivo;
-import es.serversurvival.bolsa.ofertasmercadoserver.mysql.TipoOfertante;
-import es.serversurvival.bolsa.ordenespremarket.abrirorden.OrdenAbiertaEvento;
-import es.serversurvival.bolsa.ordenespremarket.abrirorden.OrdenNoAbiertaEvento;
 import es.serversurvival.bolsa.ordenespremarket.mysql.AccionOrden;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.bolsa.posicionesabiertas.venderlargo.VenderLargoUseCase;
@@ -14,19 +11,15 @@ import es.serversurvival.bolsa.posicionesabiertas.venderlargo.PosicionVentaLargo
 import es.serversurvival.bolsa.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.shared.comandos.PixelcoinCommand;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
-import es.serversurvival.utils.Funciones;
-import es.serversurvival.utils.validaciones.Validaciones;
+import es.serversurvival.shared.utils.Funciones;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
-import static es.serversurvival.utils.validaciones.Validaciones.*;
+import static es.serversurvival.shared.utils.validaciones.Validaciones.*;
 import static org.bukkit.ChatColor.*;
-import static org.bukkit.Sound.ENTITY_PLAYER_LEVELUP;
-import static org.bukkit.Sound.ENTITY_VILLAGER_NO;
 
 @Command("bolsa vender")
 public class VenderBolsaComando extends PixelcoinCommand implements CommandRunner {
@@ -36,7 +29,7 @@ public class VenderBolsaComando extends PixelcoinCommand implements CommandRunne
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        ValidationResult result =ValidationsService.startValidating(args.length != 3 && args.length != 2, False.of(mensajeIncorrecto))
+        ValidationResult result = ValidationsService.startValidating(args.length != 3 && args.length != 2, False.of(mensajeIncorrecto))
                 .andMayThrowException(() -> args[1], mensajeIncorrecto, NaturalNumber, OwnerPosicionAbierta.de(player.getName(), TipoPosicion.LARGO))
                 .andIfExists(() -> args[2], NaturalNumber)
                 .validateAll();

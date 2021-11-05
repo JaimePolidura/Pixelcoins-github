@@ -4,69 +4,77 @@ import java.sql.*;
 import java.util.*;
 import java.util.Date;
 
-import es.serversurvival.jugadores.mySQL.Jugador;
-import es.serversurvival.jugadores.mySQL.Jugadores;
+import es.jaimetruman.delete.Delete;
+import es.jaimetruman.insert.Insert;
+import es.jaimetruman.select.Select;
+import es.jaimetruman.select.SelectOptionInitial;
+import es.jaimetruman.update.Update;
+import es.jaimetruman.update.UpdateOptionInitial;
 import es.serversurvival.shared.mysql.MySQL;
-import es.serversurvival.transacciones.mySQL.TipoTransaccion;
-import es.serversurvival.utils.Funciones;
-import lombok.SneakyThrows;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
+import es.serversurvival.shared.utils.Funciones;
 
-import static es.serversurvival.utils.Funciones.*;
+import static es.serversurvival.shared.utils.Funciones.*;
 
 // II 325 -> 218 -> 190
 public final class Deudas extends MySQL {
     public final static Deudas INSTANCE = new Deudas();
-    private Deudas () {}
+    private final SelectOptionInitial select;
+    private final UpdateOptionInitial update;
 
-    public void nuevaDeuda(java.lang.String deudor, java.lang.String acredor, int pixelcoins, int tiempo, int interes) {
-        java.lang.String fechaHoy = dateFormater.format(new Date());
+    private Deudas () {
+        this.select = Select.from("deudas");
+        this.update = Update.table("deudas");
+    }
+
+    public void nuevaDeuda(String deudor, String acredor, int pixelcoins, int tiempo, int interes) {
+        String fechaHoy = dateFormater.format(new Date());
         int cuota = (int) Math.round((double) pixelcoins / tiempo);
 
-        executeUpdate("INSERT INTO deudas (deudor, acredor, pixelcoins_restantes, tiempo_restante, interes, cuota, fecha_ultimapaga) VALUES ('" + deudor + "','" + acredor + "','" + pixelcoins + "','" + tiempo + "','" + interes + "','" + cuota + "','" + fechaHoy + "')");
+        String insertQuery = Insert.table("deudas")
+                .fields("deudor", "acredor", "pixelcoins_restantes", "tiempo_restante", "interes", "cuota", "fecha_ultimapaga")
+                .values(deudor, acredor, pixelcoins, tiempo, interes, cuota, fechaHoy);
+
+        executeUpdate(insertQuery);
     }
 
     public Deuda getDeuda(int id){
-        return (Deuda) buildObjectFromQuery(java.lang.String.format("SELECT * FROM deudas WHERE id = '%d'", id));
+        return (Deuda) buildObjectFromQuery(select.where("id").equal(id));
     }
 
-    public List<Deuda> getDeudasAcredor(java.lang.String jugador){
-        return buildListFromQuery(java.lang.String.format("SELECT * FROM deudas WHERE acredor = '%s'", jugador));
+    public List<Deuda> getDeudasAcredor(String jugador){
+        return buildListFromQuery(select.where("acredor").equal(jugador));
     }
 
-    public List<Deuda> getDeudasDeudor(java.lang.String jugador){
-        return buildListFromQuery(java.lang.String.format("SELECT * FROM deudas WHERE deudor = '%s'", jugador));
+    public List<Deuda> getDeudasDeudor(String jugador){
+        return buildListFromQuery(select.where("deudor").equal(jugador));
     }
 
     public List<Deuda> getAllDeudas () {
-        return buildListFromQuery("SELECT * FROM deudas");
+        return buildListFromQuery(select);
     }
 
-    public void setPagoDeuda(int id, int pixelcoins, int tiempo, java.lang.String fecha) {
-        executeUpdate("UPDATE deudas SET pixelcoins_restantes = '"+pixelcoins+"', tiempo_restante = '"+tiempo+"', fecha_ultimapaga = '"+fecha+"' WHERE id = '"+id+"'");
+    public void setPagoDeuda(int id, int pixelcoins, int tiempo, String fecha) {
+        executeUpdate(update.set("pixelcoins_restantes", pixelcoins).andSet("tiempo_restante", tiempo).andSet("fecha_ultimapaga", fecha).where("id").equal(id));
     }
 
-    public void setAcredorDeudor (java.lang.String nombre, java.lang.String nuevoNombre) {
-        executeUpdate("UPDATE deudas SET acredor = '"+nuevoNombre+"' WHERE acredor = '"+nombre+"'");
-        executeUpdate("UPDATE deudas SET deudor = '"+nuevoNombre+"' WHERE deudor = '"+nombre+"'");
+    public void setAcredorDeudor (String nombre, String nuevoNombre) {
+        executeUpdate(update.set("acredor", nuevoNombre).where("acredor").equal(nombre));
+        executeUpdate(update.set("deudor", nuevoNombre).where("deudor").equal(nombre));
     }
 
     public void borrarDeuda(int id) {
-        executeUpdate(java.lang.String.format("DELETE FROM deudas WHERE id = '%d'", id));
+        executeUpdate(Delete.from("deudas").where("id").equal(id));
     }
 
-    public boolean esDeudorDeDeuda(int id, java.lang.String deudor) {
-        return !isEmptyFromQuery("SELECT * FROM deudas WHERE id = '"+id+"' AND deudor = '"+deudor+"'");
+    public boolean esDeudorDeDeuda(int id, String deudor) {
+        return !isEmptyFromQuery(select.where("id").equal(id).and("deudor").equal(deudor));
     }
 
-    public int getAllPixelcoinsDeudasAcredor (java.lang.String jugador) {
+    public int getAllPixelcoinsDeudasAcredor (String jugador) {
         return getSumaTotalListInteger( getDeudasAcredor(jugador), Deuda::getPixelcoins_restantes);
     }
 
-    public int getAllPixelcoinsDeudasDeudor (java.lang.String jugador) {
+    public int getAllPixelcoinsDeudasDeudor (String jugador) {
         return getSumaTotalListInteger( getDeudasDeudor(jugador), Deuda::getPixelcoins_restantes);
     }
 

@@ -1,4 +1,4 @@
-package es.serversurvival.utils;
+package es.serversurvival.shared.utils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -17,8 +17,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
 import java.util.function.ToIntFunction;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import es.serversurvival.bolsa.llamadasapi.mysql.LlamadaApi;
 import es.serversurvival.bolsa.llamadasapi.mysql.LlamadasApi;
@@ -361,9 +359,7 @@ public final class Funciones {
     }
 
     public static boolean mercadoEstaAbierto() {
-        return false;
-
-        //return !Funciones.esHoyDiaSemana(7, 1) && Funciones.esHoyHora(15, 30, 22, 30);
+        return !Funciones.esHoyDiaSemana(7, 1) && Funciones.esHoyHora(15, 30, 22, 30);
     }
 
     public static boolean mercadoNoEstaAbierto() {

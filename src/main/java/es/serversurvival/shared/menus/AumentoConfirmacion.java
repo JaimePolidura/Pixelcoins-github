@@ -1,7 +1,7 @@
 package es.serversurvival.shared.menus;
 
 import es.serversurvival.shared.menus.confirmaciones.Confirmacion;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 

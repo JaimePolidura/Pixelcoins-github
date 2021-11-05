@@ -1,7 +1,7 @@
 package es.serversurvival.shared.eventospixelcoins;
 
 import es.jaime.Event;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 
 /**
  * Evento base para el resto de eventos de todo el plugin

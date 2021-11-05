@@ -1,32 +1,47 @@
 package es.serversurvival.cuentaweb;
 
+import es.jaimetruman.insert.Insert;
+import es.jaimetruman.select.Select;
+import es.jaimetruman.select.SelectOptionInitial;
+import es.jaimetruman.update.Update;
+import es.jaimetruman.update.UpdateOptionInitial;
 import es.serversurvival.shared.mysql.MySQL;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public final class Cuentas extends MySQL {
-    private Cuentas () {}
     public final static Cuentas INSTANCE = new Cuentas();
+    private final SelectOptionInitial select;
+    private final UpdateOptionInitial update;
+
+    private Cuentas () {
+        this.select = Select.from("cuentas");
+        this.update = Update.table("cuentas");
+    }
 
     public void nuevaCuenta (String username, String password) {
-        executeUpdate("INSERT INTO cuentas (username, password, active, roles) VALUES ('"+username+"', '"+password+"', 1, 'USER')");
+        String query = Insert.table("cuentas")
+                .fields("username", "password", "active", "roles")
+                .values(username, password, 1, "USER");
+
+        executeUpdate(query);
     }
 
     public Cuenta getCuenta(String jugador){
-        return (Cuenta) buildObjectFromQuery("SELECT * FROM cuentas WHERE username = '"+jugador+"'");
+        return (Cuenta) buildObjectFromQuery(select.where("username").equal(jugador));
     }
 
     public Cuenta getCuenta(int id){
-        return (Cuenta) buildObjectFromQuery("SELECT * FROM cuentas WHERE id = '"+id+"'");
+        return (Cuenta) buildObjectFromQuery(select.where("id").equal(id));
     }
 
     public void setPassword (String username, String password) {
-        executeUpdate("UPDATE cuentas SET password = '"+password+"' WHERE username = '"+username+"'");
+        executeUpdate(update.set("password", password).where("username").equal(username));
     }
 
     public void setUsername (String username, String nuevoUsername) {
-        executeUpdate("UPDATE cuentas SET username = '"+nuevoUsername+"' WHERE username = '"+username+"'");
+        executeUpdate(update.set("username", nuevoUsername).where("username").equal(username));
     }
 
     @Override

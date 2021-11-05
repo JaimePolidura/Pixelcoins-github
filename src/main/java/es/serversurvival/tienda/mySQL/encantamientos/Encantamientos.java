@@ -1,5 +1,7 @@
 package es.serversurvival.tienda.mySQL.encantamientos;
 
+import es.jaimetruman.insert.Insert;
+import es.jaimetruman.select.Select;
 import es.serversurvival.shared.mysql.MySQL;
 import org.bukkit.enchantments.Enchantment;
 
@@ -13,11 +15,15 @@ public final class  Encantamientos extends MySQL {
     private Encantamientos () {}
 
     public void nuevoEncantamiento(String encantamiento, int nivel, int id_oferta) {
-        executeUpdate("INSERT INTO encantamientos (encantamiento, nivel, id_oferta) VALUES ('" + encantamiento + "','" + nivel + "','" + id_oferta + "')");
+        String query = Insert.table("encantamientos")
+                .fields("encantamiento", "nivel", "id_oferta")
+                .values(encantamiento, nivel, id_oferta);
+
+        executeUpdate(query);
     }
 
     public List<Encantamiento> getEncantamientosOferta (int id_oferta){
-        return buildListFromQuery(String.format("SELECT * FROM encantamientos WHERE id_oferta = '%d'", id_oferta));
+        return buildListFromQuery(Select.from("encantamientos").where("id_oferta").equal(id_oferta));
     }
 
     public void insertarEncantamientosDeItem (Map<Enchantment, Integer> enchantments, int id_oferta) {

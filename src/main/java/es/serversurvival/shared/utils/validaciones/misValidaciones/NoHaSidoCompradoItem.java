@@ -1,4 +1,4 @@
-package es.serversurvival.utils.validaciones.misValidaciones;
+package es.serversurvival.shared.utils.validaciones.misValidaciones;
 
 import main.ValidationResult;
 import main.validators.Validator;

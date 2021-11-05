@@ -4,7 +4,7 @@ import es.serversurvival.bolsa.ordenespremarket.cancelarorden.CancelarOrdenUseCa
 import es.serversurvival.shared.menus.Menu;
 import es.serversurvival.shared.menus.inventory.InventoryCreator;
 import es.serversurvival.shared.menus.Clickable;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import io.vavr.control.Try;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

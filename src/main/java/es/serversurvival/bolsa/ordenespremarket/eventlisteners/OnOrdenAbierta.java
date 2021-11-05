@@ -2,7 +2,7 @@ package es.serversurvival.bolsa.ordenespremarket.eventlisteners;
 
 import es.jaime.EventListener;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.OrdenAbiertaEvento;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

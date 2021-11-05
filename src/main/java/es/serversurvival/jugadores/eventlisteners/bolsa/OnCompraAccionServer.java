@@ -6,7 +6,7 @@ import es.serversurvival.bolsa.ofertasmercadoserver.mysql.OfertaMercadoServer;
 import es.serversurvival.bolsa.ofertasmercadoserver.mysql.TipoOfertante;
 import es.serversurvival.jugadores.mySQL.Jugador;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 
 public final class OnCompraAccionServer implements AllMySQLTablesInstances {
     @EventListener

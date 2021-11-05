@@ -46,6 +46,7 @@ public final class ScoreBoardManager implements Listener {
 
     private void updateGlobalScoreboard (ServerScoreboard actualScoreboard) {
         List<Player> onlinePlayers = (List<Player>) Bukkit.getOnlinePlayers();
+
         Scoreboard newScoreboard = ((GlobalScoreboard) actualScoreboard).createScorebord();
         onlinePlayers.forEach(ply -> ply.setScoreboard(newScoreboard));
     }

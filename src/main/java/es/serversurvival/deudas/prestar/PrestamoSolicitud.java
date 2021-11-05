@@ -4,7 +4,7 @@ import es.serversurvival.shared.menus.Menu;
 import es.serversurvival.shared.menus.MenuManager;
 import es.serversurvival.shared.menus.solicitudes.Solicitud;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import es.serversurvival.shared.menus.inventory.InventoryCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

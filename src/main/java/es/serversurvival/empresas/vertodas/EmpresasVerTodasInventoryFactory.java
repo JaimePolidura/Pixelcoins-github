@@ -3,7 +3,7 @@ package es.serversurvival.empresas.vertodas;
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival.empleados.mysql.Empleado;
 import es.serversurvival.empresas.mysql.Empresa;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import es.serversurvival.shared.menus.inventory.InventoryFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

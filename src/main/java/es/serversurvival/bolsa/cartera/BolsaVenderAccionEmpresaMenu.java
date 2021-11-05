@@ -6,7 +6,7 @@ import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.shared.menus.Menu;
 import es.serversurvival.shared.menus.confirmaciones.Confirmacion;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import es.serversurvival.shared.menus.inventory.InventoryCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-import static es.serversurvival.utils.Funciones.enviarMensajeYSonido;
+import static es.serversurvival.shared.utils.Funciones.enviarMensajeYSonido;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.BOLD;
 
@@ -101,12 +101,11 @@ public class BolsaVenderAccionEmpresaMenu extends Menu implements Confirmacion {
 
     @Override
     public void confirmar() {
-        venderOfertaUseCase.vender(player, posicionAVender, precioVenta);
+        venderOfertaUseCase.vender(player.getName(), posicionAVender, precioVenta);
 
         enviarMensajeYSonido(player, GOLD + "Al ser un accion de una empresa del servidor de minecraft. Se ha puesta la oferta de venta en el mercado de acciones. Para consultar el mercado: " + AQUA + "/empresas mercado",
                 Sound.ENTITY_PLAYER_LEVELUP);
         Bukkit.broadcastMessage(GOLD + player.getName() + " ha subido acciones de la empresa del servidor: " + posicionAVender.getNombre_activo() + AQUA + " /empresas mercado");
-
 
         closeMenu();
     }

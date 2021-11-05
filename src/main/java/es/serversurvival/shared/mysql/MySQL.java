@@ -1,6 +1,9 @@
 package es.serversurvival.shared.mysql;
 
 
+import es.jaimetruman.ReadQuery;
+import es.jaimetruman.WriteQuery;
+import es.jaimetruman.select.Select;
 import lombok.SneakyThrows;
 
 import java.sql.*;
@@ -35,8 +38,13 @@ public abstract class MySQL implements AllMySQLTablesInstances{
     }
 
     @SneakyThrows
-    protected ResultSet executeQuery(String query) {
-        return conexion.createStatement().executeQuery(query);
+    protected ResultSet executeQuery(Select query) {
+        return conexion.createStatement().executeQuery(query.toString());
+    }
+
+    @SneakyThrows
+    protected void executeUpdate (WriteQuery consulta) {
+        conexion.createStatement().executeUpdate(consulta.toString());
     }
 
     @SneakyThrows
@@ -44,7 +52,7 @@ public abstract class MySQL implements AllMySQLTablesInstances{
         conexion.createStatement().executeUpdate(consulta);
     }
 
-    protected boolean isEmptyFromQuery (String query) {
+    protected boolean isEmptyFromQuery (Select query) {
         try{
             return !executeQuery(query).next();
         }catch (SQLException e){
@@ -54,7 +62,7 @@ public abstract class MySQL implements AllMySQLTablesInstances{
 
     protected abstract TablaObjeto buildObjectFromResultSet (ResultSet rs) throws SQLException;
 
-    protected TablaObjeto buildObjectFromQuery(String query) {
+    protected TablaObjeto buildObjectFromQuery(Select query) {
         try {
             ResultSet rs = executeQuery(query);
             rs.next();
@@ -65,7 +73,7 @@ public abstract class MySQL implements AllMySQLTablesInstances{
         }
     }
 
-    protected <T> List<T> buildListFromQuery (String query) {
+    protected <T> List<T> buildListFromQuery (Select query) {
         ResultSet rs = executeQuery(query);
         List<T> list = new ArrayList<>();
         try{

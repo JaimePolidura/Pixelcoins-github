@@ -2,7 +2,7 @@ package es.serversurvival.bolsa.llamadasapi.mysql;
 
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.bolsa.posicionescerradas.mysql.TipoPosicion;
-import es.serversurvival.utils.apiHttp.IEXCloud_API;
+import es.serversurvival.shared.utils.apiHttp.IEXCloud_API;
 import org.bukkit.Material;
 
 

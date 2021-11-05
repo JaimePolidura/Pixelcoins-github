@@ -1,7 +1,7 @@
-package es.serversurvival.utils.apiHttp;
+package es.serversurvival.shared.utils.apiHttp;
 
 
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 

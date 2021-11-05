@@ -1,13 +1,13 @@
-package es.serversurvival.utils.validaciones.misValidaciones;
+package es.serversurvival.shared.utils.validaciones.misValidaciones;
 
-import es.serversurvival.shared.menus.MenuManager;
+import es.serversurvival.tienda.mySQL.ofertas.Ofertas;
 import main.ValidationResult;
 import main.validators.Validator;
 
-public class NoLeHanEnviadoSolicitud implements Validator {
+public class SuficientesEspaciosTienda implements Validator {
     private final String messageOnFailed;
 
-    public NoLeHanEnviadoSolicitud(String messageOnFailed) {
+    public SuficientesEspaciosTienda(String messageOnFailed) {
         this.messageOnFailed = messageOnFailed;
     }
 
@@ -21,9 +21,12 @@ public class NoLeHanEnviadoSolicitud implements Validator {
         try{
             String jugador = String.valueOf(o);
 
-            return MenuManager.getByPlayer(jugador) != null ?
+            int espacios = Ofertas.INSTANCE.getOfertasJugador(jugador).size();
+
+            return espacios > Ofertas.MAX_ESPACIOS ?
                     ValidationResult.failed(messageOnFailed) :
                     ValidationResult.success();
+
         }catch (Exception e) {
             return ValidationResult.failed(messageOnFailed);
         }

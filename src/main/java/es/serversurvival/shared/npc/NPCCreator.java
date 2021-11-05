@@ -1,8 +1,8 @@
 package es.serversurvival.shared.npc;
 
 import es.serversurvival.Pixelcoin;
-import es.serversurvival.utils.apiHttp.MojangAPI;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.apiHttp.MojangAPI;
+import es.serversurvival.shared.utils.Funciones;
 import lombok.SneakyThrows;
 import net.jitse.npclib.NPCLib;
 import net.jitse.npclib.api.NPC;

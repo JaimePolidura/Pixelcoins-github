@@ -4,7 +4,7 @@ import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.empleados.mysql.TipoSueldo;
 import es.serversurvival.shared.comandos.PixelcoinCommand;
-import es.serversurvival.utils.validaciones.Validaciones;
+import es.serversurvival.shared.utils.validaciones.Validaciones;
 import es.serversurvival.empleados.contratar.ContratarSolicitud;
 import main.ValidationResult;
 import main.ValidationsService;

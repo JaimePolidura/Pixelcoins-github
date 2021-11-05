@@ -2,11 +2,11 @@ package es.serversurvival.mensajes.eventlisteners;
 
 import es.jaime.EventListener;
 import es.serversurvival.empresas.pagardividendos.EmpresaServerDividendoPagadoEvento;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 
 import java.text.DecimalFormat;
 
-import static es.serversurvival.utils.Funciones.enviarMensaje;
+import static es.serversurvival.shared.utils.Funciones.enviarMensaje;
 import static org.bukkit.ChatColor.GOLD;
 import static org.bukkit.ChatColor.GREEN;
 

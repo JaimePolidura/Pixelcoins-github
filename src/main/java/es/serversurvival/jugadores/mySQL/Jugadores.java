@@ -3,22 +3,37 @@ package es.serversurvival.jugadores.mySQL;
 import java.sql.*;
 import java.util.*;
 
+import es.jaimetruman.insert.Insert;
+import es.jaimetruman.insert.InsertOptionFinal;
+import es.jaimetruman.select.Select;
+import es.jaimetruman.select.SelectOptionInitial;
+import es.jaimetruman.update.Update;
+import es.jaimetruman.update.UpdateOptionInitial;
 import es.serversurvival.shared.mysql.MySQL;
-import es.serversurvival.transacciones.mySQL.TipoTransaccion;
-import es.serversurvival.utils.Funciones;
-import org.bukkit.entity.Player;
+import es.serversurvival.shared.utils.Funciones;
+
+import static es.jaimetruman.select.Order.*;
 
 /**
  * II 240 -> 129
  */
 public final class Jugadores extends MySQL {
+    private final InsertOptionFinal insert;
+    private final SelectOptionInitial select;
+    private final UpdateOptionInitial update;
+
     public static final Jugadores INSTANCE = new Jugadores();
-    private Jugadores () {}
+
+    private Jugadores () {
+        this.select = Select.from("jugadores");
+        this.insert = Insert.table("jugadores").fields("nombre", "pixelcoins", "nventas", "ingresos", "gastos", "ninpagos", "npagos", "numero_cuenta", "uuid");
+        this.update = Update.table("jugadores");
+    }
 
     public void nuevoJugador(String nombre, double pixelcoins, int nventas, double ingresos, double gastos, int ninpagos, int npagos, String uuid) {
         int numero_cuenta = generearNumeroCuenta();
 
-        executeUpdate("INSERT INTO jugadores (nombre, pixelcoins, nventas, ingresos, gastos, ninpagos, npagos, numero_cuenta, uuid) VALUES ('" + nombre + "','" + pixelcoins + "','" + nventas + "','" + ingresos + "','" + gastos + "','" + ninpagos + "','" + npagos + "', '"+numero_cuenta+"', '"+uuid+"')");
+        executeUpdate(insert.values(nombre, pixelcoins, nventas, ingresos, gastos, ninpagos, npagos, numero_cuenta, uuid));
     }
 
     public int generearNumeroCuenta () {
@@ -26,59 +41,59 @@ public final class Jugadores extends MySQL {
     }
 
     public boolean estaRegistradoNumeroCuentaPara (String jugador, int numero) {
-        return !isEmptyFromQuery("SELECT * FROM jugadores WHERE numero_cuenta = '"+numero+"' AND nombre = '"+jugador+"'");
+        return !isEmptyFromQuery(select.where("numero_cuenta").equal(numero).and("nombre").equal(jugador));
     }
 
     public Jugador getJugador(String jugador){
-        return (Jugador) buildObjectFromQuery(String.format("SELECT * FROM jugadores WHERE nombre = '%s'", jugador));
+        return (Jugador) buildObjectFromQuery(select.where("nombre").equal(jugador));
     }
 
     public Jugador getJugadorUUID (String uuid){
-        return (Jugador) buildObjectFromQuery("SELECT * FROM jugadores WHERE uuid = '"+uuid+"'");
+        return (Jugador) buildObjectFromQuery(select.where("uuid").equal(uuid));
     }
 
     public void setNumeroCuenta (String nombreJugador, int numero_cuenta) {
-        executeUpdate("UPDATE jugadores SET numero_cuenta = '"+numero_cuenta+"' WHERE nombre = '"+nombreJugador+"'");
+        executeUpdate(update.set("numero_cuenta", numero_cuenta).where("nombre").equal(nombreJugador));
     }
 
     public void setPixelcoin(String nombre, double pixelcoin) {
-        executeUpdate("UPDATE jugadores SET pixelcoins = '"+pixelcoin+"' WHERE nombre = '"+nombre+"'");
+        executeUpdate(update.set("pixelcoins", pixelcoin).where("nombre").equal(nombre));
     }
 
     public void setNinpagos(String nombre, int ninpagos) {
-        executeUpdate("UPDATE jugadores SET ninpagos = '"+ninpagos+"' WHERE nombre = '"+nombre+"'");
+        executeUpdate(update.set("ninpagos", ninpagos).where("nombre").equal(nombre));
     }
 
     public void setNpagos(String nombre, int npagos) {
-        executeUpdate("UPDATE jugadores SET npagos = '"+npagos+"' WHERE nombre = '"+nombre+"'");
+        executeUpdate(update.set("npagos", npagos).where("nombre").equal(nombre));
     }
 
     public void setEstadisticas(String nombre, double dinero, int nventas, double ingresos, double gastos) {
-        executeUpdate("UPDATE jugadores SET pixelcoins = '"+dinero+"', nventas = '"+nventas+"', ingresos = '"+ingresos+"', gastos = '"+gastos+"' WHERE nombre = '"+nombre+"'");
+        executeUpdate(update.set("pixelcoins", dinero).andSet("nventas", nventas).andSet("ingresos", ingresos).andSet("gastos", gastos).where("nombre").equal(nombre));
     }
 
     public void cambiarNombreJugador (String jugador, String nuevoNombreJugador) {
-        executeUpdate("UPDATE jugadores SET nombre = '"+nuevoNombreJugador+"' WHERE nombre = '"+nuevoNombreJugador+"'");
+        executeUpdate(update.set("nombre", nuevoNombreJugador).where("nombre").equal(jugador));
     }
 
     public void setUuid (String jugador, String uuid){
-        executeUpdate("UPDATE jugadores SET uuid = '"+uuid+"' WHERE nombre = '"+jugador+"'");
+        executeUpdate(update.set("uuid", uuid).where("nombre").equal(jugador));
     }
 
     public List<Jugador> getAllJugadores(){
-        return buildListFromQuery("SELECT * FROM jugadores");
+        return buildListFromQuery(select);
     }
 
     public List<Jugador> getTopVendedores (){
-        return buildListFromQuery("SELECT * FROM jugadores ORDER BY nventas DESC");
+        return buildListFromQuery(select.orderBy("nventas", DESC));
     }
 
     public List<Jugador> getTopFiables (){
-        return buildListFromQuery("SELECT * FROM jugadores ORDER BY npagos DESC");
+        return buildListFromQuery(select.orderBy("npagos", DESC));
     }
 
     public List<Jugador> getTopMenosFiables (){
-        return buildListFromQuery("SELECT * FROM jugadores ORDER BY ninpagos DESC");
+        return buildListFromQuery(select.orderBy("ninpagos", DESC));
     }
 
     public void realizarTransferencia (String nombrePagador, String nombrePagado, double cantidad) {

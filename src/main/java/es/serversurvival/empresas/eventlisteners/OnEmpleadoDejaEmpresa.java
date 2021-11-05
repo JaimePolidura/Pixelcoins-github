@@ -5,7 +5,7 @@ import es.serversurvival.empleados.irse.EmpleadoDejaEmpresaEvento;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 
-import static es.serversurvival.utils.Funciones.enviarMensaje;
+import static es.serversurvival.shared.utils.Funciones.enviarMensaje;
 
 public final class OnEmpleadoDejaEmpresa {
     @EventListener

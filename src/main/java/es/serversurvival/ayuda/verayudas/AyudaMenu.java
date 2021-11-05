@@ -5,7 +5,7 @@ import es.serversurvival.ayuda.*;
 import es.serversurvival.shared.menus.Menu;
 import es.serversurvival.shared.menus.inventory.InventoryCreator;
 import es.serversurvival.shared.menus.Clickable;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;

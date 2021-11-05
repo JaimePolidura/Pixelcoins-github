@@ -1,8 +1,7 @@
 package es.serversurvival.jugadores.withers.sacarItem;
 
 import es.jaime.EventListener;
-import es.serversurvival.jugadores.withers.sacarItem.ItemSacadoEvento;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

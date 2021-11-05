@@ -4,7 +4,7 @@ import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.shared.comandos.PixelcoinCommand;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 

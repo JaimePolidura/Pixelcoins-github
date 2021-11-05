@@ -9,7 +9,7 @@ import es.serversurvival.shared.menus.AumentoConfirmacion;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
 import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.ComprarLargoUseCase;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import es.serversurvival.shared.menus.inventory.InventoryCreator;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

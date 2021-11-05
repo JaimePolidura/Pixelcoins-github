@@ -1,26 +1,19 @@
 package es.serversurvival.bolsa.comprarlargo;
 
-import es.jaime.EventListener;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.Pixelcoin;
 import es.serversurvival.bolsa.llamadasapi.mysql.TipoActivo;
-import es.serversurvival.bolsa.ordenespremarket.abrirorden.OrdenAbiertaEvento;
-import es.serversurvival.bolsa.ordenespremarket.abrirorden.OrdenNoAbiertaEvento;
 import es.serversurvival.bolsa.ordenespremarket.mysql.AccionOrden;
 import es.serversurvival.shared.comandos.PixelcoinCommand;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
 import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.ComprarLargoUseCase;
-import es.serversurvival.utils.Funciones;
-import es.serversurvival.utils.validaciones.Validaciones;
+import es.serversurvival.shared.utils.Funciones;
+import es.serversurvival.shared.utils.validaciones.Validaciones;
 import javafx.util.Pair;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.Optional;
 

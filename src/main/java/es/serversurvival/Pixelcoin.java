@@ -11,9 +11,7 @@ import es.serversurvival.webconnection.RabbitMQConsumerTask;
 import es.serversurvival.shared.scoreboards.ScoreBoardManager;
 import es.serversurvival.shared.scoreboards.ScoreboardUpdateTask;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-
 
 import static org.bukkit.ChatColor.*;
 

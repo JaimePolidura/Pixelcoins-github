@@ -6,8 +6,7 @@ import es.serversurvival.shared.menus.Menu;
 import es.serversurvival.shared.menus.inventory.InventoryCreator;
 import es.serversurvival.shared.menus.CanGoBack;
 import es.serversurvival.shared.menus.Clickable;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import es.serversurvival.empresas.miempresa.EmpresasVerMenu;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -18,7 +17,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
-import static es.serversurvival.utils.Funciones.enviarMensajeYSonido;
+import static es.serversurvival.shared.utils.Funciones.enviarMensajeYSonido;
 
 public class EmpresasVerTodasMenu extends Menu implements CanGoBack, Clickable {
     private final SolicitarServicioUseCase solicitarServico = SolicitarServicioUseCase.INSTANCE;

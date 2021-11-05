@@ -1,6 +1,11 @@
 package es.serversurvival.bolsa.posicionescerradas.mysql;
 
 import es.jaime.EventListener;
+import es.jaimetruman.insert.Insert;
+import es.jaimetruman.select.Order;
+import es.jaimetruman.select.Select;
+import es.jaimetruman.select.SelectOptionInitial;
+import es.jaimetruman.update.Update;
 import es.serversurvival.bolsa.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.shared.mysql.MySQL;
 import es.serversurvival.shared.eventospixelcoins.PosicionCerradaEvento;
@@ -9,6 +14,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+import static es.jaimetruman.select.Order.*;
+
 /**
  * 331 -> 114
  * II: 114 -> 67
@@ -16,41 +23,43 @@ import java.util.*;
 public final class PosicionesCerradas extends MySQL {
     public final static PosicionesCerradas INSTANCE = new PosicionesCerradas();
 
-    @EventListener
-    public void onPosicionCerrada (PosicionCerradaEvento evento) {
-        PosicionCerrada pos = evento.buildPosicionCerrada();
+    private final SelectOptionInitial select;
 
-        nuevaPosicion(pos.getJugador(), pos.getTipo_activo(), pos.getSimbolo(), pos.getCantidad(), pos.getPrecio_apertura(), pos.getFecha_apertura(), pos.getPrecio_cierre(), pos.getNombre_activo(), pos.getRentabilidad(), pos.getTipo_posicion());
+    private PosicionesCerradas () {
+        this.select = Select.from("posicionescerradas");
     }
 
     public void nuevaPosicion(String jugador, TipoActivo tipoActivo, String nombre, int cantidad, double precioApertura, String fechaApertura, double precioCierre, String valorNombre, double rentabilidad, TipoPosicion tipoPosicion) {
         String fechaCierre = dateFormater.format(new Date());
+        String query = Insert.table("posicionescerradas")
+                .fields("jugador", "tipo_activo", "simbolo", "cantidad", "precio_apertura", "fecha_apertura", "precio_cierre", "fecha_cierre", "rentabilidad", "nombre_activo", "tipo_posicion")
+                .values(jugador, tipoActivo, nombre, cantidad, precioApertura, fechaApertura, precioCierre, fechaCierre, rentabilidad, valorNombre, tipoPosicion);
 
-        executeUpdate("INSERT INTO posicionescerradas (jugador, tipo_activo, simbolo, cantidad, precio_apertura, fecha_apertura, precio_cierre, fecha_cierre, rentabilidad, nombre_activo, tipo_posicion) VALUES ('" + jugador + "','"+tipoActivo.toString()+"','" + nombre + "','" + cantidad + "','" + precioApertura + "', '" + fechaApertura + "','" + precioCierre + "','" + fechaCierre + "','" + rentabilidad + "','"+valorNombre+"', '"+tipoPosicion.toString()+"')");
+        executeUpdate(query);
     }
 
     public List<PosicionCerrada> getPosicionesCerradasTopRentabilidad(String jugador, int limite) {
-        return buildListFromQuery(String.format("SELECT * FROM posicionescerradas WHERE jugador = '%s' ORDER BY rentabilidad DESC LIMIT %d", jugador, limite));
+        return buildListFromQuery(select.where("jugador").equal(jugador).orderBy("rentabilidad", DESC).limit(limite));
     }
 
     public List<PosicionCerrada> getPosicionesCerradasTopMenosRentabilidad(String jugador, int limite) {
-        return buildListFromQuery(String.format("SELECT * FROM posicionescerradas WHERE jugador = '%s' ORDER BY rentabilidad ASC LIMIT %d", jugador, limite));
+        return buildListFromQuery(select.where("jugador").equal(jugador).orderBy("rentabilidad", ASC).limit(limite));
     }
 
     public List<PosicionCerrada> getTopRentabilidades() {
-        return buildListFromQuery("SELECT * FROM posicionescerradas ORDER BY rentabilidad DESC");
+        return buildListFromQuery(select.orderBy("rentabilidad", DESC));
     }
 
     public List<PosicionCerrada> getPeoresRentabilidades() {
-        return buildListFromQuery("SELECT * FROM posicionescerradas ORDER BY rentabilidad ASC");
+        return buildListFromQuery(select.orderBy("rentabilidad", ASC));
     }
 
     public List<PosicionCerrada> getPosicionesCerradasJugador(String name) {
-        return buildListFromQuery(String.format("SELECT * FROM posicionescerradas WHERE jugador = '%s'", name));
+        return buildListFromQuery(select.where("jugador").equal(name));
     }
 
     public void setJugador (String jugador, String nuevoJugador) {
-        executeUpdate("UPDATE posicionescerradas SET jugador = '"+nuevoJugador+"' WHERE jugador = '"+jugador+"'");
+        executeUpdate(Update.table("posicionescerradas").set("jugador", nuevoJugador).where("jugador").equal(jugador));
     }
 
     @Override

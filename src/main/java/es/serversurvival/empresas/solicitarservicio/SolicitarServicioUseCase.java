@@ -8,7 +8,7 @@ import org.bukkit.Sound;
 
 import java.util.List;
 
-import static es.serversurvival.utils.Funciones.*;
+import static es.serversurvival.shared.utils.Funciones.*;
 
 public final class SolicitarServicioUseCase implements AllMySQLTablesInstances {
     public static final SolicitarServicioUseCase INSTANCE = new SolicitarServicioUseCase();

@@ -5,8 +5,14 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import es.jaimetruman.insert.Insert;
+import es.jaimetruman.select.Select;
+import es.jaimetruman.update.Update;
+import es.jaimetruman.update.UpdateOptionInitial;
 import es.serversurvival.shared.mysql.MySQL;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
+
+import static es.serversurvival.transacciones.mySQL.TipoTransaccion.*;
 
 /**
  * 792 -> 600 -> 497 -> 47 (xd)
@@ -14,25 +20,34 @@ import es.serversurvival.utils.Funciones;
 public final class Transacciones extends MySQL {
     public static final Transacciones INSTANCE = new Transacciones();
 
+    private final UpdateOptionInitial update;
+
+    private Transacciones () {
+        this.update = Update.table("transacciones");
+    }
+
     public void nuevaTransaccion(String comprador, String vendedor, double pixelcoins, String objeto, TipoTransaccion tipo) {
         String fecha = LocalDateTime.now().format(Funciones.DATE_FORMATER);
 
-        executeUpdate("INSERT INTO transacciones (fecha, comprador, vendedor, cantidad, objeto, tipo) VALUES ('" + fecha + "','" + comprador + "','" + vendedor + "','" + pixelcoins + "','" + objeto + "','" + tipo.toString() + "')");
+        nuevaTransaccion(new Transaccion(-1, fecha, comprador, vendedor, (int) pixelcoins, objeto, tipo));
     }
 
     public void nuevaTransaccion(Transaccion transaccion) {
-        String fecha = transaccion.getFecha();
+        String query = Insert.table("transacciones")
+                .fields("fecha", "comprador", "vendedor", "cantidad", "objeto", "tipo")
+                .values(transaccion.getFecha(), transaccion.getComprador(), transaccion.getVendedor(), transaccion.getCantidad(),
+                        transaccion.getObjeto(), transaccion.getTipo().toString());
 
-        executeUpdate("INSERT INTO transacciones (fecha, comprador, vendedor, cantidad, objeto, tipo) VALUES ('" + fecha + "','" + transaccion.getComprador() + "','" + transaccion.getVendedor() + "','" + transaccion.getCantidad() + "','" + transaccion.getObjeto() + "','" + transaccion.getTipo().toString() + "')");
+        executeUpdate(query);
     }
 
     public List<Transaccion> getTransaccionesPagaEmpresa (String jugador) {
-        return buildListFromQuery("SELECT * FROM transacciones WHERE comprador = '"+jugador+"' AND tipo = '"+ TipoTransaccion.EMPRESA_PAGAR_SALARIO +"'");
+        return buildListFromQuery(Select.from("transacciones").where("comprador").equal(jugador).and("tipo").equal(EMPRESA_PAGAR_SALARIO));
     }
 
     public void setCompradorVendedor (String jugador, String nuevoJugador) {
-        executeUpdate("UPDATE transacciones SET comprador = '"+nuevoJugador+"' WHERE comprador = '"+jugador+"'");
-        executeUpdate("UPDATE transacciones SET vendedor = '"+nuevoJugador+"' WHERE vendedor = '"+jugador+"'");
+        executeUpdate(update.set("comprador", nuevoJugador).where("comprador").equal(jugador));
+        executeUpdate(update.set("vendedor", nuevoJugador).where("vendedor").equal(jugador));
     }
 
     public void cambiarNombreJugadorRegistros (String jugadorACambiar, String nuevoNombre) {
@@ -48,7 +63,7 @@ public final class Transacciones extends MySQL {
                 rs.getString("vendedor"),
                 rs.getInt("cantidad"),
                 rs.getString("objeto"),
-                TipoTransaccion.valueOf(rs.getString("tipo"))
+                valueOf(rs.getString("tipo"))
         );
     }
 }

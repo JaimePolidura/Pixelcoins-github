@@ -1,7 +1,6 @@
-package es.serversurvival.utils;
+package es.serversurvival.shared.utils;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scoreboard.DisplaySlot;

@@ -1,13 +1,13 @@
-package es.serversurvival.utils.validaciones.misValidaciones;
+package es.serversurvival.shared.utils.validaciones.misValidaciones;
 
-import es.serversurvival.tienda.mySQL.ofertas.Ofertas;
+import es.serversurvival.empresas.mysql.Empresas;
 import main.ValidationResult;
 import main.validators.Validator;
 
-public class SuficientesEspaciosTienda implements Validator {
+public class NombreEmpresaNoPillado implements Validator {
     private final String messageOnFailed;
 
-    public SuficientesEspaciosTienda(String messageOnFailed) {
+    public NombreEmpresaNoPillado(String messageOnFailed) {
         this.messageOnFailed = messageOnFailed;
     }
 
@@ -19,11 +19,9 @@ public class SuficientesEspaciosTienda implements Validator {
     @Override
     public ValidationResult check(Object o) {
         try{
-            String jugador = String.valueOf(o);
+            String empresaNombre = String.valueOf(o);
 
-            int espacios = Ofertas.INSTANCE.getOfertasJugador(jugador).size();
-
-            return espacios > Ofertas.MAX_ESPACIOS ?
+            return Empresas.INSTANCE.getEmpresa(empresaNombre) != null ?
                     ValidationResult.failed(messageOnFailed) :
                     ValidationResult.success();
 

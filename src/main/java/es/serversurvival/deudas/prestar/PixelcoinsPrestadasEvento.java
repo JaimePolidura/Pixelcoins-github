@@ -3,7 +3,7 @@ package es.serversurvival.deudas.prestar;
 import es.serversurvival.shared.eventospixelcoins.EventoTipoTransaccion;
 import es.serversurvival.shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.transacciones.mySQL.Transaccion;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import es.serversurvival.transacciones.mySQL.TipoTransaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package es.serversurvival.shared.mysql;
 
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 
 import java.text.DecimalFormat;
 

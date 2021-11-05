@@ -4,7 +4,7 @@ import es.jaimetruman.mobs.Mob;
 import es.jaimetruman.mobs.OnPlayerInteractMob;
 import es.serversurvival.jugadores.withers.ingresarItem.IngresarItemUseCase;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

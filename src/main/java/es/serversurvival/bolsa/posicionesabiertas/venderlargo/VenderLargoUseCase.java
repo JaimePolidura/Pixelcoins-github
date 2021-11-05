@@ -4,8 +4,8 @@ import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
 
-import static es.serversurvival.utils.Funciones.diferenciaPorcntual;
-import static es.serversurvival.utils.Funciones.redondeoDecimales;
+import static es.serversurvival.shared.utils.Funciones.diferenciaPorcntual;
+import static es.serversurvival.shared.utils.Funciones.redondeoDecimales;
 
 public final class VenderLargoUseCase implements AllMySQLTablesInstances {
     public static final VenderLargoUseCase INSTANCE = new VenderLargoUseCase();

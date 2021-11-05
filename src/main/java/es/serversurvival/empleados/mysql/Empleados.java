@@ -4,70 +4,77 @@ import java.sql.*;
 import java.util.*;
 import java.util.Date;
 
-import es.serversurvival.empresas.mysql.Empresa;
+import es.jaimetruman.delete.Delete;
+import es.jaimetruman.insert.Insert;
+import es.jaimetruman.select.Select;
+import es.jaimetruman.select.SelectOptionInitial;
+import es.jaimetruman.update.Update;
+import es.jaimetruman.update.UpdateOptionInitial;
 import es.serversurvival.shared.mysql.MySQL;
-import es.serversurvival.utils.Funciones;
-import lombok.SneakyThrows;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
-
-import static es.serversurvival.utils.Funciones.*;
+import es.serversurvival.shared.utils.Funciones;
 
 //II 354 -> 236 -> 156
 public final class Empleados extends MySQL {
     public final static Empleados INSTANCE = new Empleados();
-    private Empleados () {}
+    private final SelectOptionInitial select;
+    private final UpdateOptionInitial update;
+
+    private Empleados () {
+        this.select = Select.from("empleados");
+        this.update = Update.table("empleados");
+    }
 
     public void nuevoEmpleado(String empleado, String empresa, double sueldo, TipoSueldo tipo, String cargo) {
         String fechaPaga = dateFormater.format(new Date());
+        String query = Insert.table("empleados")
+                .fields("jugador", "empresa", "sueldo", "cargo", "tipo_sueldo", "fecha_ultimapaga")
+                .values(empleado, empresa, sueldo, cargo, tipo.toString(), fechaPaga);
 
-        executeUpdate("INSERT INTO empleados (jugador, empresa, sueldo, cargo, tipo_sueldo, fecha_ultimapaga) VALUES ('" + empleado + "','" + empresa + "','" + sueldo + "','" + cargo + "','" + tipo.codigo + "','" + fechaPaga + "')");
+        executeUpdate(query);
     }
 
     public Empleado getEmpleado(int id){
-        return (Empleado) buildObjectFromQuery(String.format("SELECT * FROM empleados WHERE id = '%d'", id));
+        return (Empleado) buildObjectFromQuery(select.where("id").equal(id));
     }
 
     public Empleado getEmpleado (String nombre, String empresa) {
-        return (Empleado) buildObjectFromQuery(String.format("SELECT * FROM empleados WHERE jugador = '%s' AND empresa = '%s'", nombre, empresa));
+        return (Empleado) buildObjectFromQuery(select.where("jugador").equal(nombre).and("empresa").equal(empresa));
     }
 
     public void setSueldo(int id, double sueldo) {
-        executeUpdate("UPDATE empleados SET sueldo = '"+sueldo+"' WHERE id = '"+id+"'");
+        executeUpdate(update.set("sueldo", sueldo).where("id").equal(id));
     }
 
     public void setCargo(int id, String cargo) {
-        executeUpdate("UPDATE empleados SET cargo = '"+cargo+"' WHERE id = '"+id+"'");
+        executeUpdate(update.set("cargo", cargo).where("id").equal(id));
     }
 
     public void setTipo(int id, TipoSueldo tipo) {
-        executeUpdate("UPDATE empleados SET tipo_sueldo = '"+tipo.codigo+"' WHERE id = '"+id+"'");
+        executeUpdate(update.set("tipo_sueldo", tipo.codigo).where("id").equal(id));
     }
 
     public void setFechaPaga(int id, String fechaPaga) {
-        executeUpdate("UPDATE empleados SET fecha_ultimapaga = '"+fechaPaga+"' WHERE id = '"+id+"'");
+        executeUpdate(update.set("fecha_ultimapaga", fechaPaga).where("id").equal(id));
     }
 
     public void borrarEmplado(int id) {
-        executeUpdate("DELETE FROM empleados WHERE id=\"" + id + "\"      ");
+        executeUpdate(Delete.from("empleados").where("id").equal(id));
     }
 
     public void setEmpleado (String nombre, String nuevoNombre) {
-        executeUpdate("UPDATE FROM empleados SET jugador = '"+nuevoNombre+"' WHERE jugador = '"+nombre+"'");
+        executeUpdate(update.set("jugador", nuevoNombre).where("jugador").equal(nombre));
     }
 
     public List<Empleado> getAllEmpleados (){
-        return buildListFromQuery("SELECT * FROM empleados");
+        return buildListFromQuery(select);
     }
 
     public List<Empleado> getEmpleadosEmrpesa(String nombreEmpresa){
-        return buildListFromQuery("SELECT * FROM empleados WHERE empresa = '"+nombreEmpresa+"'");
+        return buildListFromQuery(select.where("empresa").equal(nombreEmpresa));
     }
 
     public List<Empleado> getTrabajosJugador(String jugador){
-        return buildListFromQuery("SELECT * FROM empleados WHERE jugador = '"+jugador+"'");
+        return buildListFromQuery(select.where("jugador").equal(jugador));
     }
 
     public Map<String, List<Empleado>> getAllEmpleadosEmpresas () {
@@ -75,10 +82,12 @@ public final class Empleados extends MySQL {
     }
 
     public boolean trabajaEmpresa(String empleado, String nombreEmpresa) {
-        return !isEmptyFromQuery("SELECT id FROM empleados WHERE jugador = '"+empleado+"' AND empresa = '"+nombreEmpresa+"'");
+        return !isEmptyFromQuery(select.where("jugador").equal(empleado).and("empresa").equal(nombreEmpresa));
     }
 
     public void cambiarEmpresaNombre(String empresa, String nuevoNombre) {
+        executeUpdate(update.set("empresa", nuevoNombre).where("empresa").equal(empresa));
+
         executeUpdate("UPDATE empleados SET empresa = '"+nuevoNombre+"' WHERE empresa = '"+empresa+"'");
     }
 

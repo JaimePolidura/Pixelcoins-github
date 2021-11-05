@@ -4,12 +4,12 @@ import es.jaime.EventListener;
 import es.serversurvival.empleados.mysql.Empleado;
 import es.serversurvival.empresas.borrar.EmpresaBorradaEvento;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import org.bukkit.ChatColor;
 
 import java.util.List;
 
-import static es.serversurvival.utils.Funciones.enviarMensaje;
+import static es.serversurvival.shared.utils.Funciones.enviarMensaje;
 
 public final class OnEmpresaBorrada implements AllMySQLTablesInstances {
     @EventListener

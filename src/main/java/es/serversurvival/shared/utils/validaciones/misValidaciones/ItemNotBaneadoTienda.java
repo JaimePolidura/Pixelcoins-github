@@ -1,15 +1,13 @@
-package es.serversurvival.utils.validaciones.misValidaciones;
+package es.serversurvival.shared.utils.validaciones.misValidaciones;
 
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.tienda.mySQL.ofertas.Ofertas;
 import main.ValidationResult;
 import main.validators.Validator;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
-public class InventarioNoLleno implements Validator {
+public class ItemNotBaneadoTienda implements Validator {
     private final String messageOnFailed;
 
-    public InventarioNoLleno(String messageOnFailed) {
+    public ItemNotBaneadoTienda(String messageOnFailed) {
         this.messageOnFailed = messageOnFailed;
     }
 
@@ -20,10 +18,10 @@ public class InventarioNoLleno implements Validator {
 
     @Override
     public ValidationResult check(Object o) {
-        try{
-            Player player = Bukkit.getPlayer(String.valueOf(o));
+        try {
+            String nombreItem = (String) o;
 
-            return Funciones.getEspaciosOcupados(player.getInventory()) == 36 ?
+            return Ofertas.estaBaneado(nombreItem) ?
                     ValidationResult.failed(messageOnFailed) :
                     ValidationResult.success();
         }catch (Exception e) {

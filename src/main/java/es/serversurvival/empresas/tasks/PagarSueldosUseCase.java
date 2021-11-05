@@ -5,7 +5,7 @@ import es.serversurvival.empleados.mysql.Empleado;
 import es.serversurvival.empleados.mysql.TipoSueldo;
 import es.serversurvival.empresas.mysql.Empresa;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import lombok.SneakyThrows;
 
 import java.util.Date;

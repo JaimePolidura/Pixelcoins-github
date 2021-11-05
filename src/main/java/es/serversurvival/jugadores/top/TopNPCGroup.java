@@ -1,7 +1,7 @@
 package es.serversurvival.jugadores.top;
 
 import es.serversurvival.shared.npc.NPCGroup;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import es.serversurvival.shared.npc.NPCCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

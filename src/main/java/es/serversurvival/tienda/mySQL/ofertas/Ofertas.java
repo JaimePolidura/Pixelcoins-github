@@ -3,27 +3,35 @@ package es.serversurvival.tienda.mySQL.ofertas;
 import java.sql.*;
 import java.util.*;
 
+import es.jaimetruman.delete.Delete;
+import es.jaimetruman.insert.Insert;
+import es.jaimetruman.select.Order;
+import es.jaimetruman.select.Select;
+import es.jaimetruman.select.SelectOptionInitial;
+import es.jaimetruman.update.Update;
+import es.jaimetruman.update.UpdateOptionInitial;
 import es.serversurvival.shared.mysql.MySQL;
 import es.serversurvival.tienda.mySQL.encantamientos.Encantamiento;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import static es.serversurvival.utils.Funciones.*;
 
 /**
  * 363 -> 193
  */
 public final class Ofertas extends MySQL {
     public final static Ofertas INSTANCE = new Ofertas();
-    private Ofertas () {}
+
+    private final UpdateOptionInitial update;
+    private final SelectOptionInitial select;
+
+    private Ofertas () {
+        this.update = Update.table("ofertas");
+        this.select = Select.from("ofertas");
+    }
 
     public final static int MAX_ESPACIOS = 90;
     public final static String NOMBRE_ITEM_RETIRAR = ChatColor.RED + "" + ChatColor.BOLD + "CLICK PARA RETIRAR";
@@ -31,49 +39,53 @@ public final class Ofertas extends MySQL {
     private final static List<String> bannedItems = Arrays.asList("POTION", "BANNER", "SPLASH_POTION", "LINGERING_POTION");
 
     public int nuevaOferta(String jugador, String objeto, int cantidad, double precio, int durabilidad) {
-        executeUpdate("INSERT INTO ofertas (jugador, objeto, cantidad, precio, durabilidad) VALUES ('" + jugador + "','" + objeto + "','" + cantidad + "','" + precio + "','" + durabilidad + "')");
+        String query = Insert.table("ofertas")
+                .fields("jugador", "objeto", "cantidad", "precio", "durabilidad")
+                .values(jugador, objeto, cantidad, precio, durabilidad);
+
+        executeUpdate(query);
 
         return getMaxId();
     }
 
     private int getMaxId() {
-        Oferta oferta = (Oferta) buildObjectFromQuery("SELECT * FROM ofertas ORDER BY id DESC LIMIT 1");
+        Oferta oferta = (Oferta) buildObjectFromQuery(select.orderBy("id", Order.DESC).limit(1));
 
         return oferta != null ? oferta.getId() : -1;
     }
 
     public int getEspacios (String jugador) {
-        List<Oferta> ofertas = buildListFromQuery("SELECT * FROM ofertas WHERE jugador = '"+jugador+"'");
+        List<Oferta> ofertas = buildListFromQuery(select.where("jugador").equal(jugador));
 
         return ofertas != null || ofertas.size() != 0 ? 0 : ofertas.size();
     }
 
     public void borrarOferta(int id) {
-        executeUpdate("DELETE FROM ofertas WHERE id=\"" + id + "\"      ");
+        executeUpdate(Delete.from("ofertas").where("id").equal(id));
     }
 
     public void setPrecio(int id, double precio){
-        executeUpdate("UPDATE ofertas SET precio = '"+precio+"' WHERE id = '"+id+"'");
+        executeUpdate(update.set("precio", precio).where("id").equal(id));
     }
 
     public void setCantidad(int id, int cantidad) {
-        executeUpdate(String.format("UPDATE ofertas SET cantidad = '%d' WHERE id = '%d'", cantidad, id));
+        executeUpdate(update.set("cantidad", cantidad).where("id").equal(id));
     }
 
     public void setJugador(String jugador, String nuevoJugador) {
-        executeUpdate("UPDATE ofertas SET jugador = '"+nuevoJugador+"' WHERE jugador = '"+jugador+"'");
+        executeUpdate(update.set("jugador", nuevoJugador).where("jugador").equal(jugador));
     }
 
     public Oferta getOferta (int id) {
-        return (Oferta) buildObjectFromQuery(String.format("SELECT * FROM ofertas WHERE id = '%d'", id));
+        return (Oferta) buildObjectFromQuery(select.where("id").equal(id));
     }
 
     public List<Oferta> getTodasOfertas(){
-        return buildListFromQuery("SELECT * FROM ofertas");
+        return buildListFromQuery(select);
     }
 
     public List<Oferta> getOfertasJugador (String nombreJugador){
-        return buildListFromQuery(String.format("SELECT * FROM ofertas WHERE jugador = '%s'", nombreJugador));
+        return buildListFromQuery(select.where("jugador").equal(nombreJugador));
     }
 
     public static boolean estaBaneado (String item) {

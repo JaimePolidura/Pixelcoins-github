@@ -10,7 +10,7 @@ import es.serversurvival.empleados.mysql.Empleados;
 import es.serversurvival.empresas.mysql.Empresas;
 import es.serversurvival.jugadores.mySQL.Jugadores;
 import es.serversurvival.mensajes.mysql.Mensajes;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import es.serversurvival.tienda.mySQL.encantamientos.Encantamientos;
 import es.serversurvival.tienda.mySQL.ofertas.Ofertas;
 import es.serversurvival.transacciones.mySQL.Transacciones;

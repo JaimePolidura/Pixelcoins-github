@@ -1,13 +1,13 @@
-package es.serversurvival.utils.validaciones.misValidaciones;
+package es.serversurvival.shared.utils.validaciones.misValidaciones;
 
-import es.serversurvival.tienda.mySQL.ofertas.Ofertas;
+import es.serversurvival.shared.menus.MenuManager;
 import main.ValidationResult;
 import main.validators.Validator;
 
-public class ItemNotBaneadoTienda implements Validator {
+public class NoLeHanEnviadoSolicitud implements Validator {
     private final String messageOnFailed;
 
-    public ItemNotBaneadoTienda(String messageOnFailed) {
+    public NoLeHanEnviadoSolicitud(String messageOnFailed) {
         this.messageOnFailed = messageOnFailed;
     }
 
@@ -18,10 +18,10 @@ public class ItemNotBaneadoTienda implements Validator {
 
     @Override
     public ValidationResult check(Object o) {
-        try {
-            String nombreItem = (String) o;
+        try{
+            String jugador = String.valueOf(o);
 
-            return Ofertas.estaBaneado(nombreItem) ?
+            return MenuManager.getByPlayer(jugador) != null ?
                     ValidationResult.failed(messageOnFailed) :
                     ValidationResult.success();
         }catch (Exception e) {

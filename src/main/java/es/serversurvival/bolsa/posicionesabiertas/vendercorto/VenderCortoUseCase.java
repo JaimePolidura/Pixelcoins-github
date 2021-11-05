@@ -2,11 +2,10 @@ package es.serversurvival.bolsa.posicionesabiertas.vendercorto;
 
 import es.serversurvival.Pixelcoin;
 import es.serversurvival.bolsa.llamadasapi.mysql.TipoActivo;
-import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionesAbiertas;
 import es.serversurvival.bolsa.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 
 public final class VenderCortoUseCase implements AllMySQLTablesInstances {
     public static final VenderCortoUseCase INSTANCE = new VenderCortoUseCase();

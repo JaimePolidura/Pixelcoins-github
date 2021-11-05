@@ -1,5 +1,9 @@
 package es.serversurvival.mensajes.mysql;
 
+import es.jaimetruman.delete.Delete;
+import es.jaimetruman.insert.Insert;
+import es.jaimetruman.select.Select;
+import es.jaimetruman.update.Update;
 import es.serversurvival.shared.mysql.MySQL;
 import org.bukkit.entity.Player;
 import java.sql.*;
@@ -13,19 +17,23 @@ public final class Mensajes extends MySQL {
     private Mensajes () {}
 
     public void nuevoMensaje(String enviador, String destinatario, String mensaje) {
-        executeUpdate("INSERT INTO mensajes (enviador, destinatario, mensaje) VALUES ('"+enviador+"','" + destinatario + "','" + mensaje + "')");
+        String query = Insert.table("mensajes")
+                .fields("enviador", "destinatario", "mensaje")
+                .values(enviador, destinatario, mensaje);
+
+        executeUpdate(query);
     }
 
     public List<Mensaje> getMensajesJugador(String destinatario){
-        return buildListFromQuery(String.format("SELECT * FROM mensajes WHERE destinatario = '%s'", destinatario));
+        return buildListFromQuery(Select.from("mensajes").where("destinatario").equal(destinatario));
     }
 
     public void setDestinatario (String nombre, String nuevoNombre) {
-        executeUpdate("UPDATE mensajes SET destinatario = '"+nuevoNombre+"' WHERE destinatario = '"+nombre+"'");
+        executeUpdate(Update.table("mensajes").set("destinatario", nuevoNombre).where("destinatario").equal(nombre));
     }
 
     public void borrarMensajes(String jugador) {
-        executeUpdate(String.format("DELETE FROM mensajes WHERE destinatario = '%s'", jugador));
+        executeUpdate(Delete.from("mensajes").where("destinatario").equal(jugador));
     }
 
     @Override

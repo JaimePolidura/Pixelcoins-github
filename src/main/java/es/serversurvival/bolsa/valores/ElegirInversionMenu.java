@@ -6,7 +6,7 @@ import es.serversurvival.shared.menus.Menu;
 import es.serversurvival.shared.menus.inventory.InventoryCreator;
 import es.serversurvival.shared.menus.Clickable;
 import es.serversurvival.bolsa.valores.criptomonedas.CriptomonedasMenu;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

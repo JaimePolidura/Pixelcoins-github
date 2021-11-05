@@ -2,17 +2,14 @@ package es.serversurvival.bolsa.cartera;
 
 import es.serversurvival.bolsa.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
-import es.serversurvival.bolsa.ordenespremarket.mysql.AccionOrden;
 import es.serversurvival.bolsa.posicionesabiertas.comprarcorto.ComprarCortoUseCase;
-import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.ComprarLargoUseCase;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
-import es.serversurvival.bolsa.posicionesabiertas.vendercorto.VenderCortoUseCase;
 import es.serversurvival.bolsa.posicionesabiertas.venderlargo.VenderLargoUseCase;
 import es.serversurvival.bolsa.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.shared.menus.Menu;
 import es.serversurvival.shared.menus.confirmaciones.Confirmacion;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import es.serversurvival.shared.menus.inventory.InventoryCreator;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -80,6 +77,8 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion {
 
     @Override
     public void confirmar() {
+        closeMenu();
+
         PosicionAbierta posicion = AllMySQLTablesInstances.posicionesAbiertasMySQL.getPosicionAbierta(id);
 
         if(Funciones.mercadoEstaAbierto() && tipoPosicion == TipoPosicion.LARGO){
@@ -94,8 +93,6 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion {
         }else if (Funciones.mercadoNoEstaAbierto() && tipoPosicion == TipoPosicion.CORTO) {
             abrirOrdenUseCase.abrirOrden(player.getName(), posicion.getNombre_activo(), posicion.getCantidad(), CORTO_COMPRA, posicion.getId());
         }
-
-        closeMenu();
     }
 
     @Override

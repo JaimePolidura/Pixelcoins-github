@@ -3,9 +3,7 @@ package es.serversurvival.bolsa.cartera;
 import es.serversurvival.bolsa.llamadasapi.mysql.LlamadaApi;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionesAbiertas;
-import es.serversurvival.bolsa.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.shared.scoreboards.SingleScoreboard;
-import es.serversurvival.utils.Funciones;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Objective;
@@ -13,9 +11,7 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.*;
 
-import static es.serversurvival.utils.Funciones.*;
-import static es.serversurvival.utils.MinecraftUtils.*;
-import static java.lang.Math.*;
+import static es.serversurvival.shared.utils.MinecraftUtils.*;
 
 public class BolsaScoreboard implements SingleScoreboard {
     private Map<String, LlamadaApi> llamadasApiMap;

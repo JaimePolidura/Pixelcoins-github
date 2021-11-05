@@ -1,5 +1,10 @@
 package es.serversurvival.webconnection.conversacionesweb.mysql;
 
+import es.jaimetruman.delete.Delete;
+import es.jaimetruman.delete.DeleteOptionsInitial;
+import es.jaimetruman.insert.Insert;
+import es.jaimetruman.select.Select;
+import es.jaimetruman.select.SelectOptionInitial;
 import es.serversurvival.shared.mysql.MySQL;
 import es.serversurvival.webconnection.ServerSocketWeb;
 import es.serversurvival.webconnection.socketmessages.SocketMessagge;
@@ -13,30 +18,40 @@ public final class ConversacionesWeb extends MySQL {
     public static final ConversacionesWeb INSTANCE = new ConversacionesWeb();
     private final ServerSocketWeb socket = ServerSocketWeb.INSTANCE;
 
-    private ConversacionesWeb () {}
+    private final DeleteOptionsInitial delete;
+    private final SelectOptionInitial select;
+
+    private ConversacionesWeb () {
+        this.delete = Delete.from("conversacionesweb");
+        this.select = Select.from("conversacionesweb");
+    }
 
     public void nuevaConversacion (String web_nombre, String server_nombre) {
-        executeUpdate("INSERT INTO conversacionesweb (web_nombre, server_nombre) VALUES ('"+web_nombre.toLowerCase()+"', '"+server_nombre.toLowerCase()+"')");
+        String query = Insert.table("conversacionesweb")
+                .fields("web_nombre", "server_nombre")
+                .values(web_nombre.toLowerCase(), server_nombre.toLowerCase());
+
+        executeUpdate(query);
     }
 
     public ConversacionWeb getConversacionServer (String server_nombre) {
-        return (ConversacionWeb) buildObjectFromQuery("SELECT * FROM conversacionesweb WHERE server_nombre = '"+server_nombre+"'");
+        return (ConversacionWeb) buildObjectFromQuery(select.where("server_nombre").equal(server_nombre));
     }
 
     public boolean hayConversacionEntre (String web_nombre, String server_nombre) {
-        return !isEmptyFromQuery("SELECT * FROM conversacionesweb WHERE web_nombre = '"+web_nombre+"' AND server_nombre = '"+server_nombre+"'");
+        return !isEmptyFromQuery(select.where("web_nombre").equal(web_nombre).and("server_nombre").equal(server_nombre));
     }
 
     public void borrarConversacionServer (String server_nombre) {
-        executeUpdate("DELETE FROM conversacionesweb WHERE server_nombre = '"+server_nombre+"'");
+        executeUpdate(delete.where("server_nombre").equal(server_nombre));
     }
 
     public void borrarConversacionWeb (String web_nombre) {
-        executeUpdate("DELETE FROM conversacionesweb WHERE web_nombre = '"+web_nombre+"'");
+        executeUpdate(delete.where("web_nombre").equal(web_nombre));
     }
 
     public void borrarTodasConversacionesWeb () {
-        executeUpdate("DELETE FROM conversacionesweb");
+        executeUpdate(delete);
     }
 
     public void cerrarChat (ConversacionWeb conversacionWeb) {

@@ -1,26 +1,26 @@
 package es.serversurvival.bolsa.posicionesabiertas.mysql;
 
+import es.jaimetruman.delete.Delete;
+import es.jaimetruman.insert.Insert;
+import es.jaimetruman.select.Select;
+import es.jaimetruman.select.SelectOptionInitial;
+import es.jaimetruman.update.Update;
+import es.jaimetruman.update.UpdateOptionInitial;
 import es.serversurvival.bolsa.llamadasapi.mysql.LlamadaApi;
 import es.serversurvival.bolsa.llamadasapi.mysql.LlamadasApi;
 import es.serversurvival.bolsa.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.shared.mysql.MySQL;
-import es.serversurvival.utils.apiHttp.IEXCloud_API;
-import es.serversurvival.utils.Funciones;
-import lombok.SneakyThrows;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.json.simple.JSONObject;
+import es.serversurvival.shared.utils.Funciones;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static es.serversurvival.utils.Funciones.*;
+import static es.serversurvival.shared.utils.Funciones.*;
 import static java.lang.Math.abs;
 
 /**
@@ -28,31 +28,39 @@ import static java.lang.Math.abs;
  */
 public final class PosicionesAbiertas extends MySQL {
     public final static PosicionesAbiertas INSTANCE = new PosicionesAbiertas();
+    private final SelectOptionInitial select;
+    private final UpdateOptionInitial update;
 
     public static final double PORCENTAJE_CORTO = 5;
 
-    private PosicionesAbiertas () {}
+    private PosicionesAbiertas () {
+        this.select = Select.from("posicionesabiertas");
+        this.update = Update.table("posicionesabiertas");
+    }
 
     public void nuevaPosicion(String jugador, TipoActivo tipoAcivo, String nombreActivo, int cantidad, double precioApertura, TipoPosicion tipoPosicion) {
         String fecha = dateFormater.format(new Date());
+        String insertQuery = Insert.table("posicionesabiertas")
+                .fields("jugador", "tipo_activo", "nombre_activo", "cantidad", "precio_apertura", "fecha_apertura", "tipo_posicion")
+                .values(jugador, tipoAcivo, nombreActivo, cantidad, precioApertura, fecha, tipoPosicion.toString());
 
-        executeUpdate("INSERT INTO posicionesabiertas (jugador, tipo_activo, nombre_activo, cantidad, precio_apertura, fecha_apertura, tipo_posicion) VALUES ('" + jugador + "','"+tipoAcivo.toString()+"','" + nombreActivo + "','" + cantidad + "','" + precioApertura + "', '" + fecha + "','"+tipoPosicion.toString()+"')");
+        executeUpdate(insertQuery);
     }
 
     public PosicionAbierta getPosicionAbierta(int id){
-        return (PosicionAbierta) buildObjectFromQuery(String.format("SELECT * FROM posicionesabiertas WHERE id = '%d'", id));
+        return (PosicionAbierta) buildObjectFromQuery(select.where("id").equal(id));
     }
 
     public PosicionAbierta getPosicionAbierta (int id, String jugador) {
-        return (PosicionAbierta) buildObjectFromQuery(String.format("SELECT * FROM posicionesabiertas WHERE id = '"+id+"' AND jugador = '%s'", jugador));
+        return (PosicionAbierta) buildObjectFromQuery(select.where("id").equal(id).and("jugador").equal(jugador));
     }
 
     public PosicionAbierta getPosicionAbierta (int id, String jugador, TipoPosicion tipoPosicion) {
-        return (PosicionAbierta) buildObjectFromQuery("SELECT * FROM posicionesabiertas WHERE id = '"+id+"' AND jugador = '"+jugador+"' AND tipo_posicion = '"+tipoPosicion.toString()+"'");
+        return (PosicionAbierta) buildObjectFromQuery(select.where("id").equal(id).and("jugador").equal(jugador).and("tipo_posicion").equal(tipoPosicion.toString()));
     }
 
     public List<PosicionAbierta> getPosicionesAbiertasJugador(String jugador){
-        return buildListFromQuery(String.format("SELECT * FROM posicionesabiertas WHERE jugador = '%s'", jugador));
+        return buildListFromQuery(select.where("jugador").equal(jugador));
     }
 
     public List<PosicionAbierta> getPosicionesAbiertasJugadorCondicion (String jugador, Predicate<? super PosicionAbierta> condicion) {
@@ -62,7 +70,7 @@ public final class PosicionesAbiertas extends MySQL {
     }
 
     public List<PosicionAbierta> getTodasPosicionesAbiertas(){
-        return buildListFromQuery("SELECT * FROM posicionesabiertas");
+        return buildListFromQuery(select);
     }
 
     public List<PosicionAbierta> getTodasPosicionesAbiertasCondicion(Predicate<? super PosicionAbierta> condicion){
@@ -72,23 +80,23 @@ public final class PosicionesAbiertas extends MySQL {
     }
 
     public List<PosicionAbierta> getPosicionesAbiertasTipoActivo (String tipoActivo) {
-        return buildListFromQuery(String.format("SELECT * FROM posicionesabiertas WHERE tipo_activo = '%s'", tipoActivo));
+        return buildListFromQuery(select.where("tipo_activo").equal(tipoActivo));
     }
 
     public void borrarPosicionAbierta(int id) {
-        executeUpdate(String.format("DELETE FROM posicionesabiertas WHERE id = '%d'", id));
+        executeUpdate(Delete.from("posicionesabiertas").where("id").equal(id));
     }
 
     public boolean existeTicker(String nombre){
-        return !isEmptyFromQuery(String.format("SELECT * FROM posicionesabiertas WHERE nombre_activo = '%s'", nombre));
+        return !isEmptyFromQuery(select.where("nombre_activo").equal(nombre));
     }
 
     public void setCantidad(int id, int cantidad) {
-        executeUpdate(String.format("UPDATE posicionesabiertas SET cantidad = '%d' WHERE id = '%d'", cantidad, id));
+        executeUpdate(update.set("cantidad", cantidad).where("id").equal(id));
     }
 
     public void setPrecioApertura (int id, double precio) {
-        executeUpdate(String.format("UPDATE posicionesabiertas SET precio_apertura = '%d' WHERE id = '%d'", precio, id));
+        executeUpdate(update.set("precio_apertura", precio).where("id").equal(id));
     }
 
     public void setJugador (String jugador, String nuevoJugador) {
@@ -96,15 +104,15 @@ public final class PosicionesAbiertas extends MySQL {
     }
 
     public List<PosicionAbierta> getPosicionAbierta (String owner, int cantidad, String ticker) {
-        return buildListFromQuery("SELECT * FROM posicionesabiertas WHERE cantidad = '"+cantidad+"' AND jugador = '"+owner+"' AND nombre_activo = '"+ticker+"'");
+        return buildListFromQuery(select.where("cantidad").equal(cantidad).and("jugador").equal(owner).and("nombre_activo").equal(ticker));
     }
 
     public List<PosicionAbierta> getPosicionesAccionesServer(String empresa) {
-        return buildListFromQuery("SELECT * FROM posicionesabiertas WHERE nombre_activo = '"+empresa+"' AND tipo_activo = 'ACCIONES_SERVER'");
+        return buildListFromQuery(select.where("nombre_activo").equal(empresa).and("tipo_activo").equal("ACCIONES_SERVER"));
     }
 
     public List<PosicionAbierta> getPosicionesServerJugador (String jugador) {
-        return buildListFromQuery("SELECT * FROM posicionesabiertas WHERE jugador = '"+jugador+"' AND tipo_activo = 'ACCIONES_SERVER'");
+        return buildListFromQuery(select.where("jugador").equal(jugador).and("tipo_activo").equal("ACCIONES_SERVER"));
     }
 
     public Map<String, List<PosicionAbierta>> getAllPosicionesAbiertasMap (Predicate<? super PosicionAbierta> condition) {

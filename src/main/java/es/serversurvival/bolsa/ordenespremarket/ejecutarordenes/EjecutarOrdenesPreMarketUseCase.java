@@ -16,8 +16,8 @@ import javafx.util.Pair;
 import java.util.List;
 
 import static es.serversurvival.bolsa.llamadasapi.mysql.TipoActivo.*;
-import static es.serversurvival.utils.Funciones.*;
-import static es.serversurvival.utils.Funciones.reducirPorcentaje;
+import static es.serversurvival.shared.utils.Funciones.*;
+import static es.serversurvival.shared.utils.Funciones.reducirPorcentaje;
 
 public final class EjecutarOrdenesPreMarketUseCase implements AllMySQLTablesInstances {
     public static final EjecutarOrdenesPreMarketUseCase INSTANCE = new EjecutarOrdenesPreMarketUseCase();

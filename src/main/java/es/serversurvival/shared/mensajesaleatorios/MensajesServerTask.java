@@ -3,7 +3,7 @@ package es.serversurvival.shared.mensajesaleatorios;
 import es.jaimetruman.task.BukkitTimeUnit;
 import es.jaimetruman.task.Task;
 import es.jaimetruman.task.TaskRunner;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 

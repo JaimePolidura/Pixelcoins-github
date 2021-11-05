@@ -1,5 +1,11 @@
 package es.serversurvival.bolsa.ofertasmercadoserver.mysql;
 
+import es.jaimetruman.delete.Delete;
+import es.jaimetruman.insert.Insert;
+import es.jaimetruman.select.Select;
+import es.jaimetruman.select.SelectOptionInitial;
+import es.jaimetruman.update.Update;
+import es.jaimetruman.update.UpdateOptionInitial;
 import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.shared.mysql.MySQL;
 
@@ -12,32 +18,42 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static es.serversurvival.utils.Funciones.*;
+import static es.serversurvival.shared.utils.Funciones.*;
 
 public final class OfertasMercadoServer extends MySQL {
-    private OfertasMercadoServer() {}
     public static final OfertasMercadoServer INSTANCE = new OfertasMercadoServer();
+    private final SelectOptionInitial select;
+    private final UpdateOptionInitial update;
+
+    private OfertasMercadoServer() {
+        this.select = Select.from("ofertasbolsaserver");
+        this.update = Update.table("ofertasbolsaserver");
+    }
 
     public void nueva (String jugador, String empresa, double precio, int cantidad, TipoOfertante tipoOfertante, double precioApertura) {
         String fecha = dateFormater.format(new Date());
 
-        executeUpdate("INSERT INTO ofertasbolsaserver (jugador, empresa, precio, cantidad, fecha, tipo_ofertante, precio_apertura) VALUES ('"+jugador+"', '"+empresa+"', '"+precio+"', '"+cantidad+"', '"+fecha+"', '"+tipoOfertante.toString()+"', '"+precioApertura+"')");
+        String insertQuery = Insert.table("ofertasbolsaserver")
+                .fields("jugador", "empresa", "precio", "cantidad", "fecha", "tipo_ofertante", "precio_apertura")
+                .values(jugador, empresa, precio, cantidad, fecha, tipoOfertante.toString(), precioApertura);
+
+        executeUpdate(insertQuery);
     }
 
     public List<OfertaMercadoServer> getAll () {
-        return buildListFromQuery("SELECT * FROM ofertasbolsaserver");
+        return buildListFromQuery(select);
     }
 
     public List<OfertaMercadoServer> getOfertasEmpresa (String empresa) {
-        return buildListFromQuery("SELECT * FROM ofertasbolsaserver WHERE empresa = '"+empresa+"'");
+        return buildListFromQuery(select.where("empresa").equal(empresa));
     }
 
     public List<OfertaMercadoServer> getOfertasJugador (String jugador) {
-        return buildListFromQuery("SELECT * FROM ofertasbolsaserver WHERE jugador = '"+jugador+"'");
+        return buildListFromQuery(select.where("jugador").equal(jugador));
     }
 
     public List<OfertaMercadoServer> getOfertasEmpresa (String empresa, Predicate<? super OfertaMercadoServer> condition) {
-        List<OfertaMercadoServer> ofertas = buildListFromQuery("SELECT * FROM ofertasbolsaserver WHERE empresa = '"+empresa+"'");
+        List<OfertaMercadoServer> ofertas = buildListFromQuery(select.where("empresa").equal(empresa));
 
         return ofertas.stream()
                 .filter(condition)
@@ -45,19 +61,19 @@ public final class OfertasMercadoServer extends MySQL {
     }
 
     public OfertaMercadoServer get (int id) {
-        return (OfertaMercadoServer) buildObjectFromQuery("SELECT * FROM ofertasbolsaserver WHERE id = '"+id+"'");
+        return (OfertaMercadoServer) buildObjectFromQuery(select.where("id").equal(id));
     }
 
     public void setCantidad (int id, int cantidad) {
-        executeUpdate("UPDATE ofertasbolsaserver SET cantidad = '"+cantidad+"' WHERE id = '"+id+"'");
+        executeUpdate(update.set("cantidad", cantidad).where("id").equal(id));
     }
 
     public void cambiarNombreJugador (String antiguoNombre, String nuevoNombre) {
-        executeUpdate("UPDATE ofertasbolsaserver SET jugador = '"+nuevoNombre+"' WHERE jugador = '"+antiguoNombre+"' AND tipo_ofertante = 'JUGADOR'");
+        executeUpdate(update.set("jugador", nuevoNombre).where("jugador").equal(antiguoNombre).and("tipo_ofertante").equal("JUGADOR"));
     }
 
     public void borrar (int id) {
-        executeUpdate("DELETE FROM ofertasbolsaserver WHERE id = '"+id+"'");
+        executeUpdate(Delete.from("ofertasbolsaserver").where("id").equal(id));
     }
 
     public void setCantidadOBorrar (int id, int cantidad) {

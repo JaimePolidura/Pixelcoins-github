@@ -4,7 +4,7 @@ import es.serversurvival.Pixelcoin;
 import es.serversurvival.jugadores.mySQL.Jugador;
 import es.serversurvival.jugadores.withers.CambioPixelcoins;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.utils.Funciones;
+import es.serversurvival.shared.utils.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

@@ -6,7 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
-import static es.serversurvival.utils.MinecraftUtils.*;
+import static es.serversurvival.shared.utils.MinecraftUtils.*;
 
 public class DeudasDisplayScoreboard implements SingleScoreboard {
     @Override

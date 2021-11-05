@@ -5,7 +5,7 @@ import es.serversurvival.shared.menus.inventory.InventoryFactory;
 import es.serversurvival.shared.menus.Paginated;
 import es.serversurvival.tienda.mySQL.ofertas.Ofertas;
 import es.serversurvival.tienda.mySQL.ofertas.Oferta;
-import es.serversurvival.utils.MinecraftUtils;
+import es.serversurvival.shared.utils.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
