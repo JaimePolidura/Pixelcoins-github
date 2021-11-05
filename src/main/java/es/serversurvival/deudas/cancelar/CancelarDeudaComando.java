@@ -2,7 +2,7 @@ package es.serversurvival.deudas.cancelar;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.deudas.mysql.Deuda;
+import es.serversurvival.deudas._shared.mysql.Deuda;
 import es.serversurvival.shared.comandos.PixelcoinCommand;
 import es.serversurvival.shared.utils.validaciones.Validaciones;
 import es.serversurvival.shared.utils.Funciones;

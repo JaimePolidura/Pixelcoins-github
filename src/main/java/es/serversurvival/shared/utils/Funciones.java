@@ -18,12 +18,12 @@ import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
 import java.util.function.ToIntFunction;
 
-import es.serversurvival.bolsa.llamadasapi.mysql.LlamadaApi;
-import es.serversurvival.bolsa.llamadasapi.mysql.LlamadasApi;
-import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionAbierta;
-import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionesAbiertas;
-import es.serversurvival.deudas.mysql.Deuda;
-import es.serversurvival.deudas.mysql.Deudas;
+import es.serversurvival.bolsa._shared.llamadasapi.mysql.LlamadaApi;
+import es.serversurvival.bolsa._shared.llamadasapi.mysql.LlamadasApi;
+import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionAbierta;
+import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionesAbiertas;
+import es.serversurvival.deudas._shared.mysql.Deuda;
+import es.serversurvival.deudas._shared.mysql.Deudas;
 import es.serversurvival.empresas.mysql.Empresa;
 import es.serversurvival.empresas.mysql.Empresas;
 import es.serversurvival.jugadores.mySQL.Jugador;

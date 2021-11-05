@@ -1,7 +1,7 @@
 package es.serversurvival.empresas.eventlisteners;
 
 import es.jaime.EventListener;
-import es.serversurvival.bolsa.ofertasmercadoserver.comprar.EmpresaServerAccionCompradaEvento;
+import es.serversurvival.bolsa.comprarofertasmercadoserver.EmpresaServerAccionCompradaEvento;
 import es.serversurvival.bolsa.ofertasmercadoserver.mysql.OfertaMercadoServer;
 import es.serversurvival.bolsa.ofertasmercadoserver.mysql.TipoOfertante;
 import es.serversurvival.empresas.mysql.Empresa;

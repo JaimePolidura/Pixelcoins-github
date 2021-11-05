@@ -1,8 +1,8 @@
 package es.serversurvival.jugadores.top;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival.bolsa.posicionescerradas.mysql.PosicionCerrada;
-import es.serversurvival.bolsa.posicionescerradas.mysql.TipoPosicion;
+import es.serversurvival.bolsa._shared.posicionescerradas.mysql.PosicionCerrada;
+import es.serversurvival.bolsa._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.jugadores.mySQL.Jugador;
 import es.serversurvival.shared.menus.inventory.InventoryFactory;
 import es.serversurvival.shared.utils.Funciones;

@@ -1,12 +1,12 @@
 package es.serversurvival.shared.mysql;
 
-import es.serversurvival.bolsa.llamadasapi.mysql.LlamadasApi;
-import es.serversurvival.bolsa.ofertasmercadoserver.mysql.OfertasMercadoServer;
-import es.serversurvival.bolsa.ordenespremarket.mysql.OrdenesPreMarket;
-import es.serversurvival.bolsa.posicionesabiertas.mysql.PosicionesAbiertas;
-import es.serversurvival.bolsa.posicionescerradas.mysql.PosicionesCerradas;
-import es.serversurvival.deudas.mysql.Deudas;
-import es.serversurvival.empleados.mysql.Empleados;
+import es.serversurvival.bolsa._shared.llamadasapi.mysql.LlamadasApi;
+import es.serversurvival.bolsa._shared.ofertasmercadoserver.mysql.OfertasMercadoServer;
+import es.serversurvival.bolsa._shared.ordenespremarket.mysql.OrdenesPreMarket;
+import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionesAbiertas;
+import es.serversurvival.bolsa._shared.posicionescerradas.mysql.PosicionesCerradas;
+import es.serversurvival.deudas._shared.mysql.Deudas;
+import es.serversurvival.empleados._shared.mysql.Empleados;
 import es.serversurvival.empresas.mysql.Empresas;
 import es.serversurvival.jugadores.mySQL.Jugadores;
 import es.serversurvival.mensajes.mysql.Mensajes;

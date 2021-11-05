@@ -1,8 +1,7 @@
 package es.serversurvival.deudas.pagarTodo;
 
-import es.serversurvival.deudas.mysql.Deuda;
+import es.serversurvival.deudas._shared.mysql.Deuda;
 import es.serversurvival.Pixelcoin;
-import es.serversurvival.jugadores.mySQL.Jugadores;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
 
 public final class PagarDeudaCompletaUseCase implements AllMySQLTablesInstances {

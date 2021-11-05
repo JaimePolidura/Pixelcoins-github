@@ -1,7 +1,7 @@
 package es.serversurvival.mensajes.eventlisteners;
 
 import es.jaime.EventListener;
-import es.serversurvival.bolsa.posicionesabiertas.pagardividendos.DividendoPagadoEvento;
+import es.serversurvival.bolsa._shared.posicionesabiertas.pagardividendos.DividendoPagadoEvento;
 import es.serversurvival.mensajes.mysql.Mensajes;
 import es.serversurvival.shared.utils.Funciones;
 

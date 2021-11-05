@@ -1,7 +1,7 @@
 package es.serversurvival.jugadores.eventlisteners.bolsa;
 
 import es.jaime.EventListener;
-import es.serversurvival.bolsa.posicionesabiertas.venderlargo.PosicionVentaLargoEvento;
+import es.serversurvival.bolsa.venderlargo.PosicionVentaLargoEvento;
 import es.serversurvival.jugadores.mySQL.Jugador;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
 

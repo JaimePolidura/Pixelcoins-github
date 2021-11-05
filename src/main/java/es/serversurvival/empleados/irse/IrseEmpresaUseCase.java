@@ -2,7 +2,7 @@ package es.serversurvival.empleados.irse;
 
 import es.serversurvival.Pixelcoin;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.empleados.mysql.Empleado;
+import es.serversurvival.empleados._shared.mysql.Empleado;
 import es.serversurvival.empresas.mysql.Empresa;
 
 public final class IrseEmpresaUseCase implements AllMySQLTablesInstances {

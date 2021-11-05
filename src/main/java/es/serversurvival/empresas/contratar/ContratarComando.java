@@ -2,7 +2,7 @@ package es.serversurvival.empresas.contratar;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.empleados.mysql.TipoSueldo;
+import es.serversurvival.empleados._shared.mysql.TipoSueldo;
 import es.serversurvival.shared.comandos.PixelcoinCommand;
 import es.serversurvival.shared.utils.validaciones.Validaciones;
 import es.serversurvival.empleados.contratar.ContratarSolicitud;

@@ -1,7 +1,7 @@
 package es.serversurvival.mensajes.eventlisteners;
 
 import es.jaime.EventListener;
-import es.serversurvival.bolsa.ordenespremarket.ejecutarordenes.OrdenNoEjecutadoEvento;
+import es.serversurvival.bolsa._shared.ordenespremarket.ejecutarordenes.OrdenNoEjecutadoEvento;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
 
 public final class OnOrdenNoEjutada implements AllMySQLTablesInstances {

@@ -1,7 +1,7 @@
 package es.serversurvival.deudas.cancelar;
 
 import es.serversurvival.Pixelcoin;
-import es.serversurvival.deudas.mysql.Deuda;
+import es.serversurvival.deudas._shared.mysql.Deuda;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
 import org.bukkit.entity.Player;
 

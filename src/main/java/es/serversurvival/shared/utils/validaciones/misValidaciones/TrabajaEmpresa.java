@@ -1,6 +1,6 @@
 package es.serversurvival.shared.utils.validaciones.misValidaciones;
 
-import es.serversurvival.empleados.mysql.Empleados;
+import es.serversurvival.empleados._shared.mysql.Empleados;
 import main.ValidationResult;
 import main.validators.Validator;
 

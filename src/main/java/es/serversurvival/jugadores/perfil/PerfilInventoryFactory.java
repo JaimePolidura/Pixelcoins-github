@@ -1,10 +1,10 @@
 package es.serversurvival.jugadores.perfil;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival.bolsa.posicionescerradas.mysql.PosicionCerrada;
+import es.serversurvival.bolsa._shared.posicionescerradas.mysql.PosicionCerrada;
 import es.serversurvival.cuentaweb.Cuenta;
-import es.serversurvival.deudas.mysql.Deuda;
-import es.serversurvival.empleados.mysql.Empleado;
+import es.serversurvival.deudas._shared.mysql.Deuda;
+import es.serversurvival.empleados._shared.mysql.Empleado;
 import es.serversurvival.empresas.mysql.Empresa;
 import es.serversurvival.jugadores.mySQL.Jugador;
 import es.serversurvival.shared.menus.inventory.InventoryFactory;

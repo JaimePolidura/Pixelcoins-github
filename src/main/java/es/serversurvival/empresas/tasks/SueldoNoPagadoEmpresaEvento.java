@@ -1,6 +1,6 @@
 package es.serversurvival.empresas.tasks;
 
-import es.serversurvival.empleados.mysql.Empleado;
+import es.serversurvival.empleados._shared.mysql.Empleado;
 import es.serversurvival.empresas.mysql.Empresa;
 import es.serversurvival.shared.eventospixelcoins.PixelcoinsEvento;
 import lombok.AllArgsConstructor;

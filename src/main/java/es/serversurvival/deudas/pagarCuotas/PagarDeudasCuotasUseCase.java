@@ -1,6 +1,6 @@
 package es.serversurvival.deudas.pagarCuotas;
 
-import es.serversurvival.deudas.mysql.Deuda;
+import es.serversurvival.deudas._shared.mysql.Deuda;
 import es.serversurvival.jugadores.mySQL.Jugador;
 import es.serversurvival.jugadores.mySQL.Jugadores;
 import es.serversurvival.Pixelcoin;

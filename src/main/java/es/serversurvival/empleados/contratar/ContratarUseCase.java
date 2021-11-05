@@ -1,6 +1,6 @@
 package es.serversurvival.empleados.contratar;
 
-import es.serversurvival.empleados.mysql.TipoSueldo;
+import es.serversurvival.empleados._shared.mysql.TipoSueldo;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
 
 public final class ContratarUseCase implements AllMySQLTablesInstances {

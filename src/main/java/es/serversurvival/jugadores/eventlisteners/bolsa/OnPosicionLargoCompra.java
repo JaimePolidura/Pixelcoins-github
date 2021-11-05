@@ -2,11 +2,9 @@ package es.serversurvival.jugadores.eventlisteners.bolsa;
 
 import es.jaime.EventListener;
 import es.jaime.TransactionalEventListener;
-import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.PosicionCompraLargoEvento;
+import es.serversurvival.bolsa.comprarlargo.PosicionCompraLargoEvento;
 import es.serversurvival.jugadores.mySQL.Jugador;
-import es.serversurvival.shared.eventospixelcoins.EventoTipoTransaccion;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.transacciones.mySQL.Transaccion;
 
 public final class OnPosicionLargoCompra implements AllMySQLTablesInstances, TransactionalEventListener {
     private PosicionCompraLargoEvento ultimoEventoEjecutado;

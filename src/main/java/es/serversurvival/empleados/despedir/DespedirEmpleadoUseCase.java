@@ -1,6 +1,6 @@
 package es.serversurvival.empleados.despedir;
 
-import es.serversurvival.empleados.mysql.Empleado;
+import es.serversurvival.empleados._shared.mysql.Empleado;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.shared.utils.Funciones;
 import org.bukkit.ChatColor;

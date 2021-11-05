@@ -1,8 +1,7 @@
 package es.serversurvival.shared.scoreboards;
 
 
-import es.jaimetruman.select.Select;
-import es.serversurvival.bolsa.cartera.BolsaScoreboard;
+import es.serversurvival.bolsa.vercartera.BolsaCarteraScoreboard;
 import es.serversurvival.deudas.ver.DeudasDisplayScoreboard;
 import es.serversurvival.jugadores.perfil.StatsDisplayScoreboard;
 import es.serversurvival.jugadores.top.TopPlayerDisplayScoreboard;
@@ -23,7 +22,7 @@ public final class ScoreboardUpdateTask extends BukkitRunnable {
         scoreboards.add(new StatsDisplayScoreboard());
         scoreboards.add(new TopPlayerDisplayScoreboard());
         scoreboards.add(new DeudasDisplayScoreboard());
-        scoreboards.add(new BolsaScoreboard());
+        scoreboards.add(new BolsaCarteraScoreboard());
 
         this.scoreBoardManager = Pixelcoin.scoreboarManager();
     }

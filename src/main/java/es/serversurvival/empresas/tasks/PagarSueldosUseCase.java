@@ -1,8 +1,8 @@
 package es.serversurvival.empresas.tasks;
 
 import es.serversurvival.Pixelcoin;
-import es.serversurvival.empleados.mysql.Empleado;
-import es.serversurvival.empleados.mysql.TipoSueldo;
+import es.serversurvival.empleados._shared.mysql.Empleado;
+import es.serversurvival.empleados._shared.mysql.TipoSueldo;
 import es.serversurvival.empresas.mysql.Empresa;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.shared.utils.Funciones;

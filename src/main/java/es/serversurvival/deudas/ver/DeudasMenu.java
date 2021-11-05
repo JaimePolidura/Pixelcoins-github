@@ -1,7 +1,7 @@
 package es.serversurvival.deudas.ver;
 
 import es.serversurvival.deudas.cancelar.CancelarDeudaUseCase;
-import es.serversurvival.deudas.mysql.Deuda;
+import es.serversurvival.deudas._shared.mysql.Deuda;
 import es.serversurvival.deudas.pagarTodo.PagarDeudaCompletaUseCase;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
 import es.serversurvival.shared.menus.Menu;

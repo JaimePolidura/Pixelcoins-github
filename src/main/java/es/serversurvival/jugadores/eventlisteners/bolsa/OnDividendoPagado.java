@@ -1,7 +1,7 @@
 package es.serversurvival.jugadores.eventlisteners.bolsa;
 
 import es.jaime.EventListener;
-import es.serversurvival.bolsa.posicionesabiertas.pagardividendos.DividendoPagadoEvento;
+import es.serversurvival.bolsa._shared.posicionesabiertas.pagardividendos.DividendoPagadoEvento;
 import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
 
 public final class OnDividendoPagado implements AllMySQLTablesInstances {
