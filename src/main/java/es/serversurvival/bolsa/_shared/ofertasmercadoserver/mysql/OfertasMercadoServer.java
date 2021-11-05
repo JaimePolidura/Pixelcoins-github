@@ -7,7 +7,7 @@ import es.jaimetruman.select.SelectOptionInitial;
 import es.jaimetruman.update.Update;
 import es.jaimetruman.update.UpdateOptionInitial;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionAbierta;
-import es.serversurvival.shared.mysql.MySQL;
+import es.serversurvival._shared.mysql.MySQL;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static es.serversurvival.shared.utils.Funciones.*;
+import static es.serversurvival._shared.utils.Funciones.*;
 
 public final class OfertasMercadoServer extends MySQL {
     public static final OfertasMercadoServer INSTANCE = new OfertasMercadoServer();

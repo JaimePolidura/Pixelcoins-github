@@ -1,11 +1,11 @@
 package es.serversurvival.tienda.vertienda;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival.shared.menus.inventory.InventoryFactory;
-import es.serversurvival.shared.menus.Paginated;
-import es.serversurvival.tienda.mySQL.ofertas.Ofertas;
-import es.serversurvival.tienda.mySQL.ofertas.Oferta;
-import es.serversurvival.shared.utils.MinecraftUtils;
+import es.serversurvival._shared.menus.inventory.InventoryFactory;
+import es.serversurvival._shared.menus.Paginated;
+import es.serversurvival.tienda._shared.mySQL.ofertas.Ofertas;
+import es.serversurvival.tienda._shared.mySQL.ofertas.Oferta;
+import es.serversurvival._shared.utils.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

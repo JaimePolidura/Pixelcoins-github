@@ -1,6 +1,6 @@
 package es.serversurvival.empresas.logitipo;
 
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 public final class CambiarLogitpoUseCase implements AllMySQLTablesInstances {
     public static final CambiarLogitpoUseCase INSTANCE = new CambiarLogitpoUseCase();

@@ -1,9 +1,9 @@
 package es.serversurvival.empresas.depositar;
 
-import es.serversurvival.shared.eventospixelcoins.EventoTipoTransaccion;
-import es.serversurvival.shared.eventospixelcoins.PixelcoinsEvento;
-import es.serversurvival.empresas.mysql.Empresa;
-import es.serversurvival.jugadores.mySQL.Jugador;
+import es.serversurvival._shared.eventospixelcoins.EventoTipoTransaccion;
+import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
+import es.serversurvival.empresas._shared.mysql.Empresa;
+import es.serversurvival.jugadores._shared.mySQL.Jugador;
 import es.serversurvival.transacciones.mySQL.Transaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

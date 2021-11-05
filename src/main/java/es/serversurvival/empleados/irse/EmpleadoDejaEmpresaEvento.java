@@ -1,7 +1,7 @@
 package es.serversurvival.empleados.irse;
 
-import es.serversurvival.shared.eventospixelcoins.PixelcoinsEvento;
-import es.serversurvival.empresas.mysql.Empresa;
+import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
+import es.serversurvival.empresas._shared.mysql.Empresa;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

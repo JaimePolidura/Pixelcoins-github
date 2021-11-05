@@ -1,10 +1,10 @@
 package es.serversurvival.deudas.pagarCuotas;
 
 import es.serversurvival.deudas._shared.mysql.Deuda;
-import es.serversurvival.jugadores.mySQL.Jugador;
-import es.serversurvival.jugadores.mySQL.Jugadores;
+import es.serversurvival.jugadores._shared.mySQL.Jugador;
+import es.serversurvival.jugadores._shared.mySQL.Jugadores;
 import es.serversurvival.Pixelcoin;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import lombok.SneakyThrows;
 
 import java.util.Date;

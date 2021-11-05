@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa._shared.llamadasapi.actualizarprecios;
 
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.LlamadaApi;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 import java.util.List;
 

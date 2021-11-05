@@ -1,14 +1,14 @@
 package es.serversurvival.jugadores.withers.sacarItem;
 
-import es.serversurvival.jugadores.mySQL.Jugador;
+import es.serversurvival.jugadores._shared.mySQL.Jugador;
 import es.serversurvival.jugadores.withers.CambioPixelcoins;
-import es.serversurvival.shared.menus.Menu;
-import es.serversurvival.shared.menus.MenuManager;
-import es.serversurvival.shared.menus.inventory.InventoryCreator;
-import es.serversurvival.shared.menus.Clickable;
-import es.serversurvival.shared.menus.Refreshcable;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.shared.utils.Funciones;
+import es.serversurvival._shared.menus.Menu;
+import es.serversurvival._shared.menus.MenuManager;
+import es.serversurvival._shared.menus.inventory.InventoryCreator;
+import es.serversurvival._shared.menus.Clickable;
+import es.serversurvival._shared.menus.Refreshcable;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;

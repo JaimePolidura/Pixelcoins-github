@@ -5,7 +5,7 @@ import es.jaimetruman.insert.Insert;
 import es.jaimetruman.select.Select;
 import es.jaimetruman.select.SelectOptionInitial;
 import es.jaimetruman.update.Update;
-import es.serversurvival.shared.mysql.MySQL;
+import es.serversurvival._shared.mysql.MySQL;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -1,10 +1,9 @@
 package es.serversurvival.jugadores.venderjugador;
 
-import es.serversurvival.shared.menus.Menu;
-import es.serversurvival.shared.menus.inventory.InventoryCreator;
-import es.serversurvival.shared.menus.solicitudes.Solicitud;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.transacciones.mySQL.TipoTransaccion;
+import es.serversurvival._shared.menus.Menu;
+import es.serversurvival._shared.menus.inventory.InventoryCreator;
+import es.serversurvival._shared.menus.solicitudes.Solicitud;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;

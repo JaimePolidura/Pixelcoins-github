@@ -4,7 +4,7 @@ import es.serversurvival.Pixelcoin;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa.ofertasmercadoserver.mysql.OfertaMercadoServer;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.TipoPosicion;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 
 public final class ComprarOfertaMercadoUseCase implements AllMySQLTablesInstances {

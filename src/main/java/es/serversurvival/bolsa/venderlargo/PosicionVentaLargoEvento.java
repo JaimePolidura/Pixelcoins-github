@@ -3,7 +3,7 @@ package es.serversurvival.bolsa.venderlargo;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.PosicionCerrada;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.TipoActivo;
-import es.serversurvival.shared.eventospixelcoins.PosicionCerradaEvento;
+import es.serversurvival._shared.eventospixelcoins.PosicionCerradaEvento;
 import es.serversurvival.transacciones.mySQL.TipoTransaccion;
 import es.serversurvival.transacciones.mySQL.Transaccion;
 import lombok.Getter;

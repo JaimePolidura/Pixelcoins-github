@@ -2,9 +2,9 @@ package es.serversurvival.empresas.miempresa;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival.empleados._shared.mysql.Empleado;
-import es.serversurvival.empresas.mysql.Empresa;
-import es.serversurvival.shared.utils.Funciones;
-import es.serversurvival.shared.menus.inventory.InventoryFactory;
+import es.serversurvival.empresas._shared.mysql.Empresa;
+import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;

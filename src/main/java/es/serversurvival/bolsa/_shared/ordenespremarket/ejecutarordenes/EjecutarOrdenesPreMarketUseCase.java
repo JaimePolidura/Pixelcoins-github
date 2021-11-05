@@ -9,15 +9,15 @@ import es.serversurvival.bolsa._shared.ordenespremarket.mysql.AccionOrden;
 import es.serversurvival.bolsa._shared.ordenespremarket.mysql.OrdenPreMarket;
 import es.serversurvival.bolsa.vendercorto.VenderCortoUseCase;
 import es.serversurvival.bolsa.venderlargo.VenderLargoUseCase;
-import es.serversurvival.jugadores.mySQL.Jugador;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival.jugadores._shared.mySQL.Jugador;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import javafx.util.Pair;
 
 import java.util.List;
 
 import static es.serversurvival.bolsa._shared.llamadasapi.mysql.TipoActivo.*;
-import static es.serversurvival.shared.utils.Funciones.*;
-import static es.serversurvival.shared.utils.Funciones.reducirPorcentaje;
+import static es.serversurvival._shared.utils.Funciones.*;
+import static es.serversurvival._shared.utils.Funciones.reducirPorcentaje;
 
 public final class EjecutarOrdenesPreMarketUseCase implements AllMySQLTablesInstances {
     public static final EjecutarOrdenesPreMarketUseCase INSTANCE = new EjecutarOrdenesPreMarketUseCase();

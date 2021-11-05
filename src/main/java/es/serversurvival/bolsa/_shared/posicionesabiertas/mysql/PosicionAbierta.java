@@ -2,7 +2,7 @@ package es.serversurvival.bolsa._shared.posicionesabiertas.mysql;
 
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.TipoActivo;
-import es.serversurvival.shared.mysql.TablaObjeto;
+import es.serversurvival._shared.mysql.TablaObjeto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

@@ -3,11 +3,11 @@ package es.serversurvival.bolsa.verofertasmercadoserver;
 import es.serversurvival.bolsa.ofertasmercadoserver.cancelar.CancelarOfertaAccionServerUseCase;
 import es.serversurvival.bolsa.comprarofertasmercadoserver.ComprarAccionesServerConfirmacion;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
-import es.serversurvival.shared.menus.Menu;
-import es.serversurvival.shared.menus.inventory.InventoryCreator;
-import es.serversurvival.shared.menus.Clickable;
-import es.serversurvival.shared.menus.Paginated;
-import es.serversurvival.shared.utils.Funciones;
+import es.serversurvival._shared.menus.Menu;
+import es.serversurvival._shared.menus.inventory.InventoryCreator;
+import es.serversurvival._shared.menus.Clickable;
+import es.serversurvival._shared.menus.Paginated;
+import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-import static es.serversurvival.shared.utils.Funciones.enviarMensajeYSonido;
+import static es.serversurvival._shared.utils.Funciones.enviarMensajeYSonido;
 import static org.bukkit.ChatColor.AQUA;
 import static org.bukkit.ChatColor.GOLD;
 

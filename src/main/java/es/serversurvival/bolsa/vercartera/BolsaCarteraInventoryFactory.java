@@ -5,9 +5,9 @@ import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionesAbiert
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.LlamadaApi;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.TipoPosicion;
-import es.serversurvival.shared.utils.Funciones;
-import es.serversurvival.shared.menus.Paginated;
-import es.serversurvival.shared.menus.inventory.InventoryFactory;
+import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival._shared.menus.Paginated;
+import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;

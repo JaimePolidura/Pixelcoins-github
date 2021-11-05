@@ -1,6 +1,6 @@
 package es.serversurvival.bolsa._shared.posicionescerradas.mysql;
 
-import es.serversurvival.shared.mysql.TablaObjeto;
+import es.serversurvival._shared.mysql.TablaObjeto;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.TipoActivo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

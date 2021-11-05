@@ -2,8 +2,8 @@ package es.serversurvival.bolsa._shared.posicionesabiertas.splitAcciones;
 
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.LlamadaApi;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionAbierta;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.shared.utils.apiHttp.IEXCloud_API;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
 import lombok.SneakyThrows;
 import org.json.simple.JSONObject;
 
@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static es.serversurvival.shared.utils.Funciones.diferenciaDias;
+import static es.serversurvival._shared.utils.Funciones.diferenciaDias;
 
 public final class SplitAccionesUseCase implements AllMySQLTablesInstances {
     public static final SplitAccionesUseCase INSTANCE = new SplitAccionesUseCase();

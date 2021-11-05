@@ -2,8 +2,8 @@ package es.serversurvival.bolsa._shared.posicionesabiertas.pagardividendos;
 
 import es.serversurvival.transacciones.mySQL.Transaccion;
 import es.serversurvival.transacciones.mySQL.TipoTransaccion;
-import es.serversurvival.shared.eventospixelcoins.EventoTipoTransaccion;
-import es.serversurvival.shared.eventospixelcoins.PixelcoinsEvento;
+import es.serversurvival._shared.eventospixelcoins.EventoTipoTransaccion;
+import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

@@ -2,8 +2,8 @@ package es.serversurvival.mensajes.ver;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.mensajes.mysql.Mensaje;
-import es.serversurvival.shared.comandos.PixelcoinCommand;
+import es.serversurvival.mensajes._shared.mysql.Mensaje;
+import es.serversurvival._shared.comandos.PixelcoinCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

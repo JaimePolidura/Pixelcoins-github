@@ -1,12 +1,12 @@
 package es.serversurvival.empleados.despedir;
 
 import es.serversurvival.empleados._shared.mysql.Empleado;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.shared.utils.Funciones;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 
-import static es.serversurvival.shared.utils.Funciones.enviarMensaje;
+import static es.serversurvival._shared.utils.Funciones.enviarMensaje;
 
 public final class DespedirEmpleadoUseCase implements AllMySQLTablesInstances {
     public static final DespedirEmpleadoUseCase INSTANCE = new DespedirEmpleadoUseCase();

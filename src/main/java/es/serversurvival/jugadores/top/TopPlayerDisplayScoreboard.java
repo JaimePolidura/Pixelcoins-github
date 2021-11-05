@@ -1,8 +1,8 @@
 package es.serversurvival.jugadores.top;
 
-import es.serversurvival.shared.scoreboards.GlobalScoreboard;
-import es.serversurvival.shared.utils.Funciones;
-import es.serversurvival.shared.utils.MinecraftUtils;
+import es.serversurvival._shared.scoreboards.GlobalScoreboard;
+import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival._shared.utils.MinecraftUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;

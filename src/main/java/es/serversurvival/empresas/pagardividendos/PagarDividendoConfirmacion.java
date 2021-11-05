@@ -1,12 +1,12 @@
 package es.serversurvival.empresas.pagardividendos;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival.empresas.mysql.Empresa;
-import es.serversurvival.shared.menus.Menu;
-import es.serversurvival.shared.menus.AumentoConfirmacion;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.shared.utils.Funciones;
-import es.serversurvival.shared.menus.inventory.InventoryCreator;
+import es.serversurvival.empresas._shared.mysql.Empresa;
+import es.serversurvival._shared.menus.Menu;
+import es.serversurvival._shared.menus.AumentoConfirmacion;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival._shared.menus.inventory.InventoryCreator;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

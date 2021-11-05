@@ -2,7 +2,7 @@ package es.serversurvival.bolsa.verofertasmercadoserver;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.shared.comandos.PixelcoinCommand;
+import es.serversurvival._shared.comandos.PixelcoinCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

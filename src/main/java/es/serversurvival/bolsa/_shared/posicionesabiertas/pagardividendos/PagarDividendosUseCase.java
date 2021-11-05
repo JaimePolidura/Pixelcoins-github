@@ -2,9 +2,9 @@ package es.serversurvival.bolsa._shared.posicionesabiertas.pagardividendos;
 
 import es.serversurvival.Pixelcoin;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionAbierta;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.shared.utils.apiHttp.IEXCloud_API;
-import es.serversurvival.shared.utils.Funciones;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
+import es.serversurvival._shared.utils.Funciones;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 

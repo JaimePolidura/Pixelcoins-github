@@ -4,8 +4,8 @@ import es.jaime.EventListener;
 import es.serversurvival.bolsa.comprarofertasmercadoserver.EmpresaServerAccionCompradaEvento;
 import es.serversurvival.bolsa.ofertasmercadoserver.mysql.OfertaMercadoServer;
 import es.serversurvival.bolsa.ofertasmercadoserver.mysql.TipoOfertante;
-import es.serversurvival.empresas.mysql.Empresa;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival.empresas._shared.mysql.Empresa;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 public final class OnCompraAccionServer implements AllMySQLTablesInstances {
     @EventListener

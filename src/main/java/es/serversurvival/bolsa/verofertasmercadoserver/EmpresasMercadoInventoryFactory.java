@@ -3,7 +3,7 @@ package es.serversurvival.bolsa.verofertasmercadoserver;
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival.bolsa.ofertasmercadoserver.mysql.OfertaMercadoServer;
 import es.serversurvival.bolsa.ofertasmercadoserver.mysql.TipoOfertante;
-import es.serversurvival.shared.menus.inventory.InventoryFactory;
+import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;

@@ -1,10 +1,10 @@
 package es.serversurvival.jugadores.withers.sacarMaxItem;
 
 import es.serversurvival.Pixelcoin;
-import es.serversurvival.jugadores.mySQL.Jugador;
+import es.serversurvival.jugadores._shared.mySQL.Jugador;
 import es.serversurvival.jugadores.withers.CambioPixelcoins;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.shared.utils.Funciones;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

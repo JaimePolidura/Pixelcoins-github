@@ -6,8 +6,8 @@ import es.jaimetruman.select.Select;
 import es.jaimetruman.select.SelectOptionInitial;
 import es.jaimetruman.update.Update;
 import es.jaimetruman.update.UpdateOptionInitial;
-import es.serversurvival.shared.mysql.MySQL;
-import es.serversurvival.shared.utils.apiHttp.IEXCloud_API;
+import es.serversurvival._shared.mysql.MySQL;
+import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
 import javafx.util.Pair;
 
 

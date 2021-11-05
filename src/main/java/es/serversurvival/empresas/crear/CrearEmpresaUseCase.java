@@ -1,7 +1,7 @@
 package es.serversurvival.empresas.crear;
 
 import es.serversurvival.Pixelcoin;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 public final class CrearEmpresaUseCase implements AllMySQLTablesInstances {
     public static final CrearEmpresaUseCase INSTANCE = new CrearEmpresaUseCase();

@@ -5,11 +5,11 @@ import es.jaime.EventBus;
 import es.jaime.impl.EventBusSynch;
 import es.jaimetruman.Mapper;
 import es.jaimetruman.task.BukkitTimeUnit;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.shared.mysql.MySQL;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.mysql.MySQL;
 import es.serversurvival.webconnection.RabbitMQConsumerTask;
-import es.serversurvival.shared.scoreboards.ScoreBoardManager;
-import es.serversurvival.shared.scoreboards.ScoreboardUpdateTask;
+import es.serversurvival._shared.scoreboards.ScoreBoardManager;
+import es.serversurvival._shared.scoreboards.ScoreboardUpdateTask;
 
 import org.bukkit.plugin.java.JavaPlugin;
 

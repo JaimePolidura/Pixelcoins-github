@@ -2,7 +2,7 @@ package es.serversurvival.empleados._shared.eventlisteners;
 
 import es.jaime.EventListener;
 import es.serversurvival.empleados._shared.mysql.Empleado;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.empresas.editarnombre.EmpresaNombreEditadoEvento;
 
 import java.util.List;

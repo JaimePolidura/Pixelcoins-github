@@ -2,10 +2,10 @@ package es.serversurvival.webconnection.conversacionesweb.responder;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.shared.comandos.PixelcoinCommand;
+import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival.webconnection.conversacionesweb.mysql.ConversacionesWeb;
-import es.serversurvival.shared.utils.Funciones;
-import es.serversurvival.shared.utils.validaciones.Validaciones;
+import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival._shared.utils.validaciones.Validaciones;
 import main.ValidationResult;
 import main.ValidationsService;
 import org.bukkit.ChatColor;

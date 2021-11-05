@@ -1,16 +1,16 @@
 package es.serversurvival.jugadores.perfil;
 
-import es.serversurvival.empresas.mysql.Empresa;
-import es.serversurvival.shared.scoreboards.SingleScoreboard;
-import es.serversurvival.shared.utils.Funciones;
-import es.serversurvival.shared.utils.MinecraftUtils;
+import es.serversurvival.empresas._shared.mysql.Empresa;
+import es.serversurvival._shared.scoreboards.SingleScoreboard;
+import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival._shared.utils.MinecraftUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.List;
 
-import static es.serversurvival.shared.utils.MinecraftUtils.addLineToScoreboard;
+import static es.serversurvival._shared.utils.MinecraftUtils.addLineToScoreboard;
 
 public class StatsDisplayScoreboard implements SingleScoreboard {
 

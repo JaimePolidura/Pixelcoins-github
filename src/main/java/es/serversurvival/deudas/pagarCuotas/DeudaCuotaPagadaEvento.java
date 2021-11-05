@@ -1,7 +1,7 @@
 package es.serversurvival.deudas.pagarCuotas;
 
-import es.serversurvival.shared.eventospixelcoins.EventoTipoTransaccion;
-import es.serversurvival.shared.eventospixelcoins.PixelcoinsEvento;
+import es.serversurvival._shared.eventospixelcoins.EventoTipoTransaccion;
+import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.transacciones.mySQL.Transaccion;
 import es.serversurvival.transacciones.mySQL.TipoTransaccion;
 import lombok.AllArgsConstructor;

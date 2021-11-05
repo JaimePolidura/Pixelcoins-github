@@ -1,9 +1,8 @@
 package es.serversurvival.jugadores.withers;
 
-import es.serversurvival.jugadores.mySQL.Jugador;
+import es.serversurvival.jugadores._shared.mySQL.Jugador;
 import es.serversurvival.jugadores.withers.sacarItem.SacarItemUseCase;
 import es.serversurvival.jugadores.withers.sacarMaxItem.SacarMaxItemUseCase;
-import es.serversurvival.transacciones.mySQL.Transacciones;
 
 public enum CambioPixelcoins {
     DIAMOND(CambioPixelcoins.DIAMANTE, SacarMaxItemUseCase.INSTANCE::sacarMaxItemDiamond),

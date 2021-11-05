@@ -1,10 +1,10 @@
 package es.serversurvival.tienda.comprar;
 
 import es.serversurvival.Pixelcoin;
-import es.serversurvival.jugadores.mySQL.Jugador;
-import es.serversurvival.jugadores.mySQL.Jugadores;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.tienda.mySQL.ofertas.Oferta;
+import es.serversurvival.jugadores._shared.mySQL.Jugador;
+import es.serversurvival.jugadores._shared.mySQL.Jugadores;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival.tienda._shared.mySQL.ofertas.Oferta;
 import org.bukkit.inventory.ItemStack;
 
 public final class ComprarOfertaUseCase implements AllMySQLTablesInstances {

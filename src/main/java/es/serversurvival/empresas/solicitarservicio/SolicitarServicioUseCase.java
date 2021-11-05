@@ -1,14 +1,14 @@
 package es.serversurvival.empresas.solicitarservicio;
 
 import es.serversurvival.empleados._shared.mysql.Empleado;
-import es.serversurvival.empresas.mysql.Empresa;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival.empresas._shared.mysql.Empresa;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 
 import java.util.List;
 
-import static es.serversurvival.shared.utils.Funciones.*;
+import static es.serversurvival._shared.utils.Funciones.*;
 
 public final class SolicitarServicioUseCase implements AllMySQLTablesInstances {
     public static final SolicitarServicioUseCase INSTANCE = new SolicitarServicioUseCase();

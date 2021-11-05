@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa.vendercorto;
 
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.TipoActivo;
-import es.serversurvival.shared.eventospixelcoins.PosicionAbiertaEvento;
+import es.serversurvival._shared.eventospixelcoins.PosicionAbiertaEvento;
 import es.serversurvival.transacciones.mySQL.Transaccion;
 
 import static es.serversurvival.transacciones.mySQL.TipoTransaccion.*;

@@ -2,7 +2,7 @@ package es.serversurvival.jugadores.withers.sacarItem;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival.jugadores.withers.CambioPixelcoins;
-import es.serversurvival.shared.menus.inventory.InventoryFactory;
+import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

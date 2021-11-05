@@ -1,9 +1,9 @@
 package es.serversurvival.empresas.vender;
 
-import es.serversurvival.shared.menus.Menu;
-import es.serversurvival.shared.menus.solicitudes.Solicitud;
-import es.serversurvival.shared.utils.Funciones;
-import es.serversurvival.shared.menus.inventory.InventoryCreator;
+import es.serversurvival._shared.menus.Menu;
+import es.serversurvival._shared.menus.solicitudes.Solicitud;
+import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival._shared.menus.inventory.InventoryCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;

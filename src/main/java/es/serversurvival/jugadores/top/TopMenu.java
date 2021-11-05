@@ -1,7 +1,7 @@
 package es.serversurvival.jugadores.top;
 
-import es.serversurvival.shared.menus.Menu;
-import es.serversurvival.shared.menus.inventory.InventoryCreator;
+import es.serversurvival._shared.menus.Menu;
+import es.serversurvival._shared.menus.inventory.InventoryCreator;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 

@@ -2,10 +2,10 @@ package es.serversurvival.ayuda.verayudas;
 
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.ayuda.*;
-import es.serversurvival.shared.menus.Menu;
-import es.serversurvival.shared.menus.inventory.InventoryCreator;
-import es.serversurvival.shared.menus.Clickable;
-import es.serversurvival.shared.utils.Funciones;
+import es.serversurvival._shared.menus.Menu;
+import es.serversurvival._shared.menus.inventory.InventoryCreator;
+import es.serversurvival._shared.menus.Clickable;
+import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;

@@ -2,7 +2,7 @@ package es.serversurvival.ayuda;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.empresas.mysql.Empresas;
+import es.serversurvival.empresas._shared.mysql.Empresas;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 

@@ -3,7 +3,7 @@ package es.serversurvival.bolsa.comprarlargo;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.TipoActivo;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 public final class ComprarLargoUseCase implements AllMySQLTablesInstances {
     public static final ComprarLargoUseCase INSTANCE = new ComprarLargoUseCase();

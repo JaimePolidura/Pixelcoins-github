@@ -9,8 +9,8 @@ import es.jaimetruman.insert.Insert;
 import es.jaimetruman.select.Select;
 import es.jaimetruman.update.Update;
 import es.jaimetruman.update.UpdateOptionInitial;
-import es.serversurvival.shared.mysql.MySQL;
-import es.serversurvival.shared.utils.Funciones;
+import es.serversurvival._shared.mysql.MySQL;
+import es.serversurvival._shared.utils.Funciones;
 
 import static es.serversurvival.transacciones.mySQL.TipoTransaccion.*;
 

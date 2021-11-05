@@ -1,7 +1,7 @@
 package es.serversurvival.jugadores.venderjugador;
 
 import es.serversurvival.Pixelcoin;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 public final class VenderJugadorUseCase implements AllMySQLTablesInstances{
     public static final VenderJugadorUseCase INSTANCE = new VenderJugadorUseCase();

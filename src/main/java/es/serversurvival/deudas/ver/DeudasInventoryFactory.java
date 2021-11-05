@@ -2,7 +2,7 @@ package es.serversurvival.deudas.ver;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival.deudas._shared.mysql.Deuda;
-import es.serversurvival.shared.menus.inventory.InventoryFactory;
+import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

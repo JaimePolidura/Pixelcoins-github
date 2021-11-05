@@ -2,7 +2,7 @@ package es.serversurvival.bolsa._shared;
 
 import es.serversurvival.Pixelcoin;
 import es.serversurvival.bolsa._shared.ordenespremarket.mysql.AccionOrden;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 public final class AbrirOrdenUseCase implements AllMySQLTablesInstances {
     public static final AbrirOrdenUseCase INSTANCE = new AbrirOrdenUseCase();

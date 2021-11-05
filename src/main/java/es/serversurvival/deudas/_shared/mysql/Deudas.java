@@ -10,10 +10,10 @@ import es.jaimetruman.select.Select;
 import es.jaimetruman.select.SelectOptionInitial;
 import es.jaimetruman.update.Update;
 import es.jaimetruman.update.UpdateOptionInitial;
-import es.serversurvival.shared.mysql.MySQL;
-import es.serversurvival.shared.utils.Funciones;
+import es.serversurvival._shared.mysql.MySQL;
+import es.serversurvival._shared.utils.Funciones;
 
-import static es.serversurvival.shared.utils.Funciones.*;
+import static es.serversurvival._shared.utils.Funciones.*;
 
 // II 325 -> 218 -> 190
 public final class Deudas extends MySQL {

@@ -3,15 +3,15 @@ package es.serversurvival.bolsa.vercartera;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionesAbiertas;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.LlamadaApi;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionAbierta;
-import es.serversurvival.shared.scoreboards.SingleScoreboard;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.scoreboards.SingleScoreboard;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.*;
 
-import static es.serversurvival.shared.utils.MinecraftUtils.*;
+import static es.serversurvival._shared.utils.MinecraftUtils.*;
 
 public class BolsaCarteraScoreboard implements SingleScoreboard {
     private Map<String, LlamadaApi> llamadasApiMap;

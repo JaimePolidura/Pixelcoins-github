@@ -2,8 +2,8 @@ package es.serversurvival.bolsa.verprecioaccion;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
-import es.serversurvival.shared.comandos.PixelcoinCommand;
-import es.serversurvival.shared.utils.apiHttp.IEXCloud_API;
+import es.serversurvival._shared.comandos.PixelcoinCommand;
+import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 

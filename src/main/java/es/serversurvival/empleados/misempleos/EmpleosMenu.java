@@ -2,12 +2,12 @@ package es.serversurvival.empleados.misempleos;
 
 import es.serversurvival.empleados.irse.IrseEmpresaUseCase;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
-import es.serversurvival.shared.menus.Menu;
-import es.serversurvival.shared.menus.MenuManager;
-import es.serversurvival.shared.menus.inventory.InventoryCreator;
-import es.serversurvival.shared.menus.CanGoBack;
-import es.serversurvival.shared.menus.Clickable;
-import es.serversurvival.shared.menus.Refreshcable;
+import es.serversurvival._shared.menus.Menu;
+import es.serversurvival._shared.menus.MenuManager;
+import es.serversurvival._shared.menus.inventory.InventoryCreator;
+import es.serversurvival._shared.menus.CanGoBack;
+import es.serversurvival._shared.menus.Clickable;
+import es.serversurvival._shared.menus.Refreshcable;
 import es.serversurvival.empresas.miempresa.EmpresasVerMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

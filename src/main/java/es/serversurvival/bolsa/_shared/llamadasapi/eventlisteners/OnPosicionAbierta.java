@@ -1,8 +1,8 @@
 package es.serversurvival.bolsa._shared.llamadasapi.eventlisteners;
 
 import es.jaime.EventListener;
-import es.serversurvival.shared.eventospixelcoins.PosicionAbiertaEvento;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.eventospixelcoins.PosicionAbiertaEvento;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 public final class OnPosicionAbierta implements AllMySQLTablesInstances {
     @EventListener

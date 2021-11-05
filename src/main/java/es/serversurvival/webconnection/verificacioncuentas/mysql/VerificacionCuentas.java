@@ -3,7 +3,7 @@ package es.serversurvival.webconnection.verificacioncuentas.mysql;
 import es.jaimetruman.delete.Delete;
 import es.jaimetruman.insert.Insert;
 import es.jaimetruman.select.Select;
-import es.serversurvival.shared.mysql.MySQL;
+import es.serversurvival._shared.mysql.MySQL;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

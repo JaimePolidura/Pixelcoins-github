@@ -1,11 +1,11 @@
 package es.serversurvival.bolsa.venderlargo;
 
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionAbierta;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.Pixelcoin;
 
-import static es.serversurvival.shared.utils.Funciones.diferenciaPorcntual;
-import static es.serversurvival.shared.utils.Funciones.redondeoDecimales;
+import static es.serversurvival._shared.utils.Funciones.diferenciaPorcntual;
+import static es.serversurvival._shared.utils.Funciones.redondeoDecimales;
 
 public final class VenderLargoUseCase implements AllMySQLTablesInstances {
     public static final VenderLargoUseCase INSTANCE = new VenderLargoUseCase();

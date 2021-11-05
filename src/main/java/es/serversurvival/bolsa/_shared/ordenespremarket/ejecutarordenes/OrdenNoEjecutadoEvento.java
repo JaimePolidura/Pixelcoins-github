@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa._shared.ordenespremarket.ejecutarordenes;
 
 import es.serversurvival.bolsa._shared.ordenespremarket.mysql.OrdenPreMarket;
-import es.serversurvival.shared.eventospixelcoins.PixelcoinsEvento;
+import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

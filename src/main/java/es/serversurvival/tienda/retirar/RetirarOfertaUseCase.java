@@ -1,7 +1,7 @@
 package es.serversurvival.tienda.retirar;
 
-import es.serversurvival.tienda.mySQL.ofertas.Ofertas;
-import es.serversurvival.tienda.mySQL.ofertas.Oferta;
+import es.serversurvival.tienda._shared.mySQL.ofertas.Ofertas;
+import es.serversurvival.tienda._shared.mySQL.ofertas.Oferta;
 import org.bukkit.inventory.ItemStack;
 
 

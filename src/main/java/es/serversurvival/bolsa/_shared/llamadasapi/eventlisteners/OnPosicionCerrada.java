@@ -1,8 +1,8 @@
 package es.serversurvival.bolsa._shared.llamadasapi.eventlisteners;
 
 import es.jaime.EventListener;
-import es.serversurvival.shared.eventospixelcoins.PosicionCerradaEvento;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.eventospixelcoins.PosicionCerradaEvento;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 public final class OnPosicionCerrada implements AllMySQLTablesInstances {
     @EventListener

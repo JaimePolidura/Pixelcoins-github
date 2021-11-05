@@ -2,7 +2,7 @@ package es.serversurvival.empresas.eventlisteners;
 
 import es.jaime.EventListener;
 import es.serversurvival.jugadores.setupjugadorunido.JugadorCambiadoDeNombreEvento;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 public final class OnJugadorCambiadoNombre implements AllMySQLTablesInstances {
     @EventListener

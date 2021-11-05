@@ -1,7 +1,7 @@
 package es.serversurvival.mensajes.ver;
 
-import es.serversurvival.mensajes.mysql.Mensaje;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival.mensajes._shared.mysql.Mensaje;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 import java.util.List;
 

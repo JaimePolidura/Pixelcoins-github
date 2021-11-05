@@ -1,9 +1,9 @@
 package es.serversurvival.empresas.sacar;
 
 import es.serversurvival.Pixelcoin;
-import es.serversurvival.empresas.mysql.Empresa;
-import es.serversurvival.jugadores.mySQL.Jugador;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival.empresas._shared.mysql.Empresa;
+import es.serversurvival.jugadores._shared.mySQL.Jugador;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 public final class SacarPixelcoinsUseCase implements AllMySQLTablesInstances {
     public static final SacarPixelcoinsUseCase INSTANCE = new SacarPixelcoinsUseCase();

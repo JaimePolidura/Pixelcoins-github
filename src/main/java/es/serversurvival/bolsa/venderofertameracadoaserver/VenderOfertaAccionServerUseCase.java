@@ -2,7 +2,7 @@ package es.serversurvival.bolsa.venderofertameracadoaserver;
 
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.bolsa._shared.ofertasmercadoserver.mysql.TipoOfertante;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 
 public final class VenderOfertaAccionServerUseCase implements AllMySQLTablesInstances {

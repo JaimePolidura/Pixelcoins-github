@@ -10,8 +10,8 @@ import es.jaimetruman.select.Select;
 import es.jaimetruman.select.SelectOptionInitial;
 import es.jaimetruman.update.Update;
 import es.jaimetruman.update.UpdateOptionInitial;
-import es.serversurvival.shared.mysql.MySQL;
-import es.serversurvival.shared.utils.Funciones;
+import es.serversurvival._shared.mysql.MySQL;
+import es.serversurvival._shared.utils.Funciones;
 
 //II 354 -> 236 -> 156
 public final class Empleados extends MySQL {

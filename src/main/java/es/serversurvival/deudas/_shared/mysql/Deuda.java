@@ -1,7 +1,7 @@
 package es.serversurvival.deudas._shared.mysql;
 
 
-import es.serversurvival.shared.mysql.TablaObjeto;
+import es.serversurvival._shared.mysql.TablaObjeto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

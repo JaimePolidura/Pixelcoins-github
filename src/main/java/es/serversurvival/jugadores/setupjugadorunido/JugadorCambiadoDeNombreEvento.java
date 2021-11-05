@@ -1,6 +1,6 @@
 package es.serversurvival.jugadores.setupjugadorunido;
 
-import es.serversurvival.shared.eventospixelcoins.PixelcoinsEvento;
+import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

@@ -1,12 +1,12 @@
 package es.serversurvival.deudas.ver;
 
-import es.serversurvival.jugadores.mySQL.Jugador;
-import es.serversurvival.shared.scoreboards.SingleScoreboard;
+import es.serversurvival.jugadores._shared.mySQL.Jugador;
+import es.serversurvival._shared.scoreboards.SingleScoreboard;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
-import static es.serversurvival.shared.utils.MinecraftUtils.*;
+import static es.serversurvival._shared.utils.MinecraftUtils.*;
 
 public class DeudasDisplayScoreboard implements SingleScoreboard {
     @Override

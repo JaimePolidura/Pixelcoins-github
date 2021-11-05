@@ -1,8 +1,8 @@
 package es.serversurvival.deudas.prestar;
 
 import es.serversurvival.Pixelcoin;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.shared.utils.Funciones;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.utils.Funciones;
 
 public final class PrestarUseCase implements AllMySQLTablesInstances {
     public static final PrestarUseCase INSTANCE = new PrestarUseCase();

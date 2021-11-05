@@ -2,8 +2,8 @@ package es.serversurvival.bolsa.vervalores.acciones;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.LlamadaApi;
-import es.serversurvival.shared.menus.inventory.InventoryFactory;
-import es.serversurvival.shared.menus.Paginated;
+import es.serversurvival._shared.menus.inventory.InventoryFactory;
+import es.serversurvival._shared.menus.Paginated;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

@@ -2,7 +2,7 @@ package es.serversurvival.bolsa.verordenespremarket;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival.bolsa._shared.ordenespremarket.mysql.OrdenPreMarket;
-import es.serversurvival.shared.menus.inventory.InventoryFactory;
+import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

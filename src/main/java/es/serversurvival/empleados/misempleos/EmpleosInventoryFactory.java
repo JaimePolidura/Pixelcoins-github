@@ -2,7 +2,7 @@ package es.serversurvival.empleados.misempleos;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival.empleados._shared.mysql.Empleado;
-import es.serversurvival.shared.menus.inventory.InventoryFactory;
+import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

@@ -10,9 +10,9 @@ import es.serversurvival.bolsa._shared.llamadasapi.mysql.LlamadasApi;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.LlamadaApi;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.TipoPosicion;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.shared.mysql.MySQL;
-import es.serversurvival.shared.utils.Funciones;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.mysql.MySQL;
+import es.serversurvival._shared.utils.Funciones;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static es.serversurvival.shared.utils.Funciones.*;
+import static es.serversurvival._shared.utils.Funciones.*;
 import static java.lang.Math.abs;
 
 /**

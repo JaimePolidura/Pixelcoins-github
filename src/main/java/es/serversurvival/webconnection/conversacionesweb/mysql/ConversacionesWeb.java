@@ -5,7 +5,7 @@ import es.jaimetruman.delete.DeleteOptionsInitial;
 import es.jaimetruman.insert.Insert;
 import es.jaimetruman.select.Select;
 import es.jaimetruman.select.SelectOptionInitial;
-import es.serversurvival.shared.mysql.MySQL;
+import es.serversurvival._shared.mysql.MySQL;
 import es.serversurvival.webconnection.ServerSocketWeb;
 import es.serversurvival.webconnection.socketmessages.SocketMessagge;
 import org.bukkit.ChatColor;

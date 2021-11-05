@@ -1,9 +1,9 @@
 package es.serversurvival.jugadores.withers.ingresarItem;
 
 import es.serversurvival.Pixelcoin;
-import es.serversurvival.jugadores.mySQL.Jugador;
+import es.serversurvival.jugadores._shared.mySQL.Jugador;
 import es.serversurvival.jugadores.withers.CambioPixelcoins;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

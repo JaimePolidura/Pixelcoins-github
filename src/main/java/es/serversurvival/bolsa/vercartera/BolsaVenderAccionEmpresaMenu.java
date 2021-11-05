@@ -3,11 +3,11 @@ package es.serversurvival.bolsa.vercartera;
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.bolsa.venderofertameracadoaserver.VenderOfertaAccionServerUseCase;
-import es.serversurvival.shared.menus.Menu;
-import es.serversurvival.shared.menus.confirmaciones.Confirmacion;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.shared.utils.Funciones;
-import es.serversurvival.shared.menus.inventory.InventoryCreator;
+import es.serversurvival._shared.menus.Menu;
+import es.serversurvival._shared.menus.confirmaciones.Confirmacion;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival._shared.menus.inventory.InventoryCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -20,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-import static es.serversurvival.shared.utils.Funciones.enviarMensajeYSonido;
+import static es.serversurvival._shared.utils.Funciones.enviarMensajeYSonido;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.BOLD;
 

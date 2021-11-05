@@ -3,9 +3,9 @@ package es.serversurvival.deudas.cancelar;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival.deudas._shared.mysql.Deuda;
-import es.serversurvival.shared.comandos.PixelcoinCommand;
-import es.serversurvival.shared.utils.validaciones.Validaciones;
-import es.serversurvival.shared.utils.Funciones;
+import es.serversurvival._shared.comandos.PixelcoinCommand;
+import es.serversurvival._shared.utils.validaciones.Validaciones;
+import es.serversurvival._shared.utils.Funciones;
 import io.vavr.control.Try;
 import main.ValidationResult;
 import main.ValidationsService;
@@ -14,7 +14,7 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static es.serversurvival.shared.utils.Funciones.enviarMensaje;
+import static es.serversurvival._shared.utils.Funciones.enviarMensaje;
 import static org.bukkit.ChatColor.*;
 
 @Command("deudas cancelar")

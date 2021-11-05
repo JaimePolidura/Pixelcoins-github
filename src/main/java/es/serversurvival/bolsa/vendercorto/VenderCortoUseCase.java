@@ -4,8 +4,8 @@ import es.serversurvival.Pixelcoin;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionesAbiertas;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.TipoActivo;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.shared.utils.Funciones;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.utils.Funciones;
 
 public final class VenderCortoUseCase implements AllMySQLTablesInstances {
     public static final VenderCortoUseCase INSTANCE = new VenderCortoUseCase();

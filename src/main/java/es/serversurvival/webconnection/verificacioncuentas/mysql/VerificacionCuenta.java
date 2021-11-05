@@ -1,6 +1,6 @@
 package es.serversurvival.webconnection.verificacioncuentas.mysql;
 
-import es.serversurvival.shared.mysql.TablaObjeto;
+import es.serversurvival._shared.mysql.TablaObjeto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

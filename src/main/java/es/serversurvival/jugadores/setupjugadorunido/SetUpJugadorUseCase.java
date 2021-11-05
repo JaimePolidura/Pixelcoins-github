@@ -1,8 +1,8 @@
 package es.serversurvival.jugadores.setupjugadorunido;
 
 import es.serversurvival.Pixelcoin;
-import es.serversurvival.jugadores.mySQL.Jugador;
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival.jugadores._shared.mySQL.Jugador;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import org.bukkit.entity.Player;
 
 public final class SetUpJugadorUseCase implements AllMySQLTablesInstances {

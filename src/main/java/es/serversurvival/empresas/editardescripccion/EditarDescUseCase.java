@@ -1,6 +1,6 @@
 package es.serversurvival.empresas.editardescripccion;
 
-import es.serversurvival.shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 public final class EditarDescUseCase implements AllMySQLTablesInstances {
     public static final EditarDescUseCase INSTANCE = new EditarDescUseCase();

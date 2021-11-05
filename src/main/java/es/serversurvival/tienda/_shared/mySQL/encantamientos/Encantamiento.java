@@ -1,0 +1,13 @@
+package es.serversurvival.tienda._shared.mySQL.encantamientos;
+
+import es.serversurvival._shared.mysql.TablaObjeto;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+public final class Encantamiento implements TablaObjeto {
+    @Getter private final int id;
+    @Getter private final String encantamiento;
+    @Getter private final int nivel;
+    @Getter private final int id_oferta;
+}
