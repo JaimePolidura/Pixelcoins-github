@@ -2,14 +2,15 @@ package es.serversurvival.ayuda;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
+import es.jaimetruman.commands.CommandRunnerNonArgs;
 import es.serversurvival.tienda._shared.mySQL.ofertas.Ofertas;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 @Command("ayuda tienda")
-public class TiendaAyuda implements CommandRunner {
+public class TiendaAyuda implements CommandRunnerNonArgs {
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender) {
         sender.sendMessage("          ");
         sender.sendMessage(ChatColor.GOLD + "En la tienda puedes comprar y vender objetos de manera segura y rapida sin requerir de que el vendedor este online. Se accede con /tienda o /warp spawn y clickeando al NPC llamando tienda.");
         sender.sendMessage("          ");

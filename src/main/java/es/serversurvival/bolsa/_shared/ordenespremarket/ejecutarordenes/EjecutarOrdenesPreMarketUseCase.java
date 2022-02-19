@@ -11,7 +11,7 @@ import es.serversurvival.bolsa.vendercorto.VenderCortoUseCase;
 import es.serversurvival.bolsa.venderlargo.VenderLargoUseCase;
 import es.serversurvival.jugadores._shared.mySQL.Jugador;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
-import javafx.util.Pair;
+import main.Pair;
 
 import java.util.List;
 

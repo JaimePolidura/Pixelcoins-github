@@ -7,7 +7,7 @@ import es.serversurvival.webconnection.conversacionesweb.mysql.ConversacionesWeb
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.utils.validaciones.Validaciones;
 import main.ValidationResult;
-import main.ValidationsService;
+import main.ValidatorService;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ public class ResponderComando extends PixelcoinCommand implements CommandRunner 
     public void execute(CommandSender sender, String[] args) {
         String playerName = sender.getName();
 
-        ValidationResult result = ValidationsService.startValidating(args.length, Validaciones.Different.of(0,
+        ValidationResult result = ValidatorService.startValidating(args.length, Validaciones.Different.of(0,
                 "Tiene que tener como minomo 2 palabras"))
                 .and(Funciones.buildStringFromArray(args), Validaciones.MaxLength.of(50), Validaciones.NotIncludeCharacters.of('&', '-'))
                 .and(existeConversacion(sender.getName()), Validaciones.True.of("No hay ninguna conversacion pendiente"))

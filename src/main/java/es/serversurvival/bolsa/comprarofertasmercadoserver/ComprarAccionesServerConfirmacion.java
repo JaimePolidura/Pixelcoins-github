@@ -1,8 +1,8 @@
 package es.serversurvival.bolsa.comprarofertasmercadoserver;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival.bolsa.ofertasmercadoserver.mysql.OfertaMercadoServer;
-import es.serversurvival.bolsa.ofertasmercadoserver.mysql.TipoOfertante;
+import es.serversurvival.bolsa._shared.ofertasmercadoserver.mysql.OfertaMercadoServer;
+import es.serversurvival.bolsa._shared.ofertasmercadoserver.mysql.TipoOfertante;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.AumentoConfirmacion;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;

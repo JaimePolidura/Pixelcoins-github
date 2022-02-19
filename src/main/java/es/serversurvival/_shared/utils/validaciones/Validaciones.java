@@ -23,8 +23,8 @@ public final class Validaciones {
 
     public final static NotNull NotNull = new NotNull("No puede estar vacio");
 
-    public final static True True = new True("error");
-    public final static False False = new False("error");
+    public final static main.validators.booleans.True True = new True("error");
+    public final static main.validators.booleans.False False = new False("error");
 
     public final static SuficinestesPixelcoins SuficientesPixelcoins = new SuficinestesPixelcoins("No tienes las suficientes pixelcoins");
     public final static es.serversurvival._shared.utils.validaciones.misValidaciones.JugadorRegistrado JugadorRegistrado = new JugadorRegistrado("Jugador no encontrado");

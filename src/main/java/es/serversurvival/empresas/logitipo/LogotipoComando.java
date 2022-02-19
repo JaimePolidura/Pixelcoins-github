@@ -6,7 +6,7 @@ import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.validaciones.Validaciones;
 import es.serversurvival._shared.utils.Funciones;
 import main.ValidationResult;
-import main.ValidationsService;
+import main.ValidatorService;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -25,7 +25,7 @@ public class LogotipoComando extends PixelcoinCommand implements CommandRunner {
         Player player = (Player) sender;
         String logitpo = player.getInventory().getItemInMainHand().getType().toString();
 
-        ValidationResult result = ValidationsService.startValidating(args.length == 2, Validaciones.True.of(usoIncorrecto))
+        ValidationResult result = ValidatorService.startValidating(args.length == 2, Validaciones.True.of(usoIncorrecto))
                 .and(logitpo, Validaciones.NotEqualsIgnoreCase.of("AIR", "Tienes que tener un item en la mano"))
                 .andMayThrowException(() -> args[1], usoIncorrecto, Validaciones.OwnerDeEmpresa.of(player.getName()))
                 .validateAll();

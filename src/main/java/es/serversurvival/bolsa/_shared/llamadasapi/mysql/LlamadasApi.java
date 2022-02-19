@@ -8,7 +8,7 @@ import es.jaimetruman.update.Update;
 import es.jaimetruman.update.UpdateOptionInitial;
 import es.serversurvival._shared.mysql.MySQL;
 import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
-import javafx.util.Pair;
+import main.Pair;
 
 
 import java.sql.ResultSet;

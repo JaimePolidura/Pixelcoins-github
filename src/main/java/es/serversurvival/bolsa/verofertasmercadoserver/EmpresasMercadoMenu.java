@@ -1,6 +1,6 @@
 package es.serversurvival.bolsa.verofertasmercadoserver;
 
-import es.serversurvival.bolsa.ofertasmercadoserver.cancelar.CancelarOfertaAccionServerUseCase;
+import es.serversurvival.bolsa.cancelarofertamercadoserver.CancelarOfertaAccionServerUseCase;
 import es.serversurvival.bolsa.comprarofertasmercadoserver.ComprarAccionesServerConfirmacion;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
 import es.serversurvival._shared.menus.Menu;

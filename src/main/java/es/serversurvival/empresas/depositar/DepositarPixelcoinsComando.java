@@ -6,7 +6,7 @@ import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.utils.validaciones.Validaciones;
 import main.ValidationResult;
-import main.ValidationsService;
+import main.ValidatorService;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,7 +21,7 @@ public class DepositarPixelcoinsComando extends PixelcoinCommand implements Comm
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        ValidationResult result = ValidationsService.startValidating(args.length == 3, Validaciones.True.of(usoIncorrecto))
+        ValidationResult result = ValidatorService.startValidating(args.length == 3, Validaciones.True.of(usoIncorrecto))
                 .andMayThrowException(() -> args[1], usoIncorrecto, Validaciones.OwnerDeEmpresa.of(player.getName()))
                 .andMayThrowException(() -> args[2], usoIncorrecto, Validaciones.PositiveNumber, Validaciones.SuficientesPixelcoins.of(player.getName()))
                 .validateAll();

@@ -1,9 +1,9 @@
 package es.serversurvival.bolsa.comprarofertasmercadoserver;
 
+import es.serversurvival.bolsa._shared.ofertasmercadoserver.mysql.OfertaMercadoServer;
 import es.serversurvival.transacciones.mySQL.TipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
-import es.serversurvival.bolsa.ofertasmercadoserver.mysql.OfertaMercadoServer;
 import es.serversurvival.transacciones.mySQL.Transaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

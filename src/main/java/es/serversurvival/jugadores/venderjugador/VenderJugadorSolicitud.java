@@ -34,6 +34,8 @@ public class VenderJugadorSolicitud extends Menu implements Solicitud {
         this.precio = precio;
         this.inventory = buildInventory();
         this.slotItemVender = jugadorVendedor.getInventory().getHeldItemSlot();
+
+        enviarSolicitud();
     }
 
     private Inventory buildInventory () {

@@ -2,15 +2,16 @@ package es.serversurvival.ayuda;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
+import es.jaimetruman.commands.CommandRunnerNonArgs;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @Command("ayuda deuda")
-public class DeudaAyuda implements CommandRunner {
+public class DeudaAyuda implements CommandRunnerNonArgs {
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender) {
         sender.sendMessage("   ");
         sender.sendMessage(ChatColor.GOLD + "Puedes prestar dinero a los jugadores poniendo asi un interes y una cantidad de tiempo en el que el jugador te devolvero el dinero");
         sender.sendMessage("   ");

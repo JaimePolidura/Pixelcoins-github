@@ -8,7 +8,7 @@ import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.utils.validaciones.Validaciones;
 import io.vavr.control.Try;
 import main.ValidationResult;
-import main.ValidationsService;
+import main.ValidatorService;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 
 import java.util.function.Supplier;
 
-import static es.serversurvival._shared.utils.Funciones.enviarMensaje;
 import static org.bukkit.ChatColor.DARK_RED;
 
 @Command("deudas pagar")
@@ -28,7 +27,7 @@ public class PagarDeudaCompletaComando extends PixelcoinCommand implements Comma
     public void execute(CommandSender player, String[] args) {
         Supplier<String> supplierPixelcoins = () -> String.valueOf(getDeuda(() -> args[1]).getPixelcoins_restantes());
 
-        ValidationResult result = ValidationsService.startValidating(args.length, Validaciones.Same.as(2, usoIncorrecto))
+        ValidationResult result = ValidatorService.startValidating(args.length, Validaciones.Same.as(2, usoIncorrecto))
                 .andMayThrowException(() -> args[1], usoIncorrecto, Validaciones.NaturalNumber)
                 .and(esDeudor(() -> args[1], player.getName()), Validaciones.True.of("No eres deudor de esa deuda"))
                 .andMayThrowException(supplierPixelcoins, usoIncorrecto, Validaciones.SuficientesPixelcoins.of(player.getName(), "No tienes las suficientes pixelcoins"))

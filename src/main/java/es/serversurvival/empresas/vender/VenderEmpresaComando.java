@@ -5,7 +5,7 @@ import es.jaimetruman.commands.CommandRunner;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.validaciones.Validaciones;
 import main.ValidationResult;
-import main.ValidationsService;
+import main.ValidatorService;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -17,7 +17,7 @@ public class VenderEmpresaComando extends PixelcoinCommand implements CommandRun
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        ValidationResult result = ValidationsService.startValidating(args.length == 4, Validaciones.True.of(usoIncorrecto))
+        ValidationResult result = ValidatorService.startValidating(args.length == 4, Validaciones.True.of(usoIncorrecto))
                 .andMayThrowException(() -> args[2], usoIncorrecto, Validaciones.JugadorOnline, Validaciones.NotEqualsIgnoreCase.of(player.getName(), "No te lo puedes vender a ti mismo"))
                 .andMayThrowException(() -> args[3], usoIncorrecto, Validaciones.PositiveNumber, Validaciones.SuficientesPixelcoins.of(() -> args[2], "No tiene tantas pixelcoins como crees xdd"))
                 .andMayThrowException(() -> args[1], usoIncorrecto, Validaciones.OwnerDeEmpresa.of(player.getName()))

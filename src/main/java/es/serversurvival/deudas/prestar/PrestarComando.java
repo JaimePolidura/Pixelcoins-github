@@ -7,7 +7,9 @@ import es.serversurvival._shared.menus.MenuManager;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.utils.validaciones.Validaciones;
 import main.ValidationResult;
-import main.ValidationsService;
+import main.ValidatorService;
+import main.validators.booleans.False;
+import main.validators.booleans.True;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
@@ -21,13 +23,13 @@ public class PrestarComando extends PixelcoinCommand implements CommandRunner {
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        ValidationResult result = ValidationsService.startValidating(args.length == 4 || args.length == 5, Validaciones.True.of(mensajeIncorrecto))
+        ValidationResult result = ValidatorService.startValidating(args.length == 4 || args.length == 5, True.of(mensajeIncorrecto))
                 .andMayThrowException(() -> args[1], mensajeIncorrecto, Validaciones.JugadorOnline, Validaciones.NotEqualsIgnoreCase.of(player.getName(), "No puedes ser tu mimsmo"))
                 .andMayThrowException(() -> args[2], mensajeIncorrecto, Validaciones.NaturalNumber)
                 .andMayThrowException(() -> args[3], mensajeIncorrecto, Validaciones.NaturalNumber)
-                .andIfExists(() -> args[4], Validaciones.NaturalNumber)
-                .andMayThrowException(() -> Integer.parseInt(args[2]) >= Integer.parseInt(args[3]), mensajeIncorrecto, Validaciones.True.of("Los dias no pueden ser superior a las pixelcoins"))
-                .andMayThrowException(() -> MenuManager.getByPlayer(Bukkit.getPlayer(args[1]).getName()) != null, mensajeIncorrecto, Validaciones.False.of("Ya le han enviado una solicitud"))
+                .andMayThrowException(() -> args[4], mensajeIncorrecto, Validaciones.NaturalNumber)
+                .andMayThrowException(() -> Integer.parseInt(args[2]) >= Integer.parseInt(args[3]), mensajeIncorrecto, True.of("Los dias no pueden ser superior a las pixelcoins"))
+                .andMayThrowException(() -> MenuManager.getByPlayer(Bukkit.getPlayer(args[1]).getName()) != null, mensajeIncorrecto, False.of("Ya le han enviado una solicitud"))
                 .andMayThrowException(pixelcoinsDeudaConIntereses(args), mensajeIncorrecto, Validaciones.SuficientesPixelcoins.of(player.getName()))
                 .validateAll();
 

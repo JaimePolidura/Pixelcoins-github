@@ -2,14 +2,15 @@ package es.serversurvival.ayuda;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
+import es.jaimetruman.commands.CommandRunnerNonArgs;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 @Command("ayuda bolsa")
-public class BolsaAyuda implements CommandRunner {
+public class BolsaAyuda implements CommandRunnerNonArgs {
 
     @Override
-    public void execute(CommandSender player, String[] args) {
+    public void execute(CommandSender player) {
         player.sendMessage("     ");
         player.sendMessage(ChatColor.GOLD + "Se puede invertir en acciones de empresas de verdad que cotizen en estados unidos para ello puedes hacer /bolsa valores, se te abrira un menu " +
                 "con diferentes accines de ejemplo por ejemplo si quieres comprar acciones de Santander clickearias en el item y seleccionarias el numero de acciones, supongamos que la accion esta a " +

@@ -2,6 +2,7 @@ package es.serversurvival.bolsa.verestadisticas;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
+import es.jaimetruman.commands.CommandRunnerNonArgs;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.PosicionCerrada;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import org.bukkit.ChatColor;
@@ -10,9 +11,9 @@ import org.bukkit.command.CommandSender;
 import java.util.List;
 
 @Command("bolsa estadisticas")
-public class EstadiscticasBolsaComando extends PixelcoinCommand implements CommandRunner {
+public class EstadiscticasBolsaComandoExecutor extends PixelcoinCommand implements CommandRunnerNonArgs {
     @Override
-    public void execute(CommandSender player, String[] args) {
+    public void execute(CommandSender player) {
         player.sendMessage(ChatColor.GOLD + "--------------------------------");
         player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "     ESTADISTICAS");
 

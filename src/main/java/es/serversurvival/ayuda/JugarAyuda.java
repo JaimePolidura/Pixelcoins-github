@@ -2,14 +2,15 @@ package es.serversurvival.ayuda;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
+import es.jaimetruman.commands.CommandRunnerNonArgs;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @Command("ayuda jugar")
-public class JugarAyuda implements CommandRunner {
+public class JugarAyuda implements CommandRunnerNonArgs {
     @Override
-    public void execute(CommandSender sneder, String[] args) {
+    public void execute(CommandSender sneder) {
         sneder.sendMessage("          ");
         sneder.sendMessage(ChatColor.YELLOW + " Para jugar:");
         sneder.sendMessage("          ");

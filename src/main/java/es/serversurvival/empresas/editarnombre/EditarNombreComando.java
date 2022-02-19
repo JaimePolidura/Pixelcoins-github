@@ -7,7 +7,7 @@ import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.validaciones.Validaciones;
 import es.serversurvival._shared.utils.Funciones;
 import main.ValidationResult;
-import main.ValidationsService;
+import main.ValidatorService;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -22,7 +22,7 @@ public class EditarNombreComando extends PixelcoinCommand implements CommandRunn
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        ValidationResult result = ValidationsService.startValidating(args.length == 3, Validaciones.True.of(usoIncorrecto))
+        ValidationResult result = ValidatorService.startValidating(args.length == 3, Validaciones.True.of(usoIncorrecto))
                 .andMayThrowException(() -> args[1], usoIncorrecto, Validaciones.OwnerDeEmpresa.of(player.getName()), Validaciones.MaxLength.of(Empresas.CrearEmpresaNombreLonMax, "El nombre no puede ser tan largo"))
                 .andMayThrowException(() -> args[2], usoIncorrecto, Validaciones.NombreEmpresaNoPillado)
                 .validateAll();

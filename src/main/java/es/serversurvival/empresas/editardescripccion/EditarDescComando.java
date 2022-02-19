@@ -7,7 +7,7 @@ import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.validaciones.Validaciones;
 import es.serversurvival._shared.utils.Funciones;
 import main.ValidationResult;
-import main.ValidationsService;
+import main.ValidatorService;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -20,7 +20,7 @@ public class EditarDescComando extends PixelcoinCommand implements CommandRunner
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        ValidationResult result = ValidationsService.startValidating(args.length >= 3, Validaciones.True.of(usoIncorrecto))
+        ValidationResult result = ValidatorService.startValidating(args.length >= 3, Validaciones.True.of(usoIncorrecto))
                 .andMayThrowException(() -> Funciones.buildStringFromArray(args, 2), usoIncorrecto, Validaciones.MaxLength.of(Empresas.CrearEmpresaDescLonMax, "La descripccino no puede ser tan larga"))
                 .andMayThrowException(() -> args[1], usoIncorrecto, Validaciones.OwnerDeEmpresa.of(player.getName()))
                 .validateAll();

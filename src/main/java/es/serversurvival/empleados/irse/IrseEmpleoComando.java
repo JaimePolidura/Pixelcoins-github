@@ -6,7 +6,7 @@ import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.validaciones.Validaciones;
 import io.vavr.control.Try;
 import main.ValidationResult;
-import main.ValidationsService;
+import main.ValidatorService;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -19,7 +19,7 @@ public class IrseEmpleoComando extends PixelcoinCommand implements CommandRunner
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        ValidationResult result = ValidationsService.startValidating(args.length, Validaciones.Same.as(2, usoIncorrecto))
+        ValidationResult result = ValidatorService.startValidating(args.length, Validaciones.Same.as(2, usoIncorrecto))
                 .andMayThrowException(() -> empresasMySQL.getEmpresa(args[1]) != null, usoIncorrecto, Validaciones.True.of("Esa empresa no exsiste"))
                 .and(trabajaEnLaEmpresa(() -> args[1], player.getName()), Validaciones.True.of("Ese jugador no trabaja en la empresa"))
                 .validateAll();

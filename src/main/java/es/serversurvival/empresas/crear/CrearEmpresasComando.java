@@ -7,7 +7,7 @@ import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.utils.validaciones.Validaciones;
 import main.ValidationResult;
-import main.ValidationsService;
+import main.ValidatorService;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -25,7 +25,7 @@ public class CrearEmpresasComando extends PixelcoinCommand implements CommandRun
     public void execute(CommandSender sender, String[] args) {
         Player player = (Player) sender;
 
-        ValidationResult result = ValidationsService.startValidating(args.length >= 3, Validaciones.True.of(usoIncorrecto))
+        ValidationResult result = ValidatorService.startValidating(args.length >= 3, Validaciones.True.of(usoIncorrecto))
                 .andMayThrowException(() -> args[1], usoIncorrecto, Validaciones.NombreEmpresaNoPillado, Validaciones.MaxLength.of(Empresas.CrearEmpresaNombreLonMax, "El nombre no puede ser tan grande"))
                 .andMayThrowException(() -> Funciones.buildStringFromArray(args, 2), usoIncorrecto, Validaciones.MaxLength.of(Empresas.CrearEmpresaDescLonMax, "La descripcion no puede ser tan larga"))
                 .and(empresasMySQL.getEmpresasOwner(sender.getName()).size() + 1 <= Empresas.nMaxEmpresas, Validaciones.True.of("No puedes tener tantas empresas"))

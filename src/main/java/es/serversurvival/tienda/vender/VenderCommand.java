@@ -7,7 +7,7 @@ import es.serversurvival._shared.utils.validaciones.Validaciones;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
 import main.ValidationResult;
-import main.ValidationsService;
+import main.ValidatorService;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -28,7 +28,7 @@ public class VenderCommand extends PixelcoinCommand implements CommandRunner {
         String nombreItemMano = player.getInventory().getItemInMainHand().getType().toString();
         ItemStack itemMano = player.getInventory().getItemInMainHand();
 
-        ValidationResult result = ValidationsService.startValidating(args.length, Validaciones.Same.as(1))
+        ValidationResult result = ValidatorService.startValidating(args.length, Validaciones.Same.as(1))
                 .and(nombreItemMano, Validaciones.NotEqualsIgnoreCase.of("AIR", "Tienes que tener un objeto en la mano"), Validaciones.ItemNotBaneadoTienda)
                 .andMayThrowException(() -> args[0], "Uso incorrecto " + "/vender <precio>", Validaciones.PositiveNumber)
                 .and(itemMano, Validaciones.NoHaSidoCompradoItem)

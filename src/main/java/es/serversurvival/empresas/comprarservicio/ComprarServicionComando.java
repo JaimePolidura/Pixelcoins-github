@@ -7,12 +7,11 @@ import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.validaciones.Validaciones;
 import es.serversurvival._shared.utils.Funciones;
 import main.ValidationResult;
-import main.ValidationsService;
+import main.ValidatorService;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static es.serversurvival._shared.utils.Funciones.enviarMensaje;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.GOLD;
 
@@ -25,7 +24,7 @@ public class ComprarServicionComando extends PixelcoinCommand implements Command
     public void execute(CommandSender sender, String[] args) {
         Player player = (Player) sender;
 
-        ValidationResult result = ValidationsService.startValidating(args, Validaciones.NotNull.message(ChatColor.DARK_RED + "Uso incorrecto /comprar"))
+        ValidationResult result = ValidatorService.startValidating(args, Validaciones.NotNull.message(ChatColor.DARK_RED + "Uso incorrecto /comprar"))
                 .and(args.length, Validaciones.Same.as(2, usoIncorrecto))
                 .andMayThrowException(() -> args[1], usoIncorrecto, Validaciones.PositiveNumber, Validaciones.SuficientesPixelcoins.of(sender.getName()))
                 .validateAll();

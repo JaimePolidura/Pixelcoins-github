@@ -7,7 +7,7 @@ import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.validaciones.Validaciones;
 import es.serversurvival.empleados.contratar.ContratarSolicitud;
 import main.ValidationResult;
-import main.ValidationsService;
+import main.ValidatorService;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -21,7 +21,7 @@ public class ContratarComando extends PixelcoinCommand implements CommandRunner 
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        ValidationResult result = ValidationsService.startValidating(args.length == 5 || args.length == 6, Validaciones.True.of(usoIncorrecto))
+        ValidationResult result = ValidatorService.startValidating(args.length == 5 || args.length == 6, Validaciones.True.of(usoIncorrecto))
                 .andMayThrowException(() -> args[3], usoIncorrecto, Validaciones.NaturalNumber)
                 .andMayThrowException(() -> args[1], usoIncorrecto, Validaciones.JugadorOnline, Validaciones.NoLeHanEnviadoSolicitud, Validaciones.NoTrabajaEmpresa.en(() -> args[2]), Validaciones.NotEqualsIgnoreCase.of(player.getName(), "No te puedes contratar a ti mismo"))
                 .andMayThrowException(() -> TipoSueldo.codigoCorrecto(args[4]), usoIncorrecto, Validaciones.True.of("El tipo de sueldo solo puede ser d: cdda dia, s: cada semana, 2s: cada dos semanas, m: cada mes"))

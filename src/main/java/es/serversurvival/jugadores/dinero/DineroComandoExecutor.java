@@ -1,7 +1,7 @@
 package es.serversurvival.jugadores.dinero;
 
 import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.CommandRunner;
+import es.jaimetruman.commands.CommandRunnerNonArgs;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
@@ -10,10 +10,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @Command("dinero")
-public class DineroComando extends PixelcoinCommand implements CommandRunner{
-
+public class DineroComandoExecutor extends PixelcoinCommand implements CommandRunnerNonArgs {
     @Override
-    public void execute(CommandSender commandSender, String[] strings) {
+    public void execute(CommandSender commandSender) {
         Player player = (Player) commandSender;
         String nombreJugador = player.getName();
 

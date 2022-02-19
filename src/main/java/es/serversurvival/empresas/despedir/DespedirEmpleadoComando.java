@@ -6,7 +6,7 @@ import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.validaciones.Validaciones;
 import es.serversurvival.empleados.despedir.DespedirEmpleadoUseCase;
 import main.ValidationResult;
-import main.ValidationsService;
+import main.ValidatorService;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -20,7 +20,7 @@ public class DespedirEmpleadoComando extends PixelcoinCommand implements Command
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        ValidationResult result = ValidationsService.startValidating(args.length == 4, Validaciones.True.of(usoIncorrecto))
+        ValidationResult result = ValidatorService.startValidating(args.length == 4, Validaciones.True.of(usoIncorrecto))
                 .andMayThrowException(() -> args[2], usoIncorrecto, Validaciones.TrabajaEmpresa.en(() -> args[1]), Validaciones.NotEqualsIgnoreCase.of(player.getName(), "No te puedes despedir a ti mismo"))
                 .andMayThrowException(() -> args[1], usoIncorrecto, Validaciones.OwnerDeEmpresa.of(player.getName()))
                 .validateAll();

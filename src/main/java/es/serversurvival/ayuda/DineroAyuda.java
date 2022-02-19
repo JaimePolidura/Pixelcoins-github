@@ -2,14 +2,15 @@ package es.serversurvival.ayuda;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
+import es.jaimetruman.commands.CommandRunnerNonArgs;
 import es.serversurvival.jugadores.withers.CambioPixelcoins;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 @Command("ayuda dinero")
-public class DineroAyuda implements CommandRunner {
+public class DineroAyuda implements CommandRunnerNonArgs {
     @Override
-    public void execute(CommandSender p, String[] args) {
+    public void execute(CommandSender p) {
         p.sendMessage(ChatColor.YELLOW + " Puedes intercambiar 1 diamante por " + CambioPixelcoins.DIAMANTE + " pixelcoins o 1 un bloque de cuarzo por " +
                 CambioPixelcoins.CUARZO + " pixelcoins o lapislazuli por " + CambioPixelcoins.LAPISLAZULI + " pixelcoins y viceversa  en los wither en " +
                 ChatColor.WHITE + "/warp Spawn " + ChatColor.YELLOW + ". Comandos de pixelcoins:");

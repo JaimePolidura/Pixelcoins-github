@@ -77,4 +77,20 @@ public class SuficinestesPixelcoins implements Validator {
             return new SuficinestesPixelcoins(messageOnFailed, -1, player, true);
         }
     }
+
+    public SuficinestesPixelcoins of (String playername, double pixelcoins) {
+        try{
+            return new SuficinestesPixelcoins(messageOnFailed, pixelcoins, playername);
+        }catch (Exception e) {
+            return new SuficinestesPixelcoins(messageOnFailed, -1, player, true);
+        }
+    }
+
+    public SuficinestesPixelcoins of (String playername, double pixelcoins, String messageOnFailed) {
+        try{
+            return new SuficinestesPixelcoins(messageOnFailed, pixelcoins, playername);
+        }catch (Exception e) {
+            return new SuficinestesPixelcoins(messageOnFailed, -1, player, true);
+        }
+    }
 }

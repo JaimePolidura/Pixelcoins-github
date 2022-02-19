@@ -8,13 +8,12 @@ import es.serversurvival._shared.utils.validaciones.Validaciones;
 import es.serversurvival._shared.utils.Funciones;
 import io.vavr.control.Try;
 import main.ValidationResult;
-import main.ValidationsService;
+import main.ValidatorService;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static es.serversurvival._shared.utils.Funciones.enviarMensaje;
 import static org.bukkit.ChatColor.*;
 
 @Command("deudas cancelar")
@@ -24,7 +23,7 @@ public class CancelarDeudaComando extends PixelcoinCommand implements CommandRun
 
     @Override
     public void execute(CommandSender player, String[] args) {
-        ValidationResult result = ValidationsService.startValidating(args.length, Validaciones.Same.as(2, usoIncorrecto))
+        ValidationResult result = ValidatorService.startValidating(args.length, Validaciones.Same.as(2, usoIncorrecto))
                 .andMayThrowException(() -> args[1], usoIncorrecto, Validaciones.NaturalNumber)
                 .andMayThrowException(() -> existeDeuda(args), usoIncorrecto, Validaciones.True.of("No hay ninguna deuda con ese id"))
                 .andMayThrowException(() -> acredorDeDeuda(args, (Player) player), usoIncorrecto, Validaciones.True.of("No eres el acredor de esa deuda"))

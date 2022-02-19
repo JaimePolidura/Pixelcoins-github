@@ -2,14 +2,15 @@ package es.serversurvival.ayuda;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
+import es.jaimetruman.commands.CommandRunnerNonArgs;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 @Command("ayuda empleo")
-public class EmpleoAyuda implements CommandRunner {
+public class EmpleoAyuda implements CommandRunnerNonArgs {
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender) {
         sender.sendMessage("   ");
         sender.sendMessage(ChatColor.YELLOW + "Puedes ser contratado por otra empresa y ser pagado");
         sender.sendMessage("   ");
