@@ -16,7 +16,11 @@ import java.util.function.Supplier;
 
 import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
 
-@Command("empleos irse")
+@Command(
+        value = "empleos irse",
+        isSubCommand = true,
+        args = {"empresa"}
+)
 public class IrseEmpleoComandoExecutor extends PixelcoinCommand implements CommandRunnerArgs<IrseEmpleoComando> {
     private final String usoIncorrecto = ChatColor.DARK_RED + "Uso incorrecto: /empleos irse <empresa>";
     private final IrseEmpresaUseCase useCase = IrseEmpresaUseCase.INSTANCE;

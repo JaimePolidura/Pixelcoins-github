@@ -44,6 +44,8 @@ public class ContratarSolicitud extends Menu implements Solicitud {
         String nombreCancelar = ChatColor.RED + "" + ChatColor.BOLD + "DENEGAR";
 
         this.inventory = InventoryCreator.createSolicitud(titulo, nombreAceptar, lore, nombreCancelar, Collections.emptyList());
+
+        enviarSolicitud();
     }
 
     @Override

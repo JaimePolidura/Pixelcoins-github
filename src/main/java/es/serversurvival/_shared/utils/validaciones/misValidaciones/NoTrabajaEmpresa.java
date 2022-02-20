@@ -56,4 +56,12 @@ public class NoTrabajaEmpresa implements Validator {
             return new NoTrabajaEmpresa(messageOnFailed, nombreEmpresa, true);
         }
     }
+
+    public NoTrabajaEmpresa en (String empresaSupplier) {
+        try{
+            return new NoTrabajaEmpresa(messageOnFailed, nombreEmpresa);
+        }catch (Exception e) {
+            return new NoTrabajaEmpresa(messageOnFailed, nombreEmpresa, true);
+        }
+    }
 }
