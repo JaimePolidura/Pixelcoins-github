@@ -45,6 +45,8 @@ public class PrestamoSolicitud extends Menu implements Solicitud {
         this.inventory = InventoryCreator.createSolicitud(titulo, nombreItemAceptar, loreAceptar, nombreCancelar, Collections.emptyList());
 
         isClicked = false;
+
+        enviarSolicitud();
     }
 
     @Override
