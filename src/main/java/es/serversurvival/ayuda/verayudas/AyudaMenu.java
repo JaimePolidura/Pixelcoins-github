@@ -1,6 +1,7 @@
 package es.serversurvival.ayuda.verayudas;
 
 import es.jaimetruman.commands.CommandRunner;
+import es.jaimetruman.commands.CommandRunnerNonArgs;
 import es.serversurvival.ayuda.*;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
@@ -43,7 +44,8 @@ public class AyudaMenu extends Menu implements Clickable {
         Optional<String> tipoAyuda = getTipoAyuda(event.getCurrentItem().getItemMeta().getDisplayName());
         if(!tipoAyuda.isPresent()){
             CommandRunner ayudaSubCommand = getCommandOfAyuda(tipoAyuda.get());
-            ayudaSubCommand.execute(event.getWhoClicked(), null);
+
+            ((CommandRunnerNonArgs) ayudaSubCommand).execute(this.getPlayer());
 
             ((Player) event.getWhoClicked()).performCommand("/ayuda " + tipoAyuda.get().toLowerCase());
             event.getWhoClicked().closeInventory();

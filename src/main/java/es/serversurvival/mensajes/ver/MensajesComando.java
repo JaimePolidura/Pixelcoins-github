@@ -2,6 +2,7 @@ package es.serversurvival.mensajes.ver;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.CommandRunner;
+import es.jaimetruman.commands.CommandRunnerNonArgs;
 import es.serversurvival.mensajes._shared.mysql.Mensaje;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import org.bukkit.ChatColor;
@@ -11,11 +12,11 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 @Command("mensajes")
-public class MensajesComando extends PixelcoinCommand implements CommandRunner {
+public class MensajesComando extends PixelcoinCommand implements CommandRunnerNonArgs {
     private final VerMensajesUseCase useCase = VerMensajesUseCase.INSTANCE;
 
     @Override
-    public void execute(CommandSender sender, String[] strings) {
+    public void execute(CommandSender sender) {
         Player player = (Player) sender;
 
         List<Mensaje> mensajes = useCase.getMensajes(sender.getName());

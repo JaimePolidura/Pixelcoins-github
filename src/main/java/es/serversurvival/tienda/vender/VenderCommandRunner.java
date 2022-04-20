@@ -1,9 +1,8 @@
 package es.serversurvival.tienda.vender;
 
 import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.CommandRunner;
+import es.jaimetruman.commands.CommandRunnerArgs;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
-import es.serversurvival._shared.utils.validaciones.Validaciones;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
 import main.ValidationResult;
@@ -16,23 +15,23 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.List;
+import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
 
-@Command("vender")
-public class VenderCommand extends PixelcoinCommand implements CommandRunner {
+@Command(value = "vender", isSubCommand = true, args = {"precio"})
+public class VenderCommandRunner extends PixelcoinCommand implements CommandRunnerArgs<VenderCommando> {
+    private static final String MENSAJE_ITEM_NO_EN_LA_MANO = "Tienes que tener un objeto en la mano";
     private final VenderTiendaUseCase useCase = VenderTiendaUseCase.INSTANCE;
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(VenderCommando comando, CommandSender sender) {
         Player player = (Player) sender;
         String nombreItemMano = player.getInventory().getItemInMainHand().getType().toString();
         ItemStack itemMano = player.getInventory().getItemInMainHand();
 
-        ValidationResult result = ValidatorService.startValidating(args.length, Validaciones.Same.as(1))
-                .and(nombreItemMano, Validaciones.NotEqualsIgnoreCase.of("AIR", "Tienes que tener un objeto en la mano"), Validaciones.ItemNotBaneadoTienda)
-                .andMayThrowException(() -> args[0], "Uso incorrecto " + "/vender <precio>", Validaciones.PositiveNumber)
-                .and(itemMano, Validaciones.NoHaSidoCompradoItem)
-                .and(player.getName(), Validaciones.SuficientesEspaciosTienda)
+        ValidationResult result = ValidatorService.startValidating(nombreItemMano, NotEqualsIgnoreCase.of("AIR", MENSAJE_ITEM_NO_EN_LA_MANO), ItemNotBaneadoTienda)
+                .and(comando.getPrecio(), PositiveNumber)
+                .and(itemMano, NoHaSidoCompradoItem)
+                .and(player.getName(), SuficientesEspaciosTienda)
                 .validateAll();
 
         if(result.isFailed()){
@@ -40,24 +39,14 @@ public class VenderCommand extends PixelcoinCommand implements CommandRunner {
             return;
         }
 
-        double precio = Double.parseDouble(args[0]);
         Inventory inventarioJugador = player.getInventory();
 
-        useCase.crearOferta(itemMano, player, precio);
+        useCase.crearOferta(itemMano, player, comando.precio);
 
         inventarioJugador.clear(player.getInventory().getHeldItemSlot());
 
         Funciones.enviarMensajeYSonido(player, ChatColor.GOLD + "Se ha añadido a la tienda. Para retirarlos /tienda y clikc izquierdo en ellos", Sound.ENTITY_VILLAGER_YES);
         Bukkit.getServer().broadcastMessage(ChatColor.GOLD + player.getName() + " ha añadido un objeto a la tienda por: " +
-                ChatColor.GREEN + AllMySQLTablesInstances.formatea.format(precio) + " PC " + ChatColor.AQUA + "/tienda");
-    }
-
-    private boolean haSidoComprado (ItemStack item) {
-        List<String> lore = item.getItemMeta().getLore();
-
-        if(lore == null || lore.size() == 0)
-            return false;
-
-        return lore.get(0).equalsIgnoreCase("Comprado en la tienda");
+                ChatColor.GREEN + AllMySQLTablesInstances.formatea.format(comando.getPrecio()) + " PC " + ChatColor.AQUA + "/tienda");
     }
 }

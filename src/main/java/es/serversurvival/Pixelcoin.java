@@ -73,7 +73,7 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
         String onWrongSender = DARK_RED + "Necesitas estar en el servidor para ejecutar el comando";
 
         Mapper.build(this)
-                .all(onWrongCommand, onWrongSender)
+                .all(onWrongCommand, onWrongSender, null)
                 .startScanning();
     }
 }
