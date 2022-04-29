@@ -1,13 +1,11 @@
 package es.serversurvival.ayuda;
 
 import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.CommandRunner;
-import es.jaimetruman.commands.CommandRunnerNonArgs;
+import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
-@Command("ayuda normas")
+@Command(value = "normas", explanation = "Ver todas las normas del servidor")
 public class NormasAyuda implements CommandRunnerNonArgs {
     public void execute(CommandSender sender) {
         sender.sendMessage("          ");

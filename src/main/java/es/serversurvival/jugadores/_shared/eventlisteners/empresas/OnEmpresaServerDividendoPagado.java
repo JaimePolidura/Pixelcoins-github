@@ -11,7 +11,7 @@ public final class OnEmpresaServerDividendoPagado implements AllMySQLTablesInsta
         Jugador jugador = jugadoresMySQL.getJugador(e.getJugador());
         double dividendo = e.getPixelcoins();
         
-        jugadoresMySQL.setEstadisticas(e.getJugador(), jugador.getPixelcoins() + dividendo, jugador.getNventas(),
+        jugadoresMySQL.setEstadisticas(e.getJugador(), jugador.getPixelcoins() + dividendo, jugador.getNVentas(),
                 jugador.getIngresos() + dividendo, jugador.getGastos());
     }
 }

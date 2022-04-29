@@ -1,15 +1,18 @@
 package es.serversurvival.empresas.editarempleado;
 
 import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.CommandRunner;
-import es.jaimetruman.commands.CommandRunnerArgs;
+import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import static org.bukkit.ChatColor.*;
 
-@Command(value = "empresas editarempleado", isSubCommand = true, args = {"empresa"})
+@Command(
+        value = "empresas editarempleado",
+        args = {"empresa"},
+        explanation = "Editar a un empleado"
+)
 public class EditarEmpleadoComandoExecutor extends PixelcoinCommand implements CommandRunnerArgs<EditarEmpleadoComando> {
     private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /empresas editarempleado <empresa>";
 

@@ -12,10 +12,10 @@ public final class OnPosicionLargoVenta implements AllMySQLTablesInstances {
         double beneficiosPerdidas = evento.getResultado();
 
         if(beneficiosPerdidas >= 0)
-            jugadoresMySQL.setEstadisticas(vendedor.getNombre(), vendedor.getPixelcoins() + evento.getValorTotal(), vendedor.getNventas(),
+            jugadoresMySQL.setEstadisticas(vendedor.getNombre(), vendedor.getPixelcoins() + evento.getValorTotal(), vendedor.getNVentas(),
                     vendedor.getIngresos() + beneficiosPerdidas, vendedor.getGastos());
         else
-            jugadoresMySQL.setEstadisticas(vendedor.getNombre(), vendedor.getPixelcoins() + evento.getValorTotal(), vendedor.getNventas(),
+            jugadoresMySQL.setEstadisticas(vendedor.getNombre(), vendedor.getPixelcoins() + evento.getValorTotal(), vendedor.getNVentas(),
                     vendedor.getIngresos(), vendedor.getGastos() + beneficiosPerdidas);
     }
 

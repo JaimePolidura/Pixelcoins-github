@@ -6,7 +6,7 @@ import es.jaime.impl.EventBusSynch;
 import es.jaimetruman.Mapper;
 import es.jaimetruman.task.BukkitTimeUnit;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival._shared.mysql.MySQL;
+import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival.webconnection.RabbitMQConsumerTask;
 import es.serversurvival._shared.scoreboards.ScoreBoardManager;
 import es.serversurvival._shared.scoreboards.ScoreboardUpdateTask;
@@ -41,7 +41,7 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
     public void onEnable() {
         plugin = this;
 
-        MySQL.conectar();
+        MySQLRepository.conectar();
 
         this.scoreBoardManager = new ScoreBoardManager();
         this.eventBus = new EventBusSynch("es.serversurvival");
@@ -70,10 +70,10 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
 
     private void setUpCommandsMobListenersTask() {
         String onWrongCommand = DARK_RED + "Comando no encontrado /ayuda";
-        String onWrongSender = DARK_RED + "Necesitas estar en el servidor para ejecutar el comando";
+        String onWrongPermissions = DARK_RED + "Tienes que ser administrador para ejecutar ese comando";
 
         Mapper.build(this)
-                .all(onWrongCommand, onWrongSender, null)
+                .all(onWrongCommand, onWrongPermissions)
                 .startScanning();
     }
 }

@@ -1,7 +1,7 @@
 package es.serversurvival.tienda.vender;
 
 import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.CommandRunnerArgs;
+import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
@@ -17,7 +17,11 @@ import org.bukkit.inventory.ItemStack;
 
 import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
 
-@Command(value = "vender", isSubCommand = true, args = {"precio"})
+@Command(
+        value = "vender",
+        args = {"precio"},
+        explanation = "Subir a la tienda el objeto que tengas en la mano, para retirarlo /tienda y dar click"
+)
 public class VenderCommandRunner extends PixelcoinCommand implements CommandRunnerArgs<VenderCommando> {
     private static final String MENSAJE_ITEM_NO_EN_LA_MANO = "Tienes que tener un objeto en la mano";
     private final VenderTiendaUseCase useCase = VenderTiendaUseCase.INSTANCE;

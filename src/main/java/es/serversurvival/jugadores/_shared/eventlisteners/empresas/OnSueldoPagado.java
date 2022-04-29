@@ -12,7 +12,7 @@ public final class OnSueldoPagado implements AllMySQLTablesInstances {
 
         System.out.println(e.getEmpleado());
 
-        jugadoresMySQL.setEstadisticas(e.getEmpleado(), empleadoAPagar.getPixelcoins() + e.getSueldo(), empleadoAPagar.getNventas(),
+        jugadoresMySQL.setEstadisticas(e.getEmpleado(), empleadoAPagar.getPixelcoins() + e.getSueldo(), empleadoAPagar.getNVentas(),
                 empleadoAPagar.getIngresos() + e.getSueldo(), empleadoAPagar.getGastos());
     }
 }

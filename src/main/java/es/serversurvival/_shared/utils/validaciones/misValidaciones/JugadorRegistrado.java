@@ -1,6 +1,6 @@
 package es.serversurvival._shared.utils.validaciones.misValidaciones;
 
-import es.serversurvival.jugadores._shared.mySQL.Jugadores;
+import es.serversurvival.jugadores._shared.mySQL.JugadoresRepository;
 import main.ValidationResult;
 import main.validators.Validator;
 
@@ -22,7 +22,7 @@ public class JugadorRegistrado implements Validator {
         try{
             String playerName = (String) o;
 
-            return Jugadores.INSTANCE.getJugador(playerName) != null ?
+            return JugadoresRepository.INSTANCE.getJugador(playerName) != null ?
                     ValidationResult.success() :
                     ValidationResult.failed(messageOnFailed);
 

@@ -1,8 +1,7 @@
 package es.serversurvival.bolsa.verprecioaccion;
 
 import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.CommandRunner;
-import es.jaimetruman.commands.CommandRunnerArgs;
+import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
 import org.bukkit.ChatColor;
@@ -11,8 +10,8 @@ import org.bukkit.command.CommandSender;
 @Command(
         value = "bolsa precio",
         isAsync = true,
-        isSubCommand = true,
-        args = {"ticker"}
+        args = {"ticker"},
+        explanation = "Ver el precio de una accion <ticker> ticker de la accion, solo se pueden empresas americanas"
 )
 public class PrecioBolsaComandoExecutor extends PixelcoinCommand implements CommandRunnerArgs<PrecioBolsaComando> {
     @Override

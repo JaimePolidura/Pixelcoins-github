@@ -10,7 +10,7 @@
     </parent>
     <groupId>es.serversurvival</groupId>
     <artifactId>demo</artifactId>
-    <version>5.0</version>
+    <version>6.0</version>
     <name>demo</name>
     <description>Plugin de la hostia</description>
 
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>com.github.JaimeTruman</groupId>
             <artifactId>Bukkit-Class-Mapper</artifactId>
-            <version>2.3.2</version>
+            <version>2.4.1</version>
         </dependency>
         <dependency>
             <groupId>com.github.JaimeTruman</groupId>

@@ -10,11 +10,11 @@ import es.jaimetruman.select.Select;
 import es.jaimetruman.select.SelectOptionInitial;
 import es.jaimetruman.update.Update;
 import es.jaimetruman.update.UpdateOptionInitial;
-import es.serversurvival._shared.mysql.MySQL;
+import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival._shared.utils.Funciones;
 
 //II 354 -> 236 -> 156
-public final class Empleados extends MySQL {
+public final class Empleados extends MySQLRepository {
     public final static Empleados INSTANCE = new Empleados();
     private final SelectOptionInitial select;
     private final UpdateOptionInitial update;

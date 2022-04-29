@@ -2,7 +2,7 @@ package es.serversurvival.tienda._shared.mySQL.encantamientos;
 
 import es.jaimetruman.insert.Insert;
 import es.jaimetruman.select.Select;
-import es.serversurvival._shared.mysql.MySQL;
+import es.serversurvival._shared.mysql.MySQLRepository;
 import org.bukkit.enchantments.Enchantment;
 
 import java.sql.ResultSet;
@@ -10,10 +10,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-public final class  Encantamientos extends MySQL {
+public final class  Encantamientos extends MySQLRepository {
     public final static Encantamientos INSTANCE = new Encantamientos();
     private Encantamientos () {}
-
+    
     public void nuevoEncantamiento(String encantamiento, int nivel, int id_oferta) {
         String query = Insert.table("encantamientos")
                 .fields("encantamiento", "nivel", "id_oferta")

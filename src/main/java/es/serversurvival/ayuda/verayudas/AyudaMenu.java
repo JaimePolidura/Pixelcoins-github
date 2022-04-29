@@ -1,8 +1,5 @@
 package es.serversurvival.ayuda.verayudas;
 
-import es.jaimetruman.commands.CommandRunner;
-import es.jaimetruman.commands.CommandRunnerNonArgs;
-import es.serversurvival.ayuda.*;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
 import es.serversurvival._shared.menus.Clickable;
@@ -16,8 +13,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class AyudaMenu extends Menu implements Clickable {
-    private Inventory inventory;
-    private Player player;
+    private final Inventory inventory;
+    private final Player player;
 
     public AyudaMenu (Player player) {
         this.player = player;
@@ -43,35 +40,34 @@ public class AyudaMenu extends Menu implements Clickable {
 
         Optional<String> tipoAyuda = getTipoAyuda(event.getCurrentItem().getItemMeta().getDisplayName());
         if(!tipoAyuda.isPresent()){
-            CommandRunner ayudaSubCommand = getCommandOfAyuda(tipoAyuda.get());
+            player.performCommand(getCommandOfAyuda(tipoAyuda.get()));
 
-            ((CommandRunnerNonArgs) ayudaSubCommand).execute(this.getPlayer());
-
-            ((Player) event.getWhoClicked()).performCommand("/ayuda " + tipoAyuda.get().toLowerCase());
             event.getWhoClicked().closeInventory();
         }
     }
 
-    private CommandRunner getCommandOfAyuda (String nombreComando) {
+    private String getCommandOfAyuda (String nombreComando) {
         switch ((nombreComando)) {
             case "JUGAR":
-                return new JugarAyuda();
+                return "jugar";
             case "PIXELCOINS":
-                return new DineroAyuda();
+                //TODO return ayuda help
+                return "ayuda";
             case "NORMAS":
-                return new NormasAyuda();
+                return "normas";
             case "TIENDA":
-                return new TiendaAyuda();
+                //TODO return tienda help
+                return "tienda help";
             case "DEUDA":
-                return new DeudaAyuda();
+                return "deudas help";
             case "EMPRESARIO":
-                return new EmpresarioAyuda();
+                return "empresas help";
             case "EMPLEO":
-                return new EmpleoAyuda();
+                return "empleados help";
             case "BOLSA":
-                return new BolsaAyuda();
+                return "bolsa help";
             default:
-                return null;
+                return "ayuda";
         }
     }
 

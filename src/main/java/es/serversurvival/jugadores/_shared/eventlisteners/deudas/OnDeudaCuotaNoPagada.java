@@ -10,6 +10,6 @@ public final class OnDeudaCuotaNoPagada implements AllMySQLTablesInstances {
     public void onCuotaNoPagada (DeudaCuotaNoPagadaEvento evento) {
         Jugador deudor = jugadoresMySQL.getJugador(evento.getDeudor());
 
-        jugadoresMySQL.setNinpagos(evento.getDeudor(), deudor.getNinpagos() + 1);
+        jugadoresMySQL.setNinpagos(evento.getDeudor(), deudor.getNInpagosDeuda() + 1);
     }
 }

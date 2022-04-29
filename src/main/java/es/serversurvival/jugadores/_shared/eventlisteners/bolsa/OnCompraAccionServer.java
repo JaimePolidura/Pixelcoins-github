@@ -22,10 +22,10 @@ public final class OnCompraAccionServer implements AllMySQLTablesInstances {
             double rentabilidad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(oferta.getPrecio_apertura(), oferta.getPrecio()), 3);
 
             if(beneficiosPerdidas >= 0)
-                jugadoresMySQL.setEstadisticas(jugadorVendedor.getNombre(), jugadorVendedor.getPixelcoins() + evento.getPixelcoins(), jugadorVendedor.getNventas(),
+                jugadoresMySQL.setEstadisticas(jugadorVendedor.getNombre(), jugadorVendedor.getPixelcoins() + evento.getPixelcoins(), jugadorVendedor.getNVentas(),
                         jugadorVendedor.getIngresos(), jugadorVendedor.getGastos() + beneficiosPerdidas);
             else
-                jugadoresMySQL.setEstadisticas(jugadorVendedor.getNombre(), jugadorVendedor.getPixelcoins() + evento.getPixelcoins(), jugadorVendedor.getNventas(),
+                jugadoresMySQL.setEstadisticas(jugadorVendedor.getNombre(), jugadorVendedor.getPixelcoins() + evento.getPixelcoins(), jugadorVendedor.getNVentas(),
                         jugadorVendedor.getIngresos() + beneficiosPerdidas, jugadorVendedor.getGastos());
         }
     }

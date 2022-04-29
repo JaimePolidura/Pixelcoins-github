@@ -9,7 +9,7 @@ import es.jaimetruman.insert.Insert;
 import es.jaimetruman.select.Select;
 import es.jaimetruman.update.Update;
 import es.jaimetruman.update.UpdateOptionInitial;
-import es.serversurvival._shared.mysql.MySQL;
+import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival._shared.utils.Funciones;
 
 import static es.serversurvival.transacciones.mySQL.TipoTransaccion.*;
@@ -17,7 +17,7 @@ import static es.serversurvival.transacciones.mySQL.TipoTransaccion.*;
 /**
  * 792 -> 600 -> 497 -> 47 (xd)
  */
-public final class Transacciones extends MySQL {
+public final class Transacciones extends MySQLRepository {
     public static final Transacciones INSTANCE = new Transacciones();
 
     private final UpdateOptionInitial update;

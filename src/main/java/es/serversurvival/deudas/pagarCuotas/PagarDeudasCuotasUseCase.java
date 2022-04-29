@@ -2,7 +2,7 @@ package es.serversurvival.deudas.pagarCuotas;
 
 import es.serversurvival.deudas._shared.mysql.Deuda;
 import es.serversurvival.jugadores._shared.mySQL.Jugador;
-import es.serversurvival.jugadores._shared.mySQL.Jugadores;
+import es.serversurvival.jugadores._shared.mySQL.JugadoresRepository;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import lombok.SneakyThrows;
@@ -18,7 +18,7 @@ public final class PagarDeudasCuotasUseCase implements AllMySQLTablesInstances {
 
     public void pagarDeudas () {
         List<Deuda> todasLasDeudas = deudasMySQL.getAllDeudas();
-        Map<String, Jugador> allJugadores = Jugadores.INSTANCE.getMapAllJugadores();
+        Map<String, Jugador> allJugadores = JugadoresRepository.INSTANCE.getMapAllJugadores();
 
         todasLasDeudas.forEach( (deuda) -> {
             Date fechaHoy = formatFehcaDeHoyException();

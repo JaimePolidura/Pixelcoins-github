@@ -1,6 +1,6 @@
 package es.serversurvival._shared.utils.validaciones.misValidaciones;
 
-import es.serversurvival.jugadores._shared.mySQL.Jugadores;
+import es.serversurvival.jugadores._shared.mySQL.JugadoresRepository;
 import main.ValidationResult;
 import main.validators.Validator;
 
@@ -44,7 +44,7 @@ public class SuficinestesPixelcoins implements Validator {
         double pixelcoins = Double.parseDouble(string);
 
         try{
-            return Jugadores.INSTANCE.getJugador(player).getPixelcoins() >= pixelcoins ?
+            return JugadoresRepository.INSTANCE.getJugador(player).getPixelcoins() >= pixelcoins ?
                     ValidationResult.success() :
                     ValidationResult.failed(messageOnFailed);
         }catch (Exception e) {

@@ -14,10 +14,10 @@ public final class OnPosicionCortoCompra implements AllMySQLTablesInstances {
 
         double pixelcoinsJugador = jugador.getPixelcoins();
         if(0 > pixelcoinsJugador + revalorizacionTotal)
-            jugadoresMySQL.setEstadisticas(jugador.getNombre(), pixelcoinsJugador + revalorizacionTotal, jugador.getNventas(),
+            jugadoresMySQL.setEstadisticas(jugador.getNombre(), pixelcoinsJugador + revalorizacionTotal, jugador.getNVentas(),
                     jugador.getIngresos(), jugador.getGastos() + revalorizacionTotal);
         else
-            jugadoresMySQL.setEstadisticas(jugador.getNombre(), pixelcoinsJugador + revalorizacionTotal, jugador.getNventas(),
+            jugadoresMySQL.setEstadisticas(jugador.getNombre(), pixelcoinsJugador + revalorizacionTotal, jugador.getNVentas(),
                     jugador.getIngresos() + revalorizacionTotal, jugador.getGastos());
 
     }

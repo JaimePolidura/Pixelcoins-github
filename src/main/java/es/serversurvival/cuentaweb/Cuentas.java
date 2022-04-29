@@ -5,12 +5,12 @@ import es.jaimetruman.select.Select;
 import es.jaimetruman.select.SelectOptionInitial;
 import es.jaimetruman.update.Update;
 import es.jaimetruman.update.UpdateOptionInitial;
-import es.serversurvival._shared.mysql.MySQL;
+import es.serversurvival._shared.mysql.MySQLRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public final class Cuentas extends MySQL {
+public final class Cuentas extends MySQLRepository {
     public final static Cuentas INSTANCE = new Cuentas();
     private final SelectOptionInitial select;
     private final UpdateOptionInitial update;

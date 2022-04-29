@@ -28,7 +28,7 @@ public final class SetUpJugadorUseCase implements AllMySQLTablesInstances {
                 Pixelcoin.publish(new JugadorCambiadoDeNombreEvento(jugadorPorUUID.getNombre(), player.getName()));
             }
 
-            if(jugadorPorUUID.getNumero_cuenta() == 0){
+            if(jugadorPorUUID.getNumeroVerificacionCuenta() == 0){
                 jugadoresMySQL.setNumeroCuenta(player.getName(), jugadoresMySQL.generearNumeroCuenta());
             }
         }

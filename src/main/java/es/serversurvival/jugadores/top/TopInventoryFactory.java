@@ -81,7 +81,7 @@ public class TopInventoryFactory extends InventoryFactory {
         int pos = 1;
         for(Jugador vendedor : listaVendedores){
             if(pos == 6) break;
-            lore.add(ChatColor.GOLD + "" + pos + "º " + vendedor.getNombre() + ": " + ChatColor.GREEN + formatea.format(vendedor.getNventas()));
+            lore.add(ChatColor.GOLD + "" + pos + "º " + vendedor.getNombre() + ": " + ChatColor.GREEN + formatea.format(vendedor.getNVentas()));
 
             pos++;
         }
@@ -97,7 +97,7 @@ public class TopInventoryFactory extends InventoryFactory {
         int pos = 1;
         for(Jugador fiabe : listaFiables){
             if(pos == 6) break;
-            lore.add(ChatColor.GOLD + "" + pos  + "º " + fiabe.getNombre() + ": " + ChatColor.GREEN + formatea.format(fiabe.getNpagos()));
+            lore.add(ChatColor.GOLD + "" + pos  + "º " + fiabe.getNombre() + ": " + ChatColor.GREEN + formatea.format(fiabe.getNPagosDeuda()));
 
             pos++;
         }
@@ -114,7 +114,7 @@ public class TopInventoryFactory extends InventoryFactory {
         for(Jugador noFiable : listaMenosFiables){
             if(pos == 6) break;
 
-            lore.add(ChatColor.GOLD + "" + pos  + "º " + noFiable.getNombre() + ": " + ChatColor.GREEN + formatea.format(noFiable.getNpagos()));
+            lore.add(ChatColor.GOLD + "" + pos  + "º " + noFiable.getNombre() + ": " + ChatColor.GREEN + formatea.format(noFiable.getNInpagosDeuda()));
             pos++;
         }
 

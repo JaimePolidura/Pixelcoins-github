@@ -1,13 +1,11 @@
 package es.serversurvival.ayuda;
 
 import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.CommandRunner;
-import es.jaimetruman.commands.CommandRunnerNonArgs;
+import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
-@Command("ayuda jugar")
+@Command(value = "jugar", explanation = "Ver las cosas basicas para jugar al servidor")
 public class JugarAyuda implements CommandRunnerNonArgs {
     @Override
     public void execute(CommandSender sneder) {

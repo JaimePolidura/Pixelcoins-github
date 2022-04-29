@@ -4,7 +4,7 @@ import es.jaimetruman.delete.Delete;
 import es.jaimetruman.insert.Insert;
 import es.jaimetruman.select.Select;
 import es.jaimetruman.update.Update;
-import es.serversurvival._shared.mysql.MySQL;
+import es.serversurvival._shared.mysql.MySQLRepository;
 
 import java.sql.*;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 126 -> 50
  */
-public final class Mensajes extends MySQL {
+public final class Mensajes extends MySQLRepository {
     public final static Mensajes INSTANCE = new Mensajes();
     private Mensajes () {}
 

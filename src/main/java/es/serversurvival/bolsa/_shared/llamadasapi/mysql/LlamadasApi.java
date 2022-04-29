@@ -6,7 +6,7 @@ import es.jaimetruman.select.Select;
 import es.jaimetruman.select.SelectOptionInitial;
 import es.jaimetruman.update.Update;
 import es.jaimetruman.update.UpdateOptionInitial;
-import es.serversurvival._shared.mysql.MySQL;
+import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
 import main.Pair;
 
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 /**
  * II 156 -> 121
  */
-public final class LlamadasApi extends MySQL {
+public final class LlamadasApi extends MySQLRepository {
     public final static LlamadasApi INSTANCE = new LlamadasApi();
 
     private final SelectOptionInitial select;

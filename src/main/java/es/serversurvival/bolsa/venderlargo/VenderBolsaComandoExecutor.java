@@ -2,7 +2,7 @@ package es.serversurvival.bolsa.venderlargo;
 
 import es.jaime.EventListener;
 import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.CommandRunnerArgs;
+import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival.bolsa._shared.AbrirOrdenUseCase;
 import es.serversurvival.bolsa._shared.ordenespremarket.mysql.AccionOrden;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionAbierta;
@@ -21,8 +21,8 @@ import static org.bukkit.ChatColor.*;
 
 @Command(
         value = "bolsa vender",
-        isSubCommand = true,
-        args = {"id", "[cantidad]¡1!"}
+        args = {"id", "[cantidad]¡1!"},
+        explanation = "Vender una posicion que tengas en cartera. <id> id de la posicion, para ver /bolsa cartera"
 )
 public class VenderBolsaComandoExecutor extends PixelcoinCommand implements CommandRunnerArgs<VenderBolsaComando> {
     private final String mensajeIncorrecto = DARK_RED + "Uso incorrecto: /bolsa vender <id> [numero a vender]";

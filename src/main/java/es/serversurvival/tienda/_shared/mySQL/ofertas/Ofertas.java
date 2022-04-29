@@ -10,7 +10,7 @@ import es.jaimetruman.select.Select;
 import es.jaimetruman.select.SelectOptionInitial;
 import es.jaimetruman.update.Update;
 import es.jaimetruman.update.UpdateOptionInitial;
-import es.serversurvival._shared.mysql.MySQL;
+import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival.tienda._shared.mySQL.encantamientos.Encantamiento;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -22,7 +22,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 /**
  * 363 -> 193
  */
-public final class Ofertas extends MySQL {
+public final class Ofertas extends MySQLRepository {
     public final static Ofertas INSTANCE = new Ofertas();
 
     private final UpdateOptionInitial update;

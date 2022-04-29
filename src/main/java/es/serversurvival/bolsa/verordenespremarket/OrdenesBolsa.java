@@ -1,12 +1,14 @@
 package es.serversurvival.bolsa.verordenespremarket;
 
 import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.CommandRunner;
-import es.jaimetruman.commands.CommandRunnerNonArgs;
+import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@Command(value = "bolsa ordenes", isSubCommand = true)
+@Command(
+        value = "bolsa ordenes",
+        explanation = "Ver todas las ordenes de compra y venta de acciones pendientes a ejecutar cuando el mercado este cerrado"
+)
 public class OrdenesBolsa implements CommandRunnerNonArgs {
     @Override
     public void execute(CommandSender sender) {

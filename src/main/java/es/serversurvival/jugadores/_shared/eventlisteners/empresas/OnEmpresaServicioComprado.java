@@ -11,6 +11,6 @@ public final class OnEmpresaServicioComprado implements AllMySQLTablesInstances 
         Jugador jugador = jugadoresMySQL.getJugador(evento.getComprador());
         double precio = evento.getPrecio();
 
-        jugadoresMySQL.setEstadisticas(jugador.getNombre(), jugador.getPixelcoins() - precio, jugador.getNventas(), jugador.getIngresos(), jugador.getGastos() + precio);
+        jugadoresMySQL.setEstadisticas(jugador.getNombre(), jugador.getPixelcoins() - precio, jugador.getNVentas(), jugador.getIngresos(), jugador.getGastos() + precio);
     }
 }

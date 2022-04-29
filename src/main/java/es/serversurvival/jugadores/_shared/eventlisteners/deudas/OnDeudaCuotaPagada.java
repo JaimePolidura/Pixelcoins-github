@@ -12,6 +12,6 @@ public final class OnDeudaCuotaPagada implements AllMySQLTablesInstances {
 
         Jugador deudor = jugadoresMySQL.getJugador(e.getDeudor());
 
-        jugadoresMySQL.setNpagos(e.getDeudor(), deudor.getNpagos() + 1);
+        jugadoresMySQL.setNpagos(e.getDeudor(), deudor.getNPagosDeuda() + 1);
     }
 }

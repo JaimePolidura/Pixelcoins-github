@@ -5,7 +5,7 @@ import es.jaimetruman.select.Select;
 import es.jaimetruman.select.SelectOptionInitial;
 import es.jaimetruman.update.Update;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.TipoActivo;
-import es.serversurvival._shared.mysql.MySQL;
+import es.serversurvival._shared.mysql.MySQLRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,7 +17,7 @@ import static es.jaimetruman.select.Order.*;
  * 331 -> 114
  * II: 114 -> 67
  */
-public final class PosicionesCerradas extends MySQL {
+public final class PosicionesCerradas extends MySQLRepository {
     public final static PosicionesCerradas INSTANCE = new PosicionesCerradas();
 
     private final SelectOptionInitial select;

@@ -11,6 +11,6 @@ public final class OnPixelcoinsDepositadas implements AllMySQLTablesInstances {
         Jugador jugador = evento.getJugador();
 
         jugadoresMySQL.setEstadisticas(jugador.getNombre(), jugador.getPixelcoins() - evento.getPixelcoins(),
-                jugador.getNventas(), jugador.getIngresos(), jugador.getGastos());
+                jugador.getNVentas(), jugador.getIngresos(), jugador.getGastos());
     }
 }

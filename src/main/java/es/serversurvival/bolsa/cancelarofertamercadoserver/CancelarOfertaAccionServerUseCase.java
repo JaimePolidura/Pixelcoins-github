@@ -12,8 +12,10 @@ public final class CancelarOfertaAccionServerUseCase implements AllMySQLTablesIn
 
     public void cancelar(String player, int id) {
         OfertaMercadoServer oferta = ofertasMercadoServerMySQL.get(id);
+
         ofertasMercadoServerMySQL.borrar(id);
-        posicionesAbiertasMySQL.nuevaPosicion(player, TipoActivo.ACCIONES_SERVER, oferta.getEmpresa(), oferta.getCantidad(), oferta.getPrecio_apertura(), TipoPosicion.LARGO);
+        posicionesAbiertasMySQL.nuevaPosicion(player, TipoActivo.ACCIONES_SERVER, oferta.getEmpresa(), oferta.getCantidad(),
+                oferta.getPrecio_apertura(), TipoPosicion.LARGO);
     }
 
 

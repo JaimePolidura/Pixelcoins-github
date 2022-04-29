@@ -27,7 +27,7 @@ import es.serversurvival.deudas._shared.mysql.Deudas;
 import es.serversurvival.empresas._shared.mysql.Empresa;
 import es.serversurvival.empresas._shared.mysql.Empresas;
 import es.serversurvival.jugadores._shared.mySQL.Jugador;
-import es.serversurvival.jugadores._shared.mySQL.Jugadores;
+import es.serversurvival.jugadores._shared.mySQL.JugadoresRepository;
 import es.serversurvival.mensajes._shared.mysql.Mensajes;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -151,7 +151,7 @@ public final class Funciones {
 
     public static Map<String, Double> crearMapaTopPatrimonioPlayers (boolean creciente) {
         Deudas deudasMySQL = Deudas.INSTANCE;
-        Jugadores jugadoresMySQL = Jugadores.INSTANCE;
+        JugadoresRepository jugadoresMySQL = JugadoresRepository.INSTANCE;
         PosicionesAbiertas posicionesAbiertasMySQL = PosicionesAbiertas.INSTANCE;
         Empresas empresasMySQL = Empresas.INSTANCE;
         LlamadasApi llamadasApiMySQL = LlamadasApi.INSTANCE;

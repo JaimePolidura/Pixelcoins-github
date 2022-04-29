@@ -10,7 +10,7 @@ public final class OnPosicionCortoVenta implements AllMySQLTablesInstances {
     public void onPosicionCortoVenta (PosicionVentaCortoEvento evento){
         Jugador jugador = jugadoresMySQL.getJugador(evento.getComprador());
 
-        jugadoresMySQL.setEstadisticas(jugador.getNombre(), jugador.getPixelcoins() - evento.getPrecioTotal(), jugador.getNventas(),
+        jugadoresMySQL.setEstadisticas(jugador.getNombre(), jugador.getPixelcoins() - evento.getPrecioTotal(), jugador.getNVentas(),
                 jugador.getIngresos(), jugador.getGastos() + evento.getPrecioTotal());
     }
 }

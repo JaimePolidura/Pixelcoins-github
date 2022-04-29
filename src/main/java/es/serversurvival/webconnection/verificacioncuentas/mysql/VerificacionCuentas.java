@@ -3,12 +3,12 @@ package es.serversurvival.webconnection.verificacioncuentas.mysql;
 import es.jaimetruman.delete.Delete;
 import es.jaimetruman.insert.Insert;
 import es.jaimetruman.select.Select;
-import es.serversurvival._shared.mysql.MySQL;
+import es.serversurvival._shared.mysql.MySQLRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public final class VerificacionCuentas extends MySQL {
+public final class VerificacionCuentas extends MySQLRepository {
     public static VerificacionCuentas INSTANCE = new VerificacionCuentas();
 
     private VerificacionCuentas () {}

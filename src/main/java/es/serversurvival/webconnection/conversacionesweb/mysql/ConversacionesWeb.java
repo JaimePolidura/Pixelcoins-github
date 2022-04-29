@@ -5,7 +5,7 @@ import es.jaimetruman.delete.DeleteOptionsInitial;
 import es.jaimetruman.insert.Insert;
 import es.jaimetruman.select.Select;
 import es.jaimetruman.select.SelectOptionInitial;
-import es.serversurvival._shared.mysql.MySQL;
+import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival.webconnection.ServerSocketWeb;
 import es.serversurvival.webconnection.socketmessages.SocketMessagge;
 import org.bukkit.ChatColor;
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public final class ConversacionesWeb extends MySQL {
+public final class ConversacionesWeb extends MySQLRepository {
     public static final ConversacionesWeb INSTANCE = new ConversacionesWeb();
     private final ServerSocketWeb socket = ServerSocketWeb.INSTANCE;
 

@@ -10,7 +10,7 @@ public final class OnPixelcoinsSacadas implements AllMySQLTablesInstances {
     public void onPixelcoinsSacadas (PixelcoinsSacadasEvento evento) {
         Jugador jugadorQueSaca = evento.getJugador();
 
-        jugadoresMySQL.setEstadisticas(jugadorQueSaca.getNombre(), jugadorQueSaca.getPixelcoins() + evento.getPixelcoins(), jugadorQueSaca.getNventas(),
+        jugadoresMySQL.setEstadisticas(jugadorQueSaca.getNombre(), jugadorQueSaca.getPixelcoins() + evento.getPixelcoins(), jugadorQueSaca.getNVentas(),
                 jugadorQueSaca.getIngresos(), jugadorQueSaca.getGastos());
     }
 }

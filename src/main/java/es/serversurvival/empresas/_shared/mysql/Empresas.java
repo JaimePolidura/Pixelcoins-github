@@ -9,7 +9,7 @@ import es.jaimetruman.select.Select;
 import es.jaimetruman.select.SelectOptionInitial;
 import es.jaimetruman.update.Update;
 import es.jaimetruman.update.UpdateOptionInitial;
-import es.serversurvival._shared.mysql.MySQL;
+import es.serversurvival._shared.mysql.MySQLRepository;
 
 import es.serversurvival._shared.utils.Funciones;
 
@@ -19,7 +19,7 @@ import static es.serversurvival._shared.utils.Funciones.*;
  * I 610 -> 300
  * II 323 -> 197
  */
-public final class Empresas extends MySQL {
+public final class Empresas extends MySQLRepository {
     public final static Empresas INSTANCE = new Empresas();
 
     private final SelectOptionInitial select;

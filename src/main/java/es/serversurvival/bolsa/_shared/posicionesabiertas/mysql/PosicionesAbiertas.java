@@ -11,7 +11,7 @@ import es.serversurvival.bolsa._shared.llamadasapi.mysql.LlamadaApi;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival._shared.mysql.MySQL;
+import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival._shared.utils.Funciones;
 
 import java.sql.ResultSet;
@@ -26,7 +26,7 @@ import static java.lang.Math.abs;
 /**
  * 405 -> 246
  */
-public final class PosicionesAbiertas extends MySQL {
+public final class PosicionesAbiertas extends MySQLRepository {
     public final static PosicionesAbiertas INSTANCE = new PosicionesAbiertas();
     private final SelectOptionInitial select;
     private final UpdateOptionInitial update;

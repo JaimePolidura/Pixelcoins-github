@@ -137,7 +137,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
             rentabilidad = Funciones.rentabilidad(ingresos, beneficios);
         }
 
-        int nventas = jugador.getNventas();
+        int nventas = jugador.getNVentas();
         int posTopRicps = jugadoresMySQL.getPosicionTopRicos(nombreJugador);
         int posTopVendedores = jugadoresMySQL.getPosicionTopVendedores(nombreJugador);
         List<String> lore = new ArrayList<>();
@@ -171,8 +171,8 @@ public class PerfilInventoryFactory extends InventoryFactory {
         lore.add(ChatColor.GOLD + "Posicion en top vendedores: " + posTopVendedores);
         lore.add("   ");
         Jugador jugadorAVer = jugadoresMySQL.getJugador(nombreJugador);
-        lore.add(ChatColor.GOLD + "Numero de veces pagada la deuda: " + jugadorAVer.getNpagos());
-        lore.add(ChatColor.GOLD + "Numero de veces de inpago de la deuda: " + ChatColor.RED +  jugadorAVer.getNinpagos());
+        lore.add(ChatColor.GOLD + "Numero de veces pagada la deuda: " + jugadorAVer.getNPagosDeuda());
+        lore.add(ChatColor.GOLD + "Numero de veces de inpago de la deuda: " + ChatColor.RED +  jugadorAVer.getNInpagosDeuda());
 
         metaStats.setLore(lore);
         stats.setItemMeta(metaStats);
@@ -187,7 +187,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
 
         Cuenta cuenta = cuentasMySQL.getCuenta(jugador);
         if(cuenta == null){
-            int numeroCuenta = jugadoresMySQL.getJugador(jugador).getNumero_cuenta();
+            int numeroCuenta = jugadoresMySQL.getJugador(jugador).getNumeroVerificacionCuenta();
             lore.add(ChatColor.DARK_AQUA + "No tienes cuenta, para registrarse:");
             lore.add(ChatColor.DARK_AQUA + "" + ChatColor.UNDERLINE + "http://serversurvival.ddns.net/registrarse");
             lore.add(ChatColor.DARK_AQUA + "Tu numero de cuenta: " + ChatColor.BOLD + numeroCuenta);

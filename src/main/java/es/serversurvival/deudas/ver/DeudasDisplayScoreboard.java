@@ -21,8 +21,8 @@ public class DeudasDisplayScoreboard implements SingleScoreboard {
         addLineToScoreboard(objective, ChatColor.GOLD + "Pixelcoins que debes: " + ChatColor.GREEN + formatea.format(totalAPagar) + " PC", 0);
         addLineToScoreboard(objective, ChatColor.GOLD + "Pixelcoins que te deben: " + ChatColor.GREEN + formatea.format(totalASerPagado) + " PC", -1);
         addLineToScoreboard(objective, "     ", -2);
-        addLineToScoreboard(objective, ChatColor.GOLD + "Nº de veces pagadas la deuda: " + formatea.format(jugadorScoreboear.getNpagos()), -3);
-        addLineToScoreboard(objective, ChatColor.GOLD + "Nº de veces no pagadas la deuda: " + formatea.format(jugadorScoreboear.getNinpagos()), -4);
+        addLineToScoreboard(objective, ChatColor.GOLD + "Nº de veces pagadas la deuda: " + formatea.format(jugadorScoreboear.getNPagosDeuda()), -3);
+        addLineToScoreboard(objective, ChatColor.GOLD + "Nº de veces no pagadas la deuda: " + formatea.format(jugadorScoreboear.getNInpagosDeuda()), -4);
 
         return scoreboard;
     }
