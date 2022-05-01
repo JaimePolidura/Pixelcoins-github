@@ -1,6 +1,5 @@
 package es.serversurvival._shared.cache;
 
-import org.junit.Before;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -11,7 +10,7 @@ public final class LRUCacheTest {
     private final LRUCache<String, Integer> lruCache;
 
     public LRUCacheTest(){
-        this.lruCache = new LRUCacheTestImpl();
+        this.lruCache = new LRUCache<>(MAX_CAPACITY);
     }
 
     @BeforeTest
@@ -47,12 +46,5 @@ public final class LRUCacheTest {
         this.lruCache.get("1");
         this.lruCache.add("extra2", 2);
         assertTrue(this.lruCache.get("1").isPresent());
-    }
-
-    private static class LRUCacheTestImpl extends LRUCache<String, Integer> {
-        @Override
-        public int maxItemsCapacity() {
-            return MAX_CAPACITY;
-        }
     }
 }

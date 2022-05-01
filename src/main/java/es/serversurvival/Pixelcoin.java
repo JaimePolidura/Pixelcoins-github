@@ -5,13 +5,20 @@ import es.jaime.EventBus;
 import es.jaime.impl.EventBusSynch;
 import es.jaimetruman.Mapper;
 import es.jaimetruman.task.BukkitTimeUnit;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.mysql.MySQLRepository;
+import es.serversurvival.jugadores._shared.newformat.application.JugadoresRepositoryService;
+import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
+import es.serversurvival.jugadores._shared.newformat.domain.JugadoresRepository;
+import es.serversurvival.jugadores._shared.newformat.infrastructure.MySQLJugadoresRepository;
 import es.serversurvival.webconnection.RabbitMQConsumerTask;
 import es.serversurvival._shared.scoreboards.ScoreBoardManager;
 import es.serversurvival._shared.scoreboards.ScoreboardUpdateTask;
 
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.HashMap;
 
 import static org.bukkit.ChatColor.*;
 
@@ -54,6 +61,7 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
         this.setUpCommandsMobListenersTask();
         this.setUpRabbitMQConsumer();
         this.setUpScoreboardUpdater();
+        this.loadAllDependenciesContainer();
 
         getServer().getConsoleSender().sendMessage(GREEN + "------------------------------");
     }
@@ -75,5 +83,12 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
         Mapper.build(this)
                 .all(onWrongCommand, onWrongPermissions)
                 .startScanning();
+    }
+
+    private void loadAllDependenciesContainer() {
+        DependecyContainer.addAll(new HashMap<>() {{
+            put(JugadoresRepository.class, new MySQLJugadoresRepository());
+            put(JugadoresService.class, new JugadoresService());
+        }});
     }
 }

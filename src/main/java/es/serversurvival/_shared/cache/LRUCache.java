@@ -6,13 +6,15 @@ import lombok.Getter;
 import java.util.LinkedList;
 import java.util.Optional;
 
-public abstract class LRUCache<K, V> implements Cache<K, V>{
+public class LRUCache<K, V> implements Cache<K, V>{
     //Last index: most not recently used
     //first index: most recently used
     private final LinkedList<CacheItem<K, V>> items;
+    private final int maxCapacity;
 
-    public LRUCache(){
+    public LRUCache(int maxCapacity){
         this.items = new LinkedList<>();
+        this.maxCapacity = maxCapacity;
     }
 
     @Override
@@ -38,6 +40,11 @@ public abstract class LRUCache<K, V> implements Cache<K, V>{
         }
 
         return Optional.empty();
+    }
+
+    @Override
+    public int maxItemsCapacity() {
+        return this.maxCapacity;
     }
 
     @Override
