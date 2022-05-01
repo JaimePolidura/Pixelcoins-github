@@ -2,7 +2,7 @@ package es.serversurvival.empresas.pagardividendos;
 
 import es.serversurvival.bolsa._shared.ofertasmercadoserver.mysql.OfertaMercadoServer;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionAbierta;
-import es.serversurvival.jugadores._shared.mySQL.Jugador;
+import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import org.bukkit.entity.Player;

@@ -4,7 +4,7 @@ import es.jaime.EventListener;
 import es.serversurvival.bolsa._shared.ofertasmercadoserver.mysql.OfertaMercadoServer;
 import es.serversurvival.bolsa._shared.ofertasmercadoserver.mysql.TipoOfertante;
 import es.serversurvival.bolsa.comprarofertasmercadoserver.EmpresaServerAccionCompradaEvento;
-import es.serversurvival.jugadores._shared.mySQL.Jugador;
+import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
 

@@ -7,7 +7,7 @@ import es.serversurvival.bolsa._shared.AbrirOrdenUseCase;
 import es.serversurvival.bolsa._shared.OrdenAbiertaEvento;
 import es.serversurvival.bolsa._shared.ordenespremarket.mysql.AccionOrden;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionesAbiertas;
-import es.serversurvival.jugadores._shared.mySQL.Jugador;
+import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
 import main.Pair;

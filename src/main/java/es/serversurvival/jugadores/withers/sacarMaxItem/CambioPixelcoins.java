@@ -1,6 +1,6 @@
 package es.serversurvival.jugadores.withers.sacarMaxItem;
 
-import es.serversurvival.jugadores._shared.mySQL.Jugador;
+import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival.jugadores.withers.sacarItem.SacarItemUseCase;
 
 public enum CambioPixelcoins {

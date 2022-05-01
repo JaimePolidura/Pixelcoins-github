@@ -11,20 +11,21 @@ import es.jaimetruman.update.Update;
 import es.jaimetruman.update.UpdateOptionInitial;
 import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 
 import static es.jaimetruman.select.Order.*;
 
 /**
  * II 240 -> 129
  */
-public final class JugadoresRepository extends MySQLRepository {
+public final class MySQLJugadoresRepository extends MySQLRepository {
     private final InsertOptionFinal insert;
     private final SelectOptionInitial select;
     private final UpdateOptionInitial update;
 
-    public static final JugadoresRepository INSTANCE = new JugadoresRepository();
+    public static final MySQLJugadoresRepository INSTANCE = new MySQLJugadoresRepository();
 
-    private JugadoresRepository() {
+    private MySQLJugadoresRepository() {
         this.select = Select.from("jugadores");
         this.insert = Insert.table("jugadores").fields("nombre", "pixelcoins", "nventas", "ingresos", "gastos", "ninpagos", "npagos", "numero_cuenta", "uuid");
         this.update = Update.table("jugadores");

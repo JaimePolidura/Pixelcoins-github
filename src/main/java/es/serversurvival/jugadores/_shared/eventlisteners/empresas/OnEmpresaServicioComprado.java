@@ -3,7 +3,7 @@ package es.serversurvival.jugadores._shared.eventlisteners.empresas;
 import es.jaime.EventListener;
 import es.serversurvival.empresas.comprarservicio.EmpresaServicioCompradoEvento;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.jugadores._shared.mySQL.Jugador;
+import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 
 public final class OnEmpresaServicioComprado implements AllMySQLTablesInstances {
     @EventListener

@@ -1,6 +1,6 @@
 package es.serversurvival.deudas.ver;
 
-import es.serversurvival.jugadores._shared.mySQL.Jugador;
+import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival._shared.scoreboards.SingleScoreboard;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Objective;

@@ -1,6 +1,7 @@
 package es.serversurvival._shared.mysql;
 
 
+import es.jaime.javaddd.domain.Aggregate;
 import es.jaimetruman.WriteQuery;
 import es.jaimetruman.select.Select;
 import lombok.SneakyThrows;
@@ -59,9 +60,9 @@ public abstract class MySQLRepository implements AllMySQLTablesInstances{
         }
     }
 
-    protected abstract TablaObjeto buildObjectFromResultSet (ResultSet rs) throws SQLException;
+    protected abstract Aggregate buildObjectFromResultSet (ResultSet rs) throws SQLException;
 
-    protected TablaObjeto buildObjectFromQuery(Select query) {
+    protected Aggregate buildObjectFromQuery(Select query) {
         try {
             ResultSet rs = executeQuery(query);
             rs.next();

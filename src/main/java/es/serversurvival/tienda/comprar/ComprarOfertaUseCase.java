@@ -1,8 +1,8 @@
 package es.serversurvival.tienda.comprar;
 
 import es.serversurvival.Pixelcoin;
-import es.serversurvival.jugadores._shared.mySQL.Jugador;
-import es.serversurvival.jugadores._shared.mySQL.JugadoresRepository;
+import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.mySQL.MySQLJugadoresRepository;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.tienda._shared.mySQL.ofertas.Oferta;
 import org.bukkit.inventory.ItemStack;
@@ -30,7 +30,7 @@ public final class ComprarOfertaUseCase implements AllMySQLTablesInstances {
             ofertasMySQL.setCantidad(id, cantidad - 1);
 
         //TODO
-        JugadoresRepository.INSTANCE.realizarTransferenciaConEstadisticas(comprador, vendedor, precio);
+        MySQLJugadoresRepository.INSTANCE.realizarTransferenciaConEstadisticas(comprador, vendedor, precio);
 
         Pixelcoin.publish(new ItemCompradoEvento(vendedor, comprador, objeto, cantidad, precio));
 

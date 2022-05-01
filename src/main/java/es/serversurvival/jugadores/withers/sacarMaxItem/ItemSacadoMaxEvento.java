@@ -2,7 +2,7 @@ package es.serversurvival.jugadores.withers.sacarMaxItem;
 
 import es.serversurvival._shared.eventospixelcoins.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
-import es.serversurvival.jugadores._shared.mySQL.Jugador;
+import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival.transacciones.mySQL.Transaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

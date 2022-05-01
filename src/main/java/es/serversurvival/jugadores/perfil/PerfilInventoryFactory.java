@@ -6,7 +6,7 @@ import es.serversurvival.cuentaweb.Cuenta;
 import es.serversurvival.deudas._shared.mysql.Deuda;
 import es.serversurvival.empleados._shared.mysql.Empleado;
 import es.serversurvival.empresas._shared.mysql.Empresa;
-import es.serversurvival.jugadores._shared.mySQL.Jugador;
+import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.Bukkit;

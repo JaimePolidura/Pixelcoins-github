@@ -13,11 +13,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.ToDoubleFunction;
-import java.util.function.ToIntFunction;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.LlamadaApi;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.LlamadasApi;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionAbierta;
@@ -26,8 +25,8 @@ import es.serversurvival.deudas._shared.mysql.Deuda;
 import es.serversurvival.deudas._shared.mysql.Deudas;
 import es.serversurvival.empresas._shared.mysql.Empresa;
 import es.serversurvival.empresas._shared.mysql.Empresas;
-import es.serversurvival.jugadores._shared.mySQL.Jugador;
-import es.serversurvival.jugadores._shared.mySQL.JugadoresRepository;
+import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.mySQL.MySQLJugadoresRepository;
 import es.serversurvival.mensajes._shared.mysql.Mensajes;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -43,6 +42,7 @@ public final class Funciones {
     public static final SimpleDateFormat DATE_FORMATER_LEGACY = new SimpleDateFormat("yyyy-MM-dd");
     public static final DateTimeFormatter DATE_FORMATER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final ExecutorService POOL = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    public static final ObjectMapper MAPPER = new ObjectMapper();
 
     private Funciones () {}
 
@@ -151,7 +151,7 @@ public final class Funciones {
 
     public static Map<String, Double> crearMapaTopPatrimonioPlayers (boolean creciente) {
         Deudas deudasMySQL = Deudas.INSTANCE;
-        JugadoresRepository jugadoresMySQL = JugadoresRepository.INSTANCE;
+        MySQLJugadoresRepository jugadoresMySQL = MySQLJugadoresRepository.INSTANCE;
         PosicionesAbiertas posicionesAbiertasMySQL = PosicionesAbiertas.INSTANCE;
         Empresas empresasMySQL = Empresas.INSTANCE;
         LlamadasApi llamadasApiMySQL = LlamadasApi.INSTANCE;

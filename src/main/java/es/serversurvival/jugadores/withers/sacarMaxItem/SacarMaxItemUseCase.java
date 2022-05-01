@@ -1,7 +1,7 @@
 package es.serversurvival.jugadores.withers.sacarMaxItem;
 
 import es.serversurvival.Pixelcoin;
-import es.serversurvival.jugadores._shared.mySQL.Jugador;
+import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival.jugadores.withers.CambioPixelcoins;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;

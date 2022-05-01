@@ -2,7 +2,7 @@ package es.serversurvival.jugadores.vercuenta;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
-import es.serversurvival.jugadores._shared.mySQL.Jugador;
+import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import org.bukkit.ChatColor;

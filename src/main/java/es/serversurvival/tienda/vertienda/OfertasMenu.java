@@ -1,7 +1,7 @@
 package es.serversurvival.tienda.vertienda;
 
 import es.jaime.EventListener;
-import es.serversurvival.jugadores._shared.mySQL.Jugador;
+import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival.tienda.comprar.ItemCompradoEvento;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.MenuManager;

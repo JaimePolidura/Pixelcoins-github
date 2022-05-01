@@ -9,7 +9,7 @@ import es.serversurvival.bolsa._shared.ordenespremarket.mysql.AccionOrden;
 import es.serversurvival.bolsa._shared.ordenespremarket.mysql.OrdenPreMarket;
 import es.serversurvival.bolsa.vendercorto.VenderCortoUseCase;
 import es.serversurvival.bolsa.venderlargo.VenderLargoUseCase;
-import es.serversurvival.jugadores._shared.mySQL.Jugador;
+import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import main.Pair;
 
