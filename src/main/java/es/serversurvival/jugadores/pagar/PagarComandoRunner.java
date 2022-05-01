@@ -18,11 +18,10 @@ import static org.bukkit.ChatColor.GOLD;
 @Command(
         value = "pagar",
         args = {"destino", "pixelcoins"},
-        explanation = "Pagar a un jugador con tus pixelcoins"
+        explanation = "Pagar a un jugador online con tus pixelcoins"
 )
 public class PagarComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<PagarComando> {
     private final PagarUseCase pagarUseCase;
-    private final String usoIncorrecto = DARK_RED + "/pagar <jugador> <pixelcoins>";
 
     public PagarComandoRunner() {
         this.pagarUseCase = new PagarUseCase();
@@ -33,16 +32,7 @@ public class PagarComandoRunner extends PixelcoinCommand implements CommandRunne
         String pagador = sender.getName();
         double pixelcoins = comando.getPixelcoins();
 
-        ValidationResult result = startValidating(pixelcoins, PositiveNumber, SuficientesPixelcoins.of(pagador, pixelcoins))
-                .and(comando.getDestino() , JugadorRegistrado, NotEqualsIgnoreCase.of(pagador))
-                .validateAll();
-
-        if(result.isFailed()){
-            sender.sendMessage(DARK_RED + result.getMessage());
-            return;
-        }
-
-        this.pagarUseCase.realizarPagoManual(pagador, comando.getDestino().getName(), pixelcoins);
+        this.pagarUseCase.realizarPago(pagador, comando.getDestino().getName(), pixelcoins);
 
         sendMessage((Player) sender, comando.getDestino().getName(), pixelcoins);
     }

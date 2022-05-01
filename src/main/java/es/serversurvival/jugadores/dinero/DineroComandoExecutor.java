@@ -9,7 +9,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@Command(value = "dinero", explanation = "Ver tus pixelcoins")
+@Command(
+        value = "dinero",
+        explanation = "Ver tus pixelcoins que tengas en efectivo"
+)
 public class DineroComandoExecutor extends PixelcoinCommand implements CommandRunnerNonArgs {
     @Override
     public void execute(CommandSender commandSender) {

@@ -19,13 +19,13 @@ public final class JugadoresRepositoryService {
         this.jugadoresRepository = DependecyContainer.get(JugadoresRepository.class);
     }
 
-    public void save(Jugador jugador) {
+    public synchronized void save(Jugador jugador) {
         this.jugadoresRepository.save(jugador);
         this.jugadoresCache.add(jugador.getNombre(), jugador);
     }
 
     public Optional<Jugador> findByJugadorId(UUID jugadorId) {
-        var jugadorOptional = this.jugadoresRepository.findByJugadorId(jugadorId);
+        var jugadorOptional = this.jugadoresRepository.findById(jugadorId);
 
         jugadorOptional.ifPresent(jugador -> this.jugadoresCache.add(jugador.getNombre(), jugador));
 

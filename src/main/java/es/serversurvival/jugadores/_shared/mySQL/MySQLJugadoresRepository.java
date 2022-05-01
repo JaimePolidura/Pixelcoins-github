@@ -122,33 +122,6 @@ public final class MySQLJugadoresRepository extends MySQLRepository {
         return jugadoresMap;
     }
 
-    public int getPosicionTopRicos (String player){
-        Map<String, Double> topPlayers = Funciones.crearMapaTopPatrimonioPlayers(false);
-
-        int pos = 1;
-        for(Map.Entry<String, Double> entry: topPlayers.entrySet()){
-            if(entry.getKey().equalsIgnoreCase(player))
-                return pos;
-            else
-                pos++;
-        }
-
-        return -1;
-    }
-
-    public int getPosicionTopVendedores (String player){
-        List<Jugador> jugadores = this.getAllJugadores();
-
-        jugadores.sort(Comparator.comparingInt(Jugador::getNVentas));
-
-        int pos = 1;
-        for(Jugador jugador : jugadores){
-            if(jugador.getNombre().equalsIgnoreCase(player)) return pos;
-            pos++;
-        }
-        return -1;
-    }
-
     @Override
     protected Jugador buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new Jugador(

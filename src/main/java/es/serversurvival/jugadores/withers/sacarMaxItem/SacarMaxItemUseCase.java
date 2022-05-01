@@ -1,9 +1,10 @@
 package es.serversurvival.jugadores.withers.sacarMaxItem;
 
 import es.serversurvival.Pixelcoin;
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
 import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival.jugadores.withers.CambioPixelcoins;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -11,14 +12,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public final class SacarMaxItemUseCase implements AllMySQLTablesInstances {
-    public static final SacarMaxItemUseCase INSTANCE = new SacarMaxItemUseCase();
+public final class SacarMaxItemUseCase {
+    private final JugadoresService jugadoresService;
+    public static SacarMaxItemUseCase INSTANCE = new SacarMaxItemUseCase();
 
-    private SacarMaxItemUseCase () {}
+    public SacarMaxItemUseCase(){
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+    }
 
     public void sacarMaxItem(String tipo, Jugador jugador) {
-        int pixelcoinsJugador = (int) jugadoresMySQL.getJugador(jugador.getNombre()).getPixelcoins();
-
         CambioPixelcoins.sacarMaxItem(tipo, jugador, jugador.getNombre());
     }
 
@@ -46,7 +48,7 @@ public final class SacarMaxItemUseCase implements AllMySQLTablesInstances {
         }
 
         int coste = (CambioPixelcoins.DIAMANTE * bloquesAnadidos * 9) + (CambioPixelcoins.DIAMANTE * diamantesAnadidos);
-        jugadoresMySQL.setPixelcoin(player.getName(), dineroJugador - coste);
+        this.jugadoresService.save(jugador.decrementPixelcoinsBy(coste));
 
         Pixelcoin.publish(new ItemSacadoMaxEvento(jugador, "DIAMOND", coste));
     }
@@ -75,7 +77,7 @@ public final class SacarMaxItemUseCase implements AllMySQLTablesInstances {
         }
 
         int coste = (CambioPixelcoins.LAPISLAZULI * bloquesAnadidos * 9) + (CambioPixelcoins.LAPISLAZULI * diamantesAnadidos);
-        jugadoresMySQL.setPixelcoin(player.getName(), dineroJugador - coste);
+        this.jugadoresService.save(jugador.decrementPixelcoinsBy(coste));
 
         Pixelcoin.publish(new ItemSacadoMaxEvento(jugador, "LAPIS_LAZULI", coste));
     }
@@ -95,7 +97,7 @@ public final class SacarMaxItemUseCase implements AllMySQLTablesInstances {
         }
 
         int coste = (CambioPixelcoins.CUARZO * bloquesAnadidos);
-        jugadoresMySQL.setPixelcoin(player.getName(), pixelcoinsJugador - coste);
+        this.jugadoresService.save(jugador.decrementPixelcoinsBy(coste));
 
         Pixelcoin.publish(new ItemSacadoMaxEvento(jugador, "QUARTZ_BLOCK", coste));
     }

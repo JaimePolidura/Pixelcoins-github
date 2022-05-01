@@ -5,7 +5,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public final class OnPlayerJoin implements Listener {
-    private final SetUpJugadorUseCase useCase = SetUpJugadorUseCase.INSTANCE;
+    private final SetUpJugadorUseCase useCase;
+
+    public OnPlayerJoin(){
+        this.useCase = new SetUpJugadorUseCase();
+    }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent evento) {

@@ -1,11 +1,13 @@
 package es.serversurvival.jugadores.perfil;
 
 import es.jaimetruman.ItemBuilder;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.PosicionCerrada;
 import es.serversurvival.cuentaweb.Cuenta;
 import es.serversurvival.deudas._shared.mysql.Deuda;
 import es.serversurvival.empleados._shared.mysql.Empleado;
 import es.serversurvival.empresas._shared.mysql.Empresa;
+import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
 import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import es.serversurvival._shared.utils.Funciones;
@@ -18,10 +20,20 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.*;
+
 public class PerfilInventoryFactory extends InventoryFactory {
-    private final List<Integer> posicionesCristales = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46 , 47, 48, 49, 50, 51, 52, 53);
+    private final List<Integer> posicionesCristales;
+    private final JugadoresService jugadoresService;
+
+    public PerfilInventoryFactory(){
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+        this.posicionesCristales = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27,
+                35, 36, 44, 45, 46 , 47, 48, 49, 50, 51, 52, 53);
+    }
 
     @Override
     protected Inventory buildInventory(String player) {
@@ -115,7 +127,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
         metaStats.setOwningPlayer(Bukkit.getPlayer(nombreJugador));
         metaStats.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER EL TOP JUGADORES");
 
-        Jugador jugador = jugadoresMySQL.getJugador(nombreJugador);
+        Jugador jugador = jugadoresService.getJugadorByNombre(nombreJugador);
 
         if(jugador == null)
             return stats;
@@ -134,12 +146,13 @@ public class PerfilInventoryFactory extends InventoryFactory {
         if(ingresos == 0){
             rentabilidad = -100;
         }else{
-            rentabilidad = Funciones.rentabilidad(ingresos, beneficios);
+            rentabilidad = rentabilidad(ingresos, beneficios);
         }
 
         int nventas = jugador.getNVentas();
-        int posTopRicps = jugadoresMySQL.getPosicionTopRicos(nombreJugador);
-        int posTopVendedores = jugadoresMySQL.getPosicionTopVendedores(nombreJugador);
+        int posTopRicps = getPoisitionOfKeyInMap(crearMapaTopPatrimonioPlayers(false), k -> k.equalsIgnoreCase(nombreJugador));
+        int posTopVendedores = jugadoresService.sortJugadoresBy(Comparator.comparingInt(Jugador::getNVentas)).indexOf(jugador) + 1;
+
         List<String> lore = new ArrayList<>();
         lore.add("  ");
         lore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "       TUS ESTADISTICAS");
@@ -170,7 +183,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
         lore.add(ChatColor.GOLD + "Nº de ventas en la tienda: " + nventas);
         lore.add(ChatColor.GOLD + "Posicion en top vendedores: " + posTopVendedores);
         lore.add("   ");
-        Jugador jugadorAVer = jugadoresMySQL.getJugador(nombreJugador);
+        Jugador jugadorAVer = jugadoresService.getJugadorByNombre(nombreJugador);
         lore.add(ChatColor.GOLD + "Numero de veces pagada la deuda: " + jugadorAVer.getNPagosDeuda());
         lore.add(ChatColor.GOLD + "Numero de veces de inpago de la deuda: " + ChatColor.RED +  jugadorAVer.getNInpagosDeuda());
 
@@ -187,7 +200,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
 
         Cuenta cuenta = cuentasMySQL.getCuenta(jugador);
         if(cuenta == null){
-            int numeroCuenta = jugadoresMySQL.getJugador(jugador).getNumeroVerificacionCuenta();
+            int numeroCuenta = jugadoresService.getJugadorByNombre(jugador).getNumeroVerificacionCuenta();
             lore.add(ChatColor.DARK_AQUA + "No tienes cuenta, para registrarse:");
             lore.add(ChatColor.DARK_AQUA + "" + ChatColor.UNDERLINE + "http://serversurvival.ddns.net/registrarse");
             lore.add(ChatColor.DARK_AQUA + "Tu numero de cuenta: " + ChatColor.BOLD + numeroCuenta);

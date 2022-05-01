@@ -1,13 +1,52 @@
 package es.serversurvival.jugadores.pagar;
 
+import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
+import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.serversurvival.Pixelcoin;
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.jugadores._shared.mySQL.MySQLJugadoresRepository;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
+import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 
 public final class PagarUseCase implements AllMySQLTablesInstances {
-    public void realizarPagoManual(String nombrePagador, String nombrePagado, double cantidad) {
-        MySQLJugadoresRepository.INSTANCE.realizarTransferenciaConEstadisticas(nombrePagador, nombrePagado, cantidad);
+    private final JugadoresService jugadoresService;
 
-        Pixelcoin.publish(new JugadorPagoManualEvento(nombrePagador, nombrePagado, cantidad));
+    public PagarUseCase(){
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+    }
+
+    public void realizarPago(String nombrePagador, String nombrePagado, double pixelcoins) {
+        this.ensureNotSamePlayer(nombrePagador, nombrePagado);
+        this.ensureCorrectFormatPixelcoins(pixelcoins);
+        var jugadorPagado = this.ensureJugadorExists(nombrePagado);
+        var jugadorPagador = this.ensureJugadorExists(nombrePagador);
+        this.ensureEnoughPixelcoins(jugadorPagador, pixelcoins);
+
+        this.jugadoresService.realizarTransferenciaConEstadisticas(jugadorPagador, jugadorPagado, pixelcoins);
+
+        Pixelcoin.publish(new JugadorPagoManualEvento(nombrePagador, nombrePagado, pixelcoins));
+    }
+
+    private void ensureNotSamePlayer(String pagador, String pagado){
+        if(pagador.equals(pagado)){
+            throw new CannotBeYourself("No te pudes pagar a ti mismo");
+        }
+    }
+
+    private void ensureCorrectFormatPixelcoins(double pixelcoins) {
+        if(pixelcoins <= 0){
+            throw new IllegalQuantity("Las pixelcoins tienen que ser un numero positivo superior a 0");
+        }
+    }
+
+    private void ensureEnoughPixelcoins(Jugador jugador, double pixelcoins){
+        if(pixelcoins > jugador.getPixelcoins())
+            throw new NotEnoughPixelcoins("No tienes las suficientes pixelcoins para realizar el pago");
+    }
+
+    private Jugador ensureJugadorExists(String nombre){
+        return this.jugadoresService.getJugadorByNombre(nombre);
     }
 }

@@ -1,35 +1,37 @@
 package es.serversurvival.jugadores.setupjugadorunido;
 
 import es.serversurvival.Pixelcoin;
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
 import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import org.bukkit.entity.Player;
 
-public final class SetUpJugadorUseCase implements AllMySQLTablesInstances {
-    public static final SetUpJugadorUseCase INSTANCE = new SetUpJugadorUseCase();
+public final class SetUpJugadorUseCase {
+    private final JugadoresService jugadoresService;
 
-    private SetUpJugadorUseCase () {}
+    public SetUpJugadorUseCase(){
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+    }
 
     public void setUpJugadorUnido (Player player) {
-        Jugador jugadorPorUUID = jugadoresMySQL.getJugadorUUID(player.getUniqueId().toString());
+        Jugador jugadorPorUUID = jugadoresService.getJugadorById(player.getUniqueId());
 
         if(jugadorPorUUID == null){
-            Jugador jugadorPorNombre = jugadoresMySQL.getJugador(player.getName());
+            Jugador jugadorPorNombre = jugadoresService.getJugadorByNombre(player.getName());
 
             if(jugadorPorNombre == null){
-                jugadoresMySQL.nuevoJugador(player.getName(), 0, 0, 0, 0, 0, 0, player.getUniqueId().toString());
-            }else{
-                jugadoresMySQL.setUuid(player.getName(), player.getUniqueId().toString());
+                jugadoresService.save(player.getUniqueId(), player.getName());
             }
         }else{
             if(!player.getName().equalsIgnoreCase(jugadorPorUUID.getNombre())){
-                jugadoresMySQL.cambiarNombreJugador(jugadorPorUUID.getNombre(), player.getName());
+                jugadoresService.save(jugadorPorUUID.withNombre(jugadorPorUUID.getNombre()));
 
                 Pixelcoin.publish(new JugadorCambiadoDeNombreEvento(jugadorPorUUID.getNombre(), player.getName()));
             }
 
             if(jugadorPorUUID.getNumeroVerificacionCuenta() == 0){
-                jugadoresMySQL.setNumeroCuenta(player.getName(), jugadoresMySQL.generearNumeroCuenta());
+                jugadoresService.save(jugadorPorUUID.withNumeroCuenta(jugadoresService.generearNumeroCuenta()));
             }
         }
     }

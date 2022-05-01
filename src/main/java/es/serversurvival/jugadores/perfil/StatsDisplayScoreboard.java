@@ -1,9 +1,11 @@
 package es.serversurvival.jugadores.perfil;
 
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas._shared.mysql.Empresa;
 import es.serversurvival._shared.scoreboards.SingleScoreboard;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.utils.MinecraftUtils;
+import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -13,13 +15,18 @@ import java.util.List;
 import static es.serversurvival._shared.utils.MinecraftUtils.addLineToScoreboard;
 
 public class StatsDisplayScoreboard implements SingleScoreboard {
+    private final JugadoresService jugadoresService;
+
+    public StatsDisplayScoreboard(){
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+    }
 
     @Override
     public Scoreboard createScoreborad(String jugador) {
         Scoreboard scoreboard = MinecraftUtils.createScoreboard("dinero", ChatColor.GOLD + "" + ChatColor.BOLD + "JUGADOR");
         Objective objective = scoreboard.getObjective("dinero");
 
-        double dineroJugador = jugadoresMySQL.getJugador(jugador).getPixelcoins();
+        double dineroJugador = jugadoresService.getJugadorByNombre(jugador).getPixelcoins();
 
         addLineToScoreboard(objective, ChatColor.GOLD + "Tus ahorros: " + ChatColor.GREEN + formatea.format(Math.round(dineroJugador)) + " PC", 1);
         addLineToScoreboard(objective, "     ", 0);

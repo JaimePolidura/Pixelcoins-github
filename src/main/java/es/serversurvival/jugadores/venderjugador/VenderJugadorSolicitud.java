@@ -1,9 +1,11 @@
 package es.serversurvival.jugadores.venderjugador;
 
+import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
 import es.serversurvival._shared.menus.solicitudes.Solicitud;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival.jugadores.pagar.PagarUseCase;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -16,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class VenderJugadorSolicitud extends Menu implements Solicitud {
-    private final VenderJugadorUseCase useCase = VenderJugadorUseCase.INSTANCE;
+    private final PagarUseCase pagarUseCase;
 
     private boolean isClicked = false;
 
@@ -34,6 +36,7 @@ public class VenderJugadorSolicitud extends Menu implements Solicitud {
         this.precio = precio;
         this.inventory = buildInventory();
         this.slotItemVender = jugadorVendedor.getInventory().getHeldItemSlot();
+        this.pagarUseCase = new PagarUseCase();
 
         enviarSolicitud();
     }
@@ -77,7 +80,7 @@ public class VenderJugadorSolicitud extends Menu implements Solicitud {
     public void aceptar() {
         isClicked = true;
 
-        useCase.vender(jugadorAVender.getName(), jugadorVendedor.getName(), precio, itemAVender.getType().toString());
+        this.pagarUseCase.realizarPago(jugadorAVender.getName(), jugadorVendedor.getName(), precio);
 
         jugadorAVender.getInventory().addItem(itemAVender);
         jugadorVendedor.getInventory().clear(slotItemVender);
@@ -87,6 +90,8 @@ public class VenderJugadorSolicitud extends Menu implements Solicitud {
 
         jugadorAVender.sendMessage(ChatColor.GOLD + "Has comprado el item");
         jugadorAVender.playSound(jugadorAVender.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+
+        Pixelcoin.publish(new ItemVendidoJugadorEvento(jugadorAVender.getName(), jugadorVendedor.getName(), precio, itemAVender.getType().toString()));
 
         closeMenu();
     }

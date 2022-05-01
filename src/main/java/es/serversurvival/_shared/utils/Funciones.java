@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -400,6 +399,19 @@ public final class Funciones {
         } else {
             Mensajes.INSTANCE.nuevoMensaje("", nombreJugador, mensajeOffline);
         }
+    }
+
+    public static <K, V> int getPoisitionOfKeyInMap(Map<K, V> map, Predicate<K> keyMatcher){
+        int position = 0;
+
+        for(var entry : map.entrySet()){
+            position++;
+
+            if(keyMatcher.test(entry.getKey()))
+                return position;
+        }
+
+        return -1;
     }
 
     public static<K, V> Map<K, List<V>> mergeMapList (List<V> toIteratem, Function<V, K> keyMapper) {

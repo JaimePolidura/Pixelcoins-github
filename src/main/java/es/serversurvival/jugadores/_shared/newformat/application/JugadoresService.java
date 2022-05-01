@@ -23,7 +23,7 @@ public final class JugadoresService {
                 0, 0, 0, 0, this.generearNumeroCuenta()));
     }
 
-    private int generearNumeroCuenta () {
+    public int generearNumeroCuenta () {
         return (int) (Math.random() * 99999);
     }
 
@@ -69,17 +69,12 @@ public final class JugadoresService {
         this.jugadoresRepositoryService.save(pagadoChangedPixelcoins);
     }
 
-    public void realizarTransferenciaConEstadisticas (String nombrePagador, String nombrePagado, double pixelcoins) {
-        Jugador pagador =  this.getJugadorByNombre(nombrePagador)
-                .decrementPixelcoinsBy(pixelcoins)
-                .incrementGastosBy(pixelcoins);
+    public void realizarTransferenciaConEstadisticas (Jugador pagador, Jugador pagado, double pixelcoins) {
+        this.jugadoresRepositoryService.save(pagador.decrementPixelcoinsBy(pixelcoins)
+                .incrementGastosBy(pixelcoins));
 
-        Jugador pagado = this.getJugadorByNombre(nombrePagado)
-                .incrementPixelcoinsBy(pixelcoins)
+        this.jugadoresRepositoryService.save(pagado.incrementPixelcoinsBy(pixelcoins)
                 .incrementNVentas()
-                .incrementIngresosBy(pixelcoins);
-
-        this.jugadoresRepositoryService.save(pagador);
-        this.jugadoresRepositoryService.save(pagado);
+                .incrementIngresosBy(pixelcoins));
     }
 }

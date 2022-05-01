@@ -8,6 +8,7 @@ import es.jaimetruman.task.BukkitTimeUnit;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.mysql.MySQLRepository;
+import es.serversurvival._shared.mysql.newformat.MySQLConfiguration;
 import es.serversurvival.jugadores._shared.newformat.application.JugadoresRepositoryService;
 import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
 import es.serversurvival.jugadores._shared.newformat.domain.JugadoresRepository;
@@ -87,8 +88,13 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
 
     private void loadAllDependenciesContainer() {
         DependecyContainer.addAll(new HashMap<>() {{
-            put(JugadoresRepository.class, new MySQLJugadoresRepository());
+            put(MySQLConfiguration.class, new MySQLConfiguration());
+
             put(JugadoresService.class, new JugadoresService());
+        }});
+
+        DependecyContainer.addAll(new HashMap<>(){{
+            put(JugadoresRepository.class, new MySQLJugadoresRepository(DependecyContainer.get(MySQLConfiguration.class)));
         }});
     }
 }

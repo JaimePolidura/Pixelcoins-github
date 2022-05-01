@@ -14,6 +14,8 @@ public enum CambioPixelcoins {
     public static final int CUARZO = 12;
     public static final int LAPISLAZULI = 5;
 
+    private static final SacarItemUseCase sacarItemUseCase = new SacarItemUseCase();
+
     public final int cambio;
     private final FunctionStrategy functionStrategy;
 
@@ -27,7 +29,7 @@ public enum CambioPixelcoins {
     }
 
     public static void sacarItem (Jugador jugador, String item) {
-        SacarItemUseCase.INSTANCE.sacarItem(jugador, item, CambioPixelcoins.getCambioTotal(item, 1));
+        sacarItemUseCase.sacarItem(jugador, item, CambioPixelcoins.getCambioTotal(item, 1));
     }
 
     public static boolean suficientesPixelcoins (String material, int cantidad, double pixelcoinsJugador) {

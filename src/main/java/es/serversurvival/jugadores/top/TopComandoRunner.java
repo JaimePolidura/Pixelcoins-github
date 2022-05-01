@@ -8,7 +8,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
-@Command(value = "top", explanation = "Ver el top ricos, pobres, mejores vendedores etc")
+@Command(
+        value = "top",
+        explanation = "Ver el top ricos, pobres, mejores vendedores etc"
+)
 public class TopComandoRunner extends PixelcoinCommand implements CommandRunnerNonArgs {
     public final static String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "              TOP";
 

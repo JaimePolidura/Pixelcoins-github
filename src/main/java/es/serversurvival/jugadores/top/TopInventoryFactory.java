@@ -1,8 +1,10 @@
 package es.serversurvival.jugadores.top;
 
 import es.jaimetruman.ItemBuilder;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.PosicionCerrada;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.TipoPosicion;
+import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
 import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import es.serversurvival._shared.utils.Funciones;
@@ -13,11 +15,18 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TopInventoryFactory extends InventoryFactory {
+    private final JugadoresService jugadoresService;
+
+    public TopInventoryFactory(){
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+    }
+
     public static final String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "              TOP";
     private List<InfoJugador> infoJugadores = new ArrayList<>();
 
@@ -74,7 +83,8 @@ public class TopInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildTopVendedoresJugadoresItem () {
-        List<Jugador> listaVendedores = jugadoresMySQL.getTopVendedores();
+        List<Jugador> listaVendedores = this.jugadoresService.sortJugadoresBy((j1, j2) -> j2.getNVentas() - j1.getNVentas());
+
         String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP VENDEDORES";
         List<String> lore = new ArrayList<>();
 
@@ -90,7 +100,7 @@ public class TopInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildTopFiablesJugadoresItem () {
-        List<Jugador> listaFiables = jugadoresMySQL.getTopFiables();
+        List<Jugador> listaFiables = this.jugadoresService.sortJugadoresBy((j1, j2) -> j2.getNPagosDeuda() - j1.getNPagosDeuda());
         String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP MENOS MOROSOS";
         List<String> lore = new ArrayList<>();
 
@@ -106,7 +116,7 @@ public class TopInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildTopMenosFiablesJugadoresItem () {
-        List<Jugador> listaMenosFiables = jugadoresMySQL.getTopMenosFiables();
+        List<Jugador> listaMenosFiables = this.jugadoresService.sortJugadoresBy((j1, j2) -> j2.getNInpagosDeuda() - j1.getNInpagosDeuda());
         String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP MOROSOS";
         List<String> lore = new ArrayList<>();
 

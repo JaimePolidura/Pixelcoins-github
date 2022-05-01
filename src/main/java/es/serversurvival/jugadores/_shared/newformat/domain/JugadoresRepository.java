@@ -7,7 +7,7 @@ import java.util.UUID;
 public interface JugadoresRepository {
     void save(Jugador jugador);
 
-    Optional<Jugador> findByJugadorId(UUID jugadorId);
+    Optional<Jugador> findById(UUID jugadorId);
 
     Optional<Jugador> findByNombre(String nombre);
 

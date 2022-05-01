@@ -1,11 +1,12 @@
 package es.serversurvival.jugadores.withers.sacarMaxItem;
 
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
 import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival.jugadores.withers.CambioPixelcoins;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
 import es.serversurvival._shared.menus.Clickable;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -17,6 +18,8 @@ import org.bukkit.inventory.ItemStack;
 import static org.bukkit.ChatColor.DARK_RED;
 
 public class SacarMaxItemMenu extends Menu implements Clickable {
+    private final JugadoresService jugadoresService;
+
     private final SacarMaxItemUseCase useCase;
     private Inventory inventory;
     private Player player;
@@ -25,6 +28,7 @@ public class SacarMaxItemMenu extends Menu implements Clickable {
         this.player = player;
         this.inventory = InventoryCreator.createInventoryMenu(new SacarMaxItemInventoryFactory(), player.getName());
         this.useCase = SacarMaxItemUseCase.INSTANCE;
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
 
         openMenu();
     }
@@ -53,7 +57,7 @@ public class SacarMaxItemMenu extends Menu implements Clickable {
         Player player = (Player) event.getWhoClicked();
         String tipoItem = itemClickeado.getType().toString();
         int espacios = Funciones.getEspaciosOcupados(player.getInventory());
-        Jugador jugador = AllMySQLTablesInstances.jugadoresMySQL.getJugador(player.getName());
+        Jugador jugador = this.jugadoresService.getJugadorByNombre(player.getName());
 
         if(espacios == 36){
             player.sendMessage(ChatColor.DARK_RED + "Tienes el inventario libre");
