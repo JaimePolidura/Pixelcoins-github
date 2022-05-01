@@ -8,4 +8,6 @@ public interface Cache<K, V> {
     void add(K key, V value);
 
     Optional<V> get(K key);
+
+    void clear();
 }

@@ -60,9 +60,9 @@ public abstract class MySQLRepository implements AllMySQLTablesInstances{
         }
     }
 
-    protected abstract Aggregate buildObjectFromResultSet (ResultSet rs) throws SQLException;
+    protected abstract TablaObjeto buildObjectFromResultSet (ResultSet rs) throws SQLException;
 
-    protected Aggregate buildObjectFromQuery(Select query) {
+    protected TablaObjeto buildObjectFromQuery(Select query) {
         try {
             ResultSet rs = executeQuery(query);
             rs.next();

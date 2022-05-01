@@ -1,13 +1,14 @@
 package es.serversurvival.jugadores._shared.newformat.domain;
 
 import es.jaime.javaddd.domain.Aggregate;
+import es.serversurvival._shared.mysql.TablaObjeto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class Jugador extends Aggregate {
+public final class Jugador extends Aggregate implements TablaObjeto {
     @Getter private final UUID jugadorId;
     @Getter private final String nombre;
     @Getter private final double pixelcoins;

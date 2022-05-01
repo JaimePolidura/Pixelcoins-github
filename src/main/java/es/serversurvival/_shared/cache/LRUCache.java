@@ -1,12 +1,10 @@
 package es.serversurvival._shared.cache;
 
-import es.serversurvival._shared.utils.Funciones;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.LinkedList;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class LRUCache<K, V> implements Cache<K, V>{
     //Last index: most not recently used
@@ -42,6 +40,11 @@ public abstract class LRUCache<K, V> implements Cache<K, V>{
         return Optional.empty();
     }
 
+    @Override
+    public void clear() {
+        this.items.clear();
+    }
+
     private void removeIfExists(K key, V value){
         this.items.remove(new CacheItem<>(key, value));
     }
@@ -56,16 +59,16 @@ public abstract class LRUCache<K, V> implements Cache<K, V>{
     }
 
     private void removeLast(){
-        this.items.remove(this.items.size());
+        this.items.removeLast();
     }
 
     private boolean hasCacheExceedCapacity(){
-        return this.items.size() == maxItemsCapacity();
+        return this.items.size() > maxItemsCapacity();
     }
 
     @AllArgsConstructor
-    private record CacheItem<K, V>(
-            @Getter K key,
-            @Getter V value
-    ) {}
+    private static class CacheItem<K, V>{
+        @Getter private final K key;
+        @Getter private final V value;
+    }
 }
