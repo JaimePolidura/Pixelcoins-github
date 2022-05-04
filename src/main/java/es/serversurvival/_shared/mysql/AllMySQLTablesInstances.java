@@ -9,7 +9,6 @@ import es.serversurvival.deudas._shared.mysql.Deudas;
 import es.serversurvival.empleados._shared.mysql.Empleados;
 import es.serversurvival.empresas._shared.mysql.Empresas;
 import es.serversurvival.jugadores._shared.mySQL.MySQLJugadoresRepository;
-import es.serversurvival.mensajes._shared.mysql.Mensajes;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.tienda._shared.mySQL.encantamientos.Encantamientos;
 import es.serversurvival.tienda._shared.mySQL.ofertas.Ofertas;
@@ -30,7 +29,6 @@ public interface AllMySQLTablesInstances {
     Encantamientos encantamientosMySQL = Encantamientos.INSTANCE;
     MySQLJugadoresRepository jugadoresMySQL = MySQLJugadoresRepository.INSTANCE;
     LlamadasApi llamadasApiMySQL = LlamadasApi.INSTANCE;
-    Mensajes mensajesMySQL = Mensajes.INSTANCE;
     Ofertas ofertasMySQL = Ofertas.INSTANCE;
     PosicionesAbiertas posicionesAbiertasMySQL = PosicionesAbiertas.INSTANCE;
     PosicionesCerradas posicionesCerradasMySQL = PosicionesCerradas.INSTANCE;

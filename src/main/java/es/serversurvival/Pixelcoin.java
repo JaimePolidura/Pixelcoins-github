@@ -9,10 +9,11 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival._shared.mysql.newformat.MySQLConfiguration;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresRepositoryService;
 import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
 import es.serversurvival.jugadores._shared.newformat.domain.JugadoresRepository;
 import es.serversurvival.jugadores._shared.newformat.infrastructure.MySQLJugadoresRepository;
+import es.serversurvival.mensajes._shared.application.MensajesService;
+import es.serversurvival.mensajes._shared.domain.MensajesRepository;
 import es.serversurvival.webconnection.RabbitMQConsumerTask;
 import es.serversurvival._shared.scoreboards.ScoreBoardManager;
 import es.serversurvival._shared.scoreboards.ScoreboardUpdateTask;
@@ -87,14 +88,20 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
     }
 
     private void loadAllDependenciesContainer() {
-        DependecyContainer.addAll(new HashMap<>() {{
-            put(MySQLConfiguration.class, new MySQLConfiguration());
+        var mysqlCOnfiguration = new MySQLConfiguration();
 
-            put(JugadoresService.class, new JugadoresService());
+        DependecyContainer.addAll(new HashMap<>() {{
+            put(MySQLConfiguration.class, mysqlCOnfiguration);
         }});
 
         DependecyContainer.addAll(new HashMap<>(){{
             put(JugadoresRepository.class, new MySQLJugadoresRepository(DependecyContainer.get(MySQLConfiguration.class)));
+            put(MensajesRepository.class, new MySQLJugadoresRepository(DependecyContainer.get(MySQLConfiguration.class)));
+        }});
+
+        DependecyContainer.addAll(new HashMap<>(){{
+            put(JugadoresService.class, new JugadoresService());
+            put(MensajesService.class, new MensajesService());
         }});
     }
 }

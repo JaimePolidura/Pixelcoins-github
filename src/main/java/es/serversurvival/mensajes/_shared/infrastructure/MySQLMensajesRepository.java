@@ -1,0 +1,53 @@
+package es.serversurvival.mensajes._shared.infrastructure;
+
+import es.jaime.configuration.DatabaseConfiguration;
+import es.jaime.mapper.EntityMapper;
+import es.jaime.repository.DataBaseRepository;
+import es.jaimetruman.delete.Delete;
+import es.jaimetruman.select.Select;
+import es.serversurvival.mensajes._shared.domain.MensajesRepository;
+import es.serversurvival.mensajes._shared.domain.Mensaje;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.UUID;
+
+public final class MySQLMensajesRepository extends DataBaseRepository<Mensaje, UUID> implements MensajesRepository {
+    private static final String TABLE_NAME = "mensajes";
+    private static final String ID_FIELD_NAME = "id";
+
+    protected MySQLMensajesRepository(DatabaseConfiguration databaseConnection) {
+        super(databaseConnection);
+    }
+
+    @Override
+    public void save(Mensaje mensaje) {
+        super.save(mensaje);
+    }
+
+    @Override
+    public List<Mensaje> findMensajesByDestinatario(String destinatario) {
+        return buildListFromQuery(Select.from(TABLE_NAME).where("destinatario").equal(destinatario));
+    }
+
+    @Override
+    public void deleteByDestinatario(String destinatario) {
+        super.execute(Delete.from(TABLE_NAME).where("destinatario").equal(destinatario));
+    }
+
+    @Override
+    protected EntityMapper<Mensaje> entityMapper() {
+        return EntityMapper.table(TABLE_NAME)
+                .idField(ID_FIELD_NAME).classToMap(Mensaje.class)
+                .build();
+    }
+
+    @Override
+    public Mensaje buildObjectFromResultSet(ResultSet rs) throws SQLException {
+        return new Mensaje(UUID.fromString(rs.getString("id")),
+                rs.getString("enviador"),
+                rs.getString("destinatario"),
+                rs.getString("mensaje"));
+    }
+}

@@ -1,19 +1,23 @@
 package es.serversurvival.mensajes.ver;
 
-import es.serversurvival.mensajes._shared.mysql.Mensaje;
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.mensajes._shared.application.MensajesService;
+import es.serversurvival.mensajes._shared.domain.Mensaje;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 import java.util.List;
 
 public final class VerMensajesUseCase implements AllMySQLTablesInstances {
-    public static final VerMensajesUseCase INSTANCE = new VerMensajesUseCase();
+    private final MensajesService mensajesService;
 
-    private VerMensajesUseCase () {}
+    private VerMensajesUseCase () {
+        this.mensajesService = DependecyContainer.get(MensajesService.class);
+    }
 
     public List<Mensaje> getMensajes(String jugador) {
-        List<Mensaje> mensajes = mensajesMySQL.getMensajesJugador(jugador);
+        List<Mensaje> mensajes = this.mensajesService.findMensajesByDestinatario(jugador);
 
-        mensajesMySQL.borrarMensajes(jugador);
+        this.mensajesService.deleteByDestinatario(jugador);
 
         return mensajes;
     }

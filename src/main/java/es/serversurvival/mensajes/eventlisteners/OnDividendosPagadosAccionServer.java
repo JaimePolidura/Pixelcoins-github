@@ -1,4 +1,4 @@
-package es.serversurvival.mensajes._shared.eventlisteners;
+package es.serversurvival.mensajes.eventlisteners;
 
 import es.jaime.EventListener;
 import es.serversurvival.empresas.pagardividendos.EmpresaServerDividendoPagadoEvento;

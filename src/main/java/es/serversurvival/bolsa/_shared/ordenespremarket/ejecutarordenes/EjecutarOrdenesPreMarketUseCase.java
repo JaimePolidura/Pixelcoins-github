@@ -81,9 +81,6 @@ public final class EjecutarOrdenesPreMarketUseCase implements AllMySQLTablesInst
         }
 
         comprarLargoUseCase.abrir(ACCIONES, ticker, nombreValor, "acciones", precio, cantidad, jugador);
-
-        //TODO Desacoplar
-        mensajesMySQL.nuevoMensaje("", jugador, "Se ha ejecutado la orden de: " + orden.getNombre_activo() + " -" + cantidad * precio + " PC");
     }
 
     private void ejecutarOrdenCompraCorto (OrdenPreMarket orden) {

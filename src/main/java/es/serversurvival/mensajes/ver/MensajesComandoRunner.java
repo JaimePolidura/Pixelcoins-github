@@ -2,24 +2,31 @@ package es.serversurvival.mensajes.ver;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
-import es.serversurvival.mensajes._shared.mysql.Mensaje;
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.mensajes._shared.application.MensajesService;
+import es.serversurvival.mensajes._shared.domain.Mensaje;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 @Command(value = "mensajes", explanation = "Ver todos los mensajes no leidos que tengas")
 public class MensajesComandoRunner extends PixelcoinCommand implements CommandRunnerNonArgs {
-    private final VerMensajesUseCase useCase = VerMensajesUseCase.INSTANCE;
+    private final MensajesService mensajesService;
+
+    public MensajesComandoRunner(){
+        this.mensajesService = DependecyContainer.get(MensajesService.class);
+    }
 
     @Override
     public void execute(CommandSender sender) {
         Player player = (Player) sender;
 
-        List<Mensaje> mensajes = useCase.getMensajes(sender.getName());
-
+        List<Mensaje> mensajes = this.mensajesService.findMensajesByDestinatario(sender.getName());
+        
         if (mensajes == null || mensajes.size() == 0) {
             player.sendMessage(ChatColor.DARK_RED + "No tienes ningun mensaje pendiente");
             return;

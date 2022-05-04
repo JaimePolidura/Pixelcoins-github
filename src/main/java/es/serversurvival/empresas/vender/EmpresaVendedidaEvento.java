@@ -7,6 +7,8 @@ import es.serversurvival.transacciones.mySQL.Transaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
+
 @AllArgsConstructor
 public final class EmpresaVendedidaEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
     @Getter private final String comprador;

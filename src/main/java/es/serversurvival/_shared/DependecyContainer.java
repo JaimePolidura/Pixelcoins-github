@@ -14,7 +14,7 @@ public final class DependecyContainer {
         dependencies.put(depencyClass, instanceClass);
     }
 
-    public static <T> void addAll(Map<Class<?>, Object> dependenciesToAdd){
+    public static void addAll(Map<Class<?>, Object> dependenciesToAdd){
         dependencies.putAll(dependenciesToAdd);
     }
 

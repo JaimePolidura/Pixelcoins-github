@@ -35,15 +35,12 @@ public final class PagarSueldosUseCase implements AllMySQLTablesInstances {
 
     private void pagarSueldo (Empleado empleado, Empresa empresa)  {
         if (empresa.getPixelcoins() < empleado.getSueldo()) {
-            mensajesMySQL.nuevoMensaje("", empleado.getJugador(), "No has podido cobrar tu sueldo por parte de " + empleado.getEmpresa() + " por que no tiene las suficientes pixelcoins");
+            Pixelcoin.publish(new ErrorPagandoSueldo(empleado.getJugador(), empresa.getNombre(), "No hay las suficientes pixelcoins"));
             return;
         }
 
         empresasMySQL.setPixelcoins(empresa.getNombre(), empresa.getPixelcoins() - empleado.getSueldo());
         empresasMySQL.setGastos(empresa.getNombre(), empresa.getPixelcoins() + empleado.getSueldo());
-
-        //TODO Desacoplar
-        mensajesMySQL.nuevoMensaje("", empleado.getJugador(), "Has cobrado " + empleado.getSueldo() + " PC de parte de la empresa: " + empleado.getEmpresa());
 
         Pixelcoin.publish(new SueldoPagadoEvento(empleado.getJugador(), empleado.getId(), empresa.getNombre(), empleado.getSueldo()));
     }

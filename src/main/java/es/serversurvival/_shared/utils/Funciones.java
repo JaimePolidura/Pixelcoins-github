@@ -16,6 +16,7 @@ import java.util.concurrent.*;
 import java.util.function.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.LlamadaApi;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.LlamadasApi;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionAbierta;
@@ -26,7 +27,8 @@ import es.serversurvival.empresas._shared.mysql.Empresa;
 import es.serversurvival.empresas._shared.mysql.Empresas;
 import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival.jugadores._shared.mySQL.MySQLJugadoresRepository;
-import es.serversurvival.mensajes._shared.mysql.Mensajes;
+import es.serversurvival.mensajes._shared.application.MensajesService;
+import es.serversurvival.mensajes._shared.domain.Mensaje;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -387,7 +389,7 @@ public final class Funciones {
         if(player != null){
             player.sendMessage(mensajeOnline);
         }else{
-            Mensajes.INSTANCE.nuevoMensaje("", nombreJugador, mensajeOffline);
+            DependecyContainer.get(MensajesService.class).save(nombreJugador, mensajeOffline);
         }
     }
 
@@ -397,7 +399,7 @@ public final class Funciones {
             player.sendMessage(mensajeOnline);
             player.playSound(player.getLocation(), sound, v1, v2);
         } else {
-            Mensajes.INSTANCE.nuevoMensaje("", nombreJugador, mensajeOffline);
+            DependecyContainer.get(MensajesService.class).save(nombreJugador, mensajeOffline);
         }
     }
 
