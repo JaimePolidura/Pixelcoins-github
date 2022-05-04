@@ -2,9 +2,11 @@ package es.serversurvival.bolsa.vendercorto;
 
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival._shared.eventospixelcoins.PosicionAbiertaEvento;
-import es.serversurvival.transacciones.mySQL.Transaccion;
+import es.serversurvival.transacciones._shared.domain.Transaccion;
 
-import static es.serversurvival.transacciones.mySQL.TipoTransaccion.*;
+import java.util.UUID;
+
+import static es.serversurvival.transacciones._shared.domain.TipoTransaccion.*;
 
 public final class PosicionVentaCortoEvento extends PosicionAbiertaEvento {
     public PosicionVentaCortoEvento(String comprador, double precioUnidad, int cantidad, double precioTotal, String ticker,
@@ -14,6 +16,6 @@ public final class PosicionVentaCortoEvento extends PosicionAbiertaEvento {
 
     @Override
     public Transaccion buildTransaccion() {
-        return new Transaccion(-1, formatFecha(), ticker, comprador, (int) precioTotal, ticker, BOLSA_CORTO_VENTA);
+        return new Transaccion(UUID.randomUUID(), formatFecha(), ticker, comprador, (int) precioTotal, ticker, BOLSA_CORTO_VENTA);
     }
 }

@@ -14,6 +14,8 @@ import es.serversurvival.jugadores._shared.newformat.domain.JugadoresRepository;
 import es.serversurvival.jugadores._shared.newformat.infrastructure.MySQLJugadoresRepository;
 import es.serversurvival.mensajes._shared.application.MensajesService;
 import es.serversurvival.mensajes._shared.domain.MensajesRepository;
+import es.serversurvival.transacciones._shared.application.TransaccionesService;
+import es.serversurvival.transacciones._shared.domain.TransaccionesRepository;
 import es.serversurvival.webconnection.RabbitMQConsumerTask;
 import es.serversurvival._shared.scoreboards.ScoreBoardManager;
 import es.serversurvival._shared.scoreboards.ScoreboardUpdateTask;
@@ -95,13 +97,15 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
         }});
 
         DependecyContainer.addAll(new HashMap<>(){{
-            put(JugadoresRepository.class, new MySQLJugadoresRepository(DependecyContainer.get(MySQLConfiguration.class)));
-            put(MensajesRepository.class, new MySQLJugadoresRepository(DependecyContainer.get(MySQLConfiguration.class)));
+            put(JugadoresRepository.class, new MySQLJugadoresRepository(mysqlCOnfiguration));
+            put(MensajesRepository.class, new MySQLJugadoresRepository(mysqlCOnfiguration));
+            put(TransaccionesRepository.class, new MySQLJugadoresRepository(mysqlCOnfiguration));
         }});
 
         DependecyContainer.addAll(new HashMap<>(){{
             put(JugadoresService.class, new JugadoresService());
             put(MensajesService.class, new MensajesService());
+            put(TransaccionesService.class, new TransaccionesService());
         }});
     }
 }

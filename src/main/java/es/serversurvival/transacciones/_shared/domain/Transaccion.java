@@ -1,16 +1,26 @@
-package es.serversurvival.transacciones.mySQL;
+package es.serversurvival.transacciones._shared.domain;
 
 import es.serversurvival._shared.mysql.TablaObjeto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 public final class Transaccion implements TablaObjeto {
-    @Getter private final int id;
+    @Getter private final UUID id;
     @Getter private final String fecha;
     @Getter private final String comprador;
     @Getter private final String vendedor;
     @Getter private final int cantidad;
     @Getter private final String objeto;
     @Getter private final TipoTransaccion tipo;
+
+    public Transaccion withComprador(String comprador){
+        return new Transaccion(id, fecha, comprador, vendedor, cantidad, objeto, tipo);
+    }
+
+    public Transaccion withVendedor(String vendedor){
+        return new Transaccion(id, fecha, comprador, vendedor, cantidad, objeto, tipo);
+    }
 }

@@ -4,9 +4,11 @@ import es.serversurvival.bolsa._shared.posicionescerradas.mysql.PosicionCerrada;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival._shared.eventospixelcoins.PosicionCerradaEvento;
-import es.serversurvival.transacciones.mySQL.TipoTransaccion;
-import es.serversurvival.transacciones.mySQL.Transaccion;
+import es.serversurvival.transacciones._shared.domain.TipoTransaccion;
+import es.serversurvival.transacciones._shared.domain.Transaccion;
 import lombok.Getter;
+
+import java.util.UUID;
 
 public final class PosicionVentaLargoEvento extends PosicionCerradaEvento {
     @Getter private final double valorTotal;
@@ -22,7 +24,7 @@ public final class PosicionVentaLargoEvento extends PosicionCerradaEvento {
 
     @Override
     public Transaccion buildTransaccion() {
-        return new Transaccion(-1, formatFecha(), ticker, vendedor, (int) valorTotal, "", TipoTransaccion.BOLSA_VENTA);
+        return new Transaccion(UUID.randomUUID(), formatFecha(), ticker, vendedor, (int) valorTotal, "", TipoTransaccion.BOLSA_VENTA);
     }
 
     @Override

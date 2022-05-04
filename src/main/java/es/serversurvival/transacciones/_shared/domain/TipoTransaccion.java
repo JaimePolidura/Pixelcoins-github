@@ -1,4 +1,4 @@
-package es.serversurvival.transacciones.mySQL;
+package es.serversurvival.transacciones._shared.domain;
 
 public enum TipoTransaccion {
     BASEDATOS_CAMBIAR_NOMBRE,

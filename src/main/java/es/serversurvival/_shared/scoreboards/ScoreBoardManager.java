@@ -4,7 +4,7 @@ import es.jaime.EventListener;
 import es.jaime.Priority;
 import es.serversurvival._shared.eventospixelcoins.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
-import es.serversurvival.transacciones.mySQL.Transaccion;
+import es.serversurvival.transacciones._shared.domain.Transaccion;
 import es.serversurvival.Pixelcoin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

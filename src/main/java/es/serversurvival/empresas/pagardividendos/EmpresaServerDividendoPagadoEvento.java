@@ -2,11 +2,13 @@ package es.serversurvival.empresas.pagardividendos;
 
 import es.serversurvival._shared.eventospixelcoins.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
-import es.serversurvival.transacciones.mySQL.Transaccion;
+import es.serversurvival.transacciones._shared.domain.Transaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import static es.serversurvival.transacciones.mySQL.TipoTransaccion.*;
+import java.util.UUID;
+
+import static es.serversurvival.transacciones._shared.domain.TipoTransaccion.*;
 
 @AllArgsConstructor
 public final class EmpresaServerDividendoPagadoEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
@@ -16,6 +18,6 @@ public final class EmpresaServerDividendoPagadoEvento extends PixelcoinsEvento i
 
     @Override
     public Transaccion buildTransaccion() {
-        return new Transaccion(-1, formatFecha(), empresa, jugador, (int) pixelcoins, "", EMPRESA_DIVIDENDO_ACCION);
+        return new Transaccion(UUID.randomUUID(), formatFecha(), empresa, jugador, (int) pixelcoins, "", EMPRESA_DIVIDENDO_ACCION);
     }
 }

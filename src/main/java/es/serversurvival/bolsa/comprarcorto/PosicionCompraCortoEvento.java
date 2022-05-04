@@ -4,9 +4,11 @@ import es.serversurvival.bolsa._shared.posicionescerradas.mysql.PosicionCerrada;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival._shared.eventospixelcoins.PosicionCerradaEvento;
-import es.serversurvival.transacciones.mySQL.Transaccion;
+import es.serversurvival.transacciones._shared.domain.Transaccion;
 
-import static es.serversurvival.transacciones.mySQL.TipoTransaccion.*;
+import java.util.UUID;
+
+import static es.serversurvival.transacciones._shared.domain.TipoTransaccion.*;
 
 public final class PosicionCompraCortoEvento extends PosicionCerradaEvento {
     protected final double revalorizacionTotal;
@@ -21,7 +23,7 @@ public final class PosicionCompraCortoEvento extends PosicionCerradaEvento {
 
     @Override
     public Transaccion buildTransaccion() {
-        return new Transaccion(-1, formatFecha(), ticker, vendedor, (int) revalorizacionTotal, "", BOLSA_CORTO_COMPRA);
+        return new Transaccion(UUID.randomUUID(), formatFecha(), ticker, vendedor, (int) revalorizacionTotal, "", BOLSA_CORTO_COMPRA);
     }
 
     @Override

@@ -2,10 +2,12 @@ package es.serversurvival.bolsa.comprarlargo;
 
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival._shared.eventospixelcoins.PosicionAbiertaEvento;
-import es.serversurvival.transacciones.mySQL.Transaccion;
+import es.serversurvival.transacciones._shared.domain.Transaccion;
 import lombok.Getter;
 
-import static es.serversurvival.transacciones.mySQL.TipoTransaccion.*;
+import java.util.UUID;
+
+import static es.serversurvival.transacciones._shared.domain.TipoTransaccion.*;
 
 
 public final class PosicionCompraLargoEvento extends PosicionAbiertaEvento {
@@ -20,6 +22,6 @@ public final class PosicionCompraLargoEvento extends PosicionAbiertaEvento {
 
     @Override
     public Transaccion buildTransaccion() {
-        return new Transaccion(-1, formatFecha(), comprador, ticker, (int) precioTotal, ticker, BOLSA_COMPRA);
+        return new Transaccion(UUID.randomUUID(), formatFecha(), comprador, ticker, (int) precioTotal, ticker, BOLSA_COMPRA);
     }
 }

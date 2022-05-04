@@ -1,16 +1,23 @@
 package es.serversurvival.transacciones.eventlisteners;
 
 import es.jaime.EventListener;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.eventospixelcoins.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
-import es.serversurvival.transacciones.mySQL.Transaccion;
-import es.serversurvival.transacciones.mySQL.Transacciones;
+import es.serversurvival.transacciones._shared.application.TransaccionesService;
+import es.serversurvival.transacciones._shared.domain.Transaccion;
 
 public final class OnTransaccion {
+    private final TransaccionesService transaccionesService;
+
+    public OnTransaccion(){
+        this.transaccionesService = DependecyContainer.get(TransaccionesService.class);
+    }
+
     @EventListener({EventoTipoTransaccion.class})
     public void onTransaccion (PixelcoinsEvento evento) {
         Transaccion transaccion = ((EventoTipoTransaccion) evento).buildTransaccion();
 
-        Transacciones.INSTANCE.nuevaTransaccion(transaccion);
+        this.transaccionesService.save(transaccion);
     }
 }

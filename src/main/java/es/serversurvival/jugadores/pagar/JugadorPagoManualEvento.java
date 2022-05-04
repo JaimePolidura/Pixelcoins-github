@@ -1,11 +1,13 @@
 package es.serversurvival.jugadores.pagar;
 
-import es.serversurvival.transacciones.mySQL.TipoTransaccion;
+import es.serversurvival.transacciones._shared.domain.TipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
-import es.serversurvival.transacciones.mySQL.Transaccion;
+import es.serversurvival.transacciones._shared.domain.Transaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.UUID;
 
 @AllArgsConstructor
 public final class JugadorPagoManualEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
@@ -15,6 +17,6 @@ public final class JugadorPagoManualEvento extends PixelcoinsEvento implements E
     
     @Override
     public Transaccion buildTransaccion() {
-        return new Transaccion(-1, formatFecha(), pagador, pagado, (int) cantidad, "", TipoTransaccion.JUGADOR_PAGO_MANUAL);
+        return new Transaccion(UUID.randomUUID(), formatFecha(), pagador, pagado, (int) cantidad, "", TipoTransaccion.JUGADOR_PAGO_MANUAL);
     }
 }

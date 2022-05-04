@@ -2,11 +2,13 @@ package es.serversurvival.deudas.prestar;
 
 import es.serversurvival._shared.eventospixelcoins.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
-import es.serversurvival.transacciones.mySQL.Transaccion;
+import es.serversurvival.transacciones._shared.domain.Transaccion;
 import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.transacciones.mySQL.TipoTransaccion;
+import es.serversurvival.transacciones._shared.domain.TipoTransaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.UUID;
 
 @AllArgsConstructor
 public final class PixelcoinsPrestadasEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
@@ -18,6 +20,6 @@ public final class PixelcoinsPrestadasEvento extends PixelcoinsEvento implements
 
     @Override
     public Transaccion buildTransaccion() {
-        return new Transaccion(-1, formatFecha(), acredor, deudor, Funciones.aumentarPorcentaje(pixelcoins, intereses), "", TipoTransaccion.DEUDAS_PRIMERA_TRANSFERENCIA);
+        return new Transaccion(UUID.randomUUID(), formatFecha(), acredor, deudor, Funciones.aumentarPorcentaje(pixelcoins, intereses), "", TipoTransaccion.DEUDAS_PRIMERA_TRANSFERENCIA);
     }
 }

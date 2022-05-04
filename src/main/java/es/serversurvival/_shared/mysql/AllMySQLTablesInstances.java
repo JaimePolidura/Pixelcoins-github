@@ -12,7 +12,6 @@ import es.serversurvival.jugadores._shared.mySQL.MySQLJugadoresRepository;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.tienda._shared.mySQL.encantamientos.Encantamientos;
 import es.serversurvival.tienda._shared.mySQL.ofertas.Ofertas;
-import es.serversurvival.transacciones.mySQL.Transacciones;
 import es.serversurvival.webconnection.conversacionesweb.mysql.ConversacionesWeb;
 import es.serversurvival.cuentaweb.Cuentas;
 
@@ -32,7 +31,6 @@ public interface AllMySQLTablesInstances {
     Ofertas ofertasMySQL = Ofertas.INSTANCE;
     PosicionesAbiertas posicionesAbiertasMySQL = PosicionesAbiertas.INSTANCE;
     PosicionesCerradas posicionesCerradasMySQL = PosicionesCerradas.INSTANCE;
-    Transacciones transaccionesMySQL = Transacciones.INSTANCE;
     Deudas deudasMySQL = Deudas.INSTANCE;
     OrdenesPreMarket ordenesMySQL = OrdenesPreMarket.INSTANCE;
     OfertasMercadoServer ofertasMercadoServerMySQL = OfertasMercadoServer.INSTANCE;

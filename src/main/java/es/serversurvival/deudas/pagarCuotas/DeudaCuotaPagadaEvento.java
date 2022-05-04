@@ -2,10 +2,12 @@ package es.serversurvival.deudas.pagarCuotas;
 
 import es.serversurvival._shared.eventospixelcoins.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
-import es.serversurvival.transacciones.mySQL.Transaccion;
-import es.serversurvival.transacciones.mySQL.TipoTransaccion;
+import es.serversurvival.transacciones._shared.domain.Transaccion;
+import es.serversurvival.transacciones._shared.domain.TipoTransaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.UUID;
 
 
 @AllArgsConstructor
@@ -18,6 +20,6 @@ public final class DeudaCuotaPagadaEvento extends PixelcoinsEvento implements Ev
 
     @Override
     public Transaccion buildTransaccion() {
-        return new Transaccion(-1, formatFecha(), deudor, acredor, (int) pixelcoinsPagadas, "", TipoTransaccion.DEUDAS_PAGAR_CUOTA);
+        return new Transaccion(UUID.randomUUID(), formatFecha(), deudor, acredor, (int) pixelcoinsPagadas, "", TipoTransaccion.DEUDAS_PAGAR_CUOTA);
     }
 }

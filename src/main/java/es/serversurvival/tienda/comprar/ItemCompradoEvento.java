@@ -2,11 +2,13 @@ package es.serversurvival.tienda.comprar;
 
 import es.serversurvival._shared.eventospixelcoins.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
-import es.serversurvival.transacciones.mySQL.Transaccion;
+import es.serversurvival.transacciones._shared.domain.Transaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import static es.serversurvival.transacciones.mySQL.TipoTransaccion.*;
+import java.util.UUID;
+
+import static es.serversurvival.transacciones._shared.domain.TipoTransaccion.*;
 
 @AllArgsConstructor
 public final class ItemCompradoEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
@@ -18,6 +20,6 @@ public final class ItemCompradoEvento extends PixelcoinsEvento implements Evento
 
     @Override
     public Transaccion buildTransaccion() {
-        return new Transaccion(-1, formatFecha(), comprador, vendedor, cantidadComprada, objeto, TIENDA_VENTA);
+        return new Transaccion(UUID.randomUUID(), formatFecha(), comprador, vendedor, cantidadComprada, objeto, TIENDA_VENTA);
     }
 }

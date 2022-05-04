@@ -1,11 +1,13 @@
 package es.serversurvival.bolsa._shared.posicionesabiertas.pagardividendos;
 
-import es.serversurvival.transacciones.mySQL.Transaccion;
-import es.serversurvival.transacciones.mySQL.TipoTransaccion;
+import es.serversurvival.transacciones._shared.domain.Transaccion;
+import es.serversurvival.transacciones._shared.domain.TipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.UUID;
 
 @AllArgsConstructor
 public final class DividendoPagadoEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
@@ -15,6 +17,6 @@ public final class DividendoPagadoEvento extends PixelcoinsEvento implements Eve
 
     @Override
     public Transaccion buildTransaccion() {
-        return new Transaccion(-1, formatFecha(), ticker, jugador, (int) pixelcoins, "", TipoTransaccion.BOLSA_DIVIDENDO);
+        return new Transaccion(UUID.randomUUID(), formatFecha(), ticker, jugador, (int) pixelcoins, "", TipoTransaccion.BOLSA_DIVIDENDO);
     }
 }

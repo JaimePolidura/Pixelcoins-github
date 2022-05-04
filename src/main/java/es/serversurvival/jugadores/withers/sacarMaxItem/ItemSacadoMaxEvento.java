@@ -3,11 +3,13 @@ package es.serversurvival.jugadores.withers.sacarMaxItem;
 import es.serversurvival._shared.eventospixelcoins.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
-import es.serversurvival.transacciones.mySQL.Transaccion;
+import es.serversurvival.transacciones._shared.domain.Transaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import static es.serversurvival.transacciones.mySQL.TipoTransaccion.*;
+import java.util.UUID;
+
+import static es.serversurvival.transacciones._shared.domain.TipoTransaccion.*;
 
 @AllArgsConstructor
 public final class ItemSacadoMaxEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
@@ -17,6 +19,6 @@ public final class ItemSacadoMaxEvento extends PixelcoinsEvento implements Event
 
     @Override
     public Transaccion buildTransaccion() {
-        return new Transaccion(-1, formatFecha(), jugador.getNombre(), "", pixelcoins, itemNombre, WITHERS_SACARMAX);
+        return new Transaccion(UUID.randomUUID(), formatFecha(), jugador.getNombre(), "", pixelcoins, itemNombre, WITHERS_SACARMAX);
     }
 }
