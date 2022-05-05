@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class PrestamoSolicitud extends Menu implements Solicitud {
-    private final PrestarUseCase prestarUseCase = PrestarUseCase.INSTANCE;
+    private final PrestarUseCase prestarUseCase;
 
     private final Player player;
     private final Inventory inventory;
@@ -42,6 +42,7 @@ public class PrestamoSolicitud extends Menu implements Solicitud {
         List<String> loreAceptar = Funciones.dividirDesc(descAceptarString, 40);
         String nombreCancelar = ChatColor.RED + "" + ChatColor.BOLD + "DENEGAR";
 
+        this.prestarUseCase = new PrestarUseCase();
         this.inventory = InventoryCreator.createSolicitud(titulo, nombreItemAceptar, loreAceptar, nombreCancelar, Collections.emptyList());
 
         isClicked = false;
@@ -66,7 +67,6 @@ public class PrestamoSolicitud extends Menu implements Solicitud {
 
     @Override
     public void enviarSolicitud() {
-        Player destinatarioPlayer = Bukkit.getPlayer(this.destinatario);
         Player enviadorPlayer = Bukkit.getPlayer(this.enviador);
 
         openMenu();

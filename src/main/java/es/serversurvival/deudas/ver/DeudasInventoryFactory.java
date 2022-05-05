@@ -1,7 +1,7 @@
 package es.serversurvival.deudas.ver;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival.deudas._shared.mysql.Deuda;
+import es.serversurvival.deudas._shared.newformat.domain.Deuda;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -53,7 +53,7 @@ public class DeudasInventoryFactory extends InventoryFactory {
         lore.add(ChatColor.GOLD + "Debes a: " + deuda.getAcredor());
         lore.add(ChatColor.GOLD + "Te queda de pagar: " + ChatColor.GREEN +  formatea.format(deuda.getPixelcoins_restantes()) + " PC" );
         lore.add(ChatColor.GOLD + "Vence en: " + deuda.getTiempo_restante() + " dias");
-        lore.add(ChatColor.GOLD + "ID: " + deuda.getId());
+        lore.add(ChatColor.GOLD + "ID: " + deuda.getDeudaId());
 
         return ItemBuilder.of(Material.RED_BANNER).lore(lore).title(displayName).build();
     }
@@ -65,7 +65,7 @@ public class DeudasInventoryFactory extends InventoryFactory {
         lore.add(ChatColor.GOLD + "Te debe: " + deuda.getDeudor());
         lore.add(ChatColor.GOLD + "Le queda de pagar: " + ChatColor.GREEN +  formatea.format(deuda.getPixelcoins_restantes()) + " PC" );
         lore.add(ChatColor.GOLD + "Vence en: " + deuda.getTiempo_restante() + " dias");
-        lore.add(ChatColor.GOLD + "ID: " + deuda.getId());
+        lore.add(ChatColor.GOLD + "ID: " + deuda.getDeudaId());
 
         return ItemBuilder.of(Material.GREEN_BANNER).lore(lore).title(displayName).build();
     }

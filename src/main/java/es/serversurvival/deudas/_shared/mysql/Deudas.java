@@ -12,6 +12,7 @@ import es.jaimetruman.update.Update;
 import es.jaimetruman.update.UpdateOptionInitial;
 import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.deudas._shared.newformat.domain.Deuda;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 
@@ -89,7 +90,7 @@ public final class Deudas extends MySQLRepository {
     @Override
     protected Deuda buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new Deuda(
-                rs.getInt("id"),
+                UUID.fromString(rs.getString("id")),
                 rs.getString("deudor"),
                 rs.getString("acredor"),
                 rs.getInt("pixelcoins_restantes"),

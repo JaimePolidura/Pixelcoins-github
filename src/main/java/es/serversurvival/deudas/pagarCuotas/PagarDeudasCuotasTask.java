@@ -6,10 +6,14 @@ import es.jaimetruman.task.TaskRunner;
 
 @Task(BukkitTimeUnit.DAY)
 public final class PagarDeudasCuotasTask implements TaskRunner {
-    private final PagarDeudasCuotasUseCase useCase = PagarDeudasCuotasUseCase.INSTANCE;
+    private final PagarDeudasCuotasTask pagarDeudasCuotasTask;
+
+    public PagarDeudasCuotasTask() {
+        this.pagarDeudasCuotasTask = new PagarDeudasCuotasTask();
+    }
 
     @Override
     public void run() {
-        useCase.pagarDeudas();
+        this.pagarDeudasCuotasTask.run();
     }
 }

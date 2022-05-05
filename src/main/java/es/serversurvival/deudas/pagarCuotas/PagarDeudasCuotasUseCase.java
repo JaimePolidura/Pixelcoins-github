@@ -1,23 +1,29 @@
 package es.serversurvival.deudas.pagarCuotas;
 
-import es.serversurvival.deudas._shared.mysql.Deuda;
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.deudas._shared.newformat.application.DeudasService;
+import es.serversurvival.deudas._shared.newformat.domain.Deuda;
 import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival.jugadores._shared.mySQL.MySQLJugadoresRepository;
 import es.serversurvival.Pixelcoin;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import lombok.SneakyThrows;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
-public final class PagarDeudasCuotasUseCase implements AllMySQLTablesInstances {
-    public static final PagarDeudasCuotasUseCase INSTANCE = new PagarDeudasCuotasUseCase();
+import static es.serversurvival._shared.mysql.AllMySQLTablesInstances.dateFormater;
 
-    private PagarDeudasCuotasUseCase () {}
+public final class PagarDeudasCuotasUseCase {
+    private final DeudasService deudasService;
+
+    private PagarDeudasCuotasUseCase () {
+        this.deudasService = DependecyContainer.get(DeudasService.class);
+    }
 
     public void pagarDeudas () {
-        List<Deuda> todasLasDeudas = deudasMySQL.getAllDeudas();
+        List<Deuda> todasLasDeudas = this.deudasService.findAll();
         Map<String, Jugador> allJugadores = MySQLJugadoresRepository.INSTANCE.getMapAllJugadores();
 
         todasLasDeudas.forEach( (deuda) -> {
@@ -31,7 +37,7 @@ public final class PagarDeudasCuotasUseCase implements AllMySQLTablesInstances {
                 if(deudor.getPixelcoins() >= deuda.getCouta()){
                     pagarDeudaYBorrarSiEsNecesario(deuda, acredor, deudor);
                 }else{
-                    sumarUnNinpagoYEnviarMensajeAlAcredor(acredor, deudor, deuda.getId());
+                    sumarUnNinpagoYEnviarMensajeAlAcredor(acredor, deudor, deuda.getDeudaId());
                 }
             }
         });
@@ -41,21 +47,23 @@ public final class PagarDeudasCuotasUseCase implements AllMySQLTablesInstances {
         String deudorNombre = deudor.getNombre();
         String acredorNombre = acredor.getNombre();
         int cuota = deuda.getCouta();
-        int id = deuda.getId();
+        UUID deudaId = deuda.getDeudaId();
         int tiempo = deuda.getTiempo_restante();
-        int pixelcoinsDeuda = deuda.getPixelcoins_restantes();
 
         if(tiempo == 1){
-            deudasMySQL.borrarDeuda(id);
+            this.deudasService.deleteById(deudaId);
         }else{
-            deudasMySQL.setPagoDeuda(id, pixelcoinsDeuda - cuota, tiempo - 1, dateFormater.format(formatFehcaDeHoyException()));
+            deudasService.save(deuda
+                    .decrementPixelcoinsRestantes(cuota)
+                    .decrementTiempoRestanteByOne()
+                    .withFechaUltimoPago(formatFehcaDeHoyException().toString()));
         }
 
-        Pixelcoin.publish(new DeudaCuotaPagadaEvento(deuda.getId(), acredorNombre, deudorNombre, cuota, tiempo - 1));
+        Pixelcoin.publish(new DeudaCuotaPagadaEvento(deuda.getDeudaId(), acredorNombre, deudorNombre, cuota, tiempo - 1));
     }
 
-    private void sumarUnNinpagoYEnviarMensajeAlAcredor (Jugador acredor, Jugador deudor, int id) {
-        Pixelcoin.publish(new DeudaCuotaNoPagadaEvento(acredor.getNombre(), deudor.getNombre(), id));
+    private void sumarUnNinpagoYEnviarMensajeAlAcredor (Jugador acredor, Jugador deudor, UUID deudaId) {
+        Pixelcoin.publish(new DeudaCuotaNoPagadaEvento(acredor.getNombre(), deudor.getNombre(), deudaId));
     }
 
     @SneakyThrows

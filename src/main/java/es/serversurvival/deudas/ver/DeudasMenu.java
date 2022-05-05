@@ -1,7 +1,10 @@
 package es.serversurvival.deudas.ver;
 
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.deudas._shared.mysql.Deudas;
+import es.serversurvival.deudas._shared.newformat.application.DeudasService;
 import es.serversurvival.deudas.cancelar.CancelarDeudaUseCase;
-import es.serversurvival.deudas._shared.mysql.Deuda;
+import es.serversurvival.deudas._shared.newformat.domain.Deuda;
 import es.serversurvival.deudas.pagarTodo.PagarDeudaCompletaUseCase;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
 import es.serversurvival._shared.menus.Menu;
@@ -20,19 +23,25 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
+import java.util.UUID;
 
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.Sound.*;
 
 public class DeudasMenu extends Menu implements Clickable, Refreshcable, CanGoBack {
-    private final PagarDeudaCompletaUseCase PagarDeudaUseCase = PagarDeudaCompletaUseCase.INSTANCE;
-    private final CancelarDeudaUseCase cancelarDeudaUseCase = CancelarDeudaUseCase.INSTANCE;
+    private final PagarDeudaCompletaUseCase pagarDeudaUseCase;
+    private final CancelarDeudaUseCase cancelarDeudaUseCase;
+    private final DeudasService deudasService;
 
     public final static String tiulo = DARK_RED + "" + BOLD + "          TUS DEUDAS";
     private Player player;
     private Inventory inventory;
 
     public DeudasMenu (Player player) {
+        this.pagarDeudaUseCase = new PagarDeudaCompletaUseCase();
+        this.cancelarDeudaUseCase = new CancelarDeudaUseCase();
+        this.deudasService = DependecyContainer.get(DeudasService.class);
+
         this.player = player;
         this.inventory = InventoryCreator.createInventoryMenu(new DeudasInventoryFactory(), player.getName());
         openMenu();
@@ -61,19 +70,19 @@ public class DeudasMenu extends Menu implements Clickable, Refreshcable, CanGoBa
     }
 
     private void performClick (ItemStack itemCliqueado) {
-        int idAPagar = Integer.parseInt(itemCliqueado.getItemMeta().getLore().get(4).split(" ")[1]);
+        UUID deudaId = UUID.fromString(String.valueOf(itemCliqueado.getItemMeta().getLore().get(4).split(" ")[1]));
         String tipoItem = itemCliqueado.getType().toString();
 
         if(tipoItem.equalsIgnoreCase("RED_BANNER")){
-            pagarDeuda(idAPagar);
+            pagarDeuda(deudaId);
         }else{
-            cancelarDeuda(idAPagar);
+            cancelarDeuda(deudaId);
         }
 
     }
 
-    private void pagarDeuda (int id) {
-        Deuda deudaAPagar = AllMySQLTablesInstances.deudasMySQL.getDeuda(id);
+    private void pagarDeuda (UUID deudaId) {
+        Deuda deudaAPagar = this.deudasService.getDeudaById(deudaId);
 
         Player jugadorQueVaAPagar = Bukkit.getPlayer(deudaAPagar.getDeudor());
         double pixelcoinsAPagar = deudaAPagar.getPixelcoins_restantes();
@@ -84,7 +93,7 @@ public class DeudasMenu extends Menu implements Clickable, Refreshcable, CanGoBa
             return;
         }
 
-        Deuda deudaPagada = PagarDeudaUseCase.pagarDeuda(id);
+        Deuda deudaPagada = pagarDeudaUseCase.pagarDeuda(deudaId, jugadorQueVaAPagar.getName());
 
         Funciones.enviarMensajeYSonido(player, GOLD + "Has pagado a " + deudaPagada.getAcredor() + " toda la deuda: "
                 + GREEN + formatea.format(deudaPagada.getPixelcoins_restantes()) + " PC", ENTITY_PLAYER_LEVELUP);
@@ -98,11 +107,8 @@ public class DeudasMenu extends Menu implements Clickable, Refreshcable, CanGoBa
         refresh();
     }
 
-    private void cancelarDeuda (int id) {
-        Deuda deudaACancelar = AllMySQLTablesInstances.deudasMySQL.getDeuda(id);
-        Player jugadorQueVaACancelar = Bukkit.getPlayer(deudaACancelar.getAcredor());
-
-        Deuda deudaCancelada = cancelarDeudaUseCase.cancelarDeuda(player, id);
+    private void cancelarDeuda (UUID deudaId) {
+        Deuda deudaCancelada = cancelarDeudaUseCase.cancelarDeuda(player.getName(), deudaId);
 
         Funciones.enviarMensajeYSonido(player, GOLD + "Has cancelado la deuda a " + deudaCancelada.getDeudor() + "!", ENTITY_PLAYER_LEVELUP);
 

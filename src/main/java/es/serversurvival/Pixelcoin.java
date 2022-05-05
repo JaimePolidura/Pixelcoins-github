@@ -9,6 +9,9 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival._shared.mysql.newformat.MySQLConfiguration;
+import es.serversurvival.deudas._shared.newformat.application.DeudasService;
+import es.serversurvival.deudas._shared.newformat.domain.DeudasRepository;
+import es.serversurvival.deudas._shared.newformat.infrastructure.MySQLDeudasRepository;
 import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
 import es.serversurvival.jugadores._shared.newformat.domain.JugadoresRepository;
 import es.serversurvival.jugadores._shared.newformat.infrastructure.MySQLJugadoresRepository;
@@ -26,6 +29,12 @@ import java.util.HashMap;
 
 import static org.bukkit.ChatColor.*;
 
+/**
+ * Updated:
+ * Jugadores
+ * Mensajes
+ * Transacciones
+ */
 public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstances {
     private static Pixelcoin plugin;
     private ScoreBoardManager scoreBoardManager;
@@ -100,12 +109,14 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
             put(JugadoresRepository.class, new MySQLJugadoresRepository(mysqlCOnfiguration));
             put(MensajesRepository.class, new MySQLJugadoresRepository(mysqlCOnfiguration));
             put(TransaccionesRepository.class, new MySQLJugadoresRepository(mysqlCOnfiguration));
+            put(DeudasRepository.class, new MySQLDeudasRepository(mysqlCOnfiguration));
         }});
 
         DependecyContainer.addAll(new HashMap<>(){{
             put(JugadoresService.class, new JugadoresService());
             put(MensajesService.class, new MensajesService());
             put(TransaccionesService.class, new TransaccionesService());
+            put(DeudasService.class, new DeudasService());
         }});
     }
 }

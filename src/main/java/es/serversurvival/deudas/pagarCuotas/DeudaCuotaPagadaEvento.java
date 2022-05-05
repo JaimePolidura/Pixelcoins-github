@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 public final class DeudaCuotaPagadaEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
-    @Getter private final int deudaId;
+    @Getter private final UUID deudaId;
     @Getter private final String acredor;
     @Getter private final String deudor;
     @Getter private final double pixelcoinsPagadas;
