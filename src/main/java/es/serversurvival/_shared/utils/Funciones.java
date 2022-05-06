@@ -415,6 +415,17 @@ public final class Funciones {
         return -1;
     }
 
+    @SafeVarargs
+    public static  <T> List<T> concat(List<T>... lists){
+        //We create a hashset to avoid duplicates
+        Set<T> valuesToReturn = new HashSet<>();
+
+        for (List<T> actualList : lists)
+            valuesToReturn.addAll(actualList);
+
+        return valuesToReturn.stream().toList();
+    }
+
     public static<K, V> Map<K, List<V>> mergeMapList (List<V> toIteratem, Function<V, K> keyMapper) {
         Map<K, List<V>> acumulator = new HashMap<>();
         

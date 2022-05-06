@@ -33,7 +33,7 @@ public final class JugadoresRepositoryService {
     }
 
     public Optional<Jugador> findByNombre(String nombre) {
-        var cacheResult = this.jugadoresCache.get(nombre);
+        var cacheResult = this.jugadoresCache.find(nombre);
 
         return cacheResult.isPresent() ?
                 cacheResult :

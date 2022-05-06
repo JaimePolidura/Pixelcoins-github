@@ -1,7 +1,7 @@
 package es.serversurvival.tienda.retirar;
 
 import es.serversurvival.tienda._shared.mySQL.ofertas.Ofertas;
-import es.serversurvival.tienda._shared.mySQL.ofertas.Oferta;
+import es.serversurvival.tienda._shared.newformat.domain.TiendaObjeto;
 import org.bukkit.inventory.ItemStack;
 
 public final class RetirarOfertaUseCase {
@@ -13,7 +13,7 @@ public final class RetirarOfertaUseCase {
     }
 
     public ItemStack retirarOferta(int idARetirar) {
-        Oferta ofertaARetirar = ofertasMySQL.getOferta(idARetirar);
+        TiendaObjeto ofertaARetirar = ofertasMySQL.getOferta(idARetirar);
 
         ItemStack itemARetirar = ofertasMySQL.getItemOferta(ofertaARetirar);
 

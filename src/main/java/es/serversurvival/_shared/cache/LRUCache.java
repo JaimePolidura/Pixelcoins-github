@@ -4,7 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class LRUCache<K, V> implements Cache<K, V>{
     //Last index: most not recently used
@@ -28,7 +32,12 @@ public class LRUCache<K, V> implements Cache<K, V>{
     }
 
     @Override
-    public Optional<V> get(K key) {
+    public void delete(K key) {
+        this.items.removeIf(cacheItem -> cacheItem.getKey().equals(key));
+    }
+
+    @Override
+    public Optional<V> find(K key) {
         int index = 0;
 
         for (CacheItem<K, V> actualCacheItem : this.items) {
@@ -37,9 +46,54 @@ public class LRUCache<K, V> implements Cache<K, V>{
 
                 return Optional.of(actualCacheItem.value);
             }
+
+            index++;
         }
 
         return Optional.empty();
+    }
+
+    @Override
+    public List<V> all() {
+        return this.items.stream()
+                .map(CacheItem::getValue)
+                .toList();
+    }
+
+    @Override
+    public Optional<V> findValue(Predicate<V> valueCondition) {
+        int index = 0;
+
+        for (CacheItem<K, V> actualCacheItem : this.items) {
+            if(valueCondition.test(actualCacheItem.value)){
+                this.moveItemToFirstPosition(index, actualCacheItem);
+
+                return Optional.of(actualCacheItem.value);
+            }
+
+            index++;
+        }
+
+        return Optional.empty();
+
+    }
+
+    @Override
+    public List<V> findValues(Predicate<V> valueCondition) {
+        List<V> valuesFound = new LinkedList<>();
+        int index = 0;
+
+        for (CacheItem<K, V> actualCacheItem : this.items) {
+            if(valueCondition.test(actualCacheItem.value)){
+                this.moveItemToFirstPosition(index, actualCacheItem);
+
+                valuesFound.add(actualCacheItem.value);
+            }
+
+            index++;
+        }
+
+        return valuesFound;
     }
 
     @Override
@@ -50,6 +104,11 @@ public class LRUCache<K, V> implements Cache<K, V>{
     @Override
     public void clear() {
         this.items.clear();
+    }
+
+    @Override
+    public boolean isFull() {
+        return this.items.size() == maxCapacity;
     }
 
     private void removeIfExists(K key, V value){

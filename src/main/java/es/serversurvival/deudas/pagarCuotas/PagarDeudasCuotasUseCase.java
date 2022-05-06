@@ -3,6 +3,7 @@ package es.serversurvival.deudas.pagarCuotas;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.deudas._shared.newformat.application.DeudasService;
 import es.serversurvival.deudas._shared.newformat.domain.Deuda;
+import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
 import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival.jugadores._shared.mySQL.MySQLJugadoresRepository;
 import es.serversurvival.Pixelcoin;
@@ -17,9 +18,11 @@ import static es.serversurvival._shared.mysql.AllMySQLTablesInstances.dateFormat
 
 public final class PagarDeudasCuotasUseCase {
     private final DeudasService deudasService;
+    private final JugadoresService jugadoresService;
 
     private PagarDeudasCuotasUseCase () {
         this.deudasService = DependecyContainer.get(DeudasService.class);
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
     }
 
     public void pagarDeudas () {
@@ -43,7 +46,7 @@ public final class PagarDeudasCuotasUseCase {
         });
     }
 
-    private void pagarDeudaYBorrarSiEsNecesario (Deuda deuda, Jugador acredor, Jugador deudor) {
+    private void pagarDeudaYBorrarSiEsNecesario(Deuda deuda, Jugador acredor, Jugador deudor) {
         String deudorNombre = deudor.getNombre();
         String acredorNombre = acredor.getNombre();
         int cuota = deuda.getCouta();
@@ -59,10 +62,18 @@ public final class PagarDeudasCuotasUseCase {
                     .withFechaUltimoPago(formatFehcaDeHoyException().toString()));
         }
 
+        this.jugadoresService.realizarTransferenciaConEstadisticas(
+                deudor, acredor, cuota
+        );
+        this.jugadoresService.save(deudor.incrementNPagos());
+
+
         Pixelcoin.publish(new DeudaCuotaPagadaEvento(deuda.getDeudaId(), acredorNombre, deudorNombre, cuota, tiempo - 1));
     }
 
     private void sumarUnNinpagoYEnviarMensajeAlAcredor (Jugador acredor, Jugador deudor, UUID deudaId) {
+        this.jugadoresService.save(deudor.incrementNInpago());
+
         Pixelcoin.publish(new DeudaCuotaNoPagadaEvento(acredor.getNombre(), deudor.getNombre(), deudaId));
     }
 

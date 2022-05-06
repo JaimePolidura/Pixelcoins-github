@@ -11,7 +11,9 @@ import es.jaimetruman.select.SelectOptionInitial;
 import es.jaimetruman.update.Update;
 import es.jaimetruman.update.UpdateOptionInitial;
 import es.serversurvival._shared.mysql.MySQLRepository;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.tienda._shared.mySQL.encantamientos.Encantamiento;
+import es.serversurvival.tienda._shared.newformat.domain.TiendaObjeto;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -49,23 +51,13 @@ public final class Ofertas extends MySQLRepository {
     }
 
     private int getMaxId() {
-        Oferta oferta = (Oferta) buildObjectFromQuery(select.orderBy("id", Order.DESC).limit(1));
+        TiendaObjeto oferta = (TiendaObjeto) buildObjectFromQuery(select.orderBy("id", Order.DESC).limit(1));
 
-        return oferta != null ? oferta.getId() : -1;
-    }
-
-    public int getEspacios (String jugador) {
-        List<Oferta> ofertas = buildListFromQuery(select.where("jugador").equal(jugador));
-
-        return ofertas != null || ofertas.size() != 0 ? 0 : ofertas.size();
+        return oferta != null ? oferta.getTiendaObjetoId() : -1;
     }
 
     public void borrarOferta(int id) {
         executeUpdate(Delete.from("ofertas").where("id").equal(id));
-    }
-
-    public void setPrecio(int id, double precio){
-        executeUpdate(update.set("precio", precio).where("id").equal(id));
     }
 
     public void setCantidad(int id, int cantidad) {
@@ -76,15 +68,15 @@ public final class Ofertas extends MySQLRepository {
         executeUpdate(update.set("jugador", nuevoJugador).where("jugador").equal(jugador));
     }
 
-    public Oferta getOferta (int id) {
-        return (Oferta) buildObjectFromQuery(select.where("id").equal(id));
+    public TiendaObjeto getOferta (int id) {
+        return (TiendaObjeto) buildObjectFromQuery(select.where("id").equal(id));
     }
 
-    public List<Oferta> getTodasOfertas(){
+    public List<TiendaObjeto> getTodasOfertas(){
         return buildListFromQuery(select);
     }
 
-    public List<Oferta> getOfertasJugador (String nombreJugador){
+    public List<TiendaObjeto> getOfertasJugador (String nombreJugador){
         return buildListFromQuery(select.where("jugador").equal(nombreJugador));
     }
 
@@ -92,11 +84,11 @@ public final class Ofertas extends MySQLRepository {
         return bannedItems.stream().anyMatch( (ite) -> ite.equalsIgnoreCase(item));
     }
 
-    public ItemStack getItemOferta(Oferta oferta) {
+    public ItemStack getItemOferta(TiendaObjeto oferta) {
         ItemStack itemToConvert = new ItemStack(Material.getMaterial(oferta.getObjeto()), oferta.getCantidad());
         itemToConvert.setDurability((short) oferta.getDurabilidad());
 
-        List<Encantamiento> encantamientos = encantamientosMySQL.getEncantamientosOferta(oferta.getId());
+        List<Encantamiento> encantamientos = encantamientosMySQL.getEncantamientosOferta(oferta.getTiendaObjetoId());
 
         if(oferta.getObjeto().equalsIgnoreCase("ENCHANTED_BOOK")){
             rellenarEncantamientoLibro(itemToConvert, encantamientos);
@@ -133,14 +125,7 @@ public final class Ofertas extends MySQLRepository {
     }
 
     @Override
-    protected Oferta buildObjectFromResultSet(ResultSet rs) throws SQLException {
-        return new Oferta(
-                rs.getInt("id"),
-                rs.getString("jugador"),
-                rs.getString("objeto"),
-                rs.getInt("cantidad"),
-                rs.getDouble("precio"),
-                rs.getInt("durabilidad")
-        );
+    protected TiendaObjeto buildObjectFromResultSet(ResultSet rs) throws SQLException {
+        return null;
     }
 }

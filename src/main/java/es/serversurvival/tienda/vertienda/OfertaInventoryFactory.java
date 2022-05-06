@@ -4,7 +4,7 @@ import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import es.serversurvival._shared.menus.Paginated;
 import es.serversurvival.tienda._shared.mySQL.ofertas.Ofertas;
-import es.serversurvival.tienda._shared.mySQL.ofertas.Oferta;
+import es.serversurvival.tienda._shared.newformat.domain.TiendaObjeto;
 import es.serversurvival._shared.utils.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,17 +23,17 @@ public class OfertaInventoryFactory extends InventoryFactory {
     protected Inventory buildInventory(String jugador) {
         Inventory inventory = Bukkit.createInventory(null, 54, titulo);
 
-        List<Oferta> ofertas = ofertasMySQL.getTodasOfertas();
+        List<TiendaObjeto> ofertas = ofertasMySQL.getTodasOfertas();
 
         for(int i = 0; i < ofertas.size(); i++){
-            Oferta oferta = ofertas.get(i);
+            TiendaObjeto oferta = ofertas.get(i);
 
             ItemStack itemStackAInsertar = ofertasMySQL.getItemOferta(oferta);
 
             List<String> lore = new ArrayList<>();
             lore.add(ChatColor.GOLD + "Precio: " + ChatColor.GREEN + formatea.format(oferta.getPrecio()) + " PC");
             lore.add(ChatColor.GOLD + "Venderdor: " + oferta.getJugador());
-            lore.add("" + oferta.getId());
+            lore.add("" + oferta.getTiendaObjetoId());
 
             String displayName;
             if(oferta.getJugador().equalsIgnoreCase(jugador)){

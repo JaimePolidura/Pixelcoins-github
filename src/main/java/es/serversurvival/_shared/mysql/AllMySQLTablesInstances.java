@@ -28,7 +28,6 @@ public interface AllMySQLTablesInstances {
     Encantamientos encantamientosMySQL = Encantamientos.INSTANCE;
     MySQLJugadoresRepository jugadoresMySQL = MySQLJugadoresRepository.INSTANCE;
     LlamadasApi llamadasApiMySQL = LlamadasApi.INSTANCE;
-    Ofertas ofertasMySQL = Ofertas.INSTANCE;
     PosicionesAbiertas posicionesAbiertasMySQL = PosicionesAbiertas.INSTANCE;
     PosicionesCerradas posicionesCerradasMySQL = PosicionesCerradas.INSTANCE;
     Deudas deudasMySQL = Deudas.INSTANCE;

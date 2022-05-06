@@ -12,7 +12,7 @@ import es.serversurvival._shared.menus.Paginated;
 import es.serversurvival._shared.menus.RefreshcableOnPaginated;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.tienda._shared.mySQL.ofertas.Ofertas;
-import es.serversurvival.tienda._shared.mySQL.ofertas.Oferta;
+import es.serversurvival.tienda._shared.newformat.domain.TiendaObjeto;
 import es.serversurvival.tienda.comprar.ComprarOfertaUseCase;
 import es.serversurvival.tienda.retirar.RetirarOfertaUseCase;
 import es.serversurvival._shared.utils.Funciones;
@@ -85,7 +85,7 @@ public class OfertasMenu extends Menu implements Clickable, Paginated, Refreshca
         }
         int id = idTry.get();
         Jugador jugador = AllMySQLTablesInstances.jugadoresMySQL.getJugador(player.getName());
-        Oferta ofertaAComprar = AllMySQLTablesInstances.ofertasMySQL.getOferta(id);
+        TiendaObjeto ofertaAComprar = AllMySQLTablesInstances.ofertasMySQL.getOferta(id);
 
         if (jugador.getPixelcoins() < ofertaAComprar.getPrecio()) {
             player.sendMessage(DARK_RED + "No puedes comprar por encima de tu dinero");
