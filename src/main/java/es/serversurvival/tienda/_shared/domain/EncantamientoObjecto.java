@@ -1,4 +1,4 @@
-package es.serversurvival.tienda._shared.newformat.domain;
+package es.serversurvival.tienda._shared.domain;
 
 import es.jaime.javaddd.domain.Aggregate;
 import es.serversurvival._shared.utils.Funciones;

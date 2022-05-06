@@ -1,8 +1,11 @@
 package es.serversurvival.tienda.vertienda;
 
 import es.jaime.EventListener;
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
 import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
-import es.serversurvival.tienda.comprar.ItemCompradoEvento;
+import es.serversurvival.tienda._shared.application.TiendaService;
+import es.serversurvival.tienda.comprar.ObjetoTiendaComprado;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.MenuManager;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
@@ -11,8 +14,7 @@ import es.serversurvival._shared.menus.Clickable;
 import es.serversurvival._shared.menus.Paginated;
 import es.serversurvival._shared.menus.RefreshcableOnPaginated;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.tienda._shared.mySQL.ofertas.Ofertas;
-import es.serversurvival.tienda._shared.newformat.domain.TiendaObjeto;
+import es.serversurvival.tienda._shared.domain.TiendaObjeto;
 import es.serversurvival.tienda.comprar.ComprarOfertaUseCase;
 import es.serversurvival.tienda.retirar.RetirarOfertaUseCase;
 import es.serversurvival._shared.utils.Funciones;
@@ -26,16 +28,15 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.bukkit.ChatColor.*;
 
 public class OfertasMenu extends Menu implements Clickable, Paginated, RefreshcableOnPaginated {
-    private final ComprarOfertaUseCase comprarOfertaUseCase = ComprarOfertaUseCase.INSTANCE;
-    private final RetirarOfertaUseCase retirarOfertaUseCase = RetirarOfertaUseCase.INSTANCE;
+    private final JugadoresService jugadoresService;
+    private final TiendaService tiendaService;
+    private final ComprarOfertaUseCase comprarOfertaUseCase;
+    private final RetirarOfertaUseCase retirarOfertaUseCase;
 
     private OfertaInventoryFactory inventoryFactory = new OfertaInventoryFactory();
 
@@ -44,9 +45,12 @@ public class OfertasMenu extends Menu implements Clickable, Paginated, Refreshca
     private int currentIndex;
     private List<Page> pages;
 
-    public OfertasMenu () {}
-
     public OfertasMenu(Player player) {
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+        this.tiendaService = DependecyContainer.get(TiendaService.class);
+        this.comprarOfertaUseCase = new ComprarOfertaUseCase();
+        this.retirarOfertaUseCase = new RetirarOfertaUseCase();
+
         this.inventory = InventoryCreator.createInventoryMenu(inventoryFactory, player.getName());
         this.player = player;
         this.currentIndex = 0;
@@ -59,7 +63,6 @@ public class OfertasMenu extends Menu implements Clickable, Paginated, Refreshca
 
     @Override
     public void onOherClick(InventoryClickEvent event) {
-        Player player = (Player) event.getWhoClicked();
         ItemStack itemClicked = event.getCurrentItem();
 
         if(itemClicked == null || Funciones.esDeTipoItem(itemClicked, "AIR")){
@@ -79,13 +82,13 @@ public class OfertasMenu extends Menu implements Clickable, Paginated, Refreshca
             player.sendMessage(ChatColor.DARK_RED + "Tienes el inventario lleno :v");
             return;
         }
-        Try<Integer> idTry =  Try.of(() -> Integer.parseInt(itemClicked.getItemMeta().getLore().get(2)));
+        Try<UUID> idTry =  Try.of(() -> UUID.fromString(itemClicked.getItemMeta().getLore().get(2)));
         if(idTry.isFailure()){
             return;
         }
-        int id = idTry.get();
+        UUID id = idTry.get();
         Jugador jugador = AllMySQLTablesInstances.jugadoresMySQL.getJugador(player.getName());
-        TiendaObjeto ofertaAComprar = AllMySQLTablesInstances.ofertasMySQL.getOferta(id);
+        TiendaObjeto ofertaAComprar = this.tiendaService.getById(id);
 
         if (jugador.getPixelcoins() < ofertaAComprar.getPrecio()) {
             player.sendMessage(DARK_RED + "No puedes comprar por encima de tu dinero");
@@ -94,23 +97,23 @@ public class OfertasMenu extends Menu implements Clickable, Paginated, Refreshca
 
         String itemClickckedDisplayName = itemClicked.getItemMeta().getDisplayName();
 
-        if (itemClickckedDisplayName.equalsIgnoreCase(Ofertas.NOMBRE_ITEM_RETIRAR)) {
-            ItemStack itemRetirado = retirarOfertaUseCase.retirarOferta(id);
+        if (itemClickckedDisplayName.equalsIgnoreCase(OfertaInventoryFactory.NOMBRE_ITEM_RETIRAR)) {
+            ItemStack itemRetirado = retirarOfertaUseCase.retirarOferta(jugador.getNombre(), id);
             player.getInventory().addItem(itemRetirado);
 
-            player.sendMessage(GOLD + "Has retirado " + itemRetirado.getType().toString() + " de la tienda");
+            player.sendMessage(GOLD + "Has retirado " + itemRetirado.getType() + " de la tienda");
         } else {
             ItemStack itemComprado = comprarOfertaUseCase.realizarVenta(player.getName(), id);
 
             MinecraftUtils.setLore(itemComprado, Collections.singletonList("Comprado en la tienda"));
             player.getInventory().addItem(itemComprado);
-            player.sendMessage(GOLD + "Has comprado " + itemComprado.getType().toString());
+            player.sendMessage(GOLD + "Has comprado " + itemComprado.getType());
         }
     }
 
 
     @EventListener
-    public void onItemCompradoTienda (ItemCompradoEvento evento) {
+    public void onItemCompradoTienda (ObjetoTiendaComprado evento) {
         Player player = Bukkit.getPlayer(evento.getComprador());
 
         Funciones.enviarMensajeYSonido(player, GOLD + "Has comprado: " + evento.getObjeto() + " , por " + GREEN +
@@ -132,12 +135,10 @@ public class OfertasMenu extends Menu implements Clickable, Paginated, Refreshca
 
     @Override
     public void refresh() {
-        OfertaInventoryFactory factory = new OfertaInventoryFactory();
         Map<String, Menu> copyOfMenus = MenuManager.getCopyOfAllMenus();
 
         copyOfMenus.forEach( (jugador, menu) -> {
-            if(menu instanceof OfertasMenu){
-                OfertasMenu menuOfertas = (OfertasMenu) menu;
+            if(menu instanceof OfertasMenu menuOfertas){
                 int currentIndexOfPage = menuOfertas.getCurrentIndex();
 
                 OfertaInventoryFactory newInventoryFactory = new OfertaInventoryFactory();

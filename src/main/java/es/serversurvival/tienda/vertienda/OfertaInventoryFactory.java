@@ -1,10 +1,12 @@
 package es.serversurvival.tienda.vertienda;
 
 import es.jaimetruman.ItemBuilder;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import es.serversurvival._shared.menus.Paginated;
-import es.serversurvival.tienda._shared.mySQL.ofertas.Ofertas;
-import es.serversurvival.tienda._shared.newformat.domain.TiendaObjeto;
+import es.serversurvival._shared.utils.ItemsUtils;
+import es.serversurvival.tienda._shared.application.TiendaService;
+import es.serversurvival.tienda._shared.domain.TiendaObjeto;
 import es.serversurvival._shared.utils.MinecraftUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,30 +19,33 @@ import java.util.List;
 
 public class OfertaInventoryFactory extends InventoryFactory {
     public final static String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "            Tienda";
-    private List<ItemStack> itemExcessInventory = new ArrayList<>();
+    public final static String NOMBRE_ITEM_RETIRAR = ChatColor.RED + "" + ChatColor.BOLD + "CLICK PARA RETIRAR";
+    public final static String NOMBRE_ITEM_COMPRAR = ChatColor.AQUA + "" + ChatColor.BOLD + "CLICK PARA COMPRAR";
+
+    private final List<ItemStack> itemExcessInventory = new ArrayList<>();
+    private final TiendaService tiendaService;
+
+    public OfertaInventoryFactory(){
+        this.tiendaService = DependecyContainer.get(TiendaService.class);
+    }
 
     @Override
     protected Inventory buildInventory(String jugador) {
         Inventory inventory = Bukkit.createInventory(null, 54, titulo);
 
-        List<TiendaObjeto> ofertas = ofertasMySQL.getTodasOfertas();
+        List<TiendaObjeto> ofertas = this.tiendaService.findAll();
 
         for(int i = 0; i < ofertas.size(); i++){
-            TiendaObjeto oferta = ofertas.get(i);
+            TiendaObjeto itemTienda = ofertas.get(i);
 
-            ItemStack itemStackAInsertar = ofertasMySQL.getItemOferta(oferta);
+            ItemStack itemStackAInsertar = ItemsUtils.getItemStakcByTiendaObjeto(itemTienda);
 
             List<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GOLD + "Precio: " + ChatColor.GREEN + formatea.format(oferta.getPrecio()) + " PC");
-            lore.add(ChatColor.GOLD + "Venderdor: " + oferta.getJugador());
-            lore.add("" + oferta.getTiendaObjetoId());
+            lore.add(ChatColor.GOLD + "Precio: " + ChatColor.GREEN + formatea.format(itemTienda.getPrecio()) + " PC");
+            lore.add(ChatColor.GOLD + "Venderdor: " + itemTienda.getJugador());
+            lore.add("" + itemTienda.getTiendaObjetoId());
 
-            String displayName;
-            if(oferta.getJugador().equalsIgnoreCase(jugador)){
-                displayName = Ofertas.NOMBRE_ITEM_RETIRAR;
-            }else{
-                displayName = Ofertas.NOMBRE_ITEM_COMPRAR;
-            }
+            String displayName = itemTienda.getJugador().equalsIgnoreCase(jugador) ? NOMBRE_ITEM_RETIRAR : NOMBRE_ITEM_COMPRAR;
 
             MinecraftUtils.setLoreAndDisplayName(itemStackAInsertar, lore, displayName);
 

@@ -1,4 +1,4 @@
-package es.serversurvival.tienda._shared.newformat.domain;
+package es.serversurvival.tienda._shared.domain;
 
 import java.util.List;
 import java.util.Optional;

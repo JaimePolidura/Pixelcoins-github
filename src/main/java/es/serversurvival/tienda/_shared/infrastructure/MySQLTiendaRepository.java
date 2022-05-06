@@ -1,4 +1,4 @@
-package es.serversurvival.tienda._shared.newformat.infrastructure;
+package es.serversurvival.tienda._shared.infrastructure;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import es.jaime.configuration.DatabaseConfiguration;
@@ -6,9 +6,9 @@ import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
 import es.jaimetruman.select.Select;
 import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.tienda._shared.newformat.domain.EncantamientoObjecto;
-import es.serversurvival.tienda._shared.newformat.domain.TiendaObjeto;
-import es.serversurvival.tienda._shared.newformat.domain.TiendaRepository;
+import es.serversurvival.tienda._shared.domain.EncantamientoObjecto;
+import es.serversurvival.tienda._shared.domain.TiendaRepository;
+import es.serversurvival.tienda._shared.domain.TiendaObjeto;
 import lombok.SneakyThrows;
 
 import java.sql.ResultSet;

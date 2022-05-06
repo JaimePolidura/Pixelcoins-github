@@ -1,10 +1,10 @@
-package es.serversurvival.tienda._shared.newformat.application;
+package es.serversurvival.tienda._shared.application;
 
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.Cache;
 import es.serversurvival._shared.cache.LRUCache;
-import es.serversurvival.tienda._shared.newformat.domain.TiendaObjeto;
-import es.serversurvival.tienda._shared.newformat.domain.TiendaRepository;
+import es.serversurvival.tienda._shared.domain.TiendaRepository;
+import es.serversurvival.tienda._shared.domain.TiendaObjeto;
 
 import java.util.List;
 import java.util.Optional;

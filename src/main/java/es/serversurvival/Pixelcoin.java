@@ -17,8 +17,8 @@ import es.serversurvival.jugadores._shared.newformat.domain.JugadoresRepository;
 import es.serversurvival.jugadores._shared.newformat.infrastructure.MySQLJugadoresRepository;
 import es.serversurvival.mensajes._shared.application.MensajesService;
 import es.serversurvival.mensajes._shared.domain.MensajesRepository;
-import es.serversurvival.tienda._shared.newformat.application.TiendaService;
-import es.serversurvival.tienda._shared.newformat.domain.TiendaRepository;
+import es.serversurvival.tienda._shared.application.TiendaService;
+import es.serversurvival.tienda._shared.domain.TiendaRepository;
 import es.serversurvival.transacciones._shared.application.TransaccionesService;
 import es.serversurvival.transacciones._shared.domain.TransaccionesRepository;
 import es.serversurvival.webconnection.RabbitMQConsumerTask;
@@ -38,6 +38,7 @@ import static org.bukkit.ChatColor.*;
  * Mensajes
  * Transacciones
  * Deudas
+ * Tienda
  */
 public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstances {
     private static Pixelcoin plugin;

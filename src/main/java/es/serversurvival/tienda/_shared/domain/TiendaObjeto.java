@@ -1,4 +1,4 @@
-package es.serversurvival.tienda._shared.newformat.domain;
+package es.serversurvival.tienda._shared.domain;
 
 import es.jaime.javaddd.domain.Aggregate;
 import es.serversurvival._shared.mysql.TablaObjeto;
@@ -18,8 +18,8 @@ public final class TiendaObjeto extends Aggregate implements TablaObjeto {
     @Getter private final int durabilidad;
     @Getter private final List<EncantamientoObjecto> encantamientos;
 
-    public TiendaObjeto withCantidad(int cantidad){
-        return new TiendaObjeto(tiendaObjetoId, jugador, objeto, cantidad, precio, durabilidad, encantamientos);
+    public TiendaObjeto decrementCantidadByOne(){
+        return new TiendaObjeto(tiendaObjetoId, jugador, objeto, cantidad - 1, precio, durabilidad, encantamientos);
     }
 
     public TiendaObjeto withJugador(String jugador){

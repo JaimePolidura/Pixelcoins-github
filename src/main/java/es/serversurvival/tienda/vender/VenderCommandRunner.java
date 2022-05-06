@@ -18,34 +18,25 @@ import org.bukkit.inventory.ItemStack;
 import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
 
 @Command(
-        value = "vender",
+        value = "tienda vender",
         args = {"precio"},
-        explanation = "Subir a la tienda el objeto que tengas en la mano, para retirarlo /tienda y dar click"
+        explanation = "Subir a la tienda el objeto que tengas en la mano, para retirarlo /tienda ver y dar click"
 )
 public class VenderCommandRunner extends PixelcoinCommand implements CommandRunnerArgs<VenderCommando> {
-    private static final String MENSAJE_ITEM_NO_EN_LA_MANO = "Tienes que tener un objeto en la mano";
-    private final VenderTiendaUseCase useCase = VenderTiendaUseCase.INSTANCE;
+    private final VenderTiendaUseCase venderTiendaUseCase;
+
+    public VenderCommandRunner(){
+        this.venderTiendaUseCase = new VenderTiendaUseCase();
+    }
 
     @Override
     public void execute(VenderCommando comando, CommandSender sender) {
         Player player = (Player) sender;
-        String nombreItemMano = player.getInventory().getItemInMainHand().getType().toString();
         ItemStack itemMano = player.getInventory().getItemInMainHand();
-
-        ValidationResult result = ValidatorService.startValidating(nombreItemMano, NotEqualsIgnoreCase.of("AIR", MENSAJE_ITEM_NO_EN_LA_MANO), ItemNotBaneadoTienda)
-                .and(comando.getPrecio(), PositiveNumber)
-                .and(itemMano, NoHaSidoCompradoItem)
-                .and(player.getName(), SuficientesEspaciosTienda)
-                .validateAll();
-
-        if(result.isFailed()){
-            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
-            return;
-        }
 
         Inventory inventarioJugador = player.getInventory();
 
-        useCase.crearOferta(itemMano, player, comando.precio);
+        this.venderTiendaUseCase.crearOferta(player.getName(), itemMano, comando.precio);
 
         inventarioJugador.clear(player.getInventory().getHeldItemSlot());
 

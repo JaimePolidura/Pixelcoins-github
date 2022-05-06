@@ -28,9 +28,7 @@ public final class Validaciones {
 
     public final static SuficinestesPixelcoins SuficientesPixelcoins = new SuficinestesPixelcoins("No tienes las suficientes pixelcoins");
     public final static es.serversurvival._shared.utils.validaciones.misValidaciones.JugadorRegistrado JugadorRegistrado = new JugadorRegistrado("Jugador no encontrado");
-    public final static ItemNotBaneadoTienda ItemNotBaneadoTienda = new ItemNotBaneadoTienda("Item no permitido en la tienda");
     public final static es.serversurvival._shared.utils.validaciones.misValidaciones.NoHaSidoCompradoItem NoHaSidoCompradoItem = new NoHaSidoCompradoItem("No puedes revender un item que ya has comprado");
-    public final static es.serversurvival._shared.utils.validaciones.misValidaciones.SuficientesEspaciosTienda SuficientesEspaciosTienda = new SuficientesEspaciosTienda("Tienes muchos objetos en la tineda");
     public final static JugadorOnline JugadorOnline = new JugadorOnline("Ese jugador no esta online");
     public final static es.serversurvival._shared.utils.validaciones.misValidaciones.InventarioNoLleno InventarioNoLleno = new InventarioNoLleno("No puedes tener el inventario lleno");
     public final static OwnerPosicionAbierta OwnerPosicionAbierta = new OwnerPosicionAbierta("Esa posicion no estuyta o no existe o no es del tipo correcto");

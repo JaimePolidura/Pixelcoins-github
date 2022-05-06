@@ -11,7 +11,7 @@ import java.util.UUID;
 import static es.serversurvival.transacciones._shared.domain.TipoTransaccion.*;
 
 @AllArgsConstructor
-public final class ItemCompradoEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
+public final class ObjetoTiendaComprado extends PixelcoinsEvento implements EventoTipoTransaccion {
     @Getter private final String vendedor;
     @Getter private final String comprador;
     @Getter private final String objeto;

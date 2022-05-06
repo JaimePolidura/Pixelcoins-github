@@ -1,24 +1,34 @@
 package es.serversurvival.tienda.retirar;
 
-import es.serversurvival.tienda._shared.mySQL.ofertas.Ofertas;
-import es.serversurvival.tienda._shared.newformat.domain.TiendaObjeto;
+import es.jaime.javaddd.domain.exceptions.NotTheOwner;
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.utils.ItemsUtils;
+import es.serversurvival.tienda._shared.application.TiendaService;
+import es.serversurvival.tienda._shared.domain.TiendaObjeto;
 import org.bukkit.inventory.ItemStack;
 
-public final class RetirarOfertaUseCase {
-    public static final RetirarOfertaUseCase INSTANCE = new RetirarOfertaUseCase();
-    private final Ofertas ofertasMySQL;
+import java.util.UUID;
 
-    private RetirarOfertaUseCase() {
-        this.ofertasMySQL = Ofertas.INSTANCE;
+public final class RetirarOfertaUseCase {
+    private final TiendaService tiendaService;
+
+    public RetirarOfertaUseCase() {
+        this.tiendaService = DependecyContainer.get(TiendaService.class);
     }
 
-    public ItemStack retirarOferta(int idARetirar) {
-        TiendaObjeto ofertaARetirar = ofertasMySQL.getOferta(idARetirar);
+    public ItemStack retirarOferta(String jugador, UUID objetoTiendaIdARetirar) {
+        TiendaObjeto ofertaARetirar = this.tiendaService.getById(objetoTiendaIdARetirar);
+        this.ensureOwnerOfItemTienda(ofertaARetirar, jugador);
 
-        ItemStack itemARetirar = ofertasMySQL.getItemOferta(ofertaARetirar);
+        ItemStack itemARetirar = ItemsUtils.getItemStakcByTiendaObjeto(ofertaARetirar);
 
-        this.ofertasMySQL.borrarOferta(idARetirar);
+        this.tiendaService.deleteById(objetoTiendaIdARetirar);
 
         return itemARetirar;
+    }
+
+    private void ensureOwnerOfItemTienda(TiendaObjeto itemTienda, String jugadorNombre){
+        if(!itemTienda.getJugador().equals(jugadorNombre))
+            throw new NotTheOwner("No eres el owner de ese objeto de la tienda");
     }
 }
