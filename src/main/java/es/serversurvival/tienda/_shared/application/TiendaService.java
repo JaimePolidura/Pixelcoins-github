@@ -23,7 +23,7 @@ public final class TiendaService {
 
     public void save(TiendaObjeto tiendaObjeto) {
         this.repositoryDb.save(tiendaObjeto);
-        this.cache.add(tiendaObjeto.getTiendaObjetoId(), tiendaObjeto);
+        this.cache.put(tiendaObjeto.getTiendaObjetoId(), tiendaObjeto);
     }
 
     public TiendaObjeto save(String jugador, String objetoNombre, int cantidad, double precio,
@@ -46,7 +46,7 @@ public final class TiendaService {
         return this.cache.isNotFull() ?
                 this.cache.findValues(tiendaObjeto -> tiendaObjeto.getJugador().equals(jugador)) :
                 this.repositoryDb.findByJugador(jugador).stream().peek(tiendaObjeto -> {
-                    this.cache.add(tiendaObjeto.getTiendaObjetoId(), tiendaObjeto);
+                    this.cache.put(tiendaObjeto.getTiendaObjetoId(), tiendaObjeto);
                 }).toList();
     }
 
@@ -54,7 +54,7 @@ public final class TiendaService {
         return this.cache.isNotFull() ?
                 this.cache.all() :
                 this.repositoryDb.findAll().stream().peek(tiendaObjeto -> {
-                    this.cache.add(tiendaObjeto.getTiendaObjetoId(), tiendaObjeto);
+                    this.cache.put(tiendaObjeto.getTiendaObjetoId(), tiendaObjeto);
                 }).toList();
     }
 
@@ -65,7 +65,7 @@ public final class TiendaService {
 
     private Function<TiendaObjeto, TiendaObjeto> saveItemToCache(){
         return tiendaObjeto -> {
-            this.cache.add(tiendaObjeto.getTiendaObjetoId(), tiendaObjeto);
+            this.cache.put(tiendaObjeto.getTiendaObjetoId(), tiendaObjeto);
 
             return tiendaObjeto;
         };

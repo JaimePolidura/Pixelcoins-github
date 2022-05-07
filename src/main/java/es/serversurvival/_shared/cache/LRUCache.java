@@ -22,7 +22,7 @@ public class LRUCache<K, V> implements Cache<K, V>{
     }
 
     @Override
-    public void add(K key, V value) {
+    public void put(K key, V value) {
         removeIfExists(key, value);
         addFirst(key, value);
 
@@ -34,6 +34,11 @@ public class LRUCache<K, V> implements Cache<K, V>{
     @Override
     public void delete(K key) {
         this.items.removeIf(cacheItem -> cacheItem.getKey().equals(key));
+    }
+
+    @Override
+    public void delete(Predicate<V> condition) {
+        this.items.removeIf(cacheItem -> condition.test(cacheItem.getValue()));
     }
 
     @Override

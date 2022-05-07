@@ -7,9 +7,11 @@ import java.util.function.Predicate;
 public interface Cache<K, V> {
     int maxItemsCapacity();
 
-    void add(K key, V value);
+    void put(K key, V value);
 
     void delete(K key);
+
+    void delete(Predicate<V> condition);
 
     Optional<V> find(K key);
 

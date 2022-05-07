@@ -1,7 +1,7 @@
 package es.serversurvival.jugadores.perfil;
 
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.empresas._shared.mysql.Empresa;
+import es.serversurvival.empresas._shared.domain.Empresa;
 import es.serversurvival._shared.scoreboards.SingleScoreboard;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.utils.MinecraftUtils;

@@ -1,7 +1,7 @@
 package es.serversurvival.empresas.borrar;
 
 import es.serversurvival.Pixelcoin;
-import es.serversurvival.empresas._shared.mysql.Empresa;
+import es.serversurvival.empresas._shared.domain.Empresa;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 public final class EmpresaBorrarUseCase implements AllMySQLTablesInstances {

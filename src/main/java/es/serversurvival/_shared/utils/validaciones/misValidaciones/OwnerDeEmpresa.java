@@ -1,6 +1,5 @@
 package es.serversurvival._shared.utils.validaciones.misValidaciones;
 
-import es.serversurvival.empresas._shared.mysql.Empresas;
 import main.ValidationResult;
 import main.validators.Validator;
 

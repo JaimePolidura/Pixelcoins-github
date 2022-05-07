@@ -1,7 +1,7 @@
 package es.serversurvival.empresas.solicitarservicio;
 
 import es.serversurvival.empleados._shared.mysql.Empleado;
-import es.serversurvival.empresas._shared.mysql.Empresa;
+import es.serversurvival.empresas._shared.domain.Empresa;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;

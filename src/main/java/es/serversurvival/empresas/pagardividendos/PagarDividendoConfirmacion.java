@@ -1,7 +1,7 @@
 package es.serversurvival.empresas.pagardividendos;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival.empresas._shared.mysql.Empresa;
+import es.serversurvival.empresas._shared.domain.Empresa;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.AumentoConfirmacion;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;

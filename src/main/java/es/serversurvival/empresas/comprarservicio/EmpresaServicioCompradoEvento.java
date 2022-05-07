@@ -2,7 +2,7 @@ package es.serversurvival.empresas.comprarservicio;
 
 import es.serversurvival._shared.eventospixelcoins.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
-import es.serversurvival.empresas._shared.mysql.Empresa;
+import es.serversurvival.empresas._shared.domain.Empresa;
 import es.serversurvival.transacciones._shared.domain.Transaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

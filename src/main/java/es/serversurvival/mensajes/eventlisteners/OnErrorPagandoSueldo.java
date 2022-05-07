@@ -2,7 +2,7 @@ package es.serversurvival.mensajes.eventlisteners;
 
 import es.jaime.EventListener;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.empresas._shared.tasks.ErrorPagandoSueldo;
+import es.serversurvival.empresas._shared.application.tasks.ErrorPagandoSueldo;
 import es.serversurvival.mensajes._shared.application.MensajesService;
 
 public final class OnErrorPagandoSueldo {

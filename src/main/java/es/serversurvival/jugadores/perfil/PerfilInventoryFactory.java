@@ -6,7 +6,7 @@ import es.serversurvival.bolsa._shared.posicionescerradas.mysql.PosicionCerrada;
 import es.serversurvival.cuentaweb.Cuenta;
 import es.serversurvival.deudas._shared.newformat.domain.Deuda;
 import es.serversurvival.empleados._shared.mysql.Empleado;
-import es.serversurvival.empresas._shared.mysql.Empresa;
+import es.serversurvival.empresas._shared.domain.Empresa;
 import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
 import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;

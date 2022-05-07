@@ -12,6 +12,8 @@ import es.serversurvival._shared.mysql.newformat.MySQLConfiguration;
 import es.serversurvival.deudas._shared.newformat.application.DeudasService;
 import es.serversurvival.deudas._shared.newformat.domain.DeudasRepository;
 import es.serversurvival.deudas._shared.newformat.infrastructure.MySQLDeudasRepository;
+import es.serversurvival.empresas._shared.domain.EmpresasRepostiory;
+import es.serversurvival.empresas._shared.infrastructure.MySQLEmpresasRepository;
 import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
 import es.serversurvival.jugadores._shared.newformat.domain.JugadoresRepository;
 import es.serversurvival.jugadores._shared.newformat.infrastructure.MySQLJugadoresRepository;
@@ -116,6 +118,7 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
             put(TransaccionesRepository.class, new MySQLJugadoresRepository(mysqlCOnfiguration));
             put(DeudasRepository.class, new MySQLDeudasRepository(mysqlCOnfiguration));
             put(TiendaRepository.class, new MySQLDeudasRepository(mysqlCOnfiguration));
+            put(EmpresasRepostiory.class, new MySQLEmpresasRepository(mysqlCOnfiguration));
         }});
 
         DependecyContainer.addAll(new HashMap<>(){{

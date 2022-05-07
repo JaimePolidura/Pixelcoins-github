@@ -1,7 +1,7 @@
 package es.serversurvival.empresas.depositar;
 
 import es.serversurvival.Pixelcoin;
-import es.serversurvival.empresas._shared.mysql.Empresa;
+import es.serversurvival.empresas._shared.domain.Empresa;
 import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 

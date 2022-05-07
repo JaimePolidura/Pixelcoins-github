@@ -2,7 +2,6 @@ package es.serversurvival.empresas.editarnombre;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival.empresas._shared.mysql.Empresas;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
 import main.ValidationResult;

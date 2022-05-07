@@ -1,9 +1,9 @@
-package es.serversurvival.empresas._shared.tasks;
+package es.serversurvival.empresas._shared.application.tasks;
 
 import es.serversurvival.Pixelcoin;
 import es.serversurvival.empleados._shared.mysql.Empleado;
 import es.serversurvival.empleados._shared.mysql.TipoSueldo;
-import es.serversurvival.empresas._shared.mysql.Empresa;
+import es.serversurvival.empresas._shared.domain.Empresa;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
 import lombok.SneakyThrows;

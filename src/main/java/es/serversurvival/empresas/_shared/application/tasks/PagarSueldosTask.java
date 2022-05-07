@@ -1,9 +1,9 @@
-package es.serversurvival.empresas._shared.tasks;
+package es.serversurvival.empresas._shared.application.tasks;
 
 import es.jaimetruman.task.Task;
 import es.jaimetruman.task.TaskRunner;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.empresas._shared.mysql.Empresa;
+import es.serversurvival.empresas._shared.domain.Empresa;
 
 import java.util.List;
 

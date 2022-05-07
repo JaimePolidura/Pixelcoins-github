@@ -7,7 +7,6 @@ import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionesAbiert
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.PosicionesCerradas;
 import es.serversurvival.deudas._shared.mysql.Deudas;
 import es.serversurvival.empleados._shared.mysql.Empleados;
-import es.serversurvival.empresas._shared.mysql.Empresas;
 import es.serversurvival.jugadores._shared.mySQL.MySQLJugadoresRepository;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.webconnection.conversacionesweb.mysql.ConversacionesWeb;

@@ -25,7 +25,7 @@ public final class JugadoresService {
 
     public void save(Jugador jugador){
         this.repositoryDb.save(jugador);
-        this.cache.add(jugador.getNombre(), jugador);
+        this.cache.put(jugador.getNombre(), jugador);
     }
 
     public void save(UUID jugadorId, String nombre) {
@@ -33,7 +33,7 @@ public final class JugadoresService {
                 0, 0, 0, 0, this.generearNumeroCuenta());
 
         this.repositoryDb.save(jugador);
-        this.cache.add(jugador.getNombre(), jugador);
+        this.cache.put(jugador.getNombre(), jugador);
     }
 
     public int generearNumeroCuenta () {
@@ -99,7 +99,7 @@ public final class JugadoresService {
 
     private Function<Jugador, Jugador> saveJugadorToCache(){
         return jugador -> {
-            this.cache.add(jugador.getNombre(), jugador);
+            this.cache.put(jugador.getNombre(), jugador);
 
             return jugador;
         };

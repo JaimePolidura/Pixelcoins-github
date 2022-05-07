@@ -2,7 +2,6 @@ package es.serversurvival.empresas.editardescripccion;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival.empresas._shared.mysql.Empresas;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import main.ValidationResult;
 import main.ValidatorService;

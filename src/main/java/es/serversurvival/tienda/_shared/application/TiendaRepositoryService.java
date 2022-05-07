@@ -21,7 +21,7 @@ public final class TiendaRepositoryService {
 
     public void save(TiendaObjeto tiendaObjeto) {
         this.repository.save(tiendaObjeto);
-        this.cache.add(tiendaObjeto.getTiendaObjetoId(), tiendaObjeto);
+        this.cache.put(tiendaObjeto.getTiendaObjetoId(), tiendaObjeto);
     }
 
     public Optional<TiendaObjeto> findById(UUID id) {
@@ -30,7 +30,7 @@ public final class TiendaRepositoryService {
         return tiendaObjetoFromCache.isPresent() ?
                 tiendaObjetoFromCache :
                 this.repository.findById(id).map(itemTienda -> {
-                    this.cache.add(itemTienda.getTiendaObjetoId(), itemTienda);
+                    this.cache.put(itemTienda.getTiendaObjetoId(), itemTienda);
 
                     return itemTienda;
                 });
@@ -41,7 +41,7 @@ public final class TiendaRepositoryService {
                 this.cache.findValues(tiendaObjeto -> tiendaObjeto.getJugador().equals(jugador)) :
                 this.repository.findByJugador(jugador).stream()
                         .peek(itemTienda -> {
-                            this.cache.add(itemTienda.getTiendaObjetoId(), itemTienda);
+                            this.cache.put(itemTienda.getTiendaObjetoId(), itemTienda);
                         })
                         .toList();
     }
