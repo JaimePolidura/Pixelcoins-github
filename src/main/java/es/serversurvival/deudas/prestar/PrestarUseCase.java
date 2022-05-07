@@ -21,9 +21,9 @@ public final class PrestarUseCase implements AllMySQLTablesInstances {
     }
 
     public void prestar (String acredor, String deudor, int pixelcoins, int interes, int dias) {
+        this.ensureNotTheSame(acredor, deudor);
         Jugador acredorJugador = this.ensureJugadorExists(acredor);
         Jugador deudorJugador = this.ensureJugadorExists(deudor);
-        this.ensureNotTheSame(acredor, deudor);
         this.ensurePixelcionsAndDiasPositiveAndNotBigger(pixelcoins, dias, interes);
         int pixelcoinsMasInteres = Funciones.aumentarPorcentaje(pixelcoins, interes);
         this.ensureAcredorHasEnoughPixelcoins(acredorJugador, pixelcoinsMasInteres);
@@ -58,5 +58,4 @@ public final class PrestarUseCase implements AllMySQLTablesInstances {
     private Jugador ensureJugadorExists(String jugadorName) {
         return this.jugadoresService.getJugadorByNombre(jugadorName);
     }
-
 }

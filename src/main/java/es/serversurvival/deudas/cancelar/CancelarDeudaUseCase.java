@@ -23,10 +23,7 @@ public final class CancelarDeudaUseCase implements AllMySQLTablesInstances {
 
         this.deudasService.deleteById(deudaId);
 
-        String nombreDeudor = deudaACancelar.getDeudor();
-        int pixelcoinsDeudaRestantes = deudaACancelar.getPixelcoins_restantes();
-
-        Pixelcoin.publish(new DeudaCanceladaEvento(playerName, nombreDeudor, pixelcoinsDeudaRestantes));
+        Pixelcoin.publish(new DeudaCanceladaEvento(playerName, deudaACancelar.getDeudor(), deudaACancelar.getPixelcoins_restantes()));
 
         return deudaACancelar;
     }

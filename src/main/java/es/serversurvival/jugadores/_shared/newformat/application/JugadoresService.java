@@ -1,54 +1,73 @@
 package es.serversurvival.jugadores._shared.newformat.application;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.cache.Cache;
+import es.serversurvival._shared.cache.LRUCache;
 import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.newformat.domain.JugadoresRepository;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public final class JugadoresService {
-    private final JugadoresRepositoryService jugadoresRepositoryService;
+    private final JugadoresRepository repositoryDb;
+    private final Cache<String, Jugador> cache;
 
     public JugadoresService() {
-        this.jugadoresRepositoryService = new JugadoresRepositoryService();
+        this.repositoryDb = DependecyContainer.get(JugadoresRepository.class);
+        this.cache = new LRUCache<>(150);
     }
 
     public void save(Jugador jugador){
-        this.jugadoresRepositoryService.save(jugador);
+        this.repositoryDb.save(jugador);
+        this.cache.add(jugador.getNombre(), jugador);
     }
 
-    public void save(UUID jugadorId, String nombre){
-        this.jugadoresRepositoryService.save(new Jugador(jugadorId, nombre, 0, 0,
-                0, 0, 0, 0, this.generearNumeroCuenta()));
+    public void save(UUID jugadorId, String nombre) {
+        var jugador = new Jugador(jugadorId, nombre, 0, 0,
+                0, 0, 0, 0, this.generearNumeroCuenta());
+
+        this.repositoryDb.save(jugador);
+        this.cache.add(jugador.getNombre(), jugador);
     }
 
     public int generearNumeroCuenta () {
         return (int) (Math.random() * 99999);
     }
 
-    public boolean estaRegistradoNumeroCuentaPara(String nombre, int numeroCuenta){
-        Optional<Jugador> jugador = this.jugadoresRepositoryService.findByNombre(nombre);
-
-        return jugador.isPresent() && jugador.get().getNumeroVerificacionCuenta() == numeroCuenta;
-    }
-
     public Jugador getJugadorByNombre(String nombre){
-        return this.jugadoresRepositoryService.findByNombre(nombre)
-                .orElseThrow(() -> new ResourceNotFound("Jugador no encontrado"));
+        var cachedJugador = this.cache.find(nombre);
+
+        return cachedJugador.orElseGet(() -> this.repositoryDb.findByNombre(nombre)
+                .map(saveJugadorToCache())
+                .orElseThrow(() -> new ResourceNotFound("Jugador no encontrado")));
     }
 
     public Jugador getJugadorById(UUID jugadorId){
-        return this.jugadoresRepositoryService.findByJugadorId(jugadorId)
-                .orElseThrow(() -> new ResourceNotFound("Jugador no encontrado"));
+        var cachedJugador = this.cache.findValue(jugador -> jugador.getJugadorId().equals(jugadorId));
+
+        return cachedJugador.orElseGet(() -> this.repositoryDb.findById(jugadorId)
+                .map(saveJugadorToCache())
+                .orElseThrow(() -> new ResourceNotFound("Jugador no encontrado")));
+    }
+
+    public boolean estaRegistradoNumeroCuentaPara(String nombre, int numeroVerificacionCuenta){
+        return this.getJugadorByNombre(nombre).getNumeroVerificacionCuenta() == numeroVerificacionCuenta;
     }
 
     public List<Jugador> findAll(){
-        return this.jugadoresRepositoryService.findAll();
+        return this.repositoryDb.findAll();
     }
 
     public List<Jugador> findBy(Predicate<? super Jugador> condition){
-        return this.findAll().stream()
+        List<Jugador> listToFind = this.cache.isFull() ? this.repositoryDb.findAll() : this.cache.all();
+
+        return listToFind.stream()
                 .filter(condition)
                 .collect(Collectors.toList());
     }
@@ -65,16 +84,24 @@ public final class JugadoresService {
         Jugador pagadoChangedPixelcoins = this.getJugadorByNombre(nombrePagado)
                 .incrementPixelcoinsBy(pixelcoins);
 
-        this.jugadoresRepositoryService.save(pagadorChangedPixelcoins);
-        this.jugadoresRepositoryService.save(pagadoChangedPixelcoins);
+        this.save(pagadorChangedPixelcoins);
+        this.save(pagadoChangedPixelcoins);
     }
 
     public void realizarTransferenciaConEstadisticas (Jugador pagador, Jugador pagado, double pixelcoins) {
-        this.jugadoresRepositoryService.save(pagador.decrementPixelcoinsBy(pixelcoins)
+        this.save(pagador.decrementPixelcoinsBy(pixelcoins)
                 .incrementGastosBy(pixelcoins));
 
-        this.jugadoresRepositoryService.save(pagado.incrementPixelcoinsBy(pixelcoins)
+        this.save(pagado.incrementPixelcoinsBy(pixelcoins)
                 .incrementNVentas()
                 .incrementIngresosBy(pixelcoins));
+    }
+
+    private Function<Jugador, Jugador> saveJugadorToCache(){
+        return jugador -> {
+            this.cache.add(jugador.getNombre(), jugador);
+
+            return jugador;
+        };
     }
 }

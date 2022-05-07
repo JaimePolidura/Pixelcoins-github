@@ -24,16 +24,9 @@ public class PrestarComandoRunner extends PixelcoinCommand implements CommandRun
         int pixelcoins = comando.getPixelcoins();
         int dias = comando.getDias();
         int interes = comando.getInteres();
-        double pixelcoinsConIntereses = Funciones.aumentarPorcentaje(pixelcoins, interes);
 
-        ValidationResult result = ValidatorService
-                .startValidating(jugador, JugadorOnline, NotEqualsIgnoreCase.of(player.getName(), "No puedes ser tu mimsmo"))
-                .and(pixelcoins, NaturalNumber)
-                .and(dias, NaturalNumber)
-                .and(interes, NaturalNumber)
-                .and(dias >= pixelcoins, True.of("Los dias no pueden ser superior a las pixelcoins"))
+        ValidationResult result = ValidatorService.startValidating(jugador, JugadorOnline)
                 .and(MenuManager.getByPlayer(jugador) != null, False.of("Ya le han enviado una solicitud"))
-                .and(pixelcoinsConIntereses, SuficientesPixelcoins.of(player.getName()))
                 .validateAll();
 
         if(result.isFailed()){
@@ -41,7 +34,7 @@ public class PrestarComandoRunner extends PixelcoinCommand implements CommandRun
             return;
         }
 
-        PrestamoSolicitud solicitud = new PrestamoSolicitud(
+        new PrestamoSolicitud(
                 player.getName(),
                 jugador,
                 pixelcoins,

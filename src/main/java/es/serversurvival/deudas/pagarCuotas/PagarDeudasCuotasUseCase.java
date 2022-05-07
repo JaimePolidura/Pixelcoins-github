@@ -20,7 +20,7 @@ public final class PagarDeudasCuotasUseCase {
     private final DeudasService deudasService;
     private final JugadoresService jugadoresService;
 
-    private PagarDeudasCuotasUseCase () {
+    public PagarDeudasCuotasUseCase () {
         this.deudasService = DependecyContainer.get(DeudasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
     }
