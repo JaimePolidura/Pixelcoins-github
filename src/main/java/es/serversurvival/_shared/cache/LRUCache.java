@@ -107,8 +107,8 @@ public class LRUCache<K, V> implements Cache<K, V>{
     }
 
     @Override
-    public boolean isFull() {
-        return this.items.size() == maxCapacity;
+    public int size() {
+        return this.items.size();
     }
 
     private void removeIfExists(K key, V value){

@@ -17,13 +17,18 @@ public interface Cache<K, V> {
 
     void clear();
 
-    boolean isFull();
+    int size();
 
     Optional<V> findValue(Predicate<V> valueCondition);
 
     List<V> findValues(Predicate<V> valueCondition);
 
-    default boolean notFull(){
+
+    default boolean isFull() {
+        return this.size() == maxItemsCapacity();
+    }
+
+    default boolean isNotFull(){
         return !this.isFull();
     }
 }

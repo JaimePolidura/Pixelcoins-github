@@ -37,7 +37,7 @@ public final class TiendaRepositoryService {
     }
 
     public List<TiendaObjeto> findByJugador(String jugador) {
-        return this.cache.notFull() ?
+        return this.cache.isNotFull() ?
                 this.cache.findValues(tiendaObjeto -> tiendaObjeto.getJugador().equals(jugador)) :
                 this.repository.findByJugador(jugador).stream()
                         .peek(itemTienda -> {
