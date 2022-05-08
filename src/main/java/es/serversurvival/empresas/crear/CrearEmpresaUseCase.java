@@ -1,16 +1,53 @@
 package es.serversurvival.empresas.crear;
 
+import es.jaime.javaddd.domain.exceptions.AlreadyExists;
+import es.jaime.javaddd.domain.exceptions.IllegalLength;
+import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.serversurvival.Pixelcoin;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival.empresas._shared.application.EmpresasService;
+import io.vavr.control.Try;
+
+import static es.serversurvival.empresas._shared.application.EmpresasService.*;
 
 public final class CrearEmpresaUseCase implements AllMySQLTablesInstances {
-    public static final CrearEmpresaUseCase INSTANCE = new CrearEmpresaUseCase();
+    private final EmpresasService empresasService;
 
-    private CrearEmpresaUseCase () {}
+    public CrearEmpresaUseCase(){
+        this.empresasService = DependecyContainer.get(EmpresasService.class);
+    }
 
     public void crear (String jugador, String nombreEmpresa, String descripcion) {
-        empresasMySQL.nuevaEmpresa(nombreEmpresa, jugador, 0, 0, 0, "DIAMOND_PICKAXE", descripcion);
+        this.ensureNombreEmpresaCorrectFormat(nombreEmpresa);
+        this.ensureDescripccionCorrectFormat(descripcion);
+        this.ensureNameNotTaken(nombreEmpresa);
+        this.ensureUserNotPassMaxEmpresas(jugador);
+
+        this.empresasService.save(nombreEmpresa, jugador, descripcion);
 
         Pixelcoin.publish(new EmpresaCreadaEvento(jugador, nombreEmpresa));
+    }
+
+    private void ensureNombreEmpresaCorrectFormat(String nombreEmpresa){
+        if(nombreEmpresa == null || nombreEmpresa.length() <= 0 || nombreEmpresa.length() > MAX_NOMBRE_LONGITUD)
+            throw new IllegalLength("El nombre tiene que comprender entre 1 y 16 caracteres");
+    }
+
+    private void ensureDescripccionCorrectFormat(String descripccion){
+        if(descripccion == null || descripccion.length() <= 0 || descripccion.length() > MAX_DESC_LONGITUD)
+            throw new IllegalLength("La descripccion tiene que comprender entre 1 y 200 caracteres");
+    }
+
+    private void ensureNameNotTaken(String nombre){
+        var taken = (Try.of(() -> this.empresasService.getEmpresaByNombre(nombre))).isFailure();
+
+        if(!taken)
+            throw new AlreadyExists("El nombre ya esta cogido");
+    }
+
+    private void ensureUserNotPassMaxEmpresas(String jugadorNombre){
+        if(this.empresasService.getByOwner(jugadorNombre).size() > MAX_EMPRESAS_PER_JUGADOR)
+            throw new IllegalQuantity("No puedes tener mas de " + MAX_EMPRESAS_PER_JUGADOR + " empresas");
     }
 }

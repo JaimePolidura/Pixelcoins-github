@@ -6,6 +6,7 @@ import es.serversurvival.bolsa._shared.posicionescerradas.mysql.PosicionCerrada;
 import es.serversurvival.cuentaweb.Cuenta;
 import es.serversurvival.deudas._shared.newformat.domain.Deuda;
 import es.serversurvival.empleados._shared.mysql.Empleado;
+import es.serversurvival.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas._shared.domain.Empresa;
 import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
 import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
@@ -27,8 +28,10 @@ import static es.serversurvival._shared.utils.Funciones.*;
 public class PerfilInventoryFactory extends InventoryFactory {
     private final List<Integer> posicionesCristales;
     private final JugadoresService jugadoresService;
+    private final EmpresasService empresasService;
 
     public PerfilInventoryFactory(){
+        this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.posicionesCristales = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27,
                 35, 36, 44, 45, 46 , 47, 48, 49, 50, 51, 52, 53);
@@ -73,7 +76,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
 
         List<String> lore = new ArrayList<>();
         lore.add("  ");
-        List<Empresa> empresas = empresasMySQL.getEmpresasOwner(jugador);
+        List<Empresa> empresas = empresasService.getByOwner(jugador);
         empresas.forEach( (empresa) -> {
             lore.add(ChatColor.GOLD + "- " + empresa.getNombre() + " ( " + ChatColor.GREEN + formatea.format(empresa.getPixelcoins()) + " PC" +  ChatColor.GOLD + ")");
         });
@@ -135,7 +138,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
         double totalDebe = deudasMySQL.getAllPixelcoinsDeudasDeudor(jugador.getNombre());
         double totalDeben = deudasMySQL.getAllPixelcoinsDeudasAcredor(jugador.getNombre());
         double totalAcciones = posicionesAbiertasMySQL.getAllPixeloinsEnAcciones(jugador.getNombre());
-        double totalEmpresas = empresasMySQL.getAllPixelcoinsEnEmpresas(jugador.getNombre());
+        double totalEmpresas = empresasService.getAllPixelcoinsEnEmpresas(jugador.getNombre());
         double resultado = (totalAhorrado + totalDeben + totalAcciones + totalEmpresas) - totalDebe;
 
         double gastos = jugador.getGastos();

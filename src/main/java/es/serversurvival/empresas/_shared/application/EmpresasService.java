@@ -16,12 +16,21 @@ import java.util.function.Function;
 import static es.serversurvival._shared.utils.Funciones.getSumaTotalListDouble;
 
 public final class EmpresasService {
+    public static final int MAX_EMPRESAS_PER_JUGADOR = 5;
+    public static final int MAX_NOMBRE_LONGITUD = 16;
+    public static final int MAX_DESC_LONGITUD = 200;
+
     private final EmpresasRepostiory repostioryDb;
     private final Cache<String, Empresa> cache;
 
     public EmpresasService(){
         this.repostioryDb = DependecyContainer.get(EmpresasRepostiory.class);
         this.cache = new LRUCache<>(200);
+    }
+
+    public void save(String nombre, String jugadorNombre, String descripccion){
+        this.save(new Empresa(UUID.randomUUID(), nombre, jugadorNombre, 0, 0,
+                0, "DIAMOND_PICKAXE", descripccion, false));
     }
 
     public void save(Empresa empresa) {

@@ -1,8 +1,10 @@
 package es.serversurvival.empleados.misempleos;
 
 import es.jaimetruman.ItemBuilder;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empleados._shared.mysql.Empleado;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
+import es.serversurvival.empresas._shared.application.EmpresasService;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,6 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmpleosInventoryFactory extends InventoryFactory {
+    private final EmpresasService empresasService;
+
+    public EmpleosInventoryFactory(){
+        this.empresasService = DependecyContainer.get(EmpresasService.class);
+    }
+
     @Override
     protected Inventory buildInventory(String jugador) {
         Inventory inventory = Bukkit.createInventory(null, 54, ChatColor.DARK_RED + "" + ChatColor.BOLD + "        TUS EMPLEOS");
@@ -47,7 +55,7 @@ public class EmpleosInventoryFactory extends InventoryFactory {
 
         List<ItemStack> itemsEmpleos = new ArrayList<>();
         empleaosJugador.forEach( (empleado) -> {
-            String icono = empresasMySQL.getEmpresa(empleado.getEmpresa()).getIcono();
+            String icono = empresasService.getEmpresaByNombre(empleado.getEmpresa()).getIcono();
             String displayName = ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA IRTE";
 
             List<String> lore = new ArrayList<>();

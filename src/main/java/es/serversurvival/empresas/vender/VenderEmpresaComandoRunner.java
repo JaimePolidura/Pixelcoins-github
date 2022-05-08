@@ -3,6 +3,7 @@ package es.serversurvival.empresas.vender;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
+import es.serversurvival._shared.utils.validaciones.misValidaciones.OwnerDeEmpresa;
 import main.ValidationResult;
 import main.ValidatorService;
 import org.bukkit.ChatColor;

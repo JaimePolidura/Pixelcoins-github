@@ -23,6 +23,7 @@ import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionesAbiertas;
 import es.serversurvival.deudas._shared.newformat.domain.Deuda;
 import es.serversurvival.deudas._shared.mysql.Deudas;
+import es.serversurvival.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas._shared.domain.Empresa;
 import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival.jugadores._shared.mySQL.MySQLJugadoresRepository;
@@ -152,14 +153,14 @@ public final class Funciones {
         Deudas deudasMySQL = Deudas.INSTANCE;
         MySQLJugadoresRepository jugadoresMySQL = MySQLJugadoresRepository.INSTANCE;
         PosicionesAbiertas posicionesAbiertasMySQL = PosicionesAbiertas.INSTANCE;
-        Empresas empresasMySQL = Empresas.INSTANCE;
+        EmpresasService empresasService = DependecyContainer.get(EmpresasService.class);
         LlamadasApi llamadasApiMySQL = LlamadasApi.INSTANCE;
 
         List<Jugador> allJugadordes = jugadoresMySQL.getAllJugadores();
         Map<String, LlamadaApi> mapAllLlamadas = llamadasApiMySQL.getMapOfAllLlamadasApi();
         Map<String, List<Deuda>> mapDeudasAcredor = deudasMySQL.getAllDeudasAcredorMap();
         Map<String, List<Deuda>> mapDeudasDeudor = deudasMySQL.getAllDeudasDeudorMap();
-        Map<String, List<Empresa>> mapEmpresasJugador = empresasMySQL.getAllEmpresasJugadorMap();
+        Map<String, List<Empresa>> mapEmpresasJugador = empresasService.getAllEmpresasJugadorMap();
         Map<String, List<PosicionAbierta>> mapPosicionesLargo = posicionesAbiertasMySQL.getAllPosicionesAbiertasMap(PosicionAbierta::noEsTipoAccionServerYLargo);
         Map<String, List<PosicionAbierta>> mapPosicionesCorto = posicionesAbiertasMySQL.getAllPosicionesAbiertasMap(PosicionAbierta::esCorto);
 

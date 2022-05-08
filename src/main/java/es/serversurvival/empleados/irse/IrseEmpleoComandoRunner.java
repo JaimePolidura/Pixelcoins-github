@@ -21,24 +21,8 @@ public class IrseEmpleoComandoRunner extends PixelcoinCommand implements Command
 
     @Override
     public void execute(IrseEmpleoComando command, CommandSender player) {
-        String empresa = command.getEmpresa();
+        useCase.irse(player.getName(), command.getEmpresa());
 
-        ValidationResult result = ValidatorService
-                .startValidating(empresasMySQL.getEmpresa(empresa) != null, True.of("Esa empresa no exsiste"))
-                .and(trabajaEnLaEmpresa(empresa, player.getName()), True.of("Ese jugador no trabaja en la empresa"))
-                .validateAll();
-
-        if(result.isFailed()){
-            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
-            return;
-        }
-
-        useCase.irse(player.getName(), empresa);
-
-        player.sendMessage(ChatColor.GOLD + "Te has ido de: " + empresa);
-    }
-
-    private boolean trabajaEnLaEmpresa (String empresa, String jugador) {
-        return empleadosMySQL.trabajaEmpresa(jugador, empresa);
+        player.sendMessage(ChatColor.GOLD + "Te has ido de: " + command.getEmpresa());
     }
 }

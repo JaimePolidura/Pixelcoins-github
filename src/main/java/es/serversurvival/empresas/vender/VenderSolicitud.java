@@ -15,8 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class VenderSolicitud extends Menu implements Solicitud {
-    private final VenderEmpresaUseCase useCase = VenderEmpresaUseCase.INSTANCE;
-
+    private final VenderEmpresaUseCase useCase;
     private final Inventory inventory;
     private final Player player;
     private final String enviador;
@@ -31,6 +30,7 @@ public class VenderSolicitud extends Menu implements Solicitud {
         this.empresa = empresa;
         this.precio = precio;
         this.player = Bukkit.getPlayer(destinatario);
+        this.useCase = new VenderEmpresaUseCase();
 
         String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "solicitud compra empresa";
         String nombreAceptar = ChatColor.GREEN + "" + ChatColor.BOLD + "ACEPTAR";

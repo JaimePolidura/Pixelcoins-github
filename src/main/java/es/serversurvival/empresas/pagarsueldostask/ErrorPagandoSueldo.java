@@ -1,4 +1,4 @@
-package es.serversurvival.empresas._shared.application.tasks;
+package es.serversurvival.empresas.pagarsueldostask;
 
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import lombok.AllArgsConstructor;

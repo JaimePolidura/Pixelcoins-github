@@ -20,31 +20,16 @@ import static org.bukkit.ChatColor.GOLD;
         explanation = "Comprar un servicio a la empresa, <empresa> nombre de la empresa <precio> pixelcoisn a dar"
 )
 public class ComprarServicionComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<ComprarServicionComando> {
-    private final String usoIncorrecto = ChatColor.DARK_RED + "Uso incorrecto /comprar <empresa> <precio>";
-    private final ComprarServicioUseCase useCase = ComprarServicioUseCase.INSTANCE;
+    private final ComprarServicioUseCase useCase;
+
+    public ComprarServicionComandoRunner(){
+        this.useCase = new ComprarServicioUseCase();
+    }
 
     @Override
     public void execute(ComprarServicionComando comprarServicionComando, CommandSender player) {
         String empresaNombre = comprarServicionComando.getEmpresa();
         double precio = comprarServicionComando.getPrecio();
-
-        ValidationResult result = ValidatorService
-                .startValidating(precio, PositiveNumber, SuficientesPixelcoins.of(player.getName()))
-                .validateAll();
-
-        if(result.isFailed()){
-            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
-            return;
-        }
-        Empresa empresaAComprar = empresasMySQL.getEmpresa(empresaNombre);
-        if (empresaAComprar == null) { //TODO
-            player.sendMessage(DARK_RED + "Esa empresa no existe");
-            return;
-        }
-        if (empresaAComprar.getOwner().equalsIgnoreCase(player.getName())) {
-            player.sendMessage(DARK_RED + "No puedes comprar un servivio de tu propia empresa");
-            return;
-        }
 
         //TODO Mejorar para que al enviar el mensaje al owner no tengamos que devolver nada en el metodo
         Empresa empresa = useCase.comprar(player.getName(), empresaNombre, precio);
@@ -55,6 +40,5 @@ public class ComprarServicionComandoRunner extends PixelcoinCommand implements C
                 " por " + GREEN + formatea.format(precio) + " PC";
 
         Funciones.enviarMensaje(empresa.getOwner(), mensajeOnline, mensajeOnline);
-
     }
 }

@@ -14,8 +14,6 @@ import static org.bukkit.ChatColor.*;
         explanation = "Editar a un empleado"
 )
 public class EditarEmpleadoComandoExecutor extends PixelcoinCommand implements CommandRunnerArgs<EditarEmpleadoComando> {
-    private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /empresas editarempleado <empresa>";
-
     @Override
     public void execute(EditarEmpleadoComando comando, CommandSender sender) {
         if(comando.getEmpresa().equalsIgnoreCase(""))

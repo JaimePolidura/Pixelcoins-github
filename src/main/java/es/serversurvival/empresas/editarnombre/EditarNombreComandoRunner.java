@@ -20,25 +20,15 @@ import static org.bukkit.ChatColor.DARK_RED;
         explanation = "Cambiar el nombre de tu empresa a otro, el nombre no puede estar cogido"
 )
 public class EditarNombreComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<EditarNombreComando> {
-    private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /empresas editarnombre <empresa> <nuevo nombre>";
-    private final EditarNombreUseCase useCase = EditarNombreUseCase.INSTANCE;
+    private final EditarNombreUseCase useCase;
+
+    public EditarNombreComandoRunner() {
+        this.useCase = new EditarNombreUseCase();
+    }
 
     @Override
     public void execute(EditarNombreComando editarNombreComando, CommandSender sender) {
-        String empresa = editarNombreComando.getEmpresa();
-        String nuevoNombre = editarNombreComando.getNuevoNombre();
-
-        ValidationResult result = ValidatorService
-                .startValidating(empresa, OwnerDeEmpresa.of(sender.getName()), MaxLength.of(Empresas.CrearEmpresaNombreLonMax, "El nombre no puede ser tan largo"))
-                .and(nuevoNombre, NombreEmpresaNoPillado)
-                .validateAll();
-
-        if(result.isFailed()) {
-            sender.sendMessage(ChatColor.DARK_RED + result.getMessage());
-            return;
-        }
-
-        useCase.editar(empresa, nuevoNombre);
+        useCase.editar(editarNombreComando.getEmpresa(), editarNombreComando.getNuevoNombre(), sender.getName());
 
         Funciones.enviarMensajeYSonido((Player) sender, ChatColor.GOLD + "Has cambiado de nombre a tu empresa!", Sound.ENTITY_PLAYER_LEVELUP);
     }

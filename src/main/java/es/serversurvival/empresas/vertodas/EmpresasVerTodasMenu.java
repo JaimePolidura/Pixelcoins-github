@@ -20,15 +20,17 @@ import java.util.*;
 import static es.serversurvival._shared.utils.Funciones.enviarMensajeYSonido;
 
 public class EmpresasVerTodasMenu extends Menu implements CanGoBack, Clickable {
-    private final SolicitarServicioUseCase solicitarServico = SolicitarServicioUseCase.INSTANCE;
-
     public static final String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "        EMPRESAS";
-    private Inventory inventory;
-    private Player player;
+
+    private final SolicitarServicioUseCase solicitarServico;
+    private final Inventory inventory;
+    private final Player player;
 
     public EmpresasVerTodasMenu(Player player) {
+        this.solicitarServico = new SolicitarServicioUseCase();
         this.inventory = InventoryCreator.createInventoryMenu(new EmpresasVerTodasInventoryFactory(), player.getName());
         this.player = player;
+
         openMenu();
     }
 

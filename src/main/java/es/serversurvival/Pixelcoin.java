@@ -12,6 +12,7 @@ import es.serversurvival._shared.mysql.newformat.MySQLConfiguration;
 import es.serversurvival.deudas._shared.newformat.application.DeudasService;
 import es.serversurvival.deudas._shared.newformat.domain.DeudasRepository;
 import es.serversurvival.deudas._shared.newformat.infrastructure.MySQLDeudasRepository;
+import es.serversurvival.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas._shared.domain.EmpresasRepostiory;
 import es.serversurvival.empresas._shared.infrastructure.MySQLEmpresasRepository;
 import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
@@ -127,6 +128,7 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
             put(TransaccionesService.class, new TransaccionesService());
             put(DeudasService.class, new DeudasService());
             put(TiendaService.class, new TiendaService());
+            put(EmpresasService.class, new EmpresasService());
         }});
     }
 }

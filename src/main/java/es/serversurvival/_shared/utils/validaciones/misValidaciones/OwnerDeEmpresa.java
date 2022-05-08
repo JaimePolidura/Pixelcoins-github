@@ -1,14 +1,18 @@
 package es.serversurvival._shared.utils.validaciones.misValidaciones;
 
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.empresas._shared.application.EmpresasService;
 import main.ValidationResult;
 import main.validators.Validator;
 
-public class OwnerDeEmpresa implements Validator {
-    private String messageOnFailed;
+public final class OwnerDeEmpresa implements Validator {
+    private final String messageOnFailed;
+    private EmpresasService empresasService;
     private String jugador;
 
     public OwnerDeEmpresa(String messageOnFailed) {
         this.messageOnFailed = messageOnFailed;
+        this.empresasService = DependecyContainer.get(EmpresasService.class);
     }
 
     public OwnerDeEmpresa(String messageOnFailed, String jugador) {
@@ -26,7 +30,7 @@ public class OwnerDeEmpresa implements Validator {
         try{
             String empresaNombre = String.valueOf(o);
 
-            return Empresas.INSTANCE.getEmpresa(empresaNombre).getOwner().equalsIgnoreCase(jugador) ?
+            return this.empresasService.getEmpresaByNombre(empresaNombre).getOwner().equalsIgnoreCase(jugador) ?
                     ValidationResult.success() :
                     ValidationResult.failed(messageOnFailed);
         }catch (Exception e) {

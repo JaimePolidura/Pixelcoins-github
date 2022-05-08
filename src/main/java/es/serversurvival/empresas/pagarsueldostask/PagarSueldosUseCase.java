@@ -1,8 +1,10 @@
-package es.serversurvival.empresas._shared.application.tasks;
+package es.serversurvival.empresas.pagarsueldostask;
 
 import es.serversurvival.Pixelcoin;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empleados._shared.mysql.Empleado;
 import es.serversurvival.empleados._shared.mysql.TipoSueldo;
+import es.serversurvival.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas._shared.domain.Empresa;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
@@ -12,9 +14,11 @@ import java.util.Date;
 import java.util.List;
 
 public final class PagarSueldosUseCase implements AllMySQLTablesInstances {
-    public static final PagarSueldosUseCase INSTANCE = new PagarSueldosUseCase();
+    private final EmpresasService empresasService;
 
-    private PagarSueldosUseCase () {}
+    public PagarSueldosUseCase() {
+        this.empresasService = DependecyContainer.get(EmpresasService.class);
+    }
 
     public void pagarSueldos (Empresa empresa, List<Empleado> empleados) {
         Date hoy = formatFehcaDeHoyException();
@@ -39,8 +43,8 @@ public final class PagarSueldosUseCase implements AllMySQLTablesInstances {
             return;
         }
 
-        empresasMySQL.setPixelcoins(empresa.getNombre(), empresa.getPixelcoins() - empleado.getSueldo());
-        empresasMySQL.setGastos(empresa.getNombre(), empresa.getPixelcoins() + empleado.getSueldo());
+        empresasService.save(empresa.decrementPixelcoinsBy(empleado.getSueldo())
+                .incrementGastosBy(empleado.getSueldo()) );
 
         Pixelcoin.publish(new SueldoPagadoEvento(empleado.getJugador(), empleado.getId(), empresa.getNombre(), empleado.getSueldo()));
     }

@@ -23,8 +23,8 @@ public class EmpresasVerMenu extends Menu implements Clickable, Refreshcable, Po
     private final DespedirEmpleadoUseCase despedirEmpleadoUseCase = DespedirEmpleadoUseCase.INSTANCE;
 
     private Inventory inventory;
-    private String empresa;
-    private Player player;
+    private final String empresa;
+    private final Player player;
 
     public EmpresasVerMenu (Player player, String empresa) {
         this.empresa = empresa;

@@ -20,27 +20,17 @@ import static org.bukkit.ChatColor.DARK_RED;
         explanation = "Depositar pixelcoins en la empresa <empresa>"
 )
 public class DepositarPixelcoinsComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<DepositarPixelcoinsComando> {
-    private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /empresas depositar <empresa> <pixelcoins>";
-    private final DepositarPixelcoinsUseCase useCasse = DepositarPixelcoinsUseCase.INSTANCE;
+    private final DepositarPixelcoinsUseCase useCasse;
+
+    public DepositarPixelcoinsComandoRunner(){
+        this.useCasse = new DepositarPixelcoinsUseCase();
+    }
 
     @Override
-    public void execute(DepositarPixelcoinsComando depositarPixelcoinsComando, CommandSender player) {
-        String empresa = depositarPixelcoinsComando.getEmpresa();
-        double pixelcoins = depositarPixelcoinsComando.getPixelcoins();
+    public void execute(DepositarPixelcoinsComando comando, CommandSender player) {
+        useCasse.depositar(comando.getEmpresa(), player.getName(), comando.getPixelcoins());
 
-        ValidationResult result = ValidatorService
-                .startValidating(empresa, OwnerDeEmpresa.of(player.getName()))
-                .and(pixelcoins, PositiveNumber, SuficientesPixelcoins.of(player.getName()))
-                .validateAll();
-
-        if(result.isFailed()){
-            player.sendMessage(DARK_RED + result.getMessage());
-            return;
-        }
-
-        useCasse.depositar(empresa, player.getName(), pixelcoins);
-
-        Funciones.enviarMensajeYSonido((Player) player, GOLD + "Has metido " + GREEN + formatea.format(pixelcoins) + " PC" + GOLD
-                + " en tu empresa: " + DARK_AQUA + empresa, Sound.ENTITY_PLAYER_LEVELUP);
+        Funciones.enviarMensajeYSonido((Player) player, GOLD + "Has metido " + GREEN + formatea.format(comando.getPixelcoins()) + " PC" + GOLD
+                + " en tu empresa: " + DARK_AQUA + comando.getEmpresa(), Sound.ENTITY_PLAYER_LEVELUP);
     }
 }

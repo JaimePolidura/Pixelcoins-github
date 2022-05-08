@@ -1,7 +1,9 @@
 package es.serversurvival.empresas.vertodas;
 
 import es.jaimetruman.ItemBuilder;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empleados._shared.mysql.Empleado;
+import es.serversurvival.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas._shared.domain.Empresa;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
@@ -16,12 +18,17 @@ import java.util.List;
 import static org.bukkit.ChatColor.*;
 
 public class EmpresasVerTodasInventoryFactory extends InventoryFactory {
+    private final EmpresasService empresasService;
+
+    public EmpresasVerTodasInventoryFactory(){
+        this.empresasService = DependecyContainer.get(EmpresasService.class);
+    }
 
     @Override
     protected Inventory buildInventory(String jugadorNombre) {
         Inventory inventory = Bukkit.createInventory(null, 54, EmpresasVerTodasMenu.titulo);
 
-        List<Empresa> todasLasEmpresas = empresasMySQL.getTodasEmpresas();
+        List<Empresa> todasLasEmpresas = empresasService.getAll();
         ItemStack back = buildItemGoBack();
 
         todasLasEmpresas.forEach( (empresa) -> {

@@ -24,42 +24,21 @@ import static org.bukkit.ChatColor.*;
 )
 public class SacarPixelcoinsComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<SacarPixelcoinsComando> {
     private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /empresas sacar <empresa> <pixelcoins>";
-    private final SacarPixelcoinsUseCase useCase = SacarPixelcoinsUseCase.INSTANCE;
+    private final SacarPixelcoinsUseCase useCase;
+
+    public SacarPixelcoinsComandoRunner(){
+        this.useCase = new SacarPixelcoinsUseCase();
+    }
 
     @Override
     public void execute(SacarPixelcoinsComando comando, CommandSender player) {
-        String empresa = comando.getEmpresa();
-        double pixelcoins = comando.getPixelcoins();
+        double pixelcoinsASacar = comando.getPixelcoins();
+        String empresaNombre = comando.getEmpresa();
 
-        ValidationResult result = ValidatorService
-                .startValidating(empresa, OwnerDeEmpresa.of(player.getName()))
-                .and(pixelcoins, PositiveNumber)
-                .and(suficientesPixelcoins(empresa, pixelcoins), True.of("No puedes sacar mas pixelcoins de la empresa de las que tiene"))
-                .validateAll();
+        useCase.sacar(player.getName(), empresaNombre, pixelcoinsASacar);
 
-        if(result.isFailed()){
-            player.sendMessage(ChatColor.DARK_RED + result.getMessage());
-            return;
-        }
+        Funciones.enviarMensajeYSonido((Player) player, GOLD + "Has sacado " + GREEN + formatea.format(pixelcoinsASacar)
+                + " PC" + GOLD + " de tu empresa: " + DARK_AQUA + empresaNombre, Sound.ENTITY_PLAYER_LEVELUP);
 
-        Funciones.enviarMensajeYSonido((Player) player, GOLD + "Has metido " + GREEN + formatea.format(pixelcoins) + " PC" + GOLD + " en tu empresa: "
-                + DARK_AQUA + empresa, Sound.ENTITY_PLAYER_LEVELUP);
-
-        useCase.sacar(player.getName(), empresa, pixelcoins);
-    }
-
-
-    private boolean suficientesPixelcoins(String empresaSupplier, double pixelcoins) {
-        return Empresas.INSTANCE.getEmpresa(empresaSupplier).getPixelcoins() >= pixelcoins;
-    }
-
-    @EventListener
-    public void onPixelcoinsSacadas (PixelcoinsSacadasEvento evento) {
-        Player player = Bukkit.getPlayer(evento.getJugador().getNombre());
-        Empresa empresa = evento.getEmpresa();
-
-        Funciones.enviarMensajeYSonido(player, GOLD + "Has sacado " + GREEN + formatea.format(evento.getPixelcoins())
-                + " PC" + GOLD + " de tu empresa: " + DARK_AQUA + empresa.getNombre() + GOLD + " ahora tiene: " + GREEN
-                + formatea.format(empresa.getPixelcoins() - evento.getPixelcoins()) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
     }
 }

@@ -1,20 +1,48 @@
 package es.serversurvival.empresas.sacar;
 
+import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
+import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival.Pixelcoin;
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas._shared.domain.Empresa;
+import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
 import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 public final class SacarPixelcoinsUseCase implements AllMySQLTablesInstances {
-    public static final SacarPixelcoinsUseCase INSTANCE = new SacarPixelcoinsUseCase();
+    private final EmpresasService empresasService;
+    private final JugadoresService jugadoresService;
 
-    public void sacar (String jugador, String empresa, double pixelcoins) {
-        Empresa empresaASacar = empresasMySQL.getEmpresa(empresa);
-        Jugador jugadorQueSaca = jugadoresMySQL.getJugador(jugador);
-        double pixelcoinsEmpresa = empresaASacar.getPixelcoins();
+    public SacarPixelcoinsUseCase(){
+        this.empresasService = DependecyContainer.get(EmpresasService.class);
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+    }
 
-        empresasMySQL.setPixelcoins(empresa, pixelcoinsEmpresa - pixelcoins);
+    public void sacar (String playerName, String empresaNombre, double pixelcoinsASacar) {
+        this.ensureCorrectFormatPixelcoins(pixelcoinsASacar);
+        Jugador jugador = this.jugadoresService.getJugadorByNombre(playerName);
+        Empresa empresaASacar = this.empresasService.getEmpresaByNombre(empresaNombre);
+        this.ensureOwnerOfEmpresa(empresaASacar, playerName);
 
-        Pixelcoin.publish(new PixelcoinsSacadasEvento(jugadorQueSaca, empresaASacar, pixelcoins));
+        pixelcoinsASacar = pixelcoinsASacar > empresaASacar.getPixelcoins() ?
+                empresaASacar.getPixelcoins() :
+                pixelcoinsASacar;
+
+        empresasService.save(empresaASacar.decrementPixelcoinsBy(pixelcoinsASacar));
+        jugadoresService.save(jugador.incrementPixelcoinsBy(pixelcoinsASacar));
+
+        Pixelcoin.publish(new PixelcoinsSacadasEvento(jugador, empresaASacar, pixelcoinsASacar));
+    }
+
+
+    private void ensureOwnerOfEmpresa(Empresa empresa, String playerName){
+        if(!empresa.getOwner().equalsIgnoreCase(playerName))
+            throw new NotTheOwner("No eres el owner de la empresa");
+    }
+
+    private void ensureCorrectFormatPixelcoins(double pixelcoins){
+        if(pixelcoins <= 0)
+            throw new IllegalQuantity("Las pixelcoins deben de ser un numero natural");
     }
 }

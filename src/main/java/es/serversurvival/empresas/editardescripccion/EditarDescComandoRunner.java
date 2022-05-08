@@ -17,27 +17,17 @@ import static org.bukkit.ChatColor.DARK_RED;
         explanation = "Editar la descripccion de tu empresa"
 )
 public class EditarDescComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<EditarDescComando> {
-    private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /empresas editardescripccion <empresa> <nueva desc>";
-    private EditarDescUseCase useCase = EditarDescUseCase.INSTANCE;
+    private final EditarDescUseCase useCase;
+
+    public EditarDescComandoRunner(){
+        this.useCase = new EditarDescUseCase();
+    }
 
     @Override
     public void execute(EditarDescComando comando, CommandSender sender) {
-        String empresa = comando.getEmpresa();
-        String descripcion = comando.getDescripcion();
+        useCase.edit(comando.getEmpresa(), comando.getDescripcion(), sender.getName());
 
-        ValidationResult result = ValidatorService
-                .startValidating(descripcion, MaxLength.of(Empresas.CrearEmpresaDescLonMax, "La descripccino no puede ser tan larga"))
-                .and(empresa, OwnerDeEmpresa.of(sender.getName()))
-                .validateAll();
-
-        if (result.isFailed()){
-            sender.sendMessage(ChatColor.DARK_RED + result.getMessage());
-            return;
-        }
-
-        useCase.edit(empresa, descripcion);
-
-        sender.sendMessage(ChatColor.GOLD + "Has cambiado la descripccion de tu empresa: " + ChatColor.DARK_AQUA + empresa +
+        sender.sendMessage(ChatColor.GOLD + "Has cambiado la descripccion de tu empresa: " + ChatColor.DARK_AQUA + comando.getEmpresa() +
                 ChatColor.GOLD + " a ver en " + ChatColor.AQUA + "/empresas vertodas");
     }
 }

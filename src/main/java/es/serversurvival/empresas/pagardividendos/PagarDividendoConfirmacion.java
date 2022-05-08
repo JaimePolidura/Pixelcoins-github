@@ -1,6 +1,8 @@
 package es.serversurvival.empresas.pagardividendos;
 
 import es.jaimetruman.ItemBuilder;
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas._shared.domain.Empresa;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.AumentoConfirmacion;
@@ -18,7 +20,8 @@ import java.util.List;
 import static org.bukkit.ChatColor.*;
 
 public class PagarDividendoConfirmacion extends Menu implements AumentoConfirmacion {
-    private final PagarDividendosEmpresaServerUseCase useCase = PagarDividendosEmpresaServerUseCase.INSTANCE;
+    private final PagarDividendosEmpresaServerUseCase useCase;
+    private final EmpresasService empresasService;
 
     private final Inventory inventory;
     private final Player player;
@@ -27,9 +30,10 @@ public class PagarDividendoConfirmacion extends Menu implements AumentoConfirmac
     private int dividendoPorAccion;
 
     public PagarDividendoConfirmacion (Player player, String nombreEmpresa) {
-
+        this.empresasService = DependecyContainer.get(EmpresasService.class);
+        this.useCase = new PagarDividendosEmpresaServerUseCase();
         this.accionesTotales = AllMySQLTablesInstances.ofertasMercadoServerMySQL.getAccionesTotalesParaPagarDividendo(nombreEmpresa);
-        this.empresa = AllMySQLTablesInstances.empresasMySQL.getEmpresa(nombreEmpresa);
+        this.empresa = this.empresasService.getEmpresaByNombre(nombreEmpresa);
 
         this.player = player;
         this.dividendoPorAccion = 1;
@@ -37,7 +41,7 @@ public class PagarDividendoConfirmacion extends Menu implements AumentoConfirmac
         String titulo = DARK_RED + "" + BOLD + "   REPARTIR DIVIDENDOS ";
         List<String> lore = new ArrayList<>();
         lore.add(GOLD + "Repartir " + GREEN + AllMySQLTablesInstances.formatea.format(dividendoPorAccion) + " PC" + GOLD + " por accion");
-        lore.add(GOLD + "Que seria un gasto total de " + GREEN + AllMySQLTablesInstances.formatea.format(accionesTotales * dividendoPorAccion) + " PC");
+        lore.add(GOLD + "Que seria un gasto total de " + GREEN + AllMySQLTablesInstances.formatea.format((long) accionesTotales * dividendoPorAccion) + " PC");
         lore.add(GOLD + "La empresa tiene " + GREEN + AllMySQLTablesInstances.formatea.format(empresa.getPixelcoins()) + " PC " + GOLD + "en caja");
         String nombreItemAceptar = GREEN + "" + BOLD + "REPARTIR";
         String itemCancelar = RED + "" + BOLD + "CANCELAR";
@@ -68,7 +72,7 @@ public class PagarDividendoConfirmacion extends Menu implements AumentoConfirmac
 
     @Override
     public void confirmar() {
-        useCase.pagarDividendoAccionServer(player, empresa.getNombre(), dividendoPorAccion, accionesTotales * dividendoPorAccion);
+        useCase.pagarDividendoAccionServer(empresa.getNombre(), dividendoPorAccion, accionesTotales * dividendoPorAccion);
 
         Funciones.enviarMensajeYSonido(player, GOLD + "Se han pagado todos los dividendos", Sound.ENTITY_PLAYER_LEVELUP);
 

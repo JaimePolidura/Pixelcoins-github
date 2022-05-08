@@ -1,7 +1,10 @@
 package es.serversurvival.empresas.pagardividendos;
 
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa._shared.ofertasmercadoserver.mysql.OfertaMercadoServer;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionAbierta;
+import es.serversurvival.empresas._shared.application.EmpresasService;
+import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
 import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
@@ -11,11 +14,16 @@ import java.util.List;
 import java.util.Map;
 
 public final class PagarDividendosEmpresaServerUseCase implements AllMySQLTablesInstances {
-    public static final PagarDividendosEmpresaServerUseCase INSTANCE = new PagarDividendosEmpresaServerUseCase();
+    private final EmpresasService empresasService;
+    private final JugadoresService jugadoresService;
 
-    private PagarDividendosEmpresaServerUseCase () {}
+    public PagarDividendosEmpresaServerUseCase(){
+        this.empresasService = DependecyContainer.get(EmpresasService.class);
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+    }
 
-    public void pagarDividendoAccionServer (Player owner, String nombreEmpresa, double dividendoPorAccion, double totalAPagar) {
+    public void pagarDividendoAccionServer(String nombreEmpresa, double dividendoPorAccion, double totalAPagar) {
+        var empresa = this.empresasService.getEmpresaByNombre(nombreEmpresa);
         List<PosicionAbierta> posicionesAccion = posicionesAbiertasMySQL.getPosicionesAccionesServer(nombreEmpresa);
         List<OfertaMercadoServer> ofertasAccion =  ofertasMercadoServerMySQL.getOfertasEmpresa(nombreEmpresa, OfertaMercadoServer::esTipoOfertanteJugador);
 
@@ -28,12 +36,14 @@ public final class PagarDividendosEmpresaServerUseCase implements AllMySQLTables
             pagarDividendoAccionAJugador(allJugadoresMap.get(oferta.getJugador()), oferta.getCantidad(), dividendoPorAccion, nombreEmpresa);
         });
 
-        empresasMySQL.setPixelcoins(nombreEmpresa, empresasMySQL.getEmpresa(nombreEmpresa).getPixelcoins() - totalAPagar);
+        this.empresasService.save(empresa.decrementPixelcoinsBy(totalAPagar));
     }
 
     private void pagarDividendoAccionAJugador (Jugador jugador, int cantidad, double dividendoPorAccion, String nombreEmpresa) {
-        double dividendo = cantidad * dividendoPorAccion;
+        double dividendoTotal = cantidad * dividendoPorAccion;
+        this.jugadoresService.save(jugador.incrementPixelcoinsBy(dividendoTotal)
+                .incrementIngresosBy(dividendoTotal));
 
-        Pixelcoin.publish(new EmpresaServerDividendoPagadoEvento(jugador.getNombre(), nombreEmpresa, dividendo));
+        Pixelcoin.publish(new EmpresaServerDividendoPagadoEvento(jugador.getNombre(), nombreEmpresa, dividendoTotal));
     }
 }

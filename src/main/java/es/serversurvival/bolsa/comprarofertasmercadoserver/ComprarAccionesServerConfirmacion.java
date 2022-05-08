@@ -1,6 +1,7 @@
 package es.serversurvival.bolsa.comprarofertasmercadoserver;
 
 import es.jaimetruman.ItemBuilder;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa._shared.ofertasmercadoserver.mysql.OfertaMercadoServer;
 import es.serversurvival.bolsa._shared.ofertasmercadoserver.mysql.TipoOfertante;
 import es.serversurvival._shared.menus.Menu;
@@ -8,6 +9,7 @@ import es.serversurvival._shared.menus.AumentoConfirmacion;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
+import es.serversurvival.empresas._shared.application.EmpresasService;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -23,6 +25,7 @@ import static org.bukkit.ChatColor.GREEN;
 public class ComprarAccionesServerConfirmacion extends Menu implements AumentoConfirmacion {
     private final ComprarOfertaMercadoUseCase useCase = ComprarOfertaMercadoUseCase.INSTANCE;
 
+    private final EmpresasService empresasService;
     private final String nombreEmpresa;
     private double precioTotal;
     private final Inventory inventory;
@@ -34,6 +37,7 @@ public class ComprarAccionesServerConfirmacion extends Menu implements AumentoCo
 
     public ComprarAccionesServerConfirmacion(Player player, int id) {
         this.player = player;
+        this.empresasService = DependecyContainer.get(EmpresasService.class);
 
         OfertaMercadoServer oferta = AllMySQLTablesInstances.ofertasMercadoServerMySQL.get(id);
 
@@ -99,7 +103,7 @@ public class ComprarAccionesServerConfirmacion extends Menu implements AumentoCo
                     AllMySQLTablesInstances.formatea.format(precioTotal) + "PC";
 
             //TODO
-            Funciones.enviarMensaje(AllMySQLTablesInstances.empresasMySQL.getEmpresa(nombreEmpresa).getOwner(), mensajeOnline, mensajeOnline);
+            Funciones.enviarMensaje(this.empresasService.getEmpresaByNombre(nombreEmpresa).getOwner(), mensajeOnline, mensajeOnline);
         }else{
             double beneficiosPerdidas = (oferta.getPrecio() - oferta.getPrecio_apertura()) * cantidadAComprar;
             double rentabilidad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(oferta.getPrecio_apertura(), oferta.getPrecio()), 3);

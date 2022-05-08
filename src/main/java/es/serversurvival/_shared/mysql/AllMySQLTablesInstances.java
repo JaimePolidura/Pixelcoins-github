@@ -21,7 +21,6 @@ public interface AllMySQLTablesInstances {
 
     Cuentas cuentasMySQL = Cuentas.INSTANCE;
     Empleados empleadosMySQL = Empleados.INSTANCE;
-    Empresas empresasMySQL = Empresas.INSTANCE;
     MySQLJugadoresRepository jugadoresMySQL = MySQLJugadoresRepository.INSTANCE;
     LlamadasApi llamadasApiMySQL = LlamadasApi.INSTANCE;
     PosicionesAbiertas posicionesAbiertasMySQL = PosicionesAbiertas.INSTANCE;

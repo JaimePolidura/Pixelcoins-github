@@ -1,7 +1,7 @@
 package es.serversurvival.empleados._shared.eventlisteners;
 
 import es.jaime.EventListener;
-import es.serversurvival.empresas._shared.application.tasks.SueldoPagadoEvento;
+import es.serversurvival.empresas.pagarsueldostask.SueldoPagadoEvento;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 import java.util.Date;

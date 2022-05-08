@@ -1,4 +1,4 @@
-package es.serversurvival.empresas._shared.application.tasks;
+package es.serversurvival.empresas.pagarsueldostask;
 
 import es.serversurvival.empleados._shared.mysql.Empleado;
 import es.serversurvival.empresas._shared.domain.Empresa;

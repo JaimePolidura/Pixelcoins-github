@@ -1,6 +1,8 @@
 package es.serversurvival.empresas.solicitarservicio;
 
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empleados._shared.mysql.Empleado;
+import es.serversurvival.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas._shared.domain.Empresa;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import org.bukkit.ChatColor;
@@ -11,12 +13,15 @@ import java.util.List;
 import static es.serversurvival._shared.utils.Funciones.*;
 
 public final class SolicitarServicioUseCase implements AllMySQLTablesInstances {
-    public static final SolicitarServicioUseCase INSTANCE = new SolicitarServicioUseCase();
+    private final EmpresasService empresasService;
 
-    private SolicitarServicioUseCase () {}
+    public SolicitarServicioUseCase() {
+        this.empresasService = DependecyContainer.get(EmpresasService.class);
+    }
+
 
     public void solicitar (String quienSolicita, String empresaNombre) {
-        Empresa empresa = empresasMySQL.getEmpresa(empresaNombre);
+        Empresa empresa = this.empresasService.getEmpresaByNombre(empresaNombre);
 
         String mensajeOnline = ChatColor.GOLD + quienSolicita + " te ha solicitado el servicio de tu empresa: " + empresaNombre;
         String mensajeOffline = quienSolicita + " te ha solicitado el servicio de tu empresa: " + empresaNombre;

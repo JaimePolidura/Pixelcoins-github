@@ -1,6 +1,7 @@
 package es.serversurvival.jugadores.perfil;
 
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas._shared.domain.Empresa;
 import es.serversurvival._shared.scoreboards.SingleScoreboard;
 import es.serversurvival._shared.utils.Funciones;
@@ -16,8 +17,10 @@ import static es.serversurvival._shared.utils.MinecraftUtils.addLineToScoreboard
 
 public class StatsDisplayScoreboard implements SingleScoreboard {
     private final JugadoresService jugadoresService;
+    private final EmpresasService empresasService;
 
     public StatsDisplayScoreboard(){
+        this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
     }
 
@@ -32,7 +35,7 @@ public class StatsDisplayScoreboard implements SingleScoreboard {
         addLineToScoreboard(objective, "     ", 0);
         addLineToScoreboard(objective, ChatColor.GOLD + "-------Empresas-----", -2);
 
-        List<Empresa> empresas = sortEmpresaByPixelcoins(empresasMySQL.getEmpresasOwner(jugador));
+        List<Empresa> empresas = sortEmpresaByPixelcoins(empresasService.getByOwner(jugador));
         for(int i = 0; i < empresas.size(); i++){
             Empresa empresa = empresas.get(i);
 
