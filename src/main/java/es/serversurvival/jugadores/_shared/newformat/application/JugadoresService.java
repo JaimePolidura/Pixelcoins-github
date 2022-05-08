@@ -49,7 +49,7 @@ public final class JugadoresService {
     }
 
     public Jugador getJugadorById(UUID jugadorId){
-        var cachedJugador = this.cache.findValue(jugador -> jugador.getJugadorId().equals(jugadorId));
+        var cachedJugador = this.cache.findValueIf(jugador -> jugador.getJugadorId().equals(jugadorId));
 
         return cachedJugador.orElseGet(() -> this.repositoryDb.findById(jugadorId)
                 .map(saveJugadorToCache())

@@ -38,7 +38,7 @@ public final class TiendaRepositoryService {
 
     public List<TiendaObjeto> findByJugador(String jugador) {
         return this.cache.isNotFull() ?
-                this.cache.findValues(tiendaObjeto -> tiendaObjeto.getJugador().equals(jugador)) :
+                this.cache.findValuesIf(tiendaObjeto -> tiendaObjeto.getJugador().equals(jugador)) :
                 this.repository.findByJugador(jugador).stream()
                         .peek(itemTienda -> {
                             this.cache.put(itemTienda.getTiendaObjetoId(), itemTienda);
@@ -52,6 +52,6 @@ public final class TiendaRepositoryService {
 
     public void deleteById(UUID id) {
         this.repository.deleteById(id);
-        this.cache.delete(id);
+        this.cache.removeValueIf(id);
     }
 }

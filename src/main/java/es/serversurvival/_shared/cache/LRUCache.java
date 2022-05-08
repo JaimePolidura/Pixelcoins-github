@@ -32,12 +32,12 @@ public class LRUCache<K, V> implements Cache<K, V>{
     }
 
     @Override
-    public void delete(K key) {
+    public void removeValueIf(K key) {
         this.items.removeIf(cacheItem -> cacheItem.getKey().equals(key));
     }
 
     @Override
-    public void delete(Predicate<V> condition) {
+    public void removeValueIf(Predicate<V> condition) {
         this.items.removeIf(cacheItem -> condition.test(cacheItem.getValue()));
     }
 
@@ -66,7 +66,7 @@ public class LRUCache<K, V> implements Cache<K, V>{
     }
 
     @Override
-    public Optional<V> findValue(Predicate<V> valueCondition) {
+    public Optional<V> findValueIf(Predicate<V> valueCondition) {
         int index = 0;
 
         for (CacheItem<K, V> actualCacheItem : this.items) {
@@ -84,7 +84,7 @@ public class LRUCache<K, V> implements Cache<K, V>{
     }
 
     @Override
-    public List<V> findValues(Predicate<V> valueCondition) {
+    public List<V> findValuesIf(Predicate<V> valueCondition) {
         List<V> valuesFound = new LinkedList<>();
         int index = 0;
 

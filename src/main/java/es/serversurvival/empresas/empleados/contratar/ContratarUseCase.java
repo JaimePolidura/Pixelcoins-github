@@ -1,0 +1,14 @@
+package es.serversurvival.empresas.empleados.contratar;
+
+import es.serversurvival.empresas.empleados._shared.mysql.TipoSueldo;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+
+public final class ContratarUseCase implements AllMySQLTablesInstances {
+    public static final ContratarUseCase INSTANCE = new ContratarUseCase();
+
+    private ContratarUseCase () {}
+
+    public void contratar (String nombreAContratar, String empresa, double salario, TipoSueldo tipoSueldo, String cargo) {
+        empleadosMySQL.nuevoEmpleado(nombreAContratar, empresa, salario, tipoSueldo, cargo);
+    }
+}

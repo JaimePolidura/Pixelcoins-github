@@ -2,8 +2,8 @@ package es.serversurvival.mensajes.eventlisteners;
 
 import es.jaime.EventListener;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.empleados._shared.mysql.Empleado;
-import es.serversurvival.empresas.vender.EmpresaVendedidaEvento;
+import es.serversurvival.empresas.empleados._shared.mysql.Empleado;
+import es.serversurvival.empresas.empresas.vender.EmpresaVendedidaEvento;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.mensajes._shared.application.MensajesService;
 

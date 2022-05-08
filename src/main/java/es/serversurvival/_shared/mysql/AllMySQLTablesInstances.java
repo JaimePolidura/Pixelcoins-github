@@ -6,7 +6,7 @@ import es.serversurvival.bolsa._shared.ordenespremarket.mysql.OrdenesPreMarket;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionesAbiertas;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.PosicionesCerradas;
 import es.serversurvival.deudas._shared.mysql.Deudas;
-import es.serversurvival.empleados._shared.mysql.Empleados;
+import es.serversurvival.empresas.empleados._shared.mysql.Empleados;
 import es.serversurvival.jugadores._shared.mySQL.MySQLJugadoresRepository;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.webconnection.conversacionesweb.mysql.ConversacionesWeb;

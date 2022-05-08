@@ -1,7 +1,7 @@
 package es.serversurvival._shared.utils.validaciones.misValidaciones;
 
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.empresas._shared.application.EmpresasService;
+import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import main.ValidationResult;
 import main.validators.Validator;
 

@@ -1,7 +1,7 @@
 package es.serversurvival.mensajes.eventlisteners;
 
 import es.jaime.EventListener;
-import es.serversurvival.empresas.pagardividendos.EmpresaServerDividendoPagadoEvento;
+import es.serversurvival.empresas.empresas.pagardividendos.EmpresaServerDividendoPagadoEvento;
 import es.serversurvival._shared.utils.Funciones;
 
 import java.text.DecimalFormat;
