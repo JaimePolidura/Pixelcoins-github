@@ -14,14 +14,14 @@ import java.util.Collections;
 import java.util.*;
 
 public class BorrrarEmpresaConfirmacion extends Menu implements Confirmacion {
-    private final EmpresaBorrarUseCase useCase;
+    private final BorrarEmpresaUseCase useCase;
 
     private final Player player;
     private final Inventory inventory;
     private final String empresa;
     
     public BorrrarEmpresaConfirmacion(Player destinatario, String empresa) {
-        this.useCase = new EmpresaBorrarUseCase();
+        this.useCase = new BorrarEmpresaUseCase();
         this.empresa = empresa;
         this.player = destinatario;
 

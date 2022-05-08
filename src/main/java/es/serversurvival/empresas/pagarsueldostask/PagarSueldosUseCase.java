@@ -8,6 +8,7 @@ import es.serversurvival.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas._shared.domain.Empresa;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
 import lombok.SneakyThrows;
 
 import java.util.Date;
@@ -15,9 +16,11 @@ import java.util.List;
 
 public final class PagarSueldosUseCase implements AllMySQLTablesInstances {
     private final EmpresasService empresasService;
+    private final JugadoresService jugadoresService;
 
     public PagarSueldosUseCase() {
         this.empresasService = DependecyContainer.get(EmpresasService.class);
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
     }
 
     public void pagarSueldos (Empresa empresa, List<Empleado> empleados) {
@@ -43,8 +46,12 @@ public final class PagarSueldosUseCase implements AllMySQLTablesInstances {
             return;
         }
 
+        var jugadorEmpleado = this.jugadoresService.getJugadorByNombre(empleado.getJugador());
+
         empresasService.save(empresa.decrementPixelcoinsBy(empleado.getSueldo())
                 .incrementGastosBy(empleado.getSueldo()) );
+        this.jugadoresService.save(jugadorEmpleado.incrementPixelcoinsBy(empleado.getSueldo())
+                .incrementIngresosBy(empleado.getSueldo()));
 
         Pixelcoin.publish(new SueldoPagadoEvento(empleado.getJugador(), empleado.getId(), empresa.getNombre(), empleado.getSueldo()));
     }
