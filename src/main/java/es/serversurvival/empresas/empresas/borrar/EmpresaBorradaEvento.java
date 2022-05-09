@@ -6,6 +6,7 @@ import es.serversurvival.transacciones._shared.domain.Transaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
 import java.util.UUID;
 
 import static es.serversurvival.transacciones._shared.domain.TipoTransaccion.*;
@@ -15,6 +16,7 @@ public final class EmpresaBorradaEvento extends PixelcoinsEvento implements Even
     @Getter private final String jugador;
     @Getter private final String empresa;
     @Getter private final double pixelcoins;
+    @Getter private final List<String> antiguosEmpleadosNombre;
 
     @Override
     public Transaccion buildTransaccion() {

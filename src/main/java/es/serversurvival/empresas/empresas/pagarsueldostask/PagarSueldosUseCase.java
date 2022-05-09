@@ -2,6 +2,7 @@ package es.serversurvival.empresas.empresas.pagarsueldostask;
 
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empleados._shared.domain.TipoSueldo;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
@@ -14,13 +15,17 @@ import lombok.SneakyThrows;
 import java.util.Date;
 import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.*;
+
 public final class PagarSueldosUseCase implements AllMySQLTablesInstances {
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;
+    private final EmpleadosService empleadosService;
 
     public PagarSueldosUseCase() {
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+        this.empleadosService = DependecyContainer.get(EmpleadosService.class);
     }
 
     public void pagarSueldos (Empresa empresa, List<Empleado> empleados) {
@@ -30,7 +35,7 @@ public final class PagarSueldosUseCase implements AllMySQLTablesInstances {
             Date actualEmpl = formatFechaDeLaBaseDatosException(empleado.getFechaUltimaPaga());
             String tipoSueldo = empleado.getTipoSueldo().codigo;
 
-            int diferenciaDias = (int) Funciones.diferenciaDias(hoy, actualEmpl);
+            int diferenciaDias = (int) diferenciaDias(hoy, actualEmpl);
 
             if(TipoSueldo.dentroDeLosDias(tipoSueldo, diferenciaDias)){
                 continue;
@@ -48,10 +53,11 @@ public final class PagarSueldosUseCase implements AllMySQLTablesInstances {
 
         var jugadorEmpleado = this.jugadoresService.getJugadorByNombre(empleado.getNombre());
 
-        empresasService.save(empresa.decrementPixelcoinsBy(empleado.getSueldo())
+        this.empresasService.save(empresa.decrementPixelcoinsBy(empleado.getSueldo())
                 .incrementGastosBy(empleado.getSueldo()) );
         this.jugadoresService.save(jugadorEmpleado.incrementPixelcoinsBy(empleado.getSueldo())
                 .incrementIngresosBy(empleado.getSueldo()));
+        this.empleadosService.save(empleado.withFechaUltimaPaga(hoy()));
 
         Pixelcoin.publish(new SueldoPagadoEvento(empleado.getNombre(), empleado.getEmpleadoId(), empresa.getNombre(), empleado.getSueldo()));
     }

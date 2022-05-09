@@ -6,7 +6,7 @@ import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.empresas.empleados._shared.domain.Empleado;
+import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
@@ -15,10 +15,12 @@ import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 public final class VenderEmpresaUseCase implements AllMySQLTablesInstances {
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;
+    private final EmpleadosService empleadosService;
 
     public VenderEmpresaUseCase() {
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+        this.empleadosService = DependecyContainer.get(EmpleadosService.class);
     }
 
     public void vender (String vendedor, String comprador, double precioEmpresa, String nombreEmpresa) {
@@ -31,12 +33,12 @@ public final class VenderEmpresaUseCase implements AllMySQLTablesInstances {
 
         this.empresasService.save(empresa.withOwner(comprador));
         this.jugadoresService.realizarTransferenciaConEstadisticas(jugadorComprador, jugadorVendedor, precioEmpresa);
+        this.empleadosService.findByEmpresa(nombreEmpresa).stream()
+                .filter(empleado -> empleado.getNombre().equalsIgnoreCase(comprador))
+                .findFirst()
+                .ifPresent(empleado -> this.empleadosService.deleteById(empleado.getEmpleadoId()));
 
-        Empleado emplado = empleadosMySQL.getEmpleado(comprador, nombreEmpresa);
-        if(emplado != null)
-            empleadosMySQL.borrarEmplado(emplado.getEmpleadoId());
-
-        Pixelcoin.publish(new EmpresaVendedidaEvento(comprador, vendedor, precioEmpresa, nombreEmpresa));
+        Pixelcoin.publish(new EmpresaVendedida(comprador, vendedor, precioEmpresa, nombreEmpresa));
     }
 
     private void ensureVendedorHasEnoughPixelcoins(Jugador vendedor, double pixelcoins){

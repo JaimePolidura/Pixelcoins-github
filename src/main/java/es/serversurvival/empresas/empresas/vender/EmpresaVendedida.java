@@ -10,7 +10,7 @@ import lombok.Getter;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class EmpresaVendedidaEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
+public final class EmpresaVendedida extends PixelcoinsEvento implements EventoTipoTransaccion {
     @Getter private final String comprador;
     @Getter private final String vendedor;
     @Getter private final double pixelcoins;

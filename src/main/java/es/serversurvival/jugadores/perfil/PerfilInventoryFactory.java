@@ -5,6 +5,7 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.PosicionCerrada;
 import es.serversurvival.cuentaweb.Cuenta;
 import es.serversurvival.deudas._shared.newformat.domain.Deuda;
+import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
@@ -29,10 +30,12 @@ public class PerfilInventoryFactory extends InventoryFactory {
     private final List<Integer> posicionesCristales;
     private final JugadoresService jugadoresService;
     private final EmpresasService empresasService;
+    private final EmpleadosService empleadosService;
 
     public PerfilInventoryFactory(){
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+        this.empleadosService = DependecyContainer.get(EmpleadosService.class);
         this.posicionesCristales = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27,
                 35, 36, 44, 45, 46 , 47, 48, 49, 50, 51, 52, 53);
     }
@@ -63,7 +66,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
 
         List<String> lore = new ArrayList<>();
         lore.add("  ");
-        List<Empleado> empleos = empleadosMySQL.getTrabajosJugador(jugador);
+        List<Empleado> empleos = empleadosService.findByJugador(jugador);
         empleos.forEach( (emp) -> {
             lore.add(ChatColor.GOLD + "" + emp.getEmpresa() + " " + ChatColor.GREEN + formatea.format(emp.getSueldo()) + " PC " + ChatColor.GOLD + "/ " + emp.getTipoSueldo().nombre);
         });

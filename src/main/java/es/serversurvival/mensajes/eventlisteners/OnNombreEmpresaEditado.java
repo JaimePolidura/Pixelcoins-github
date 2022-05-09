@@ -2,6 +2,7 @@ package es.serversurvival.mensajes.eventlisteners;
 
 import es.jaime.EventListener;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.empresas.empresas.editarnombre.EmpresaNombreEditadoEvento;
@@ -11,14 +12,16 @@ import java.util.List;
 
 public final class OnNombreEmpresaEditado implements AllMySQLTablesInstances {
     private final MensajesService mensajesService;
+    private final EmpleadosService empleadosService;
 
     public OnNombreEmpresaEditado(){
         this.mensajesService = DependecyContainer.get(MensajesService.class);
+        this.empleadosService = DependecyContainer.get(EmpleadosService.class);
     }
 
     @EventListener
     public void onNombreEmpresaEditado (EmpresaNombreEditadoEvento evento) {
-        List<Empleado> empleados = empleadosMySQL.getEmpleadosEmrpesa(evento.getNuevoNombre());
+        List<Empleado> empleados = empleadosService.findByEmpresa(evento.getNuevoNombre());
 
         empleados.forEach(empleado -> {
             mensajesService.save(empleado.getNombre(), "La empresa en la que trabajas: " + evento.getAntiguoNombre() +

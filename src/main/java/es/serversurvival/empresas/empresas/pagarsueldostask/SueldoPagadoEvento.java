@@ -13,7 +13,7 @@ import static es.serversurvival.transacciones._shared.domain.TipoTransaccion.*;
 @AllArgsConstructor
 public final class SueldoPagadoEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
     @Getter private final String empleado;
-    @Getter private final int empleadoId;
+    @Getter private final UUID empleadoId;
     @Getter private final String empresa;
     @Getter private final double sueldo;
 

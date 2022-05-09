@@ -1,6 +1,7 @@
 package es.serversurvival.empresas.empresas.solicitarservicio;
 
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
@@ -14,11 +15,12 @@ import static es.serversurvival._shared.utils.Funciones.*;
 
 public final class SolicitarServicioUseCase implements AllMySQLTablesInstances {
     private final EmpresasService empresasService;
+    private final EmpleadosService empleadosService;
 
     public SolicitarServicioUseCase() {
         this.empresasService = DependecyContainer.get(EmpresasService.class);
+        this.empleadosService = DependecyContainer.get(EmpleadosService.class);
     }
-
 
     public void solicitar (String quienSolicita, String empresaNombre) {
         Empresa empresa = this.empresasService.getEmpresaByNombre(empresaNombre);
@@ -28,7 +30,7 @@ public final class SolicitarServicioUseCase implements AllMySQLTablesInstances {
 
         enviarMensaje(empresa.getOwner(), mensajeOnline, mensajeOffline, Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
-        List<Empleado> empleados = empleadosMySQL.getEmpleadosEmrpesa(empresaNombre);
+        List<Empleado> empleados = empleadosService.findByEmpresa(empresaNombre);
         empleados.forEach( empleado -> {
             enviarMensajeYSonidoSiOnline(empleado.getNombre(), ChatColor.GOLD + quienSolicita +
                     " te ha solicitado el servicio de la empresa: " + empresaNombre, Sound.ENTITY_PLAYER_LEVELUP);

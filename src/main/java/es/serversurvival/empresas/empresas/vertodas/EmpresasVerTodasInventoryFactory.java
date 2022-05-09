@@ -2,6 +2,7 @@ package es.serversurvival.empresas.empresas.vertodas;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
@@ -19,9 +20,11 @@ import static org.bukkit.ChatColor.*;
 
 public class EmpresasVerTodasInventoryFactory extends InventoryFactory {
     private final EmpresasService empresasService;
+    private final EmpleadosService empleadosService;
 
     public EmpresasVerTodasInventoryFactory(){
         this.empresasService = DependecyContainer.get(EmpresasService.class);
+        this.empleadosService = DependecyContainer.get(EmpleadosService.class);
     }
 
     @Override
@@ -74,7 +77,7 @@ public class EmpresasVerTodasInventoryFactory extends InventoryFactory {
     }
 
     private List<String> insertarEmpleados (String nombreEmpresa, List<String> lore) {
-        List<Empleado> empleados = empleadosMySQL.getEmpleadosEmrpesa(nombreEmpresa);
+        List<Empleado> empleados = this.empleadosService.findByEmpresa(nombreEmpresa);
 
         lore.add(GOLD + "Empleados:");
         if(empleados.size() != 0){

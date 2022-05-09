@@ -32,7 +32,7 @@ public class ContratarComandoRunner extends PixelcoinCommand implements CommandR
 
         ValidationResult result = ValidatorService
                 .startValidating(sueldo, NaturalNumber)
-                .and(jugador, JugadorOnline, NoLeHanEnviadoSolicitud, NoTrabajaEmpresa.en(empresa), NotEqualsIgnoreCase.of(player.getName(), "No te puedes contratar a ti mismo"))
+                .and(jugador, JugadorOnline, NoLeHanEnviadoSolicitud, NotEqualsIgnoreCase.of(player.getName(), "No te puedes contratar a ti mismo"))
                 .and(TipoSueldo.codigoCorrecto(tipoSueldoString), True.of("El tipo de sueldo solo puede ser d: cdda dia, s: cada semana, 2s: cada dos semanas, m: cada mes"))
                 .and(empresa, OwnerDeEmpresa.of(player.getName()))
                 .validateAll();

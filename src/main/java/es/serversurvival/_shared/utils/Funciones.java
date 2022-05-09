@@ -297,6 +297,10 @@ public final class Funciones {
         return stringBuilder.toString();
     }
 
+    public static String hoy(){
+        return DATE_FORMATER_LEGACY.format(new Date());
+    }
+
     public static String quitarPalabrasEntreEspacios (String palabra, String... palabrasAQuitar) {
         String[] palabraDivididaEspacios = palabra.split(" ");
         StringBuilder stringBuilder = new StringBuilder();

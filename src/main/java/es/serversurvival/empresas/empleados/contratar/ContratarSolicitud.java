@@ -15,7 +15,7 @@ import org.bukkit.inventory.Inventory;
 import java.util.*;
 
 public class ContratarSolicitud extends Menu implements Solicitud {
-    private final ContratarUseCase useCase = ContratarUseCase.INSTANCE;
+    private final ContratarUseCase useCase;
 
     private final Player player;
     private final Inventory inventory;
@@ -28,6 +28,7 @@ public class ContratarSolicitud extends Menu implements Solicitud {
     private boolean isClicked = false;
 
     public ContratarSolicitud (String enviador, String destinatario, String empresa, double sueldo, TipoSueldo tipoSueldo, String cargo) {
+        this.useCase = new ContratarUseCase();
         this.player = Bukkit.getPlayer(destinatario);
         this.enviador = enviador;
         this.destinatario = destinatario;
@@ -76,7 +77,7 @@ public class ContratarSolicitud extends Menu implements Solicitud {
         Player enviadorPlayer = Bukkit.getPlayer(enviador);
         Player destinatarioPlayer = Bukkit.getPlayer(destinatario);
 
-        useCase.contratar(destinatario, empresa, sueldo, tipoSueldo, cargo);
+        useCase.contratar(enviadorPlayer.getName(), destinatario, empresa, sueldo, tipoSueldo, cargo);
 
         closeMenu();
 

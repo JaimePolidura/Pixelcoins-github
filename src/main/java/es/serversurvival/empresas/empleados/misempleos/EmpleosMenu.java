@@ -19,12 +19,12 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Map;
 
 public class EmpleosMenu extends Menu implements Clickable, Refreshcable, CanGoBack {
-    private final IrseEmpresaUseCase irseEmpresaUseCase = IrseEmpresaUseCase.INSTANCE;
-
-    private Player player;
+    private final IrseEmpresaUseCase irseEmpresaUseCase;
+    private final Player player;
     private Inventory inventory;
 
     public EmpleosMenu (Player player) {
+        this.irseEmpresaUseCase = new IrseEmpresaUseCase();
         this.player = player;
         this.inventory = InventoryCreator.createInventoryMenu(new EmpleosInventoryFactory(), player.getName());
         openMenu();

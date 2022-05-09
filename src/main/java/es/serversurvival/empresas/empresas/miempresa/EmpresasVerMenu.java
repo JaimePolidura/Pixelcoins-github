@@ -10,7 +10,9 @@ import es.serversurvival._shared.menus.*;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -19,14 +21,17 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Map;
 
+import static es.serversurvival._shared.utils.Funciones.enviarMensaje;
+
 public class EmpresasVerMenu extends Menu implements Clickable, Refreshcable, PostLoading, CanGoBack {
-    private final DespedirEmpleadoUseCase despedirEmpleadoUseCase = DespedirEmpleadoUseCase.INSTANCE;
+    private final DespedirEmpleadoUseCase despedirEmpleadoUseCase;
 
     private Inventory inventory;
     private final String empresa;
     private final Player player;
 
     public EmpresasVerMenu (Player player, String empresa) {
+        this.despedirEmpleadoUseCase = new DespedirEmpleadoUseCase();
         this.empresa = empresa;
         this.player = player;
         this.inventory = InventoryCreator.createInventoryMenu(new VerEmpresaInventoryFactory(empresa), player.getName());
@@ -73,7 +78,11 @@ public class EmpresasVerMenu extends Menu implements Clickable, Refreshcable, Po
             }
             nombreEmpleadoADespedir = itemClickedao.getItemMeta().getLore().get(1).split(" ")[1];
 
-            despedirEmpleadoUseCase.despedir(nombreEmpleadoADespedir, empresa, "Despedido desde el menu");
+            despedirEmpleadoUseCase.despedir(player.getName(), nombreEmpleadoADespedir, empresa, "Despedido");
+
+            player.sendMessage(ChatColor.GOLD + "Has despedido a: " + nombreEmpleadoADespedir);
+            String mensajeOnline = ChatColor.RED + "Has sido despedido de " + empresa + " razon: " + "Despedido";
+            enviarMensaje(nombreEmpleadoADespedir, mensajeOnline, mensajeOnline, Sound.BLOCK_ANVIL_LAND, 10, 1);
 
             refresh();
         }

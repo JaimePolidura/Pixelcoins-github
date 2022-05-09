@@ -18,6 +18,11 @@ import java.util.UUID;
 import static es.serversurvival._shared.mysql.AllMySQLTablesInstances.dateFormater;
 
 public final class EmpleadosService {
+    public static final int MAX_CARGO_LENGTH = 16;
+    public static final int MIN_CARGO_LENGTH = 3;
+    public static final int MIN_DESPEDIR_RAZON_LENGH = 3;
+    public static final int MAX_DESPEDIR_RAZON_LENGH = 3;
+
     private final EmpleadosRepository repositoryDb;
     private final Cache<UUID, Empleado> cache;
 

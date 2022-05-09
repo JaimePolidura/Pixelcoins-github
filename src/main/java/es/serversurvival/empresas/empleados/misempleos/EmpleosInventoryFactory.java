@@ -2,6 +2,7 @@ package es.serversurvival.empresas.empleados.misempleos;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
@@ -16,9 +17,11 @@ import java.util.List;
 
 public class EmpleosInventoryFactory extends InventoryFactory {
     private final EmpresasService empresasService;
+    private final EmpleadosService empleadosService;
 
     public EmpleosInventoryFactory(){
         this.empresasService = DependecyContainer.get(EmpresasService.class);
+        this.empleadosService = DependecyContainer.get(EmpleadosService.class);
     }
 
     @Override
@@ -51,7 +54,7 @@ public class EmpleosInventoryFactory extends InventoryFactory {
     }
 
     private List<ItemStack> buildItemsEmpleos (String jugador) {
-        List<Empleado> empleaosJugador = empleadosMySQL.getTrabajosJugador(jugador);
+        List<Empleado> empleaosJugador = this.empleadosService.findByJugador(jugador);
 
         List<ItemStack> itemsEmpleos = new ArrayList<>();
         empleaosJugador.forEach( (empleado) -> {

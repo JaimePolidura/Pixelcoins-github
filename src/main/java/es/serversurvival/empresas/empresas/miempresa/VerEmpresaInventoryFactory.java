@@ -2,6 +2,7 @@ package es.serversurvival.empresas.empresas.miempresa;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
@@ -21,10 +22,12 @@ import static org.bukkit.ChatColor.*;
 public class VerEmpresaInventoryFactory extends InventoryFactory {
     private final String empresaNombre;
     private final EmpresasService empresasService;
+    private final EmpleadosService empleadosService;
 
     public VerEmpresaInventoryFactory (String empresa) {
         this.empresaNombre = empresa;
         this.empresasService = DependecyContainer.get(EmpresasService.class);
+        this.empleadosService = DependecyContainer.get(EmpleadosService.class);
     }
 
     @Override
@@ -115,7 +118,7 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
 
     private List<ItemStack> buildItemsEmpleados () {
         List<ItemStack> itemsEmpleados = new ArrayList<>();
-        List<Empleado> empleados = empleadosMySQL.getEmpleadosEmrpesa(empresaNombre);
+        List<Empleado> empleados = this.empleadosService.findByEmpresa(empresaNombre);
 
         empleados.forEach( (empleado) -> {
             List<String> lore = new ArrayList<>();

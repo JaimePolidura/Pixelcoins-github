@@ -12,8 +12,11 @@ import org.bukkit.command.CommandSender;
         explanation = "Irse de una empresa en la que estes contratado <empresa> nombre de la empresa para irse"
 )
 public class IrseEmpleoComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<IrseEmpleoComando> {
-    private final String usoIncorrecto = ChatColor.DARK_RED + "Uso incorrecto: /empleos irse <empresa>";
-    private final IrseEmpresaUseCase useCase = IrseEmpresaUseCase.INSTANCE;
+    private final IrseEmpresaUseCase useCase;
+
+    public IrseEmpleoComandoRunner() {
+        this.useCase = new IrseEmpresaUseCase();
+    }
 
     @Override
     public void execute(IrseEmpleoComando command, CommandSender player) {
