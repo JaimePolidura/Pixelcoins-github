@@ -1,6 +1,6 @@
 package es.serversurvival.empresas.empleados.despedir;
 
-import es.serversurvival.empresas.empleados._shared.mysql.Empleado;
+import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.ChatColor;
@@ -15,7 +15,7 @@ public final class DespedirEmpleadoUseCase implements AllMySQLTablesInstances {
 
     public void despedir (String empleado, String empresa, String razon) {
         Empleado empleadoABorrar = empleadosMySQL.getEmpleado(empleado, empresa);
-        empleadosMySQL.borrarEmplado(empleadoABorrar.getId());
+        empleadosMySQL.borrarEmplado(empleadoABorrar.getEmpleadoId());
 
         String mensajeOnline = ChatColor.RED + "Has sido despedido de " + empresa + " razon: " + razon;
 

@@ -2,7 +2,7 @@ package es.serversurvival.empresas.empleados.misempleos;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.empresas.empleados._shared.mysql.Empleado;
+import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import org.bukkit.Bukkit;
@@ -62,10 +62,10 @@ public class EmpleosInventoryFactory extends InventoryFactory {
             lore.add("   ");
             lore.add(ChatColor.GOLD + "Empresa: " + empleado.getEmpresa());
             lore.add(ChatColor.GOLD + "Cargo: " + empleado.getCargo());
-            lore.add(ChatColor.GOLD + "Sueldo: " + ChatColor.GREEN + formatea.format(empleado.getSueldo()) + "/" + empleado.getTipo_sueldo().nombre);
-            lore.add(ChatColor.GOLD + "Ultima vez que te pagaron: " + empleado.getFecha_ultimapaga());
+            lore.add(ChatColor.GOLD + "Sueldo: " + ChatColor.GREEN + formatea.format(empleado.getSueldo()) + "/" + empleado.getTipoSueldo().nombre);
+            lore.add(ChatColor.GOLD + "Ultima vez que te pagaron: " + empleado.getFechaUltimaPaga());
             lore.add("   ");
-            lore.add(ChatColor.GOLD + "ID: " + empleado.getId());
+            lore.add(ChatColor.GOLD + "ID: " + empleado.getEmpleadoId());
 
 
             itemsEmpleos.add(ItemBuilder.of(Material.valueOf(icono)).title(displayName).lore(lore).build());

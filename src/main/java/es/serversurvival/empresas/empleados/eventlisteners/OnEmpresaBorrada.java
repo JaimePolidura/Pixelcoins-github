@@ -1,7 +1,7 @@
-package es.serversurvival.empresas.empleados._shared.eventlisteners;
+package es.serversurvival.empresas.empleados.eventlisteners;
 
 import es.jaime.EventListener;
-import es.serversurvival.empresas.empleados._shared.mysql.Empleado;
+import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas.borrar.EmpresaBorradaEvento;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
@@ -20,7 +20,7 @@ public final class OnEmpresaBorrada implements AllMySQLTablesInstances {
             String mensajeOnline = ChatColor.GOLD + evento.getJugador() + " ha borrado su empresa donde trabajabas: " + evento.getEmpresa();
             String mensajeOffline = "El owner de la empresa en la que trabajas: " + empleado.getEmpresa() + " la ha borrado, ya no existe";
 
-            Funciones.enviarMensaje(empleado.getJugador(), mensajeOnline, mensajeOffline);
+            Funciones.enviarMensaje(empleado.getNombre(), mensajeOnline, mensajeOffline);
         });
     }
 }

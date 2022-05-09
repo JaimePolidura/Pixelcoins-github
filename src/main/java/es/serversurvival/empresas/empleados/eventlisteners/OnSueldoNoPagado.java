@@ -1,4 +1,4 @@
-package es.serversurvival.empresas.empleados._shared.eventlisteners;
+package es.serversurvival.empresas.empleados.eventlisteners;
 
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import lombok.AllArgsConstructor;

@@ -60,7 +60,7 @@ public final class TiendaService {
 
     public void deleteById(UUID id) {
         this.repositoryDb.deleteById(id);
-        this.cache.removeValueIf(id);
+        this.cache.remove(id);
     }
 
     private Function<TiendaObjeto, TiendaObjeto> saveItemToCache(){

@@ -2,7 +2,7 @@ package es.serversurvival.mensajes.eventlisteners;
 
 import es.jaime.EventListener;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.empresas.empleados._shared.mysql.Empleado;
+import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.empresas.empresas.editarnombre.EmpresaNombreEditadoEvento;
 import es.serversurvival.mensajes._shared.application.MensajesService;
@@ -21,7 +21,7 @@ public final class OnNombreEmpresaEditado implements AllMySQLTablesInstances {
         List<Empleado> empleados = empleadosMySQL.getEmpleadosEmrpesa(evento.getNuevoNombre());
 
         empleados.forEach(empleado -> {
-            mensajesService.save(empleado.getJugador(), "La empresa en la que trabajas: " + evento.getAntiguoNombre() +
+            mensajesService.save(empleado.getNombre(), "La empresa en la que trabajas: " + evento.getAntiguoNombre() +
                     " ha cambiado a de nombre a " + evento.getNuevoNombre());
         });
     }

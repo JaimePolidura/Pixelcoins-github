@@ -5,7 +5,7 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.PosicionCerrada;
 import es.serversurvival.cuentaweb.Cuenta;
 import es.serversurvival.deudas._shared.newformat.domain.Deuda;
-import es.serversurvival.empresas.empleados._shared.mysql.Empleado;
+import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
@@ -65,7 +65,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
         lore.add("  ");
         List<Empleado> empleos = empleadosMySQL.getTrabajosJugador(jugador);
         empleos.forEach( (emp) -> {
-            lore.add(ChatColor.GOLD + "" + emp.getEmpresa() + " " + ChatColor.GREEN + formatea.format(emp.getSueldo()) + " PC " + ChatColor.GOLD + "/ " + emp.getTipo_sueldo().nombre);
+            lore.add(ChatColor.GOLD + "" + emp.getEmpresa() + " " + ChatColor.GREEN + formatea.format(emp.getSueldo()) + " PC " + ChatColor.GOLD + "/ " + emp.getTipoSueldo().nombre);
         });
 
         return ItemBuilder.of(Material.GOLDEN_APPLE).title(displayName).lore(lore).build();

@@ -1,4 +1,4 @@
-package es.serversurvival.empresas.empleados._shared.eventlisteners;
+package es.serversurvival.empresas.empleados.eventlisteners;
 
 import es.jaime.EventListener;
 import es.serversurvival.empresas.empresas.pagarsueldostask.SueldoPagadoEvento;

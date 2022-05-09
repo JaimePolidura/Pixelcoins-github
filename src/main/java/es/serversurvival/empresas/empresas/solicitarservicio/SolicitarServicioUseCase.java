@@ -1,7 +1,7 @@
 package es.serversurvival.empresas.empresas.solicitarservicio;
 
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.empresas.empleados._shared.mysql.Empleado;
+import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
@@ -30,7 +30,7 @@ public final class SolicitarServicioUseCase implements AllMySQLTablesInstances {
 
         List<Empleado> empleados = empleadosMySQL.getEmpleadosEmrpesa(empresaNombre);
         empleados.forEach( empleado -> {
-            enviarMensajeYSonidoSiOnline(empleado.getJugador(), ChatColor.GOLD + quienSolicita +
+            enviarMensajeYSonidoSiOnline(empleado.getNombre(), ChatColor.GOLD + quienSolicita +
                     " te ha solicitado el servicio de la empresa: " + empresaNombre, Sound.ENTITY_PLAYER_LEVELUP);
         });
     }

@@ -52,6 +52,6 @@ public final class TiendaRepositoryService {
 
     public void deleteById(UUID id) {
         this.repository.deleteById(id);
-        this.cache.removeValueIf(id);
+        this.cache.remove(id);
     }
 }

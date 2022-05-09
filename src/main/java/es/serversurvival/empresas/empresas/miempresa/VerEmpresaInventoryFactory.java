@@ -2,7 +2,7 @@ package es.serversurvival.empresas.empresas.miempresa;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.empresas.empleados._shared.mysql.Empleado;
+import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival._shared.utils.Funciones;
@@ -120,16 +120,16 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
         empleados.forEach( (empleado) -> {
             List<String> lore = new ArrayList<>();
             lore.add("   ");
-            lore.add(GOLD + "Empleado: " + empleado.getJugador());
+            lore.add(GOLD + "Empleado: " + empleado.getNombre());
             lore.add(GOLD + "Cargo: " + empleado.getCargo());
-            lore.add(GOLD + "Sueldo: " + GREEN + formatea.format(empleado.getSueldo()) + " PC/" + empleado.getTipo_sueldo().nombre);
-            lore.add(GOLD + "ID: " + empleado.getId());
+            lore.add(GOLD + "Sueldo: " + GREEN + formatea.format(empleado.getSueldo()) + " PC/" + empleado.getTipoSueldo().nombre);
+            lore.add(GOLD + "ID: " + empleado.getEmpleadoId());
             lore.add("   ");
-            lore.add("/empresas despedir " + empresaNombre + " " + empleado.getJugador());
+            lore.add("/empresas despedir " + empresaNombre + " " + empleado.getNombre());
             lore.add("  <razon>");
-            lore.add("/empresas editarempleado " + empresaNombre + " " + empleado.getJugador());
+            lore.add("/empresas editarempleado " + empresaNombre + " " + empleado.getNombre());
             lore.add("  sueldo <sueldo>");
-            lore.add("/empresas editarempleado " + empresaNombre + " " + empleado.getJugador());
+            lore.add("/empresas editarempleado " + empresaNombre + " " + empleado.getNombre());
             lore.add("  tiposueldo <tipo (ver en info)>");
 
             itemsEmpleados.add(ItemBuilder.of(Material.PLAYER_HEAD).lore(lore).title(RED + "" + BOLD + "" + UNDERLINE + "CLICK PARA DESPEDIR").build());

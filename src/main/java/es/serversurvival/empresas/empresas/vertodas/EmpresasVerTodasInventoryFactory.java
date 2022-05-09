@@ -2,7 +2,7 @@ package es.serversurvival.empresas.empresas.vertodas;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.empresas.empleados._shared.mysql.Empleado;
+import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival._shared.utils.Funciones;
@@ -79,7 +79,7 @@ public class EmpresasVerTodasInventoryFactory extends InventoryFactory {
         lore.add(GOLD + "Empleados:");
         if(empleados.size() != 0){
             for (Empleado empleado : empleados) {
-                lore.add(GOLD + "-" + empleado.getJugador());
+                lore.add(GOLD + "-" + empleado.getNombre());
             }
         }else{
             lore.add(GOLD + "Sin trabajadores");

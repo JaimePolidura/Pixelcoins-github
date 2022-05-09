@@ -7,8 +7,8 @@ import java.util.function.Predicate;
 public interface Cache<K, V> {
     int maxItemsCapacity();
     void put(K key, V value);
-    void removeValueIf(K key);
-    void removeValueIf(Predicate<V> condition);
+    void remove(K key);
+    void remove(Predicate<V> condition);
     Optional<V> find(K key);
     List<V> all();
     void clear();

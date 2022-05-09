@@ -32,12 +32,12 @@ public class LRUCache<K, V> implements Cache<K, V>{
     }
 
     @Override
-    public void removeValueIf(K key) {
+    public void remove(K key) {
         this.items.removeIf(cacheItem -> cacheItem.getKey().equals(key));
     }
 
     @Override
-    public void removeValueIf(Predicate<V> condition) {
+    public void remove(Predicate<V> condition) {
         this.items.removeIf(cacheItem -> condition.test(cacheItem.getValue()));
     }
 

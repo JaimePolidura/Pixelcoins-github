@@ -68,7 +68,7 @@ public final class EmpresasService {
 
     public void deleteByEmpresaId(UUID empresaId) {
         this.repostioryDb.deleteByEmpresaId(empresaId);
-        this.cache.removeValueIf(empresa -> empresa.getEmpresaId().equals(empresaId));
+        this.cache.remove(empresa -> empresa.getEmpresaId().equals(empresaId));
     }
 
     public boolean isCotizada(String nombre){

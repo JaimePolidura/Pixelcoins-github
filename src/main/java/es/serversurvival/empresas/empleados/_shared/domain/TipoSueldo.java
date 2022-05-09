@@ -1,4 +1,4 @@
-package es.serversurvival.empresas.empleados._shared.mysql;
+package es.serversurvival.empresas.empleados._shared.domain;
 
 import java.util.Arrays;
 

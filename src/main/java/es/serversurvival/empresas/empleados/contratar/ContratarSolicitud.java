@@ -1,6 +1,6 @@
 package es.serversurvival.empresas.empleados.contratar;
 
-import es.serversurvival.empresas.empleados._shared.mysql.TipoSueldo;
+import es.serversurvival.empresas.empleados._shared.domain.TipoSueldo;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.MenuManager;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;

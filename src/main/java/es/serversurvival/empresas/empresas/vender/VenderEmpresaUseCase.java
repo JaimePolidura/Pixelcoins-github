@@ -6,7 +6,7 @@ import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.empresas.empleados._shared.mysql.Empleado;
+import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
@@ -34,7 +34,7 @@ public final class VenderEmpresaUseCase implements AllMySQLTablesInstances {
 
         Empleado emplado = empleadosMySQL.getEmpleado(comprador, nombreEmpresa);
         if(emplado != null)
-            empleadosMySQL.borrarEmplado(emplado.getId());
+            empleadosMySQL.borrarEmplado(emplado.getEmpleadoId());
 
         Pixelcoin.publish(new EmpresaVendedidaEvento(comprador, vendedor, precioEmpresa, nombreEmpresa));
     }
