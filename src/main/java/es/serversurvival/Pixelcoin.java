@@ -9,6 +9,12 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival._shared.mysql.newformat.MySQLConfiguration;
+import es.serversurvival.web.conversacionesweb._shared.application.ConversacionesWebService;
+import es.serversurvival.web.conversacionesweb._shared.domain.ConversacionesWebRepostiory;
+import es.serversurvival.web.conversacionesweb._shared.infrastructure.InMemoryConversacionesRepository;
+import es.serversurvival.web.cuentasweb._shared.application.CuentasWebService;
+import es.serversurvival.web.cuentasweb._shared.domain.CuentasWebRepository;
+import es.serversurvival.web.cuentasweb._shared.infrastructure.MySQLCuentasWebRepository;
 import es.serversurvival.deudas._shared.newformat.application.DeudasService;
 import es.serversurvival.deudas._shared.newformat.domain.DeudasRepository;
 import es.serversurvival.deudas._shared.newformat.infrastructure.MySQLDeudasRepository;
@@ -26,7 +32,7 @@ import es.serversurvival.tienda._shared.application.TiendaService;
 import es.serversurvival.tienda._shared.domain.TiendaRepository;
 import es.serversurvival.transacciones._shared.application.TransaccionesService;
 import es.serversurvival.transacciones._shared.domain.TransaccionesRepository;
-import es.serversurvival.webconnection.RabbitMQConsumerTask;
+import es.serversurvival.web.webconnection.RabbitMQConsumerTask;
 import es.serversurvival._shared.scoreboards.ScoreBoardManager;
 import es.serversurvival._shared.scoreboards.ScoreboardUpdateTask;
 
@@ -46,6 +52,7 @@ import static org.bukkit.ChatColor.*;
  5 Tienda
  6 Empresas
  7 Empleados
+ 8 CuentasWeb
  */
 public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstances {
     private static Pixelcoin plugin;
@@ -77,8 +84,6 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
 
         this.scoreBoardManager = new ScoreBoardManager();
         this.eventBus = new EventBusSynch("es.serversurvival");
-
-        conversacionesWebMySQL.borrarTodasConversacionesWeb();
 
         getLogger().info("------------Plugin activado -------------");
         getServer().getConsoleSender().sendMessage(GREEN + "------------------------------");
@@ -125,8 +130,10 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
             put(TiendaRepository.class, new MySQLDeudasRepository(mysqlCOnfiguration));
             put(EmpresasRepostiory.class, new MySQLEmpresasRepository(mysqlCOnfiguration));
             put(EmpleadosRepository.class, new MySQLEmpresasRepository(mysqlCOnfiguration));
+            put(CuentasWebRepository.class, new MySQLCuentasWebRepository(mysqlCOnfiguration));
+            put(ConversacionesWebRepostiory.class, new InMemoryConversacionesRepository());
         }});
-    
+
         DependecyContainer.addAll(new HashMap<>(){{
             put(JugadoresService.class, new JugadoresService());
             put(MensajesService.class, new MensajesService());
@@ -135,6 +142,8 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
             put(TiendaService.class, new TiendaService());
             put(EmpresasService.class, new EmpresasService());
             put(EmpleadosService.class, new EmpleadosService());
+            put(CuentasWebService.class, new CuentasWebService());
+            put(ConversacionesWebService.class, new ConversacionesWebService());
         }});
     }
 }

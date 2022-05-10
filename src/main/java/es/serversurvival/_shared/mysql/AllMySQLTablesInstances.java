@@ -8,7 +8,6 @@ import es.serversurvival.bolsa._shared.posicionescerradas.mysql.PosicionesCerrad
 import es.serversurvival.deudas._shared.mysql.Deudas;
 import es.serversurvival.jugadores._shared.mySQL.MySQLJugadoresRepository;
 import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.webconnection.conversacionesweb.mysql.ConversacionesWeb;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -24,5 +23,4 @@ public interface AllMySQLTablesInstances {
     Deudas deudasMySQL = Deudas.INSTANCE;
     OrdenesPreMarket ordenesMySQL = OrdenesPreMarket.INSTANCE;
     OfertasMercadoServer ofertasMercadoServerMySQL = OfertasMercadoServer.INSTANCE;
-    ConversacionesWeb conversacionesWebMySQL = ConversacionesWeb.INSTANCE;
 }
