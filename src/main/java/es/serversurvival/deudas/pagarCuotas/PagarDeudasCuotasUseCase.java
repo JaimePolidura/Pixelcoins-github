@@ -3,9 +3,8 @@ package es.serversurvival.deudas.pagarCuotas;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.deudas._shared.newformat.application.DeudasService;
 import es.serversurvival.deudas._shared.newformat.domain.Deuda;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
-import es.serversurvival.jugadores._shared.mySQL.MySQLJugadoresRepository;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.Pixelcoin;
 import lombok.SneakyThrows;
 
@@ -27,7 +26,7 @@ public final class PagarDeudasCuotasUseCase {
 
     public void pagarDeudas () {
         List<Deuda> todasLasDeudas = this.deudasService.findAll();
-        Map<String, Jugador> allJugadores = MySQLJugadoresRepository.INSTANCE.getMapAllJugadores();
+        Map<String, Jugador> allJugadores = DependecyContainer.get(JugadoresService.class).getMapAllJugadores();
 
         todasLasDeudas.forEach( (deuda) -> {
             Date fechaHoy = formatFehcaDeHoyException();

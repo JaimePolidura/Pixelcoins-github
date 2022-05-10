@@ -3,15 +3,15 @@ package es.serversurvival.jugadores.perfil;
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.PosicionCerrada;
+import es.serversurvival.deudas._shared.newformat.application.DeudasService;
 import es.serversurvival.web.cuentasweb._shared.application.CuentasWebService;
 import es.serversurvival.web.cuentasweb._shared.domain.CuentaWeb;
-import es.serversurvival.deudas._shared.newformat.domain.Deuda;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -30,11 +30,13 @@ import static es.serversurvival._shared.utils.Funciones.*;
 public class PerfilInventoryFactory extends InventoryFactory {
     private final List<Integer> posicionesCristales;
     private final JugadoresService jugadoresService;
+    private final DeudasService deudasService;
     private final EmpresasService empresasService;
     private final EmpleadosService empleadosService;
     private final CuentasWebService cuentasWebService;
 
     public PerfilInventoryFactory(){
+        this.deudasService = DependecyContainer.get(DeudasService.class);
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.empleadosService = DependecyContainer.get(EmpleadosService.class);
@@ -116,8 +118,8 @@ public class PerfilInventoryFactory extends InventoryFactory {
     private ItemStack buildItemDeudas (String jugador) {
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TUS DEUDAS";
 
-        double totalQueLeDeben = deudasMySQL.getDeudasAcredor(jugador).stream().mapToInt(Deuda::getPixelcoins_restantes).sum();
-        double totalQueDebe = deudasMySQL.getDeudasDeudor(jugador).stream().mapToInt(Deuda::getPixelcoins_restantes).sum();
+        double totalQueLeDeben = deudasService.getAllPixelcoinsDeudasAcredor(jugador);
+        double totalQueDebe = deudasService.getAllPixelcoinsDeudasDeudor(jugador);
 
         List<String> lore = new ArrayList<String>() {{
             add("    ");
@@ -135,14 +137,14 @@ public class PerfilInventoryFactory extends InventoryFactory {
         metaStats.setOwningPlayer(Bukkit.getPlayer(nombreJugador));
         metaStats.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER EL TOP JUGADORES");
 
-        Jugador jugador = jugadoresService.getJugadorByNombre(nombreJugador);
+        Jugador jugador = jugadoresService.getByNombre(nombreJugador);
 
         if(jugador == null)
             return stats;
 
         double totalAhorrado = jugador.getPixelcoins();
-        double totalDebe = deudasMySQL.getAllPixelcoinsDeudasDeudor(jugador.getNombre());
-        double totalDeben = deudasMySQL.getAllPixelcoinsDeudasAcredor(jugador.getNombre());
+        double totalDebe = deudasService.getAllPixelcoinsDeudasDeudor(jugador.getNombre());
+        double totalDeben = deudasService.getAllPixelcoinsDeudasAcredor(jugador.getNombre());
         double totalAcciones = posicionesAbiertasMySQL.getAllPixeloinsEnAcciones(jugador.getNombre());
         double totalEmpresas = empresasService.getAllPixelcoinsEnEmpresas(jugador.getNombre());
         double resultado = (totalAhorrado + totalDeben + totalAcciones + totalEmpresas) - totalDebe;
@@ -191,7 +193,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
         lore.add(ChatColor.GOLD + "Nº de ventas en la tienda: " + nventas);
         lore.add(ChatColor.GOLD + "Posicion en top vendedores: " + posTopVendedores);
         lore.add("   ");
-        Jugador jugadorAVer = jugadoresService.getJugadorByNombre(nombreJugador);
+        Jugador jugadorAVer = jugadoresService.getByNombre(nombreJugador);
         lore.add(ChatColor.GOLD + "Numero de veces pagada la deuda: " + jugadorAVer.getNPagosDeuda());
         lore.add(ChatColor.GOLD + "Numero de veces de inpago de la deuda: " + ChatColor.RED +  jugadorAVer.getNInpagosDeuda());
 
@@ -208,7 +210,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
 
         CuentaWeb cuenta = this.cuentasWebService.getByUsername(jugador);
         if(cuenta == null){
-            int numeroCuenta = jugadoresService.getJugadorByNombre(jugador).getNumeroVerificacionCuenta();
+            int numeroCuenta = jugadoresService.getByNombre(jugador).getNumeroVerificacionCuenta();
             lore.add(ChatColor.DARK_AQUA + "No tienes cuenta, para registrarse:");
             lore.add(ChatColor.DARK_AQUA + "" + ChatColor.UNDERLINE + "http://serversurvival.ddns.net/registrarse");
             lore.add(ChatColor.DARK_AQUA + "Tu numero de cuenta: " + ChatColor.BOLD + numeroCuenta);

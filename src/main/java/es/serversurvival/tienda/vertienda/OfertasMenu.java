@@ -2,8 +2,8 @@ package es.serversurvival.tienda.vertienda;
 
 import es.jaime.EventListener;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.tienda._shared.application.TiendaService;
 import es.serversurvival.tienda.comprar.ObjetoTiendaComprado;
 import es.serversurvival._shared.menus.Menu;
@@ -87,7 +87,7 @@ public class OfertasMenu extends Menu implements Clickable, Paginated, Refreshca
             return;
         }
         UUID id = idTry.get();
-        Jugador jugador = AllMySQLTablesInstances.jugadoresMySQL.getJugador(player.getName());
+        Jugador jugador = this.jugadoresService.getByNombre(player.getName());
         TiendaObjeto ofertaAComprar = this.tiendaService.getById(id);
 
         if (jugador.getPixelcoins() < ofertaAComprar.getPrecio()) {

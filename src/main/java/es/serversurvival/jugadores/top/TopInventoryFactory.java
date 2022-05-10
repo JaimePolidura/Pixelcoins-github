@@ -4,8 +4,8 @@ import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.PosicionCerrada;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.TipoPosicion;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.Bukkit;
@@ -228,7 +228,7 @@ public class TopInventoryFactory extends InventoryFactory {
     }
 
     private void initInfoJugadores () {
-        List<Jugador> jugadores = jugadoresMySQL.getAllJugadores();
+        List<Jugador> jugadores = jugadoresService.findAll();
         Map<String, Double> mapPatrimonio = Funciones.crearMapaTopPatrimonioPlayers(false);
 
         for (Jugador jugador : jugadores) {

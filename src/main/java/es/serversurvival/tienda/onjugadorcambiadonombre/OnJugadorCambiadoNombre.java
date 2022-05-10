@@ -2,9 +2,7 @@ package es.serversurvival.tienda.onjugadorcambiadonombre;
 
 import es.jaime.EventListener;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
 import es.serversurvival.jugadores.setupjugadorunido.JugadorCambiadoDeNombreEvento;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.tienda._shared.application.TiendaService;
 import es.serversurvival.tienda._shared.domain.TiendaObjeto;
 

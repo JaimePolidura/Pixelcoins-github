@@ -8,8 +8,8 @@ import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 
 public final class ComprarServicioUseCase implements AllMySQLTablesInstances {
     private final EmpresasService empresasService;
@@ -43,7 +43,7 @@ public final class ComprarServicioUseCase implements AllMySQLTablesInstances {
     }
 
     private Jugador ensureEnoughPixelcoins(String jugadorNombre, double pixelcoins) {
-        var jugador = this.jugadoresService.getJugadorByNombre(jugadorNombre);
+        var jugador = this.jugadoresService.getByNombre(jugadorNombre);
 
         if(jugador.getPixelcoins() < pixelcoins)
             throw new NotEnoughPixelcoins("No tienes las suficientes pixelcoins");

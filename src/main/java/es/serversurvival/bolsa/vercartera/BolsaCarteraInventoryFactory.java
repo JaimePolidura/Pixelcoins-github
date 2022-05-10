@@ -1,6 +1,7 @@
 package es.serversurvival.bolsa.vercartera;
 
 import es.jaimetruman.ItemBuilder;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionesAbiertas;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.LlamadaApi;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionAbierta;
@@ -8,6 +9,7 @@ import es.serversurvival.bolsa._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.menus.Paginated;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -21,12 +23,17 @@ import java.util.Map;
 import static org.bukkit.ChatColor.*;
 
 public class BolsaCarteraInventoryFactory extends InventoryFactory {
+    private final JugadoresService jugadoresService;
+    private final List<ItemStack> itemExcessInventory = new ArrayList<>();
     private double resultadoTotal;
     private double valorTotal;
     private double liquidezjugador;
     private Map<String, LlamadaApi> llamadasApis;
     private Map<String, Integer> posicionesAbiertasPeso;
-    private List<ItemStack> itemExcessInventory = new ArrayList<>();
+
+    public BolsaCarteraInventoryFactory() {
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+    }
 
     @Override
     protected Inventory buildInventory(String jugador) {
@@ -91,7 +98,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         List<ItemStack> posicionesAbiertasItems = new ArrayList<>();
 
         List<PosicionAbierta> posicionAbiertasJugador = posicionesAbiertasMySQL.getPosicionesAbiertasJugador(jugador);
-        this.liquidezjugador = jugadoresMySQL.getJugador(jugador).getPixelcoins();
+        this.liquidezjugador = jugadoresService.getByNombre(jugador).getPixelcoins();
         rellenarLlamadasApi();
         rellenarPosicionesAbiertasPeso(posicionAbiertasJugador, getTotalInvertido(posicionAbiertasJugador));
 

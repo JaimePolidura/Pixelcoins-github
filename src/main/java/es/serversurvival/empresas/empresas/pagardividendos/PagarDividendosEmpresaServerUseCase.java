@@ -4,8 +4,8 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa._shared.ofertasmercadoserver.mysql.OfertaMercadoServer;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
@@ -26,7 +26,7 @@ public final class PagarDividendosEmpresaServerUseCase implements AllMySQLTables
         List<PosicionAbierta> posicionesAccion = posicionesAbiertasMySQL.getPosicionesAccionesServer(nombreEmpresa);
         List<OfertaMercadoServer> ofertasAccion =  ofertasMercadoServerMySQL.getOfertasEmpresa(nombreEmpresa, OfertaMercadoServer::esTipoOfertanteJugador);
 
-        Map<String, Jugador> allJugadoresMap = jugadoresMySQL.getMapAllJugadores();
+        Map<String, Jugador> allJugadoresMap = jugadoresService.getMapAllJugadores();
 
         posicionesAccion.forEach(posicion -> {
             pagarDividendoAccionAJugador(allJugadoresMap.get(posicion.getJugador()), posicion.getCantidad(), dividendoPorAccion, nombreEmpresa);

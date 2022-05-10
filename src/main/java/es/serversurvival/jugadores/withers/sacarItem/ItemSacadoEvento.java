@@ -3,7 +3,7 @@ package es.serversurvival.jugadores.withers.sacarItem;
 import es.serversurvival.transacciones._shared.domain.TipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.transacciones._shared.domain.Transaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

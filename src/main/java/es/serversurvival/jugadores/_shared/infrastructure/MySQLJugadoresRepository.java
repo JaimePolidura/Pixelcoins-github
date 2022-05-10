@@ -1,11 +1,11 @@
-package es.serversurvival.jugadores._shared.newformat.infrastructure;
+package es.serversurvival.jugadores._shared.infrastructure;
 
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
 import es.jaimetruman.select.Select;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
-import es.serversurvival.jugadores._shared.newformat.domain.JugadoresRepository;
+import es.serversurvival.jugadores._shared.domain.JugadoresRepository;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

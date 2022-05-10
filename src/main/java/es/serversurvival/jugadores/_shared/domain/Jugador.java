@@ -1,4 +1,4 @@
-package es.serversurvival.jugadores._shared.newformat.domain;
+package es.serversurvival.jugadores._shared.domain;
 
 import es.jaime.javaddd.domain.Aggregate;
 import es.serversurvival._shared.mysql.TablaObjeto;

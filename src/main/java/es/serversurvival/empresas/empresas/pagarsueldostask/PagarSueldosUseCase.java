@@ -8,8 +8,7 @@ import es.serversurvival.empresas.empleados._shared.domain.TipoSueldo;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
 import lombok.SneakyThrows;
 
 import java.util.Date;
@@ -51,7 +50,7 @@ public final class PagarSueldosUseCase implements AllMySQLTablesInstances {
             return;
         }
 
-        var jugadorEmpleado = this.jugadoresService.getJugadorByNombre(empleado.getNombre());
+        var jugadorEmpleado = this.jugadoresService.getByNombre(empleado.getNombre());
 
         this.empresasService.save(empresa.decrementPixelcoinsBy(empleado.getSueldo())
                 .incrementGastosBy(empleado.getSueldo()) );

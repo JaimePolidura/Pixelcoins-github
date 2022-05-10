@@ -23,9 +23,9 @@ import es.serversurvival.empresas.empleados._shared.domain.EmpleadosRepository;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.EmpresasRepostiory;
 import es.serversurvival.empresas.empresas._shared.infrastructure.MySQLEmpresasRepository;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
-import es.serversurvival.jugadores._shared.newformat.domain.JugadoresRepository;
-import es.serversurvival.jugadores._shared.newformat.infrastructure.MySQLJugadoresRepository;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.JugadoresRepository;
+import es.serversurvival.jugadores._shared.infrastructure.MySQLJugadoresRepository;
 import es.serversurvival.mensajes._shared.application.MensajesService;
 import es.serversurvival.mensajes._shared.domain.MensajesRepository;
 import es.serversurvival.tienda._shared.application.TiendaService;
@@ -67,7 +67,7 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
     public static Pixelcoin getInstance() {
         return plugin;
     }
-
+    
     public static void publish (Event event) {
         plugin.eventBus.publish(event);
     }

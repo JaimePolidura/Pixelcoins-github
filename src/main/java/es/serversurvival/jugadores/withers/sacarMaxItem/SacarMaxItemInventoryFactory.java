@@ -2,7 +2,7 @@ package es.serversurvival.jugadores.withers.sacarMaxItem;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores.withers.CambioPixelcoins;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import org.bukkit.Bukkit;
@@ -25,7 +25,7 @@ public class SacarMaxItemInventoryFactory extends InventoryFactory {
     protected Inventory buildInventory(String jugador) {
         Inventory inventory = Bukkit.createInventory(null, 27, ChatColor.DARK_RED + "" + ChatColor.BOLD + "ELLIGE ITEM PARA SACR MAX");
 
-        double dineroJugador = jugadoresService.getJugadorByNombre(jugador).getPixelcoins();
+        double dineroJugador = jugadoresService.getByNombre(jugador).getPixelcoins();
 
         inventory.setItem(4, buildItemInfo());
         inventory.setItem(10, buildItem(dineroJugador, "DIAMANTES", Material.DIAMOND_BLOCK, CambioPixelcoins.DIAMANTE));

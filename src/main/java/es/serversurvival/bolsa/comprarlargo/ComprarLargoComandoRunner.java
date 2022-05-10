@@ -2,11 +2,13 @@ package es.serversurvival.bolsa.comprarlargo;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa._shared.AbrirOrdenUseCase;
 import es.serversurvival.bolsa._shared.ordenespremarket.mysql.AccionOrden;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
 import main.Pair;
 import main.ValidationResult;
 import main.ValidatorService;
@@ -26,6 +28,12 @@ import static org.bukkit.Sound.*;
         explanation = "Para comprar una accion. <ticker> ticker de la accion (solo se pueden acciones americanas) <cantidad> cantidad de acciones a comprar"
 )
 public class ComprarLargoComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<ComprarLargoComando> {
+    private final JugadoresService jugadoresService;
+
+    public ComprarLargoComandoRunner(){
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+    }
+
     @Override
     public void execute(ComprarLargoComando comando, CommandSender sender) {
         String ticker = comando.getTicker();
@@ -52,7 +60,7 @@ public class ComprarLargoComandoRunner extends PixelcoinCommand implements Comma
         String nombreValor = valorOpcional.get().getKey();
         double precio = valorOpcional.get().getValue();
 
-        if(jugadoresMySQL.getJugador(sender.getName()).getPixelcoins() < (precio * cantidad)){
+        if(jugadoresService.getByNombre(sender.getName()).getPixelcoins() < (precio * cantidad)){
             sender.sendMessage(DARK_RED + "No tienes las suficientes pixelcoins para pagar " + cantidad + " " + ticker + " a " + formatea.format(precio) + " $ -> " + formatea.format(precio * cantidad) + " PC");
             return;
         }

@@ -7,8 +7,8 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 
 public final class DepositarPixelcoinsUseCase {
     private final JugadoresService jugadoresService;
@@ -38,7 +38,7 @@ public final class DepositarPixelcoinsUseCase {
     }
 
     private Jugador ensureEnoughPixelcoins(String jugadorNombre, double pixelcoinsADepositar){
-        var jugador = this.jugadoresService.getJugadorByNombre(jugadorNombre);
+        var jugador = this.jugadoresService.getByNombre(jugadorNombre);
 
         if(jugador.getPixelcoins() > pixelcoinsADepositar)
             throw new NotEnoughPixelcoins("No tienes las suficientes pixelcoins para depositar");

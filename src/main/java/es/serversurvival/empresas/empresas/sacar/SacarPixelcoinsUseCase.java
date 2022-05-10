@@ -6,8 +6,8 @@ import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 public final class SacarPixelcoinsUseCase implements AllMySQLTablesInstances {
@@ -21,7 +21,7 @@ public final class SacarPixelcoinsUseCase implements AllMySQLTablesInstances {
 
     public void sacar (String playerName, String empresaNombre, double pixelcoinsASacar) {
         this.ensureCorrectFormatPixelcoins(pixelcoinsASacar);
-        Jugador jugador = this.jugadoresService.getJugadorByNombre(playerName);
+        Jugador jugador = this.jugadoresService.getByNombre(playerName);
         Empresa empresaASacar = this.empresasService.getEmpresaByNombre(empresaNombre);
         this.ensureOwnerOfEmpresa(empresaASacar, playerName);
 

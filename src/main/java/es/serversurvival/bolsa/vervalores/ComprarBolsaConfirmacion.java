@@ -1,6 +1,7 @@
 package es.serversurvival.bolsa.vervalores;
 
 import es.jaimetruman.ItemBuilder;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa._shared.AbrirOrdenUseCase;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa._shared.ordenespremarket.mysql.AccionOrden;
@@ -11,6 +12,7 @@ import es.serversurvival._shared.menus.AumentoConfirmacion;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -26,20 +28,22 @@ public class ComprarBolsaConfirmacion extends Menu implements AumentoConfirmacio
     private final ComprarOfertaMercadoUseCase comprarOfertaUseCase = ComprarOfertaMercadoUseCase.INSTANCE;
     private final ComprarLargoUseCase comprarLargoUseCase = ComprarLargoUseCase.INSTANCE;
     private final AbrirOrdenUseCase abrirOrdenUseCase = AbrirOrdenUseCase.INSTANCE;
+    private final JugadoresService jugadoresService;
 
     private final String simbolo;
-    private double precioUnidad;
+    private final double precioUnidad;
     private double precioTotal;
     private final TipoActivo tipoActivo;
     private final String alias;
     private final Inventory inventory;
     private final Player player;
     private int cantidadAComprar = 1;
-    private double dineroJugador;
+    private final double dineroJugador;
     private final String nombreValor;
     private int id;
 
     public ComprarBolsaConfirmacion(String simbolo, String nombreValor, TipoActivo tipoActivo, String alias, Player player, double precioUnidad) {
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.nombreValor = nombreValor;
         this.alias = alias;
         this.tipoActivo = tipoActivo;
@@ -56,7 +60,7 @@ public class ComprarBolsaConfirmacion extends Menu implements AumentoConfirmacio
 
         this.inventory = InventoryCreator.createConfirmacionAumento(titulo, tituloAceptar, lore, tituloCancelar);
 
-        this.dineroJugador = AllMySQLTablesInstances.jugadoresMySQL.getJugador(player.getName()).getPixelcoins();
+        this.dineroJugador = jugadoresService.getByNombre(player.getName()).getPixelcoins();
 
         openMenu();
     }

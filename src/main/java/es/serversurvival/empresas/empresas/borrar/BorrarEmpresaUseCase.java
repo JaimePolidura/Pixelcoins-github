@@ -3,14 +3,12 @@ package es.serversurvival.empresas.empresas.borrar;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
-import org.bukkit.ChatColor;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
 
 public final class BorrarEmpresaUseCase implements AllMySQLTablesInstances {
     private final EmpresasService empresasService;
@@ -26,7 +24,7 @@ public final class BorrarEmpresaUseCase implements AllMySQLTablesInstances {
     public void borrar (String owner, String empresaNombre) {
         Empresa empresaABorrar = this.empresasService.getEmpresaByNombre(empresaNombre);
         this.ensureOwner(empresaABorrar, owner);
-        var jugadorOwner = jugadoresService.getJugadorByNombre(empresaABorrar.getOwner());
+        var jugadorOwner = jugadoresService.getByNombre(empresaABorrar.getOwner());
         var empleados = this.empleadosService.findByEmpresa(empresaNombre);
 
         this.empresasService.deleteByEmpresaId(empresaABorrar.getEmpresaId());

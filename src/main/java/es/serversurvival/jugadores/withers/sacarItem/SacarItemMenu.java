@@ -1,6 +1,8 @@
 package es.serversurvival.jugadores.withers.sacarItem;
 
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.jugadores.withers.CambioPixelcoins;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.MenuManager;
@@ -22,13 +24,15 @@ import java.util.Map;
 import static org.bukkit.ChatColor.DARK_RED;
 
 public class SacarItemMenu extends Menu implements Clickable, Refreshcable {
+    private final JugadoresService jugadoresService;
     private Player player;
     private Inventory inventory;
     private double pixelcoinsJugador;
-    
+
     public SacarItemMenu(Player player) {
         this.player = player;
-        this.pixelcoinsJugador = AllMySQLTablesInstances.jugadoresMySQL.getJugador(player.getName()).getPixelcoins();
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+        this.pixelcoinsJugador = this.jugadoresService.getByNombre(player.getName()).getPixelcoins();
 
         this.inventory = InventoryCreator.createInventoryMenu(new SacarItemInventoryFactory(pixelcoinsJugador), player.getName());
         openMenu();
@@ -60,7 +64,7 @@ public class SacarItemMenu extends Menu implements Clickable, Refreshcable {
             return;
         }
 
-        Jugador jugadorASacar = AllMySQLTablesInstances.jugadoresMySQL.getJugador(player.getName());
+        Jugador jugadorASacar = this.jugadoresService.getByNombre(player.getName());
         String tipoItem = itemClickeado.getType().toString();
         double cambioPixelcoins = CambioPixelcoins.getCambioTotal(tipoItem, 1); //Pixelcoins a sacar
 

@@ -2,8 +2,8 @@ package es.serversurvival.jugadores.withers.ingresarItem;
 
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.jugadores.withers.CambioPixelcoins;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import org.bukkit.entity.Player;
@@ -17,7 +17,7 @@ public final class IngresarItemUseCase implements AllMySQLTablesInstances {
     }
 
     public void ingresarItem(ItemStack itemAIngresar, Player player) {
-        Jugador jugador = jugadoresService.getJugadorByNombre(player.getName());
+        Jugador jugador = jugadoresService.getByNombre(player.getName());
 
         int cantidad = itemAIngresar.getAmount();
         String nombreItem = itemAIngresar.getType().toString();

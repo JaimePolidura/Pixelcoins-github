@@ -1,15 +1,13 @@
-package es.serversurvival.jugadores._shared.newformat.application;
+package es.serversurvival.jugadores._shared.application;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.Cache;
 import es.serversurvival._shared.cache.LRUCache;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
-import es.serversurvival.jugadores._shared.newformat.domain.JugadoresRepository;
+import es.serversurvival.jugadores._shared.domain.JugadoresRepository;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -40,7 +38,7 @@ public final class JugadoresService {
         return (int) (Math.random() * 99999);
     }
 
-    public Jugador getJugadorByNombre(String nombre){
+    public Jugador getByNombre(String nombre){
         var cachedJugador = this.cache.find(nombre);
 
         return cachedJugador.orElseGet(() -> this.repositoryDb.findByNombre(nombre)
@@ -48,7 +46,7 @@ public final class JugadoresService {
                 .orElseThrow(() -> new ResourceNotFound("Jugador no encontrado")));
     }
 
-    public Jugador getJugadorById(UUID jugadorId){
+    public Jugador getById(UUID jugadorId){
         var cachedJugador = this.cache.findValueIf(jugador -> jugador.getJugadorId().equals(jugadorId));
 
         return cachedJugador.orElseGet(() -> this.repositoryDb.findById(jugadorId)
@@ -57,7 +55,7 @@ public final class JugadoresService {
     }
 
     public boolean estaRegistradoNumeroCuentaPara(String nombre, int numeroVerificacionCuenta){
-        return this.getJugadorByNombre(nombre).getNumeroVerificacionCuenta() == numeroVerificacionCuenta;
+        return this.getByNombre(nombre).getNumeroVerificacionCuenta() == numeroVerificacionCuenta;
     }
 
     public List<Jugador> findAll(){
@@ -79,9 +77,9 @@ public final class JugadoresService {
     }
 
     public void realizarTransferencia (String nombrePagador, String nombrePagado, double pixelcoins) {
-        Jugador pagadorChangedPixelcoins = this.getJugadorByNombre(nombrePagador)
+        Jugador pagadorChangedPixelcoins = this.getByNombre(nombrePagador)
                 .decrementPixelcoinsBy(pixelcoins);
-        Jugador pagadoChangedPixelcoins = this.getJugadorByNombre(nombrePagado)
+        Jugador pagadoChangedPixelcoins = this.getByNombre(nombrePagado)
                 .incrementPixelcoinsBy(pixelcoins);
 
         this.save(pagadorChangedPixelcoins);
@@ -95,6 +93,13 @@ public final class JugadoresService {
         this.save(pagado.incrementPixelcoinsBy(pixelcoins)
                 .incrementNVentas()
                 .incrementIngresosBy(pixelcoins));
+    }
+
+    public Map<String, Jugador> getMapAllJugadores () {
+        Map<String, Jugador> jugadoresMap = new HashMap<>();
+        findAll().forEach(jugador -> jugadoresMap.put(jugador.getNombre(), jugador));
+
+        return jugadoresMap;
     }
 
     private Function<Jugador, Jugador> saveJugadorToCache(){

@@ -2,9 +2,11 @@ package es.serversurvival.jugadores.dinero;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,13 +16,19 @@ import org.bukkit.entity.Player;
         explanation = "Ver tus pixelcoins que tengas en efectivo"
 )
 public class DineroComandoExecutor extends PixelcoinCommand implements CommandRunnerNonArgs {
+    private final JugadoresService jugadoresService;
+
+    public DineroComandoExecutor() {
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+    }
+
     @Override
     public void execute(CommandSender commandSender) {
         Player player = (Player) commandSender;
         String nombreJugador = player.getName();
 
         double patrimonioJugador = Funciones.getPatrimonioJugador(nombreJugador);
-        double totalAhorrado = AllMySQLTablesInstances.jugadoresMySQL.getJugador(nombreJugador).getPixelcoins();
+        double totalAhorrado = jugadoresService.getByNombre(nombreJugador).getPixelcoins();
 
         patrimonioJugador = patrimonioJugador - totalAhorrado;
 

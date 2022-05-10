@@ -25,8 +25,8 @@ import es.serversurvival.deudas._shared.newformat.domain.Deuda;
 import es.serversurvival.deudas._shared.mysql.Deudas;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
-import es.serversurvival.jugadores._shared.mySQL.MySQLJugadoresRepository;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.mensajes._shared.application.MensajesService;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -151,12 +151,12 @@ public final class Funciones {
 
     public static Map<String, Double> crearMapaTopPatrimonioPlayers (boolean creciente) {
         Deudas deudasMySQL = Deudas.INSTANCE;
-        MySQLJugadoresRepository jugadoresMySQL = MySQLJugadoresRepository.INSTANCE;
+        JugadoresService jugadoresService = DependecyContainer.get(JugadoresService.class);
         PosicionesAbiertas posicionesAbiertasMySQL = PosicionesAbiertas.INSTANCE;
         EmpresasService empresasService = DependecyContainer.get(EmpresasService.class);
         LlamadasApi llamadasApiMySQL = LlamadasApi.INSTANCE;
 
-        List<Jugador> allJugadordes = jugadoresMySQL.getAllJugadores();
+        List<Jugador> allJugadordes = jugadoresService.findAll();
         Map<String, LlamadaApi> mapAllLlamadas = llamadasApiMySQL.getMapOfAllLlamadasApi();
         Map<String, List<Deuda>> mapDeudasAcredor = deudasMySQL.getAllDeudasAcredorMap();
         Map<String, List<Deuda>> mapDeudasDeudor = deudasMySQL.getAllDeudasDeudorMap();

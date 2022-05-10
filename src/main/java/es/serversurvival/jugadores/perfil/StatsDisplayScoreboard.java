@@ -6,7 +6,7 @@ import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival._shared.scoreboards.SingleScoreboard;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.utils.MinecraftUtils;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -29,7 +29,7 @@ public class StatsDisplayScoreboard implements SingleScoreboard {
         Scoreboard scoreboard = MinecraftUtils.createScoreboard("dinero", ChatColor.GOLD + "" + ChatColor.BOLD + "JUGADOR");
         Objective objective = scoreboard.getObjective("dinero");
 
-        double dineroJugador = jugadoresService.getJugadorByNombre(jugador).getPixelcoins();
+        double dineroJugador = jugadoresService.getByNombre(jugador).getPixelcoins();
 
         addLineToScoreboard(objective, ChatColor.GOLD + "Tus ahorros: " + ChatColor.GREEN + formatea.format(Math.round(dineroJugador)) + " PC", 1);
         addLineToScoreboard(objective, "     ", 0);

@@ -3,11 +3,13 @@ package es.serversurvival.bolsa.vendercorto;
 import es.jaime.EventListener;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa._shared.AbrirOrdenUseCase;
 import es.serversurvival.bolsa._shared.OrdenAbiertaEvento;
 import es.serversurvival.bolsa._shared.ordenespremarket.mysql.AccionOrden;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionesAbiertas;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
 import main.Pair;
@@ -35,6 +37,11 @@ import static org.bukkit.Sound.ENTITY_PLAYER_LEVELUP;
 public class VenderCortoComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<VenderCortoComando> {
     private final VenderCortoUseCase venderCortoUseCase = VenderCortoUseCase.INSTANCE;
     private final AbrirOrdenUseCase abrirOrdenUseCase = AbrirOrdenUseCase.INSTANCE;
+    private final JugadoresService jugadoresService;
+
+    public VenderCortoComandoRunner(){
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+    }
 
     @Override
     public void execute(VenderCortoComando comando, CommandSender player){
@@ -56,7 +63,7 @@ public class VenderCortoComandoRunner extends PixelcoinCommand implements Comman
             player.sendMessage(DARK_RED + "El nombre que has puesto no existe. Para consultar los tickers: /bolsa valores o en internet");
             return;
         }
-        Jugador jugador = jugadoresMySQL.getJugador(player.getName());
+        Jugador jugador = this.jugadoresService.getByNombre(player.getName());
         double dineroJugador = jugador.getPixelcoins();
         double valorTotal = optionalNombrePrecio.get().getValue() * cantidad;
         double comision = Funciones.redondeoDecimales(Funciones.reducirPorcentaje(valorTotal, 100 - PosicionesAbiertas.PORCENTAJE_CORTO), 2);

@@ -6,8 +6,8 @@ import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 
 public final class PagarUseCase implements AllMySQLTablesInstances {
     private final JugadoresService jugadoresService;
@@ -46,6 +46,6 @@ public final class PagarUseCase implements AllMySQLTablesInstances {
     }
 
     private Jugador ensureJugadorExists(String nombre){
-        return this.jugadoresService.getJugadorByNombre(nombre);
+        return this.jugadoresService.getByNombre(nombre);
     }
 }

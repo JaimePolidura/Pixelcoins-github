@@ -1,6 +1,8 @@
 package es.serversurvival.deudas.ver;
 
 import es.jaimetruman.ItemBuilder;
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.deudas._shared.newformat.application.DeudasService;
 import es.serversurvival.deudas._shared.newformat.domain.Deuda;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import org.bukkit.Bukkit;
@@ -13,6 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DeudasInventoryFactory extends InventoryFactory {
+    private final DeudasService deudasService;
+
+    public DeudasInventoryFactory() {
+        this.deudasService = DependecyContainer.get(DeudasService.class);
+    }
 
     @Override
     protected Inventory buildInventory(String jugador) {
@@ -37,8 +44,8 @@ public class DeudasInventoryFactory extends InventoryFactory {
     private List<ItemStack> buildItemsDeudas (String jugador) {
         List<ItemStack> itemsDeLasDeudas = new ArrayList<>();
 
-        List<Deuda> deudasJugadorDebe = deudasMySQL.getDeudasDeudor(jugador);
-        List<Deuda> deudasJugadorDeben = deudasMySQL.getDeudasAcredor(jugador);
+        List<Deuda> deudasJugadorDebe = this.deudasService.findDeudasByDeudor(jugador);
+        List<Deuda> deudasJugadorDeben = this.deudasService.findDeudasByDeudor(jugador);
 
         deudasJugadorDebe.forEach(deuda -> itemsDeLasDeudas.add(buildItemFromDeudaDeudor(deuda)));
         deudasJugadorDeben.forEach(deuda -> itemsDeLasDeudas.add(buildItemFromDeudaAcredor(deuda)));

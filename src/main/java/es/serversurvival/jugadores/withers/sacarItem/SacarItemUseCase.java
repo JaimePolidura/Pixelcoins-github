@@ -2,8 +2,8 @@ package es.serversurvival.jugadores.withers.sacarItem;
 
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 public final class SacarItemUseCase implements AllMySQLTablesInstances {

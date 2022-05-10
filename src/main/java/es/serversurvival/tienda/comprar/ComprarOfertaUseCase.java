@@ -4,8 +4,8 @@ import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival._shared.utils.ItemsUtils;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.tienda._shared.application.TiendaService;
 import es.serversurvival.tienda._shared.domain.TiendaObjeto;
@@ -58,6 +58,6 @@ public final class ComprarOfertaUseCase implements AllMySQLTablesInstances {
     }
 
     private Jugador ensureJugadorExists(String jugadorName){
-        return this.jugadoresService.getJugadorByNombre(jugadorName);
+        return this.jugadoresService.getByNombre(jugadorName);
     }
 }

@@ -1,8 +1,8 @@
 package es.serversurvival.jugadores.withers.sacarMaxItem;
 
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.jugadores.withers.CambioPixelcoins;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
@@ -57,7 +57,7 @@ public class SacarMaxItemMenu extends Menu implements Clickable {
         Player player = (Player) event.getWhoClicked();
         String tipoItem = itemClickeado.getType().toString();
         int espacios = Funciones.getEspaciosOcupados(player.getInventory());
-        Jugador jugador = this.jugadoresService.getJugadorByNombre(player.getName());
+        Jugador jugador = this.jugadoresService.getByNombre(player.getName());
 
         if(espacios == 36){
             player.sendMessage(ChatColor.DARK_RED + "Tienes el inventario libre");

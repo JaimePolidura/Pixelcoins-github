@@ -5,12 +5,11 @@ import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 
 public final class VenderEmpresaUseCase {
     private final EmpresasService empresasService;
@@ -27,8 +26,8 @@ public final class VenderEmpresaUseCase {
         this.ensureCorrectFormatPixelcoins(precioEmpresa);
         var empresa = empresasService.getEmpresaByNombre(nombreEmpresa);
         this.ensureOwnerOfEmpresa(vendedor, empresa);
-        var jugadorComprador = this.jugadoresService.getJugadorByNombre(comprador);
-        var jugadorVendedor = this.jugadoresService.getJugadorByNombre(vendedor);
+        var jugadorComprador = this.jugadoresService.getByNombre(comprador);
+        var jugadorVendedor = this.jugadoresService.getByNombre(vendedor);
         this.ensureVendedorHasEnoughPixelcoins(jugadorVendedor, precioEmpresa);
 
         this.empresasService.save(empresa.withOwner(comprador));

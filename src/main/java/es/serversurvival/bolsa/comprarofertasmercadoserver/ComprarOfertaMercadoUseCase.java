@@ -2,14 +2,13 @@ package es.serversurvival.bolsa.comprarofertasmercadoserver;
 
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa._shared.ofertasmercadoserver.mysql.OfertaMercadoServer;
 import es.serversurvival.bolsa._shared.ofertasmercadoserver.mysql.TipoOfertante;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 
 
 public final class ComprarOfertaMercadoUseCase implements AllMySQLTablesInstances {
@@ -27,23 +26,19 @@ public final class ComprarOfertaMercadoUseCase implements AllMySQLTablesInstance
         posicionesAbiertasMySQL.nuevaPosicion(compradorName, TipoActivo.ACCIONES_SERVER, oferta.getEmpresa(), cantidadAComprar, oferta.getPrecio(), TipoPosicion.LARGO);
         ofertasMercadoServerMySQL.setCantidadOBorrar(idOfeta, oferta.getCantidad() - cantidadAComprar);
 
-        Jugador comprador = jugadoresMySQL.getJugador(compradorName);
+        Jugador comprador = jugadoresService.getByNombre(compradorName);
 
         jugadoresService.save(comprador.decrementPixelcoinsBy(oferta.getPrecio()));
 
         if(oferta.getTipo_ofertante() == TipoOfertante.JUGADOR){
-            Jugador vendedor = jugadoresMySQL.getJugador(oferta.getJugador());
-
+            Jugador vendedor = jugadoresService.getByNombre(oferta.getJugador());
 
             double beneficiosPerdidas = (oferta.getPrecio() - oferta.getPrecio_apertura()) * cantidadAComprar;
-            double rentabilidad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(oferta.getPrecio_apertura(), oferta.getPrecio()), 3);
 
             if(beneficiosPerdidas >= 0)
-                jugadoresMySQL.setEstadisticas(vendedor.getNombre(), vendedor.getPixelcoins() + precioTotalAPagar, vendedor.getNVentas(),
-                        vendedor.getIngresos(), vendedor.getGastos() + beneficiosPerdidas);
+                this.jugadoresService.save(vendedor.incrementPixelcoinsBy(precioTotalAPagar).incrementGastosBy(beneficiosPerdidas));
             else
-                jugadoresMySQL.setEstadisticas(vendedor.getNombre(), vendedor.getPixelcoins() + precioTotalAPagar, vendedor.getNVentas(),
-                        vendedor.getIngresos() + beneficiosPerdidas, vendedor.getGastos());
+                this.jugadoresService.save(vendedor.incrementPixelcoinsBy(precioTotalAPagar).incrementIngresosBy(beneficiosPerdidas));
         }
 
         Pixelcoin.publish(new EmpresaServerAccionCompradaEvento(compradorName, precioTotalAPagar, cantidadAComprar, oferta, oferta.getEmpresa()));

@@ -1,6 +1,7 @@
 package es.serversurvival.bolsa._shared.ordenespremarket.ejecutarordenes;
 
 import es.serversurvival.Pixelcoin;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionesAbiertas;
 import es.serversurvival.bolsa.comprarcorto.ComprarCortoUseCase;
@@ -9,7 +10,8 @@ import es.serversurvival.bolsa._shared.ordenespremarket.mysql.AccionOrden;
 import es.serversurvival.bolsa._shared.ordenespremarket.mysql.OrdenPreMarket;
 import es.serversurvival.bolsa.vendercorto.VenderCortoUseCase;
 import es.serversurvival.bolsa.venderlargo.VenderLargoUseCase;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import main.Pair;
 
@@ -21,13 +23,16 @@ import static es.serversurvival._shared.utils.Funciones.reducirPorcentaje;
 
 public final class EjecutarOrdenesPreMarketUseCase implements AllMySQLTablesInstances {
     public static final EjecutarOrdenesPreMarketUseCase INSTANCE = new EjecutarOrdenesPreMarketUseCase();
+    private final JugadoresService jugadoresService;
 
     private final ComprarLargoUseCase comprarLargoUseCase = ComprarLargoUseCase.INSTANCE;
     private final VenderLargoUseCase venderLargoUseCase = VenderLargoUseCase.INSTANCE;
     private final VenderCortoUseCase venderCortoUseCase = VenderCortoUseCase.INSTANCE;
     private final ComprarCortoUseCase comprarCortoUseCase = ComprarCortoUseCase.INSTANCE;
 
-    private EjecutarOrdenesPreMarketUseCase() {}
+    private EjecutarOrdenesPreMarketUseCase() {
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+    }
 
     public void ejecutarOrdenes () {
         List<OrdenPreMarket> todasLasOrdenes = ordenesMySQL.getAllOrdenes();
@@ -70,7 +75,7 @@ public final class EjecutarOrdenesPreMarketUseCase implements AllMySQLTablesInst
 
         double precio = pairNombrePrecio.getValue();
         String nombreValor = pairNombrePrecio.getKey();
-        double pixelcoinsJugador = jugadoresMySQL.getJugador(jugador).getPixelcoins();
+        double pixelcoinsJugador = jugadoresService.getByNombre(jugador).getPixelcoins();
 
         if(cantidad * precio >= pixelcoinsJugador)
             cantidad = (int) (pixelcoinsJugador / precio);
@@ -94,7 +99,7 @@ public final class EjecutarOrdenesPreMarketUseCase implements AllMySQLTablesInst
         double precio = pairNombrePrecio.getValue();
         String nombreValor = pairNombrePrecio.getKey();
 
-        Jugador jugador = jugadoresMySQL.getJugador(orden.getJugador());
+        Jugador jugador = jugadoresService.getByNombre(orden.getJugador());
         double dineroJugador = jugador.getPixelcoins();
         double valorTotal = pairNombrePrecio.getValue() * orden.getCantidad();
         double comision = redondeoDecimales(reducirPorcentaje(valorTotal, 100 - PosicionesAbiertas.PORCENTAJE_CORTO), 2);

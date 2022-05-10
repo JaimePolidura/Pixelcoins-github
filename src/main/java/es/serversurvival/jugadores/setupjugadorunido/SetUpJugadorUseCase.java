@@ -2,8 +2,8 @@ package es.serversurvival.jugadores.setupjugadorunido;
 
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 import org.bukkit.entity.Player;
 
 public final class SetUpJugadorUseCase {
@@ -14,10 +14,10 @@ public final class SetUpJugadorUseCase {
     }
 
     public void setUpJugadorUnido (Player player) {
-        Jugador jugadorPorUUID = jugadoresService.getJugadorById(player.getUniqueId());
+        Jugador jugadorPorUUID = jugadoresService.getById(player.getUniqueId());
 
         if(jugadorPorUUID == null){
-            Jugador jugadorPorNombre = jugadoresService.getJugadorByNombre(player.getName());
+            Jugador jugadorPorNombre = jugadoresService.getByNombre(player.getName());
 
             if(jugadorPorNombre == null){
                 jugadoresService.save(player.getUniqueId(), player.getName());

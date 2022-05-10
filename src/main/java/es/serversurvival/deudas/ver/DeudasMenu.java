@@ -1,11 +1,11 @@
 package es.serversurvival.deudas.ver;
 
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.deudas._shared.mysql.Deudas;
 import es.serversurvival.deudas._shared.newformat.application.DeudasService;
 import es.serversurvival.deudas.cancelar.CancelarDeudaUseCase;
 import es.serversurvival.deudas._shared.newformat.domain.Deuda;
 import es.serversurvival.deudas.pagarTodo.PagarDeudaCompletaUseCase;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.MenuManager;
@@ -13,7 +13,6 @@ import es.serversurvival._shared.menus.inventory.InventoryCreator;
 import es.serversurvival._shared.menus.CanGoBack;
 import es.serversurvival._shared.menus.Clickable;
 import es.serversurvival._shared.menus.Refreshcable;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -31,6 +30,7 @@ import static org.bukkit.Sound.*;
 public class DeudasMenu extends Menu implements Clickable, Refreshcable, CanGoBack {
     private final PagarDeudaCompletaUseCase pagarDeudaUseCase;
     private final CancelarDeudaUseCase cancelarDeudaUseCase;
+    private final JugadoresService jugadoresService;
     private final DeudasService deudasService;
 
     public final static String tiulo = DARK_RED + "" + BOLD + "          TUS DEUDAS";
@@ -38,6 +38,7 @@ public class DeudasMenu extends Menu implements Clickable, Refreshcable, CanGoBa
     private Inventory inventory;
 
     public DeudasMenu (Player player) {
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.pagarDeudaUseCase = new PagarDeudaCompletaUseCase();
         this.cancelarDeudaUseCase = new CancelarDeudaUseCase();
         this.deudasService = DependecyContainer.get(DeudasService.class);
@@ -87,7 +88,7 @@ public class DeudasMenu extends Menu implements Clickable, Refreshcable, CanGoBa
         Player jugadorQueVaAPagar = Bukkit.getPlayer(deudaAPagar.getDeudor());
         double pixelcoinsAPagar = deudaAPagar.getPixelcoins_restantes();
 
-        if(AllMySQLTablesInstances.jugadoresMySQL.getJugador(jugadorQueVaAPagar.getName()).getPixelcoins() < pixelcoinsAPagar){
+        if(jugadoresService.getByNombre(jugadorQueVaAPagar.getName()).getPixelcoins() < pixelcoinsAPagar){
             jugadorQueVaAPagar.sendMessage(DARK_RED + "No tienes el suficiente dinero");
             jugadorQueVaAPagar.playSound(jugadorQueVaAPagar.getLocation(), ENTITY_VILLAGER_NO, 10, 1);
             return;

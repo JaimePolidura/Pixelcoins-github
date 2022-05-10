@@ -1,4 +1,4 @@
-package es.serversurvival.jugadores._shared.newformat.domain;
+package es.serversurvival.jugadores._shared.domain;
 
 import java.util.List;
 import java.util.Optional;

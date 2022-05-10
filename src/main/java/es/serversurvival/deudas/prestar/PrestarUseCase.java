@@ -8,8 +8,8 @@ import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.deudas._shared.newformat.application.DeudasService;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 
 public final class PrestarUseCase implements AllMySQLTablesInstances {
     private final JugadoresService jugadoresService;
@@ -56,6 +56,6 @@ public final class PrestarUseCase implements AllMySQLTablesInstances {
     }
 
     private Jugador ensureJugadorExists(String jugadorName) {
-        return this.jugadoresService.getJugadorByNombre(jugadorName);
+        return this.jugadoresService.getByNombre(jugadorName);
     }
 }

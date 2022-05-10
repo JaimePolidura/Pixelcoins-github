@@ -3,8 +3,8 @@ package es.serversurvival.jugadores.vercuenta;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.jugadores._shared.newformat.application.JugadoresService;
-import es.serversurvival.jugadores._shared.newformat.domain.Jugador;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -24,7 +24,7 @@ public class VerCuentaComandoRunner extends PixelcoinCommand implements CommandR
     @Override
     public void execute(CommandSender sender) {
         Player player = (Player) sender;
-        Jugador jugador = jugadoresService.getJugadorByNombre(player.getName());
+        Jugador jugador = jugadoresService.getByNombre(player.getName());
 
         player.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
         player.sendMessage("   ");

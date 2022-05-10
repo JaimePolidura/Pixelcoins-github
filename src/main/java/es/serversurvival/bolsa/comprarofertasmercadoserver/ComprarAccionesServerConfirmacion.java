@@ -10,6 +10,7 @@ import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -24,6 +25,7 @@ import static org.bukkit.ChatColor.GREEN;
 
 public class ComprarAccionesServerConfirmacion extends Menu implements AumentoConfirmacion {
     private final ComprarOfertaMercadoUseCase useCase = ComprarOfertaMercadoUseCase.INSTANCE;
+    private JugadoresService jugadoresService;
 
     private final EmpresasService empresasService;
     private final String nombreEmpresa;
@@ -37,12 +39,14 @@ public class ComprarAccionesServerConfirmacion extends Menu implements AumentoCo
 
     public ComprarAccionesServerConfirmacion(Player player, int id) {
         this.player = player;
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.empresasService = DependecyContainer.get(EmpresasService.class);
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
 
         OfertaMercadoServer oferta = AllMySQLTablesInstances.ofertasMercadoServerMySQL.get(id);
 
         this.oferta = oferta;
-        this.dineroJugador = AllMySQLTablesInstances.jugadoresMySQL.getJugador(player.getName()).getPixelcoins();
+        this.dineroJugador = jugadoresService.getByNombre(player.getName()).getPixelcoins();
         this.nombreEmpresa = oferta.getEmpresa();
         this.cantidadAComprar = 1;
 
