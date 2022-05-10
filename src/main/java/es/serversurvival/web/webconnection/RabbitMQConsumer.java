@@ -9,7 +9,7 @@ import es.serversurvival.web.conversacionesweb.isonline.IsOnlineMessagge;
 import es.serversurvival.web.webconnection.socketmessages.CanRedirect;
 import es.serversurvival.web.webconnection.socketmessages.SocketMessagge;
 import es.serversurvival.web.webconnection.socketmessages.SocketMessaggeExecutor;
-import es.serversurvival.web.webconnection.verificacioncuentas.enviarnumero.SendNumberMessagge;
+import es.serversurvival.web.verificacioncuentas.enviarnumero.SendNumberMessagge;
 import lombok.SneakyThrows;
 
 import java.io.IOException;

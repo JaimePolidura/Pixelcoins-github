@@ -1,8 +1,9 @@
-package es.serversurvival.web.webconnection.verificacioncuentas.enviarnumero;
+package es.serversurvival.web.verificacioncuentas.enviarnumero;
 
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.web.verificacioncuentas._shared.application.VerificacionCuentaService;
 import es.serversurvival.web.webconnection.socketmessages.SocketMessagge;
 import es.serversurvival.web.webconnection.socketmessages.SocketMessaggeExecutor;
-import es.serversurvival.web.webconnection.verificacioncuentas.mysql.VerificacionCuentas;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -11,7 +12,12 @@ import org.bukkit.entity.Player;
  * Form of the messagge: sendnumber-name=jaimetruman&number=10
  */
 public class SendNumberMessagge extends SocketMessaggeExecutor {
+    private final VerificacionCuentaService verificacionCuentaService;
     private final String NAME = "sendnumber";
+
+    public SendNumberMessagge() {
+        this.verificacionCuentaService = DependecyContainer.get(VerificacionCuentaService.class);
+    }
 
     @Override
     public String getName() {
@@ -23,11 +29,9 @@ public class SendNumberMessagge extends SocketMessaggeExecutor {
         Player player = Bukkit.getPlayer(messagge.get("name"));
 
         if(player != null){
-            VerificacionCuentas verificacionCuentasMySQL = VerificacionCuentas.INSTANCE;
             int number = (int) (Math.random() * 9999);
 
-            VerificacionCuentas.INSTANCE.removeVerificacionCuenta(player.getName());
-            VerificacionCuentas.INSTANCE.nuevaVerificacionCuenta(player.getName(), number);
+            this.verificacionCuentaService.save(player.getName(), number);
 
             player.sendMessage(ChatColor.GOLD + "El numero de verificacion: " + number);
         }

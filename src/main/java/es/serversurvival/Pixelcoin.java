@@ -32,6 +32,9 @@ import es.serversurvival.tienda._shared.application.TiendaService;
 import es.serversurvival.tienda._shared.domain.TiendaRepository;
 import es.serversurvival.transacciones._shared.application.TransaccionesService;
 import es.serversurvival.transacciones._shared.domain.TransaccionesRepository;
+import es.serversurvival.web.verificacioncuentas._shared.application.VerificacionCuentaService;
+import es.serversurvival.web.verificacioncuentas._shared.domain.VerificacionCuentaRepository;
+import es.serversurvival.web.verificacioncuentas._shared.infrastructure.InMemoryVerificacionCuentaRepository;
 import es.serversurvival.web.webconnection.RabbitMQConsumerTask;
 import es.serversurvival._shared.scoreboards.ScoreBoardManager;
 import es.serversurvival._shared.scoreboards.ScoreboardUpdateTask;
@@ -53,6 +56,7 @@ import static org.bukkit.ChatColor.*;
  6 Empresas
  7 Empleados
  8 CuentasWeb
+ 9 Verificacion cuentas
  */
 public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstances {
     private static Pixelcoin plugin;
@@ -132,6 +136,7 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
             put(EmpleadosRepository.class, new MySQLEmpresasRepository(mysqlCOnfiguration));
             put(CuentasWebRepository.class, new MySQLCuentasWebRepository(mysqlCOnfiguration));
             put(ConversacionesWebRepostiory.class, new InMemoryConversacionesRepository());
+            put(VerificacionCuentaRepository.class, new InMemoryVerificacionCuentaRepository());
         }});
 
         DependecyContainer.addAll(new HashMap<>(){{
@@ -144,6 +149,7 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
             put(EmpleadosService.class, new EmpleadosService());
             put(CuentasWebService.class, new CuentasWebService());
             put(ConversacionesWebService.class, new ConversacionesWebService());
+            put(VerificacionCuentaService.class, new VerificacionCuentaService());
         }});
     }
 }
