@@ -3,7 +3,8 @@ package es.serversurvival.jugadores.perfil;
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa._shared.posicionescerradas.mysql.PosicionCerrada;
-import es.serversurvival.cuentaweb.Cuenta;
+import es.serversurvival.cuentaweb._shared.application.CuentasWebService;
+import es.serversurvival.cuentaweb._shared.domain.CuentaWeb;
 import es.serversurvival.deudas._shared.newformat.domain.Deuda;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
@@ -31,11 +32,13 @@ public class PerfilInventoryFactory extends InventoryFactory {
     private final JugadoresService jugadoresService;
     private final EmpresasService empresasService;
     private final EmpleadosService empleadosService;
+    private final CuentasWebService cuentasWebService;
 
     public PerfilInventoryFactory(){
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.empleadosService = DependecyContainer.get(EmpleadosService.class);
+        this.cuentasWebService = DependecyContainer.get(CuentasWebService.class);
         this.posicionesCristales = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27,
                 35, 36, 44, 45, 46 , 47, 48, 49, 50, 51, 52, 53);
     }
@@ -203,7 +206,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
         List<String> lore = new ArrayList<>();
         lore.add("  ");
 
-        Cuenta cuenta = cuentasMySQL.getCuenta(jugador);
+        CuentaWeb cuenta = this.cuentasWebService.getByUsername(jugador);
         if(cuenta == null){
             int numeroCuenta = jugadoresService.getJugadorByNombre(jugador).getNumeroVerificacionCuenta();
             lore.add(ChatColor.DARK_AQUA + "No tienes cuenta, para registrarse:");

@@ -39,12 +39,13 @@ import static org.bukkit.ChatColor.*;
 /**
  * Updated:
  *
- * Jugadores
- * Mensajes
- * Transacciones
- * Deudas
- * Tienda
- * Empresas
+ 1 Jugadores
+ 2 Mensajes
+ 3 Transacciones
+ 4 Deudas
+ 5 Tienda
+ 6 Empresas
+ 7 Empleados
  */
 public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstances {
     private static Pixelcoin plugin;

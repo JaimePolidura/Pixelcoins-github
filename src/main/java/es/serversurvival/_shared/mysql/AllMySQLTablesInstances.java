@@ -9,7 +9,6 @@ import es.serversurvival.deudas._shared.mysql.Deudas;
 import es.serversurvival.jugadores._shared.mySQL.MySQLJugadoresRepository;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.webconnection.conversacionesweb.mysql.ConversacionesWeb;
-import es.serversurvival.cuentaweb.Cuentas;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -18,7 +17,6 @@ public interface AllMySQLTablesInstances {
     SimpleDateFormat dateFormater = Funciones.DATE_FORMATER_LEGACY;
     DecimalFormat formatea = Funciones.FORMATEA;
 
-    Cuentas cuentasMySQL = Cuentas.INSTANCE;
     MySQLJugadoresRepository jugadoresMySQL = MySQLJugadoresRepository.INSTANCE;
     LlamadasApi llamadasApiMySQL = LlamadasApi.INSTANCE;
     PosicionesAbiertas posicionesAbiertasMySQL = PosicionesAbiertas.INSTANCE;
