@@ -17,10 +17,10 @@ import java.util.function.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa._shared.llamadasapi.mysql.LlamadaApi;
-import es.serversurvival.bolsa._shared.llamadasapi.mysql.LlamadasApi;
-import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionAbierta;
-import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionesAbiertas;
+import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadaApi;
+import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadasApi;
+import es.serversurvival.bolsa.other._shared.posicionesabiertas.mysql.PosicionAbierta;
+import es.serversurvival.bolsa.other._shared.posicionesabiertas.mysql.PosicionesAbiertas;
 import es.serversurvival.deudas._shared.newformat.domain.Deuda;
 import es.serversurvival.deudas._shared.mysql.Deudas;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;

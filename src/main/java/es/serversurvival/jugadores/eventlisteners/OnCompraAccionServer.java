@@ -2,9 +2,9 @@ package es.serversurvival.jugadores.eventlisteners;
 
 import es.jaime.EventListener;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa._shared.ofertasmercadoserver.mysql.OfertaMercadoServer;
-import es.serversurvival.bolsa._shared.ofertasmercadoserver.mysql.TipoOfertante;
-import es.serversurvival.bolsa.comprarofertasmercadoserver.EmpresaServerAccionCompradaEvento;
+import es.serversurvival.bolsa.other._shared.ofertasmercadoserver.mysql.OfertaMercadoServer;
+import es.serversurvival.bolsa.other._shared.ofertasmercadoserver.mysql.TipoOfertante;
+import es.serversurvival.bolsa.other.comprarofertasmercadoserver.EmpresaServerAccionCompradaEvento;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival._shared.utils.Funciones;

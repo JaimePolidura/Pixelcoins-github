@@ -2,7 +2,7 @@ package es.serversurvival.jugadores.perfil;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa._shared.posicionescerradas.mysql.PosicionCerrada;
+import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.PosicionCerrada;
 import es.serversurvival.deudas._shared.newformat.application.DeudasService;
 import es.serversurvival.web.cuentasweb._shared.application.CuentasWebService;
 import es.serversurvival.web.cuentasweb._shared.domain.CuentaWeb;

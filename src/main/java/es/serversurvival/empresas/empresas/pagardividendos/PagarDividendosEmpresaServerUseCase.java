@@ -1,8 +1,8 @@
 package es.serversurvival.empresas.empresas.pagardividendos;
 
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa._shared.ofertasmercadoserver.mysql.OfertaMercadoServer;
-import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionAbierta;
+import es.serversurvival.bolsa.other._shared.ofertasmercadoserver.mysql.OfertaMercadoServer;
+import es.serversurvival.bolsa.other._shared.posicionesabiertas.mysql.PosicionAbierta;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;

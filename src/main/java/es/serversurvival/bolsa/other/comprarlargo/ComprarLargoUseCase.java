@@ -1,0 +1,18 @@
+package es.serversurvival.bolsa.other.comprarlargo;
+
+import es.serversurvival.Pixelcoin;
+import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
+import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+
+public final class ComprarLargoUseCase implements AllMySQLTablesInstances {
+    public static final ComprarLargoUseCase INSTANCE = new ComprarLargoUseCase();
+
+    private ComprarLargoUseCase() {}
+
+    public void abrir (TipoActivo tipoActivo, String ticker, String nombreValor, String alias, double precioUnidad, int cantidad, String nombrePlayer) {
+        posicionesAbiertasMySQL.nuevaPosicion(nombrePlayer, tipoActivo, ticker, cantidad, precioUnidad, TipoPosicion.LARGO);
+
+        Pixelcoin.publish(new PosicionCompraLargoEvento(nombrePlayer, precioUnidad, cantidad, cantidad*precioUnidad, ticker, tipoActivo, nombreValor, alias));
+    }
+}

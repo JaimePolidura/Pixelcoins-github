@@ -2,7 +2,7 @@ package es.serversurvival.jugadores.eventlisteners;
 
 import es.jaime.EventListener;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.comprarlargo.PosicionCompraLargoEvento;
+import es.serversurvival.bolsa.other.comprarlargo.PosicionCompraLargoEvento;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;

@@ -2,8 +2,8 @@ package es.serversurvival.jugadores.top;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa._shared.posicionescerradas.mysql.PosicionCerrada;
-import es.serversurvival.bolsa._shared.posicionescerradas.mysql.TipoPosicion;
+import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.PosicionCerrada;
+import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;

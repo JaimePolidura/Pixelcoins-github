@@ -1,7 +1,7 @@
 package es.serversurvival._shared.utils.validaciones.misValidaciones;
 
-import es.serversurvival.bolsa._shared.posicionesabiertas.mysql.PosicionesAbiertas;
-import es.serversurvival.bolsa._shared.posicionescerradas.mysql.TipoPosicion;
+import es.serversurvival.bolsa.other._shared.posicionesabiertas.mysql.PosicionesAbiertas;
+import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
 import main.ValidationResult;
 import main.validators.Validator;
 

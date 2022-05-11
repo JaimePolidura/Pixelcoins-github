@@ -3,7 +3,7 @@ package es.serversurvival.jugadores.perfil;
 import es.serversurvival._shared.menus.Clickable;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
-import es.serversurvival.bolsa.vercartera.BolsaCarteraMenu;
+import es.serversurvival.bolsa.other.vercartera.BolsaCarteraMenu;
 import es.serversurvival.deudas.ver.DeudasMenu;
 import es.serversurvival.empresas.empleados.misempleos.EmpleosMenu;
 import es.serversurvival.empresas.empresas.vertodas.EmpresasVerTodasMenu;
