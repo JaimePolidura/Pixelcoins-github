@@ -23,16 +23,16 @@ import static org.bukkit.ChatColor.AQUA;
 import static org.bukkit.ChatColor.GOLD;
 
 public class EmpresasMercadoMenu extends Menu implements Clickable, Paginated {
-    private final CancelarOfertaAccionServerUseCase cancelarOfertaUseaCase = CancelarOfertaAccionServerUseCase.INSTANCE;
+    private final CancelarOfertaAccionServerUseCase cancelarOfertaUseaCase;
 
-    private EmpresasMercadoInventoryFactory inventoryFactory = new EmpresasMercadoInventoryFactory();
+    private final EmpresasMercadoInventoryFactory inventoryFactory = new EmpresasMercadoInventoryFactory();
     private Inventory inventory;
     private final Player player;
     private int currentIndex = 0;
-    private List<Page> pages = new ArrayList<>();
+    private final List<Page> pages = new ArrayList<>();
 
     public EmpresasMercadoMenu(Player player) {
-
+        this.cancelarOfertaUseaCase= new CancelarOfertaAccionServerUseCase();
         this.player = player;
         this.inventory = InventoryCreator.createInventoryMenu(inventoryFactory, player.getName());
         this.pages.add(new Page(0, inventory));

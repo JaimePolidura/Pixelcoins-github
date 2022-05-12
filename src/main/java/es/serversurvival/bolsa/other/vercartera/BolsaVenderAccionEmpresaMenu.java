@@ -25,18 +25,19 @@ import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.BOLD;
 
 public class BolsaVenderAccionEmpresaMenu extends Menu implements Confirmacion {
-    private final VenderOfertaAccionServerUseCase venderOfertaUseCase = VenderOfertaAccionServerUseCase.INSTANCE;
+    private final VenderOfertaAccionServerUseCase venderOfertaUseCase;
 
     private final Inventory inventory;
     private final Player player;
     private final PosicionAbierta posicionAVender;
+    private final String empresa;
+    private final double precioApertura;
     private double precioVenta;
-    private String empresa;
-    private double precioApertura;
 
     public BolsaVenderAccionEmpresaMenu(Player player, PosicionAbierta posicionAVender) {
         this.player = player;
         this.posicionAVender = posicionAVender;
+        this.venderOfertaUseCase = new VenderOfertaAccionServerUseCase();
 
         String empresa = posicionAVender.getNombreActivo();
         this.precioVenta = (int) posicionAVender.getPrecioApertura();

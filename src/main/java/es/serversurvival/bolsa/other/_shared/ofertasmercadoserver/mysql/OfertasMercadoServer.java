@@ -6,6 +6,8 @@ import es.jaimetruman.select.Select;
 import es.jaimetruman.select.SelectOptionInitial;
 import es.jaimetruman.update.Update;
 import es.jaimetruman.update.UpdateOptionInitial;
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
 import es.serversurvival._shared.mysql.MySQLRepository;
 
@@ -24,10 +26,12 @@ public final class OfertasMercadoServer extends MySQLRepository {
     public static final OfertasMercadoServer INSTANCE = new OfertasMercadoServer();
     private final SelectOptionInitial select;
     private final UpdateOptionInitial update;
+    private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
 
     private OfertasMercadoServer() {
         this.select = Select.from("ofertasbolsaserver");
         this.update = Update.table("ofertasbolsaserver");
+        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
     }
 
     public void nueva (String jugador, String empresa, double precio, int cantidad, TipoOfertante tipoOfertante, double precioApertura) {
@@ -84,7 +88,7 @@ public final class OfertasMercadoServer extends MySQLRepository {
     }
 
     public int getAccionesTotales (String empresa) {
-        int accionesNoEnCirculacion = getSumaTotalListInteger(posicionesAbiertasMySQL.getPosicionesAccionesServer(empresa), PosicionAbierta::getCantidad);
+        int accionesNoEnCirculacion = getSumaTotalListInteger(posicionesAbiertasSerivce.findAll(pos -> pos.getNombreActivo().equalsIgnoreCase(empresa)), PosicionAbierta::getCantidad);
         int accionesEnCirculacion = getSumaTotalListInteger(getOfertasEmpresa(empresa), OfertaMercadoServer::getCantidad);
 
         return accionesNoEnCirculacion + accionesEnCirculacion;
@@ -97,7 +101,7 @@ public final class OfertasMercadoServer extends MySQLRepository {
     }
 
     public Map<String, Integer> getAccionistasEmpresaServer (String empresa) {
-        List<PosicionAbierta> posicionesAcciones = posicionesAbiertasMySQL.getPosicionesAccionesServer(empresa);
+        List<PosicionAbierta> posicionesAcciones = posicionesAbiertasSerivce.findAll(pos -> pos.getNombreActivo().equalsIgnoreCase(empresa));
         List<OfertaMercadoServer> ofertasAcciones = getOfertasEmpresa(empresa);
 
         int accionesTotales = getAccionesTotales(empresa);
@@ -121,7 +125,7 @@ public final class OfertasMercadoServer extends MySQLRepository {
     }
 
     public int getAccionesTotalesParaPagarDividendo (String empresa) {
-        List<PosicionAbierta> posicionesAccion = posicionesAbiertasMySQL.getPosicionesAccionesServer(empresa);
+        List<PosicionAbierta> posicionesAccion = posicionesAbiertasSerivce.findAll(pos -> pos.getNombreActivo().equalsIgnoreCase(empresa));
         List<OfertaMercadoServer> ofertasAccion =  ofertasMercadoServerMySQL.getOfertasEmpresa(empresa, OfertaMercadoServer::esTipoOfertanteJugador);
 
         return getSumaTotalListInteger(posicionesAccion, PosicionAbierta::getCantidad) +

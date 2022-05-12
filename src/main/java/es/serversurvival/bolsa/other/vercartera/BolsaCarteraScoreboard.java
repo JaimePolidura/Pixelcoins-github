@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa.other.vercartera;
 
-import es.serversurvival.bolsa.posicionesabiertas.old.mysql.PosicionesAbiertas;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadaApi;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
 import es.serversurvival._shared.scoreboards.SingleScoreboard;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
@@ -23,7 +23,7 @@ public class BolsaCarteraScoreboard implements SingleScoreboard {
         Scoreboard scoreboard = createScoreboard("bolsa", ChatColor.GOLD + "" + ChatColor.BOLD + "TUS MEJORES ACCIONES");
         Objective objective = scoreboard.getObjective("bolsa");
 
-        Map<PosicionAbierta, Double> posicionAbiertas = PosicionesAbiertas.INSTANCE.calcularTopPosicionesAbiertas(jugador);
+        Map<PosicionAbierta, Double> posicionAbiertas = PosicionesUtils.calcularTopPosicionesAbiertas(jugador);
         int loops = 0;
         int pos = 0;
         for(Map.Entry<PosicionAbierta, Double> entry : posicionAbiertas.entrySet()){

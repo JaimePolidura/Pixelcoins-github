@@ -7,23 +7,25 @@ import es.serversurvival.bolsa.other._shared.ofertasmercadoserver.mysql.OfertaMe
 import es.serversurvival.bolsa.other._shared.ofertasmercadoserver.mysql.TipoOfertante;
 import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 
 
 public final class ComprarOfertaMercadoUseCase implements AllMySQLTablesInstances {
-    public static final ComprarOfertaMercadoUseCase INSTANCE = new ComprarOfertaMercadoUseCase();
     private final JugadoresService jugadoresService;
+    private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
 
-    private ComprarOfertaMercadoUseCase () {
+    public ComprarOfertaMercadoUseCase () {
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
     }
 
     public void comprarOfertaMercadoAccionServer (String compradorName, int idOfeta, int cantidadAComprar) {
         OfertaMercadoServer oferta = ofertasMercadoServerMySQL.get(idOfeta);
         double precioTotalAPagar = oferta.getPrecio() * cantidadAComprar;
 
-        posicionesAbiertasMySQL.nuevaPosicion(compradorName, TipoActivo.ACCIONES_SERVER, oferta.getEmpresa(), cantidadAComprar, oferta.getPrecio(), TipoPosicion.LARGO);
+        posicionesAbiertasSerivce.save(compradorName, TipoActivo.ACCIONES_SERVER, oferta.getEmpresa(), cantidadAComprar, oferta.getPrecio(), TipoPosicion.LARGO);
         ofertasMercadoServerMySQL.setCantidadOBorrar(idOfeta, oferta.getCantidad() - cantidadAComprar);
 
         Jugador comprador = jugadoresService.getByNombre(compradorName);

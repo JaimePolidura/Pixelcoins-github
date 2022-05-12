@@ -1,6 +1,8 @@
 package es.serversurvival.bolsa.other.verordenespremarket;
 
 import es.jaimetruman.ItemBuilder;
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.bolsa.ordenespremarket._shared.application.OrdenesPremarketService;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.OrdenPremarket;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import org.bukkit.Bukkit;
@@ -13,6 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BolsaOrdenesInventoryFactory extends InventoryFactory {
+    private final OrdenesPremarketService ordenesPremarketService;
+
+    public BolsaOrdenesInventoryFactory(){
+        this.ordenesPremarketService = DependecyContainer.get(OrdenesPremarketService.class);
+    }
+
     @Override
     protected Inventory buildInventory(String jugador) {
         Inventory inventory = Bukkit.createInventory(null, 54, ChatColor.DARK_RED + "" + ChatColor.BOLD + "         TUS ORDENES");
@@ -28,7 +36,7 @@ public class BolsaOrdenesInventoryFactory extends InventoryFactory {
     }
 
     private List<ItemStack> buildItemsOrdenes (String jugador) {
-        List<OrdenPremarket> ordenes = ordenesMySQL.getOrdenes(jugador);
+        List<OrdenPremarket> ordenes = ordenesPremarketService.findByJugador(jugador);
         List<ItemStack> items = new ArrayList<>();
 
         for(OrdenPremarket orden : ordenes){

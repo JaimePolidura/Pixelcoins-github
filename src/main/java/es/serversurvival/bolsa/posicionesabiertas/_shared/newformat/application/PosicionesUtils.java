@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application;
 
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadaApi;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadasApi;
 import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
@@ -10,6 +10,7 @@ import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.Posic
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import static es.serversurvival._shared.mysql.AllMySQLTablesInstances.llamadasApiMySQL;
 import static es.serversurvival._shared.utils.Funciones.*;
@@ -17,7 +18,7 @@ import static java.lang.Math.abs;
 
 public final class PosicionesUtils {
 
-    private PosicionesUtils posicionesUtils () {}
+    private PosicionesUtils () {}
 
     public static double getAllPixeloinsEnValores(String jugador) {
         var posicionesAbiertasService = DependecyContainer.get(PosicionesAbiertasSerivce.class);
@@ -67,5 +68,14 @@ public final class PosicionesUtils {
         }
 
         return sortMapByValueDecre(posicionAbiertasConRentabilidad);
+    }
+
+
+    public static Map<String, List<PosicionAbierta>> getAllPosicionesAbiertasMap (Predicate<PosicionAbierta> condition) {
+        var posicionesAbiertasService = DependecyContainer.get(PosicionesAbiertasSerivce.class);
+
+        List<PosicionAbierta> posicionAbiertas = posicionesAbiertasService.findAll(condition);
+
+        return mergeMapList(posicionAbiertas, PosicionAbierta::getJugador);
     }
 }

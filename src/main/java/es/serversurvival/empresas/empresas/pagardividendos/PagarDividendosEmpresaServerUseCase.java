@@ -2,6 +2,7 @@ package es.serversurvival.empresas.empresas.pagardividendos;
 
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.other._shared.ofertasmercadoserver.mysql.OfertaMercadoServer;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
@@ -15,20 +16,24 @@ import java.util.Map;
 public final class PagarDividendosEmpresaServerUseCase implements AllMySQLTablesInstances {
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;
+    private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
 
     public PagarDividendosEmpresaServerUseCase(){
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
     }
 
     public void pagarDividendoAccionServer(String nombreEmpresa, double dividendoPorAccion, double totalAPagar) {
         var empresa = this.empresasService.getEmpresaByNombre(nombreEmpresa);
-        List<PosicionAbierta> posicionesAccion = posicionesAbiertasMySQL.getPosicionesAccionesServer(nombreEmpresa);
+        List<PosicionAbierta> posicionesAccionDeEmpresa = posicionesAbiertasSerivce.findAll(PosicionAbierta::esTipoAccionServer).stream()
+                .filter(posicionAbierta -> posicionAbierta.getNombreActivo().equalsIgnoreCase(nombreEmpresa))
+                .toList();
         List<OfertaMercadoServer> ofertasAccion =  ofertasMercadoServerMySQL.getOfertasEmpresa(nombreEmpresa, OfertaMercadoServer::esTipoOfertanteJugador);
 
         Map<String, Jugador> allJugadoresMap = jugadoresService.getMapAllJugadores();
 
-        posicionesAccion.forEach(posicion -> {
+        posicionesAccionDeEmpresa.forEach(posicion -> {
             pagarDividendoAccionAJugador(allJugadoresMap.get(posicion.getJugador()), posicion.getCantidad(), dividendoPorAccion, nombreEmpresa);
         });
         ofertasAccion.forEach(oferta -> {

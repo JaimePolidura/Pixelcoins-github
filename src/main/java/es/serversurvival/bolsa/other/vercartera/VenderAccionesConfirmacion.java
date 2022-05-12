@@ -1,8 +1,12 @@
 package es.serversurvival.bolsa.other.vercartera;
 
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.bolsa._shared.application.OrderExecutorProxy;
+import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenPremarketCommand;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
 import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.bolsa.other.comprarcorto.ComprarCortoUseCase;
@@ -18,24 +22,30 @@ import org.bukkit.inventory.Inventory;
 
 import java.util.*;
 
+import static es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenPremarketCommand.*;
 import static org.bukkit.ChatColor.*;
 
 public class VenderAccionesConfirmacion extends Menu implements Confirmacion {
-    private final VenderLargoUseCase venderLargoUseCase = VenderLargoUseCase.INSTANCE;
-    private final ComprarCortoUseCase comprarCortoUseCase = ComprarCortoUseCase.INSTANCE;
-    private final AbrirOrdenUseCase abrirOrdenUseCase = AbrirOrdenUseCase.INSTANCE;
+    private final VenderLargoUseCase venderLargoUseCase;
+    private final ComprarCortoUseCase comprarCortoUseCase;
+    private final AbrirOrdenUseCase abrirOrdenUseCase;
+    private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
 
     private final Inventory inventory;
     private final Player player;
     private final TipoPosicion tipoPosicion;
     private final TipoActivo tipoActivo;
-    private final int id;
+    private final UUID id;
 
-    public VenderAccionesConfirmacion (Player player, int id, TipoPosicion tipoPosicion, TipoActivo tipoActivo, List<String> loreItemClicked) {
+    public VenderAccionesConfirmacion (Player player, UUID id, TipoPosicion tipoPosicion, TipoActivo tipoActivo, List<String> loreItemClicked) {
         this.player = player;
+        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
         this.id = id;
         this.tipoPosicion = tipoPosicion;;
         this.tipoActivo = tipoActivo;
+        this.abrirOrdenUseCase = new AbrirOrdenUseCase();
+        this.venderLargoUseCase = new VenderLargoUseCase();
+        this.comprarCortoUseCase = new ComprarCortoUseCase();
 
         String titulo = DARK_RED + "" + BOLD + "     ¿Quieres vender?";
         String tituloItemVender = GREEN + "" + BOLD + "VENDER";
@@ -49,15 +59,11 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion {
 
         }else{
             String cantidadAcciones = loreItemClicked.get(5).split(" ")[1];
-            String valorTotal = loreItemClicked.get(10).split(" ")[2];
             String beneficios = loreItemClicked.get(8).split(" ")[2];
             String rentabilidad = loreItemClicked.get(9).split(" ")[1];
-
-            if(beneficios.charAt(2) == '+'){
-                loreVender = Arrays.asList(GOLD +  "Vender " + cantidadAcciones + " acciones con unos beneficios de " + GREEN + beneficios + " PC", GOLD + "y una rentabilidad del " + GREEN + rentabilidad);
-            }else{
-                loreVender = Arrays.asList(GOLD +  "Vender " + cantidadAcciones + " acciones con unas perdidas de " + RED + beneficios + " PC", GOLD + " y una rentabilidad del " + RED + rentabilidad);
-            }
+            loreVender = (beneficios.charAt(2) == '+') ?
+                    Arrays.asList(GOLD + "Vender " + cantidadAcciones + " acciones con unos beneficios de " + GREEN + beneficios + " PC", GOLD + "y una rentabilidad del " + GREEN + rentabilidad) :
+                    Arrays.asList(GOLD + "Vender " + cantidadAcciones + " acciones con unas perdidas de " + RED + beneficios + " PC", GOLD + " y una rentabilidad del " + RED + rentabilidad);
         }
 
         this.inventory = InventoryCreator.createSolicitud(titulo, tituloItemVender, loreVender, tituloItemCancelar, loreCancelar);
@@ -79,20 +85,21 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion {
     public void confirmar() {
         closeMenu();
 
-        PosicionAbierta posicion = AllMySQLTablesInstances.posicionesAbiertasMySQL.getPosicionAbierta(id);
+        PosicionAbierta posicion = posicionesAbiertasSerivce.getById(id);
 
-        if(Funciones.mercadoEstaAbierto() && tipoPosicion == TipoPosicion.LARGO){
-            venderLargoUseCase.venderPosicion(posicion, posicion.getCantidad(), player.getName());
-
-        }else if (Funciones.mercadoEstaAbierto() && tipoPosicion == TipoPosicion.CORTO) {
-            comprarCortoUseCase.comprarPosicionCorto(posicion, posicion.getCantidad(), player.getName());
-
-        }else if (Funciones.mercadoNoEstaAbierto() && tipoPosicion == TipoPosicion.LARGO) {
-            abrirOrdenUseCase.abrirOrden(player.getName(), posicion.getNombreActivo(), posicion.getCantidad(), TipoAccion.LARGO_VENTA, posicion.getId());
-
-        }else if (Funciones.mercadoNoEstaAbierto() && tipoPosicion == TipoPosicion.CORTO) {
-            abrirOrdenUseCase.abrirOrden(player.getName(), posicion.getNombreActivo(), posicion.getCantidad(), TipoAccion.CORTO_COMPRA, posicion.getId());
+        OrderExecutorProxy.execute(of(
+                    player.getName(),
+                    posicion.getNombreActivo(),
+                    posicion.getCantidad(),
+                    tipoPosicion == TipoPosicion.LARGO ? TipoAccion.LARGO_VENTA : TipoAccion.CORTO_COMPRA,
+                    posicion.getPosicionAbiertaId()
+        ), () -> {
+            if(tipoPosicion == TipoPosicion.LARGO)
+                venderLargoUseCase.venderPosicion(posicion, posicion.getCantidad(), player.getName());
+            else
+                comprarCortoUseCase.comprarPosicionCorto(posicion, posicion.getCantidad(), player.getName());
         }
+        );
     }
 
     @Override

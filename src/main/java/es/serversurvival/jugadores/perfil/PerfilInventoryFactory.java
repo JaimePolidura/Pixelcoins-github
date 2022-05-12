@@ -3,6 +3,8 @@ package es.serversurvival.jugadores.perfil;
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.PosicionCerrada;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesUtils;
 import es.serversurvival.deudas._shared.newformat.application.DeudasService;
 import es.serversurvival.web.cuentasweb._shared.application.CuentasWebService;
 import es.serversurvival.web.cuentasweb._shared.domain.CuentaWeb;
@@ -145,9 +147,9 @@ public class PerfilInventoryFactory extends InventoryFactory {
         double totalAhorrado = jugador.getPixelcoins();
         double totalDebe = deudasService.getAllPixelcoinsDeudasDeudor(jugador.getNombre());
         double totalDeben = deudasService.getAllPixelcoinsDeudasAcredor(jugador.getNombre());
-        double totalAcciones = posicionesAbiertasMySQL.getAllPixeloinsEnAcciones(jugador.getNombre());
+        double totalEnAcciones = PosicionesUtils.getAllPixeloinsEnValores(jugador.getNombre());
         double totalEmpresas = empresasService.getAllPixelcoinsEnEmpresas(jugador.getNombre());
-        double resultado = (totalAhorrado + totalDeben + totalAcciones + totalEmpresas) - totalDebe;
+        double resultado = (totalAhorrado + totalDeben + totalEnAcciones + totalEmpresas) - totalDebe;
 
         double gastos = jugador.getGastos();
         double ingresos = jugador.getIngresos();
@@ -169,7 +171,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
         lore.add("   ");
         lore.add(ChatColor.GOLD + "Liquidez (ahorrado): " + ChatColor.GREEN + formatea.format(totalAhorrado) + " PC");
         lore.add(ChatColor.GOLD + "Total en empresas: " + ChatColor.GREEN + formatea.format(totalEmpresas) + " PC");
-        lore.add(ChatColor.GOLD + "Total en acciones: " + ChatColor.GREEN + formatea.format(totalAcciones) + " PC");
+        lore.add(ChatColor.GOLD + "Total en acciones: " + ChatColor.GREEN + formatea.format(totalEnAcciones) + " PC");
         lore.add(ChatColor.GOLD + "Total que te deben: " + ChatColor.GREEN + formatea.format(totalDeben) + " PC");
         lore.add(ChatColor.GOLD + "Total que debes: " + ChatColor.RED + "-" + formatea.format(totalDebe) + " PC");
         if(beneficios >= 0)

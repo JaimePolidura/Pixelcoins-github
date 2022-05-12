@@ -1,20 +1,24 @@
 package es.serversurvival.bolsa.other.cancelarofertamercadoserver;
 
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa.other._shared.ofertasmercadoserver.mysql.OfertaMercadoServer;
 import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
 
 public final class CancelarOfertaAccionServerUseCase implements AllMySQLTablesInstances {
-    public static final CancelarOfertaAccionServerUseCase INSTANCE = new CancelarOfertaAccionServerUseCase();
+    private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
 
-    private CancelarOfertaAccionServerUseCase() {}
+    public CancelarOfertaAccionServerUseCase() {
+        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
+    }
 
     public void cancelar(String player, int id) {
         OfertaMercadoServer oferta = ofertasMercadoServerMySQL.get(id);
 
         ofertasMercadoServerMySQL.borrar(id);
-        posicionesAbiertasMySQL.nuevaPosicion(player, TipoActivo.ACCIONES_SERVER, oferta.getEmpresa(), oferta.getCantidad(),
+        posicionesAbiertasSerivce.save(player, TipoActivo.ACCIONES_SERVER, oferta.getEmpresa(), oferta.getCantidad(),
                 oferta.getPrecio_apertura(), TipoPosicion.LARGO);
     }
 

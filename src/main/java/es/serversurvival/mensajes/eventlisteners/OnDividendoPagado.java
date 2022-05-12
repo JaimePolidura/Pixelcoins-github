@@ -2,7 +2,7 @@ package es.serversurvival.mensajes.eventlisteners;
 
 import es.jaime.EventListener;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.posicionesabiertas.old.pagardividendos.DividendoPagadoEvento;
+import es.serversurvival.bolsa.posicionesabiertas.dividendostask.DividendoPagadoEvento;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.mensajes._shared.application.MensajesService;
 

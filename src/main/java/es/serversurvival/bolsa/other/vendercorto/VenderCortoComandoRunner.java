@@ -4,10 +4,12 @@ import es.jaime.EventListener;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.bolsa._shared.application.OrderExecutorProxy;
+import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenPremarketCommand;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.OrdenAbiertaEvento;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
-import es.serversurvival.bolsa.posicionesabiertas.old.mysql.PosicionesAbiertas;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
@@ -24,6 +26,7 @@ import org.bukkit.entity.Player;
 import java.util.Optional;
 
 import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
+import static es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce.*;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.Sound.ENTITY_PLAYER_LEVELUP;
 
@@ -35,12 +38,14 @@ import static org.bukkit.Sound.ENTITY_PLAYER_LEVELUP;
                 "ticker de la accion, solo se pueden empresas americanas, <cantidad> cantidad de accinoes a vender"
 )
 public class VenderCortoComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<VenderCortoComando> {
-    private final VenderCortoUseCase venderCortoUseCase = VenderCortoUseCase.INSTANCE;
-    private final AbrirOrdenUseCase abrirOrdenUseCase = AbrirOrdenUseCase.INSTANCE;
+    private final VenderCortoUseCase venderCortoUseCase;
+    private final AbrirOrdenUseCase abrirOrdenUseCase;
     private final JugadoresService jugadoresService;
 
     public VenderCortoComandoRunner(){
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+        this.abrirOrdenUseCase = new AbrirOrdenUseCase();
+        this.venderCortoUseCase = new VenderCortoUseCase();
     }
 
     @Override
@@ -59,27 +64,22 @@ public class VenderCortoComandoRunner extends PixelcoinCommand implements Comman
 
         Optional<Pair<String, Double>> optionalNombrePrecio = llamadasApiMySQL.getPairNombreValorPrecio(ticker);
 
-        if(!optionalNombrePrecio.isPresent()){
+        if (optionalNombrePrecio.isPresent()) {
+            Jugador jugador = this.jugadoresService.getByNombre(player.getName());
+            double dineroJugador = jugador.getPixelcoins();
+            double valorTotal = optionalNombrePrecio.get().getValue() * cantidad;
+            double comision = Funciones.redondeoDecimales(Funciones.reducirPorcentaje(valorTotal, 100 - PORCENTAJE_CORTO), 2);
+
+            if (comision > dineroJugador) {
+                player.sendMessage(DARK_RED + "No tienes el dinero suficiente para esa operacion");
+                return;
+            }
+
+            OrderExecutorProxy.execute(AbrirOrdenPremarketCommand.of(player.getName(), ticker, cantidad, TipoAccion.CORTO_VENTA, null), () -> {
+                abrirOrdenUseCase.abrirOrden(AbrirOrdenPremarketCommand.of(player.getName(), ticker, cantidad, TipoAccion.CORTO_VENTA, null));
+            });
+        } else {
             player.sendMessage(DARK_RED + "El nombre que has puesto no existe. Para consultar los tickers: /bolsa valores o en internet");
-            return;
-        }
-        Jugador jugador = this.jugadoresService.getByNombre(player.getName());
-        double dineroJugador = jugador.getPixelcoins();
-        double valorTotal = optionalNombrePrecio.get().getValue() * cantidad;
-        double comision = Funciones.redondeoDecimales(Funciones.reducirPorcentaje(valorTotal, 100 - PosicionesAbiertas.PORCENTAJE_CORTO), 2);
-
-        if(comision > dineroJugador){
-            player.sendMessage(DARK_RED + "No tienes el dinero suficiente para esa operacion");
-            return;
-        }
-
-        String nombreValor = optionalNombrePrecio.get().getKey();
-        double precioAccion = optionalNombrePrecio.get().getValue();
-
-        if(Funciones.mercadoEstaAbierto()){
-            venderCortoUseCase.venderEnCortoBolsa(player.getName(), ticker, nombreValor, cantidad, precioAccion);
-        }else{
-            abrirOrdenUseCase.abrirOrden(player.getName(), ticker, cantidad, TipoAccion.CORTO_VENTA, -1);
         }
     }
 

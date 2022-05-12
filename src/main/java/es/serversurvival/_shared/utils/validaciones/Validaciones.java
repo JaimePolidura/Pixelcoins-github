@@ -32,6 +32,5 @@ public final class Validaciones {
     public final static JugadorOnline JugadorOnline = new JugadorOnline("Ese jugador no esta online");
     public final static es.serversurvival._shared.utils.validaciones.misValidaciones.InventarioNoLleno InventarioNoLleno = new InventarioNoLleno("No puedes tener el inventario lleno");
     public final static OwnerDeEmpresa OwnerDeEmpresa = new OwnerDeEmpresa("No eres el owner de la empresa");
-    public final static OwnerPosicionAbierta OwnerPosicionAbierta = new OwnerPosicionAbierta("Esa posicion no estuyta o no existe o no es del tipo correcto");
     public final static NoLeHanEnviadoSolicitud NoLeHanEnviadoSolicitud = new NoLeHanEnviadoSolicitud ("A ese jugador ya le has enviado una solicitud / ya le han enviado una solicitud");
 }

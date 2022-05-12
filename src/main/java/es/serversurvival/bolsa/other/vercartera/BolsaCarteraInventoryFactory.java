@@ -2,13 +2,15 @@ package es.serversurvival.bolsa.other.vercartera;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.posicionesabiertas.old.mysql.PosicionesAbiertas;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadaApi;
+import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
 import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.menus.Paginated;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionesAbiertasRepository;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -24,6 +26,8 @@ import static org.bukkit.ChatColor.*;
 
 public class BolsaCarteraInventoryFactory extends InventoryFactory {
     private final JugadoresService jugadoresService;
+    private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
+
     private final List<ItemStack> itemExcessInventory = new ArrayList<>();
     private double resultadoTotal;
     private double valorTotal;
@@ -33,6 +37,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
 
     public BolsaCarteraInventoryFactory() {
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
     }
 
     @Override
@@ -97,7 +102,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
     private List<ItemStack> buildItemsPosicionesAbiertas(String jugador) {
         List<ItemStack> posicionesAbiertasItems = new ArrayList<>();
 
-        List<PosicionAbierta> posicionAbiertasJugador = posicionesAbiertasMySQL.getPosicionesAbiertasJugador(jugador);
+        List<PosicionAbierta> posicionAbiertasJugador = posicionesAbiertasSerivce.findByJugador(jugador);
         this.liquidezjugador = jugadoresService.getByNombre(jugador).getPixelcoins();
         rellenarLlamadasApi();
         rellenarPosicionesAbiertasPeso(posicionAbiertasJugador, getTotalInvertido(posicionAbiertasJugador));
@@ -124,8 +129,8 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         lore.add("   ");
         lore.add(GOLD + "Empresa: " + llamada.getNombre_activo());
 
-        if (!PosicionesAbiertas.getNombreSimbolo(posicion.getNombreActivo()).equalsIgnoreCase(posicion.getNombreActivo())) {
-            lore.add(GOLD + "Ticker: " + posicion.getNombreActivo() + " (" + PosicionesAbiertas.getNombreSimbolo(posicion.getNombreActivo()) + ")");
+        if (!TipoActivo.getNombreActivo(posicion.getNombreActivo()).equalsIgnoreCase(posicion.getNombreActivo())) {
+            lore.add(GOLD + "Ticker: " + posicion.getNombreActivo() + " (" + TipoActivo.getNombreActivo(posicion.getNombreActivo()) + ")");
         } else {
             lore.add(GOLD + "Ticker: " + posicion.getNombreActivo() + " (Acciones) ");
         }
@@ -144,7 +149,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         lore.add(GOLD + "Valor total: " + GREEN + formatea.format(precioAcutal * posicion.getCantidad()) + " PC");
         lore.add("   ");
         lore.add(GOLD + "Fecha de compra: " + posicion.getPrecioApertura());
-        lore.add(GOLD + "ID: " + posicion.getId());
+        lore.add(GOLD + "ID: " + posicion.getPosicionAbiertaId());
 
         this.valorTotal = valorTotal + (precioAcutal * posicion.getCantidad());
         this.resultadoTotal = resultadoTotal + perdidasOBeneficios;
@@ -167,8 +172,8 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         lore.add("   ");
         lore.add(GOLD + "Empresa: " + llamada.getNombre_activo());
 
-        if (!PosicionesAbiertas.getNombreSimbolo(posicion.getNombreActivo()).equalsIgnoreCase(posicion.getNombreActivo())) {
-            lore.add(GOLD + "Ticker: " + posicion.getNombreActivo() + " (" + PosicionesAbiertas.getNombreSimbolo(posicion.getNombreActivo()) + ")");
+        if (!TipoActivo.getNombreActivo(posicion.getNombreActivo()).equalsIgnoreCase(posicion.getNombreActivo())) {
+            lore.add(GOLD + "Ticker: " + posicion.getNombreActivo() + " (" + TipoActivo.getNombreActivo(posicion.getNombreActivo()) + ")");
         } else {
             lore.add(GOLD + "Ticker: " + posicion.getNombreActivo() + " (Acciones) ");
         }
@@ -187,7 +192,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         lore.add(GOLD + "Valor total: " + GREEN + formatea.format(precioAcutal * posicion.getCantidad()) + " PC");
         lore.add("   ");
         lore.add(GOLD + "Fecha de compra: " + posicion.getFechaApertura());
-        lore.add(GOLD + "ID: " + posicion.getId());
+        lore.add(GOLD + "ID: " + posicion.getPosicionAbiertaId());
 
         this.resultadoTotal = resultadoTotal + perdidasOBeneficios;
 

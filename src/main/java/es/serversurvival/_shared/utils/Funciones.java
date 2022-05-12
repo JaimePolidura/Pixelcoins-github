@@ -19,8 +19,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadaApi;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadasApi;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
-import es.serversurvival.bolsa.posicionesabiertas.old.mysql.PosicionesAbiertas;
 import es.serversurvival.deudas._shared.newformat.domain.Deuda;
 import es.serversurvival.deudas._shared.mysql.Deudas;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
@@ -151,9 +152,8 @@ public final class Funciones {
 
     public static Map<String, Double> crearMapaTopPatrimonioPlayers (boolean creciente) {
         Deudas deudasMySQL = Deudas.INSTANCE;
-        JugadoresService jugadoresService = DependecyContainer.get(JugadoresService.class);
-        PosicionesAbiertas posicionesAbiertasMySQL = PosicionesAbiertas.INSTANCE;
-        EmpresasService empresasService = DependecyContainer.get(EmpresasService.class);
+        var jugadoresService = DependecyContainer.get(JugadoresService.class);
+        var empresasService = DependecyContainer.get(EmpresasService.class);
         LlamadasApi llamadasApiMySQL = LlamadasApi.INSTANCE;
 
         List<Jugador> allJugadordes = jugadoresService.findAll();
@@ -161,8 +161,8 @@ public final class Funciones {
         Map<String, List<Deuda>> mapDeudasAcredor = deudasMySQL.getAllDeudasAcredorMap();
         Map<String, List<Deuda>> mapDeudasDeudor = deudasMySQL.getAllDeudasDeudorMap();
         Map<String, List<Empresa>> mapEmpresasJugador = empresasService.getAllEmpresasJugadorMap();
-        Map<String, List<PosicionAbierta>> mapPosicionesLargo = posicionesAbiertasMySQL.getAllPosicionesAbiertasMap(PosicionAbierta::noEsTipoAccionServerYLargo);
-        Map<String, List<PosicionAbierta>> mapPosicionesCorto = posicionesAbiertasMySQL.getAllPosicionesAbiertasMap(PosicionAbierta::esCorto);
+        Map<String, List<PosicionAbierta>> mapPosicionesLargo = PosicionesUtils.getAllPosicionesAbiertasMap(PosicionAbierta::noEsTipoAccionServerYLargo);
+        Map<String, List<PosicionAbierta>> mapPosicionesCorto = PosicionesUtils.getAllPosicionesAbiertasMap(PosicionAbierta::esCorto);
 
         HashMap<String, Double> toReturn = new HashMap<>();
 

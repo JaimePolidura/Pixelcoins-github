@@ -1,34 +1,51 @@
 package es.serversurvival.bolsa.other.venderlargo;
 
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.Pixelcoin;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
+
+import java.util.UUID;
 
 import static es.serversurvival._shared.utils.Funciones.diferenciaPorcntual;
 import static es.serversurvival._shared.utils.Funciones.redondeoDecimales;
 
 public final class VenderLargoUseCase implements AllMySQLTablesInstances {
-    public static final VenderLargoUseCase INSTANCE = new VenderLargoUseCase();
+    private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
+    private final JugadoresService jugadoresService;
 
-    private VenderLargoUseCase() {}
+    public VenderLargoUseCase() {
+        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+    }
     
     public void venderPosicion(PosicionAbierta posicionAVender, int cantidad, String nombreJugador) {
-        int idPosiconAbierta = posicionAVender.getId();
-        double precioPorAccion = llamadasApiMySQL.getLlamadaAPI(posicionAVender.getNombreActivo()).getPrecio();
-
+        double precioActual = llamadasApiMySQL.getLlamadaAPI(posicionAVender.getNombreActivo()).getPrecio();
+        Jugador vendedor = jugadoresService.getByNombre(posicionAVender.getJugador());
         String ticker = posicionAVender.getNombreActivo();
         int nAccionesTotlaesEnCartera = posicionAVender.getCantidad();
         double precioApertura = posicionAVender.getPrecioApertura();
+        double beneficiosPerdidas = (precioActual - precioApertura) * cantidad;
+        double valorTotalAVender = precioActual * cantidad;
         String fechaApertura = posicionAVender.getFechaApertura();
-        double rentabilidad = redondeoDecimales(diferenciaPorcntual(precioApertura, precioPorAccion), 3);
+        String nombreValor = llamadasApiMySQL.getLlamadaAPI(ticker).getNombre_activo();
+        double rentabilidad = redondeoDecimales(diferenciaPorcntual(precioApertura, precioActual), 3);
 
         if (cantidad == nAccionesTotlaesEnCartera)
-            posicionesAbiertasMySQL.borrarPosicionAbierta(idPosiconAbierta);
+            posicionesAbiertasSerivce.deleteById(posicionAVender.getPosicionAbiertaId());
         else
-            posicionesAbiertasMySQL.setCantidad(idPosiconAbierta, nAccionesTotlaesEnCartera - cantidad);
+            posicionesAbiertasSerivce.save(posicionAVender.withCantidad(nAccionesTotlaesEnCartera - cantidad));
 
-        String nombreValor = llamadasApiMySQL.getLlamadaAPI(ticker).getNombre_activo();
+        if(beneficiosPerdidas >= 0)
+            this.jugadoresService.save(vendedor.incrementPixelcoinsBy(valorTotalAVender).incrementIngresosBy(beneficiosPerdidas));
+        else
+            this.jugadoresService.save(vendedor.incrementPixelcoinsBy(valorTotalAVender).incrementGastosBy(beneficiosPerdidas));
 
-        Pixelcoin.publish(new PosicionVentaLargoEvento(nombreJugador, ticker, nombreValor, precioApertura, fechaApertura, precioPorAccion, cantidad, rentabilidad, posicionAVender.getTipoActivo()));
+
+        Pixelcoin.publish(new PosicionVentaLargoEvento(nombreJugador, ticker, nombreValor, precioApertura, fechaApertura,
+                precioActual, cantidad, rentabilidad, posicionAVender.getTipoActivo()));
     }
 }

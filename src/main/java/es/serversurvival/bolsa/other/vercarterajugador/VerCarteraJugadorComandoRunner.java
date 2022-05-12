@@ -2,6 +2,7 @@ package es.serversurvival.bolsa.other.vercarterajugador;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
@@ -21,7 +22,7 @@ public class VerCarteraJugadorComandoRunner extends PixelcoinCommand implements 
     public void execute(VerCarteraJugadorComando comando, CommandSender player) {
         String nombreJugadorAVer = comando.getJugador();
 
-        double totalInvertido = posicionesAbiertasMySQL.getAllPixeloinsEnAcciones(nombreJugadorAVer);
+        double totalInvertido = PosicionesUtils.getAllPixeloinsEnValores(nombreJugadorAVer);
         Map<String, Integer> posicionesConPeso = getPesoCarteraAcciones(nombreJugadorAVer, totalInvertido);
 
         player.sendMessage(ChatColor.GOLD + "" + "------------------------------");
@@ -39,7 +40,7 @@ public class VerCarteraJugadorComandoRunner extends PixelcoinCommand implements 
     }
 
     private Map<String, Integer> getPesoCarteraAcciones (String jugador, double totalInvertido){
-        Map<PosicionAbierta, Integer> posicionAbiertasPesoSinOrdenar = posicionesAbiertasMySQL.getPosicionesAbiertasConPesoJugador(jugador, totalInvertido);
+        Map<PosicionAbierta, Integer> posicionAbiertasPesoSinOrdenar = PosicionesUtils.getPosicionesAbiertasConPesoJugador(jugador, totalInvertido);
         Map<String, Integer> posicionesAbiertasOrednadas = new HashMap<>();
 
         for(Map.Entry<PosicionAbierta, Integer> entry : posicionAbiertasPesoSinOrdenar.entrySet()){

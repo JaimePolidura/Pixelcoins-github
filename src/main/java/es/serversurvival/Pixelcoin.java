@@ -9,6 +9,12 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival._shared.mysql.newformat.MySQLConfiguration;
+import es.serversurvival.bolsa.ordenespremarket._shared.application.OrdenesPremarketService;
+import es.serversurvival.bolsa.ordenespremarket._shared.domain.OrderesPremarketRepository;
+import es.serversurvival.bolsa.ordenespremarket._shared.infrastructure.MySQLOrdenesPremarketRepository;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionesAbiertasRepository;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.infrastructure.MySQLPosicionesAbiertasRepository;
 import es.serversurvival.web.conversacionesweb._shared.application.ConversacionesWebService;
 import es.serversurvival.web.conversacionesweb._shared.domain.ConversacionesWebRepostiory;
 import es.serversurvival.web.conversacionesweb._shared.infrastructure.InMemoryConversacionesRepository;
@@ -57,6 +63,7 @@ import static org.bukkit.ChatColor.*;
  7 Empleados
  8 CuentasWeb
  9 Verificacion cuentas
+ 10 OrdenesPremarket
  */
 public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstances {
     private static Pixelcoin plugin;
@@ -137,6 +144,8 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
             put(CuentasWebRepository.class, new MySQLCuentasWebRepository(mysqlCOnfiguration));
             put(ConversacionesWebRepostiory.class, new InMemoryConversacionesRepository());
             put(VerificacionCuentaRepository.class, new InMemoryVerificacionCuentaRepository());
+            put(OrderesPremarketRepository.class, new MySQLOrdenesPremarketRepository(mysqlCOnfiguration));
+            put(PosicionesAbiertasRepository.class, new MySQLPosicionesAbiertasRepository(mysqlCOnfiguration));
         }});
 
         DependecyContainer.addAll(new HashMap<>(){{
@@ -150,6 +159,8 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
             put(CuentasWebService.class, new CuentasWebService());
             put(ConversacionesWebService.class, new ConversacionesWebService());
             put(VerificacionCuentaService.class, new VerificacionCuentaService());
+            put(OrdenesPremarketService.class, new OrdenesPremarketService());
+            put(PosicionesAbiertasSerivce.class, new PosicionesAbiertasSerivce());
         }});
     }
 }

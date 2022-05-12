@@ -1,10 +1,13 @@
-package es.serversurvival.bolsa.posicionesabiertas.old.pagardividendos;
+package es.serversurvival.bolsa.posicionesabiertas.dividendostask;
 
 import es.serversurvival.Pixelcoin;
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
 import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -13,17 +16,23 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class PagarDividendosUseCase implements AllMySQLTablesInstances {
-    public static final PagarDividendosUseCase INSTANCE = new PagarDividendosUseCase();
+import static es.serversurvival._shared.utils.Funciones.*;
 
-    private PagarDividendosUseCase () {}
+public final class PagarDividendosUseCase implements AllMySQLTablesInstances {
+    private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
+    private final JugadoresService jugadoresService;
+
+    public PagarDividendosUseCase() {
+        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+    }
 
     public void pagarDividendos() {
         Date hoy = new Date();
-        List<PosicionAbierta> posicionAbiertas = posicionesAbiertasMySQL.getTodasPosicionesAbiertas().stream()
+        List<PosicionAbierta> posicionAbiertas = posicionesAbiertasSerivce.findAll().stream()
                 .filter(PosicionAbierta::esLargo)
                 .filter(PosicionAbierta::esTipoAccion)
-                .collect(Collectors.toList());
+                .toList();
 
         for(PosicionAbierta posicionAbierta : posicionAbiertas) {
             double dividendo;
@@ -37,11 +46,22 @@ public final class PagarDividendosUseCase implements AllMySQLTablesInstances {
                 continue;
             }
 
-            if (Funciones.diferenciaDias(hoy, fechaPagoDividendos) == 0) {
-                Pixelcoin.publish(new DividendoPagadoEvento(posicionAbierta.getJugador(), posicionAbierta.getNombreActivo(),
-                        dividendo + posicionAbierta.getCantidad()));
+            if (diferenciaDias(hoy, fechaPagoDividendos) == 0) {
+                pagarDividendo(posicionAbierta, dividendo);
             }
         }
+    }
+
+    private void pagarDividendo(PosicionAbierta posicionAbierta, double dividendo) {
+        var totalDividendoInflow = dividendo * posicionAbierta.getCantidad();
+        var jugadorTenedorAccion = this.jugadoresService.getByNombre(posicionAbierta.getJugador());
+
+        this.jugadoresService.save(jugadorTenedorAccion
+                .incrementPixelcoinsBy(totalDividendoInflow)
+                .incrementIngresosBy(totalDividendoInflow));
+
+        Pixelcoin.publish(new DividendoPagadoEvento(posicionAbierta.getPosicionAbiertaId(), posicionAbierta.getJugador(),
+                posicionAbierta.getNombreActivo(), totalDividendoInflow));
     }
 
     private double getCantidadDePagoDeDividendoDesdeJSON(JSONObject json) {

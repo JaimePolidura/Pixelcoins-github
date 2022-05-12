@@ -6,8 +6,10 @@ import es.jaimetruman.select.Select;
 import es.jaimetruman.select.SelectOptionInitial;
 import es.jaimetruman.update.Update;
 import es.jaimetruman.update.UpdateOptionInitial;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
 import main.Pair;
 
 
@@ -22,11 +24,13 @@ import java.util.stream.Collectors;
  */
 public final class LlamadasApi extends MySQLRepository {
     public final static LlamadasApi INSTANCE = new LlamadasApi();
+    private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
 
     private final SelectOptionInitial select;
     private final UpdateOptionInitial update;
 
     private LlamadasApi () {
+        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
         this.select = Select.from("llamadasapi");
         this.update = Update.table("llamadasapi");
     }
@@ -79,7 +83,7 @@ public final class LlamadasApi extends MySQLRepository {
     }
 
     public void borrarLlamadaSiNoEsUsada (String ticker) {
-        if(!posicionesAbiertasMySQL.existeTicker(ticker))
+        if(this.posicionesAbiertasSerivce.existsNombreActivo(ticker))
             borrarLlamada(ticker);
     }
 

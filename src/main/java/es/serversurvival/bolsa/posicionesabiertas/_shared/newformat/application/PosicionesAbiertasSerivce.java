@@ -4,21 +4,37 @@ import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.Cache;
 import es.serversurvival._shared.cache.LRUCache;
+import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
+import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
 import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionesAbiertasRepository;
+import org.junit.internal.builders.JUnit3Builder;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static es.serversurvival._shared.mysql.AllMySQLTablesInstances.dateFormater;
+
 public final class PosicionesAbiertasSerivce {
+    public static final double PORCENTAJE_CORTO = 5;
+
     private final PosicionesAbiertasRepository repositoryDb;
     private final Cache<UUID, PosicionAbierta> cache;
 
     public PosicionesAbiertasSerivce(){
         this.repositoryDb = DependecyContainer.get(PosicionesAbiertasRepository.class);
         this.cache = new LRUCache<>(150);
+    }
+
+    public void save(String jugador, TipoActivo tipoAcivo, String nombreActivo, int cantidad,
+                              double precioApertura, TipoPosicion tipoPosicion) {
+        String fecha = dateFormater.format(new Date());
+
+        this.save(new PosicionAbierta(UUID.randomUUID(), jugador, tipoAcivo, nombreActivo, cantidad, precioApertura,
+                fecha, tipoPosicion));
     }
 
     public void save(PosicionAbierta posicionAbierta) {
@@ -54,15 +70,10 @@ public final class PosicionesAbiertasSerivce {
                 .toList();
     }
 
-
-
-//    public Map<String, List<PosicionAbierta>> getAllPosicionesAbiertasMap (Predicate<? super PosicionAbierta> condition) {
-//        List<PosicionAbierta> posicionAbiertas = this.getTodasPosicionesAbiertas().stream()
-//                .filter(condition)
-//                .collect(Collectors.toList());
-//
-//        return Funciones.mergeMapList(posicionAbiertas, PosicionAbierta::getJugador);
-//    }
+    public boolean existsNombreActivo(String nombreActivo){
+        return this.repositoryDb.findAll().stream()
+                .anyMatch(posicionAbierta -> posicionAbierta.getNombreActivo().equalsIgnoreCase(nombreActivo));
+    }
 
     public void deleteById(UUID posicionAbiertaId) {
         this.repositoryDb.deleteById(posicionAbiertaId);

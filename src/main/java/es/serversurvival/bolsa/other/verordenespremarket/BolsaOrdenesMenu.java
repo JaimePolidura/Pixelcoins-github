@@ -12,13 +12,16 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.UUID;
+
 public class BolsaOrdenesMenu extends Menu implements Clickable {
-    private final CancelarOrdenUseCase cancelarOrdenUseCase = CancelarOrdenUseCase.INSTANCE;
+    private final CancelarOrdenUseCase cancelarOrdenUseCase;
 
     private final Inventory inventory;
     private final Player player;
 
     public BolsaOrdenesMenu(Player player) {
+        this.cancelarOrdenUseCase = new CancelarOrdenUseCase();
         this.player = player;
         this.inventory = InventoryCreator.createInventoryMenu(new BolsaOrdenesInventoryFactory(), player.getName());
 
@@ -43,7 +46,7 @@ public class BolsaOrdenesMenu extends Menu implements Clickable {
             return;
         }
 
-        Try<Integer> idTry = getIdOrdenFromItem(itemClicked);
+        Try<UUID> idTry = getIdOrdenFromItem(itemClicked);
         if(idTry.isSuccess()){
             cancelarOrdenUseCase.cancelar(idTry.get());
             player.sendMessage(ChatColor.RED + "Has cancelado la orden");
@@ -52,7 +55,7 @@ public class BolsaOrdenesMenu extends Menu implements Clickable {
         }
     }
 
-    private Try<Integer> getIdOrdenFromItem(ItemStack item) {
-        return Try.of(() -> Integer.parseInt(item.getItemMeta().getLore().get(5)));
+    private Try<UUID> getIdOrdenFromItem(ItemStack item) {
+        return Try.of(() -> UUID.fromString(item.getItemMeta().getLore().get(5)));
     }
 }

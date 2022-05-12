@@ -3,6 +3,7 @@ package es.serversurvival.bolsa.other.comprarlargo;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.bolsa._shared.application.OrderExecutorProxy;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
@@ -18,6 +19,7 @@ import org.bukkit.command.CommandSender;
 import java.util.Optional;
 
 import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
+import static es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenPremarketCommand.*;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.Sound.*;
 
@@ -29,9 +31,11 @@ import static org.bukkit.Sound.*;
 )
 public class ComprarLargoComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<ComprarLargoComando> {
     private final JugadoresService jugadoresService;
+    private final ComprarLargoUseCase comprarLargoUseCase;
 
     public ComprarLargoComandoRunner(){
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+        this.comprarLargoUseCase = new ComprarLargoUseCase();
     }
 
     @Override
@@ -52,7 +56,7 @@ public class ComprarLargoComandoRunner extends PixelcoinCommand implements Comma
 
         Optional<Pair<String, Double>> valorOpcional = llamadasApiMySQL.getPairNombreValorPrecio(ticker);
 
-        if(!valorOpcional.isPresent()){
+        if(valorOpcional.isEmpty()){
             sender.sendMessage(DARK_RED + "Ticker no encontrado, los tickers se ven en /bolsa valores o en inernet como en es.investing.com. Solo se puede invertir en acciones que cotizen en Estados Unidos");
             return;
         }
@@ -65,10 +69,8 @@ public class ComprarLargoComandoRunner extends PixelcoinCommand implements Comma
             return;
         }
 
-        if(Funciones.mercadoNoEstaAbierto()) {
-            AbrirOrdenUseCase.INSTANCE.abrirOrden(sender.getName(), ticker, cantidad, TipoAccion.LARGO_COMPRA, -1);
-        } else {
-            ComprarLargoUseCase.INSTANCE.abrir(TipoActivo.ACCIONES, ticker.toUpperCase(), nombreValor, "acciones", precio, cantidad, sender.getName());
+        OrderExecutorProxy.execute(of(sender.getName(), ticker, cantidad, TipoAccion.LARGO_COMPRA, null), () -> {
+            comprarLargoUseCase.comprar(TipoActivo.ACCIONES, ticker.toUpperCase(), nombreValor, "acciones", precio, cantidad, sender.getName());
 
             Bukkit.broadcastMessage(GOLD + sender.getName() + " ha comprado " + cantidad + " acciones de "
                     + nombreValor + " a " + GREEN + formatea.format(precio) + "PC");
@@ -76,6 +78,6 @@ public class ComprarLargoComandoRunner extends PixelcoinCommand implements Comma
             Funciones.enviarMensajeYSonido(Bukkit.getPlayer(sender.getName()), GOLD + "Has comprado " + formatea.format(cantidad)
                     + " acciones a " + GREEN + formatea.format(precio) + " PC" + GOLD + " que es un total de " + GREEN +
                     formatea.format(precio) + " PC " + GOLD + " comandos: " + AQUA + "/bolsa vender /bolsa cartera", ENTITY_PLAYER_LEVELUP);
-        }
+        });
     }
 }

@@ -24,7 +24,7 @@ import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.GREEN;
 
 public class ComprarAccionesServerConfirmacion extends Menu implements AumentoConfirmacion {
-    private final ComprarOfertaMercadoUseCase useCase = ComprarOfertaMercadoUseCase.INSTANCE;
+    private final ComprarOfertaMercadoUseCase useCase;
     private JugadoresService jugadoresService;
 
     private final EmpresasService empresasService;
@@ -42,6 +42,7 @@ public class ComprarAccionesServerConfirmacion extends Menu implements AumentoCo
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+        this.useCase = new ComprarOfertaMercadoUseCase();
 
         OfertaMercadoServer oferta = AllMySQLTablesInstances.ofertasMercadoServerMySQL.get(id);
 

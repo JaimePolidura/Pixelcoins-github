@@ -1,13 +1,19 @@
 package es.serversurvival.bolsa.other.cancelarorderpremarket;
 
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival.bolsa.ordenespremarket._shared.application.OrdenesPremarketService;
 
-public final class CancelarOrdenUseCase implements AllMySQLTablesInstances {
-    public static final CancelarOrdenUseCase INSTANCE = new CancelarOrdenUseCase();
+import java.util.UUID;
 
-    private CancelarOrdenUseCase () {}
+public final class CancelarOrdenUseCase {
+    private final OrdenesPremarketService ordenesPremarketService;
 
-    public void cancelar (int id) {
-        ordenesMySQL.borrarOrden(id);
+    public CancelarOrdenUseCase(){
+        this.ordenesPremarketService = DependecyContainer.get(OrdenesPremarketService .class);
+    }
+
+    public void cancelar (UUID id) {
+        this.ordenesPremarketService.deleteById(id);
     }
 }

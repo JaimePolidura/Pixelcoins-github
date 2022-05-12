@@ -3,6 +3,7 @@ package es.serversurvival.bolsa.other.vercartera;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.bolsa.other.vervalores.ElegirInversionMenu;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
@@ -22,6 +23,8 @@ import java.util.*;
 import static org.bukkit.Material.*;
 
 public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
+    private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
+
     public static final String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + " TU CARTERA DE ACCIONES";
     private final BolsaCarteraInventoryFactory bolsaCarteraInventoryFactory = new BolsaCarteraInventoryFactory();
     private final Player player;
@@ -30,6 +33,7 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
     private final List<Page> pages;
 
     public BolsaCarteraMenu(Player jugador) {
+        this.posicionesAbiertasSerivce = new PosicionesAbiertasSerivce();
         this.player = jugador;
         this.inventory = InventoryCreator.createInventoryMenu(bolsaCarteraInventoryFactory, jugador.getName());
         this.currentIndex = 0;
@@ -72,10 +76,10 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
         Material clickedItemType = clikedItem.getType();
         TipoPosicion tipoPosicion = clickedItemType == NAME_TAG ? TipoPosicion.LARGO : TipoPosicion.CORTO;
         List<String> loreItemClicked = clikedItem.getItemMeta().getLore();
-        int id = Integer.parseInt(loreItemClicked.get(loreItemClicked.size() - 1).split(" ")[1]);
+        UUID id = UUID.fromString(loreItemClicked.get(loreItemClicked.size() - 1).split(" ")[1]);
 
         if(clickedItemType == GREEN_BANNER){
-            BolsaVenderAccionEmpresaMenu menu = new BolsaVenderAccionEmpresaMenu(player, AllMySQLTablesInstances.posicionesAbiertasMySQL.getPosicionAbierta(id));
+            BolsaVenderAccionEmpresaMenu menu = new BolsaVenderAccionEmpresaMenu(player, posicionesAbiertasSerivce.getById(id));
         }else{
             VenderAccionesConfirmacion confirmacion = new VenderAccionesConfirmacion(player, id, tipoPosicion, TipoActivo.ACCIONES, loreItemClicked); //TODO Hay que hacerlo compatible con los demas activos
         }

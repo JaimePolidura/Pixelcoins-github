@@ -1,6 +1,8 @@
-package es.serversurvival.bolsa.posicionesabiertas.old.splitAcciones;
+package es.serversurvival.bolsa.posicionesabiertas.splitaccionestask;
 
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadaApi;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
@@ -15,9 +17,11 @@ import java.util.Map;
 import static es.serversurvival._shared.utils.Funciones.diferenciaDias;
 
 public final class SplitAccionesUseCase implements AllMySQLTablesInstances {
-    public static final SplitAccionesUseCase INSTANCE = new SplitAccionesUseCase();
+    private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
 
-    private SplitAccionesUseCase () {}
+    public SplitAccionesUseCase() {
+        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
+    }
 
     public void actualizarSplits () {
         Map<String, JSONObject> infoSplitsPorAccion = new HashMap<>();
@@ -32,7 +36,7 @@ public final class SplitAccionesUseCase implements AllMySQLTablesInstances {
             }
         });
 
-        List<PosicionAbierta> posicionAbiertas = posicionesAbiertasMySQL.getTodasPosicionesAbiertasCondicion(PosicionAbierta::esTipoAccion);
+        List<PosicionAbierta> posicionAbiertas = posicionesAbiertasSerivce.findAll(PosicionAbierta::esTipoAccion);
         posicionAbiertas.forEach( (posicionAbierta) -> {
             JSONObject infoSplit = infoSplitsPorAccion.get(posicionAbierta.getNombreActivo());
 
@@ -44,7 +48,7 @@ public final class SplitAccionesUseCase implements AllMySQLTablesInstances {
     }
 
     @SneakyThrows
-    private void realizarSplit(PosicionAbierta pos, JSONObject infoSplit) {
+    private void realizarSplit(PosicionAbierta posicionAbiertaToSplit, JSONObject infoSplit) {
         Date fechaHoy = new Date();
         Date dateSplit = dateFormater.parse((String) infoSplit.get("date"));
 
@@ -52,14 +56,15 @@ public final class SplitAccionesUseCase implements AllMySQLTablesInstances {
         int numerador = (int) infoSplit.get("toFactor");
 
         if (diferenciaDias(fechaHoy, dateSplit) == 0) {
-            int cantidadDeAccionesConvertibles = pos.getCantidad() - (pos.getCantidad() % denominador);
-            int accionesSobrantes = pos.getCantidad() % denominador;
+            int cantidadDeAccionesConvertibles = posicionAbiertaToSplit.getCantidad() - (posicionAbiertaToSplit.getCantidad() % denominador);
+            int accionesSobrantes = posicionAbiertaToSplit.getCantidad() % denominador;
             int accionesConvertidas = (cantidadDeAccionesConvertibles / denominador) * numerador;
 
-            double precioAperturaConvertido = pos.getPrecioApertura() / (numerador / denominador);
+            double precioAperturaConvertido = posicionAbiertaToSplit.getPrecioApertura() / (numerador / denominador);
 
-            posicionesAbiertasMySQL.setCantidad(pos.getId(), accionesConvertidas + accionesSobrantes);
-            posicionesAbiertasMySQL.setPrecioApertura(pos.getId(), precioAperturaConvertido);
+            posicionesAbiertasSerivce.save(posicionAbiertaToSplit
+                    .withCantidad(accionesConvertidas + accionesSobrantes)
+                    .withPrecioApertura(precioAperturaConvertido));
         }
     }
 }

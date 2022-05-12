@@ -21,9 +21,9 @@ public final class PosicionAbierta extends Aggregate implements TablaObjeto {
     @Getter private final String fechaApertura;
     @Getter private final TipoPosicion tipoPosicion;
 
-    public PosicionAbierta decrementCantidadBy(int cantidadToDecrement){
+    public PosicionAbierta withCantidad(int cantidad){
         return new PosicionAbierta(posicionAbiertaId, jugador, tipoActivo, nombreActivo,
-                cantidad - cantidadToDecrement, precioApertura, fechaApertura, tipoPosicion);
+                cantidad, precioApertura, fechaApertura, tipoPosicion);
     }
 
     public PosicionAbierta withPrecioApertura(double newPrecioApertura){
