@@ -3,7 +3,7 @@ package es.serversurvival.bolsa.other.comprarlargo;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.other._shared.AbrirOrdenUseCase;
+import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival._shared.comandos.PixelcoinCommand;

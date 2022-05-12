@@ -1,8 +1,8 @@
 package es.serversurvival.bolsa.other.vercartera;
 
-import es.serversurvival.bolsa.other._shared.posicionesabiertas.mysql.PosicionesAbiertas;
+import es.serversurvival.bolsa.posicionesabiertas.old.mysql.PosicionesAbiertas;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadaApi;
-import es.serversurvival.bolsa.other._shared.posicionesabiertas.mysql.PosicionAbierta;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
 import es.serversurvival._shared.scoreboards.SingleScoreboard;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import org.bukkit.ChatColor;
@@ -46,7 +46,7 @@ public class BolsaCarteraScoreboard implements SingleScoreboard {
     }
 
     private String buildLinea (PosicionAbierta posicion, Double rentabilidad) {
-        String nombreEmpresa = llamadasApiMap.get(posicion.getNombre_activo()).getNombre_activo();
+        String nombreEmpresa = llamadasApiMap.get(posicion.getNombreActivo()).getNombre_activo();
         String linea;
 
         if(rentabilidad >= 0){
@@ -57,9 +57,9 @@ public class BolsaCarteraScoreboard implements SingleScoreboard {
 
         if(linea.length() > 40){
             if(rentabilidad >= 0)
-                linea = ChatColor.GOLD + posicion.getNombre_activo() + ": " + ChatColor.GREEN + "+" + rentabilidad + "%";
+                linea = ChatColor.GOLD + posicion.getNombreActivo() + ": " + ChatColor.GREEN + "+" + rentabilidad + "%";
             else
-                linea = ChatColor.GOLD + posicion.getNombre_activo() + ": " + ChatColor.RED + rentabilidad + "%";
+                linea = ChatColor.GOLD + posicion.getNombreActivo() + ": " + ChatColor.RED + rentabilidad + "%";
         }
 
         return linea;

@@ -1,6 +1,6 @@
 package es.serversurvival.bolsa.other.venderlargo;
 
-import es.serversurvival.bolsa.other._shared.posicionesabiertas.mysql.PosicionAbierta;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.Pixelcoin;
 
@@ -14,12 +14,12 @@ public final class VenderLargoUseCase implements AllMySQLTablesInstances {
     
     public void venderPosicion(PosicionAbierta posicionAVender, int cantidad, String nombreJugador) {
         int idPosiconAbierta = posicionAVender.getId();
-        double precioPorAccion = llamadasApiMySQL.getLlamadaAPI(posicionAVender.getNombre_activo()).getPrecio();
+        double precioPorAccion = llamadasApiMySQL.getLlamadaAPI(posicionAVender.getNombreActivo()).getPrecio();
 
-        String ticker = posicionAVender.getNombre_activo();
+        String ticker = posicionAVender.getNombreActivo();
         int nAccionesTotlaesEnCartera = posicionAVender.getCantidad();
-        double precioApertura = posicionAVender.getPrecio_apertura();
-        String fechaApertura = posicionAVender.getFecha_apertura();
+        double precioApertura = posicionAVender.getPrecioApertura();
+        String fechaApertura = posicionAVender.getFechaApertura();
         double rentabilidad = redondeoDecimales(diferenciaPorcntual(precioApertura, precioPorAccion), 3);
 
         if (cantidad == nAccionesTotlaesEnCartera)
@@ -29,6 +29,6 @@ public final class VenderLargoUseCase implements AllMySQLTablesInstances {
 
         String nombreValor = llamadasApiMySQL.getLlamadaAPI(ticker).getNombre_activo();
 
-        Pixelcoin.publish(new PosicionVentaLargoEvento(nombreJugador, ticker, nombreValor, precioApertura, fechaApertura, precioPorAccion, cantidad, rentabilidad, posicionAVender.getTipo_activo()));
+        Pixelcoin.publish(new PosicionVentaLargoEvento(nombreJugador, ticker, nombreValor, precioApertura, fechaApertura, precioPorAccion, cantidad, rentabilidad, posicionAVender.getTipoActivo()));
     }
 }

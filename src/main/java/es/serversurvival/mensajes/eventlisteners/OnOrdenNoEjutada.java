@@ -2,7 +2,7 @@ package es.serversurvival.mensajes.eventlisteners;
 
 import es.jaime.EventListener;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.other._shared.ordenespremarket.ejecutarordenes.OrdenNoEjecutadoEvento;
+import es.serversurvival.bolsa.ordenespremarket.ejecutarordenes.OrdenNoEjecutadoEvento;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.mensajes._shared.application.MensajesService;
 

@@ -1,9 +1,9 @@
 package es.serversurvival.bolsa.other.vercartera;
 
-import es.serversurvival.bolsa.other._shared.AbrirOrdenUseCase;
+import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
-import es.serversurvival.bolsa.other._shared.posicionesabiertas.mysql.PosicionAbierta;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
 import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.bolsa.other.comprarcorto.ComprarCortoUseCase;
 import es.serversurvival.bolsa.other.venderlargo.VenderLargoUseCase;
@@ -88,10 +88,10 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion {
             comprarCortoUseCase.comprarPosicionCorto(posicion, posicion.getCantidad(), player.getName());
 
         }else if (Funciones.mercadoNoEstaAbierto() && tipoPosicion == TipoPosicion.LARGO) {
-            abrirOrdenUseCase.abrirOrden(player.getName(), posicion.getNombre_activo(), posicion.getCantidad(), TipoAccion.LARGO_VENTA, posicion.getId());
+            abrirOrdenUseCase.abrirOrden(player.getName(), posicion.getNombreActivo(), posicion.getCantidad(), TipoAccion.LARGO_VENTA, posicion.getId());
 
         }else if (Funciones.mercadoNoEstaAbierto() && tipoPosicion == TipoPosicion.CORTO) {
-            abrirOrdenUseCase.abrirOrden(player.getName(), posicion.getNombre_activo(), posicion.getCantidad(), TipoAccion.CORTO_COMPRA, posicion.getId());
+            abrirOrdenUseCase.abrirOrden(player.getName(), posicion.getNombreActivo(), posicion.getCantidad(), TipoAccion.CORTO_COMPRA, posicion.getId());
         }
     }
 

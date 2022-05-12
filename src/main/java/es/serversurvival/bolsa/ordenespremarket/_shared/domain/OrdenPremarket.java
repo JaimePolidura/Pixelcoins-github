@@ -13,11 +13,11 @@ public final class OrdenPremarket implements TablaObjeto {
     @Getter private final String nombreActivo;
     @Getter private final int cantidad;
     @Getter private final TipoAccion tipoAccion;
-    @Getter private final UUID idPosicionabierta;
+    @Getter private final UUID posicionAbiertaId;
 
     public OrdenPremarket withJugador(String jugador){
         return new OrdenPremarket(
-                orderPremarketId, jugador, nombreActivo, cantidad, tipoAccion, idPosicionabierta
+                orderPremarketId, jugador, nombreActivo, cantidad, tipoAccion, posicionAbiertaId
         );
     }
 }

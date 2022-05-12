@@ -3,12 +3,12 @@ package es.serversurvival.bolsa.other.comprarcorto;
 import es.jaime.EventListener;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival.bolsa.other._shared.AbrirOrdenUseCase;
-import es.serversurvival.bolsa.other._shared.posicionesabiertas.mysql.PosicionAbierta;
+import es.serversurvival.bolsa._shared.application.OrderExecutorProxy;
+import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
 import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
 import main.ValidationResult;
 import main.ValidatorService;
 import org.bukkit.Bukkit;
@@ -17,6 +17,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
+import static es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion.CORTO_COMPRA;
+import static es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenPremarketCommand.of;
 import static org.bukkit.ChatColor.*;
 
 @Command(
@@ -31,7 +33,7 @@ public class ComprarCortoComandoRunner extends PixelcoinCommand implements Comma
     @Override
     public void execute(ComprarCortoComando comando, CommandSender sender) {
         int id = comando.getId();
-        int cantidad = comando.getCantidad();
+        final int cantidad = comando.getCantidad();
 
         ValidationResult result = ValidatorService
                 .startValidating(comando.getId(), OwnerPosicionAbierta.de(sender.getName(), TipoPosicion.CORTO))
@@ -49,11 +51,8 @@ public class ComprarCortoComandoRunner extends PixelcoinCommand implements Comma
             cantidad = posicionAComprar.getCantidad();
         }
 
-        if(Funciones.mercadoEstaAbierto()){
-            comprarCortoUseCase.comprarPosicionCorto(posicionAComprar, cantidad, sender.getName());
-        }else{
-            abrirOrdenUseCase.abrirOrden(sender.getName(), posicionAComprar.getNombre_activo(), cantidad, TipoAccion.CORTO_COMPRA, posicionAComprar.getId());
-        }
+        OrderExecutorProxy.execute(of(sender.getName(), posicionAComprar.getNombreActivo(), cantidad, CORTO_COMPRA, posicionAComprar.getId()),
+                () -> comprarCortoUseCase.comprarPosicionCorto(posicionAComprar, cantidad, sender.getName()));
     }
 
     @EventListener

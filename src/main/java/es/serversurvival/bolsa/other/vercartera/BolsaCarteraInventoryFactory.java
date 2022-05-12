@@ -2,9 +2,9 @@ package es.serversurvival.bolsa.other.vercartera;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.other._shared.posicionesabiertas.mysql.PosicionesAbiertas;
+import es.serversurvival.bolsa.posicionesabiertas.old.mysql.PosicionesAbiertas;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadaApi;
-import es.serversurvival.bolsa.other._shared.posicionesabiertas.mysql.PosicionAbierta;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
 import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.menus.Paginated;
@@ -103,7 +103,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         rellenarPosicionesAbiertasPeso(posicionAbiertasJugador, getTotalInvertido(posicionAbiertasJugador));
 
         for (PosicionAbierta posicion : posicionAbiertasJugador) {
-            if (posicion.getTipo_posicion() == TipoPosicion.LARGO) {
+            if (posicion.getTipoPosicion() == TipoPosicion.LARGO) {
                 posicionesAbiertasItems.add(buildPosicionAbiertaLarga(posicion));
             } else {
                 posicionesAbiertasItems.add(buildPosicionAbiertaCorto(posicion));
@@ -114,25 +114,25 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildPosicionAbiertaLarga(PosicionAbierta posicion) {
-        LlamadaApi llamada = llamadasApis.get(posicion.getNombre_activo());
+        LlamadaApi llamada = llamadasApis.get(posicion.getNombreActivo());
 
         double precioAcutal = llamada.getPrecio();
-        double perdidasOBeneficios = posicion.getCantidad() * (precioAcutal - posicion.getPrecio_apertura());
-        double rentabilidad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(posicion.getPrecio_apertura(), precioAcutal), 2);
-        double peso = posicionesAbiertasPeso.get(posicion.getNombre_activo());
+        double perdidasOBeneficios = posicion.getCantidad() * (precioAcutal - posicion.getPrecioApertura());
+        double rentabilidad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(posicion.getPrecioApertura(), precioAcutal), 2);
+        double peso = posicionesAbiertasPeso.get(posicion.getNombreActivo());
         List<String> lore = new ArrayList<>();
         lore.add("   ");
         lore.add(GOLD + "Empresa: " + llamada.getNombre_activo());
 
-        if (!PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()).equalsIgnoreCase(posicion.getNombre_activo())) {
-            lore.add(GOLD + "Ticker: " + posicion.getNombre_activo() + " (" + PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()) + ")");
+        if (!PosicionesAbiertas.getNombreSimbolo(posicion.getNombreActivo()).equalsIgnoreCase(posicion.getNombreActivo())) {
+            lore.add(GOLD + "Ticker: " + posicion.getNombreActivo() + " (" + PosicionesAbiertas.getNombreSimbolo(posicion.getNombreActivo()) + ")");
         } else {
-            lore.add(GOLD + "Ticker: " + posicion.getNombre_activo() + " (Acciones) ");
+            lore.add(GOLD + "Ticker: " + posicion.getNombreActivo() + " (Acciones) ");
         }
         lore.add(GOLD + "Peso en cartera: " + peso + "%");
         lore.add("   ");
         lore.add(GOLD + "Acciones compradas: " + posicion.getCantidad());
-        lore.add(GOLD + "Precio apertura: " + GREEN + formatea.format(posicion.getPrecio_apertura()) + " PC");
+        lore.add(GOLD + "Precio apertura: " + GREEN + formatea.format(posicion.getPrecioApertura()) + " PC");
         lore.add(GOLD + "Precio actual: " + GREEN + formatea.format(precioAcutal));
         if (perdidasOBeneficios >= 0) {
             lore.add(GOLD + "Beneficios totales: " + GREEN + "+" + formatea.format(perdidasOBeneficios) + " PC");
@@ -143,7 +143,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         }
         lore.add(GOLD + "Valor total: " + GREEN + formatea.format(precioAcutal * posicion.getCantidad()) + " PC");
         lore.add("   ");
-        lore.add(GOLD + "Fecha de compra: " + posicion.getPrecio_apertura());
+        lore.add(GOLD + "Fecha de compra: " + posicion.getPrecioApertura());
         lore.add(GOLD + "ID: " + posicion.getId());
 
         this.valorTotal = valorTotal + (precioAcutal * posicion.getCantidad());
@@ -156,26 +156,26 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildPosicionAbiertaCorto(PosicionAbierta posicion) {
-        LlamadaApi llamada = llamadasApis.get(posicion.getNombre_activo());
+        LlamadaApi llamada = llamadasApis.get(posicion.getNombreActivo());
 
         double precioAcutal = llamada.getPrecio();
-        double perdidasOBeneficios = posicion.getCantidad() * (posicion.getPrecio_apertura() - precioAcutal);
-        double rentabilidad = Math.abs(Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(posicion.getPrecio_apertura(), precioAcutal), 2));
+        double perdidasOBeneficios = posicion.getCantidad() * (posicion.getPrecioApertura() - precioAcutal);
+        double rentabilidad = Math.abs(Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(posicion.getPrecioApertura(), precioAcutal), 2));
 
-        double peso = posicionesAbiertasPeso.get(posicion.getNombre_activo());
+        double peso = posicionesAbiertasPeso.get(posicion.getNombreActivo());
         List<String> lore = new ArrayList<>();
         lore.add("   ");
         lore.add(GOLD + "Empresa: " + llamada.getNombre_activo());
 
-        if (!PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()).equalsIgnoreCase(posicion.getNombre_activo())) {
-            lore.add(GOLD + "Ticker: " + posicion.getNombre_activo() + " (" + PosicionesAbiertas.getNombreSimbolo(posicion.getNombre_activo()) + ")");
+        if (!PosicionesAbiertas.getNombreSimbolo(posicion.getNombreActivo()).equalsIgnoreCase(posicion.getNombreActivo())) {
+            lore.add(GOLD + "Ticker: " + posicion.getNombreActivo() + " (" + PosicionesAbiertas.getNombreSimbolo(posicion.getNombreActivo()) + ")");
         } else {
-            lore.add(GOLD + "Ticker: " + posicion.getNombre_activo() + " (Acciones) ");
+            lore.add(GOLD + "Ticker: " + posicion.getNombreActivo() + " (Acciones) ");
         }
         lore.add(GOLD + "Peso en cartera: " + peso + "%");
         lore.add("   ");
         lore.add(GOLD + "Acciones vendidas: " + posicion.getCantidad());
-        lore.add(GOLD + "Precio apertura: " + GREEN + formatea.format(posicion.getPrecio_apertura()) + " PC");
+        lore.add(GOLD + "Precio apertura: " + GREEN + formatea.format(posicion.getPrecioApertura()) + " PC");
         lore.add(GOLD + "Precio actual: " + GREEN + formatea.format(precioAcutal));
         if (perdidasOBeneficios >= 0) {
             lore.add(GOLD + "Beneficios totales: " + GREEN + "+" + formatea.format(perdidasOBeneficios) + " PC");
@@ -186,7 +186,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         }
         lore.add(GOLD + "Valor total: " + GREEN + formatea.format(precioAcutal * posicion.getCantidad()) + " PC");
         lore.add("   ");
-        lore.add(GOLD + "Fecha de compra: " + posicion.getFecha_apertura());
+        lore.add(GOLD + "Fecha de compra: " + posicion.getFechaApertura());
         lore.add(GOLD + "ID: " + posicion.getId());
 
         this.resultadoTotal = resultadoTotal + perdidasOBeneficios;
@@ -212,8 +212,8 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         Map<String, Integer> posicionesAbiertasConPeso = new HashMap<>();
 
         posicionesJugador.forEach((posicion) -> {
-            posicionesAbiertasConPeso.put(posicion.getNombre_activo(),
-                    (int) Funciones.rentabilidad(totalInverito, posicion.getCantidad() * llamadasApis.get(posicion.getNombre_activo()).getPrecio()));
+            posicionesAbiertasConPeso.put(posicion.getNombreActivo(),
+                    (int) Funciones.rentabilidad(totalInverito, posicion.getCantidad() * llamadasApis.get(posicion.getNombreActivo()).getPrecio()));
         });
 
         this.posicionesAbiertasPeso = posicionesAbiertasConPeso;
@@ -221,7 +221,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
 
     private double getTotalInvertido(List<PosicionAbierta> posicionAbiertas) {
         return posicionAbiertas.stream()
-                .mapToDouble((pos) -> pos.getCantidad() * llamadasApis.get(pos.getNombre_activo()).getPrecio())
+                .mapToDouble((pos) -> pos.getCantidad() * llamadasApis.get(pos.getNombreActivo()).getPrecio())
                 .sum();
     }
 

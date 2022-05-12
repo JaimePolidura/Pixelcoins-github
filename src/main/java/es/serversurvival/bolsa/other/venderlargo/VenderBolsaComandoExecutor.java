@@ -3,9 +3,9 @@ package es.serversurvival.bolsa.other.venderlargo;
 import es.jaime.EventListener;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival.bolsa.other._shared.AbrirOrdenUseCase;
+import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
-import es.serversurvival.bolsa.other._shared.posicionesabiertas.mysql.PosicionAbierta;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
@@ -48,7 +48,7 @@ public class VenderBolsaComandoExecutor extends PixelcoinCommand implements Comm
         if (posicionAVender.getCantidad() < cantidad)
             cantidad = posicionAVender.getCantidad();
 
-        if(posicionAVender.getTipo_activo() == TipoActivo.ACCIONES_SERVER){
+        if(posicionAVender.getTipoActivo() == TipoActivo.ACCIONES_SERVER){
             //TODO:
             return;
         }
@@ -56,7 +56,7 @@ public class VenderBolsaComandoExecutor extends PixelcoinCommand implements Comm
         if(Funciones.mercadoEstaAbierto()){
             venderUseCase.venderPosicion(posicionAVender, cantidad, player.getName());
         }else{
-            abrirOrdenUseCase.abrirOrden(player.getName(), posicionAVender.getNombre_activo(), cantidad, TipoAccion.LARGO_VENTA, posicionAVender.getId());
+            abrirOrdenUseCase.abrirOrden(player.getName(), posicionAVender.getNombreActivo(), cantidad, TipoAccion.LARGO_VENTA, posicionAVender.getId());
         }
     }
 

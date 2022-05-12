@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa.other.comprarcorto;
 
 import es.serversurvival.Pixelcoin;
-import es.serversurvival.bolsa.other._shared.posicionesabiertas.mysql.PosicionAbierta;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
@@ -13,12 +13,12 @@ public final class ComprarCortoUseCase implements AllMySQLTablesInstances {
 
     public void comprarPosicionCorto (PosicionAbierta posicionAComprar, int cantidad, String playername) {
         int idPosiconAbierta = posicionAComprar.getId();
-        double precioPorAccion = llamadasApiMySQL.getLlamadaAPI(posicionAComprar.getNombre_activo()).getPrecio();
+        double precioPorAccion = llamadasApiMySQL.getLlamadaAPI(posicionAComprar.getNombreActivo()).getPrecio();
 
-        String ticker = posicionAComprar.getNombre_activo();
+        String ticker = posicionAComprar.getNombreActivo();
         int nAccionesTotlaesEnCartera = posicionAComprar.getCantidad();
-        double precioApertura = posicionAComprar.getPrecio_apertura();
-        String fechaApertura = posicionAComprar.getFecha_apertura();
+        double precioApertura = posicionAComprar.getPrecioApertura();
+        String fechaApertura = posicionAComprar.getFechaApertura();
         double rentabilidad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(precioPorAccion, precioApertura), 3);
 
         if (cantidad == nAccionesTotlaesEnCartera)

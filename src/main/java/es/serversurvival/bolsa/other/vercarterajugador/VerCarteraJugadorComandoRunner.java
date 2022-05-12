@@ -2,7 +2,7 @@ package es.serversurvival.bolsa.other.vercarterajugador;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival.bolsa.other._shared.posicionesabiertas.mysql.PosicionAbierta;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.ChatColor;
@@ -43,10 +43,10 @@ public class VerCarteraJugadorComandoRunner extends PixelcoinCommand implements 
         Map<String, Integer> posicionesAbiertasOrednadas = new HashMap<>();
 
         for(Map.Entry<PosicionAbierta, Integer> entry : posicionAbiertasPesoSinOrdenar.entrySet()){
-            if(posicionesAbiertasOrednadas.get(entry.getKey().getNombre_activo()) != null){
-                posicionesAbiertasOrednadas.put(entry.getKey().getNombre_activo(), posicionesAbiertasOrednadas.get(entry.getKey().getNombre_activo()) + entry.getValue());
+            if(posicionesAbiertasOrednadas.get(entry.getKey().getNombreActivo()) != null){
+                posicionesAbiertasOrednadas.put(entry.getKey().getNombreActivo(), posicionesAbiertasOrednadas.get(entry.getKey().getNombreActivo()) + entry.getValue());
             }else{
-                posicionesAbiertasOrednadas.put(entry.getKey().getNombre_activo(), entry.getValue());
+                posicionesAbiertasOrednadas.put(entry.getKey().getNombreActivo(), entry.getValue());
             }
         }
 

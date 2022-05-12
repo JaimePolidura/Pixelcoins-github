@@ -6,7 +6,7 @@ import es.jaimetruman.select.Select;
 import es.jaimetruman.select.SelectOptionInitial;
 import es.jaimetruman.update.Update;
 import es.jaimetruman.update.UpdateOptionInitial;
-import es.serversurvival.bolsa.other._shared.posicionesabiertas.mysql.PosicionAbierta;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
 import es.serversurvival._shared.mysql.MySQLRepository;
 
 import java.sql.ResultSet;

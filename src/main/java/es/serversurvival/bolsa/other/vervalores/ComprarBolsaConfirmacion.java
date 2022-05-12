@@ -2,7 +2,7 @@ package es.serversurvival.bolsa.other.vervalores;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.other._shared.AbrirOrdenUseCase;
+import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
 import es.serversurvival.bolsa.other.comprarlargo.ComprarLargoUseCase;

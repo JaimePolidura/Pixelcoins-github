@@ -19,8 +19,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadaApi;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadasApi;
-import es.serversurvival.bolsa.other._shared.posicionesabiertas.mysql.PosicionAbierta;
-import es.serversurvival.bolsa.other._shared.posicionesabiertas.mysql.PosicionesAbiertas;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
+import es.serversurvival.bolsa.posicionesabiertas.old.mysql.PosicionesAbiertas;
 import es.serversurvival.deudas._shared.newformat.domain.Deuda;
 import es.serversurvival.deudas._shared.mysql.Deudas;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
@@ -196,14 +196,14 @@ public final class Funciones {
             ///Posiciones abiertas largas
             if(mapPosicionesLargo.get(jugador.getNombre()) != null){
                 activosTotales += mapPosicionesLargo.get(jugador.getNombre()).stream()
-                        .mapToDouble(pos -> (mapAllLlamadas.get(pos.getNombre_activo()).getPrecio() * pos.getCantidad()))
+                        .mapToDouble(pos -> (mapAllLlamadas.get(pos.getNombreActivo()).getPrecio() * pos.getCantidad()))
                         .sum();
             }
 
             //Posicioenes abiertas cortas
             if(mapPosicionesCorto.get(jugador.getNombre()) != null){
                 activosTotales += mapPosicionesCorto.get(jugador.getNombre()).stream()
-                        .mapToDouble(pos -> (pos.getPrecio_apertura() - mapAllLlamadas.get(pos.getNombre_activo()).getPrecio()) * pos.getCantidad())
+                        .mapToDouble(pos -> (pos.getPrecioApertura() - mapAllLlamadas.get(pos.getNombreActivo()).getPrecio()) * pos.getCantidad())
                         .sum();
             }
 

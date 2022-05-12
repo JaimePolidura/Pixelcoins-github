@@ -1,9 +1,13 @@
 package es.serversurvival.bolsa.other._shared.llamadasapi.mysql;
 
-import es.serversurvival.bolsa.other._shared.posicionesabiertas.mysql.PosicionAbierta;
+import es.serversurvival.bolsa._shared.domain.Criptomonedas;
+import es.serversurvival.bolsa._shared.domain.MateriasPrimas;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
 import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
 import org.bukkit.Material;
+
+import java.util.function.Supplier;
 
 
 public enum TipoActivo {
@@ -66,9 +70,19 @@ public enum TipoActivo {
         return alias.substring(0, 1).toUpperCase() + alias.substring(1);
     }
 
+    public static String getNombreActivo(String valor){
+        String nombreSimbolo = MateriasPrimas.getNombreActivo(valor);
+
+        if(nombreSimbolo.equalsIgnoreCase(valor))
+            nombreSimbolo = Criptomonedas.getNombreActivo(valor);
+
+        return nombreSimbolo;
+
+    }
+
     public static Material getMaterialFor (PosicionAbierta posicion) {
-        return posicion.getTipo_posicion() == TipoPosicion.CORTO ?
+        return posicion.getTipoPosicion() == TipoPosicion.CORTO ?
                 Material.REDSTONE_TORCH :
-                posicion.getTipo_activo().materialDisplay;
+                posicion.getTipoActivo().materialDisplay;
     }
 }

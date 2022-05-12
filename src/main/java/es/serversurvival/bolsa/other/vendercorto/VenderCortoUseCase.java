@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa.other.vendercorto;
 
 import es.serversurvival.Pixelcoin;
-import es.serversurvival.bolsa.other._shared.posicionesabiertas.mysql.PosicionesAbiertas;
+import es.serversurvival.bolsa.posicionesabiertas.old.mysql.PosicionesAbiertas;
 import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;

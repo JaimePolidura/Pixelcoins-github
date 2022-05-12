@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa.other.vercartera;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival.bolsa.other._shared.posicionesabiertas.mysql.PosicionAbierta;
+import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
 import es.serversurvival.bolsa.other.venderofertameracadoaserver.VenderOfertaAccionServerUseCase;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.confirmaciones.Confirmacion;
@@ -38,10 +38,10 @@ public class BolsaVenderAccionEmpresaMenu extends Menu implements Confirmacion {
         this.player = player;
         this.posicionAVender = posicionAVender;
 
-        String empresa = posicionAVender.getNombre_activo();
-        this.precioVenta = (int) posicionAVender.getPrecio_apertura();
-        this.empresa = posicionAVender.getNombre_activo();
-        this.precioApertura = posicionAVender.getPrecio_apertura();
+        String empresa = posicionAVender.getNombreActivo();
+        this.precioVenta = (int) posicionAVender.getPrecioApertura();
+        this.empresa = posicionAVender.getNombreActivo();
+        this.precioApertura = posicionAVender.getPrecioApertura();
 
         String titulo = DARK_RED + "" + BOLD + "   VENDER ACCION ";
         String tituloAceptar = GREEN + "" + BOLD + "VENDER " + empresa;
@@ -105,7 +105,7 @@ public class BolsaVenderAccionEmpresaMenu extends Menu implements Confirmacion {
 
         enviarMensajeYSonido(player, GOLD + "Al ser un accion de una empresa del servidor de minecraft. Se ha puesta la oferta de venta en el mercado de acciones. Para consultar el mercado: " + AQUA + "/empresas mercado",
                 Sound.ENTITY_PLAYER_LEVELUP);
-        Bukkit.broadcastMessage(GOLD + player.getName() + " ha subido acciones de la empresa del servidor: " + posicionAVender.getNombre_activo() + AQUA + " /empresas mercado");
+        Bukkit.broadcastMessage(GOLD + player.getName() + " ha subido acciones de la empresa del servidor: " + posicionAVender.getNombreActivo() + AQUA + " /empresas mercado");
 
         closeMenu();
     }
