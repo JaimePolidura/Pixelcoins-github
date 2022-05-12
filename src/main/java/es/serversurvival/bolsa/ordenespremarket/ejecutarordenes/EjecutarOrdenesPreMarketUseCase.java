@@ -3,26 +3,24 @@ package es.serversurvival.bolsa.ordenespremarket.ejecutarordenes;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrdenesPremarketService;
-import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
-import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
-import es.serversurvival.bolsa.other.comprarcorto.ComprarCortoUseCase;
-import es.serversurvival.bolsa.other.comprarlargo.ComprarLargoUseCase;
+import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
+import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
+import es.serversurvival.bolsa.posicionesabiertas.comprarcorto.ComprarCortoUseCase;
+import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.ComprarLargoUseCase;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.OrdenPremarket;
-import es.serversurvival.bolsa.other.vendercorto.VenderCortoUseCase;
-import es.serversurvival.bolsa.other.venderlargo.VenderLargoUseCase;
+import es.serversurvival.bolsa.posicionesabiertas.vendercorto.VenderCortoUseCase;
+import es.serversurvival.bolsa.posicionesabiertas.venderlargo.VenderLargoUseCase;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import main.Pair;
 
 import java.util.List;
-import java.util.UUID;
 
 import static es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo.*;
 import static es.serversurvival._shared.utils.Funciones.*;
 import static es.serversurvival._shared.utils.Funciones.reducirPorcentaje;
-import static es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce.*;
 
 public final class EjecutarOrdenesPreMarketUseCase implements AllMySQLTablesInstances {
     private final JugadoresService jugadoresService;

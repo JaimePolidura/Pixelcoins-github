@@ -2,7 +2,7 @@ package es.serversurvival.mensajes.eventlisteners;
 
 import es.jaime.EventListener;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.other.comprarlargo.PosicionCompraLargoEvento;
+import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.PosicionCompraLargoEvento;
 import es.serversurvival.mensajes._shared.application.MensajesService;
 
 public final class OnPosicionCompraLargoEvento {

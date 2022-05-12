@@ -2,7 +2,7 @@ package es.serversurvival.bolsa.posicionesabiertas.onjugadorcambiadonombre;
 
 import es.jaime.EventListener;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
+import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.jugadores.setupjugadorunido.JugadorCambiadoDeNombreEvento;
 
 public final class OnJugadorCambiadoNombre {

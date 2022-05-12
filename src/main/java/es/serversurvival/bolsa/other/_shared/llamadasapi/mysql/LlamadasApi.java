@@ -9,7 +9,7 @@ import es.jaimetruman.update.UpdateOptionInitial;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
-import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
+import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import main.Pair;
 
 

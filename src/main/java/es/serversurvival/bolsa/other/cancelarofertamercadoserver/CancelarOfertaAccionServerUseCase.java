@@ -5,7 +5,7 @@ import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa.other._shared.ofertasmercadoserver.mysql.OfertaMercadoServer;
 import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
+import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 
 public final class CancelarOfertaAccionServerUseCase implements AllMySQLTablesInstances {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;

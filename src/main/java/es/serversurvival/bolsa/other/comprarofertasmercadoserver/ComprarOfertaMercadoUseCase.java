@@ -7,7 +7,7 @@ import es.serversurvival.bolsa.other._shared.ofertasmercadoserver.mysql.OfertaMe
 import es.serversurvival.bolsa.other._shared.ofertasmercadoserver.mysql.TipoOfertante;
 import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
+import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 

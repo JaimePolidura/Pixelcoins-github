@@ -1,8 +1,8 @@
 package es.serversurvival.bolsa.other.venderofertameracadoaserver;
 
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
-import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
+import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
+import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival.bolsa.other._shared.ofertasmercadoserver.mysql.TipoOfertante;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 

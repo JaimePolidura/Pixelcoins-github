@@ -1,7 +1,7 @@
 package es.serversurvival._shared.scoreboards;
 
 
-import es.serversurvival.bolsa.other.vercartera.BolsaCarteraScoreboard;
+import es.serversurvival.bolsa.posicionesabiertas.vercartera.BolsaCarteraScoreboard;
 import es.serversurvival.deudas.ver.DeudasDisplayScoreboard;
 import es.serversurvival.jugadores.perfil.StatsDisplayScoreboard;
 import es.serversurvival.jugadores.top.TopPlayerDisplayScoreboard;

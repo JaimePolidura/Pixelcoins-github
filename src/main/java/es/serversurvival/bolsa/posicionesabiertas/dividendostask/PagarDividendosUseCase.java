@@ -2,11 +2,10 @@ package es.serversurvival.bolsa.posicionesabiertas.dividendostask;
 
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.application.PosicionesAbiertasSerivce;
-import es.serversurvival.bolsa.posicionesabiertas._shared.newformat.domain.PosicionAbierta;
+import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
+import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
-import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -14,7 +13,6 @@ import org.json.simple.JSONObject;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 
