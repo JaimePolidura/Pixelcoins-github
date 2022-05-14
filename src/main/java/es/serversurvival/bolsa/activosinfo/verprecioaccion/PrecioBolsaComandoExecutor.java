@@ -1,9 +1,11 @@
-package es.serversurvival.bolsa.other.verprecioaccion;
+package es.serversurvival.bolsa.activosinfo.verprecioaccion;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -14,6 +16,12 @@ import org.bukkit.command.CommandSender;
         explanation = "Ver el precio de una accion <ticker> ticker de la accion, solo se pueden empresas americanas"
 )
 public class PrecioBolsaComandoExecutor extends PixelcoinCommand implements CommandRunnerArgs<PrecioBolsaComando> {
+    private final ActivoInfoService activoInfoService;
+
+    public PrecioBolsaComandoExecutor() {
+        this.activoInfoService = DependecyContainer.get(ActivoInfoService.class);
+    }
+
     @Override
     public void execute(PrecioBolsaComando comando, CommandSender player) {
         String ticker = comando.getTicker();

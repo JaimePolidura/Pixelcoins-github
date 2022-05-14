@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa.posicionesabiertas.splitaccionestask;
 
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadaApi;
+import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
@@ -25,12 +25,12 @@ public final class SplitAccionesUseCase implements AllMySQLTablesInstances {
 
     public void actualizarSplits () {
         Map<String, JSONObject> infoSplitsPorAccion = new HashMap<>();
-        List<LlamadaApi> todasLlamadasApi = llamadasApiMySQL.getTodasLlamadasApiCondicion(LlamadaApi::esTipoAccion);
+        List<ActivoInfo> todasLlamadasApi = llamadasApiMySQL.getTodasLlamadasApiCondicion(ActivoInfo::esTipoAccion);
 
         todasLlamadasApi.forEach( (llamada) -> {
             try {
-                JSONObject infoSplit = IEXCloud_API.getSplitInfoEmpresa(llamada.getSimbolo());
-                infoSplitsPorAccion.put(llamada.getNombre_activo(), infoSplit);
+                JSONObject infoSplit = IEXCloud_API.getSplitInfoEmpresa(llamada.getNombreActivo());
+                infoSplitsPorAccion.put(llamada.getNombreActivoLargo(), infoSplit);
             } catch (Exception ignored) {
                 //IGNORED
             }

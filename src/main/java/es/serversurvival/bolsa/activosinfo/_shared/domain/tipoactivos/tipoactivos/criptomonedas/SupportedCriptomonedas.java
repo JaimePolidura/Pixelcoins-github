@@ -1,13 +1,11 @@
-package es.serversurvival.bolsa._shared.domain;
-
-import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
+package es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.tipoactivos.criptomonedas;
 
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo.CRIPTOMONEDAS;
+import static es.serversurvival.bolsa.activosinfo._shared.domain.TipoActivo.CRIPTOMONEDAS;
 
-public enum Criptomonedas {
+public enum SupportedCriptomonedas {
     BTCUSD("Bitcoin", CRIPTOMONEDAS),
     LTCUSD("Litecoin", CRIPTOMONEDAS),
     ETHUSD("Etherium", CRIPTOMONEDAS);
@@ -15,13 +13,13 @@ public enum Criptomonedas {
     public final String nombreActivo;
     public final TipoActivo tipoActivo;
 
-    Criptomonedas(String nombreActivo, TipoActivo tipoActivo) {
+    SupportedCriptomonedas(String nombreActivo, TipoActivo tipoActivo) {
         this.nombreActivo = nombreActivo;
         this.tipoActivo = tipoActivo;
     }
     
-    public static String getNombreActivo(String simbolo) {
-        Optional<Criptomonedas> valor = Stream.of(Criptomonedas.values())
+    public static String getNombreActivoLargo(String simbolo) {
+        Optional<SupportedCriptomonedas> valor = Stream.of(SupportedCriptomonedas.values())
                 .filter(mat -> mat.nombreActivo.equalsIgnoreCase(simbolo))
                 .findAny();
 

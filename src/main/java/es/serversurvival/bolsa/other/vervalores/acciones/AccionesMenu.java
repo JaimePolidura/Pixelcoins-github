@@ -1,6 +1,5 @@
 package es.serversurvival.bolsa.other.vervalores.acciones;
 
-import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival._shared.menus.Clickable;
 import es.serversurvival._shared.menus.Paginated;
 import es.serversurvival._shared.menus.PostLoading;

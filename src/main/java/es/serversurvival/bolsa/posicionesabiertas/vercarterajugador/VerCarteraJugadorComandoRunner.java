@@ -28,7 +28,7 @@ public class VerCarteraJugadorComandoRunner extends PixelcoinCommand implements 
         player.sendMessage(ChatColor.GOLD + "" + "------------------------------");
         player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "   LAS CARTERA DE " + nombreJugadorAVer);
         for(Map.Entry<String, Integer> entry : posicionesConPeso.entrySet()){
-            String nombreValor = llamadasApiMySQL.getLlamadaAPI(entry.getKey()).getNombre_activo();
+            String nombreValor = llamadasApiMySQL.getLlamadaAPI(entry.getKey()).getNombreActivoLargo();
 
             if(entry.getValue() == 0){
                 player.sendMessage(ChatColor.GOLD + nombreValor + ": 0% - 1% %");

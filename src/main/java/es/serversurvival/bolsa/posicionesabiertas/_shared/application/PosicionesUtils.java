@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa.posicionesabiertas._shared.application;
 
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadaApi;
+import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadasApi;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
@@ -25,7 +25,7 @@ public final class PosicionesUtils {
         var posLargas = posicionesAbiertasService.findByJugador(jugador, PosicionAbierta::noEsTipoAccionServerYLargo);
         var posCortas = posicionesAbiertasService.findByJugador(jugador, PosicionAbierta::esCorto);
 
-        Map<String, LlamadaApi> llamadasApiMap = llamadasApiMySQL.getMapOfAllLlamadasApi();
+        Map<String, ActivoInfo> llamadasApiMap = llamadasApiMySQL.getMapOfAllLlamadasApi();
 
         double pixelcoinsEnLargos =
                 getSumaTotalListDouble(posLargas, pos -> llamadasApiMap.get(pos.getNombreActivo()).getPrecio() * pos.getCantidad());

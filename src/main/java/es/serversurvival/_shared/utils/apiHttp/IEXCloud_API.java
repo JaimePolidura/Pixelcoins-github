@@ -6,7 +6,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public final class IEXCloud_API {
-    private static final String token = "Tsk_604d13bfa8544d66ab14f9d5e62ff80f";
+    public static final String token = "Tsk_604d13bfa8544d66ab14f9d5e62ff80f";
 
     private IEXCloud_API() {
     }
@@ -21,12 +21,6 @@ public final class IEXCloud_API {
         Object response = Funciones.peticionHttp("https://sandbox.iexapis.com/stable/time-series/advanced_dividends/" + ticker + "?range=next-" + dentroDeCuando + "&token=" + token);
 
         return (JSONArray) response;
-    }
-
-    public static JSONObject getProximosDividendos(String ticker) throws Exception {
-        Object response = Funciones.peticionHttp("https://sandbox.iexapis.com/stable/stock/" + ticker + "/dividends/next?token=" + token);
-
-        return (JSONObject) response;
     }
 
     public static double getPrecioCriptomoneda(String simbolo) throws Exception {
@@ -57,14 +51,5 @@ public final class IEXCloud_API {
         JSONArray responseArray = (JSONArray) response;
 
         return (JSONObject) responseArray.get(0);
-    }
-
-    public static double getEPS(String ticker) throws Exception {
-        JSONObject resposne = (JSONObject) Funciones.peticionHttp("https://sandbox.iexapis.com/stable/stock/" + ticker + "/earnings/1?period=annual&token=" + token);
-
-        JSONArray arrayEearning = (JSONArray) resposne.get("earnings");
-        JSONObject earningJSON = (JSONObject) arrayEearning.get(0);
-
-        return Double.parseDouble(String.valueOf(earningJSON.get("actualEPS")));
     }
 }

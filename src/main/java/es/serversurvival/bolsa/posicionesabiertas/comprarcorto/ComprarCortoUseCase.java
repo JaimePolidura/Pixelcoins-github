@@ -6,7 +6,6 @@ import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
-import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
@@ -31,7 +30,7 @@ public final class ComprarCortoUseCase implements AllMySQLTablesInstances {
         double precioPorAccion = llamadasApiMySQL.getLlamadaAPI(poscionAComprarCorto.getNombreActivo()).getPrecio();
 
         String ticker = poscionAComprarCorto.getNombreActivo();
-        String nombreValor = llamadasApiMySQL.getLlamadaAPI(ticker).getNombre_activo();
+        String nombreValor = llamadasApiMySQL.getLlamadaAPI(ticker).getNombreActivoLargo();
         Jugador jugador = this.jugadoresService.getByNombre(poscionAComprarCorto.getJugador());
         double precioApertura = poscionAComprarCorto.getPrecioApertura();
         double revalorizacionTotal = (poscionAComprarCorto.getPrecioApertura() - precioPorAccion) * cantidad;

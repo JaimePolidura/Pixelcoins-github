@@ -1,6 +1,6 @@
 package es.serversurvival.bolsa.posicionesabiertas.vercartera;
 
-import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadaApi;
+import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival._shared.scoreboards.SingleScoreboard;
@@ -14,7 +14,7 @@ import java.util.*;
 import static es.serversurvival._shared.utils.MinecraftUtils.*;
 
 public class BolsaCarteraScoreboard implements SingleScoreboard {
-    private Map<String, LlamadaApi> llamadasApiMap;
+    private Map<String, ActivoInfo> llamadasApiMap;
 
     @Override
     public Scoreboard createScoreborad(String jugador) {
@@ -46,7 +46,7 @@ public class BolsaCarteraScoreboard implements SingleScoreboard {
     }
 
     private String buildLinea (PosicionAbierta posicion, Double rentabilidad) {
-        String nombreEmpresa = llamadasApiMap.get(posicion.getNombreActivo()).getNombre_activo();
+        String nombreEmpresa = llamadasApiMap.get(posicion.getNombreActivo()).getNombreActivoLargo();
         String linea;
 
         if(rentabilidad >= 0){

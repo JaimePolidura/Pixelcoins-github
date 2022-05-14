@@ -1,9 +1,7 @@
 package es.serversurvival.bolsa.posicionesabiertas.comprarlargo;
 
-import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival._shared.eventospixelcoins.PosicionAbiertaEvento;
 import es.serversurvival.transacciones._shared.domain.Transaccion;
-import lombok.Getter;
 
 import java.util.UUID;
 

@@ -1,8 +1,8 @@
 package es.serversurvival.tienda._shared.application;
 
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.cache.Cache;
 import es.serversurvival._shared.cache.LRUCache;
+import es.serversurvival._shared.cache.LimitedCache;
 import es.serversurvival.tienda._shared.domain.TiendaRepository;
 import es.serversurvival.tienda._shared.domain.TiendaObjeto;
 
@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public final class TiendaRepositoryService {
     private final TiendaRepository repository;
-    private final Cache<UUID, TiendaObjeto> cache;
+    private final LimitedCache<UUID, TiendaObjeto> cache;
 
     public TiendaRepositoryService(){
         this.repository = DependecyContainer.get(TiendaRepository.class);

@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 public interface Cache<K, V> {
-    int maxItemsCapacity();
     void put(K key, V value);
     void remove(K key);
     void remove(Predicate<V> condition);
@@ -15,12 +14,4 @@ public interface Cache<K, V> {
     int size();
     Optional<V> findValueIf(Predicate<V> valueCondition);
     List<V> findValuesIf(Predicate<V> valueCondition);
-
-    default boolean isFull() {
-        return this.size() == maxItemsCapacity();
-    }
-
-    default boolean isNotFull(){
-        return !this.isFull();
-    }
 }

@@ -9,6 +9,10 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival._shared.mysql.newformat.MySQLConfiguration;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
+import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfoCacheRepository;
+import es.serversurvival.bolsa.activosinfo._shared.infrastructure.InMemoryActivoInfoCacheRepository;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrdenesPremarketService;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.OrderesPremarketRepository;
 import es.serversurvival.bolsa.ordenespremarket._shared.infrastructure.MySQLOrdenesPremarketRepository;
@@ -68,6 +72,7 @@ import static org.bukkit.ChatColor.*;
  9 Verificacion cuentas
  10 OrdenesPremarket
  11 PosicionesAbiertas
+ 12 Llamadas api
  */
 public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstances {
     private static Pixelcoin plugin;
@@ -151,6 +156,7 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
             put(OrderesPremarketRepository.class, new MySQLOrdenesPremarketRepository(mysqlCOnfiguration));
             put(PosicionesAbiertasRepository.class, new MySQLPosicionesAbiertasRepository(mysqlCOnfiguration));
             put(PosicionesCerradasRepository.class, new MySQLPosicionesCerradasRepository(mysqlCOnfiguration));
+            put(ActivoInfoCacheRepository.class, new InMemoryActivoInfoCacheRepository());
         }});
 
         DependecyContainer.addAll(new HashMap<>(){{
@@ -167,6 +173,7 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
             put(OrdenesPremarketService.class, new OrdenesPremarketService());
             put(PosicionesAbiertasSerivce.class, new PosicionesAbiertasSerivce());
             put(PosicionesCerradasService.class, new PosicionesCerradasService());
+            put(ActivoInfoService.class, new ActivoInfoService());
         }});
     }
 }

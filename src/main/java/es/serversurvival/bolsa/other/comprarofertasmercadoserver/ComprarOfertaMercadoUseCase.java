@@ -2,7 +2,6 @@ package es.serversurvival.bolsa.other.comprarofertasmercadoserver;
 
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa.other._shared.ofertasmercadoserver.mysql.OfertaMercadoServer;
 import es.serversurvival.bolsa.other._shared.ofertasmercadoserver.mysql.TipoOfertante;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;

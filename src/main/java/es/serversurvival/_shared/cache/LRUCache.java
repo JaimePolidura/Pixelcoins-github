@@ -6,11 +6,9 @@ import lombok.Getter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
-public class LRUCache<K, V> implements Cache<K, V>{
+public class LRUCache<K, V> implements LimitedCache<K, V> {
     //Last index: most not recently used
     //first index: most recently used
     private final LinkedList<CacheItem<K, V>> items;

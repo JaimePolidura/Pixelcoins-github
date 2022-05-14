@@ -1,6 +1,5 @@
 package es.serversurvival._shared.eventospixelcoins;
 
-import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

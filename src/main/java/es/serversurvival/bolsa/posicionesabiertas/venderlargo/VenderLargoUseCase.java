@@ -8,9 +8,6 @@ import es.serversurvival.Pixelcoin;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 
-import static es.serversurvival._shared.utils.Funciones.diferenciaPorcntual;
-import static es.serversurvival._shared.utils.Funciones.redondeoDecimales;
-
 public final class VenderLargoUseCase implements AllMySQLTablesInstances {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final JugadoresService jugadoresService;
@@ -29,7 +26,7 @@ public final class VenderLargoUseCase implements AllMySQLTablesInstances {
         double beneficiosPerdidas = (precioActual - precioApertura) * cantidad;
         double valorTotalAVender = precioActual * cantidad;
         String fechaApertura = posicionAVender.getFechaApertura();
-        String nombreValor = llamadasApiMySQL.getLlamadaAPI(ticker).getNombre_activo();
+        String nombreValor = llamadasApiMySQL.getLlamadaAPI(ticker).getNombreActivoLargo();
 
         if (cantidad == nAccionesTotlaesEnCartera)
             posicionesAbiertasSerivce.deleteById(posicionAVender.getPosicionAbiertaId());

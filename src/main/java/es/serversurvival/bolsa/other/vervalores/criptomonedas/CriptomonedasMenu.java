@@ -1,7 +1,6 @@
 package es.serversurvival.bolsa.other.vervalores.criptomonedas;
 
 import es.serversurvival.Pixelcoin;
-import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa.other.vervalores.ComprarBolsaConfirmacion;
 import es.serversurvival._shared.menus.Clickable;
 import es.serversurvival._shared.menus.PostLoading;

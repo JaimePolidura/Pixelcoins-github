@@ -9,6 +9,7 @@ import es.jaimetruman.update.UpdateOptionInitial;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
+import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import main.Pair;
 
@@ -43,25 +44,25 @@ public final class LlamadasApi extends MySQLRepository {
         executeUpdate(insertQuery);
     }
 
-    public LlamadaApi getLlamadaAPI(String simbolo) {
-        return (LlamadaApi) buildObjectFromQuery(select.where("simbolo").equal(simbolo));
+    public ActivoInfo getLlamadaAPI(String simbolo) {
+        return (ActivoInfo) buildObjectFromQuery(select.where("simbolo").equal(simbolo));
     }
 
-    public List<LlamadaApi> getTodasLlamadasApi(){
+    public List<ActivoInfo> getTodasLlamadasApi(){
         return buildListFromQuery(select);
     }
 
-    public List<LlamadaApi> getTodasLlamadasApiCondicion (Predicate<? super LlamadaApi> condicion) {
+    public List<ActivoInfo> getTodasLlamadasApiCondicion (Predicate<? super ActivoInfo> condicion) {
         return getTodasLlamadasApi().stream()
                 .filter(condicion)
                 .collect(Collectors.toList());
     }
 
-    public Map<String, LlamadaApi> getMapOfAllLlamadasApi () {
-        Map<String, LlamadaApi> mapLlamadas = new HashMap<>();
+    public Map<String, ActivoInfo> getMapOfAllLlamadasApi () {
+        Map<String, ActivoInfo> mapLlamadas = new HashMap<>();
 
-        List<LlamadaApi> llamadaApiList = getTodasLlamadasApi();
-        llamadaApiList.forEach(llamada -> mapLlamadas.put(llamada.getSimbolo(), llamada) );
+        List<ActivoInfo> llamadaApiList = getTodasLlamadasApi();
+        llamadaApiList.forEach(llamada -> mapLlamadas.put(llamada.getNombreActivo(), llamada) );
 
         return mapLlamadas;
     }
@@ -98,8 +99,8 @@ public final class LlamadasApi extends MySQLRepository {
             String nombreValor;
 
             if(estaReg(ticker)){
-                LlamadaApi llamadaApi = this.getLlamadaAPI(ticker);
-                nombreValor = llamadaApi.getNombre_activo();
+                ActivoInfo llamadaApi = this.getLlamadaAPI(ticker);
+                nombreValor = llamadaApi.getNombreActivoLargo();
                 precio = llamadaApi.getPrecio();
             }else{
                 nombreValor = IEXCloud_API.getNombreEmpresa(ticker);
@@ -113,8 +114,8 @@ public final class LlamadasApi extends MySQLRepository {
     }
 
     @Override
-    protected LlamadaApi buildObjectFromResultSet(ResultSet rs) throws SQLException {
-        return new LlamadaApi(rs.getString("simbolo"),
+    protected ActivoInfo buildObjectFromResultSet(ResultSet rs) throws SQLException {
+        return new ActivoInfo(rs.getString("simbolo"),
                 rs.getDouble("precio"),
                 TipoActivo.valueOf(rs.getString("tipo_activo")),
                 rs.getString("nombre_activo"));

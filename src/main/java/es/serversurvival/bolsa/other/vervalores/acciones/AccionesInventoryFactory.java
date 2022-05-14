@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa.other.vervalores.acciones;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadaApi;
+import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import es.serversurvival._shared.menus.Paginated;
 import org.bukkit.Bukkit;
@@ -66,19 +66,19 @@ public class AccionesInventoryFactory extends InventoryFactory {
     private List<ItemStack> buildItemsAcciones (Map<String, String> accionesPaginaActual) {
         List<ItemStack> itemStackList = new ArrayList<>();
 
-        Map<String, LlamadaApi> acciones = llamadasApiMySQL.getMapOfAllLlamadasApi();
+        Map<String, ActivoInfo> acciones = llamadasApiMySQL.getMapOfAllLlamadasApi();
 
         for (Map.Entry<String, String> entry : accionesPaginaActual.entrySet()) {
             List<String> lore = new ArrayList<>();
             lore.add(ChatColor.GOLD + "Ticker: " + entry.getKey());
 
-            LlamadaApi accion = acciones.get(entry.getKey());
+            ActivoInfo accion = acciones.get(entry.getKey());
             String displayName = "";
             if(accion == null){
                 displayName = ChatColor.GOLD + "" + ChatColor.BOLD + entry.getValue();
                 lore.add(ChatColor.RED + "Cargando...");
             }else{
-                displayName = ChatColor.GOLD + "" + ChatColor.BOLD + accion.getNombre_activo();
+                displayName = ChatColor.GOLD + "" + ChatColor.BOLD + accion.getNombreActivoLargo();
                 lore.add(ChatColor.GOLD + "Precio/Accion:" + ChatColor.GREEN + " " + formatea.format(accion.getPrecio())  + " PC");
             }
 

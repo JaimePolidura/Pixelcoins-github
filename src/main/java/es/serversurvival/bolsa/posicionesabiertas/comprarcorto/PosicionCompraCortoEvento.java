@@ -2,7 +2,6 @@ package es.serversurvival.bolsa.posicionesabiertas.comprarcorto;
 
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
-import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival._shared.eventospixelcoins.PosicionCerradaEvento;
 import es.serversurvival.transacciones._shared.domain.Transaccion;
 

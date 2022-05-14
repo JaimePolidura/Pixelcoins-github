@@ -11,6 +11,5 @@ public interface AllMySQLTablesInstances {
     SimpleDateFormat dateFormater = Funciones.DATE_FORMATER_LEGACY;
     DecimalFormat formatea = Funciones.FORMATEA;
 
-    LlamadasApi llamadasApiMySQL = LlamadasApi.INSTANCE;
     OfertasMercadoServer ofertasMercadoServerMySQL = OfertasMercadoServer.INSTANCE;
 }

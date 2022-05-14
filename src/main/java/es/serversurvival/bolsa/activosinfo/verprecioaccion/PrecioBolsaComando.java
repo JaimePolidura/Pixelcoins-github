@@ -1,4 +1,4 @@
-package es.serversurvival.bolsa.other.verprecioaccion;
+package es.serversurvival.bolsa.activosinfo.verprecioaccion;
 
 import lombok.Getter;
 

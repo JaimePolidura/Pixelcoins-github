@@ -4,6 +4,7 @@ import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.Cache;
 import es.serversurvival._shared.cache.LRUCache;
+import es.serversurvival._shared.cache.LimitedCache;
 import es.serversurvival.jugadores._shared.domain.JugadoresRepository;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 
 public final class JugadoresService {
     private final JugadoresRepository repositoryDb;
-    private final Cache<String, Jugador> cache;
+    private final LimitedCache<String, Jugador> cache;
 
     public JugadoresService() {
         this.repositoryDb = DependecyContainer.get(JugadoresRepository.class);

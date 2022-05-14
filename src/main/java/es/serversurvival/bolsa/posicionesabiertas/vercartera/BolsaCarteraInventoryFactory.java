@@ -2,8 +2,7 @@ package es.serversurvival.bolsa.posicionesabiertas.vercartera;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadaApi;
-import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
@@ -31,7 +30,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
     private double resultadoTotal;
     private double valorTotal;
     private double liquidezjugador;
-    private Map<String, LlamadaApi> llamadasApis;
+    private Map<String, ActivoInfo> llamadasApis;
     private Map<String, Integer> posicionesAbiertasPeso;
 
     public BolsaCarteraInventoryFactory() {
@@ -118,7 +117,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildPosicionAbiertaLarga(PosicionAbierta posicion) {
-        LlamadaApi llamada = llamadasApis.get(posicion.getNombreActivo());
+        ActivoInfo llamada = llamadasApis.get(posicion.getNombreActivo());
 
         double precioAcutal = llamada.getPrecio();
         double perdidasOBeneficios = posicion.getCantidad() * (precioAcutal - posicion.getPrecioApertura());
@@ -126,7 +125,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         double peso = posicionesAbiertasPeso.get(posicion.getNombreActivo());
         List<String> lore = new ArrayList<>();
         lore.add("   ");
-        lore.add(GOLD + "Empresa: " + llamada.getNombre_activo());
+        lore.add(GOLD + "Empresa: " + llamada.getNombreActivoLargo());
 
         if (!TipoActivo.getNombreActivo(posicion.getNombreActivo()).equalsIgnoreCase(posicion.getNombreActivo())) {
             lore.add(GOLD + "Ticker: " + posicion.getNombreActivo() + " (" + TipoActivo.getNombreActivo(posicion.getNombreActivo()) + ")");
@@ -160,7 +159,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildPosicionAbiertaCorto(PosicionAbierta posicion) {
-        LlamadaApi llamada = llamadasApis.get(posicion.getNombreActivo());
+        ActivoInfo llamada = llamadasApis.get(posicion.getNombreActivo());
 
         double precioAcutal = llamada.getPrecio();
         double perdidasOBeneficios = posicion.getCantidad() * (posicion.getPrecioApertura() - precioAcutal);
@@ -169,7 +168,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         double peso = posicionesAbiertasPeso.get(posicion.getNombreActivo());
         List<String> lore = new ArrayList<>();
         lore.add("   ");
-        lore.add(GOLD + "Empresa: " + llamada.getNombre_activo());
+        lore.add(GOLD + "Empresa: " + llamada.getNombreActivoLargo());
 
         if (!TipoActivo.getNombreActivo(posicion.getNombreActivo()).equalsIgnoreCase(posicion.getNombreActivo())) {
             lore.add(GOLD + "Ticker: " + posicion.getNombreActivo() + " (" + TipoActivo.getNombreActivo(posicion.getNombreActivo()) + ")");
@@ -202,11 +201,11 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
     }
 
     private void rellenarLlamadasApi() {
-        List<LlamadaApi> llamadaApisList = llamadasApiMySQL.getTodasLlamadasApi();
-        Map<String, LlamadaApi> llamadaApiMap = new HashMap<>();
+        List<ActivoInfo> llamadaApisList = llamadasApiMySQL.getTodasLlamadasApi();
+        Map<String, ActivoInfo> llamadaApiMap = new HashMap<>();
 
         llamadaApisList.forEach((llamada) -> {
-            llamadaApiMap.put(llamada.getSimbolo(), llamada);
+            llamadaApiMap.put(llamada.getNombreActivo(), llamada);
         });
 
         this.llamadasApis = llamadaApiMap;

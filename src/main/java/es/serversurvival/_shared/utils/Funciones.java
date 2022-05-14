@@ -17,7 +17,7 @@ import java.util.function.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadaApi;
+import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadasApi;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
@@ -156,7 +156,7 @@ public final class Funciones {
         LlamadasApi llamadasApiMySQL = LlamadasApi.INSTANCE;
 
         List<Jugador> allJugadordes = jugadoresService.findAll();
-        Map<String, LlamadaApi> mapAllLlamadas = llamadasApiMySQL.getMapOfAllLlamadasApi();
+        Map<String, ActivoInfo> mapAllLlamadas = llamadasApiMySQL.getMapOfAllLlamadasApi();
         Map<String, List<Deuda>> mapDeudasAcredor = deudasMySQL.getAllDeudasAcredorMap();
         Map<String, List<Deuda>> mapDeudasDeudor = deudasMySQL.getAllDeudasDeudorMap();
         Map<String, List<Empresa>> mapEmpresasJugador = empresasService.getAllEmpresasJugadorMap();
@@ -220,7 +220,7 @@ public final class Funciones {
         return crearMapaTopPatrimonioPlayers(false).get(nombreJugador);
     }
 
-    public static Object peticionHttp(String link) throws Exception {
+    public synchronized static Object peticionHttp(String link) throws Exception {
         URL url = new URL(link);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 

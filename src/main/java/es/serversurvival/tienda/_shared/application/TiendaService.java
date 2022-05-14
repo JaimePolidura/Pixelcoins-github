@@ -4,6 +4,7 @@ import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.Cache;
 import es.serversurvival._shared.cache.LRUCache;
+import es.serversurvival._shared.cache.LimitedCache;
 import es.serversurvival.tienda._shared.domain.EncantamientoObjecto;
 import es.serversurvival.tienda._shared.domain.TiendaObjeto;
 import es.serversurvival.tienda._shared.domain.TiendaRepository;
@@ -14,7 +15,7 @@ import java.util.function.Function;
 
 public final class TiendaService {
     private final TiendaRepository repositoryDb;
-    private final Cache<UUID, TiendaObjeto> cache;
+    private final LimitedCache<UUID, TiendaObjeto> cache;
 
     public TiendaService(){
         this.repositoryDb = DependecyContainer.get(TiendaRepository.class);

@@ -18,9 +18,9 @@ import main.Pair;
 
 import java.util.List;
 
-import static es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo.*;
 import static es.serversurvival._shared.utils.Funciones.*;
 import static es.serversurvival._shared.utils.Funciones.reducirPorcentaje;
+import static es.serversurvival.bolsa.activosinfo._shared.domain.TipoActivo.ACCIONES;
 import static es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce.PORCENTAJE_CORTO;
 
 public final class EjecutarOrdenesPreMarketUseCase implements AllMySQLTablesInstances {

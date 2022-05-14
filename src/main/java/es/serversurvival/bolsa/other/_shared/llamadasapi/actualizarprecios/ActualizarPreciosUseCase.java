@@ -1,6 +1,6 @@
 package es.serversurvival.bolsa.other._shared.llamadasapi.actualizarprecios;
 
-import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadaApi;
+import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 import java.util.List;
@@ -11,12 +11,12 @@ public final class ActualizarPreciosUseCase implements AllMySQLTablesInstances {
     private ActualizarPreciosUseCase () {}
 
     public synchronized void actualizarPrecios (){
-        List<LlamadaApi> llamadaApis = llamadasApiMySQL.getTodasLlamadasApi();
+        List<ActivoInfo> llamadaApis = llamadasApiMySQL.getTodasLlamadasApi();
 
-        for (LlamadaApi llamadaApi : llamadaApis) {
-            double precio = llamadaApi.getTipo_activo().getPrecio(llamadaApi.getSimbolo());
+        for (ActivoInfo llamadaApi : llamadaApis) {
+            double precio = llamadaApi.getTipoActivo().getPrecio(llamadaApi.getNombreActivo());
 
-            llamadasApiMySQL.setPrecio(llamadaApi.getSimbolo(), precio);
+            llamadasApiMySQL.setPrecio(llamadaApi.getNombreActivo(), precio);
         }
     }
 }
