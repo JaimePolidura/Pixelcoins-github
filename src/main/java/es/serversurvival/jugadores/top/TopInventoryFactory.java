@@ -2,8 +2,9 @@ package es.serversurvival.jugadores.top;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.PosicionCerrada;
-import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
+import es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService;
+import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
+import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
@@ -19,15 +20,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService.*;
+
 public class TopInventoryFactory extends InventoryFactory {
     private final JugadoresService jugadoresService;
+    private final PosicionesCerradasService posicionesCerradasService;
 
     public TopInventoryFactory(){
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+        this.posicionesCerradasService = DependecyContainer.get(PosicionesCerradasService.class);
     }
 
     public static final String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "              TOP";
-    private List<InfoJugador> infoJugadores = new ArrayList<>();
+    private final List<InfoJugador> infoJugadores = new ArrayList<>();
 
     @Override
     protected Inventory buildInventory(String jugador) {
@@ -133,23 +138,23 @@ public class TopInventoryFactory extends InventoryFactory {
     private ItemStack buildItemTopOperacionesBolsa () {
         String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP MEJORES OPERAIONES BOLSA";
 
-        List<PosicionCerrada> posicionCerradasNotDuplicadas = posicionesCerradasMySQL.getTopRentabilidades().stream()
-                .filter(pos -> pos.getTipo_posicion() == TipoPosicion.LARGO)
-                .collect(Collectors.toList());
+        List<PosicionCerrada> posicionCerradasNotDuplicadas = posicionesCerradasService.findAllByConditionAndSorted(
+                pos -> pos.getTipoPosicion() == TipoPosicion.LARGO
+        );
 
         posicionCerradasNotDuplicadas = getNotDuplicatedElements(posicionCerradasNotDuplicadas);
         List<String> lore = new ArrayList<>();
 
         for(int i = 0; i < 5; i++){
-            double rentabilidad = Funciones.redondeoDecimales(posicionCerradasNotDuplicadas.get(i).getRentabilidad(), 3);
+            double rentabilidad = Funciones.redondeoDecimales(posicionCerradasNotDuplicadas.get(i).calculateRentabildiad(), 3);
 
             if(rentabilidad > 0){
-                if(posicionCerradasNotDuplicadas.get(i).getTipo_posicion() == TipoPosicion.CORTO){
+                if(posicionCerradasNotDuplicadas.get(i).getTipoPosicion() == TipoPosicion.CORTO){
                     lore.add("" + ChatColor.GOLD + (i + 1)  + "º (CORTO) " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": "
-                            + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.GREEN + " +" + rentabilidad + "%");
+                            + posicionCerradasNotDuplicadas.get(i).getNombreActivo() + ChatColor.GREEN + " +" + rentabilidad + "%");
                 }else{
                     lore.add("" + ChatColor.GOLD + (i + 1)  + "º " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": "
-                            + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.GREEN + " +" + rentabilidad + "%");
+                            + posicionCerradasNotDuplicadas.get(i).getNombreActivo() + ChatColor.GREEN + " +" + rentabilidad + "%");
                 }
             }
         }
@@ -159,17 +164,19 @@ public class TopInventoryFactory extends InventoryFactory {
 
     private ItemStack buildItemPeoresOperacioensBolsa() {
         String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP PEORES OPERAIONES BOLSA";
-        List<PosicionCerrada> posicionCerradasNotDuplicadas = posicionesCerradasMySQL.getPeoresRentabilidades();
+        List<PosicionCerrada> posicionCerradasNotDuplicadas = posicionesCerradasService.findAll(SORT_BY_RENTABILIDADES_ASC);
         posicionCerradasNotDuplicadas = getNotDuplicatedElements(posicionCerradasNotDuplicadas);
         List<String> lore = new ArrayList<>();
 
         for(int i = 0; i < 5; i++){
-            double rentabilidad = Funciones.redondeoDecimales(posicionCerradasNotDuplicadas.get(i).getRentabilidad(), 3);
+            double rentabilidad = Funciones.redondeoDecimales(posicionCerradasNotDuplicadas.get(i).calculateRentabildiad(), 3);
 
-            if(posicionCerradasNotDuplicadas.get(i).getTipo_posicion() == TipoPosicion.CORTO){
-                lore.add("" + ChatColor.GOLD + (i + 1)  + "º (CORTO) " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.RED + " " + rentabilidad + "%");
+            if(posicionCerradasNotDuplicadas.get(i).getTipoPosicion() == TipoPosicion.CORTO){
+                lore.add("" + ChatColor.GOLD + (i + 1)  + "º (CORTO) " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " +
+                        posicionCerradasNotDuplicadas.get(i).getNombreActivo() + ChatColor.RED + " " + rentabilidad + "%");
             }else{
-                lore.add("" + ChatColor.GOLD + (i + 1)  + "º " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " + posicionCerradasNotDuplicadas.get(i).getSimbolo() + ChatColor.RED + " " + rentabilidad + "%");
+                lore.add("" + ChatColor.GOLD + (i + 1)  + "º " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " +
+                        posicionCerradasNotDuplicadas.get(i).getNombreActivo() + ChatColor.RED + " " + rentabilidad + "%");
             }
         }
 

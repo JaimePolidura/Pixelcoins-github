@@ -30,7 +30,6 @@ public final class VenderLargoUseCase implements AllMySQLTablesInstances {
         double valorTotalAVender = precioActual * cantidad;
         String fechaApertura = posicionAVender.getFechaApertura();
         String nombreValor = llamadasApiMySQL.getLlamadaAPI(ticker).getNombre_activo();
-        double rentabilidad = redondeoDecimales(diferenciaPorcntual(precioApertura, precioActual), 3);
 
         if (cantidad == nAccionesTotlaesEnCartera)
             posicionesAbiertasSerivce.deleteById(posicionAVender.getPosicionAbiertaId());
@@ -44,6 +43,6 @@ public final class VenderLargoUseCase implements AllMySQLTablesInstances {
 
 
         Pixelcoin.publish(new PosicionVentaLargoEvento(nombreJugador, ticker, nombreValor, precioApertura, fechaApertura,
-                precioActual, cantidad, rentabilidad, posicionAVender.getTipoActivo()));
+                precioActual, cantidad, posicionAVender.getTipoActivo()));
     }
 }

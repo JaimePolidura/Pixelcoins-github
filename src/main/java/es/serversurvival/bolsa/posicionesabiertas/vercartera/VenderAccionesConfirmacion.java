@@ -7,7 +7,7 @@ import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
-import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
+import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.bolsa.posicionesabiertas.comprarcorto.ComprarCortoUseCase;
 import es.serversurvival.bolsa.posicionesabiertas.venderlargo.VenderLargoUseCase;
 import es.serversurvival._shared.menus.Menu;
@@ -31,7 +31,6 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion {
     private final Inventory inventory;
     private final Player player;
     private final TipoPosicion tipoPosicion;
-    private final TipoActivo tipoActivo;
     private final UUID id;
 
     public VenderAccionesConfirmacion (Player player, UUID id, TipoPosicion tipoPosicion, TipoActivo tipoActivo, List<String> loreItemClicked) {
@@ -39,7 +38,6 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion {
         this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
         this.id = id;
         this.tipoPosicion = tipoPosicion;;
-        this.tipoActivo = tipoActivo;
         this.abrirOrdenUseCase = new AbrirOrdenUseCase();
         this.venderLargoUseCase = new VenderLargoUseCase();
         this.comprarCortoUseCase = new ComprarCortoUseCase();
@@ -94,7 +92,7 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion {
             if(tipoPosicion == TipoPosicion.LARGO)
                 venderLargoUseCase.venderPosicion(posicion, posicion.getCantidad(), player.getName());
             else
-                comprarCortoUseCase.comprarPosicionCorto(posicion, posicion.getCantidad(), player.getName());
+                comprarCortoUseCase.comprarPosicionCorto(posicion.getPosicionAbiertaId(), posicion.getCantidad(), posicion.getJugador());
         }
         );
     }

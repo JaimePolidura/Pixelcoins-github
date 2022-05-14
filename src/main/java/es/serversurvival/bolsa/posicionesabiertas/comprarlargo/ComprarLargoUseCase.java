@@ -1,8 +1,9 @@
 package es.serversurvival.bolsa.posicionesabiertas.comprarlargo;
 
+import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
+import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
@@ -18,13 +19,27 @@ public final class ComprarLargoUseCase implements AllMySQLTablesInstances {
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
     }
 
-    public void comprar(TipoActivo tipoActivo, String ticker, String nombreValor, String alias, double precioUnidad, int cantidad, String jugadorNombre) {
+    public void comprarLargo(TipoActivo tipoActivo, String nombreActivo, int cantidad, String jugadorNombre) {
         Jugador jugador = jugadoresService.getByNombre(jugadorNombre);
-        double totalPrice = precioUnidad * cantidad;
-        posicionesAbiertasSerivce.save(jugadorNombre, tipoActivo, ticker, cantidad, precioUnidad, TipoPosicion.LARGO);
+        double precioUnidad = this.getPrice(tipoActivo, nombreActivo);
 
+        double totalPrice = precioUnidad * cantidad;
+
+        this.posicionesAbiertasSerivce.save(jugadorNombre, tipoActivo, nombreActivo, cantidad, precioUnidad, TipoPosicion.LARGO);
         this.jugadoresService.save(jugador.decrementPixelcoinsBy(totalPrice));
 
-        Pixelcoin.publish(new PosicionCompraLargoEvento(jugadorNombre, precioUnidad, cantidad, cantidad*precioUnidad, ticker, tipoActivo, nombreValor, alias));
+        Pixelcoin.publish(new PosicionCompraLargoEvento(jugadorNombre, precioUnidad, cantidad, cantidad*precioUnidad, nombreActivo, tipoActivo));
+    }
+
+    private double getPrice(TipoActivo tipoActivo, String nombreActivo){
+        var llamdaApi = llamadasApiMySQL.getLlamadaAPI(nombreActivo);
+        var precio = llamdaApi == null ?
+                tipoActivo.getPrecio(nombreActivo) :
+                llamdaApi.getPrecio();
+
+        if(precio == -1)
+            throw new ResourceNotFound("Valor no econtrado, solo se puden comprar valores en la bolsa americana");
+
+        return precio;
     }
 }

@@ -15,6 +15,9 @@ import es.serversurvival.bolsa.ordenespremarket._shared.infrastructure.MySQLOrde
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionesAbiertasRepository;
 import es.serversurvival.bolsa.posicionesabiertas._shared.infrastructure.MySQLPosicionesAbiertasRepository;
+import es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService;
+import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionesCerradasRepository;
+import es.serversurvival.bolsa.posicionescerradas._shared.infrastructure.MySQLPosicionesCerradasRepository;
 import es.serversurvival.web.conversacionesweb._shared.application.ConversacionesWebService;
 import es.serversurvival.web.conversacionesweb._shared.domain.ConversacionesWebRepostiory;
 import es.serversurvival.web.conversacionesweb._shared.infrastructure.InMemoryConversacionesRepository;
@@ -64,6 +67,7 @@ import static org.bukkit.ChatColor.*;
  8 CuentasWeb
  9 Verificacion cuentas
  10 OrdenesPremarket
+ 11 PosicionesAbiertas
  */
 public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstances {
     private static Pixelcoin plugin;
@@ -146,6 +150,7 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
             put(VerificacionCuentaRepository.class, new InMemoryVerificacionCuentaRepository());
             put(OrderesPremarketRepository.class, new MySQLOrdenesPremarketRepository(mysqlCOnfiguration));
             put(PosicionesAbiertasRepository.class, new MySQLPosicionesAbiertasRepository(mysqlCOnfiguration));
+            put(PosicionesCerradasRepository.class, new MySQLPosicionesCerradasRepository(mysqlCOnfiguration));
         }});
 
         DependecyContainer.addAll(new HashMap<>(){{
@@ -161,6 +166,7 @@ public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstanc
             put(VerificacionCuentaService.class, new VerificacionCuentaService());
             put(OrdenesPremarketService.class, new OrdenesPremarketService());
             put(PosicionesAbiertasSerivce.class, new PosicionesAbiertasSerivce());
+            put(PosicionesCerradasService.class, new PosicionesCerradasService());
         }});
     }
 }

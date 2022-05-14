@@ -1,5 +1,7 @@
 package es.serversurvival.bolsa.posicionesabiertas.comprarcorto;
 
+import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
+import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
@@ -10,6 +12,8 @@ import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 
+import java.util.UUID;
+
 public final class ComprarCortoUseCase implements AllMySQLTablesInstances {
     private final JugadoresService jugadoresService;
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
@@ -19,31 +23,50 @@ public final class ComprarCortoUseCase implements AllMySQLTablesInstances {
         this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
     }
 
-    public void comprarPosicionCorto (PosicionAbierta posicionAComprar, int cantidad, String jugadorNombre) {
-        double precioPorAccion = llamadasApiMySQL.getLlamadaAPI(posicionAComprar.getNombreActivo()).getPrecio();
+    public void comprarPosicionCorto (UUID posicoinAbiertaIdComprarCorto, int cantidad, String jugadorNombre) {
+        var poscionAComprarCorto = this.posicionesAbiertasSerivce.getById(posicoinAbiertaIdComprarCorto);
+        this.ensureCantidadCorrectFormat(poscionAComprarCorto, cantidad);
+        this.ensureJugadorOwnerOfPosicion(poscionAComprarCorto, jugadorNombre);
 
-        String ticker = posicionAComprar.getNombreActivo();
+        double precioPorAccion = llamadasApiMySQL.getLlamadaAPI(poscionAComprarCorto.getNombreActivo()).getPrecio();
+
+        String ticker = poscionAComprarCorto.getNombreActivo();
         String nombreValor = llamadasApiMySQL.getLlamadaAPI(ticker).getNombre_activo();
-        Jugador jugador = this.jugadoresService.getByNombre(jugadorNombre);
-        int nAccionesTotlaesEnCartera = posicionAComprar.getCantidad();
-        double precioApertura = posicionAComprar.getPrecioApertura();
-        double revalorizacionTotal = (posicionAComprar.getPrecioApertura() - precioPorAccion) * cantidad;
-        String fechaApertura = posicionAComprar.getFechaApertura();
+        Jugador jugador = this.jugadoresService.getByNombre(poscionAComprarCorto.getJugador());
+        double precioApertura = poscionAComprarCorto.getPrecioApertura();
+        double revalorizacionTotal = (poscionAComprarCorto.getPrecioApertura() - precioPorAccion) * cantidad;
+        String fechaApertura = poscionAComprarCorto.getFechaApertura();
         double rentabilidad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(precioPorAccion, precioApertura), 3);
-
-        if (cantidad == nAccionesTotlaesEnCartera)
-            posicionesAbiertasSerivce.deleteById(posicionAComprar.getPosicionAbiertaId());
-        else
-            posicionesAbiertasSerivce.save(posicionAComprar.withCantidad(nAccionesTotlaesEnCartera - cantidad));
-
         double pixelcoinsJugador = jugador.getPixelcoins();
 
+        this.modifyPosicionAbierta(poscionAComprarCorto, cantidad);
+        this.addPixelcoinsToJugaodor(jugador, revalorizacionTotal, pixelcoinsJugador);
+
+        Pixelcoin.publish(new PosicionCompraCortoEvento(poscionAComprarCorto.getJugador(), ticker, nombreValor, precioApertura, fechaApertura,
+                precioPorAccion, cantidad, rentabilidad, TipoActivo.ACCIONES));
+    }
+
+    private void ensureCantidadCorrectFormat(PosicionAbierta posicionAbierta, int cantidad){
+        if(cantidad <= 0 || cantidad > posicionAbierta.getCantidad())
+            throw new IllegalQuantity("La cantidad a comprar en corto tiene que ser mayor que 0 y menor o igual que la cantidad de la posicion");
+    }
+
+    private void ensureJugadorOwnerOfPosicion(PosicionAbierta posicionAbierta, String jugadorNombre){
+        if(!posicionAbierta.getJugador().equalsIgnoreCase(jugadorNombre))
+            throw new NotTheOwner("No tinenes esa posicion en cartera");
+    }
+
+    private void addPixelcoinsToJugaodor(Jugador jugador, double revalorizacionTotal, double pixelcoinsJugador) {
         if(0 > pixelcoinsJugador + revalorizacionTotal)
             jugadoresService.save(jugador.incrementPixelcoinsBy(revalorizacionTotal).incrementGastosBy(revalorizacionTotal));
         else
             jugadoresService.save(jugador.incrementPixelcoinsBy(revalorizacionTotal).incrementIngresosBy(revalorizacionTotal));
+    }
 
-
-        Pixelcoin.publish(new PosicionCompraCortoEvento(jugadorNombre, ticker, nombreValor, precioApertura, fechaApertura, precioPorAccion, cantidad, rentabilidad, TipoActivo.ACCIONES));
+    private void modifyPosicionAbierta(PosicionAbierta posicionAComprar, int cantidadAComprar) {
+        if (cantidadAComprar == posicionAComprar.getCantidad())
+            posicionesAbiertasSerivce.deleteById(posicionAComprar.getPosicionAbiertaId());
+        else
+            posicionesAbiertasSerivce.save(posicionAComprar.withCantidad(posicionAComprar.getCantidad() - cantidadAComprar));
     }
 }

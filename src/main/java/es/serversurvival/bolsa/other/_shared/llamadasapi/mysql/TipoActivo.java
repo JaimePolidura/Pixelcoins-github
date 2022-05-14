@@ -3,7 +3,7 @@ package es.serversurvival.bolsa.other._shared.llamadasapi.mysql;
 import es.serversurvival.bolsa._shared.domain.Criptomonedas;
 import es.serversurvival.bolsa._shared.domain.MateriasPrimas;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
-import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
+import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
 import org.bukkit.Material;
 

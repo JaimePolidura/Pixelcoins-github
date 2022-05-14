@@ -2,7 +2,8 @@ package es.serversurvival.jugadores.perfil;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.PosicionCerrada;
+import es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService;
+import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
 import es.serversurvival.deudas._shared.newformat.application.DeudasService;
 import es.serversurvival.web.cuentasweb._shared.application.CuentasWebService;
@@ -35,6 +36,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
     private final EmpresasService empresasService;
     private final EmpleadosService empleadosService;
     private final CuentasWebService cuentasWebService;
+    private final PosicionesCerradasService posicionesCerradasService;
 
     public PerfilInventoryFactory(){
         this.deudasService = DependecyContainer.get(DeudasService.class);
@@ -44,6 +46,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
         this.cuentasWebService = DependecyContainer.get(CuentasWebService.class);
         this.posicionesCristales = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27,
                 35, 36, 44, 45, 46 , 47, 48, 49, 50, 51, 52, 53);
+        this.posicionesCerradasService = DependecyContainer.get(PosicionesCerradasService.class);
     }
 
     @Override
@@ -96,7 +99,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
     private ItemStack buildItemBolsa (String jugador) {
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK VER TUS ACCIONES";
 
-        List<PosicionCerrada> posicionCerradas = posicionesCerradasMySQL.getPosicionesCerradasJugador(jugador);
+        List<PosicionCerrada> posicionCerradas = posicionesCerradasService.findByJugador(jugador);
         List<String> lore = new ArrayList<>();
         lore.add("   ");
         lore.add(ChatColor.GOLD + "Tus posiciones cerradas:");
@@ -104,12 +107,12 @@ public class PerfilInventoryFactory extends InventoryFactory {
         for(int i = 0; i < posicionCerradas.size() || i < 7; i++){
             PosicionCerrada pos = posicionCerradas.get(i);
 
-            if(pos.getRentabilidad() >= 0){
-                lore.add(ChatColor.GOLD + "" + pos.getSimbolo() + " -> " + ChatColor.GREEN + pos.getRentabilidadString()
-                        + "% : " +  ( (int) ((pos.getCantidad() * pos.getPrecio_apertura()) -  pos.getCantidad() * pos.getPrecio_cierre())) + " PC");
+            if(pos.calculateRentabildiad() >= 0){
+                lore.add(ChatColor.GOLD + "" + pos.getNombreActivo() + " -> " + ChatColor.GREEN + pos.calculateRentabildiad()
+                        + "% : " +  ( (int) ((pos.getCantidad() * pos.getPrecioApertura()) -  pos.getCantidad() * pos.getPrecioCierre())) + " PC");
             }else{
-                lore.add(ChatColor.GOLD + "" + pos.getSimbolo() + " -> " + ChatColor.RED + pos.getRentabilidadString()
-                        + "% : " +  ( (int) ((pos.getCantidad() * pos.getPrecio_apertura()) -  pos.getCantidad() * pos.getPrecio_cierre())) + " PC");
+                lore.add(ChatColor.GOLD + "" + pos.getNombreActivo() + " -> " + ChatColor.RED + pos.calculateRentabildiad()
+                        + "% : " +  ( (int) ((pos.getCantidad() * pos.getPrecioApertura()) -  pos.getCantidad() * pos.getPrecioCierre())) + " PC");
             }
         }
 

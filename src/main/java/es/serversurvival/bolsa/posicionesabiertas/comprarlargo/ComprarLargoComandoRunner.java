@@ -69,7 +69,7 @@ public class ComprarLargoComandoRunner extends PixelcoinCommand implements Comma
         }
 
         OrderExecutorProxy.execute(of(sender.getName(), ticker, cantidad, TipoAccion.LARGO_COMPRA, null), () -> {
-            comprarLargoUseCase.comprar(TipoActivo.ACCIONES, ticker.toUpperCase(), nombreValor, "acciones", precio, cantidad, sender.getName());
+            comprarLargoUseCase.comprarLargo(TipoActivo.ACCIONES, ticker.toUpperCase(), cantidad, sender.getName());
 
             Bukkit.broadcastMessage(GOLD + sender.getName() + " ha comprado " + cantidad + " acciones de "
                     + nombreValor + " a " + GREEN + formatea.format(precio) + "PC");

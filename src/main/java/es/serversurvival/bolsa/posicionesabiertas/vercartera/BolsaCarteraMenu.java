@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa.posicionesabiertas.vercartera;
 
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
-import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
+import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.bolsa.other.vervalores.ElegirInversionMenu;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.jugadores.perfil.PerfilMenu;

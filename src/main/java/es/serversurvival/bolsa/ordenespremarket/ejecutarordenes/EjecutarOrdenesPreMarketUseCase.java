@@ -21,6 +21,7 @@ import java.util.List;
 import static es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo.*;
 import static es.serversurvival._shared.utils.Funciones.*;
 import static es.serversurvival._shared.utils.Funciones.reducirPorcentaje;
+import static es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce.PORCENTAJE_CORTO;
 
 public final class EjecutarOrdenesPreMarketUseCase implements AllMySQLTablesInstances {
     private final JugadoresService jugadoresService;
@@ -92,13 +93,11 @@ public final class EjecutarOrdenesPreMarketUseCase implements AllMySQLTablesInst
             return;
         }
 
-        comprarLargoUseCase.comprar(ACCIONES, ticker, nombreValor, "acciones", precio, cantidad, jugador);
+        comprarLargoUseCase.comprarLargo(ACCIONES, ticker, cantidad, jugador);
     }
 
     private void ejecutarOrdenCompraCorto (OrdenPremarket orden) {
-        PosicionAbierta posicionAbierta = posicionesAbiertasSerivce.getById(orden.getPosicionAbiertaId());
-
-        comprarCortoUseCase.comprarPosicionCorto(posicionAbierta, orden.getCantidad(), orden.getJugador());
+        comprarCortoUseCase.comprarPosicionCorto(orden.getPosicionAbiertaId(), orden.getCantidad(), orden.getJugador());
     }
 
     private void ejecutarOrdenVentaCorto (OrdenPremarket orden) {

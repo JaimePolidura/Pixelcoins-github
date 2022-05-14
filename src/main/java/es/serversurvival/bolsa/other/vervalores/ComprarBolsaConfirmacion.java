@@ -39,12 +39,12 @@ public class ComprarBolsaConfirmacion extends Menu implements AumentoConfirmacio
     private final Player player;
     private int cantidadAComprar = 1;
     private final double dineroJugador;
-    private final String nombreValor;
+    private final String nombreActivo;
     private int id;
 
     public ComprarBolsaConfirmacion(String simbolo, String nombreValor, TipoActivo tipoActivo, String alias, Player player, double precioUnidad) {
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.nombreValor = nombreValor;
+        this.nombreActivo = nombreValor;
         this.comprarLargoUseCase = new ComprarLargoUseCase();
         this.comprarOfertaUseCase = new ComprarOfertaMercadoUseCase();
         this.alias = alias;
@@ -91,24 +91,26 @@ public class ComprarBolsaConfirmacion extends Menu implements AumentoConfirmacio
 
     @Override
     public void confirmar() {
-        if (dineroJugador < precioTotal) {
-            player.sendMessage(ChatColor.DARK_RED + "No tienes el suficiente dinero");
-            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
+        Funciones.POOL.submit(() -> {
+            if (dineroJugador < precioTotal) {
+                player.sendMessage(ChatColor.DARK_RED + "No tienes el suficiente dinero");
+                player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
+                closeMenu();
+                return;
+            }
+
+            if(tipoActivo == TipoActivo.ACCIONES_SERVER){
+                comprarOfertaUseCase.comprarOfertaMercadoAccionServer(player.getName(), id, cantidadAComprar);
+            }else if(Funciones.mercadoEstaAbierto()){
+                OrderExecutorProxy.execute(AbrirOrdenPremarketCommand.of(player.getName(), simbolo, cantidadAComprar, TipoAccion.LARGO_COMPRA, null),
+                        () -> {
+                            comprarLargoUseCase.comprarLargo(tipoActivo, nombreActivo, cantidadAComprar, player.getName());
+                        }
+                );
+            }
+
             closeMenu();
-            return;
-        }
-
-        if(tipoActivo == TipoActivo.ACCIONES_SERVER){
-            comprarOfertaUseCase.comprarOfertaMercadoAccionServer(player.getName(), id, cantidadAComprar);
-        }else if(Funciones.mercadoEstaAbierto()){
-            OrderExecutorProxy.execute(AbrirOrdenPremarketCommand.of(player.getName(), simbolo, cantidadAComprar, TipoAccion.LARGO_COMPRA, null),
-                () -> {
-                    comprarLargoUseCase.comprar(tipoActivo, simbolo, nombreValor, alias, precioUnidad, cantidadAComprar, player.getName());
-                }
-            );
-        }
-
-        closeMenu();
+        });
     }
 
     @Override

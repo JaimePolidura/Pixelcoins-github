@@ -6,7 +6,7 @@ import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadaApi;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
-import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
+import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.menus.Paginated;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;

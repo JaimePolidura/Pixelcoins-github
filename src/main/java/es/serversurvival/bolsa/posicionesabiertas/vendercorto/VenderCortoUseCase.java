@@ -2,12 +2,14 @@ package es.serversurvival.bolsa.posicionesabiertas.vendercorto;
 
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
+import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
+
+import static es.serversurvival._shared.utils.Funciones.*;
+import static es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce.PORCENTAJE_CORTO;
 
 public final class VenderCortoUseCase implements AllMySQLTablesInstances {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
@@ -21,7 +23,7 @@ public final class VenderCortoUseCase implements AllMySQLTablesInstances {
     public void venderEnCortoBolsa (String jugadorNombre, String ticker, String nombreValor, int cantidad, double precioPorAccion) {
         var jugador = this.jugadoresService.getByNombre(jugadorNombre);
         double valorTotal = precioPorAccion * cantidad;
-        double comision = Funciones.redondeoDecimales(Funciones.reducirPorcentaje(valorTotal, 100 - PORCENTAJE_CORTO), 2);
+        double comision = redondeoDecimales(reducirPorcentaje(valorTotal, 100 - PORCENTAJE_CORTO), 2);
 
         this.posicionesAbiertasSerivce.save(jugadorNombre, TipoActivo.ACCIONES, ticker, cantidad, precioPorAccion, TipoPosicion.CORTO);
 

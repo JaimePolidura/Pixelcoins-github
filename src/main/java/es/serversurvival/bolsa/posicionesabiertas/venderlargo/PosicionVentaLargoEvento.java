@@ -1,22 +1,25 @@
 package es.serversurvival.bolsa.posicionesabiertas.venderlargo;
 
-import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.PosicionCerrada;
-import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
+import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
+import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival._shared.eventospixelcoins.PosicionCerradaEvento;
 import es.serversurvival.transacciones._shared.domain.TipoTransaccion;
 import es.serversurvival.transacciones._shared.domain.Transaccion;
 import lombok.Getter;
 
+import java.util.Date;
 import java.util.UUID;
+
+import static es.serversurvival._shared.mysql.AllMySQLTablesInstances.dateFormater;
 
 public final class PosicionVentaLargoEvento extends PosicionCerradaEvento {
     @Getter private final double valorTotal;
     @Getter private final double resultado;
 
     public PosicionVentaLargoEvento(String vendedor, String ticker, String nombreValor, double precioApertura,
-                                    String fechaApertura, double precioCierre, int cantidad, double rentabilidad, TipoActivo tipoActivo) {
-        super(vendedor, ticker, nombreValor, precioApertura, fechaApertura, precioCierre, cantidad, rentabilidad, tipoActivo);
+                                    String fechaApertura, double precioCierre, int cantidad, TipoActivo tipoActivo) {
+        super(vendedor, ticker, nombreValor, precioApertura, fechaApertura, precioCierre, cantidad, tipoActivo);
 
         this.valorTotal = precioCierre * cantidad;
         this.resultado = (precioCierre - precioApertura) * cantidad;
@@ -29,6 +32,9 @@ public final class PosicionVentaLargoEvento extends PosicionCerradaEvento {
 
     @Override
     public PosicionCerrada buildPosicionCerrada() {
-        return new PosicionCerrada(-1, vendedor, tipoActivo, nombreValor, cantidad, precioApertura, fechaApertura, precioCierre, formatFecha(), rentabilidad, ticker, TipoPosicion.LARGO);
+        String fechaCierre = dateFormater.format(new Date());
+
+        return new PosicionCerrada(UUID.randomUUID(), vendedor, tipoActivo, nombreAcitvo, cantidad, precioApertura, fechaApertura,
+                precioCierre, fechaCierre, TipoPosicion.LARGO);
     }
 }

@@ -2,7 +2,6 @@ package es.serversurvival._shared.mysql;
 
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadasApi;
 import es.serversurvival.bolsa.other._shared.ofertasmercadoserver.mysql.OfertasMercadoServer;
-import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.PosicionesCerradas;
 import es.serversurvival._shared.utils.Funciones;
 
 import java.text.DecimalFormat;
@@ -13,6 +12,5 @@ public interface AllMySQLTablesInstances {
     DecimalFormat formatea = Funciones.FORMATEA;
 
     LlamadasApi llamadasApiMySQL = LlamadasApi.INSTANCE;
-    PosicionesCerradas posicionesCerradasMySQL = PosicionesCerradas.INSTANCE;
     OfertasMercadoServer ofertasMercadoServerMySQL = OfertasMercadoServer.INSTANCE;
 }

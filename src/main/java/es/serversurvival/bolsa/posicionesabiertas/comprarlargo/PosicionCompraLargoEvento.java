@@ -11,13 +11,9 @@ import static es.serversurvival.transacciones._shared.domain.TipoTransaccion.*;
 
 
 public final class PosicionCompraLargoEvento extends PosicionAbiertaEvento {
-    @Getter private final String alias;
-
     public PosicionCompraLargoEvento(String comprador, double precioUnidad, int cantidad, double precioTotal, String ticker,
-                                     TipoActivo tipoActivo, String nombreValor, String alias) {
-        super(comprador, precioUnidad, cantidad, precioTotal, ticker, tipoActivo, nombreValor);
-
-        this.alias = alias;
+                                     TipoActivo tipoActivo) {
+        super(comprador, precioUnidad, cantidad, precioTotal, ticker, tipoActivo, null);
     }
 
     @Override

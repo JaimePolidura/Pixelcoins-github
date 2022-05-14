@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 import java.util.Optional;
 
 import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
+import static es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce.PORCENTAJE_CORTO;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.Sound.ENTITY_PLAYER_LEVELUP;
 

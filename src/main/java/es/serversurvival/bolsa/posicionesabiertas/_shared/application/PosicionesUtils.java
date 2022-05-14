@@ -3,7 +3,7 @@ package es.serversurvival.bolsa.posicionesabiertas._shared.application;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadaApi;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadasApi;
-import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
+import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 
 import java.util.HashMap;

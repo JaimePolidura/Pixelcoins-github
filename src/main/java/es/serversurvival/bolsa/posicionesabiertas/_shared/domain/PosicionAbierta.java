@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa.posicionesabiertas._shared.domain;
 
 import es.jaime.javaddd.domain.Aggregate;
-import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
+import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival._shared.mysql.TablaObjeto;
 import lombok.AllArgsConstructor;

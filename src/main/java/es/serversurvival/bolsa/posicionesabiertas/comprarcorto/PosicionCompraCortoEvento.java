@@ -1,13 +1,15 @@
 package es.serversurvival.bolsa.posicionesabiertas.comprarcorto;
 
-import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.PosicionCerrada;
-import es.serversurvival.bolsa.other._shared.posicionescerradas.mysql.TipoPosicion;
+import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
+import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.TipoActivo;
 import es.serversurvival._shared.eventospixelcoins.PosicionCerradaEvento;
 import es.serversurvival.transacciones._shared.domain.Transaccion;
 
+import java.util.Date;
 import java.util.UUID;
 
+import static es.serversurvival._shared.mysql.AllMySQLTablesInstances.dateFormater;
 import static es.serversurvival.transacciones._shared.domain.TipoTransaccion.*;
 
 public final class PosicionCompraCortoEvento extends PosicionCerradaEvento {
@@ -16,7 +18,7 @@ public final class PosicionCompraCortoEvento extends PosicionCerradaEvento {
     public PosicionCompraCortoEvento(String vendedor, String ticker, String nombreValor, double precioApertura, String fechaApertura,
                                      double precioCierre, int cantidad, double rentabilidad, TipoActivo tipoActivo) {
 
-        super(vendedor, ticker, nombreValor, precioApertura, fechaApertura, precioCierre, cantidad, rentabilidad, tipoActivo);
+        super(vendedor, ticker, nombreValor, precioApertura, fechaApertura, precioCierre, cantidad, tipoActivo);
 
         this.revalorizacionTotal = (precioApertura - precioCierre) * cantidad;
     }
@@ -28,6 +30,10 @@ public final class PosicionCompraCortoEvento extends PosicionCerradaEvento {
 
     @Override
     public PosicionCerrada buildPosicionCerrada() {
-        return new PosicionCerrada(-1, vendedor, tipoActivo, nombreValor, cantidad, precioApertura, fechaApertura, precioCierre, formatFecha(), rentabilidad, ticker, TipoPosicion.CORTO);
+        String fechaCierre = dateFormater.format(new Date());
+
+
+        return new PosicionCerrada(UUID.randomUUID(), vendedor, tipoActivo, nombreAcitvo, cantidad, precioApertura,
+                fechaApertura, precioCierre, fechaCierre, TipoPosicion.CORTO);
     }
 }
