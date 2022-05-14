@@ -5,6 +5,7 @@ import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.Dividendos
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.Split;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivoService;
 import io.vavr.control.Try;
+import lombok.SneakyThrows;
 import org.json.simple.JSONObject;
 
 import static es.serversurvival._shared.utils.Funciones.*;
@@ -20,7 +21,8 @@ public final class AccionesService extends TipoActivoService implements Split, D
     }
 
     @Override
-    public String getNombreActivoLargo(String nombreActivo) throws Exception {
+    @SneakyThrows
+    public String getNombreActivoLargo(String nombreActivo) {
         Object response = peticionHttp("https://sandbox.iexapis.com/stable/stock/" + nombreActivo + "/company?token=" + IEXCloud_API.token);
         JSONObject json = (JSONObject) response;
         String nombreValor = String.valueOf(json.get("companyName"));

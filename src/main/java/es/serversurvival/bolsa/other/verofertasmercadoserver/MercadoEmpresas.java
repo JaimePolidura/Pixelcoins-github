@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 )
 public class MercadoEmpresas extends PixelcoinCommand implements CommandRunnerNonArgs {
     @Override
+
     public void execute(CommandSender sender) {
         EmpresasMercadoMenu empresasMercadoMenu = new EmpresasMercadoMenu((Player) sender);
     }

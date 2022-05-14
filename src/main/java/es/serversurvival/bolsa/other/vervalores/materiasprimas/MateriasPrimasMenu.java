@@ -1,6 +1,7 @@
 package es.serversurvival.bolsa.other.vervalores.materiasprimas;
 
 import es.serversurvival.Pixelcoin;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.other.vervalores.ComprarBolsaConfirmacion;
 import es.serversurvival._shared.menus.Clickable;
 import es.serversurvival._shared.menus.PostLoading;
@@ -66,7 +67,7 @@ public class MateriasPrimasMenu extends Menu implements Clickable, PostLoading {
             alias = "galones";
         }
 
-        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, TipoActivo.MATERIAS_PRIMAS, alias, player, precio);
+        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, SupportedTipoActivo.MATERIAS_PRIMAS, alias, player, precio);
     }
 
     @Override

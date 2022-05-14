@@ -1,5 +1,6 @@
 package es.serversurvival.bolsa.posicionesabiertas.comprarcorto;
 
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival._shared.eventospixelcoins.PosicionCerradaEvento;
@@ -15,7 +16,7 @@ public final class PosicionCompraCortoEvento extends PosicionCerradaEvento {
     protected final double revalorizacionTotal;
 
     public PosicionCompraCortoEvento(String vendedor, String ticker, String nombreValor, double precioApertura, String fechaApertura,
-                                     double precioCierre, int cantidad, double rentabilidad, TipoActivo tipoActivo) {
+                                     double precioCierre, int cantidad, double rentabilidad, SupportedTipoActivo tipoActivo) {
 
         super(vendedor, ticker, nombreValor, precioApertura, fechaApertura, precioCierre, cantidad, tipoActivo);
 

@@ -1,5 +1,6 @@
 package es.serversurvival.bolsa.posicionesabiertas.vercartera;
 
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.bolsa.other.vervalores.ElegirInversionMenu;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
@@ -79,7 +80,7 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
         if(clickedItemType == GREEN_BANNER){
             BolsaVenderAccionEmpresaMenu menu = new BolsaVenderAccionEmpresaMenu(player, posicionesAbiertasSerivce.getById(id));
         }else{
-            VenderAccionesConfirmacion confirmacion = new VenderAccionesConfirmacion(player, id, tipoPosicion, TipoActivo.ACCIONES, loreItemClicked); //TODO Hay que hacerlo compatible con los demas activos
+            VenderAccionesConfirmacion confirmacion = new VenderAccionesConfirmacion(player, id, tipoPosicion, SupportedTipoActivo.ACCIONES, loreItemClicked); //TODO Hay que hacerlo compatible con los demas activos
         }
     }
 

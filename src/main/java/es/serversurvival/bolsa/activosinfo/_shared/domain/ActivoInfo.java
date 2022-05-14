@@ -12,6 +12,14 @@ public final class ActivoInfo implements TablaObjeto {
     @Getter private final SupportedTipoActivo tipoActivo;
     @Getter private final String nombreActivoLargo;
 
+    public ActivoInfo withPrecio(double precio){
+        return new ActivoInfo(nombreActivo, precio, tipoActivo, nombreActivoLargo);
+    }
+
+    public ActivoInfo withNombreActivoLargo(String nombreActivoLargo){
+        return new ActivoInfo(nombreActivo, precio, tipoActivo, nombreActivoLargo);
+    }
+
     public boolean esTipoAccion () {
         return this.getTipoActivo() == SupportedTipoActivo.ACCIONES;
     }

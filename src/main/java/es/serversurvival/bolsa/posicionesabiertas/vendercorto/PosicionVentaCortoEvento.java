@@ -1,6 +1,7 @@
 package es.serversurvival.bolsa.posicionesabiertas.vendercorto;
 
 import es.serversurvival._shared.eventospixelcoins.PosicionAbiertaEvento;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.transacciones._shared.domain.Transaccion;
 
 import java.util.UUID;
@@ -9,7 +10,7 @@ import static es.serversurvival.transacciones._shared.domain.TipoTransaccion.*;
 
 public final class PosicionVentaCortoEvento extends PosicionAbiertaEvento {
     public PosicionVentaCortoEvento(String comprador, double precioUnidad, int cantidad, double precioTotal, String ticker,
-                                    TipoActivo tipoActivo, String nombreValor) {
+                                    SupportedTipoActivo tipoActivo, String nombreValor) {
         super(comprador, precioUnidad, cantidad, precioTotal, ticker, tipoActivo, nombreValor);
     }
 

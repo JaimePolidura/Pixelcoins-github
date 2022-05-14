@@ -1,5 +1,6 @@
 package es.serversurvival.bolsa.posicionesabiertas.venderlargo;
 
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival._shared.eventospixelcoins.PosicionCerradaEvento;
@@ -17,7 +18,7 @@ public final class PosicionVentaLargoEvento extends PosicionCerradaEvento {
     @Getter private final double resultado;
 
     public PosicionVentaLargoEvento(String vendedor, String ticker, String nombreValor, double precioApertura,
-                                    String fechaApertura, double precioCierre, int cantidad, TipoActivo tipoActivo) {
+                                    String fechaApertura, double precioCierre, int cantidad, SupportedTipoActivo tipoActivo) {
         super(vendedor, ticker, nombreValor, precioApertura, fechaApertura, precioCierre, cantidad, tipoActivo);
 
         this.valorTotal = precioCierre * cantidad;

@@ -3,6 +3,7 @@ package es.serversurvival.bolsa.other.vervalores;
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa._shared.application.OrderExecutorProxy;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenPremarketCommand;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
 import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.ComprarLargoUseCase;
@@ -32,7 +33,7 @@ public class ComprarBolsaConfirmacion extends Menu implements AumentoConfirmacio
     private final String simbolo;
     private final double precioUnidad;
     private double precioTotal;
-    private final TipoActivo tipoActivo;
+    private final SupportedTipoActivo tipoActivo;
     private final String alias;
     private final Inventory inventory;
     private final Player player;
@@ -41,7 +42,7 @@ public class ComprarBolsaConfirmacion extends Menu implements AumentoConfirmacio
     private final String nombreActivo;
     private int id;
 
-    public ComprarBolsaConfirmacion(String simbolo, String nombreValor, TipoActivo tipoActivo, String alias, Player player, double precioUnidad) {
+    public ComprarBolsaConfirmacion(String simbolo, String nombreValor, SupportedTipoActivo tipoActivo, String alias, Player player, double precioUnidad) {
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.nombreActivo = nombreValor;
         this.comprarLargoUseCase = new ComprarLargoUseCase();
@@ -98,15 +99,11 @@ public class ComprarBolsaConfirmacion extends Menu implements AumentoConfirmacio
                 return;
             }
 
-            if(tipoActivo == TipoActivo.ACCIONES_SERVER){
-                comprarOfertaUseCase.comprarOfertaMercadoAccionServer(player.getName(), id, cantidadAComprar);
-            }else if(Funciones.mercadoEstaAbierto()){
-                OrderExecutorProxy.execute(AbrirOrdenPremarketCommand.of(player.getName(), simbolo, cantidadAComprar, TipoAccion.LARGO_COMPRA, null),
-                        () -> {
-                            comprarLargoUseCase.comprarLargo(tipoActivo, nombreActivo, cantidadAComprar, player.getName());
-                        }
-                );
-            }
+            OrderExecutorProxy.execute(AbrirOrdenPremarketCommand.of(player.getName(), simbolo, cantidadAComprar, TipoAccion.LARGO_COMPRA, null),
+                    () -> {
+                        comprarLargoUseCase.comprarLargo(tipoActivo, nombreActivo, cantidadAComprar, player.getName());
+                    }
+            );
 
             closeMenu();
         });

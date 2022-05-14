@@ -6,6 +6,7 @@ import es.serversurvival._shared.menus.PostLoading;
 import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.other.vervalores.ComprarBolsaConfirmacion;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.utils.MinecraftUtils;
@@ -63,7 +64,7 @@ public class AccionesMenu extends Menu implements Clickable, Paginated, PostLoad
         String ticker = lore.get(0).split(" ")[1];
 
         closeMenu();
-        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(ticker, nombreValor, TipoActivo.ACCIONES, "acciones", player, precio);
+        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(ticker, nombreValor, SupportedTipoActivo.ACCIONES, "acciones", player, precio);
     }
 
     @Override

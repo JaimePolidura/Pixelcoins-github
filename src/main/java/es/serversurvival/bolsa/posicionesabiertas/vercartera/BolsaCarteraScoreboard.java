@@ -1,5 +1,7 @@
 package es.serversurvival.bolsa.posicionesabiertas.vercartera;
 
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
@@ -15,10 +17,15 @@ import static es.serversurvival._shared.utils.MinecraftUtils.*;
 
 public class BolsaCarteraScoreboard implements SingleScoreboard {
     private Map<String, ActivoInfo> llamadasApiMap;
+    private final ActivoInfoService activoInfoService;
+
+    public BolsaCarteraScoreboard() {
+        this.activoInfoService = DependecyContainer.get(ActivoInfoService.class);
+    }
 
     @Override
     public Scoreboard createScoreborad(String jugador) {
-        this.llamadasApiMap = AllMySQLTablesInstances.llamadasApiMySQL.getMapOfAllLlamadasApi();
+        this.llamadasApiMap = this.activoInfoService.findAllToMap();
 
         Scoreboard scoreboard = createScoreboard("bolsa", ChatColor.GOLD + "" + ChatColor.BOLD + "TUS MEJORES ACCIONES");
         Objective objective = scoreboard.getObjective("bolsa");

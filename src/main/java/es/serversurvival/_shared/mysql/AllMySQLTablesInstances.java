@@ -1,6 +1,5 @@
 package es.serversurvival._shared.mysql;
 
-import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadasApi;
 import es.serversurvival.bolsa.other._shared.ofertasmercadoserver.mysql.OfertasMercadoServer;
 import es.serversurvival._shared.utils.Funciones;
 

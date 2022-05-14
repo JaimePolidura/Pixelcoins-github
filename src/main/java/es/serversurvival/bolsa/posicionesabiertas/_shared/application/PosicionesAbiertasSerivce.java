@@ -1,9 +1,11 @@
 package es.serversurvival.bolsa.posicionesabiertas._shared.application;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.jaimetruman.select.Select;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.Cache;
 import es.serversurvival._shared.cache.LRUCache;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionesAbiertasRepository;
@@ -27,8 +29,8 @@ public final class PosicionesAbiertasSerivce {
         this.cache = new LRUCache<>(150);
     }
 
-    public void save(String jugador, TipoActivo tipoAcivo, String nombreActivo, int cantidad,
-                              double precioApertura, TipoPosicion tipoPosicion) {
+    public void save(String jugador, SupportedTipoActivo tipoAcivo, String nombreActivo, int cantidad,
+                     double precioApertura, TipoPosicion tipoPosicion) {
         String fecha = dateFormater.format(new Date());
 
         this.save(new PosicionAbierta(UUID.randomUUID(), jugador, tipoAcivo, nombreActivo, cantidad, precioApertura,
@@ -68,8 +70,12 @@ public final class PosicionesAbiertasSerivce {
                 .toList();
     }
 
+    public List<PosicionAbierta> findByNombreActivo(String nombreActivo) {
+        return this.repositoryDb.findByNombreActivo(nombreActivo);
+    }
+
     public boolean existsNombreActivo(String nombreActivo){
-        return this.repositoryDb.findAll().stream()
+        return this.findByNombreActivo(nombreActivo).stream()
                 .anyMatch(posicionAbierta -> posicionAbierta.getNombreActivo().equalsIgnoreCase(nombreActivo));
     }
 

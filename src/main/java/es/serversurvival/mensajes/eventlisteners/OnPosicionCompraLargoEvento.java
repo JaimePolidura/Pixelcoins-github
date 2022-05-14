@@ -14,6 +14,6 @@ public final class OnPosicionCompraLargoEvento {
 
     @EventListener
     public void on(PosicionCompraLargoEvento evento){
-        mensajesService.save(evento.getComprador(), "Se ha ejecutado la orden de: " + evento.getNombreValor() + " -" + evento.getCantidadPosicion() * evento.getPrecioUnidad() + " PC");
+        mensajesService.save(evento.getComprador(), "Se ha ejecutado la orden de: " + evento.getNombreActivo() + " -" + evento.getCantidadPosicion() * evento.getPrecioUnidad() + " PC");
     }
 }

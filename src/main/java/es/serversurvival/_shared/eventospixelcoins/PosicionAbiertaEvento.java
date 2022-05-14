@@ -1,5 +1,6 @@
 package es.serversurvival._shared.eventospixelcoins;
 
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import lombok.Getter;
 
 public abstract class PosicionAbiertaEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
@@ -7,18 +8,18 @@ public abstract class PosicionAbiertaEvento extends PixelcoinsEvento implements 
     @Getter protected final String ticker;
     @Getter protected final int cantidadPosicion;
     @Getter protected final double precioUnidad;
-    @Getter protected final TipoActivo tipoActivo;
+    @Getter protected final SupportedTipoActivo tipoActivo;
     @Getter protected final double precioTotal;
-    @Getter protected final String nombreValor;
+    @Getter protected final String nombreActivo;
 
     public PosicionAbiertaEvento(String comprador, double precioUnidad, int cantidad, double precioTotal, String ticker,
-                                 TipoActivo tipoActivo, String nombreValor) {
+                                 SupportedTipoActivo tipoActivo, String nombreValor) {
         this.cantidadPosicion = cantidad;
         this.tipoActivo = tipoActivo;
         this.precioUnidad = precioUnidad;
         this.ticker = ticker;
         this.precioTotal = precioTotal;
-        this.nombreValor = nombreValor;
+        this.nombreActivo = nombreValor;
         this.comprador = comprador;
     }
 }

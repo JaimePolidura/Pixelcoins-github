@@ -1,6 +1,7 @@
 package es.serversurvival.bolsa.posicionescerradas._shared.domain;
 
 import es.serversurvival._shared.mysql.TablaObjeto;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -10,7 +11,7 @@ import java.util.UUID;
 public final class PosicionCerrada implements TablaObjeto {
     @Getter private final UUID posicionCerradaId;
     @Getter private final String jugador;
-    @Getter private final TipoActivo tipoActivo;
+    @Getter private final SupportedTipoActivo tipoActivo;
     @Getter private final String nombreActivo;
     @Getter private final int cantidad;
     @Getter private final double precioApertura;
@@ -25,7 +26,9 @@ public final class PosicionCerrada implements TablaObjeto {
     }
 
     public double calculateRentabildiad(){
-        return ((this.precioCierre / this.precioApertura) - 1) * 100;
+        return  this.tipoPosicion == TipoPosicion.LARGO ?
+                ((this.precioCierre / this.precioApertura) - 1) * 100 :
+                ((this.precioApertura / this.precioCierre) - 1) * 100;
     }
 
     public boolean esSimilar (PosicionCerrada posicionAComparar) {

@@ -1,6 +1,7 @@
 package es.serversurvival.bolsa.other.vervalores.criptomonedas;
 
 import es.serversurvival.Pixelcoin;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.other.vervalores.ComprarBolsaConfirmacion;
 import es.serversurvival._shared.menus.Clickable;
 import es.serversurvival._shared.menus.PostLoading;
@@ -59,7 +60,7 @@ public class CriptomonedasMenu extends Menu implements Clickable, PostLoading {
         double precio = Double.parseDouble(lore.get(1).split(" ")[1]);
         String simbolo = lore.get(0).split(" ")[1];
 
-        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, TipoActivo.CRIPTOMONEDAS, "monedas", player, precio);
+        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, SupportedTipoActivo.CRIPTOMONEDAS, "monedas", player, precio);
     }
 
     @Override

@@ -2,6 +2,7 @@ package es.serversurvival.bolsa.posicionesabiertas.vercartera;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
@@ -25,15 +26,17 @@ import static org.bukkit.ChatColor.*;
 public class BolsaCarteraInventoryFactory extends InventoryFactory {
     private final JugadoresService jugadoresService;
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
+    private final ActivoInfoService activoInfoService;
 
     private final List<ItemStack> itemExcessInventory = new ArrayList<>();
     private double resultadoTotal;
     private double valorTotal;
     private double liquidezjugador;
-    private Map<String, ActivoInfo> llamadasApis;
+    private Map<String, ActivoInfo> activosInfoMap;
     private Map<String, Integer> posicionesAbiertasPeso;
 
     public BolsaCarteraInventoryFactory() {
+        this.activoInfoService = DependecyContainer.get(ActivoInfoService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
     }
@@ -102,7 +105,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
 
         List<PosicionAbierta> posicionAbiertasJugador = posicionesAbiertasSerivce.findByJugador(jugador);
         this.liquidezjugador = jugadoresService.getByNombre(jugador).getPixelcoins();
-        rellenarLlamadasApi();
+        this.activosInfoMap = this.activoInfoService.findAllToMap();
         rellenarPosicionesAbiertasPeso(posicionAbiertasJugador, getTotalInvertido(posicionAbiertasJugador));
 
         for (PosicionAbierta posicion : posicionAbiertasJugador) {
@@ -117,7 +120,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildPosicionAbiertaLarga(PosicionAbierta posicion) {
-        ActivoInfo llamada = llamadasApis.get(posicion.getNombreActivo());
+        ActivoInfo llamada = activosInfoMap.get(posicion.getNombreActivo());
 
         double precioAcutal = llamada.getPrecio();
         double perdidasOBeneficios = posicion.getCantidad() * (precioAcutal - posicion.getPrecioApertura());
@@ -127,11 +130,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         lore.add("   ");
         lore.add(GOLD + "Empresa: " + llamada.getNombreActivoLargo());
 
-        if (!TipoActivo.getNombreActivo(posicion.getNombreActivo()).equalsIgnoreCase(posicion.getNombreActivo())) {
-            lore.add(GOLD + "Ticker: " + posicion.getNombreActivo() + " (" + TipoActivo.getNombreActivo(posicion.getNombreActivo()) + ")");
-        } else {
-            lore.add(GOLD + "Ticker: " + posicion.getNombreActivo() + " (Acciones) ");
-        }
+        lore.add(GOLD + "Ticker: " + posicion.getNombreActivo() + " (Acciones) ");
         lore.add(GOLD + "Peso en cartera: " + peso + "%");
         lore.add("   ");
         lore.add(GOLD + "Acciones compradas: " + posicion.getCantidad());
@@ -159,7 +158,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildPosicionAbiertaCorto(PosicionAbierta posicion) {
-        ActivoInfo llamada = llamadasApis.get(posicion.getNombreActivo());
+        ActivoInfo llamada = activosInfoMap.get(posicion.getNombreActivo());
 
         double precioAcutal = llamada.getPrecio();
         double perdidasOBeneficios = posicion.getCantidad() * (posicion.getPrecioApertura() - precioAcutal);
@@ -170,11 +169,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         lore.add("   ");
         lore.add(GOLD + "Empresa: " + llamada.getNombreActivoLargo());
 
-        if (!TipoActivo.getNombreActivo(posicion.getNombreActivo()).equalsIgnoreCase(posicion.getNombreActivo())) {
-            lore.add(GOLD + "Ticker: " + posicion.getNombreActivo() + " (" + TipoActivo.getNombreActivo(posicion.getNombreActivo()) + ")");
-        } else {
-            lore.add(GOLD + "Ticker: " + posicion.getNombreActivo() + " (Acciones) ");
-        }
+        lore.add(GOLD + "Ticker: " + posicion.getNombreActivo() + " (Acciones) ");
         lore.add(GOLD + "Peso en cartera: " + peso + "%");
         lore.add("   ");
         lore.add(GOLD + "Acciones vendidas: " + posicion.getCantidad());
@@ -200,23 +195,12 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
                 .build();
     }
 
-    private void rellenarLlamadasApi() {
-        List<ActivoInfo> llamadaApisList = llamadasApiMySQL.getTodasLlamadasApi();
-        Map<String, ActivoInfo> llamadaApiMap = new HashMap<>();
-
-        llamadaApisList.forEach((llamada) -> {
-            llamadaApiMap.put(llamada.getNombreActivo(), llamada);
-        });
-
-        this.llamadasApis = llamadaApiMap;
-    }
-
     private void rellenarPosicionesAbiertasPeso(List<PosicionAbierta> posicionesJugador, double totalInverito) {
         Map<String, Integer> posicionesAbiertasConPeso = new HashMap<>();
 
         posicionesJugador.forEach((posicion) -> {
             posicionesAbiertasConPeso.put(posicion.getNombreActivo(),
-                    (int) Funciones.rentabilidad(totalInverito, posicion.getCantidad() * llamadasApis.get(posicion.getNombreActivo()).getPrecio()));
+                    (int) Funciones.rentabilidad(totalInverito, posicion.getCantidad() * activosInfoMap.get(posicion.getNombreActivo()).getPrecio()));
         });
 
         this.posicionesAbiertasPeso = posicionesAbiertasConPeso;
@@ -224,7 +208,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
 
     private double getTotalInvertido(List<PosicionAbierta> posicionAbiertas) {
         return posicionAbiertas.stream()
-                .mapToDouble((pos) -> pos.getCantidad() * llamadasApis.get(pos.getNombreActivo()).getPrecio())
+                .mapToDouble((pos) -> pos.getCantidad() * activosInfoMap.get(pos.getNombreActivo()).getPrecio())
                 .sum();
     }
 

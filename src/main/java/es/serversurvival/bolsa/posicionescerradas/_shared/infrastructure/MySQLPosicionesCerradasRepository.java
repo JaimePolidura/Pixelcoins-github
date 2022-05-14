@@ -4,6 +4,7 @@ import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
 import es.jaimetruman.select.Select;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionesCerradasRepository;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
@@ -49,7 +50,7 @@ public final class MySQLPosicionesCerradasRepository extends DataBaseRepository<
         return new PosicionCerrada(
                 UUID.fromString(rs.getString(ID_FIELD_NAME)),
                 rs.getString("jugador"),
-                TipoActivo.valueOf(rs.getString("tipoActivo")),
+                SupportedTipoActivo.valueOf(rs.getString("tipoActivo")),
                 rs.getString("nombreActivo"),
                 rs.getInt("cantidad"),
                 rs.getDouble("precioApertura"),

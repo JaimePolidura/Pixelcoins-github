@@ -21,27 +21,27 @@ public final class ComprarOfertaMercadoUseCase implements AllMySQLTablesInstance
     }
 
     public void comprarOfertaMercadoAccionServer (String compradorName, int idOfeta, int cantidadAComprar) {
-        OfertaMercadoServer oferta = ofertasMercadoServerMySQL.get(idOfeta);
-        double precioTotalAPagar = oferta.getPrecio() * cantidadAComprar;
-
-        posicionesAbiertasSerivce.save(compradorName, TipoActivo.ACCIONES_SERVER, oferta.getEmpresa(), cantidadAComprar, oferta.getPrecio(), TipoPosicion.LARGO);
-        ofertasMercadoServerMySQL.setCantidadOBorrar(idOfeta, oferta.getCantidad() - cantidadAComprar);
-
-        Jugador comprador = jugadoresService.getByNombre(compradorName);
-
-        jugadoresService.save(comprador.decrementPixelcoinsBy(oferta.getPrecio()));
-
-        if(oferta.getTipo_ofertante() == TipoOfertante.JUGADOR){
-            Jugador vendedor = jugadoresService.getByNombre(oferta.getJugador());
-
-            double beneficiosPerdidas = (oferta.getPrecio() - oferta.getPrecio_apertura()) * cantidadAComprar;
-
-            if(beneficiosPerdidas >= 0)
-                this.jugadoresService.save(vendedor.incrementPixelcoinsBy(precioTotalAPagar).incrementGastosBy(beneficiosPerdidas));
-            else
-                this.jugadoresService.save(vendedor.incrementPixelcoinsBy(precioTotalAPagar).incrementIngresosBy(beneficiosPerdidas));
-        }
-
-        Pixelcoin.publish(new EmpresaServerAccionCompradaEvento(compradorName, precioTotalAPagar, cantidadAComprar, oferta, oferta.getEmpresa()));
+//        OfertaMercadoServer oferta = ofertasMercadoServerMySQL.get(idOfeta);
+//        double precioTotalAPagar = oferta.getPrecio() * cantidadAComprar;
+//
+//        posicionesAbiertasSerivce.save(compradorName, TipoActivo.ACCIONES_SERVER, oferta.getEmpresa(), cantidadAComprar, oferta.getPrecio(), TipoPosicion.LARGO);
+//        ofertasMercadoServerMySQL.setCantidadOBorrar(idOfeta, oferta.getCantidad() - cantidadAComprar);
+//
+//        Jugador comprador = jugadoresService.getByNombre(compradorName);
+//
+//        jugadoresService.save(comprador.decrementPixelcoinsBy(oferta.getPrecio()));
+//
+//        if(oferta.getTipo_ofertante() == TipoOfertante.JUGADOR){
+//            Jugador vendedor = jugadoresService.getByNombre(oferta.getJugador());
+//
+//            double beneficiosPerdidas = (oferta.getPrecio() - oferta.getPrecio_apertura()) * cantidadAComprar;
+//
+//            if(beneficiosPerdidas >= 0)
+//                this.jugadoresService.save(vendedor.incrementPixelcoinsBy(precioTotalAPagar).incrementGastosBy(beneficiosPerdidas));
+//            else
+//                this.jugadoresService.save(vendedor.incrementPixelcoinsBy(precioTotalAPagar).incrementIngresosBy(beneficiosPerdidas));
+//        }
+//
+//        Pixelcoin.publish(new EmpresaServerAccionCompradaEvento(compradorName, precioTotalAPagar, cantidadAComprar, oferta, oferta.getEmpresa()));
     }
 }

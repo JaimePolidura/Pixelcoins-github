@@ -11,6 +11,8 @@ public interface PosicionesAbiertasRepository {
 
     List<PosicionAbierta> findByJugador(String jugador);
 
+    List<PosicionAbierta> findByNombreActivo(String nombreActivo);
+
     List<PosicionAbierta> findAll();
 
     void deleteById(UUID posicionAbiertaId);

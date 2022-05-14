@@ -1,5 +1,6 @@
 package es.serversurvival._shared.eventospixelcoins;
 
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,5 +13,5 @@ public abstract class PosicionCerradaEvento extends PixelcoinsEvento implements 
     @Getter protected final String fechaApertura;
     @Getter protected final double precioCierre;
     @Getter protected final int cantidad;
-    @Getter protected final TipoActivo tipoActivo;
+    @Getter protected final SupportedTipoActivo tipoActivo;
 }

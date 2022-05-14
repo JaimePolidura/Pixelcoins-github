@@ -17,8 +17,8 @@ import java.util.function.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
-import es.serversurvival.bolsa.other._shared.llamadasapi.mysql.LlamadasApi;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival.deudas._shared.newformat.domain.Deuda;
@@ -153,14 +153,14 @@ public final class Funciones {
         Deudas deudasMySQL = Deudas.INSTANCE;
         var jugadoresService = DependecyContainer.get(JugadoresService.class);
         var empresasService = DependecyContainer.get(EmpresasService.class);
-        LlamadasApi llamadasApiMySQL = LlamadasApi.INSTANCE;
+        var activoInfoService = DependecyContainer.get(ActivoInfoService.class);
 
         List<Jugador> allJugadordes = jugadoresService.findAll();
-        Map<String, ActivoInfo> mapAllLlamadas = llamadasApiMySQL.getMapOfAllLlamadasApi();
+        Map<String, ActivoInfo> mapAllLlamadas = activoInfoService.findAllToMap();
         Map<String, List<Deuda>> mapDeudasAcredor = deudasMySQL.getAllDeudasAcredorMap();
         Map<String, List<Deuda>> mapDeudasDeudor = deudasMySQL.getAllDeudasDeudorMap();
         Map<String, List<Empresa>> mapEmpresasJugador = empresasService.getAllEmpresasJugadorMap();
-        Map<String, List<PosicionAbierta>> mapPosicionesLargo = PosicionesUtils.getAllPosicionesAbiertasMap(PosicionAbierta::noEsTipoAccionServerYLargo);
+        Map<String, List<PosicionAbierta>> mapPosicionesLargo = PosicionesUtils.getAllPosicionesAbiertasMap(PosicionAbierta::esLargo);
         Map<String, List<PosicionAbierta>> mapPosicionesCorto = PosicionesUtils.getAllPosicionesAbiertasMap(PosicionAbierta::esCorto);
 
         HashMap<String, Double> toReturn = new HashMap<>();

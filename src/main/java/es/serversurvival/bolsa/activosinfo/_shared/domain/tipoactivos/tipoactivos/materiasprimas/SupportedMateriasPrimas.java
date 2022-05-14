@@ -1,9 +1,12 @@
 package es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.tipoactivos.materiasprimas;
 
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static es.serversurvival.bolsa.activosinfo._shared.domain.TipoActivo.MATERIAS_PRIMAS;
+import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo.MATERIAS_PRIMAS;
+
 
 public enum SupportedMateriasPrimas {
     DJFUELUSGULF("Queroseno", MATERIAS_PRIMAS),
@@ -12,9 +15,9 @@ public enum SupportedMateriasPrimas {
     GASDESW("Diesel", MATERIAS_PRIMAS);
 
     public final String nombreActivoLargo;
-    public final TipoActivo tipoActivo;
+    public final SupportedTipoActivo tipoActivo;
 
-    SupportedMateriasPrimas(String nombreActivoLargo, TipoActivo tipoActivo) {
+    SupportedMateriasPrimas(String nombreActivoLargo, SupportedTipoActivo tipoActivo) {
         this.nombreActivoLargo = nombreActivoLargo;
         this.tipoActivo = tipoActivo;
     }

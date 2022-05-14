@@ -1,9 +1,12 @@
 package es.serversurvival.bolsa.other.vervalores.acciones;
 
 import es.jaimetruman.ItemBuilder;
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import es.serversurvival._shared.menus.Paginated;
+import es.serversurvival.bolsa.activosinfo.actualizar.ActualizarActivosInfoTask;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -18,8 +21,11 @@ import java.util.Map;
 public class AccionesInventoryFactory extends InventoryFactory {
     private final HashMap<String, String> accionesPagina1 = new HashMap<>();
     private final HashMap<String, String> accionesPagina2 = new HashMap<>();
+    private final ActivoInfoService activoInfoService;
 
     public AccionesInventoryFactory() {
+        this.activoInfoService= DependecyContainer.get(ActivoInfoService.class);
+
         buildPagina1();
         buildPagina2();
     }
@@ -66,7 +72,7 @@ public class AccionesInventoryFactory extends InventoryFactory {
     private List<ItemStack> buildItemsAcciones (Map<String, String> accionesPaginaActual) {
         List<ItemStack> itemStackList = new ArrayList<>();
 
-        Map<String, ActivoInfo> acciones = llamadasApiMySQL.getMapOfAllLlamadasApi();
+        Map<String, ActivoInfo> acciones = activoInfoService.findAllToMap();
 
         for (Map.Entry<String, String> entry : accionesPaginaActual.entrySet()) {
             List<String> lore = new ArrayList<>();

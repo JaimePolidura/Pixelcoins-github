@@ -6,6 +6,9 @@ import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfoCacheReposit
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public final class ActivoInfoService {
     private final ActivoInfoCacheRepository repositoryCache;
@@ -18,7 +21,7 @@ public final class ActivoInfoService {
         this.repositoryCache.save(activoApiCache);
     }
 
-    public ActivoInfo findByNombreActivo(String nombreActivo, SupportedTipoActivo supportedTipoActivo) {
+    public ActivoInfo getByNombreActivo(String nombreActivo, SupportedTipoActivo supportedTipoActivo) {
         return this.repositoryCache.findByNombreActivo(nombreActivo).orElseGet(() -> {
             String nombreActivoLargo = supportedTipoActivo.getTipoActivoService().getNombreActivoLargo(nombreActivo);
             double preico = supportedTipoActivo.getTipoActivoService().getPrecio(nombreActivo);
@@ -29,6 +32,17 @@ public final class ActivoInfoService {
 
     public List<ActivoInfo> findAll() {
         return this.repositoryCache.findAll();
+    }
+
+    public Map<String, ActivoInfo> findAllToMap(){
+        return this.findAll().stream()
+                .collect(Collectors.toMap(ActivoInfo::getNombreActivo, activoInfo -> activoInfo));
+    }
+
+    public List<ActivoInfo> findAll(Predicate<? super ActivoInfo> condition){
+        return this.findAll().stream()
+                .filter(condition)
+                .toList();
     }
 
     public void deleteByNombreActivo(String nombreActivo) {

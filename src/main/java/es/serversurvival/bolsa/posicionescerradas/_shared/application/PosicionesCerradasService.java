@@ -1,6 +1,7 @@
 package es.serversurvival.bolsa.posicionescerradas._shared.application;
 
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionesCerradasRepository;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
@@ -20,7 +21,7 @@ public final class PosicionesCerradasService {
         this.repositoryDb = DependecyContainer.get(PosicionesCerradasRepository.class);
     }
 
-    public void save(String jugador, TipoActivo tipoActivo, String nombreActivo, int cantidad, double precioApertura,
+    public void save(String jugador, SupportedTipoActivo tipoActivo, String nombreActivo, int cantidad, double precioApertura,
                      String fechaApertura, double precioCierre, TipoPosicion tipoPosicion) {
         String fechaCierre = dateFormater.format(new Date());
 

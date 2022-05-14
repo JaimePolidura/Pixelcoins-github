@@ -2,6 +2,7 @@ package es.serversurvival.bolsa.posicionesabiertas.vendercorto;
 
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
@@ -24,10 +25,10 @@ public final class VenderCortoUseCase implements AllMySQLTablesInstances {
         double valorTotal = precioPorAccion * cantidad;
         double comision = redondeoDecimales(reducirPorcentaje(valorTotal, 100 - PORCENTAJE_CORTO), 2);
 
-        this.posicionesAbiertasSerivce.save(jugadorNombre, TipoActivo.ACCIONES, ticker, cantidad, precioPorAccion, TipoPosicion.CORTO);
+        this.posicionesAbiertasSerivce.save(jugadorNombre, SupportedTipoActivo.ACCIONES, ticker, cantidad, precioPorAccion, TipoPosicion.CORTO);
 
         jugadoresService.save(jugador.decrementPixelcoinsBy(comision).incrementGastosBy(comision));
 
-        Pixelcoin.publish(new PosicionVentaCortoEvento(jugadorNombre, precioPorAccion, cantidad, comision, ticker, TipoActivo.ACCIONES, nombreValor));
+        Pixelcoin.publish(new PosicionVentaCortoEvento(jugadorNombre, precioPorAccion, cantidad, comision, ticker, SupportedTipoActivo.ACCIONES, nombreValor));
     }
 }

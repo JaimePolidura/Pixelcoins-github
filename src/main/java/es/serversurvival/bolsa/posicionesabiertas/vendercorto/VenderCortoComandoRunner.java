@@ -5,6 +5,9 @@ import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa._shared.application.OrderExecutorProxy;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.activosinfo.actualizar.ActualizarActivosInfoTask;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenPremarketCommand;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.OrdenAbiertaEvento;
@@ -37,14 +40,14 @@ import static org.bukkit.Sound.ENTITY_PLAYER_LEVELUP;
                 "ticker de la accion, solo se pueden empresas americanas, <cantidad> cantidad de accinoes a vender"
 )
 public class VenderCortoComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<VenderCortoComando> {
-    private final VenderCortoUseCase venderCortoUseCase;
     private final AbrirOrdenUseCase abrirOrdenUseCase;
     private final JugadoresService jugadoresService;
+    private final ActivoInfoService activoInfoService;
 
     public VenderCortoComandoRunner(){
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.abrirOrdenUseCase = new AbrirOrdenUseCase();
-        this.venderCortoUseCase = new VenderCortoUseCase();
+        this.activoInfoService = DependecyContainer.get(ActivoInfoService.class);
     }
 
     @Override
@@ -61,12 +64,12 @@ public class VenderCortoComandoRunner extends PixelcoinCommand implements Comman
             return;
         }
 
-        Optional<Pair<String, Double>> optionalNombrePrecio = llamadasApiMySQL.getPairNombreValorPrecio(ticker);
+        double precio = this.activoInfoService.getByNombreActivo(ticker, SupportedTipoActivo.ACCIONES).getPrecio();
 
-        if (optionalNombrePrecio.isPresent()) {
+        if (precio == -1) {
             Jugador jugador = this.jugadoresService.getByNombre(player.getName());
             double dineroJugador = jugador.getPixelcoins();
-            double valorTotal = optionalNombrePrecio.get().getValue() * cantidad;
+            double valorTotal = precio * cantidad;
             double comision = Funciones.redondeoDecimales(Funciones.reducirPorcentaje(valorTotal, 100 - PORCENTAJE_CORTO), 2);
 
             if (comision > dineroJugador) {
@@ -86,13 +89,13 @@ public class VenderCortoComandoRunner extends PixelcoinCommand implements Comman
     public void onVentaCortoBolsa (PosicionVentaCortoEvento evento) {
         Player player = Bukkit.getPlayer(evento.getComprador());
 
-        Funciones.enviarMensajeYSonido( player, GOLD + "Te has puesto corto en " + evento.getNombreValor() + " en " +
-                evento.getNombreValor() + " cada una a " + GREEN + formatea.format(evento.getPrecioUnidad()) + " PC " +
+        Funciones.enviarMensajeYSonido( player, GOLD + "Te has puesto corto en " + evento.getNombreActivo() + " en " +
+                evento.getNombreActivo() + " cada una a " + GREEN + formatea.format(evento.getPrecioUnidad()) + " PC " +
                 GOLD + "Para recomprar las acciones: /bolsa comprarcorto <id>. /bolsa cartera" + GOLD +
                 "Ademas se te ha cobrado un 5% del valor total de la venta (" + GREEN  + formatea.format(evento.getPrecioTotal())
                 + " PC" + GOLD + ") por lo cual: " + RED + "-" + formatea.format(evento.getPrecioTotal()) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
 
-        Bukkit.broadcastMessage(GOLD + player.getName() + " se ha puesto en corto en " + evento.getNombreValor());
+        Bukkit.broadcastMessage(GOLD + player.getName() + " se ha puesto en corto en " + evento.getNombreActivo());
     }
 
     @EventListener

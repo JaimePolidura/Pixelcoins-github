@@ -1,9 +1,11 @@
 package es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.tipoactivos.criptomonedas;
 
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static es.serversurvival.bolsa.activosinfo._shared.domain.TipoActivo.CRIPTOMONEDAS;
+import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo.CRIPTOMONEDAS;
 
 public enum SupportedCriptomonedas {
     BTCUSD("Bitcoin", CRIPTOMONEDAS),
@@ -11,9 +13,9 @@ public enum SupportedCriptomonedas {
     ETHUSD("Etherium", CRIPTOMONEDAS);
 
     public final String nombreActivo;
-    public final TipoActivo tipoActivo;
+    public final SupportedTipoActivo tipoActivo;
 
-    SupportedCriptomonedas(String nombreActivo, TipoActivo tipoActivo) {
+    SupportedCriptomonedas(String nombreActivo, SupportedTipoActivo tipoActivo) {
         this.nombreActivo = nombreActivo;
         this.tipoActivo = tipoActivo;
     }

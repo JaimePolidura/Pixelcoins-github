@@ -1,0 +1,32 @@
+package es.serversurvival.bolsa.activosinfo.eventlisteners;
+
+import es.jaime.EventListener;
+import es.jaime.Priority;
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
+import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.ordenespremarket.ejecutarordenes.OrdenNoEjecutadoEvento;
+import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
+import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
+
+import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo.*;
+
+public final class OnPremarketOrdenNoEjecutada implements AllMySQLTablesInstances {
+    private final ActivoInfoService activoInfoService;
+    private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
+
+    public OnPremarketOrdenNoEjecutada() {
+        this.activoInfoService = DependecyContainer.get(ActivoInfoService.class);
+        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
+    }
+
+    @EventListener(pritority = Priority.LOWEST)
+    public void onOrdenNoEjecutada (OrdenNoEjecutadoEvento evento) {
+        String nombreActivo = evento.getOrden().getNombreActivo();
+        
+        if(!this.posicionesAbiertasSerivce.existsNombreActivo(nombreActivo)){
+            this.activoInfoService.deleteByNombreActivo(nombreActivo);
+        }
+    }
+}

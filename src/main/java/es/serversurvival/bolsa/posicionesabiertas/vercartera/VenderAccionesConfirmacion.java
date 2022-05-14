@@ -2,6 +2,7 @@ package es.serversurvival.bolsa.posicionesabiertas.vercartera;
 
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa._shared.application.OrderExecutorProxy;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
@@ -32,7 +33,7 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion {
     private final TipoPosicion tipoPosicion;
     private final UUID id;
 
-    public VenderAccionesConfirmacion (Player player, UUID id, TipoPosicion tipoPosicion, TipoActivo tipoActivo, List<String> loreItemClicked) {
+    public VenderAccionesConfirmacion (Player player, UUID id, TipoPosicion tipoPosicion, SupportedTipoActivo tipoActivo, List<String> loreItemClicked) {
         this.player = player;
         this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
         this.id = id;
@@ -47,18 +48,12 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion {
         List<String> loreCancelar = Collections.singletonList("");
         List<String> loreVender;
 
-        if(tipoActivo == TipoActivo.ACCIONES_SERVER){
-            String cantidadAcciones = loreItemClicked.get(2).split(" ")[1];
-            loreVender = Arrays.asList(GOLD + "Se añadiran al mercado de acciones del server, ", GOLD + cantidadAcciones + " acciones. /empresas mercado");
-
-        }else{
-            String cantidadAcciones = loreItemClicked.get(5).split(" ")[1];
-            String beneficios = loreItemClicked.get(8).split(" ")[2];
-            String rentabilidad = loreItemClicked.get(9).split(" ")[1];
-            loreVender = (beneficios.charAt(2) == '+') ?
-                    Arrays.asList(GOLD + "Vender " + cantidadAcciones + " acciones con unos beneficios de " + GREEN + beneficios + " PC", GOLD + "y una rentabilidad del " + GREEN + rentabilidad) :
-                    Arrays.asList(GOLD + "Vender " + cantidadAcciones + " acciones con unas perdidas de " + RED + beneficios + " PC", GOLD + " y una rentabilidad del " + RED + rentabilidad);
-        }
+        String cantidadAcciones = loreItemClicked.get(5).split(" ")[1];
+        String beneficios = loreItemClicked.get(8).split(" ")[2];
+        String rentabilidad = loreItemClicked.get(9).split(" ")[1];
+        loreVender = (beneficios.charAt(2) == '+') ?
+                Arrays.asList(GOLD + "Vender " + cantidadAcciones + " acciones con unos beneficios de " + GREEN + beneficios + " PC", GOLD + "y una rentabilidad del " + GREEN + rentabilidad) :
+                Arrays.asList(GOLD + "Vender " + cantidadAcciones + " acciones con unas perdidas de " + RED + beneficios + " PC", GOLD + " y una rentabilidad del " + RED + rentabilidad);
 
         this.inventory = InventoryCreator.createSolicitud(titulo, tituloItemVender, loreVender, tituloItemCancelar, loreCancelar);
 
