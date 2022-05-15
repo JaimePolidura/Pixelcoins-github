@@ -3,7 +3,7 @@ package es.serversurvival.jugadores.eventlisteners;
 import es.jaime.EventListener;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
-import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.TipoOfertante;
+import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
 import es.serversurvival.empresas.ofertasaccionesserver.comprarofertasmercadoserver.EmpresaServerAccionCompradaEvento;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
@@ -23,7 +23,7 @@ public final class OnCompraAccionServer {
 
         jugadoresService.save(comprador.decrementPixelcoinsBy(evento.getPixelcoins()));
 
-        if(oferta.getTipoOfertante() == TipoOfertante.JUGADOR){
+        if(oferta.getTipoOfertante() == TipoAccionista.JUGADOR){
             Jugador jugadorVendedor = jugadoresService.getByNombre(oferta.getNombreOfertante());
             double beneficiosPerdidas = (oferta.getPrecio() - oferta.getPrecioApertura()) * evento.getCantidad();
             double rentabilidad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(oferta.getPrecioApertura(), oferta.getPrecio()), 3);

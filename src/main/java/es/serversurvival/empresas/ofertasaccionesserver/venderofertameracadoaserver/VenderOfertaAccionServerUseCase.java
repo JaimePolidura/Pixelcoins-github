@@ -4,7 +4,7 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
-import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.TipoOfertante;
+import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
 
 
 public final class VenderOfertaAccionServerUseCase {
@@ -18,7 +18,7 @@ public final class VenderOfertaAccionServerUseCase {
 
     public void vender(String playerName, PosicionAbierta posicionAVender, double precio) {
         ofertasAccionesServerService.save(playerName, posicionAVender.getNombreActivo(), precio,
-                posicionAVender.getCantidad(), TipoOfertante.JUGADOR, posicionAVender.getPrecioApertura());
+                posicionAVender.getCantidad(), TipoAccionista.JUGADOR, posicionAVender.getPrecioApertura());
         posicionesAbiertasSerivce.deleteById(posicionAVender.getPosicionAbiertaId());
     }
 }

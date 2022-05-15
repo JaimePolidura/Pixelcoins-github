@@ -2,6 +2,7 @@ package es.serversurvival.empresas.ofertasaccionesserver._shared.domain;
 
 import es.jaime.javaddd.domain.Aggregate;
 import es.serversurvival._shared.mysql.TablaObjeto;
+import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,7 +16,7 @@ public final class OfertaAccionServer extends Aggregate implements TablaObjeto {
     @Getter private final double precio;
     @Getter private final int cantidad;
     @Getter private final String fecha;
-    @Getter private final TipoOfertante tipoOfertante;
+    @Getter private final TipoAccionista tipoOfertante;
     @Getter private final double precioApertura;
 
     public OfertaAccionServer withNombreOfertante(String nombreOfertante){
@@ -29,6 +30,6 @@ public final class OfertaAccionServer extends Aggregate implements TablaObjeto {
     }
 
     public boolean esTipoOfertanteJugador () {
-        return this.tipoOfertante == TipoOfertante.JUGADOR;
+        return this.tipoOfertante == TipoAccionista.JUGADOR;
     }
 }

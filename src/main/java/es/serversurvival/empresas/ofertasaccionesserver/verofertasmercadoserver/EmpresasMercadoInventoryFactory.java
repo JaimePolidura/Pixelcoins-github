@@ -5,7 +5,7 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
-import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.TipoOfertante;
+import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -96,9 +96,9 @@ public class EmpresasMercadoInventoryFactory extends InventoryFactory {
                 RED + "" + UNDERLINE + "" + BOLD + "CLICK PARA CANCELAR" :
                 GOLD + "" + UNDERLINE + "" + BOLD + "CLICK PARA COMPRAR";
         Material material;
-        if(ofertaAccion.getNombreOfertante().equals(jugador) && ofertaAccion.getTipoOfertante() == TipoOfertante.JUGADOR){
+        if(ofertaAccion.getNombreOfertante().equals(jugador) && ofertaAccion.getTipoOfertante() == TipoAccionista.JUGADOR){
             material = Material.RED_BANNER;
-        }else if (ofertaAccion.getTipoOfertante() == TipoOfertante.JUGADOR) {
+        }else if (ofertaAccion.getTipoOfertante() == TipoAccionista.JUGADOR) {
             material = Material.GREEN_BANNER;
         }else{
             material = Material.BLUE_BANNER;

@@ -4,10 +4,9 @@ import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
-import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.TipoOfertante;
+import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.AumentoConfirmacion;
-import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
@@ -107,7 +106,7 @@ public class ComprarAccionesServerConfirmacion extends Menu implements AumentoCo
 
         Bukkit.broadcastMessage(GOLD + player.getName() + " ha comprado " + cantidadAComprar + " acciones de la empresa del server: " + nombreEmpresa + " a " + GREEN + FORMATEA.format(oferta.getPrecio()) + "PC");
 
-        if(oferta.getTipoOfertante() == TipoOfertante.EMPRESA){
+        if(oferta.getTipoOfertante() == TipoAccionista.EMPRESA){
             String mensajeOnline = GOLD + player.getName() + " ha comprado " + cantidadAComprar + " acciones de " + nombreEmpresa + "."+GREEN+" +" +
                     FORMATEA.format(precioTotal) + "PC";
 

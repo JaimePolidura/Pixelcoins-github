@@ -6,7 +6,7 @@ import es.jaime.repository.DataBaseRepository;
 import es.jaimetruman.select.Select;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertasAccionesServerRepository;
-import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.TipoOfertante;
+import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -69,7 +69,7 @@ public final class MySQLOfertasAccionesServerRepository extends DataBaseReposito
                 rs.getDouble("precio"),
                 rs.getInt("cantidad"),
                 rs.getString("fecha"),
-                TipoOfertante.valueOf(rs.getString("tipo_ofertante")),
+                TipoAccionista.valueOf(rs.getString("tipo_ofertante")),
                 rs.getDouble("precio_apertura")
         );
     }
