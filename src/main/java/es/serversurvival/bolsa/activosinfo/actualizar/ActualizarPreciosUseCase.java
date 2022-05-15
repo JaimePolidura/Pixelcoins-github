@@ -3,7 +3,6 @@ package es.serversurvival.bolsa.activosinfo.actualizar;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;

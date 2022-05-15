@@ -4,7 +4,6 @@ import es.jaime.EventListener;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.empresas.empresas.editarnombre.EmpresaNombreEditadoEvento;
 import es.serversurvival.mensajes._shared.application.MensajesService;
 

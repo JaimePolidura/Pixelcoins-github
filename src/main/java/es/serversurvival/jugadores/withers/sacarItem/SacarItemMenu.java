@@ -9,7 +9,6 @@ import es.serversurvival._shared.menus.MenuManager;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
 import es.serversurvival._shared.menus.Clickable;
 import es.serversurvival._shared.menus.Refreshcable;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

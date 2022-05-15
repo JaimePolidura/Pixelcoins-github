@@ -5,7 +5,6 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas.vender.EmpresaVendedida;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.mensajes._shared.application.MensajesService;
 
 import java.util.List;

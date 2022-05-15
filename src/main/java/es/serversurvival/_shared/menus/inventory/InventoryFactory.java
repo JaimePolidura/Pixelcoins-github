@@ -1,7 +1,6 @@
 package es.serversurvival._shared.menus.inventory;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.menus.Paginated;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

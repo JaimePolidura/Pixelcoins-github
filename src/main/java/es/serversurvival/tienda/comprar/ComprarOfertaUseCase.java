@@ -6,7 +6,6 @@ import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival._shared.utils.ItemsUtils;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.tienda._shared.application.TiendaService;
 import es.serversurvival.tienda._shared.domain.TiendaObjeto;
 import org.bukkit.inventory.ItemStack;

@@ -1,6 +1,5 @@
 package es.serversurvival._shared.menus;
 
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 

@@ -13,7 +13,6 @@ import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import es.serversurvival._shared.menus.Clickable;
 import es.serversurvival._shared.menus.Paginated;
 import es.serversurvival._shared.menus.RefreshcableOnPaginated;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.tienda._shared.domain.TiendaObjeto;
 import es.serversurvival.tienda.comprar.ComprarOfertaUseCase;
 import es.serversurvival.tienda.retirar.RetirarOfertaUseCase;

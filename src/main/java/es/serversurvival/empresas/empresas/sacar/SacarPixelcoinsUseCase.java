@@ -8,7 +8,6 @@ import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 public final class SacarPixelcoinsUseCase implements AllMySQLTablesInstances {
     private final EmpresasService empresasService;

@@ -1,14 +1,13 @@
 package es.serversurvival.empresas.empresas.pagardividendos;
 
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.other._shared.ofertasmercadoserver.mysql.OfertaMercadoServer;
+import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.Pixelcoin;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 import java.util.List;
 import java.util.Map;
@@ -30,7 +29,7 @@ public final class PagarDividendosEmpresaServerUseCase implements AllMySQLTables
         List<PosicionAbierta> posicionesAccionDeEmpresa = posicionesAbiertasSerivce.findAll().stream()
                 .filter(posicionAbierta -> posicionAbierta.getNombreActivo().equalsIgnoreCase(nombreEmpresa))
                 .toList();
-        List<OfertaMercadoServer> ofertasAccion =  ofertasMercadoServerMySQL.getOfertasEmpresa(nombreEmpresa, OfertaMercadoServer::esTipoOfertanteJugador);
+        List<OfertaAccionServer> ofertasAccion =  ofertasMercadoServerMySQL.getOfertasEmpresa(nombreEmpresa, OfertaAccionServer::esTipoOfertanteJugador);
 
         Map<String, Jugador> allJugadoresMap = jugadoresService.getMapAllJugadores();
 
@@ -38,7 +37,7 @@ public final class PagarDividendosEmpresaServerUseCase implements AllMySQLTables
             pagarDividendoAccionAJugador(allJugadoresMap.get(posicion.getJugador()), posicion.getCantidad(), dividendoPorAccion, nombreEmpresa);
         });
         ofertasAccion.forEach(oferta -> {
-            pagarDividendoAccionAJugador(allJugadoresMap.get(oferta.getJugador()), oferta.getCantidad(), dividendoPorAccion, nombreEmpresa);
+            pagarDividendoAccionAJugador(allJugadoresMap.get(oferta.getNombreOfertante()), oferta.getCantidad(), dividendoPorAccion, nombreEmpresa);
         });
 
         this.empresasService.save(empresa.decrementPixelcoinsBy(totalAPagar));

@@ -3,7 +3,6 @@ package es.serversurvival.jugadores.withers.ingresarItem.diamante;
 import es.jaimetruman.mobs.Mob;
 import es.jaimetruman.mobs.OnPlayerInteractMob;
 import es.serversurvival.jugadores.withers.ingresarItem.IngresarItemUseCase;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;

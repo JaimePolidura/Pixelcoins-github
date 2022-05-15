@@ -7,7 +7,6 @@ import es.serversurvival.empresas.empleados._shared.application.EmpleadosService
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 
 public final class BorrarEmpresaUseCase implements AllMySQLTablesInstances {

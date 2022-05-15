@@ -3,7 +3,6 @@ package es.serversurvival.deudas.prestar;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.MenuManager;
 import es.serversurvival._shared.menus.solicitudes.Solicitud;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
 import org.bukkit.Bukkit;

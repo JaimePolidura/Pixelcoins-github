@@ -5,7 +5,6 @@ import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.deudas._shared.newformat.application.DeudasService;
 import es.serversurvival.jugadores._shared.application.JugadoresService;

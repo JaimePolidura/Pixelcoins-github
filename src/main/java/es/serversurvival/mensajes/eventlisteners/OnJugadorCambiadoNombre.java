@@ -3,7 +3,6 @@ package es.serversurvival.mensajes.eventlisteners;
 import es.jaime.EventListener;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.jugadores.setupjugadorunido.JugadorCambiadoDeNombreEvento;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.mensajes._shared.application.MensajesService;
 
 public final class OnJugadorCambiadoNombre implements AllMySQLTablesInstances {

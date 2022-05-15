@@ -3,15 +3,11 @@ package es.serversurvival.jugadores.pagar;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
-import main.ValidationResult;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
-import static main.ValidatorService.*;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.GOLD;
 

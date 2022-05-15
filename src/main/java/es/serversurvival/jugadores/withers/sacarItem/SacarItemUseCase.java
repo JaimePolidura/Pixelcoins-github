@@ -4,7 +4,6 @@ import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 public final class SacarItemUseCase implements AllMySQLTablesInstances {
     private final JugadoresService jugadoresService;

@@ -3,7 +3,6 @@ package es.serversurvival.mensajes.ver;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.mensajes._shared.application.MensajesService;
 import es.serversurvival.mensajes._shared.domain.Mensaje;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 
 import java.util.List;
 

@@ -4,7 +4,6 @@ import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
 import es.serversurvival._shared.menus.solicitudes.Solicitud;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.jugadores.pagar.PagarUseCase;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

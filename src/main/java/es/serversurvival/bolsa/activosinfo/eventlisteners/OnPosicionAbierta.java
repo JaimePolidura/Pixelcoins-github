@@ -4,10 +4,8 @@ import es.jaime.EventListener;
 import es.jaime.Priority;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.eventospixelcoins.PosicionAbiertaEvento;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 
 public final class OnPosicionAbierta implements AllMySQLTablesInstances {
     private final ActivoInfoService activoInfoService;

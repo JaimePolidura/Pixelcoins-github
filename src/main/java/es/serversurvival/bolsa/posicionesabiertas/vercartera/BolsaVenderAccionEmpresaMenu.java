@@ -2,10 +2,9 @@ package es.serversurvival.bolsa.posicionesabiertas.vercartera;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
-import es.serversurvival.bolsa.other.venderofertameracadoaserver.VenderOfertaAccionServerUseCase;
+import es.serversurvival.empresas.ofertasaccionesserver.venderofertameracadoaserver.VenderOfertaAccionServerUseCase;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.confirmaciones.Confirmacion;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
 import org.bukkit.Bukkit;

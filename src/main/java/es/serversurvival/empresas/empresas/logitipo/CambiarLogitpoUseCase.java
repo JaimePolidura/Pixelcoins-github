@@ -3,7 +3,6 @@ package es.serversurvival.empresas.empresas.logitipo;
 import es.jaime.javaddd.domain.exceptions.IllegalType;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import org.bukkit.Material;

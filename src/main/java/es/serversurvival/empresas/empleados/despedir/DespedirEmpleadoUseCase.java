@@ -2,19 +2,13 @@ package es.serversurvival.empresas.empleados.despedir;
 
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalLength;
-import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
-import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
 
 import static es.serversurvival._shared.utils.Funciones.enviarMensaje;
 import static es.serversurvival.empresas.empleados._shared.application.EmpleadosService.*;

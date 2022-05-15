@@ -5,7 +5,6 @@ import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

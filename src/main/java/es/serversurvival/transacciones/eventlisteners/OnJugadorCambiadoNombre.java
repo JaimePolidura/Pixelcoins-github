@@ -3,12 +3,8 @@ package es.serversurvival.transacciones.eventlisteners;
 import es.jaime.EventListener;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.jugadores.setupjugadorunido.JugadorCambiadoDeNombreEvento;
-import es.serversurvival._shared.mysql.AllMySQLTablesInstances;
 import es.serversurvival.transacciones._shared.application.TransaccionesService;
 import es.serversurvival.transacciones._shared.domain.Transaccion;
-import es.serversurvival.transacciones._shared.domain.TransaccionesRepository;
-
-import java.util.List;
 
 public final class OnJugadorCambiadoNombre {
     private final TransaccionesService transaccionesService;
