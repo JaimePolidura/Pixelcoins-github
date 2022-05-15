@@ -7,6 +7,7 @@ import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.command.CommandSender;
 
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.GOLD;
 
@@ -33,7 +34,7 @@ public class ComprarServicionComandoRunner extends PixelcoinCommand implements C
         player.sendMessage(GOLD + "Has pagado " + GREEN + precio + " PC " + GOLD + " a la empresa: " + empresaNombre + " por su servicio");
 
         String mensajeOnline = GOLD + player.getName() + " ha comprado vuestro servicio de la empresa: " + empresaNombre +
-                " por " + GREEN + formatea.format(precio) + " PC";
+                " por " + GREEN + FORMATEA.format(precio) + " PC";
 
         Funciones.enviarMensaje(empresa.getOwner(), mensajeOnline, mensajeOnline);
     }

@@ -8,6 +8,7 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.GOLD;
 
@@ -34,12 +35,12 @@ public class PagarComandoRunner extends PixelcoinCommand implements CommandRunne
     }
 
     private void sendMessage (Player pagador, String pagado, double pixelcoins) {
-        pagador.sendMessage(GOLD + "Has pagado: " + GREEN + AllMySQLTablesInstances.formatea.format(pixelcoins) + " PC " + GOLD + "a " + pagado);
-        String mensajeSiEstaOnline = GOLD + pagador.getName() + " te ha pagado: " + GREEN + "+" + AllMySQLTablesInstances.formatea.format(pixelcoins) + " PC " + AQUA + "(/estadisticas)";
+        pagador.sendMessage(GOLD + "Has pagado: " + GREEN + FORMATEA.format(pixelcoins) + " PC " + GOLD + "a " + pagado);
+        String mensajeSiEstaOnline = GOLD + pagador.getName() + " te ha pagado: " + GREEN + "+" + FORMATEA.format(pixelcoins) + " PC " + AQUA + "(/estadisticas)";
         Funciones.enviarMensaje(pagado, mensajeSiEstaOnline, mensajeSiEstaOnline, Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
-        String mensajeOnline = GOLD + pagador.getName() + " te ha pagado " + GREEN + formatea.format(pixelcoins) + "PC!";
-        String mensajeOffline = pagador.getName() + " te ha pagado " + formatea.format(pixelcoins) + "PC!";
+        String mensajeOnline = GOLD + pagador.getName() + " te ha pagado " + GREEN + FORMATEA.format(pixelcoins) + "PC!";
+        String mensajeOffline = pagador.getName() + " te ha pagado " + FORMATEA.format(pixelcoins) + "PC!";
 
         Funciones.enviarMensaje(pagado, mensajeOnline, mensajeOffline);
     }

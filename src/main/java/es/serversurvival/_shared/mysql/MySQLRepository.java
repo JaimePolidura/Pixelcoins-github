@@ -9,7 +9,7 @@ import lombok.SneakyThrows;
 import java.sql.*;
 import java.util.*;
 
-public abstract class MySQLRepository implements AllMySQLTablesInstances{
+public abstract class MySQLRepository{
     protected MySQLRepository() {}
 
     protected static Connection conexion;

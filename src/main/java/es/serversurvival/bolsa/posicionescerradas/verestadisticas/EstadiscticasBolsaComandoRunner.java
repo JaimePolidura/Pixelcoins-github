@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService.*;
 
 @Command(value = "bolsa estadisticas", explanation = "Ver tus estadisticas en la bolsa")
@@ -41,7 +42,7 @@ public class EstadiscticasBolsaComandoRunner extends PixelcoinCommand implements
                 double rentabilidad = operacionCerrada.calculateRentabildiad();
 
                 player.sendMessage(ChatColor.GOLD + "" + (i+1) + "º " + nombre + ": " + ChatColor.GREEN + "+" + rentabilidad + "% -> +" +
-                        formatea.format((cantidad * cierre) - (cantidad * apertura)) + " PC");
+                        FORMATEA.format((cantidad * cierre) - (cantidad * apertura)) + " PC");
             }
         }
 
@@ -58,7 +59,7 @@ public class EstadiscticasBolsaComandoRunner extends PixelcoinCommand implements
                 double rentabilidad = operacionCerrada.calculateRentabildiad();
 
                 player.sendMessage(ChatColor.GOLD + "" + (i + 1) + "º " + nombre  + ": " + ChatColor.RED + rentabilidad + "% -> " +
-                        formatea.format((cantidad * cierre) - (cantidad * apertura)) + " PC ");
+                        FORMATEA.format((cantidad * cierre) - (cantidad * apertura)) + " PC ");
             }
         }
 

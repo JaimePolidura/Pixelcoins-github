@@ -12,6 +12,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+
 public class SacarItemInventoryFactory extends InventoryFactory {
     private final double pixelcoinsJugador;
 
@@ -49,7 +51,7 @@ public class SacarItemInventoryFactory extends InventoryFactory {
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.AQUA + "1 "+itemACambiar+" -> " + ChatColor.GREEN + cambio);
         lore.add("    ");
-        lore.add(ChatColor.GOLD +"Tus pixelcoins disponibles: " + ChatColor.GREEN + formatea.format(pixelcoinsJugador));
+        lore.add(ChatColor.GOLD +"Tus pixelcoins disponibles: " + ChatColor.GREEN + FORMATEA.format(pixelcoinsJugador));
 
         return ItemBuilder.of(itemMaterial).title(displayName).lore(lore).build();
     }

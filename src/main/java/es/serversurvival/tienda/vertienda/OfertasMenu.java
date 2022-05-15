@@ -29,6 +29,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 public class OfertasMenu extends Menu implements Clickable, Paginated, RefreshcableOnPaginated {
@@ -116,10 +117,10 @@ public class OfertasMenu extends Menu implements Clickable, Paginated, Refreshca
         Player player = Bukkit.getPlayer(evento.getComprador());
 
         Funciones.enviarMensajeYSonido(player, GOLD + "Has comprado: " + evento.getObjeto() + " , por " + GREEN +
-                AllMySQLTablesInstances.formatea.format(evento.getPrecioUnidad()) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
+                FORMATEA.format(evento.getPrecioUnidad()) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
 
         Funciones.enviarMensajeYSonidoSiOnline(evento.getVendedor(), GOLD + evento.getComprador() + " te ha comprado: " +
-                evento.getObjeto() + " por: " + GREEN + AllMySQLTablesInstances.formatea.format(evento.getPrecioUnidad()) + " PC ", Sound.ENTITY_PLAYER_LEVELUP);
+                evento.getObjeto() + " por: " + GREEN + FORMATEA.format(evento.getPrecioUnidad()) + " PC ", Sound.ENTITY_PLAYER_LEVELUP);
     }
 
     @Override

@@ -7,7 +7,7 @@ import es.serversurvival._shared.eventospixelcoins.PosicionAbiertaEvento;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 
-public final class OnPosicionAbierta implements AllMySQLTablesInstances {
+public final class OnPosicionAbierta {
     private final ActivoInfoService activoInfoService;
 
     public OnPosicionAbierta() {

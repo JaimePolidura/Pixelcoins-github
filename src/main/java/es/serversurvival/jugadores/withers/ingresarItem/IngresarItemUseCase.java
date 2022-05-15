@@ -8,7 +8,7 @@ import es.serversurvival.jugadores.withers.CambioPixelcoins;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public final class IngresarItemUseCase implements AllMySQLTablesInstances {
+public final class IngresarItemUseCase {
     private final JugadoresService jugadoresService;
 
     public IngresarItemUseCase(){

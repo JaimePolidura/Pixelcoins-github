@@ -22,6 +22,9 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static es.serversurvival._shared.utils.Funciones.DATE_FORMATER_LEGACY;
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+
 public class AccionesMenu extends Menu implements Clickable, Paginated, PostLoading {
     public static final String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "   Escoge para invertir";
     private static ExecutorService pool = Executors.newSingleThreadExecutor();
@@ -109,7 +112,7 @@ public class AccionesMenu extends Menu implements Clickable, Paginated, PostLoad
             String ticker = lore.get(0).split(" ")[1];
             try {
                 double precioAccion = IEXCloud_API.getOnlyPrice(ticker);
-                lore.add(1, ChatColor.GOLD + "Precio/Accion:" + ChatColor.GREEN + " " + formatea.format(precioAccion)  + " PC");
+                lore.add(1, ChatColor.GOLD + "Precio/Accion:" + ChatColor.GREEN + " " + FORMATEA.format(precioAccion)  + " PC");
 
                 MinecraftUtils.setLore(item, lore);
             } catch (Exception e) {

@@ -9,7 +9,7 @@ import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 
-public final class SacarPixelcoinsUseCase implements AllMySQLTablesInstances {
+public final class SacarPixelcoinsUseCase {
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;
 

@@ -1,6 +1,7 @@
 package es.serversurvival.deudas.pagarCuotas;
 
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.deudas._shared.newformat.application.DeudasService;
 import es.serversurvival.deudas._shared.newformat.domain.Deuda;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
@@ -13,7 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static es.serversurvival._shared.mysql.AllMySQLTablesInstances.dateFormater;
+import static es.serversurvival._shared.utils.Funciones.DATE_FORMATER_LEGACY;
+
 
 public final class PagarDeudasCuotasUseCase {
     private final DeudasService deudasService;
@@ -78,11 +80,11 @@ public final class PagarDeudasCuotasUseCase {
 
     @SneakyThrows
     private Date formatFehcaDeHoyException () {
-        return dateFormater.parse(dateFormater.format(new Date()));
+        return DATE_FORMATER_LEGACY.parse(DATE_FORMATER_LEGACY.format(new Date()));
     }
 
     @SneakyThrows
     private Date formatFechaDeLaBaseDatosException (String fecha) {
-        return dateFormater.parse(fecha);
+        return DATE_FORMATER_LEGACY.parse(fecha);
     }
 }

@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static es.serversurvival._shared.utils.Funciones.enviarMensajeYSonido;
 import static org.bukkit.ChatColor.AQUA;
@@ -60,7 +61,7 @@ public class EmpresasMercadoMenu extends Menu implements Clickable, Paginated {
         }
 
         List<String> loreItemClicked = clikedItem.getItemMeta().getLore();
-        int id = Integer.parseInt(loreItemClicked.get(loreItemClicked.size() - 1));
+        UUID id = UUID.fromString(loreItemClicked.get(loreItemClicked.size() - 1));
         String empresa = loreItemClicked.get(1).split(" ")[1];
 
         if(clikedItem.getType() == Material.RED_BANNER){ //Red banner -> la oferta es del jugador

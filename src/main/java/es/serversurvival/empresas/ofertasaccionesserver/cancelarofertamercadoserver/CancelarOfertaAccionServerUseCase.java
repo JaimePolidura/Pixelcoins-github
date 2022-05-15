@@ -3,14 +3,16 @@ package es.serversurvival.empresas.ofertasaccionesserver.cancelarofertamercadose
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 
-public final class CancelarOfertaAccionServerUseCase implements AllMySQLTablesInstances {
+import java.util.UUID;
+
+public final class CancelarOfertaAccionServerUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
 
     public CancelarOfertaAccionServerUseCase() {
         this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
     }
 
-    public void cancelar(String player, int id) {
+    public void cancelar(String player, UUID id) {
         //TODO
 //        OfertaMercadoServer oferta = ofertasMercadoServerMySQL.get(id);
 //

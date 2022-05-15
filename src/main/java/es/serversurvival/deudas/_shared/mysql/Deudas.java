@@ -28,7 +28,7 @@ public final class Deudas extends MySQLRepository {
     }
 
     public void nuevaDeuda(String deudor, String acredor, int pixelcoins, int tiempo, int interes) {
-        String fechaHoy = dateFormater.format(new Date());
+        String fechaHoy = DATE_FORMATER_LEGACY.format(new Date());
         int cuota = (int) Math.round((double) pixelcoins / tiempo);
 
         String insertQuery = Insert.table("deudas")

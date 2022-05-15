@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static es.serversurvival._shared.utils.Funciones.*;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.GREEN;
 
@@ -58,7 +59,7 @@ public class ComprarAccionesServerConfirmacion extends Menu implements AumentoCo
         String tituloAceptar = GREEN + "" + BOLD + "COMPRAR ACCIONES";
         String tituloCancelar = RED + "" + BOLD + "CANCELAR";
         List<String> lore = new ArrayList<>();
-        lore.add(GOLD + "Comprar 1 acciones de " + nombreEmpresa + " a " + GREEN + Funciones..formatea.format(oferta.getPrecio()) + " PC");
+        lore.add(GOLD + "Comprar 1 acciones de " + nombreEmpresa + " a " + GREEN + FORMATEA.format(oferta.getPrecio()) + " PC");
 
         this.inventory = InventoryCreator.createConfirmacionAumento(titulo, tituloAceptar, lore, tituloCancelar);
 
@@ -79,7 +80,7 @@ public class ComprarAccionesServerConfirmacion extends Menu implements AumentoCo
 
         String displayName = GREEN + "" + BOLD + "COMPRAR ACCIONES";
         List<String> lore = new ArrayList<>();
-        lore.add(GOLD + "Comprar " + nuevaCantidad + " acciones " + nombreEmpresa + " a " + GREEN + oferta.getPrecio() + " PC -> total: " + AllMySQLTablesInstances.formatea.format(Funciones.redondeoDecimales(precioTotal, 3)) + " PC");
+        lore.add(GOLD + "Comprar " + nuevaCantidad + " acciones " + nombreEmpresa + " a " + GREEN + oferta.getPrecio() + " PC -> total: " +  FORMATEA.format(redondeoDecimales(precioTotal, 3)) + " PC");
 
         ItemBuilder.of(Material.GREEN_WOOL).title(displayName).lore(lore).buildAddInventory(inventory, 14);
     }
@@ -93,7 +94,7 @@ public class ComprarAccionesServerConfirmacion extends Menu implements AumentoCo
             return;
         }
 
-        useCase.comprarOfertaMercadoAccionServer(player.getName(), oferta.getId(), this.cantidadAComprar);
+        useCase.comprarOfertaMercadoAccionServer(player.getName(), oferta.getOfertasAccionesServerId(), this.cantidadAComprar);
 
         sendMessage();
 
@@ -101,29 +102,29 @@ public class ComprarAccionesServerConfirmacion extends Menu implements AumentoCo
     }
 
     private void sendMessage () {
-        Funciones.enviarMensajeYSonido(player, GOLD + "Has comprado " + AllMySQLTablesInstances.formatea.format(cantidadAComprar)  + " acciones a " + GREEN + AllMySQLTablesInstances.formatea.format(oferta.getPrecio()) + " PC" + GOLD + " que es un total de " +
-                GREEN + AllMySQLTablesInstances.formatea.format(precioTotal) + " PC " + GOLD + " comandos: " + AQUA + "/bolsa vender /bolsa cartera", Sound.ENTITY_PLAYER_LEVELUP);
+        enviarMensajeYSonido(player, GOLD + "Has comprado " + FORMATEA.format(cantidadAComprar)  + " acciones a " + GREEN + FORMATEA.format(oferta.getPrecio()) + " PC" + GOLD + " que es un total de " +
+                GREEN +  FORMATEA.format(precioTotal) + " PC " + GOLD + " comandos: " + AQUA + "/bolsa vender /bolsa cartera", Sound.ENTITY_PLAYER_LEVELUP);
 
-        Bukkit.broadcastMessage(GOLD + player.getName() + " ha comprado " + cantidadAComprar + " acciones de la empresa del server: " + nombreEmpresa + " a " + GREEN + AllMySQLTablesInstances.formatea.format(oferta.getPrecio()) + "PC");
+        Bukkit.broadcastMessage(GOLD + player.getName() + " ha comprado " + cantidadAComprar + " acciones de la empresa del server: " + nombreEmpresa + " a " + GREEN + FORMATEA.format(oferta.getPrecio()) + "PC");
 
         if(oferta.getTipoOfertante() == TipoOfertante.EMPRESA){
             String mensajeOnline = GOLD + player.getName() + " ha comprado " + cantidadAComprar + " acciones de " + nombreEmpresa + "."+GREEN+" +" +
-                    AllMySQLTablesInstances.formatea.format(precioTotal) + "PC";
+                    FORMATEA.format(precioTotal) + "PC";
 
             //TODO
-            Funciones.enviarMensaje(this.empresasService.getEmpresaByNombre(nombreEmpresa).getOwner(), mensajeOnline, mensajeOnline);
+            enviarMensaje(this.empresasService.getEmpresaByNombre(nombreEmpresa).getOwner(), mensajeOnline, mensajeOnline);
         }else{
             double beneficiosPerdidas = (oferta.getPrecio() - oferta.getPrecioApertura()) * cantidadAComprar;
-            double rentabilidad = Funciones.redondeoDecimales(Funciones.diferenciaPorcntual(oferta.getPrecioApertura(), oferta.getPrecio()), 3);
+            double rentabilidad = redondeoDecimales(diferenciaPorcntual(oferta.getPrecioApertura(), oferta.getPrecio()), 3);
 
             String mensajeOnline = beneficiosPerdidas >= 0 ?
-                    GOLD + player.getName() + " te ha comprado " + cantidadAComprar + " acciones de " + nombreEmpresa + " con unos beneficios de " + GREEN + "+" + AllMySQLTablesInstances.formatea.format(beneficiosPerdidas) + " PC +" + AllMySQLTablesInstances.formatea.format(rentabilidad):
-                    GOLD + player.getName() + " te ha comprado " + cantidadAComprar + " acciones de " + nombreEmpresa + " con unos beneficios de " + RED + AllMySQLTablesInstances.formatea.format(beneficiosPerdidas) + " PC " + AllMySQLTablesInstances.formatea.format(rentabilidad) ;
+                    GOLD + player.getName() + " te ha comprado " + cantidadAComprar + " acciones de " + nombreEmpresa + " con unos beneficios de " + GREEN + "+" + FORMATEA.format(beneficiosPerdidas) + " PC +" + FORMATEA.format(rentabilidad):
+                    GOLD + player.getName() + " te ha comprado " + cantidadAComprar + " acciones de " + nombreEmpresa + " con unos beneficios de " + RED + FORMATEA.format(beneficiosPerdidas) + " PC " + FORMATEA.format(rentabilidad) ;
             String mensajeOffline = beneficiosPerdidas >= 0 ?
-                    player.getName() + " te ha comprado " + cantidadAComprar + " acciones de " + nombreEmpresa + " con unos beneficios de " + "+" + AllMySQLTablesInstances.formatea.format(beneficiosPerdidas) + " PC +" + AllMySQLTablesInstances.formatea.format(rentabilidad) :
-                    player.getName() + " te ha comprado " + cantidadAComprar + " acciones de " + nombreEmpresa + " con unos beneficios de " + AllMySQLTablesInstances.formatea.format(beneficiosPerdidas) + " PC" + AllMySQLTablesInstances.formatea.format(rentabilidad);
+                    player.getName() + " te ha comprado " + cantidadAComprar + " acciones de " + nombreEmpresa + " con unos beneficios de " + "+" + FORMATEA.format(beneficiosPerdidas) + " PC +" + FORMATEA.format(rentabilidad) :
+                    player.getName() + " te ha comprado " + cantidadAComprar + " acciones de " + nombreEmpresa + " con unos beneficios de " + FORMATEA.format(beneficiosPerdidas) + " PC" + FORMATEA.format(rentabilidad);
 
-            Funciones.enviarMensaje(oferta.getNombreOfertante(), mensajeOnline, mensajeOffline);
+            enviarMensaje(oferta.getNombreOfertante(), mensajeOnline, mensajeOffline);
         }
     }
 

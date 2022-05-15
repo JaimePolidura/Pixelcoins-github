@@ -8,7 +8,7 @@ import es.serversurvival.empresas.ofertasaccionesserver.comprarofertasmercadoser
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 
-public final class OnCompraAccionServer implements AllMySQLTablesInstances {
+public final class OnCompraAccionServer {
     private final EmpresasService empresasService;
 
     public OnCompraAccionServer() {

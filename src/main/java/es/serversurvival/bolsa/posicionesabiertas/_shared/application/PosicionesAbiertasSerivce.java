@@ -1,10 +1,10 @@
 package es.serversurvival.bolsa.posicionesabiertas._shared.application;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.jaimetruman.select.Select;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.Cache;
 import es.serversurvival._shared.cache.LRUCache;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
@@ -16,7 +16,6 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static es.serversurvival._shared.mysql.AllMySQLTablesInstances.dateFormater;
 
 public final class PosicionesAbiertasSerivce {
     public static final double PORCENTAJE_CORTO = 5;
@@ -31,7 +30,7 @@ public final class PosicionesAbiertasSerivce {
 
     public void save(String jugador, SupportedTipoActivo tipoAcivo, String nombreActivo, int cantidad,
                      double precioApertura, TipoPosicion tipoPosicion) {
-        String fecha = dateFormater.format(new Date());
+        String fecha = Funciones.DATE_FORMATER_LEGACY.format(new Date());
 
         this.save(new PosicionAbierta(UUID.randomUUID(), jugador, tipoAcivo, nombreActivo, cantidad, precioApertura,
                 fecha, tipoPosicion));

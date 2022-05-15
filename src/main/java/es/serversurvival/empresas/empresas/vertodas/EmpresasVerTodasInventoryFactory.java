@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 public class EmpresasVerTodasInventoryFactory extends InventoryFactory {
@@ -63,10 +64,10 @@ public class EmpresasVerTodasInventoryFactory extends InventoryFactory {
         lore.add(GOLD + "Owner: " + GOLD + empresa.getOwner());
         if(empresa.isCotizada()) lore.add(GOLD + "Cotiza en bolsa");
         lore.add("     ");
-        lore.add(GOLD + "Pixelcoins: " + GREEN + formatea.format(empresa.getPixelcoins()) + " PC");
-        lore.add(GOLD + "Ingresos: " + GREEN + formatea.format(empresa.getIngresos()) + " PC");
-        lore.add(GOLD + "Gastos: " + GREEN + formatea.format(empresa.getGastos()) + " PC");
-        lore.add(GOLD + "Beneficios: " + GREEN + formatea.format(empresa.getIngresos() - empresa.getGastos()) + " PC");
+        lore.add(GOLD + "Pixelcoins: " + GREEN + FORMATEA.format(empresa.getPixelcoins()) + " PC");
+        lore.add(GOLD + "Ingresos: " + GREEN + FORMATEA.format(empresa.getIngresos()) + " PC");
+        lore.add(GOLD + "Gastos: " + GREEN + FORMATEA.format(empresa.getGastos()) + " PC");
+        lore.add(GOLD + "Beneficios: " + GREEN + FORMATEA.format(empresa.getIngresos() - empresa.getGastos()) + " PC");
         double margen = Funciones.rentabilidad(empresa.getIngresos(), empresa.getIngresos() - empresa.getGastos());
         lore.add(GOLD + "Rentabilidad: " + GREEN + ((int) margen) + "%");
 

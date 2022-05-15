@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 public class VerEmpresaInventoryFactory extends InventoryFactory {
@@ -65,15 +66,15 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
         List<String> descripccion = Funciones.dividirDesc(empresaAVer.getDescripcion(), 40);
         lore.addAll(1, descripccion);
         lore.add("  ");
-        lore.add(GOLD + "Pixelcoins: " + GREEN + formatea.format(empresaAVer.getPixelcoins()) + " PC");
-        lore.add(GOLD + "Ingresos: " + GREEN + formatea.format(empresaAVer.getIngresos()) + " PC");
-        lore.add(GOLD + "Gastos: " + GREEN + formatea.format(empresaAVer.getGastos()) + " PC");
+        lore.add(GOLD + "Pixelcoins: " + GREEN + FORMATEA.format(empresaAVer.getPixelcoins()) + " PC");
+        lore.add(GOLD + "Ingresos: " + GREEN + FORMATEA.format(empresaAVer.getIngresos()) + " PC");
+        lore.add(GOLD + "Gastos: " + GREEN + FORMATEA.format(empresaAVer.getGastos()) + " PC");
         double beneficiosPerdidas = empresaAVer.getIngresos() - empresaAVer.getGastos();
         if(beneficiosPerdidas >= 0){
-            lore.add(GOLD + "Beneficios: "  +  GREEN + "+" +  formatea.format(beneficiosPerdidas) + " PC");
+            lore.add(GOLD + "Beneficios: "  +  GREEN + "+" +  FORMATEA.format(beneficiosPerdidas) + " PC");
             lore.add(GOLD + "Rentabilidad: " + GREEN + "+" + Funciones.redondeoDecimales(Funciones.rentabilidad(empresaAVer.getIngresos(), beneficiosPerdidas),1) + "%");
         }else{
-            lore.add(GOLD + "Perdidas: " + RED + formatea.format(beneficiosPerdidas) + " PC");
+            lore.add(GOLD + "Perdidas: " + RED + FORMATEA.format(beneficiosPerdidas) + " PC");
             lore.add(GOLD + "Rentabilidad: " + RED + Funciones.redondeoDecimales(Funciones.rentabilidad(empresaAVer.getIngresos(), beneficiosPerdidas),1) + "%");
         }
         lore.add("   ");
@@ -125,7 +126,7 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
             lore.add("   ");
             lore.add(GOLD + "Empleado: " + empleado.getNombre());
             lore.add(GOLD + "Cargo: " + empleado.getCargo());
-            lore.add(GOLD + "Sueldo: " + GREEN + formatea.format(empleado.getSueldo()) + " PC/" + empleado.getTipoSueldo().nombre);
+            lore.add(GOLD + "Sueldo: " + GREEN + FORMATEA.format(empleado.getSueldo()) + " PC/" + empleado.getTipoSueldo().nombre);
             lore.add(GOLD + "ID: " + empleado.getEmpleadoId());
             lore.add("   ");
             lore.add("/empresas despedir " + empresaNombre + " " + empleado.getNombre());
@@ -144,16 +145,17 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
     private ItemStack buildItemAccionistas () {
         String displayName = GOLD + "" + BOLD + "ACCIONISTAS";
         List<String> lore = new ArrayList<>();
-        Map<String, Integer> jugadoresAccionistas = ofertasMercadoServerMySQL.getAccionistasEmpresaServer(empresaNombre);
-
-        jugadoresAccionistas.forEach((jugador, peso) -> {
-            if(jugador.equalsIgnoreCase(empresaNombre)){
-                lore.add(GOLD + "" + "EMPRESA : " + GREEN + formatea.format(peso) + "%");
-            }else{
-                lore.add(GOLD + jugador + ": " + GREEN + formatea.format(peso) + "%");
-            }
-
-        });
+        //TODO XD
+//        Map<String, Integer> jugadoresAccionistas = ofertasMercadoServerMySQL.getAccionistasEmpresaServer(empresaNombre);
+//
+//        jugadoresAccionistas.forEach((jugador, peso) -> {
+//            if(jugador.equalsIgnoreCase(empresaNombre)){
+//                lore.add(GOLD + "" + "EMPRESA : " + GREEN + FORMATEA.format(peso) + "%");
+//            }else{
+//                lore.add(GOLD + jugador + ": " + GREEN + FORMATEA.format(peso) + "%");
+//            }
+//
+//        });
 
         return ItemBuilder.of(Material.NETHERITE_SCRAP).title(displayName).lore(lore).build();
     }

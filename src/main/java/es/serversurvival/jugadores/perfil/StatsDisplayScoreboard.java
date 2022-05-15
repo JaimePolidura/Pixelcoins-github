@@ -13,6 +13,7 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival._shared.utils.MinecraftUtils.addLineToScoreboard;
 
 public class StatsDisplayScoreboard implements SingleScoreboard {
@@ -31,7 +32,7 @@ public class StatsDisplayScoreboard implements SingleScoreboard {
 
         double dineroJugador = jugadoresService.getByNombre(jugador).getPixelcoins();
 
-        addLineToScoreboard(objective, ChatColor.GOLD + "Tus ahorros: " + ChatColor.GREEN + formatea.format(Math.round(dineroJugador)) + " PC", 1);
+        addLineToScoreboard(objective, ChatColor.GOLD + "Tus ahorros: " + ChatColor.GREEN + FORMATEA.format(Math.round(dineroJugador)) + " PC", 1);
         addLineToScoreboard(objective, "     ", 0);
         addLineToScoreboard(objective, ChatColor.GOLD + "-------Empresas-----", -2);
 
@@ -39,7 +40,7 @@ public class StatsDisplayScoreboard implements SingleScoreboard {
         for(int i = 0; i < empresas.size(); i++){
             Empresa empresa = empresas.get(i);
 
-            String mensaje = ChatColor.GOLD + "- " + empresa.getNombre() + " (" + ChatColor.GREEN + formatea.format(empresa.getPixelcoins()) + " PC ";
+            String mensaje = ChatColor.GOLD + "- " + empresa.getNombre() + " (" + ChatColor.GREEN + FORMATEA.format(empresa.getPixelcoins()) + " PC ";
             mensaje = mensaje + calcularRentabilidadEmpresaYFormatear(empresa);
             mensaje = cambiarLongitudDelMensajeSiEsNecesario(mensaje, empresa);
 
@@ -51,7 +52,7 @@ public class StatsDisplayScoreboard implements SingleScoreboard {
 
     private String cambiarLongitudDelMensajeSiEsNecesario (String mensaje, Empresa empresa) {
         if (mensaje.length() > 40) {
-            mensaje = ChatColor.GOLD + "- " + empresa.getNombre() + " (" + ChatColor.GREEN + formatea.format(empresa.getPixelcoins()) + " PC";
+            mensaje = ChatColor.GOLD + "- " + empresa.getNombre() + " (" + ChatColor.GREEN + FORMATEA.format(empresa.getPixelcoins()) + " PC";
             if (mensaje.length() > 40) {
                 mensaje = ChatColor.GOLD + "- " + empresa.getNombre();
             }

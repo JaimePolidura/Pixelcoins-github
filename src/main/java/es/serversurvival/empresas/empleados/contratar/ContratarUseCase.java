@@ -10,7 +10,7 @@ import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 
 import static es.serversurvival.empresas.empleados._shared.application.EmpleadosService.*;
 
-public final class ContratarUseCase implements AllMySQLTablesInstances {
+public final class ContratarUseCase {
     private final EmpleadosService empleadosService;
     private final EmpresasService empresasService;
 

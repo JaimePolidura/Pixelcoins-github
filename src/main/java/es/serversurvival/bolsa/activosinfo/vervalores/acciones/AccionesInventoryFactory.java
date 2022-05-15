@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static es.serversurvival._shared.utils.Funciones.DATE_FORMATER_LEGACY;
+
 public class AccionesInventoryFactory extends InventoryFactory {
     private final HashMap<String, String> accionesPagina1 = new HashMap<>();
     private final HashMap<String, String> accionesPagina2 = new HashMap<>();
@@ -84,7 +86,7 @@ public class AccionesInventoryFactory extends InventoryFactory {
                 lore.add(ChatColor.RED + "Cargando...");
             }else{
                 displayName = ChatColor.GOLD + "" + ChatColor.BOLD + accion.getNombreActivoLargo();
-                lore.add(ChatColor.GOLD + "Precio/Accion:" + ChatColor.GREEN + " " + formatea.format(accion.getPrecio())  + " PC");
+                lore.add(ChatColor.GOLD + "Precio/Accion:" + ChatColor.GREEN + " " + DATE_FORMATER_LEGACY.format(accion.getPrecio())  + " PC");
             }
 
             ItemStack accionItem = ItemBuilder.of(Material.BOOK).title(displayName).lore(lore).build();

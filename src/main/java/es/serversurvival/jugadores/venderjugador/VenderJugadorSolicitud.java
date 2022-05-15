@@ -16,6 +16,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+
 public class VenderJugadorSolicitud extends Menu implements Solicitud {
     private final PagarUseCase pagarUseCase;
 
@@ -45,7 +47,7 @@ public class VenderJugadorSolicitud extends Menu implements Solicitud {
 
         String nombreAceptar = ChatColor.GREEN + "" + ChatColor.BOLD + "COMPRAR";
         List<String> loreAceptar = Arrays.asList(ChatColor.GOLD + jugadorVendedor.getName() + " quiere venderte " + itemAVender.getAmount() + " de ", ChatColor.GOLD +
-                itemAVender.getType().toString() + " a " + ChatColor.GREEN + AllMySQLTablesInstances.formatea.format(precio) + " PC " + ChatColor.GOLD + " en total");
+                itemAVender.getType().toString() + " a " + ChatColor.GREEN + FORMATEA.format(precio) + " PC " + ChatColor.GOLD + " en total");
 
         String nomrbreCancelar = ChatColor.RED +  "" + ChatColor.BOLD + "RECHAZAR";
         List<String> loreCancelar = Arrays.asList(ChatColor.GOLD + "Cancelar la oferta de " + jugadorVendedor.getName());
@@ -84,7 +86,7 @@ public class VenderJugadorSolicitud extends Menu implements Solicitud {
         jugadorAVender.getInventory().addItem(itemAVender);
         jugadorVendedor.getInventory().clear(slotItemVender);
 
-        jugadorVendedor.sendMessage(ChatColor.GOLD + jugadorAVender.getName() + " te ha compradoo " + itemAVender.getType().toString() + " al precio de " + ChatColor.GREEN + AllMySQLTablesInstances.formatea.format(precio) + " PC");
+        jugadorVendedor.sendMessage(ChatColor.GOLD + jugadorAVender.getName() + " te ha compradoo " + itemAVender.getType() + " al precio de " + ChatColor.GREEN + FORMATEA.format(precio) + " PC");
         jugadorVendedor.playSound(jugadorVendedor.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
         jugadorAVender.sendMessage(ChatColor.GOLD + "Has comprado el item");

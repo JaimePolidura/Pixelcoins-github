@@ -72,7 +72,7 @@ import static org.bukkit.ChatColor.*;
  11 PosicionesAbiertas
  12 Llamadas api
  */
-public final class Pixelcoin extends JavaPlugin implements AllMySQLTablesInstances {
+public final class Pixelcoin extends JavaPlugin {
     private static Pixelcoin plugin;
     private ScoreBoardManager scoreBoardManager;
     private EventBus eventBus;

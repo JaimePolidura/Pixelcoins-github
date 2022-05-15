@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static es.serversurvival._shared.utils.Funciones.*;
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService.*;
 
 public class TopInventoryFactory extends InventoryFactory {
@@ -53,7 +55,7 @@ public class TopInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildTopRicosJugadoresItem () {
-        Map<String, Double> listaRicos = Funciones.crearMapaTopPatrimonioPlayers(false);
+        Map<String, Double> listaRicos = crearMapaTopPatrimonioPlayers(false);
         String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP RICOS";
 
         List<String> lore = new ArrayList<>();
@@ -61,7 +63,7 @@ public class TopInventoryFactory extends InventoryFactory {
         for(Map.Entry<String, Double> entry : listaRicos.entrySet()){
             if(pos == 6) break;
 
-            lore.add(ChatColor.GOLD + "" + pos + "º " + entry.getKey() + ": " + ChatColor.GREEN + formatea.format(entry.getValue()) + " PC");
+            lore.add(ChatColor.GOLD + "" + pos + "º " + entry.getKey() + ": " + ChatColor.GREEN + FORMATEA.format(entry.getValue()) + " PC");
             pos++;
         }
 
@@ -69,7 +71,7 @@ public class TopInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildTopPobresJugadoresItem () {
-        Map<String, Double> listaRicos = Funciones.crearMapaTopPatrimonioPlayers(true);
+        Map<String, Double> listaRicos = crearMapaTopPatrimonioPlayers(true);
 
         String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP POBRES";
 
@@ -79,7 +81,7 @@ public class TopInventoryFactory extends InventoryFactory {
             if(pos == 6) break;
             if(entry.getValue() == 0) continue;
 
-            lore.add(ChatColor.GOLD + "" + pos + "º " + entry.getKey() + ": " + ChatColor.GREEN + formatea.format(entry.getValue()) + " PC");
+            lore.add(ChatColor.GOLD + "" + pos + "º " + entry.getKey() + ": " + ChatColor.GREEN + FORMATEA.format(entry.getValue()) + " PC");
             pos++;
         }
 
@@ -95,7 +97,7 @@ public class TopInventoryFactory extends InventoryFactory {
         int pos = 1;
         for(Jugador vendedor : listaVendedores){
             if(pos == 6) break;
-            lore.add(ChatColor.GOLD + "" + pos + "º " + vendedor.getNombre() + ": " + ChatColor.GREEN + formatea.format(vendedor.getNVentas()));
+            lore.add(ChatColor.GOLD + "" + pos + "º " + vendedor.getNombre() + ": " + ChatColor.GREEN + FORMATEA.format(vendedor.getNVentas()));
 
             pos++;
         }
@@ -111,7 +113,7 @@ public class TopInventoryFactory extends InventoryFactory {
         int pos = 1;
         for(Jugador fiabe : listaFiables){
             if(pos == 6) break;
-            lore.add(ChatColor.GOLD + "" + pos  + "º " + fiabe.getNombre() + ": " + ChatColor.GREEN + formatea.format(fiabe.getNPagosDeuda()));
+            lore.add(ChatColor.GOLD + "" + pos  + "º " + fiabe.getNombre() + ": " + ChatColor.GREEN + FORMATEA.format(fiabe.getNPagosDeuda()));
 
             pos++;
         }
@@ -128,7 +130,7 @@ public class TopInventoryFactory extends InventoryFactory {
         for(Jugador noFiable : listaMenosFiables){
             if(pos == 6) break;
 
-            lore.add(ChatColor.GOLD + "" + pos  + "º " + noFiable.getNombre() + ": " + ChatColor.GREEN + formatea.format(noFiable.getNInpagosDeuda()));
+            lore.add(ChatColor.GOLD + "" + pos  + "º " + noFiable.getNombre() + ": " + ChatColor.GREEN + FORMATEA.format(noFiable.getNInpagosDeuda()));
             pos++;
         }
 
@@ -146,7 +148,7 @@ public class TopInventoryFactory extends InventoryFactory {
         List<String> lore = new ArrayList<>();
 
         for(int i = 0; i < 5; i++){
-            double rentabilidad = Funciones.redondeoDecimales(posicionCerradasNotDuplicadas.get(i).calculateRentabildiad(), 3);
+            double rentabilidad = redondeoDecimales(posicionCerradasNotDuplicadas.get(i).calculateRentabildiad(), 3);
 
             if(rentabilidad > 0){
                 if(posicionCerradasNotDuplicadas.get(i).getTipoPosicion() == TipoPosicion.CORTO){
@@ -169,7 +171,7 @@ public class TopInventoryFactory extends InventoryFactory {
         List<String> lore = new ArrayList<>();
 
         for(int i = 0; i < 5; i++){
-            double rentabilidad = Funciones.redondeoDecimales(posicionCerradasNotDuplicadas.get(i).calculateRentabildiad(), 3);
+            double rentabilidad = redondeoDecimales(posicionCerradasNotDuplicadas.get(i).calculateRentabildiad(), 3);
 
             if(posicionCerradasNotDuplicadas.get(i).getTipoPosicion() == TipoPosicion.CORTO){
                 lore.add("" + ChatColor.GOLD + (i + 1)  + "º (CORTO) " + posicionCerradasNotDuplicadas.get(i).getJugador() + ": " +
@@ -190,7 +192,7 @@ public class TopInventoryFactory extends InventoryFactory {
 
         for (int i = 0; i < 5; i++) {
             if(infoJugadores.get(i).porcentajePatrimonioIngresos > 0){
-                lore.add(ChatColor.GOLD + "" + (i + 1) + " " + infoJugadores.get(i).nombre + ": " + formatea.format(Funciones.redondeoDecimales(infoJugadores.get(i).porcentajePatrimonioIngresos, 3)) + "%");
+                lore.add(ChatColor.GOLD + "" + (i + 1) + " " + infoJugadores.get(i).nombre + ": " + FORMATEA.format(redondeoDecimales(infoJugadores.get(i).porcentajePatrimonioIngresos, 3)) + "%");
             }else{
                 lore.add(ChatColor.GOLD + "" + (i + 1) + " " + infoJugadores.get(i).nombre + ": " + ChatColor.GREEN + "0%");
             }
@@ -236,7 +238,7 @@ public class TopInventoryFactory extends InventoryFactory {
 
     private void initInfoJugadores () {
         List<Jugador> jugadores = jugadoresService.findAll();
-        Map<String, Double> mapPatrimonio = Funciones.crearMapaTopPatrimonioPlayers(false);
+        Map<String, Double> mapPatrimonio = crearMapaTopPatrimonioPlayers(false);
 
         for (Jugador jugador : jugadores) {
             String nombreJugador = jugador.getNombre();
@@ -256,7 +258,7 @@ public class TopInventoryFactory extends InventoryFactory {
             this.jugador = jugador;
             this.nombre = nombre;
             this.patrimonio = patrimonio;
-            this.porcentajePatrimonioIngresos = Funciones.rentabilidad(patrimonio, jugador.getIngresos() - jugador.getGastos());
+            this.porcentajePatrimonioIngresos = rentabilidad(patrimonio, jugador.getIngresos() - jugador.getGastos());
         }
     }
 }

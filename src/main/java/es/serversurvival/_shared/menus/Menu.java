@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 
-public abstract class Menu implements AllMySQLTablesInstances {
+public abstract class Menu {
     public abstract Inventory getInventory();
     public abstract Player getPlayer();
 

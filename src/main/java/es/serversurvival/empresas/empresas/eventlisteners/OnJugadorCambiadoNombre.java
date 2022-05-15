@@ -5,7 +5,7 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.jugadores.setupjugadorunido.JugadorCambiadoDeNombreEvento;
 
-public final class OnJugadorCambiadoNombre implements AllMySQLTablesInstances {
+public final class OnJugadorCambiadoNombre {
     private final EmpresasService empresasService;
 
     public OnJugadorCambiadoNombre() {

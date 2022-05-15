@@ -20,6 +20,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.DATE_FORMATER_LEGACY;
+
 public class CriptomonedasMenu extends Menu implements Clickable, PostLoading {
     public static final String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "   Escoge para invertir";
     private Player player;
@@ -80,7 +82,7 @@ public class CriptomonedasMenu extends Menu implements Clickable, PostLoading {
                 try {
                     double precioMoneda = IEXCloud_API.getPrecioCriptomoneda(ticker);
 
-                    loreItem.add(1, ChatColor.GOLD + "Precio/Moneda:" + ChatColor.GREEN + " " + AllMySQLTablesInstances.formatea.format(precioMoneda) + " $");
+                    loreItem.add(1, ChatColor.GOLD + "Precio/Moneda:" + ChatColor.GREEN + " " + DATE_FORMATER_LEGACY.format(precioMoneda) + " $");
 
                     MinecraftUtils.setLore(actual, loreItem);
                 } catch (Exception e) {

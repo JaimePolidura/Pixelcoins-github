@@ -7,7 +7,7 @@ import es.serversurvival._shared.eventospixelcoins.PosicionCerradaEvento;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 
-public final class OnPosicionCerrada implements AllMySQLTablesInstances {
+public final class OnPosicionCerrada {
     private final ActivoInfoService activoInfoService;
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
 

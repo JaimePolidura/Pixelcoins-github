@@ -1,7 +1,9 @@
 package es.serversurvival.empresas.ofertasaccionesserver.verofertasmercadoserver;
 
 import es.jaimetruman.ItemBuilder;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
+import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.TipoOfertante;
 import org.bukkit.Bukkit;
@@ -12,11 +14,17 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 public class EmpresasMercadoInventoryFactory extends InventoryFactory {
     private final String titulo = DARK_RED + "" + BOLD + "    MERCADO DE ACCIONES";
-    private List<ItemStack> itemExcessInventory = new ArrayList<>();
+    private final OfertasAccionesServerService ofertasAccionesServerService;
+    private final List<ItemStack> itemExcessInventory = new ArrayList<>();
+
+    public EmpresasMercadoInventoryFactory() {
+        this.ofertasAccionesServerService = DependecyContainer.get(OfertasAccionesServerService.class);
+    }
 
     @Override
     protected Inventory buildInventory(String jugador) {
@@ -75,7 +83,7 @@ public class EmpresasMercadoInventoryFactory extends InventoryFactory {
 
 
     private List<ItemStack> buildItemsOfertas (String jugador) {
-        List<OfertaAccionServer> mercadoOferta = ofertasMercadoServerMySQL.getAll();
+        List<OfertaAccionServer> mercadoOferta = ofertasAccionesServerService.findAll();
         List<ItemStack> items = new ArrayList<>();
 
         mercadoOferta.forEach(oferta -> items.add(buildItemFromOferta(oferta, jugador)));
@@ -101,12 +109,12 @@ public class EmpresasMercadoInventoryFactory extends InventoryFactory {
         lore.add(GOLD + "Empresa: " + ofertaAccion.getEmpresa());
         lore.add(GOLD + "Ofertante: " + ofertaAccion.getNombreOfertante() + " ("+ofertaAccion.getTipoOfertante().toString().toLowerCase()+")");
         lore.add(GOLD + "Acciones: " + ofertaAccion.getCantidad());
-        lore.add(GOLD + "Precio/Accion: " + GREEN + formatea.format(ofertaAccion.getPrecio()) + " PC");
-        lore.add(GOLD + "Precio total: " + GREEN + formatea.format(ofertaAccion.getPrecio() * ofertaAccion.getCantidad()) + " PC");
+        lore.add(GOLD + "Precio/Accion: " + GREEN + FORMATEA.format(ofertaAccion.getPrecio()) + " PC");
+        lore.add(GOLD + "Precio total: " + GREEN + FORMATEA.format(ofertaAccion.getPrecio() * ofertaAccion.getCantidad()) + " PC");
         lore.add("   ");
         lore.add(GOLD + "Fecha: " + ofertaAccion.getFecha());
         lore.add("  ");
-        lore.add("" + ofertaAccion.getId());
+        lore.add("" + ofertaAccion.getNombreOfertante());
 
         return ItemBuilder.of(material).title(displayname).lore(lore).build();
     }

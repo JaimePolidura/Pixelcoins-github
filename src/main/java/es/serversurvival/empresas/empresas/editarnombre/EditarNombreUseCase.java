@@ -9,7 +9,7 @@ import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import io.vavr.control.Try;
 
-public final class EditarNombreUseCase implements AllMySQLTablesInstances {
+public final class EditarNombreUseCase {
     private final EmpresasService empresasService;
 
     public EditarNombreUseCase(){

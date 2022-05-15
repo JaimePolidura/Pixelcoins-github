@@ -18,6 +18,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival._shared.utils.Funciones.sortMapByValueDecre;
 
 @Command(
@@ -49,7 +50,7 @@ public class VerCarteraJugadorComandoRunner extends PixelcoinCommand implements 
             if(precio == 0){
                 player.sendMessage(ChatColor.GOLD + nombreValor + ": 0% - 1% %");
             }else {
-                player.sendMessage(ChatColor.GOLD + nombreValor + ": " + formatea.format(entry.getValue()) + "%");
+                player.sendMessage(ChatColor.GOLD + nombreValor + ": " + FORMATEA.format(entry.getValue()) + "%");
             }
         }
         player.sendMessage(ChatColor.GOLD + "" + "------------------------------");

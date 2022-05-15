@@ -4,8 +4,10 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 
+import java.util.UUID;
 
-public final class ComprarOfertaMercadoUseCase implements AllMySQLTablesInstances {
+
+public final class ComprarOfertaMercadoUseCase {
     private final JugadoresService jugadoresService;
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
 
@@ -14,7 +16,7 @@ public final class ComprarOfertaMercadoUseCase implements AllMySQLTablesInstance
         this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
     }
 
-    public void comprarOfertaMercadoAccionServer (String compradorName, int idOfeta, int cantidadAComprar) {
+    public void comprarOfertaMercadoAccionServer (String compradorName, UUID idOfeta, int cantidadAComprar) {
 //        OfertaMercadoServer oferta = ofertasMercadoServerMySQL.get(idOfeta);
 //        double precioTotalAPagar = oferta.getPrecio() * cantidadAComprar;
 //

@@ -2,6 +2,7 @@ package es.serversurvival.bolsa.posicionesabiertas.dividendostask;
 
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
@@ -15,7 +16,7 @@ import java.util.List;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 
-public final class PagarDividendosUseCase implements AllMySQLTablesInstances {
+public final class PagarDividendosUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final JugadoresService jugadoresService;
 
@@ -66,7 +67,7 @@ public final class PagarDividendosUseCase implements AllMySQLTablesInstances {
     }
 
     private Date getFechaPagoDividendosJSON (JSONObject json) throws ParseException {
-        return dateFormater.parse((String) json.get("paymentDate"));
+        return DATE_FORMATER_LEGACY.parse((String) json.get("paymentDate"));
     }
 
     private JSONObject getJSONDividendos (String ticker) throws Exception {

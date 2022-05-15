@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
-public final class ComprarOfertaUseCase implements AllMySQLTablesInstances {
+public final class ComprarOfertaUseCase {
     private final TiendaService tiendaService;
     private final JugadoresService jugadoresService;
 

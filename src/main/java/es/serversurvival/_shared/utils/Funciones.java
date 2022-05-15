@@ -41,7 +41,7 @@ public final class Funciones {
     public static final DecimalFormat FORMATEA = new DecimalFormat("###,###.##");
     public static final SimpleDateFormat DATE_FORMATER_LEGACY = new SimpleDateFormat("yyyy-MM-dd");
     public static final DateTimeFormatter DATE_FORMATER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    public static final ExecutorService POOL = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        public static final ExecutorService POOL = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     public static final ObjectMapper MAPPER = new ObjectMapper();
 
     private Funciones () {}

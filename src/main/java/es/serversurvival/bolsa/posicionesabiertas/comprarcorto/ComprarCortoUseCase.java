@@ -16,7 +16,7 @@ import java.util.UUID;
 
 import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo.ACCIONES;
 
-public final class ComprarCortoUseCase implements AllMySQLTablesInstances {
+public final class ComprarCortoUseCase {
     private final JugadoresService jugadoresService;
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final ActivoInfoService activoInfoService;

@@ -1,5 +1,6 @@
 package es.serversurvival.bolsa.posicionesabiertas.comprarcorto;
 
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
@@ -9,7 +10,6 @@ import es.serversurvival.transacciones._shared.domain.Transaccion;
 import java.util.Date;
 import java.util.UUID;
 
-import static es.serversurvival._shared.mysql.AllMySQLTablesInstances.dateFormater;
 import static es.serversurvival.transacciones._shared.domain.TipoTransaccion.*;
 
 public final class PosicionCompraCortoEvento extends PosicionCerradaEvento {
@@ -30,7 +30,7 @@ public final class PosicionCompraCortoEvento extends PosicionCerradaEvento {
 
     @Override
     public PosicionCerrada buildPosicionCerrada() {
-        String fechaCierre = dateFormater.format(new Date());
+        String fechaCierre = Funciones.DATE_FORMATER_LEGACY.format(new Date());
 
 
         return new PosicionCerrada(UUID.randomUUID(), vendedor, tipoActivo, nombreAcitvo, cantidad, precioApertura,

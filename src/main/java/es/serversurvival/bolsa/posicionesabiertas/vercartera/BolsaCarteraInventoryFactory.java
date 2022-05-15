@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static es.serversurvival._shared.utils.Funciones.DATE_FORMATER_LEGACY;
 import static org.bukkit.ChatColor.*;
 
 public class BolsaCarteraInventoryFactory extends InventoryFactory {
@@ -134,16 +135,16 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         lore.add(GOLD + "Peso en cartera: " + peso + "%");
         lore.add("   ");
         lore.add(GOLD + "Acciones compradas: " + posicion.getCantidad());
-        lore.add(GOLD + "Precio apertura: " + GREEN + formatea.format(posicion.getPrecioApertura()) + " PC");
-        lore.add(GOLD + "Precio actual: " + GREEN + formatea.format(precioAcutal));
+        lore.add(GOLD + "Precio apertura: " + GREEN + DATE_FORMATER_LEGACY.format(posicion.getPrecioApertura()) + " PC");
+        lore.add(GOLD + "Precio actual: " + GREEN + DATE_FORMATER_LEGACY.format(precioAcutal));
         if (perdidasOBeneficios >= 0) {
-            lore.add(GOLD + "Beneficios totales: " + GREEN + "+" + formatea.format(perdidasOBeneficios) + " PC");
+            lore.add(GOLD + "Beneficios totales: " + GREEN + "+" + DATE_FORMATER_LEGACY.format(perdidasOBeneficios) + " PC");
             lore.add(GOLD + "Rentabilidad: " + GREEN + "+" + rentabilidad + "%");
         } else {
-            lore.add(GOLD + "Perdidas totales: " + RED + formatea.format(perdidasOBeneficios) + " PC");
+            lore.add(GOLD + "Perdidas totales: " + RED + DATE_FORMATER_LEGACY.format(perdidasOBeneficios) + " PC");
             lore.add(GOLD + "Rentabilidad: " + RED + rentabilidad + "%");
         }
-        lore.add(GOLD + "Valor total: " + GREEN + formatea.format(precioAcutal * posicion.getCantidad()) + " PC");
+        lore.add(GOLD + "Valor total: " + GREEN + DATE_FORMATER_LEGACY.format(precioAcutal * posicion.getCantidad()) + " PC");
         lore.add("   ");
         lore.add(GOLD + "Fecha de compra: " + posicion.getPrecioApertura());
         lore.add(GOLD + "ID: " + posicion.getPosicionAbiertaId());
@@ -173,16 +174,16 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
         lore.add(GOLD + "Peso en cartera: " + peso + "%");
         lore.add("   ");
         lore.add(GOLD + "Acciones vendidas: " + posicion.getCantidad());
-        lore.add(GOLD + "Precio apertura: " + GREEN + formatea.format(posicion.getPrecioApertura()) + " PC");
-        lore.add(GOLD + "Precio actual: " + GREEN + formatea.format(precioAcutal));
+        lore.add(GOLD + "Precio apertura: " + GREEN + DATE_FORMATER_LEGACY.format(posicion.getPrecioApertura()) + " PC");
+        lore.add(GOLD + "Precio actual: " + GREEN + DATE_FORMATER_LEGACY.format(precioAcutal));
         if (perdidasOBeneficios >= 0) {
-            lore.add(GOLD + "Beneficios totales: " + GREEN + "+" + formatea.format(perdidasOBeneficios) + " PC");
+            lore.add(GOLD + "Beneficios totales: " + GREEN + "+" + DATE_FORMATER_LEGACY.format(perdidasOBeneficios) + " PC");
             lore.add(GOLD + "Rentabilidad: " + GREEN + "+" + rentabilidad + "%");
         } else {
-            lore.add(GOLD + "Perdidas totales: " + RED + formatea.format(perdidasOBeneficios) + " PC");
+            lore.add(GOLD + "Perdidas totales: " + RED + DATE_FORMATER_LEGACY.format(perdidasOBeneficios) + " PC");
             lore.add(GOLD + "Rentabilidad: " + RED + rentabilidad + "%");
         }
-        lore.add(GOLD + "Valor total: " + GREEN + formatea.format(precioAcutal * posicion.getCantidad()) + " PC");
+        lore.add(GOLD + "Valor total: " + GREEN + DATE_FORMATER_LEGACY.format(precioAcutal * posicion.getCantidad()) + " PC");
         lore.add("   ");
         lore.add(GOLD + "Fecha de compra: " + posicion.getFechaApertura());
         lore.add(GOLD + "ID: " + posicion.getPosicionAbiertaId());
@@ -248,11 +249,11 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
     private ItemStack buildItemResultado() {
         List<String> lore = new ArrayList<>();
         lore.add(GOLD + "Estas al " + Funciones.redondeoDecimales(Funciones.rentabilidad(liquidezjugador + valorTotal, valorTotal), 1) + " % invertido");
-        lore.add(GOLD + "Valor total: " + GREEN + formatea.format(valorTotal) + " PC");
+        lore.add(GOLD + "Valor total: " + GREEN + DATE_FORMATER_LEGACY.format(valorTotal) + " PC");
         if (resultadoTotal >= 0)
-            lore.add(GOLD + "Beneficios: " + GREEN + formatea.format(resultadoTotal) + " PC");
+            lore.add(GOLD + "Beneficios: " + GREEN + DATE_FORMATER_LEGACY.format(resultadoTotal) + " PC");
         else
-            lore.add(GOLD + "Perdidas: " + RED + formatea.format(resultadoTotal) + " PC");
+            lore.add(GOLD + "Perdidas: " + RED + DATE_FORMATER_LEGACY.format(resultadoTotal) + " PC");
 
         double rentabilidad = Funciones.rentabilidad(valorTotal, resultadoTotal);
         if (rentabilidad > 0)

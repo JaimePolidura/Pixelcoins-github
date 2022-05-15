@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static es.serversurvival._shared.mysql.AllMySQLTablesInstances.dateFormater;
-
 public final class EmpleadosService {
     public static final int MAX_CARGO_LENGTH = 16;
     public static final int MIN_CARGO_LENGTH = 3;
@@ -32,7 +30,7 @@ public final class EmpleadosService {
     }
 
     public void save(String empleado, String empresa, double sueldo, TipoSueldo tipo, String cargo) {
-        String fechaPaga = dateFormater.format(new Date());
+        String fechaPaga = Funciones.DATE_FORMATER_LEGACY.format(new Date());
 
         this.save(new Empleado(UUID.randomUUID(), empleado, empresa, sueldo, cargo, tipo, fechaPaga));
     }

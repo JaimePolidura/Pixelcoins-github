@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public abstract class InventoryFactory implements AllMySQLTablesInstances {
+public abstract class InventoryFactory {
     protected abstract Inventory buildInventory (String jugador);
 
     protected ItemStack buildItemGoBack () {

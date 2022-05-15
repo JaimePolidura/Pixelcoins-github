@@ -16,6 +16,7 @@ import org.bukkit.inventory.Inventory;
 import java.util.ArrayList;
 import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 public class PagarDividendoConfirmacion extends Menu implements AumentoConfirmacion {
@@ -31,7 +32,9 @@ public class PagarDividendoConfirmacion extends Menu implements AumentoConfirmac
     public PagarDividendoConfirmacion (Player player, String nombreEmpresa) {
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.useCase = new PagarDividendosEmpresaServerUseCase();
-        this.accionesTotales = AllMySQLTablesInstances.ofertasMercadoServerMySQL.getAccionesTotalesParaPagarDividendo(nombreEmpresa);
+//        this.accionesTotales = AllMySQLTablesInstances.ofertasMercadoServerMySQL.getAccionesTotalesParaPagarDividendo(nombreEmpresa);
+        //TODO XD
+        this.accionesTotales = 0;
         this.empresa = this.empresasService.getEmpresaByNombre(nombreEmpresa);
 
         this.player = player;
@@ -39,9 +42,9 @@ public class PagarDividendoConfirmacion extends Menu implements AumentoConfirmac
 
         String titulo = DARK_RED + "" + BOLD + "   REPARTIR DIVIDENDOS ";
         List<String> lore = new ArrayList<>();
-        lore.add(GOLD + "Repartir " + GREEN + AllMySQLTablesInstances.formatea.format(dividendoPorAccion) + " PC" + GOLD + " por accion");
-        lore.add(GOLD + "Que seria un gasto total de " + GREEN + AllMySQLTablesInstances.formatea.format((long) accionesTotales * dividendoPorAccion) + " PC");
-        lore.add(GOLD + "La empresa tiene " + GREEN + AllMySQLTablesInstances.formatea.format(empresa.getPixelcoins()) + " PC " + GOLD + "en caja");
+        lore.add(GOLD + "Repartir " + GREEN + FORMATEA.format(dividendoPorAccion) + " PC" + GOLD + " por accion");
+        lore.add(GOLD + "Que seria un gasto total de " + GREEN + FORMATEA.format((long) accionesTotales * dividendoPorAccion) + " PC");
+        lore.add(GOLD + "La empresa tiene " + GREEN + FORMATEA.format(empresa.getPixelcoins()) + " PC " + GOLD + "en caja");
         String nombreItemAceptar = GREEN + "" + BOLD + "REPARTIR";
         String itemCancelar = RED + "" + BOLD + "CANCELAR";
 
@@ -62,9 +65,9 @@ public class PagarDividendoConfirmacion extends Menu implements AumentoConfirmac
 
         String nombreItemAceptar =  GREEN + "" + BOLD + "   REPARTIR";
         List<String> loreAcepatr = new ArrayList<>();
-        loreAcepatr.add(GOLD + "Repartir " + GREEN + AllMySQLTablesInstances.formatea.format(dividendoPorAccion) + " PC" + GOLD + " por accion");
-        loreAcepatr.add(GOLD + "Que seria un gasto de " + GREEN + AllMySQLTablesInstances.formatea.format(accionesTotales * dividendoPorAccion) + " PC");
-        loreAcepatr.add(GOLD + "La empresa tiene " + GREEN + AllMySQLTablesInstances.formatea.format(empresa.getPixelcoins()) + " PC " + GOLD + "en caja");
+        loreAcepatr.add(GOLD + "Repartir " + GREEN + FORMATEA.format(dividendoPorAccion) + " PC" + GOLD + " por accion");
+        loreAcepatr.add(GOLD + "Que seria un gasto de " + GREEN + FORMATEA.format((long) accionesTotales * dividendoPorAccion) + " PC");
+        loreAcepatr.add(GOLD + "La empresa tiene " + GREEN + FORMATEA.format(empresa.getPixelcoins()) + " PC " + GOLD + "en caja");
 
         ItemBuilder.of(Material.GREEN_WOOL).title(nombreItemAceptar).lore(loreAcepatr).buildAddInventory(inventory, 14);
     }

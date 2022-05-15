@@ -22,6 +22,8 @@ import org.bukkit.inventory.Inventory;
 import java.util.ArrayList;
 import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.*;
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 public class ComprarBolsaConfirmacion extends Menu implements AumentoConfirmacion {
@@ -57,7 +59,7 @@ public class ComprarBolsaConfirmacion extends Menu implements AumentoConfirmacio
         String tituloAceptar = GREEN + "" + BOLD + "COMPRAR " + alias.toUpperCase();
         String tituloCancelar = RED + "" + BOLD + "CANCELAR";
         List<String> lore = new ArrayList<>();
-        lore.add(GOLD + "Comprar 1 " + alias + " de " + simbolo + " a " + GREEN + AllMySQLTablesInstances.formatea.format(precioUnidad) + " PC");
+        lore.add(GOLD + "Comprar 1 " + alias + " de " + simbolo + " a " + GREEN + FORMATEA.format(precioUnidad) + " PC");
 
         this.inventory = InventoryCreator.createConfirmacionAumento(titulo, tituloAceptar, lore, tituloCancelar);
 
@@ -83,14 +85,14 @@ public class ComprarBolsaConfirmacion extends Menu implements AumentoConfirmacio
         }
         String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "COMPRAR " + alias.toUpperCase();
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GOLD + "Comprar " + cantidadAComprar + " " +  alias  + " " + simbolo + " a " + ChatColor.GREEN + precioUnidad + " PC -> total: " + AllMySQLTablesInstances.formatea.format(Funciones.redondeoDecimales(precioTotal, 3)) + " PC");
+        lore.add(ChatColor.GOLD + "Comprar " + cantidadAComprar + " " +  alias  + " " + simbolo + " a " + ChatColor.GREEN + precioUnidad + " PC -> total: " + FORMATEA.format(redondeoDecimales(precioTotal, 3)) + " PC");
 
         ItemBuilder.of(Material.GREEN_WOOL).title(displayName).lore(lore).buildAddInventory(inventory, 14);
     }
 
     @Override
     public void confirmar() {
-        Funciones.POOL.submit(() -> {
+        POOL.submit(() -> {
             if (dineroJugador < precioTotal) {
                 player.sendMessage(ChatColor.DARK_RED + "No tienes el suficiente dinero");
                 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);

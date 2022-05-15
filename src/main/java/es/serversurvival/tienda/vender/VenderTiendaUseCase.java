@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public final class VenderTiendaUseCase implements AllMySQLTablesInstances {
+public final class VenderTiendaUseCase {
     private static final List<String> bannedItems = Arrays.asList("POTION", "BANNER", "SPLASH_POTION", "LINGERING_POTION", "AIR");
     private static final int MAX_ITEMS_PER_PLAYER = 5;
 

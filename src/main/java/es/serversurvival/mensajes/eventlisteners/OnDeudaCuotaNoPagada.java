@@ -5,7 +5,7 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.deudas.pagarCuotas.DeudaCuotaNoPagadaEvento;
 import es.serversurvival.mensajes._shared.application.MensajesService;
 
-public final class OnDeudaCuotaNoPagada implements AllMySQLTablesInstances {
+public final class OnDeudaCuotaNoPagada {
     private final MensajesService mensajesService;
 
     public OnDeudaCuotaNoPagada(){

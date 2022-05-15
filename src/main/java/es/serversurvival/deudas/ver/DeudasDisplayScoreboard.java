@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival._shared.utils.MinecraftUtils.*;
 
 public class DeudasDisplayScoreboard implements SingleScoreboard {
@@ -29,11 +30,11 @@ public class DeudasDisplayScoreboard implements SingleScoreboard {
         int totalAPagar = this.deudasService.getAllPixelcoinsDeudasDeudor(jugador);
         int totalASerPagado = this.deudasService.getAllPixelcoinsDeudasDeudor(jugador);
 
-        addLineToScoreboard(objective, ChatColor.GOLD + "Pixelcoins que debes: " + ChatColor.GREEN + formatea.format(totalAPagar) + " PC", 0);
-        addLineToScoreboard(objective, ChatColor.GOLD + "Pixelcoins que te deben: " + ChatColor.GREEN + formatea.format(totalASerPagado) + " PC", -1);
+        addLineToScoreboard(objective, ChatColor.GOLD + "Pixelcoins que debes: " + ChatColor.GREEN + FORMATEA.format(totalAPagar) + " PC", 0);
+        addLineToScoreboard(objective, ChatColor.GOLD + "Pixelcoins que te deben: " + ChatColor.GREEN + FORMATEA.format(totalASerPagado) + " PC", -1);
         addLineToScoreboard(objective, "     ", -2);
-        addLineToScoreboard(objective, ChatColor.GOLD + "Nº de veces pagadas la deuda: " + formatea.format(jugadorScoreboear.getNPagosDeuda()), -3);
-        addLineToScoreboard(objective, ChatColor.GOLD + "Nº de veces no pagadas la deuda: " + formatea.format(jugadorScoreboear.getNInpagosDeuda()), -4);
+        addLineToScoreboard(objective, ChatColor.GOLD + "Nº de veces pagadas la deuda: " + FORMATEA.format(jugadorScoreboear.getNPagosDeuda()), -3);
+        addLineToScoreboard(objective, ChatColor.GOLD + "Nº de veces no pagadas la deuda: " + FORMATEA.format(jugadorScoreboear.getNInpagosDeuda()), -4);
 
         return scoreboard;
     }

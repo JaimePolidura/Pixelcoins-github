@@ -77,7 +77,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
         lore.add("  ");
         List<Empleado> empleos = empleadosService.findByJugador(jugador);
         empleos.forEach( (emp) -> {
-            lore.add(ChatColor.GOLD + "" + emp.getEmpresa() + " " + ChatColor.GREEN + formatea.format(emp.getSueldo()) + " PC " + ChatColor.GOLD + "/ " + emp.getTipoSueldo().nombre);
+            lore.add(ChatColor.GOLD + "" + emp.getEmpresa() + " " + ChatColor.GREEN + FORMATEA.format(emp.getSueldo()) + " PC " + ChatColor.GOLD + "/ " + emp.getTipoSueldo().nombre);
         });
 
         return ItemBuilder.of(Material.GOLDEN_APPLE).title(displayName).lore(lore).build();
@@ -90,7 +90,7 @@ public class PerfilInventoryFactory extends InventoryFactory {
         lore.add("  ");
         List<Empresa> empresas = empresasService.getByOwner(jugador);
         empresas.forEach( (empresa) -> {
-            lore.add(ChatColor.GOLD + "- " + empresa.getNombre() + " ( " + ChatColor.GREEN + formatea.format(empresa.getPixelcoins()) + " PC" +  ChatColor.GOLD + ")");
+            lore.add(ChatColor.GOLD + "- " + empresa.getNombre() + " ( " + ChatColor.GREEN + FORMATEA.format(empresa.getPixelcoins()) + " PC" +  ChatColor.GOLD + ")");
         });
 
         return ItemBuilder.of(Material.GOLD_BLOCK).title(displayName).lore(lore).build();
@@ -171,27 +171,27 @@ public class PerfilInventoryFactory extends InventoryFactory {
         lore.add("  ");
         lore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "       TUS ESTADISTICAS");
         lore.add("   ");
-        lore.add(ChatColor.GOLD + "Liquidez (ahorrado): " + ChatColor.GREEN + formatea.format(totalAhorrado) + " PC");
-        lore.add(ChatColor.GOLD + "Total en empresas: " + ChatColor.GREEN + formatea.format(totalEmpresas) + " PC");
-        lore.add(ChatColor.GOLD + "Total en acciones: " + ChatColor.GREEN + formatea.format(totalEnAcciones) + " PC");
-        lore.add(ChatColor.GOLD + "Total que te deben: " + ChatColor.GREEN + formatea.format(totalDeben) + " PC");
-        lore.add(ChatColor.GOLD + "Total que debes: " + ChatColor.RED + "-" + formatea.format(totalDebe) + " PC");
+        lore.add(ChatColor.GOLD + "Liquidez (ahorrado): " + ChatColor.GREEN + FORMATEA.format(totalAhorrado) + " PC");
+        lore.add(ChatColor.GOLD + "Total en empresas: " + ChatColor.GREEN + FORMATEA.format(totalEmpresas) + " PC");
+        lore.add(ChatColor.GOLD + "Total en acciones: " + ChatColor.GREEN + FORMATEA.format(totalEnAcciones) + " PC");
+        lore.add(ChatColor.GOLD + "Total que te deben: " + ChatColor.GREEN + FORMATEA.format(totalDeben) + " PC");
+        lore.add(ChatColor.GOLD + "Total que debes: " + ChatColor.RED + "-" + FORMATEA.format(totalDebe) + " PC");
         if(beneficios >= 0)
-            lore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Reultado: " + ChatColor.GREEN + formatea.format(resultado) + " PC");
+            lore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Reultado: " + ChatColor.GREEN + FORMATEA.format(resultado) + " PC");
         else
-            lore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Reultado: " + ChatColor.RED + "-" + formatea.format(resultado) + " PC");
+            lore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Reultado: " + ChatColor.RED + "-" + FORMATEA.format(resultado) + " PC");
 
         lore.add(ChatColor.GOLD + "Posicion top ricos: " + posTopRicps);
         lore.add("    ");
 
-        lore.add(ChatColor.GOLD + "Ingresos: " + ChatColor.GREEN + formatea.format(ingresos) + " PC");
-        lore.add(ChatColor.GOLD + "Gastos: " + ChatColor.GREEN + formatea.format(gastos) + " PC");
+        lore.add(ChatColor.GOLD + "Ingresos: " + ChatColor.GREEN + FORMATEA.format(ingresos) + " PC");
+        lore.add(ChatColor.GOLD + "Gastos: " + ChatColor.GREEN + FORMATEA.format(gastos) + " PC");
         if(beneficios >= 0){
-            lore.add(ChatColor.GOLD + "Beneficios: " + ChatColor.GREEN + formatea.format(beneficios) + " PC");
-            lore.add(ChatColor.GOLD + "Rentabilidad: " + ChatColor.GREEN + "+" + formatea.format((int) rentabilidad) + " %");
+            lore.add(ChatColor.GOLD + "Beneficios: " + ChatColor.GREEN + FORMATEA.format(beneficios) + " PC");
+            lore.add(ChatColor.GOLD + "Rentabilidad: " + ChatColor.GREEN + "+" + FORMATEA.format((int) rentabilidad) + " %");
         }else{
-            lore.add(ChatColor.GOLD + "Beneficios: " + ChatColor.RED + formatea.format(beneficios) + " PC");
-            lore.add(ChatColor.GOLD + "Rentabilidad: " + ChatColor.RED + formatea.format((int) rentabilidad) + " %");
+            lore.add(ChatColor.GOLD + "Beneficios: " + ChatColor.RED + FORMATEA.format(beneficios) + " PC");
+            lore.add(ChatColor.GOLD + "Rentabilidad: " + ChatColor.RED + FORMATEA.format((int) rentabilidad) + " %");
         }
         lore.add("   ");
         lore.add(ChatColor.GOLD + "Nº de ventas en la tienda: " + nventas);

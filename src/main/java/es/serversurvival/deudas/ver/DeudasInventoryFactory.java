@@ -14,6 +14,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+
 public class DeudasInventoryFactory extends InventoryFactory {
     private final DeudasService deudasService;
 
@@ -58,7 +60,7 @@ public class DeudasInventoryFactory extends InventoryFactory {
         List<String> lore = new ArrayList<>();
         lore.add("   ");
         lore.add(ChatColor.GOLD + "Debes a: " + deuda.getAcredor());
-        lore.add(ChatColor.GOLD + "Te queda de pagar: " + ChatColor.GREEN +  formatea.format(deuda.getPixelcoins_restantes()) + " PC" );
+        lore.add(ChatColor.GOLD + "Te queda de pagar: " + ChatColor.GREEN +  FORMATEA.format(deuda.getPixelcoins_restantes()) + " PC" );
         lore.add(ChatColor.GOLD + "Vence en: " + deuda.getTiempo_restante() + " dias");
         lore.add(ChatColor.GOLD + "ID: " + deuda.getDeudaId());
 
@@ -70,7 +72,7 @@ public class DeudasInventoryFactory extends InventoryFactory {
         List<String> lore = new ArrayList<>();
         lore.add("   ");
         lore.add(ChatColor.GOLD + "Te debe: " + deuda.getDeudor());
-        lore.add(ChatColor.GOLD + "Le queda de pagar: " + ChatColor.GREEN +  formatea.format(deuda.getPixelcoins_restantes()) + " PC" );
+        lore.add(ChatColor.GOLD + "Le queda de pagar: " + ChatColor.GREEN +  FORMATEA.format(deuda.getPixelcoins_restantes()) + " PC" );
         lore.add(ChatColor.GOLD + "Vence en: " + deuda.getTiempo_restante() + " dias");
         lore.add(ChatColor.GOLD + "ID: " + deuda.getDeudaId());
 

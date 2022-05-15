@@ -8,7 +8,6 @@ import es.serversurvival.deudas._shared.newformat.domain.DeudasRepository;
 
 import java.util.*;
 
-import static es.serversurvival._shared.mysql.AllMySQLTablesInstances.dateFormater;
 import static es.serversurvival._shared.utils.Funciones.getSumaTotalListInteger;
 
 public final class DeudasService {
@@ -19,7 +18,7 @@ public final class DeudasService {
     }
 
     public void save(String deudor, String acredor, int pixelcoins, int tiempo, int interes) {
-        String fechaHoy = dateFormater.format(new Date());
+        String fechaHoy = Funciones.DATE_FORMATER_LEGACY.format(new Date());
         int cuota = (int) Math.round((double) pixelcoins / tiempo);
 
         this.deudasRepository.save(new Deuda(UUID.randomUUID(), deudor, acredor, pixelcoins, tiempo, interes, cuota, fechaHoy));

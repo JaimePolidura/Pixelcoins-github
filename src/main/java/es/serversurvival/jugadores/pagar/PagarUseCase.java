@@ -8,7 +8,7 @@ import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 
-public final class PagarUseCase implements AllMySQLTablesInstances {
+public final class PagarUseCase {
     private final JugadoresService jugadoresService;
 
     public PagarUseCase(){

@@ -8,8 +8,7 @@ import es.serversurvival.deudas._shared.newformat.domain.Deuda;
 
 import java.util.UUID;
 
-
-public final class CancelarDeudaUseCase implements AllMySQLTablesInstances {
+public final class CancelarDeudaUseCase {
     private final DeudasService deudasService;
 
     public CancelarDeudaUseCase () {

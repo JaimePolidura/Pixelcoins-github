@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 
 @Mob(x = 252, y = 64, z = -216)
-public class IngresarCuarzoPixelcoinsMob implements OnPlayerInteractMob, AllMySQLTablesInstances {
+public class IngresarCuarzoPixelcoinsMob implements OnPlayerInteractMob {
     private final IngresarItemUseCase ingresarItemUseCase;
 
     public IngresarCuarzoPixelcoinsMob() {

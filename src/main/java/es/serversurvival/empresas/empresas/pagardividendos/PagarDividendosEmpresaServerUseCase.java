@@ -1,6 +1,7 @@
 package es.serversurvival.empresas.empresas.pagardividendos;
 
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
@@ -12,15 +13,17 @@ import es.serversurvival.Pixelcoin;
 import java.util.List;
 import java.util.Map;
 
-public final class PagarDividendosEmpresaServerUseCase implements AllMySQLTablesInstances {
+public final class PagarDividendosEmpresaServerUseCase {
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
+    private final OfertasAccionesServerService ofertasAccionesServerService;
 
     public PagarDividendosEmpresaServerUseCase(){
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
+        this.ofertasAccionesServerService = DependecyContainer.get(OfertasAccionesServerService.class);
     }
 
     public void pagarDividendoAccionServer(String nombreEmpresa, double dividendoPorAccion, double totalAPagar) {
@@ -29,7 +32,7 @@ public final class PagarDividendosEmpresaServerUseCase implements AllMySQLTables
         List<PosicionAbierta> posicionesAccionDeEmpresa = posicionesAbiertasSerivce.findAll().stream()
                 .filter(posicionAbierta -> posicionAbierta.getNombreActivo().equalsIgnoreCase(nombreEmpresa))
                 .toList();
-        List<OfertaAccionServer> ofertasAccion =  ofertasMercadoServerMySQL.getOfertasEmpresa(nombreEmpresa, OfertaAccionServer::esTipoOfertanteJugador);
+        List<OfertaAccionServer> ofertasAccion =  ofertasAccionesServerService.findByEmpresa(nombreEmpresa, OfertaAccionServer::esTipoOfertanteJugador);
 
         Map<String, Jugador> allJugadoresMap = jugadoresService.getMapAllJugadores();
 

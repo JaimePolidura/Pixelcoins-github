@@ -7,7 +7,7 @@ import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public final class ActualizarPreciosUseCase implements AllMySQLTablesInstances {
+public final class ActualizarPreciosUseCase {
     private final ActivoInfoService activoInfoService;
     private final AtomicBoolean isLoading;
 

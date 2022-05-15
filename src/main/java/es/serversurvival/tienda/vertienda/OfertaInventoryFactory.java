@@ -17,6 +17,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+
 public class OfertaInventoryFactory extends InventoryFactory {
     public final static String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "            Tienda";
     public final static String NOMBRE_ITEM_RETIRAR = ChatColor.RED + "" + ChatColor.BOLD + "CLICK PARA RETIRAR";
@@ -41,7 +43,7 @@ public class OfertaInventoryFactory extends InventoryFactory {
             ItemStack itemStackAInsertar = ItemsUtils.getItemStakcByTiendaObjeto(itemTienda);
 
             List<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GOLD + "Precio: " + ChatColor.GREEN + formatea.format(itemTienda.getPrecio()) + " PC");
+            lore.add(ChatColor.GOLD + "Precio: " + ChatColor.GREEN + FORMATEA.format(itemTienda.getPrecio()) + " PC");
             lore.add(ChatColor.GOLD + "Venderdor: " + itemTienda.getJugador());
             lore.add("" + itemTienda.getTiendaObjetoId());
 

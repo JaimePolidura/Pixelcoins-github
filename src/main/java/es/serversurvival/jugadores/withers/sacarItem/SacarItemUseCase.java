@@ -5,7 +5,7 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 
-public final class SacarItemUseCase implements AllMySQLTablesInstances {
+public final class SacarItemUseCase {
     private final JugadoresService jugadoresService;
     public static final SacarItemUseCase INSTANCE = new SacarItemUseCase();
 

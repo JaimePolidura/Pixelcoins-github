@@ -2,6 +2,7 @@ package es.serversurvival.empresas.empresas.pagarsueldostask;
 
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empleados._shared.domain.TipoSueldo;
@@ -15,7 +16,7 @@ import java.util.List;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 
-public final class PagarSueldosUseCase implements AllMySQLTablesInstances {
+public final class PagarSueldosUseCase {
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;
     private final EmpleadosService empleadosService;
@@ -62,11 +63,11 @@ public final class PagarSueldosUseCase implements AllMySQLTablesInstances {
 
     @SneakyThrows
     private Date formatFechaDeLaBaseDatosException (String fecha) {
-        return dateFormater.parse(fecha);
+        return DATE_FORMATER_LEGACY.parse(fecha);
     }
 
     @SneakyThrows
     private Date formatFehcaDeHoyException () {
-        return dateFormater.parse(dateFormater.format(new Date()));
+        return DATE_FORMATER_LEGACY.parse(DATE_FORMATER_LEGACY.format(new Date()));
     }
 }

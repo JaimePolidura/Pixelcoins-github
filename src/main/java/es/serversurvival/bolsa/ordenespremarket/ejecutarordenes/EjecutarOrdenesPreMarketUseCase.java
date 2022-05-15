@@ -23,7 +23,7 @@ import static es.serversurvival._shared.utils.Funciones.reducirPorcentaje;
 import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo.ACCIONES;
 import static es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce.PORCENTAJE_CORTO;
 
-public final class EjecutarOrdenesPreMarketUseCase implements AllMySQLTablesInstances {
+public final class EjecutarOrdenesPreMarketUseCase {
     private final JugadoresService jugadoresService;
     private final OrdenesPremarketService ordenesPremarketService;
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;

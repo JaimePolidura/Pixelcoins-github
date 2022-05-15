@@ -11,14 +11,12 @@ import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
 import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
-import main.Pair;
 import main.ValidationResult;
 import main.ValidatorService;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
-import java.util.Optional;
-
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
 import static es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenPremarketCommand.*;
 import static org.bukkit.ChatColor.*;
@@ -68,7 +66,7 @@ public class ComprarLargoComandoRunner extends PixelcoinCommand implements Comma
         double precio = activoInfo.getPrecio();
 
         if(jugadoresService.getByNombre(sender.getName()).getPixelcoins() < (precio * cantidad)){
-            sender.sendMessage(DARK_RED + "No tienes las suficientes pixelcoins para pagar " + cantidad + " " + ticker + " a " + formatea.format(precio) + " $ -> " + formatea.format(precio * cantidad) + " PC");
+            sender.sendMessage(DARK_RED + "No tienes las suficientes pixelcoins para pagar " + cantidad + " " + ticker + " a " + FORMATEA.format(precio) + " $ -> " + FORMATEA.format(precio * cantidad) + " PC");
             return;
         }
 
@@ -76,11 +74,11 @@ public class ComprarLargoComandoRunner extends PixelcoinCommand implements Comma
             comprarLargoUseCase.comprarLargo(SupportedTipoActivo.ACCIONES, ticker.toUpperCase(), cantidad, sender.getName());
 
             Bukkit.broadcastMessage(GOLD + sender.getName() + " ha comprado " + cantidad + " acciones de "
-                    + nombreValor + " a " + GREEN + formatea.format(precio) + "PC");
+                    + nombreValor + " a " + GREEN + FORMATEA.format(precio) + "PC");
 
-            Funciones.enviarMensajeYSonido(Bukkit.getPlayer(sender.getName()), GOLD + "Has comprado " + formatea.format(cantidad)
-                    + " acciones a " + GREEN + formatea.format(precio) + " PC" + GOLD + " que es un total de " + GREEN +
-                    formatea.format(precio) + " PC " + GOLD + " comandos: " + AQUA + "/bolsa vender /bolsa cartera", ENTITY_PLAYER_LEVELUP);
+            Funciones.enviarMensajeYSonido(Bukkit.getPlayer(sender.getName()), GOLD + "Has comprado " + FORMATEA.format(cantidad)
+                    + " acciones a " + GREEN + FORMATEA.format(precio) + " PC" + GOLD + " que es un total de " + GREEN +
+                    FORMATEA.format(precio) + " PC " + GOLD + " comandos: " + AQUA + "/bolsa vender /bolsa cartera", ENTITY_PLAYER_LEVELUP);
         });
     }
 }

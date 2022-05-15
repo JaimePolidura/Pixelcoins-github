@@ -6,7 +6,7 @@ import es.serversurvival.mensajes._shared.domain.Mensaje;
 
 import java.util.List;
 
-public final class VerMensajesUseCase implements AllMySQLTablesInstances {
+public final class VerMensajesUseCase {
     private final MensajesService mensajesService;
 
     private VerMensajesUseCase () {

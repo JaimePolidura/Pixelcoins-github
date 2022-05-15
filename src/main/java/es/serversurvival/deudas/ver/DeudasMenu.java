@@ -24,6 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Map;
 import java.util.UUID;
 
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.Sound.*;
 
@@ -97,10 +98,10 @@ public class DeudasMenu extends Menu implements Clickable, Refreshcable, CanGoBa
         Deuda deudaPagada = pagarDeudaUseCase.pagarDeuda(deudaId, jugadorQueVaAPagar.getName());
 
         Funciones.enviarMensajeYSonido(player, GOLD + "Has pagado a " + deudaPagada.getAcredor() + " toda la deuda: "
-                + GREEN + formatea.format(deudaPagada.getPixelcoins_restantes()) + " PC", ENTITY_PLAYER_LEVELUP);
+                + GREEN + FORMATEA.format(deudaPagada.getPixelcoins_restantes()) + " PC", ENTITY_PLAYER_LEVELUP);
 
         String mensajeOnline = GOLD + player.getName() + " ta ha pagado toda la deuda: " + GREEN +
-                formatea.format(deudaPagada.getPixelcoins_restantes()) + " PC";
+                FORMATEA.format(deudaPagada.getPixelcoins_restantes()) + " PC";
 
         String mensajeOffline = player.getName() + " ta ha pagado toda la deuda: " + deudaPagada.getPixelcoins_restantes() + " PC";
         Funciones.enviarMensaje(deudaPagada.getAcredor(), mensajeOnline, mensajeOffline, ENTITY_PLAYER_LEVELUP, 10, 1);
@@ -114,7 +115,7 @@ public class DeudasMenu extends Menu implements Clickable, Refreshcable, CanGoBa
         Funciones.enviarMensajeYSonido(player, GOLD + "Has cancelado la deuda a " + deudaCancelada.getDeudor() + "!", ENTITY_PLAYER_LEVELUP);
 
         String mensajeOnline = GOLD + player.getName() + " te ha cancelado la deuda de " + GREEN +
-                formatea.format(deudaCancelada.getPixelcoins_restantes()) + " PC";
+                FORMATEA.format(deudaCancelada.getPixelcoins_restantes()) + " PC";
         Funciones.enviarMensaje(deudaCancelada.getDeudor(), mensajeOnline, mensajeOnline, ENTITY_PLAYER_LEVELUP, 10, 1);
 
         refresh();

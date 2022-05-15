@@ -15,6 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+
 public class EmpleosInventoryFactory extends InventoryFactory {
     private final EmpresasService empresasService;
     private final EmpleadosService empleadosService;
@@ -65,7 +67,7 @@ public class EmpleosInventoryFactory extends InventoryFactory {
             lore.add("   ");
             lore.add(ChatColor.GOLD + "Empresa: " + empleado.getEmpresa());
             lore.add(ChatColor.GOLD + "Cargo: " + empleado.getCargo());
-            lore.add(ChatColor.GOLD + "Sueldo: " + ChatColor.GREEN + formatea.format(empleado.getSueldo()) + "/" + empleado.getTipoSueldo().nombre);
+            lore.add(ChatColor.GOLD + "Sueldo: " + ChatColor.GREEN + FORMATEA.format(empleado.getSueldo()) + "/" + empleado.getTipoSueldo().nombre);
             lore.add(ChatColor.GOLD + "Ultima vez que te pagaron: " + empleado.getFechaUltimaPaga());
             lore.add("   ");
             lore.add(ChatColor.GOLD + "ID: " + empleado.getEmpleadoId());

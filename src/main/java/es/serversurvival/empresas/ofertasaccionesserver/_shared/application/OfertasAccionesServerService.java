@@ -2,19 +2,32 @@ package es.serversurvival.empresas.ofertasaccionesserver._shared.application;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertasAccionesServerRepository;
+import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.TipoOfertante;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static es.serversurvival._shared.utils.Funciones.DATE_FORMATER_LEGACY;
 
 public final class OfertasAccionesServerService {
     private final OfertasAccionesServerRepository repositoryDb;
 
     public OfertasAccionesServerService() {
         this.repositoryDb = DependecyContainer.get(OfertasAccionesServerRepository.class);
+    }
+
+    public void save(String jugador, String empresa, double precio, int cantidad, TipoOfertante tipoOfertante,
+                     double precioApertura){
+
+        String fecha = DATE_FORMATER_LEGACY.format(new Date());
+        this.repositoryDb.save(new OfertaAccionServer(UUID.randomUUID(), jugador, empresa, precio, cantidad,
+                fecha, tipoOfertante, precioApertura ));
     }
 
     public void save(OfertaAccionServer ofertaMercadoServer) {

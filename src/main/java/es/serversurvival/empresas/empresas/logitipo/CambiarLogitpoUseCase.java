@@ -7,7 +7,7 @@ import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import org.bukkit.Material;
 
-public final class CambiarLogitpoUseCase implements AllMySQLTablesInstances {
+public final class CambiarLogitpoUseCase {
     private final EmpresasService empresasService;
 
     public CambiarLogitpoUseCase() {

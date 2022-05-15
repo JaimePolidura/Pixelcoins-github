@@ -10,7 +10,7 @@ import es.serversurvival.jugadores._shared.application.JugadoresService;
 import static es.serversurvival._shared.utils.Funciones.*;
 import static es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce.PORCENTAJE_CORTO;
 
-public final class VenderCortoUseCase implements AllMySQLTablesInstances {
+public final class VenderCortoUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final JugadoresService jugadoresService;
 

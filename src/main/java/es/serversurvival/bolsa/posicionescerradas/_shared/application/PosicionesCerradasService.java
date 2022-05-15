@@ -1,6 +1,7 @@
 package es.serversurvival.bolsa.posicionescerradas._shared.application;
 
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionesCerradasRepository;
@@ -9,7 +10,6 @@ import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import java.util.*;
 import java.util.function.Predicate;
 
-import static es.serversurvival._shared.mysql.AllMySQLTablesInstances.dateFormater;
 
 public final class PosicionesCerradasService {
     public static final Comparator<PosicionCerrada> SORT_BY_RENTABILIDADES_ASC = (p1, p2) -> (int) (p1.calculateRentabildiad() - p2.calculateRentabildiad());
@@ -23,7 +23,7 @@ public final class PosicionesCerradasService {
 
     public void save(String jugador, SupportedTipoActivo tipoActivo, String nombreActivo, int cantidad, double precioApertura,
                      String fechaApertura, double precioCierre, TipoPosicion tipoPosicion) {
-        String fechaCierre = dateFormater.format(new Date());
+        String fechaCierre = Funciones.DATE_FORMATER_LEGACY.format(new Date());
 
         this.save(new PosicionCerrada(UUID.randomUUID(), jugador, tipoActivo, nombreActivo, cantidad, precioApertura,
                 fechaApertura, precioCierre, fechaCierre, tipoPosicion));

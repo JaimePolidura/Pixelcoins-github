@@ -12,7 +12,7 @@ import java.util.List;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 
-public final class SolicitarServicioUseCase implements AllMySQLTablesInstances {
+public final class SolicitarServicioUseCase {
     private final EmpresasService empresasService;
     private final EmpleadosService empleadosService;
 

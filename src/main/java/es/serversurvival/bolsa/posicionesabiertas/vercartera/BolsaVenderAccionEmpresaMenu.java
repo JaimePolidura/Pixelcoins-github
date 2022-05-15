@@ -19,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.DATE_FORMATER_LEGACY;
 import static es.serversurvival._shared.utils.Funciones.enviarMensajeYSonido;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.BOLD;
@@ -47,8 +48,8 @@ public class BolsaVenderAccionEmpresaMenu extends Menu implements Confirmacion {
         String tituloAceptar = GREEN + "" + BOLD + "VENDER " + empresa;
         String tituloCancelar = RED + "" + BOLD + "CANCELAR";
         List<String> lore = new ArrayList<>();
-        lore.add(GOLD + "Vender 1 accion de " + empresa + " a " + GREEN + AllMySQLTablesInstances.formatea.format(precioVenta) + " PC");
-        lore.add(GOLD + "Compraste estas acciones a " + GREEN + AllMySQLTablesInstances.formatea.format(precioApertura) + " PC");
+        lore.add(GOLD + "Vender 1 accion de " + empresa + " a " + GREEN + DATE_FORMATER_LEGACY.format(precioVenta) + " PC");
+        lore.add(GOLD + "Compraste estas acciones a " + GREEN + DATE_FORMATER_LEGACY.format(precioApertura) + " PC");
 
         this.inventory = InventoryCreator.createConfirmacionAumento(titulo, tituloAceptar, lore, tituloCancelar);
 
@@ -82,8 +83,8 @@ public class BolsaVenderAccionEmpresaMenu extends Menu implements Confirmacion {
 
         String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "VENDER " + empresa;
         List<String> lore = new ArrayList<>();
-        lore.add(GOLD + "Vender 1 accion de " + empresa + " a " + GREEN + AllMySQLTablesInstances.formatea.format(precioVenta) + " PC");
-        lore.add(GOLD + "Compraste estas acciones a " + GREEN + AllMySQLTablesInstances.formatea.format(precioApertura) + " PC");
+        lore.add(GOLD + "Vender 1 accion de " + empresa + " a " + GREEN + DATE_FORMATER_LEGACY.format(precioVenta) + " PC");
+        lore.add(GOLD + "Compraste estas acciones a " + GREEN + DATE_FORMATER_LEGACY.format(precioApertura) + " PC");
 
         ItemBuilder.of(Material.GREEN_WOOL).title(displayName).lore(lore).buildAddInventory(inventory, 14);
     }

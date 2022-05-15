@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 @Mob(x = 245, y = 64, z = -216)
-public class IngresarDiamantesPixelcoinsMob implements OnPlayerInteractMob, AllMySQLTablesInstances {
+public class IngresarDiamantesPixelcoinsMob implements OnPlayerInteractMob {
     private final IngresarItemUseCase ingresarItemUseCase;
 
     public IngresarDiamantesPixelcoinsMob() {

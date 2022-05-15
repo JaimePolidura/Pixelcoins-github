@@ -9,7 +9,7 @@ import es.serversurvival.mensajes._shared.application.MensajesService;
 
 import java.util.List;
 
-public final class OnEmpresaVendida implements AllMySQLTablesInstances {
+public final class OnEmpresaVendida {
     private final MensajesService mensajesService;
     private final EmpleadosService empleadosService;
 

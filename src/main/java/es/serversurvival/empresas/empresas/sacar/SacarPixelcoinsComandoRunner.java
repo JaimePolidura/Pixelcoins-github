@@ -8,6 +8,7 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 @Command(
@@ -30,7 +31,7 @@ public class SacarPixelcoinsComandoRunner extends PixelcoinCommand implements Co
 
         useCase.sacar(player.getName(), empresaNombre, pixelcoinsASacar);
 
-        Funciones.enviarMensajeYSonido((Player) player, GOLD + "Has sacado " + GREEN + formatea.format(pixelcoinsASacar)
+        Funciones.enviarMensajeYSonido((Player) player, GOLD + "Has sacado " + GREEN + FORMATEA.format(pixelcoinsASacar)
                 + " PC" + GOLD + " de tu empresa: " + DARK_AQUA + empresaNombre, Sound.ENTITY_PLAYER_LEVELUP);
 
     }

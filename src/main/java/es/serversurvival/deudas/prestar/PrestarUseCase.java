@@ -10,7 +10,7 @@ import es.serversurvival.deudas._shared.newformat.application.DeudasService;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 
-public final class PrestarUseCase implements AllMySQLTablesInstances {
+public final class PrestarUseCase {
     private final JugadoresService jugadoresService;
     private final DeudasService deudasService;
 

@@ -15,6 +15,9 @@ import org.bukkit.inventory.Inventory;
 import java.util.Collections;
 import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.*;
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+
 public class PrestamoSolicitud extends Menu implements Solicitud {
     private final PrestarUseCase prestarUseCase;
 
@@ -37,8 +40,8 @@ public class PrestamoSolicitud extends Menu implements Solicitud {
 
         String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "    Solicitud Prestamo";
         String nombreItemAceptar = ChatColor.GREEN + "" + ChatColor.BOLD + "ACEPTAR";
-        String descAceptarString = ChatColor.GOLD + "Prestamo de " + enviador + " de " + ChatColor.GREEN + AllMySQLTablesInstances.formatea.format(pixelcoins) + ChatColor.GOLD + " a " + dias + " dias  con un interes del " + interes + "% (" + ChatColor.GREEN + AllMySQLTablesInstances.formatea.format(Funciones.aumentarPorcentaje(pixelcoins, interes)) + " PC" + ChatColor.GOLD + ")";
-        List<String> loreAceptar = Funciones.dividirDesc(descAceptarString, 40);
+        String descAceptarString = ChatColor.GOLD + "Prestamo de " + enviador + " de " + ChatColor.GREEN + FORMATEA.format(pixelcoins) + ChatColor.GOLD + " a " + dias + " dias  con un interes del " + interes + "% (" + ChatColor.GREEN + FORMATEA.format(aumentarPorcentaje(pixelcoins, interes)) + " PC" + ChatColor.GOLD + ")";
+        List<String> loreAceptar = dividirDesc(descAceptarString, 40);
         String nombreCancelar = ChatColor.RED + "" + ChatColor.BOLD + "DENEGAR";
 
         this.prestarUseCase = new PrestarUseCase();
@@ -81,7 +84,7 @@ public class PrestamoSolicitud extends Menu implements Solicitud {
 
         this.prestarUseCase.prestar(this.enviador, this.destinatario, pixelcoins, interes, dias);
 
-        destinatarioPlayer.sendMessage(ChatColor.GOLD + "Has aceptado la solicitud de: " + ChatColor.GREEN + AllMySQLTablesInstances.formatea.format(pixelcoins) + " PC " + ChatColor.GOLD + "con un interes del: " + ChatColor.GREEN + interes +
+        destinatarioPlayer.sendMessage(ChatColor.GOLD + "Has aceptado la solicitud de: " + ChatColor.GREEN + FORMATEA.format(pixelcoins) + " PC " + ChatColor.GOLD + "con un interes del: " + ChatColor.GREEN + interes +
                 ChatColor.GOLD + " a " + ChatColor.GREEN + dias + ChatColor.GOLD + " dias");
 
         if (enviadorPlayer != null) {

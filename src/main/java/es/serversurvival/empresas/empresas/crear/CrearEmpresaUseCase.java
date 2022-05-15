@@ -8,7 +8,7 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import io.vavr.control.Try;
 
-public final class CrearEmpresaUseCase implements AllMySQLTablesInstances {
+public final class CrearEmpresaUseCase {
     private final EmpresasService empresasService;
 
     public CrearEmpresaUseCase(){

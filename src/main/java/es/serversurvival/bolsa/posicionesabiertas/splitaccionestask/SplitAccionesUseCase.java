@@ -1,6 +1,7 @@
 package es.serversurvival.bolsa.posicionesabiertas.splitaccionestask;
 
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
@@ -16,7 +17,7 @@ import java.util.Map;
 
 import static es.serversurvival._shared.utils.Funciones.diferenciaDias;
 
-public final class SplitAccionesUseCase implements AllMySQLTablesInstances {
+public final class SplitAccionesUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final ActivoInfoService activoInfoService;
 
@@ -52,7 +53,7 @@ public final class SplitAccionesUseCase implements AllMySQLTablesInstances {
     @SneakyThrows
     private void realizarSplit(PosicionAbierta posicionAbiertaToSplit, JSONObject infoSplit) {
         Date fechaHoy = new Date();
-        Date dateSplit = dateFormater.parse((String) infoSplit.get("date"));
+        Date dateSplit = Funciones.DATE_FORMATER_LEGACY.parse((String) infoSplit.get("date"));
 
         int denominador = (int) infoSplit.get("fromFactor");
         int numerador = (int) infoSplit.get("toFactor");

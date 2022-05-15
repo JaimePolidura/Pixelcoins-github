@@ -8,6 +8,7 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 @Command(
@@ -26,7 +27,7 @@ public class DepositarPixelcoinsComandoRunner extends PixelcoinCommand implement
     public void execute(DepositarPixelcoinsComando comando, CommandSender player) {
         useCasse.depositar(comando.getEmpresa(), player.getName(), comando.getPixelcoins());
 
-        Funciones.enviarMensajeYSonido((Player) player, GOLD + "Has metido " + GREEN + formatea.format(comando.getPixelcoins()) + " PC" + GOLD
+        Funciones.enviarMensajeYSonido((Player) player, GOLD + "Has metido " + GREEN + FORMATEA.format(comando.getPixelcoins()) + " PC" + GOLD
                 + " en tu empresa: " + DARK_AQUA + comando.getEmpresa(), Sound.ENTITY_PLAYER_LEVELUP);
     }
 }

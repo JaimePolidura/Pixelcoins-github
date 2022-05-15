@@ -7,7 +7,7 @@ import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService
 import es.serversurvival.bolsa.ordenespremarket.ejecutarordenes.OrdenNoEjecutadoEvento;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 
-public final class OnPremarketOrdenNoEjecutada implements AllMySQLTablesInstances {
+public final class OnPremarketOrdenNoEjecutada {
     private final ActivoInfoService activoInfoService;
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
 

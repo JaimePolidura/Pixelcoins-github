@@ -10,6 +10,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+
 @Command(
         value = "dinero",
         explanation = "Ver tus pixelcoins que tengas en efectivo"
@@ -31,10 +33,10 @@ public class DineroComandoExecutor extends PixelcoinCommand implements CommandRu
 
         patrimonioJugador = patrimonioJugador - totalAhorrado;
 
-        player.sendMessage(ChatColor.GOLD + "Ahorrado (disponible) : " + ChatColor.GREEN + AllMySQLTablesInstances.formatea.format(totalAhorrado) + " PC");
+        player.sendMessage(ChatColor.GOLD + "Ahorrado (disponible) : " + ChatColor.GREEN + FORMATEA.format(totalAhorrado) + " PC");
         if(patrimonioJugador != 0){
             player.sendMessage("             ");
-            player.sendMessage(ChatColor.GOLD + "Tienes: " + ChatColor.GREEN + AllMySQLTablesInstances.formatea.format(patrimonioJugador) + " PC " + ChatColor.GOLD + "en otras partes. /perfil o /estadisticas");
+            player.sendMessage(ChatColor.GOLD + "Tienes: " + ChatColor.GREEN + FORMATEA.format(patrimonioJugador) + " PC " + ChatColor.GOLD + "en otras partes. /perfil o /estadisticas");
         }
     }
 }

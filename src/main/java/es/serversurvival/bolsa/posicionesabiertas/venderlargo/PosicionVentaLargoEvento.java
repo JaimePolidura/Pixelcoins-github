@@ -1,5 +1,6 @@
 package es.serversurvival.bolsa.posicionesabiertas.venderlargo;
 
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
@@ -10,8 +11,6 @@ import lombok.Getter;
 
 import java.util.Date;
 import java.util.UUID;
-
-import static es.serversurvival._shared.mysql.AllMySQLTablesInstances.dateFormater;
 
 public final class PosicionVentaLargoEvento extends PosicionCerradaEvento {
     @Getter private final double valorTotal;
@@ -32,7 +31,7 @@ public final class PosicionVentaLargoEvento extends PosicionCerradaEvento {
 
     @Override
     public PosicionCerrada buildPosicionCerrada() {
-        String fechaCierre = dateFormater.format(new Date());
+        String fechaCierre = Funciones.DATE_FORMATER_LEGACY.format(new Date());
 
         return new PosicionCerrada(UUID.randomUUID(), vendedor, tipoActivo, nombreAcitvo, cantidad, precioApertura, fechaApertura,
                 precioCierre, fechaCierre, TipoPosicion.LARGO);

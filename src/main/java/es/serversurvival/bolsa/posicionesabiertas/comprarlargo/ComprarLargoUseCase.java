@@ -10,7 +10,7 @@ import es.serversurvival.bolsa.posicionesabiertas._shared.application.Posiciones
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 
-public final class ComprarLargoUseCase implements AllMySQLTablesInstances {
+public final class ComprarLargoUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final JugadoresService jugadoresService;
     private final ActivoInfoService activoInfoService;
