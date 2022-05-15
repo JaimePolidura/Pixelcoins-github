@@ -2,8 +2,8 @@ package es.serversurvival.deudas.ver;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.deudas._shared.newformat.application.DeudasService;
-import es.serversurvival.deudas._shared.newformat.domain.Deuda;
+import es.serversurvival.deudas._shared.application.DeudasService;
+import es.serversurvival.deudas._shared.domain.Deuda;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

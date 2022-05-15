@@ -5,7 +5,6 @@ import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -15,7 +14,7 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService.*;
 
 @Command(value = "bolsa estadisticas", explanation = "Ver tus estadisticas en la bolsa")
-public class EstadiscticasBolsaComandoRunner extends PixelcoinCommand implements CommandRunnerNonArgs {
+public class EstadiscticasBolsaComandoRunner implements CommandRunnerNonArgs {
     private static final int LIMIT = 5;
 
     private final PosicionesCerradasService posicionesCerradasService;

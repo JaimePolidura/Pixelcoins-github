@@ -1,6 +1,6 @@
 package es.serversurvival.bolsa.posicionesabiertas.vendercorto;
 
-import es.serversurvival._shared.eventospixelcoins.PosicionAbiertaEvento;
+import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbiertaEvento;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.transacciones._shared.domain.Transaccion;
 

@@ -1,12 +1,12 @@
 package es.serversurvival.bolsa.activosinfo._shared.domain;
 
-import es.serversurvival._shared.mysql.TablaObjeto;
+import es.jaime.javaddd.domain.Aggregate;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public final class ActivoInfo implements TablaObjeto {
+public final class ActivoInfo extends Aggregate {
     @Getter private final String nombreActivo;
     @Getter private final double precio;
     @Getter private final SupportedTipoActivo tipoActivo;

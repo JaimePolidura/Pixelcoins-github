@@ -4,6 +4,8 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.tipoactivos.acciones.AccionesService;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
@@ -32,7 +34,7 @@ public final class SplitAccionesUseCase {
 
         todasLlamadasApi.forEach( (llamada) -> {
             try {
-                JSONObject infoSplit = IEXCloud_API.getSplitInfoEmpresa(llamada.getNombreActivo());
+                JSONObject infoSplit = getSplitData(llamada);
                 infoSplitsPorAccion.put(llamada.getNombreActivoLargo(), infoSplit);
             } catch (Exception ignored) {
                 //IGNORED
@@ -48,6 +50,11 @@ public final class SplitAccionesUseCase {
             }
         });
 
+    }
+
+    private JSONObject getSplitData(ActivoInfo activoInfo) throws Exception {
+        return (JSONObject) ((AccionesService) SupportedTipoActivo.ACCIONES.getTipoActivoService())
+                .getSplitData(activoInfo.getNombreActivo());
     }
 
     @SneakyThrows

@@ -12,10 +12,6 @@ public final class Validaciones {
 
     public final static PositiveNumber PositiveNumber = new PositiveNumber("Tiene que ser un numero positivo");
     public final static NaturalNumber NaturalNumber = new NaturalNumber("Tiene que ser un numero positivo y no decimal");
-    public final static Different Different = new Different("No esta permitido ese numero");
-    public final static Same Same = new Same("Tiene que ser lo mismo");
-
-
 
     public final static MaxLength MaxLength = new MaxLength("No puede ser muy grande");
     public final static NotEqualsIgnoreCase NotEqualsIgnoreCase = new NotEqualsIgnoreCase("No puedes ser tu mismo");

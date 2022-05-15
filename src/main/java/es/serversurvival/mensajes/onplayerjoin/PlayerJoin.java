@@ -1,4 +1,4 @@
-package es.serversurvival._shared.eventosminecraft;
+package es.serversurvival.mensajes.onplayerjoin;
 
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.mensajes._shared.application.MensajesService;

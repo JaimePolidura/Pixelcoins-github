@@ -1,9 +1,9 @@
 package es.serversurvival.deudas.ver;
 
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.deudas._shared.newformat.application.DeudasService;
+import es.serversurvival.deudas._shared.application.DeudasService;
 import es.serversurvival.deudas.cancelar.CancelarDeudaUseCase;
-import es.serversurvival.deudas._shared.newformat.domain.Deuda;
+import es.serversurvival.deudas._shared.domain.Deuda;
 import es.serversurvival.deudas.pagarTodo.PagarDeudaCompletaUseCase;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores.perfil.PerfilMenu;

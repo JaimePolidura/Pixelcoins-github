@@ -1,8 +1,8 @@
-package es.serversurvival.deudas._shared.eventlisteners;
+package es.serversurvival.deudas.onjugadorcambiadonombre;
 
 import es.jaime.EventListener;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.deudas._shared.newformat.application.DeudasService;
+import es.serversurvival.deudas._shared.application.DeudasService;
 import es.serversurvival.jugadores.setupjugadorunido.JugadorCambiadoDeNombreEvento;
 
 public final class OnJugadorCambiadoNombre {

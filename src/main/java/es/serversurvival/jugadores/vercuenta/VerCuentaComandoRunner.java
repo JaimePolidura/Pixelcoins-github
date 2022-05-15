@@ -5,7 +5,6 @@ import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,7 +13,7 @@ import org.bukkit.entity.Player;
         value = "cuenta",
         explanation = "Ver tu cuenta de la web"
 )
-public class VerCuentaComandoRunner extends PixelcoinCommand implements CommandRunnerNonArgs {
+public class VerCuentaComandoRunner implements CommandRunnerNonArgs {
     private final JugadoresService jugadoresService;
 
     public VerCuentaComandoRunner(){

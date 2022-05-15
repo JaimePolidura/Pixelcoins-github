@@ -2,9 +2,7 @@ package es.serversurvival.deudas.prestar;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.menus.MenuManager;
-import es.serversurvival._shared.utils.Funciones;
 import main.ValidationResult;
 import main.ValidatorService;
 import org.bukkit.command.CommandSender;
@@ -17,7 +15,7 @@ import static org.bukkit.ChatColor.*;
         args = {"jugador", "pixelcoins", "dias", "[interes]¡1!"},
         explanation = "Prestar dinero a un jugador durante dias. La deuda se pagara cada dia"
 )
-public class PrestarComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<PrestarComando> {
+public class PrestarComandoRunner implements CommandRunnerArgs<PrestarComando> {
     @Override
     public void execute(PrestarComando comando, CommandSender player) {
         String jugador = comando.getJugador();

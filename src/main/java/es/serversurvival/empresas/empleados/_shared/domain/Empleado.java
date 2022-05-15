@@ -1,14 +1,13 @@
 package es.serversurvival.empresas.empleados._shared.domain;
 
 import es.jaime.javaddd.domain.Aggregate;
-import es.serversurvival._shared.mysql.TablaObjeto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class Empleado extends Aggregate implements TablaObjeto {
+public final class Empleado extends Aggregate {
     @Getter private final UUID empleadoId;
     @Getter private final String nombre;
     @Getter private final String empresa;

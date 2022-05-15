@@ -4,7 +4,7 @@ import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.Cache;
 import es.serversurvival._shared.cache.LRUCache;
-import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival._shared.utils.CollectionUtils;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.empresas._shared.domain.EmpresasRepostiory;
 
@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
-import static es.serversurvival._shared.utils.Funciones.getSumaTotalListDouble;
+import static es.serversurvival._shared.utils.CollectionUtils.*;
 
 public final class EmpresasService {
     public static final int MAX_EMPRESAS_PER_JUGADOR = 5;
@@ -76,7 +76,7 @@ public final class EmpresasService {
     }
 
     public Map<String, List<Empresa>> getAllEmpresasJugadorMap () {
-        return Funciones.mergeMapList(this.getAll(), Empresa::getOwner);
+        return CollectionUtils.mergeMapList(this.getAll(), Empresa::getOwner);
     }
 
     private Function<Empresa, Empresa> saveEmpresaToCache(){

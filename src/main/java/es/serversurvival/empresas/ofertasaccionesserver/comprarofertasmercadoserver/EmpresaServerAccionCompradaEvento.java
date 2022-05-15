@@ -2,7 +2,7 @@ package es.serversurvival.empresas.ofertasaccionesserver.comprarofertasmercadose
 
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.transacciones._shared.domain.TipoTransaccion;
-import es.serversurvival._shared.eventospixelcoins.EventoTipoTransaccion;
+import es.serversurvival.transacciones._shared.domain.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.transacciones._shared.domain.Transaccion;
 import lombok.AllArgsConstructor;

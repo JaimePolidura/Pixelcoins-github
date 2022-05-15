@@ -3,7 +3,6 @@ package es.serversurvival.bolsa.activosinfo.verprecioaccion;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import org.bukkit.ChatColor;
@@ -15,7 +14,7 @@ import org.bukkit.command.CommandSender;
         args = {"ticker"},
         explanation = "Ver el precio de una accion <ticker> ticker de la accion, solo se pueden empresas americanas"
 )
-public class PrecioBolsaComandoExecutor extends PixelcoinCommand implements CommandRunnerArgs<PrecioBolsaComando> {
+public class PrecioBolsaComandoExecutor implements CommandRunnerArgs<PrecioBolsaComando> {
     private final ActivoInfoService activoInfoService;
 
     public PrecioBolsaComandoExecutor() {

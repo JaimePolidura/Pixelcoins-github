@@ -2,7 +2,6 @@ package es.serversurvival.empresas.empresas.sacar;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -16,7 +15,7 @@ import static org.bukkit.ChatColor.*;
         args = {"empresa", "pixelcoins"},
         explanation = "Sacar pixelcoins de tu empresa"
 )
-public class SacarPixelcoinsComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<SacarPixelcoinsComando> {
+public class SacarPixelcoinsComandoRunner implements CommandRunnerArgs<SacarPixelcoinsComando> {
     private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /empresas sacar <empresa> <pixelcoins>";
     private final SacarPixelcoinsUseCase useCase;
 

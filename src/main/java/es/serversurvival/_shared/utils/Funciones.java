@@ -21,8 +21,9 @@ import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
-import es.serversurvival.deudas._shared.newformat.domain.Deuda;
-import es.serversurvival.deudas._shared.mysql.Deudas;
+import es.serversurvival.deudas._shared.application.DeudasService;
+import es.serversurvival.deudas._shared.domain.Deuda;
+import es.serversurvival.deudas._shared.domain.DeudasRepository;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
@@ -41,7 +42,7 @@ public final class Funciones {
     public static final DecimalFormat FORMATEA = new DecimalFormat("###,###.##");
     public static final SimpleDateFormat DATE_FORMATER_LEGACY = new SimpleDateFormat("yyyy-MM-dd");
     public static final DateTimeFormatter DATE_FORMATER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        public static final ExecutorService POOL = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    public static final ExecutorService POOL = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     public static final ObjectMapper MAPPER = new ObjectMapper();
 
     private Funciones () {}
@@ -57,21 +58,6 @@ public final class Funciones {
         }
         
         return espaciosLibres;
-    }
-
-    public static int[] slotsItem(int n, int slotsLibres) {
-        int[] arr = new int[slotsLibres];
-
-        for (int i = 0; i < slotsLibres; i++) {
-            if (n - 64 > 0) {
-                arr[i] = 64;
-                n = n - 64;
-            } else {
-                arr[i] = n;
-                break;
-            }
-        }
-        return arr;
     }
 
     public static int aumentarPorcentaje(double num, double porcentaje) {
@@ -119,46 +105,21 @@ public final class Funciones {
         return (aComparar - base) / (base / 100);
     }
 
-    public static<K, V extends Comparable<V>> HashMap<K, V> sortMapByValueDecre(Map<K, V> hm) {
-        List<Map.Entry<K, V>> list = new LinkedList<>(hm.entrySet());
-
-        list.sort((o1, o2) -> (o2.getValue().compareTo(o1.getValue())));
-
-        HashMap<K, V> temp = new LinkedHashMap<>();
-        for (Map.Entry<K, V> aa : list) {
-            temp.put(aa.getKey(), aa.getValue());
-        }
-
-        return temp;
-    }
-
-    public static<K, V extends Comparable<V>> HashMap<K, V> sortMapByValueCrec(Map<K, V> hm) {
-        List<Map.Entry<K, V>> list = new LinkedList<>(hm.entrySet());
-        list.sort(Map.Entry.comparingByValue());
-
-        HashMap<K, V> temp = new LinkedHashMap<>();
-        for (Map.Entry<K, V> aa : list) {
-            temp.put(aa.getKey(), aa.getValue());
-        }
-
-        return temp;
-    }
-
     public static double redondeoDecimales(double numero, int numeroDecimales) {
         BigDecimal redondeado = new BigDecimal(numero).setScale(numeroDecimales, RoundingMode.HALF_EVEN);
         return redondeado.doubleValue();
     }
 
     public static Map<String, Double> crearMapaTopPatrimonioPlayers (boolean creciente) {
-        Deudas deudasMySQL = Deudas.INSTANCE;
+        var deudasMyService = DependecyContainer.get(DeudasService.class);
         var jugadoresService = DependecyContainer.get(JugadoresService.class);
         var empresasService = DependecyContainer.get(EmpresasService.class);
         var activoInfoService = DependecyContainer.get(ActivoInfoService.class);
 
         List<Jugador> allJugadordes = jugadoresService.findAll();
         Map<String, ActivoInfo> mapAllLlamadas = activoInfoService.findAllToMap();
-        Map<String, List<Deuda>> mapDeudasAcredor = deudasMySQL.getAllDeudasAcredorMap();
-        Map<String, List<Deuda>> mapDeudasDeudor = deudasMySQL.getAllDeudasDeudorMap();
+        Map<String, List<Deuda>> mapDeudasAcredor = deudasMyService.getAllDeudasAcredorMap();
+        Map<String, List<Deuda>> mapDeudasDeudor = deudasMyService.getAllDeudasDeudorMap();
         Map<String, List<Empresa>> mapEmpresasJugador = empresasService.getAllEmpresasJugadorMap();
         Map<String, List<PosicionAbierta>> mapPosicionesLargo = PosicionesUtils.getAllPosicionesAbiertasMap(PosicionAbierta::esLargo);
         Map<String, List<PosicionAbierta>> mapPosicionesCorto = PosicionesUtils.getAllPosicionesAbiertasMap(PosicionAbierta::esCorto);
@@ -211,9 +172,9 @@ public final class Funciones {
         });
 
         if(creciente)
-            return Funciones.sortMapByValueCrec(toReturn);
+            return CollectionUtils.sortMapByValueCrec(toReturn);
         else
-            return Funciones.sortMapByValueDecre(toReturn);
+            return CollectionUtils.sortMapByValueDecre(toReturn);
     }
 
     public static double getPatrimonioJugador(String nombreJugador){
@@ -236,13 +197,6 @@ public final class Funciones {
         return parser.parse(response.toString());
     }
 
-    public static boolean cuincideNombre (String nombre, String... items){
-        List<String> bannedNamesList = Arrays.asList(items);
-
-        return bannedNamesList.stream()
-                .anyMatch( (name) -> name.equalsIgnoreCase(nombre));
-    }
-
     public static boolean noCuincideNombre (String nombre, String... items){
         return !cuincideNombre(nombre, items);
     }
@@ -258,18 +212,6 @@ public final class Funciones {
 
     public static boolean noEsDeTipoItem(ItemStack item, String...tipos) {
         return !cuincideNombre(item.getType().toString(), tipos);
-    }
-
-    public static<E> int getSumaTotalListInteger (List<E> list, ToIntFunction<E> whatToSum) {
-        return list.stream()
-                .mapToInt(whatToSum)
-                .sum();
-    }
-
-    public static<E> double getSumaTotalListDouble (List<E> list, ToDoubleFunction<E> whatToSum) {
-        return list.stream()
-                .mapToDouble(whatToSum)
-                .sum();
     }
 
     public static int generateRandomNumber (int from, int to) {
@@ -323,12 +265,6 @@ public final class Funciones {
         return stringBuilder.toString();
     }
 
-    public static <T> Predicate<T> distinctBy(Function<? super T, ?> keyExtractor) {
-        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
-
-        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
-    }
-
     public static String buildStringFromArray (String[] array, int startIndex) {
         StringBuilder builder = new StringBuilder();
 
@@ -341,11 +277,6 @@ public final class Funciones {
         }
 
         return builder.toString();
-    }
-
-    @SafeVarargs
-    public static<E> List<E> listOf (E... elements) {
-        return new ArrayList<>(Arrays.asList(elements));
     }
     
     public static boolean esHoyDiaSemana (int... diaSemanas) {
@@ -395,6 +326,13 @@ public final class Funciones {
         }
     }
 
+    public static boolean cuincideNombre (String nombre, String... items){
+        List<String> bannedNamesList = Arrays.asList(items);
+
+        return bannedNamesList.stream()
+                .anyMatch( (name) -> name.equalsIgnoreCase(nombre));
+    }
+
     public static void enviarMensaje (String nombreJugador, String mensajeOnline, String mensajeOffline, Sound sound, int v1, int v2) {
         Player player = Bukkit.getPlayer(nombreJugador);
         if (player != null) {
@@ -403,48 +341,5 @@ public final class Funciones {
         } else {
             DependecyContainer.get(MensajesService.class).save(nombreJugador, mensajeOffline);
         }
-    }
-
-    public static <K, V> int getPoisitionOfKeyInMap(Map<K, V> map, Predicate<K> keyMatcher){
-        int position = 0;
-
-        for(var entry : map.entrySet()){
-            position++;
-
-            if(keyMatcher.test(entry.getKey()))
-                return position;
-        }
-
-        return -1;
-    }
-
-    @SafeVarargs
-    public static  <T> List<T> concat(List<T>... lists){
-        //We create a hashset to avoid duplicates
-        Set<T> valuesToReturn = new HashSet<>();
-
-        for (List<T> actualList : lists)
-            valuesToReturn.addAll(actualList);
-
-        return valuesToReturn.stream().toList();
-    }
-
-    public static<K, V> Map<K, List<V>> mergeMapList (List<V> toIteratem, Function<V, K> keyMapper) {
-        Map<K, List<V>> acumulator = new HashMap<>();
-        
-        for(V element : toIteratem){
-            K mappedKey = keyMapper.apply(element);
-
-            if(acumulator.get(element) == null){
-                acumulator.put(mappedKey, listOf(element));
-            }else{
-                List<V> listOfValues = acumulator.get(mappedKey);
-                listOfValues.add(element);
-
-                acumulator.put(mappedKey, listOfValues);
-            }
-        }
-
-        return acumulator;
     }
 }

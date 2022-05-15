@@ -1,14 +1,15 @@
-package es.serversurvival.deudas._shared.newformat.application;
+package es.serversurvival.deudas._shared.application;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.utils.CollectionUtils;
 import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.deudas._shared.newformat.domain.Deuda;
-import es.serversurvival.deudas._shared.newformat.domain.DeudasRepository;
+import es.serversurvival.deudas._shared.domain.Deuda;
+import es.serversurvival.deudas._shared.domain.DeudasRepository;
 
 import java.util.*;
 
-import static es.serversurvival._shared.utils.Funciones.getSumaTotalListInteger;
+import static es.serversurvival._shared.utils.CollectionUtils.*;
 
 public final class DeudasService {
     private final DeudasRepository deudasRepository;
@@ -60,7 +61,11 @@ public final class DeudasService {
     }
 
     public Map<String, List<Deuda>> getAllDeudasDeudorMap () {
-        return Funciones.mergeMapList(this.findAll(), Deuda::getDeudor);
+        return mergeMapList(this.findAll(), Deuda::getDeudor);
+    }
+
+    public Map<String, List<Deuda>> getAllDeudasAcredorMap () {
+        return mergeMapList(this.findAll(), Deuda::getDeudor);
     }
 
     public void deleteById(UUID id) {

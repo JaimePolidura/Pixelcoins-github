@@ -1,4 +1,4 @@
-package es.serversurvival._shared.mysql.newformat;
+package es.serversurvival._shared.mysql;
 
 import es.jaime.configuration.DatabaseConfiguration;
 

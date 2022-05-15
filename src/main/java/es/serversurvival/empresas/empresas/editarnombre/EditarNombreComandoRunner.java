@@ -2,7 +2,6 @@ package es.serversurvival.empresas.empresas.editarnombre;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -14,7 +13,7 @@ import org.bukkit.entity.Player;
         args = {"empresa", "nuevoNombre"},
         explanation = "Cambiar el nombre de tu empresa a otro, el nombre no puede estar cogido"
 )
-public class EditarNombreComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<EditarNombreComando> {
+public class EditarNombreComandoRunner implements CommandRunnerArgs<EditarNombreComando> {
     private final EditarNombreUseCase useCase;
 
     public EditarNombreComandoRunner() {

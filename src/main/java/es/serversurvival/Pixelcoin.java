@@ -6,8 +6,7 @@ import es.jaime.impl.EventBusSynch;
 import es.jaimetruman.Mapper;
 import es.jaimetruman.task.BukkitTimeUnit;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.mysql.MySQLRepository;
-import es.serversurvival._shared.mysql.newformat.MySQLConfiguration;
+import es.serversurvival._shared.mysql.MySQLConfiguration;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfoCacheRepository;
 import es.serversurvival.bolsa.activosinfo._shared.infrastructure.InMemoryActivoInfoCacheRepository;
@@ -32,9 +31,9 @@ import es.serversurvival.web.conversacionesweb._shared.infrastructure.InMemoryCo
 import es.serversurvival.web.cuentasweb._shared.application.CuentasWebService;
 import es.serversurvival.web.cuentasweb._shared.domain.CuentasWebRepository;
 import es.serversurvival.web.cuentasweb._shared.infrastructure.MySQLCuentasWebRepository;
-import es.serversurvival.deudas._shared.newformat.application.DeudasService;
-import es.serversurvival.deudas._shared.newformat.domain.DeudasRepository;
-import es.serversurvival.deudas._shared.newformat.infrastructure.MySQLDeudasRepository;
+import es.serversurvival.deudas._shared.application.DeudasService;
+import es.serversurvival.deudas._shared.domain.DeudasRepository;
+import es.serversurvival.deudas._shared.infrastructure.MySQLDeudasRepository;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.EmpleadosRepository;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
@@ -105,8 +104,6 @@ public final class Pixelcoin extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
-
-        MySQLRepository.conectar();
 
         this.scoreBoardManager = new ScoreBoardManager();
         this.eventBus = new EventBusSynch("es.serversurvival");

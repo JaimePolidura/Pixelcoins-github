@@ -1,14 +1,14 @@
-package es.serversurvival.deudas._shared.newformat.domain;
+package es.serversurvival.deudas._shared.domain;
 
 
-import es.serversurvival._shared.mysql.TablaObjeto;
+import es.jaime.javaddd.domain.Aggregate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class Deuda implements TablaObjeto {
+public final class Deuda extends Aggregate {
     @Getter private final UUID deudaId;
     @Getter private final String deudor;
     @Getter private final String acredor;

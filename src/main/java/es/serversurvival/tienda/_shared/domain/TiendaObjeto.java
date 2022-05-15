@@ -1,7 +1,6 @@
 package es.serversurvival.tienda._shared.domain;
 
 import es.jaime.javaddd.domain.Aggregate;
-import es.serversurvival._shared.mysql.TablaObjeto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -9,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class TiendaObjeto extends Aggregate implements TablaObjeto {
+public final class TiendaObjeto extends Aggregate {
     @Getter private final UUID tiendaObjetoId;
     @Getter private final String jugador;
     @Getter private final String objeto;

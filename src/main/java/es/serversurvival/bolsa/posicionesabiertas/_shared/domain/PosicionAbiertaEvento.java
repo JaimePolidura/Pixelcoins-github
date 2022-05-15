@@ -1,6 +1,8 @@
-package es.serversurvival._shared.eventospixelcoins;
+package es.serversurvival.bolsa.posicionesabiertas._shared.domain;
 
+import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.transacciones._shared.domain.EventoTipoTransaccion;
 import lombok.Getter;
 
 public abstract class PosicionAbiertaEvento extends PixelcoinsEvento implements EventoTipoTransaccion {

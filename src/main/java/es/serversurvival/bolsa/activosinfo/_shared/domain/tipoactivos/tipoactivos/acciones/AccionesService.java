@@ -34,20 +34,12 @@ public final class AccionesService extends TipoActivoService implements Split, D
     }
 
     @Override
-    public Object getDividendosData(String nombreActivo) {
-        Try<Object> dividendReponse = Try.of(() -> {
-            return peticionHttp("https://sandbox.iexapis.com/stable/time-series/advanced_dividends/" + nombreActivo + "?range=next-week&token=" + IEXCloud_API.token);
-        });
-
-        return dividendReponse.isSuccess() ? dividendReponse.get() : null;
+    public Object getDividendosData(String nombreActivo) throws Exception {
+        return peticionHttp("https://sandbox.iexapis.com/stable/time-series/advanced_dividends/" + nombreActivo + "?range=next-week&token=" + IEXCloud_API.token);
     }
 
     @Override
-    public Object getSplitData(String nombreActivo) {
-        Try<Object> dividendoAttempt = Try.of(() -> {
-            return peticionHttp("https://sandbox.iexapis.com/stable/stock/" + nombreActivo + "/splits/1m?token=" + IEXCloud_API.token);
-        });
-
-        return dividendoAttempt.isSuccess() ? dividendoAttempt.get() : null;
+    public Object getSplitData(String nombreActivo) throws Exception {
+        return peticionHttp("https://sandbox.iexapis.com/stable/stock/" + nombreActivo + "/splits/1m?token=" + IEXCloud_API.token);
     }
 }

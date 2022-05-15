@@ -1,7 +1,7 @@
 package es.serversurvival.jugadores.withers.ingresarItem;
 
 import es.serversurvival.transacciones._shared.domain.TipoTransaccion;
-import es.serversurvival._shared.eventospixelcoins.EventoTipoTransaccion;
+import es.serversurvival.transacciones._shared.domain.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.transacciones._shared.domain.Transaccion;

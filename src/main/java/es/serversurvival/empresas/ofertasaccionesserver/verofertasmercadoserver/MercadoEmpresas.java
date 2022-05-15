@@ -2,7 +2,6 @@ package es.serversurvival.empresas.ofertasaccionesserver.verofertasmercadoserver
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -10,7 +9,7 @@ import org.bukkit.entity.Player;
         value = "empresas mercado",
         explanation = "Ver todas las ofertas de venta de acciones de empresas del servidor"
 )
-public class MercadoEmpresas extends PixelcoinCommand implements CommandRunnerNonArgs {
+public class MercadoEmpresas implements CommandRunnerNonArgs {
     @Override
 
     public void execute(CommandSender sender) {

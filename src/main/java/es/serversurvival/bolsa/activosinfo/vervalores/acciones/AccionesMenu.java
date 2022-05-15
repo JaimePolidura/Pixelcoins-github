@@ -111,7 +111,7 @@ public class AccionesMenu extends Menu implements Clickable, Paginated, PostLoad
 
             String ticker = lore.get(0).split(" ")[1];
             try {
-                double precioAccion = IEXCloud_API.getOnlyPrice(ticker);
+                double precioAccion = SupportedTipoActivo.ACCIONES.getTipoActivoService().getPrecio(ticker);
                 lore.add(1, ChatColor.GOLD + "Precio/Accion:" + ChatColor.GREEN + " " + FORMATEA.format(precioAccion)  + " PC");
 
                 MinecraftUtils.setLore(item, lore);

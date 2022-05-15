@@ -2,7 +2,6 @@ package es.serversurvival.empresas.empresas.vender;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import main.ValidationResult;
 import main.ValidatorService;
 import org.bukkit.ChatColor;
@@ -16,7 +15,7 @@ import static org.bukkit.ChatColor.DARK_RED;
         args = {"empresa", "jugador", "precio"},
         explanation = "Vender tu empresa a otro jugador por pixelcoins"
 )
-public class VenderEmpresaComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<VenderEmpresaComando> {
+public class VenderEmpresaComandoRunner implements CommandRunnerArgs<VenderEmpresaComando> {
     private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /empresas vender <empresa> <jugador> <precio>";
 
     @Override

@@ -1,14 +1,13 @@
 package es.serversurvival.web.cuentasweb._shared.domain;
 
 import es.jaime.javaddd.domain.Aggregate;
-import es.serversurvival._shared.mysql.TablaObjeto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class CuentaWeb extends Aggregate implements TablaObjeto {
+public final class CuentaWeb extends Aggregate {
     @Getter private final UUID cuentaWebId;
     @Getter private final String username;
     @Getter private final String password;

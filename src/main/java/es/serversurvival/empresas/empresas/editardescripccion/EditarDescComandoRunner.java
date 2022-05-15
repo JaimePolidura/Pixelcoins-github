@@ -2,7 +2,6 @@ package es.serversurvival.empresas.empresas.editardescripccion;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -11,7 +10,7 @@ import org.bukkit.command.CommandSender;
         args = {"empresa", "descripcion..."},
         explanation = "Editar la descripccion de tu empresa"
 )
-public class EditarDescComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<EditarDescComando> {
+public class EditarDescComandoRunner implements CommandRunnerArgs<EditarDescComando> {
     private final EditarDescUseCase useCase;
 
     public EditarDescComandoRunner(){

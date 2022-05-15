@@ -86,9 +86,9 @@ public class MateriasPrimasMenu extends Menu implements Clickable, PostLoading {
 
                 String ticker = precioLore.get(0).split(" ")[1];
                 try {
-                    double preioMat = IEXCloud_API.getPrecioMateriaPrima(ticker);
+                    double precioMat = SupportedTipoActivo.MATERIAS_PRIMAS.getTipoActivoService().getPrecio(ticker);
 
-                    precioLore.add(1, ChatColor.GOLD + "Precio/Unidad:" + ChatColor.GREEN + " " + preioMat + " $");
+                    precioLore.add(1, ChatColor.GOLD + "Precio/Unidad:" + ChatColor.GREEN + " " + precioMat + " $");
 
                     MinecraftUtils.setLore(actual, precioLore);
                 } catch (Exception e) {

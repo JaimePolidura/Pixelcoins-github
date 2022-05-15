@@ -13,11 +13,10 @@ public final class OrderExecutorProxy {
     }
 
     public void run(AbrirOrdenPremarketCommand commandoOnMarketClose, Runnable onMarketOpen){
-        if(Funciones.mercadoEstaAbierto()){
+        if(Funciones.mercadoEstaAbierto())
             onMarketOpen.run();
-        }else{
+        else
             this.abrirOrdenUseCase.abrirOrden(commandoOnMarketClose);
-        }
     }
 
     public static void execute(AbrirOrdenPremarketCommand commandoOnMarketClose, Runnable onMarketOpen){

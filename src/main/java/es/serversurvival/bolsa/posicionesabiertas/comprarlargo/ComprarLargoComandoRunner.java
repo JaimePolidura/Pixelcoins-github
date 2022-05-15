@@ -8,7 +8,6 @@ import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import main.ValidationResult;
@@ -28,7 +27,7 @@ import static org.bukkit.Sound.*;
         args = {"ticker", "cantidad"},
         explanation = "Para comprar una accion. <ticker> ticker de la accion (solo se pueden acciones americanas) <cantidad> cantidad de acciones a comprar"
 )
-public class ComprarLargoComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<ComprarLargoComando> {
+public class ComprarLargoComandoRunner implements CommandRunnerArgs<ComprarLargoComando> {
     private final JugadoresService jugadoresService;
     private final ComprarLargoUseCase comprarLargoUseCase;
     private final ActivoInfoService activoInfoService;

@@ -2,6 +2,7 @@ package es.serversurvival.jugadores.withers.sacarMaxItem;
 
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.utils.CollectionUtils;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.jugadores.withers.CambioPixelcoins;
@@ -11,6 +12,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import static es.serversurvival._shared.utils.CollectionUtils.*;
 
 public final class SacarMaxItemUseCase {
     private final JugadoresService jugadoresService;
@@ -33,14 +36,14 @@ public final class SacarMaxItemUseCase {
         int bloques = ((convertibles / CambioPixelcoins.DIAMANTE) - items) / 9;
 
         int bloquesAnadidos = 0;
-        int[] slotsBloques = Funciones.slotsItem(bloques, 36 - Funciones.getEspaciosOcupados(player.getInventory()));
+        int[] slotsBloques = slotsItem(bloques, 36 - Funciones.getEspaciosOcupados(player.getInventory()));
         Inventory inventoryJugador = player.getInventory();
 
         for (int i = 0; i < slotsBloques.length; i++) {
             bloquesAnadidos = bloquesAnadidos + slotsBloques[i];
             inventoryJugador.addItem(new ItemStack(Material.getMaterial("DIAMOND_BLOCK"), slotsBloques[i]));
         }
-        int[] slotsDiamantes = Funciones.slotsItem(items, 36 - Funciones.getEspaciosOcupados(inventoryJugador));
+        int[] slotsDiamantes = slotsItem(items, 36 - Funciones.getEspaciosOcupados(inventoryJugador));
         int diamantesAnadidos = 0;
         for (int i = 0; i < slotsDiamantes.length; i++) {
             diamantesAnadidos = diamantesAnadidos + slotsDiamantes[i];
@@ -62,14 +65,14 @@ public final class SacarMaxItemUseCase {
         int bloques = ((convertibles / CambioPixelcoins.LAPISLAZULI) - items) / 9;
 
         int bloquesAnadidos = 0;
-        int[] slotsBloques = Funciones.slotsItem(bloques, 36 - Funciones.getEspaciosOcupados(player.getInventory()));
+        int[] slotsBloques = slotsItem(bloques, 36 - Funciones.getEspaciosOcupados(player.getInventory()));
         Inventory inventoryJugador = player.getInventory();
 
         for (int i = 0; i < slotsBloques.length; i++) {
             bloquesAnadidos = bloquesAnadidos + slotsBloques[i];
             inventoryJugador.addItem(new ItemStack(Material.getMaterial("LAPIS_BLOCK"), slotsBloques[i]));
         }
-        int[] slotsDiamantes = Funciones.slotsItem(items, 36 - Funciones.getEspaciosOcupados(inventoryJugador));
+        int[] slotsDiamantes = slotsItem(items, 36 - Funciones.getEspaciosOcupados(inventoryJugador));
         int diamantesAnadidos = 0;
         for (int i = 0; i < slotsDiamantes.length; i++) {
             diamantesAnadidos = diamantesAnadidos + slotsDiamantes[i];
@@ -88,7 +91,7 @@ public final class SacarMaxItemUseCase {
 
         int bloques = (pixelcoinsJugador - (pixelcoinsJugador % CambioPixelcoins.CUARZO)) / CambioPixelcoins.CUARZO;
 
-        int[] slotsBloques = Funciones.slotsItem(bloques, 36 - Funciones.getEspaciosOcupados(player.getInventory()));
+        int[] slotsBloques = slotsItem(bloques, 36 - Funciones.getEspaciosOcupados(player.getInventory()));
         int bloquesAnadidos = 0;
         Inventory jugadorInventory = player.getInventory();
         for (int i = 0; i < slotsBloques.length; i++) {

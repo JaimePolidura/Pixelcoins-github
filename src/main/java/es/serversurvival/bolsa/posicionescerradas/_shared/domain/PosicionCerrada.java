@@ -1,6 +1,6 @@
 package es.serversurvival.bolsa.posicionescerradas._shared.domain;
 
-import es.serversurvival._shared.mysql.TablaObjeto;
+import es.jaime.javaddd.domain.Aggregate;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import lombok.Getter;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class PosicionCerrada implements TablaObjeto {
+public final class PosicionCerrada extends Aggregate {
     @Getter private final UUID posicionCerradaId;
     @Getter private final String jugador;
     @Getter private final SupportedTipoActivo tipoActivo;

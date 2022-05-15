@@ -1,13 +1,13 @@
 package es.serversurvival.bolsa.ordenespremarket._shared.domain;
 
-import es.serversurvival._shared.mysql.TablaObjeto;
+import es.jaime.javaddd.domain.Aggregate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class OrdenPremarket implements TablaObjeto {
+public final class OrdenPremarket extends Aggregate {
     @Getter private final UUID orderPremarketId;
     @Getter private final String jugador;
     @Getter private final String nombreActivo;

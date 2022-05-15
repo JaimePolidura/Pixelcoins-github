@@ -2,7 +2,6 @@ package es.serversurvival.empresas.empresas.depositar;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -16,7 +15,7 @@ import static org.bukkit.ChatColor.*;
         args = {"empresa", "pixelcoins"},
         explanation = "Depositar pixelcoins en la empresa <empresa>"
 )
-public class DepositarPixelcoinsComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<DepositarPixelcoinsComando> {
+public class DepositarPixelcoinsComandoRunner implements CommandRunnerArgs<DepositarPixelcoinsComando> {
     private final DepositarPixelcoinsUseCase useCasse;
 
     public DepositarPixelcoinsComandoRunner(){

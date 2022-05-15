@@ -80,7 +80,7 @@ public class CriptomonedasMenu extends Menu implements Clickable, PostLoading {
                 String ticker = loreItem.get(0).split(" ")[1];
 
                 try {
-                    double precioMoneda = IEXCloud_API.getPrecioCriptomoneda(ticker);
+                    double precioMoneda = SupportedTipoActivo.CRIPTOMONEDAS.getTipoActivoService().getPrecio(ticker);
 
                     loreItem.add(1, ChatColor.GOLD + "Precio/Moneda:" + ChatColor.GREEN + " " + DATE_FORMATER_LEGACY.format(precioMoneda) + " $");
 

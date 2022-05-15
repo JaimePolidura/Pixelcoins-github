@@ -2,7 +2,6 @@ package es.serversurvival.empresas.empresas.miempresa;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import main.ValidationResult;
 import main.ValidatorService;
 import org.bukkit.ChatColor;
@@ -17,7 +16,7 @@ import static org.bukkit.ChatColor.DARK_RED;
         args = {"empresa"},
         explanation = "Ver todos los datos de tu <empresa>"
 )
-public class MiEmpresaComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<MiEmpresaComando> {
+public class MiEmpresaComandoRunner implements CommandRunnerArgs<MiEmpresaComando> {
     private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /empresas miempresa <empresa>";
 
     @Override

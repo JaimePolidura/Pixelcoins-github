@@ -3,8 +3,8 @@ package es.serversurvival.deudas.cancelar;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.deudas._shared.newformat.application.DeudasService;
-import es.serversurvival.deudas._shared.newformat.domain.Deuda;
+import es.serversurvival.deudas._shared.application.DeudasService;
+import es.serversurvival.deudas._shared.domain.Deuda;
 
 import java.util.UUID;
 

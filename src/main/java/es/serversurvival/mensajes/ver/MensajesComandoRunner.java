@@ -5,16 +5,14 @@ import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.mensajes._shared.application.MensajesService;
 import es.serversurvival.mensajes._shared.domain.Mensaje;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 @Command(value = "mensajes", explanation = "Ver todos los mensajes no leidos que tengas")
-public class MensajesComandoRunner extends PixelcoinCommand implements CommandRunnerNonArgs {
+public class MensajesComandoRunner implements CommandRunnerNonArgs {
     private final MensajesService mensajesService;
 
     public MensajesComandoRunner(){

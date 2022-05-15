@@ -3,7 +3,6 @@ package es.serversurvival.empresas.empresas.contratar;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival.empresas.empleados._shared.domain.TipoSueldo;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival.empresas.empleados.contratar.ContratarSolicitud;
 import main.ValidationResult;
 import main.ValidatorService;
@@ -19,7 +18,7 @@ import static org.bukkit.ChatColor.DARK_RED;
         explanation = "Contratar a un jugador en tu empresa con un sueldo, <tipoSueldo> frequencia de pago: d (cada dia), s (cada semana), " +
                 "2s (cada 2 semanas), m (cada mes)"
 )
-public class ContratarComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<ContratarComando> {
+public class ContratarComandoRunner implements CommandRunnerArgs<ContratarComando> {
     private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /empresas contratar <jugador> <empresa> <sueldo> <tipo sueldo (/ayuda empresas)> [cargo]";
 
     @Override

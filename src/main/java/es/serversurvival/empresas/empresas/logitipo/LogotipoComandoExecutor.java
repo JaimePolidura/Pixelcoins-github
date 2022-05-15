@@ -2,7 +2,6 @@ package es.serversurvival.empresas.empresas.logitipo;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -15,7 +14,7 @@ import org.bukkit.entity.Player;
         args = {"empresa"},
         explanation = "Cambiar el logotipo de tu empresa. Para esto selecciona un item en la mano y ejecuta el comando"
 )
-public class LogotipoComandoExecutor extends PixelcoinCommand implements CommandRunnerArgs<LogotipoComando> {
+public class LogotipoComandoExecutor implements CommandRunnerArgs<LogotipoComando> {
     private final CambiarLogitpoUseCase useCase;
 
     public LogotipoComandoExecutor() {

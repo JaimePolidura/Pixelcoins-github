@@ -4,7 +4,7 @@ import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
-import es.serversurvival._shared.eventospixelcoins.PosicionCerradaEvento;
+import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerradaEvento;
 import es.serversurvival.transacciones._shared.domain.Transaccion;
 
 import java.util.Date;

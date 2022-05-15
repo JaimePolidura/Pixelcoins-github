@@ -5,6 +5,7 @@ import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.Cache;
 import es.serversurvival._shared.cache.LRUCache;
+import es.serversurvival._shared.utils.CollectionUtils;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empleados._shared.domain.EmpleadosRepository;
@@ -75,7 +76,7 @@ public final class EmpleadosService {
     }
 
     public Map<String, List<Empleado>> getAllEmpleadosEmpresas () {
-        return Funciones.mergeMapList(this.findAll(), Empleado::getEmpresa);
+        return CollectionUtils.mergeMapList(this.findAll(), Empleado::getEmpresa);
     }
 
     private Function<Empleado, Empleado> saveToCache(){

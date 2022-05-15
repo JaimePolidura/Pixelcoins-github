@@ -1,11 +1,11 @@
-package es.serversurvival.deudas._shared.newformat.infrastructure;
+package es.serversurvival.deudas._shared.infrastructure;
 
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
 import es.jaimetruman.select.Select;
-import es.serversurvival.deudas._shared.newformat.domain.Deuda;
-import es.serversurvival.deudas._shared.newformat.domain.DeudasRepository;
+import es.serversurvival.deudas._shared.domain.Deuda;
+import es.serversurvival.deudas._shared.domain.DeudasRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

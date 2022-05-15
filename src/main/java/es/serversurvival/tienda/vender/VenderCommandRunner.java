@@ -2,7 +2,6 @@ package es.serversurvival.tienda.vender;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,7 +18,7 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
         args = {"precio"},
         explanation = "Subir a la tienda el objeto que tengas en la mano, para retirarlo /tienda ver y dar click"
 )
-public class VenderCommandRunner extends PixelcoinCommand implements CommandRunnerArgs<VenderCommando> {
+public class VenderCommandRunner implements CommandRunnerArgs<VenderCommando> {
     private final VenderTiendaUseCase venderTiendaUseCase;
 
     public VenderCommandRunner(){

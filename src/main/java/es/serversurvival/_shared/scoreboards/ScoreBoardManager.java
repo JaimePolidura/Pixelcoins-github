@@ -2,7 +2,7 @@ package es.serversurvival._shared.scoreboards;
 
 import es.jaime.EventListener;
 import es.jaime.Priority;
-import es.serversurvival._shared.eventospixelcoins.EventoTipoTransaccion;
+import es.serversurvival.transacciones._shared.domain.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.transacciones._shared.domain.Transaccion;
 import es.serversurvival.Pixelcoin;

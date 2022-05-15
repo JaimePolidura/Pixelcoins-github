@@ -2,24 +2,19 @@ package es.serversurvival.empresas.empresas.despedir;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
-import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.empresas.empleados.despedir.DespedirEmpleadoUseCase;
-import main.ValidationResult;
-import main.ValidatorService;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 
 import static es.serversurvival._shared.utils.Funciones.*;
-import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
 
 @Command(
         value = "empresas despedir",
         args = {"empresa", "jugador", "razon"},
         explanation = "Despedir a un jugador de tu empresa"
 )
-public class DespedirEmpleadoComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<DespedirEmpleadoComando> {
+public class DespedirEmpleadoComandoRunner implements CommandRunnerArgs<DespedirEmpleadoComando> {
     private final DespedirEmpleadoUseCase useCase;
 
     public DespedirEmpleadoComandoRunner(){

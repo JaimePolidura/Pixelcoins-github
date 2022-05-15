@@ -5,28 +5,23 @@ import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
-import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
-import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.mensajes._shared.domain.MensajesRepository;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import static es.serversurvival._shared.utils.CollectionUtils.*;
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
-import static es.serversurvival._shared.utils.Funciones.sortMapByValueDecre;
 
 @Command(
         value = "bolsa vercartera",
         args = {"jugador"},
         explanation = "Ver la cartera de la bolsa de otro jugador"
 )
-public class VerCarteraJugadorComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<VerCarteraJugadorComando> {
+public class VerCarteraJugadorComandoRunner implements CommandRunnerArgs<VerCarteraJugadorComando> {
     private final ActivoInfoService activoInfoService;
 
     public VerCarteraJugadorComandoRunner() {

@@ -3,7 +3,6 @@ package es.serversurvival.empresas.empresas.comprarservicio;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.command.CommandSender;
 
@@ -16,7 +15,7 @@ import static org.bukkit.ChatColor.GOLD;
         args = {"empresa", "precio"},
         explanation = "Comprar un servicio a la empresa, <empresa> nombre de la empresa <precio> pixelcoisn a dar"
 )
-public class ComprarServicionComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<ComprarServicionComando> {
+public class ComprarServicionComandoRunner implements CommandRunnerArgs<ComprarServicionComando> {
     private final ComprarServicioUseCase useCase;
 
     public ComprarServicionComandoRunner(){

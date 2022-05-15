@@ -2,7 +2,6 @@ package es.serversurvival.empresas.empleados.irse;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -11,7 +10,7 @@ import org.bukkit.command.CommandSender;
         args = {"empresa"},
         explanation = "Irse de una empresa en la que estes contratado <empresa> nombre de la empresa para irse"
 )
-public class IrseEmpleoComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<IrseEmpleoComando> {
+public class IrseEmpleoComandoRunner implements CommandRunnerArgs<IrseEmpleoComando> {
     private final IrseEmpresaUseCase useCase;
 
     public IrseEmpleoComandoRunner() {

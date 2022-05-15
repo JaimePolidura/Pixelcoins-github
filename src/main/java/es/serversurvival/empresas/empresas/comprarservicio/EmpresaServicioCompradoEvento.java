@@ -1,6 +1,6 @@
 package es.serversurvival.empresas.empresas.comprarservicio;
 
-import es.serversurvival._shared.eventospixelcoins.EventoTipoTransaccion;
+import es.serversurvival.transacciones._shared.domain.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.transacciones._shared.domain.Transaccion;

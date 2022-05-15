@@ -1,13 +1,13 @@
 package es.serversurvival.transacciones._shared.domain;
 
-import es.serversurvival._shared.mysql.TablaObjeto;
+import es.jaime.javaddd.domain.Aggregate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class Transaccion implements TablaObjeto {
+public final class Transaccion extends Aggregate {
     @Getter private final UUID id;
     @Getter private final String fecha;
     @Getter private final String comprador;

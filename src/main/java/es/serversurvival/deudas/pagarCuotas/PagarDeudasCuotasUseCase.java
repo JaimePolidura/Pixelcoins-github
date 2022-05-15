@@ -1,9 +1,8 @@
 package es.serversurvival.deudas.pagarCuotas;
 
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.deudas._shared.newformat.application.DeudasService;
-import es.serversurvival.deudas._shared.newformat.domain.Deuda;
+import es.serversurvival.deudas._shared.application.DeudasService;
+import es.serversurvival.deudas._shared.domain.Deuda;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.Pixelcoin;

@@ -3,7 +3,7 @@ package es.serversurvival.bolsa.activosinfo.eventlisteners;
 import es.jaime.EventListener;
 import es.jaime.Priority;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.eventospixelcoins.PosicionCerradaEvento;
+import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerradaEvento;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 

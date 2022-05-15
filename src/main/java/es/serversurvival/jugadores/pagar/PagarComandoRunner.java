@@ -2,7 +2,6 @@ package es.serversurvival.jugadores.pagar;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -17,7 +16,7 @@ import static org.bukkit.ChatColor.GOLD;
         args = {"destino", "pixelcoins"},
         explanation = "Pagar a un jugador online con tus pixelcoins"
 )
-public class PagarComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<PagarComando> {
+public class PagarComandoRunner implements CommandRunnerArgs<PagarComando> {
     private final PagarUseCase pagarUseCase;
 
     public PagarComandoRunner() {

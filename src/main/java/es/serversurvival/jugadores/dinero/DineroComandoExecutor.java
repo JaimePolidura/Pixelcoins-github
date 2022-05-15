@@ -3,7 +3,6 @@ package es.serversurvival.jugadores.dinero;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import org.bukkit.ChatColor;
@@ -16,7 +15,7 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
         value = "dinero",
         explanation = "Ver tus pixelcoins que tengas en efectivo"
 )
-public class DineroComandoExecutor extends PixelcoinCommand implements CommandRunnerNonArgs {
+public class DineroComandoExecutor implements CommandRunnerNonArgs {
     private final JugadoresService jugadoresService;
 
     public DineroComandoExecutor() {

@@ -1,7 +1,6 @@
 package es.serversurvival.empresas.empresas._shared.domain;
 
 import es.jaime.javaddd.domain.Aggregate;
-import es.serversurvival._shared.mysql.TablaObjeto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.Material;
@@ -9,7 +8,7 @@ import org.bukkit.Material;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class Empresa extends Aggregate implements TablaObjeto {
+public final class Empresa extends Aggregate {
     @Getter private final UUID empresaId;
     @Getter private final String nombre;
     @Getter private final String owner;

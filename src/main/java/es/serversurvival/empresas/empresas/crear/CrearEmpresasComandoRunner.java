@@ -2,7 +2,6 @@ package es.serversurvival.empresas.empresas.crear;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -14,7 +13,7 @@ import org.bukkit.entity.Player;
         args = {"nombre", "descripccion..."},
         explanation = "Crear empresa en la que podras contratar jugadores, facturar etc"
 )
-public class CrearEmpresasComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<CrearEmpresasComando> {
+public class CrearEmpresasComandoRunner implements CommandRunnerArgs<CrearEmpresasComando> {
     private final CrearEmpresaUseCase useCase;
 
     public CrearEmpresasComandoRunner(){

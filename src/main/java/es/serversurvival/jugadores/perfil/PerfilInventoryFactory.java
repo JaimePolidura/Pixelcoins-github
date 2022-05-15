@@ -2,10 +2,11 @@ package es.serversurvival.jugadores.perfil;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.utils.CollectionUtils;
 import es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
-import es.serversurvival.deudas._shared.newformat.application.DeudasService;
+import es.serversurvival.deudas._shared.application.DeudasService;
 import es.serversurvival.web.cuentasweb._shared.application.CuentasWebService;
 import es.serversurvival.web.cuentasweb._shared.domain.CuentaWeb;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
@@ -27,6 +28,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+import static es.serversurvival._shared.utils.CollectionUtils.*;
 import static es.serversurvival._shared.utils.Funciones.*;
 
 public class PerfilInventoryFactory extends InventoryFactory {

@@ -1,7 +1,6 @@
 package es.serversurvival.empresas.ofertasaccionesserver._shared.domain;
 
 import es.jaime.javaddd.domain.Aggregate;
-import es.serversurvival._shared.mysql.TablaObjeto;
 import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +8,7 @@ import lombok.Getter;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class OfertaAccionServer extends Aggregate implements TablaObjeto {
+public final class OfertaAccionServer extends Aggregate {
     @Getter private final UUID ofertasAccionesServerId;
     @Getter private final String nombreOfertante;
     @Getter private final String empresa;

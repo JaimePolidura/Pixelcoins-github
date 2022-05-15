@@ -7,16 +7,13 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa._shared.application.OrderExecutorProxy;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
-import es.serversurvival.bolsa.activosinfo.actualizar.ActualizarActivosInfoTask;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenPremarketCommand;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.OrdenAbiertaEvento;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import es.serversurvival._shared.utils.Funciones;
-import main.Pair;
 import main.ValidationResult;
 import main.ValidatorService;
 import org.bukkit.Bukkit;
@@ -24,8 +21,6 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
-import java.util.Optional;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
@@ -40,7 +35,7 @@ import static org.bukkit.Sound.ENTITY_PLAYER_LEVELUP;
         explanation = "Abrir posicion en corto de una accion, se te cobrara una comision <ticker> " +
                 "ticker de la accion, solo se pueden empresas americanas, <cantidad> cantidad de accinoes a vender"
 )
-public class VenderCortoComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<VenderCortoComando> {
+public class VenderCortoComandoRunner implements CommandRunnerArgs<VenderCortoComando> {
     private final AbrirOrdenUseCase abrirOrdenUseCase;
     private final JugadoresService jugadoresService;
     private final ActivoInfoService activoInfoService;

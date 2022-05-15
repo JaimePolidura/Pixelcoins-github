@@ -1,6 +1,7 @@
 package es.serversurvival.bolsa.posicionesabiertas._shared.application;
 
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.utils.CollectionUtils;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import static es.serversurvival._shared.utils.CollectionUtils.*;
 import static es.serversurvival._shared.utils.Funciones.*;
 import static java.lang.Math.abs;
 

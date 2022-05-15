@@ -2,10 +2,8 @@ package es.serversurvival.jugadores.venderjugador;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival._shared.comandos.PixelcoinCommand;
 import main.ValidationResult;
 import main.ValidatorService;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -17,7 +15,7 @@ import static org.bukkit.ChatColor.DARK_RED;
         args = {"comprador", "pixelcoins"},
         explanation = "Vender a un jugador el item que tengas en la mano"
 )
-public class VenderJugadorComandoRunner extends PixelcoinCommand implements CommandRunnerArgs<VenderJugadorComando> {
+public class VenderJugadorComandoRunner implements CommandRunnerArgs<VenderJugadorComando> {
     @Override
     public void execute(VenderJugadorComando venderJugadorComando, CommandSender sender) {
         Player player = (Player) sender;
