@@ -7,8 +7,8 @@ import lombok.Getter;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class AccionistaEmpresaServer extends Aggregate {
-    @Getter private final UUID accionistaEmpresaServerId;
+public final class AccionEmpresaServer extends Aggregate {
+    @Getter private final UUID accionEmpresaServerId;
     @Getter private final String nombreAccionista;
     @Getter private final TipoAccionista tipoAccionista;
     @Getter private final String empresa;
@@ -16,13 +16,13 @@ public final class AccionistaEmpresaServer extends Aggregate {
     @Getter private final double precioApertura;
     @Getter private final String fechaApertura;
 
-    public AccionistaEmpresaServer withNombreAccionsta(String nombreAccionista){
-        return new AccionistaEmpresaServer(accionistaEmpresaServerId, nombreAccionista, tipoAccionista, empresa,
+    public AccionEmpresaServer withNombreAccionsta(String nombreAccionista){
+        return new AccionEmpresaServer(accionEmpresaServerId, nombreAccionista, tipoAccionista, empresa,
                 cantidad, precioApertura, fechaApertura);
     }
 
-    public AccionistaEmpresaServer withCantidad(int cantidad){
-        return new AccionistaEmpresaServer(accionistaEmpresaServerId, nombreAccionista, tipoAccionista, empresa,
-                cantidad, precioApertura, fechaApertura);
+    public AccionEmpresaServer decreaseCantidad(int cantidad){
+        return new AccionEmpresaServer(accionEmpresaServerId, nombreAccionista, tipoAccionista, empresa,
+                this.cantidad - cantidad, precioApertura, fechaApertura);
     }
 }

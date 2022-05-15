@@ -20,6 +20,12 @@ import es.serversurvival.bolsa.posicionesabiertas._shared.infrastructure.MySQLPo
 import es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionesCerradasRepository;
 import es.serversurvival.bolsa.posicionescerradas._shared.infrastructure.MySQLPosicionesCerradasRepository;
+import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasEmpresasServerService;
+import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistasEmpresasServerRepository;
+import es.serversurvival.empresas.accionistasempresasserver._shared.infrastructure.MySQLAccionistasEmpresasServerRepository;
+import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
+import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertasAccionesServerRepository;
+import es.serversurvival.empresas.ofertasaccionesserver._shared.infrastructure.MySQLOfertasAccionesServerRepository;
 import es.serversurvival.web.conversacionesweb._shared.application.ConversacionesWebService;
 import es.serversurvival.web.conversacionesweb._shared.domain.ConversacionesWebRepostiory;
 import es.serversurvival.web.conversacionesweb._shared.infrastructure.InMemoryConversacionesRepository;
@@ -71,6 +77,8 @@ import static org.bukkit.ChatColor.*;
  10 OrdenesPremarket
  11 PosicionesAbiertas
  12 Llamadas api
+ 13 Ofertas empresas server
+ 14 Acciones empresas server
  */
 public final class Pixelcoin extends JavaPlugin {
     private static Pixelcoin plugin;
@@ -155,6 +163,8 @@ public final class Pixelcoin extends JavaPlugin {
             put(PosicionesAbiertasRepository.class, new MySQLPosicionesAbiertasRepository(mysqlCOnfiguration));
             put(PosicionesCerradasRepository.class, new MySQLPosicionesCerradasRepository(mysqlCOnfiguration));
             put(ActivoInfoCacheRepository.class, new InMemoryActivoInfoCacheRepository());
+            put(OfertasAccionesServerRepository.class, new MySQLOfertasAccionesServerRepository(mysqlCOnfiguration));
+            put(AccionistasEmpresasServerRepository.class, new MySQLAccionistasEmpresasServerRepository(mysqlCOnfiguration));
         }});
 
         DependecyContainer.addAll(new HashMap<>(){{
@@ -172,6 +182,8 @@ public final class Pixelcoin extends JavaPlugin {
             put(PosicionesAbiertasSerivce.class, new PosicionesAbiertasSerivce());
             put(PosicionesCerradasService.class, new PosicionesCerradasService());
             put(ActivoInfoService.class, new ActivoInfoService());
+            put(OfertasAccionesServerService.class, new OfertasAccionesServerService());
+            put(AccionistasEmpresasServerService.class, new AccionistasEmpresasServerService());
         }});
     }
 }

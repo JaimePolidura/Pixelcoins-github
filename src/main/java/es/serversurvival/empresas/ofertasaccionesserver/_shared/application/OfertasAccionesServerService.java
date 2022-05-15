@@ -22,11 +22,11 @@ public final class OfertasAccionesServerService {
     }
 
     public void save(String jugador, String empresa, double precio, int cantidad, TipoAccionista tipoOfertante,
-                     double precioApertura){
+                     double precioApertura, UUID accionEmpresServerId){
 
         String fecha = DATE_FORMATER_LEGACY.format(new Date());
         this.repositoryDb.save(new OfertaAccionServer(UUID.randomUUID(), jugador, empresa, precio, cantidad,
-                fecha, tipoOfertante, precioApertura ));
+                fecha, tipoOfertante, precioApertura, accionEmpresServerId));
     }
 
     public void save(OfertaAccionServer ofertaMercadoServer) {

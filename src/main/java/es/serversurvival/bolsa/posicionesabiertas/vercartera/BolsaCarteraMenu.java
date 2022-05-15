@@ -78,7 +78,6 @@ public class BolsaCarteraMenu extends Menu implements Clickable, Paginated {
         UUID id = UUID.fromString(loreItemClicked.get(loreItemClicked.size() - 1).split(" ")[1]);
 
         if(clickedItemType == GREEN_BANNER){
-            BolsaVenderAccionEmpresaMenu menu = new BolsaVenderAccionEmpresaMenu(player, posicionesAbiertasSerivce.getById(id));
         }else{
             VenderAccionesConfirmacion confirmacion = new VenderAccionesConfirmacion(player, id, tipoPosicion, SupportedTipoActivo.ACCIONES, loreItemClicked); //TODO Hay que hacerlo compatible con los demas activos
         }

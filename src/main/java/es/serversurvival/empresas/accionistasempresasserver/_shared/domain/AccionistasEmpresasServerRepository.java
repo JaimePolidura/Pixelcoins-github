@@ -5,13 +5,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface AccionistasEmpresasServerRepository {
-    void save(AccionistaEmpresaServer accionistaEmpresaServer);
+    void save(AccionEmpresaServer accionistaEmpresaServer);
 
-    Optional<AccionistaEmpresaServer> findById(UUID id);
+    Optional<AccionEmpresaServer> findById(UUID id);
 
-    List<AccionistaEmpresaServer> findByEmpresa(String empresa);
+    List<AccionEmpresaServer> findByEmpresa(String empresa);
 
-    List<AccionistaEmpresaServer> findByNombreAccionista(String nombreAccionista);
+    List<AccionEmpresaServer> findByNombreAccionista(String nombreAccionista);
 
     void deleteById(UUID id);
 }

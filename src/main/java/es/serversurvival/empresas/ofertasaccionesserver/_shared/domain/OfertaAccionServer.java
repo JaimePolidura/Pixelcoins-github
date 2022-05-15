@@ -18,15 +18,16 @@ public final class OfertaAccionServer extends Aggregate implements TablaObjeto {
     @Getter private final String fecha;
     @Getter private final TipoAccionista tipoOfertante;
     @Getter private final double precioApertura;
+    @Getter private final UUID accionistaEmpresaServerId;
 
     public OfertaAccionServer withNombreOfertante(String nombreOfertante){
         return new OfertaAccionServer(ofertasAccionesServerId, nombreOfertante, empresa, precio,
-                cantidad, fecha, tipoOfertante, precioApertura);
+                cantidad, fecha, tipoOfertante, precioApertura, accionistaEmpresaServerId);
     }
 
-    public OfertaAccionServer withCantidad(int cantidad){
+    public OfertaAccionServer decreaseCantidadBy(int cantidad){
         return new OfertaAccionServer(ofertasAccionesServerId, nombreOfertante, empresa, precio,
-                cantidad, fecha, tipoOfertante, precioApertura);
+                this.cantidad - cantidad, fecha, tipoOfertante, precioApertura, accionistaEmpresaServerId);
     }
 
     public boolean esTipoOfertanteJugador () {

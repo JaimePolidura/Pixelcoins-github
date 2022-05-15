@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa.posicionesabiertas.vercartera;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
+import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionEmpresaServer;
 import es.serversurvival.empresas.ofertasaccionesserver.venderofertameracadoaserver.VenderOfertaAccionServerUseCase;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.confirmaciones.Confirmacion;
@@ -29,20 +29,19 @@ public class BolsaVenderAccionEmpresaMenu extends Menu implements Confirmacion {
 
     private final Inventory inventory;
     private final Player player;
-    private final PosicionAbierta posicionAVender;
+    private final AccionEmpresaServer accionEmpresaAVender;
     private final String empresa;
     private final double precioApertura;
     private double precioVenta;
 
-    public BolsaVenderAccionEmpresaMenu(Player player, PosicionAbierta posicionAVender) {
+    public BolsaVenderAccionEmpresaMenu(Player player, AccionEmpresaServer accionEmpresaAVender) {
         this.player = player;
-        this.posicionAVender = posicionAVender;
+        this.accionEmpresaAVender = accionEmpresaAVender;
         this.venderOfertaUseCase = new VenderOfertaAccionServerUseCase();
 
-        String empresa = posicionAVender.getNombreActivo();
-        this.precioVenta = (int) posicionAVender.getPrecioApertura();
-        this.empresa = posicionAVender.getNombreActivo();
-        this.precioApertura = posicionAVender.getPrecioApertura();
+        this.precioVenta = (int) accionEmpresaAVender.getPrecioApertura();
+        this.empresa = accionEmpresaAVender.getEmpresa();
+        this.precioApertura = accionEmpresaAVender.getPrecioApertura();
 
         String titulo = DARK_RED + "" + BOLD + "   VENDER ACCION ";
         String tituloAceptar = GREEN + "" + BOLD + "VENDER " + empresa;
@@ -89,7 +88,6 @@ public class BolsaVenderAccionEmpresaMenu extends Menu implements Confirmacion {
         ItemBuilder.of(Material.GREEN_WOOL).title(displayName).lore(lore).buildAddInventory(inventory, 14);
     }
 
-
     @Override
     public Inventory getInventory() {
         return inventory;
@@ -102,11 +100,12 @@ public class BolsaVenderAccionEmpresaMenu extends Menu implements Confirmacion {
 
     @Override
     public void confirmar() {
-        venderOfertaUseCase.vender(player.getName(), posicionAVender, precioVenta);
+        venderOfertaUseCase.vender(player.getName(),this.accionEmpresaAVender.getAccionEmpresaServerId(),
+                this.precioVenta, this.accionEmpresaAVender.getCantidad());
 
         enviarMensajeYSonido(player, GOLD + "Al ser un accion de una empresa del servidor de minecraft. Se ha puesta la oferta de venta en el mercado de acciones. Para consultar el mercado: " + AQUA + "/empresas mercado",
                 Sound.ENTITY_PLAYER_LEVELUP);
-        Bukkit.broadcastMessage(GOLD + player.getName() + " ha subido acciones de la empresa del servidor: " + posicionAVender.getNombreActivo() + AQUA + " /empresas mercado");
+        Bukkit.broadcastMessage(GOLD + player.getName() + " ha subido acciones de la empresa del servidor: " + accionEmpresaAVender.getEmpresa() + AQUA + " /empresas mercado");
 
         closeMenu();
     }

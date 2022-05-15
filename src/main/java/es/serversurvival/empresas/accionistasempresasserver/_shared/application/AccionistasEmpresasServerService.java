@@ -2,11 +2,15 @@ package es.serversurvival.empresas.accionistasempresasserver._shared.application
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistaEmpresaServer;
+import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionEmpresaServer;
 import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistasEmpresasServerRepository;
+import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import static es.serversurvival._shared.utils.Funciones.*;
 
 public final class AccionistasEmpresasServerService {
     private final AccionistasEmpresasServerRepository repositoryDb;
@@ -14,20 +18,28 @@ public final class AccionistasEmpresasServerService {
     public AccionistasEmpresasServerService() {
         this.repositoryDb = DependecyContainer.get(AccionistasEmpresasServerRepository.class);
     }
+    public void save(String accionistaName, TipoAccionista tipoAccionista, String empresaName, int cantidad, double precioApertura){
+        String date = DATE_FORMATER_LEGACY.format(new Date());
 
-    public AccionistaEmpresaServer getById(UUID id) {
-        return this.repositoryDb.findById(id).orElseThrow(() -> new ResourceNotFound("Accion no encontrada"));
+        this.save(new AccionEmpresaServer(
+                UUID.randomUUID(), accionistaName, tipoAccionista, empresaName, cantidad, precioApertura, date
+        ));
     }
 
-    public void save(AccionistaEmpresaServer accionistaEmpresaServer) {
+    public void save(AccionEmpresaServer accionistaEmpresaServer) {
         this.repositoryDb.save(accionistaEmpresaServer);
     }
 
-    public List<AccionistaEmpresaServer> findByEmpresa(String empresa) {
+    public AccionEmpresaServer getById(UUID id) {
+        return this.repositoryDb.findById(id)
+                .orElseThrow(() -> new ResourceNotFound("Accion no encontrada"));
+    }
+
+    public List<AccionEmpresaServer> findByEmpresa(String empresa) {
         return this.repositoryDb.findByEmpresa(empresa);
     }
 
-    public List<AccionistaEmpresaServer> findByNombreAccionista(String nombreAccionista) {
+    public List<AccionEmpresaServer> findByNombreAccionista(String nombreAccionista) {
         return this.repositoryDb.findByNombreAccionista(nombreAccionista);
     }
 
