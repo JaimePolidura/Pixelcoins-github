@@ -7,18 +7,21 @@ import es.serversurvival._shared.cache.LRUCache;
 import es.serversurvival._shared.cache.LimitedCache;
 import es.serversurvival.jugadores._shared.domain.JugadoresRepository;
 import es.serversurvival.jugadores._shared.domain.Jugador;
+import lombok.Setter;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public final class JugadoresService {
-    private final JugadoresRepository repositoryDb;
-    private final LimitedCache<String, Jugador> cache;
+public class JugadoresService {
+    private JugadoresRepository repositoryDb;
+    private LimitedCache<String, Jugador> cache;
 
-    public JugadoresService() {
-        this.repositoryDb = DependecyContainer.get(JugadoresRepository.class);
+    public JugadoresService () {}
+
+    public JugadoresService(JugadoresRepository jugadoresRepository) {
+        this.repositoryDb = jugadoresRepository;
         this.cache = new LRUCache<>(150);
     }
 
@@ -55,12 +58,10 @@ public final class JugadoresService {
                 .orElseThrow(() -> new ResourceNotFound("Jugador no encontrado")));
     }
 
-    public boolean estaRegistradoNumeroCuentaPara(String nombre, int numeroVerificacionCuenta){
-        return this.getByNombre(nombre).getNumeroVerificacionCuenta() == numeroVerificacionCuenta;
-    }
-
     public List<Jugador> findAll(){
-        return this.repositoryDb.findAll();
+        return this.repositoryDb.findAll().stream()
+                .map(saveJugadorToCache())
+                .toList();
     }
 
     public List<Jugador> findBy(Predicate<? super Jugador> condition){
@@ -75,16 +76,6 @@ public final class JugadoresService {
         return this.findAll().stream()
                 .sorted(jugadorComparator)
                 .collect(Collectors.toList());
-    }
-
-    public void realizarTransferencia (String nombrePagador, String nombrePagado, double pixelcoins) {
-        Jugador pagadorChangedPixelcoins = this.getByNombre(nombrePagador)
-                .decrementPixelcoinsBy(pixelcoins);
-        Jugador pagadoChangedPixelcoins = this.getByNombre(nombrePagado)
-                .incrementPixelcoinsBy(pixelcoins);
-
-        this.save(pagadorChangedPixelcoins);
-        this.save(pagadoChangedPixelcoins);
     }
 
     public void realizarTransferenciaConEstadisticas (Jugador pagador, Jugador pagado, double pixelcoins) {

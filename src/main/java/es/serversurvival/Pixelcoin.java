@@ -165,7 +165,7 @@ public final class Pixelcoin extends JavaPlugin {
         }});
 
         DependecyContainer.addAll(new HashMap<>(){{
-            put(JugadoresService.class, new JugadoresService());
+            put(JugadoresService.class, new JugadoresService(DependecyContainer.get(JugadoresRepository.class)));
             put(MensajesService.class, new MensajesService());
             put(TransaccionesService.class, new TransaccionesService());
             put(DeudasService.class, new DeudasService());

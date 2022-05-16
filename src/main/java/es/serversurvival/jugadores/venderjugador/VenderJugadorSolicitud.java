@@ -1,9 +1,11 @@
 package es.serversurvival.jugadores.venderjugador;
 
 import es.serversurvival.Pixelcoin;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
 import es.serversurvival._shared.menus.solicitudes.Solicitud;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores.pagar.PagarUseCase;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -37,7 +39,7 @@ public class VenderJugadorSolicitud extends Menu implements Solicitud {
         this.precio = precio;
         this.inventory = buildInventory();
         this.slotItemVender = jugadorVendedor.getInventory().getHeldItemSlot();
-        this.pagarUseCase = new PagarUseCase();
+        this.pagarUseCase = new PagarUseCase(DependecyContainer.get(JugadoresService.class));
 
         enviarSolicitud();
     }

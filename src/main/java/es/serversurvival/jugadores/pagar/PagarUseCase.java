@@ -7,12 +7,13 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
+import org.junit.runner.RunWith;
 
 public final class PagarUseCase {
     private final JugadoresService jugadoresService;
 
-    public PagarUseCase(){
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+    public PagarUseCase(JugadoresService jugadoresService){
+        this.jugadoresService = jugadoresService;
     }
 
     public void realizarPago(String nombrePagador, String nombrePagado, double pixelcoins) {

@@ -2,7 +2,9 @@ package es.serversurvival.jugadores.pagar;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -20,7 +22,7 @@ public class PagarComandoRunner implements CommandRunnerArgs<PagarComando> {
     private final PagarUseCase pagarUseCase;
 
     public PagarComandoRunner() {
-        this.pagarUseCase = new PagarUseCase();
+        this.pagarUseCase = new PagarUseCase(DependecyContainer.get(JugadoresService.class));
     }
 
     @Override
