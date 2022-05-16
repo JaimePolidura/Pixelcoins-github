@@ -6,6 +6,7 @@ import es.jaime.impl.EventBusSynch;
 import es.jaimetruman.Mapper;
 import es.jaimetruman.task.BukkitTimeUnit;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
 import es.serversurvival._shared.mysql.MySQLConfiguration;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfoCacheRepository;
@@ -58,6 +59,7 @@ import es.serversurvival._shared.scoreboards.ScoreboardUpdateTask;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 import static org.bukkit.ChatColor.*;
 
@@ -117,6 +119,8 @@ public final class Pixelcoin extends JavaPlugin {
         this.loadAllDependenciesContainer();
 
         getServer().getConsoleSender().sendMessage(GREEN + "------------------------------");
+
+        this.eventBus.publish(new PluginIniciado());
     }
 
     private void setUpRabbitMQConsumer () {
@@ -143,6 +147,7 @@ public final class Pixelcoin extends JavaPlugin {
 
         DependecyContainer.addAll(new HashMap<>() {{
             put(MySQLConfiguration.class, mysqlCOnfiguration);
+            put(EventBus.class, new EventBusSynch("es.serversurvival"));
         }});
 
         DependecyContainer.addAll(new HashMap<>(){{

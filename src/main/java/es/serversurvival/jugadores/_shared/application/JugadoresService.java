@@ -1,10 +1,13 @@
 package es.serversurvival.jugadores._shared.application;
 
+import es.jaime.EventListener;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.Cache;
 import es.serversurvival._shared.cache.LRUCache;
 import es.serversurvival._shared.cache.LimitedCache;
+import es.serversurvival._shared.cache.UnlimitedCacheSize;
+import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
 import es.serversurvival.jugadores._shared.domain.JugadoresRepository;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import lombok.Setter;
@@ -16,13 +19,13 @@ import java.util.stream.Collectors;
 
 public class JugadoresService {
     private JugadoresRepository repositoryDb;
-    private LimitedCache<String, Jugador> cache;
+    private UnlimitedCacheSize<String, Jugador> cache;
 
     public JugadoresService () {}
 
     public JugadoresService(JugadoresRepository jugadoresRepository) {
         this.repositoryDb = jugadoresRepository;
-        this.cache = new LRUCache<>(150);
+        this.cache = new UnlimitedCacheSize<>();
     }
 
     public void save(Jugador jugador){
@@ -45,6 +48,10 @@ public class JugadoresService {
     public Jugador getByNombre(String nombre){
         var cachedJugador = this.cache.find(nombre);
 
+        cachedJugador.ifPresent(jugador -> {
+            System.out.println(jugador.getNVentas());
+        });
+
         return cachedJugador.orElseGet(() -> this.repositoryDb.findByNombre(nombre)
                 .map(saveJugadorToCache())
                 .orElseThrow(() -> new ResourceNotFound("Jugador no encontrado")));
@@ -65,9 +72,7 @@ public class JugadoresService {
     }
 
     public List<Jugador> findBy(Predicate<? super Jugador> condition){
-        List<Jugador> listToFind = this.cache.isFull() ? this.repositoryDb.findAll() : this.cache.all();
-
-        return listToFind.stream()
+        return this.cache.all().stream()
                 .filter(condition)
                 .collect(Collectors.toList());
     }
@@ -100,5 +105,12 @@ public class JugadoresService {
 
             return jugador;
         };
+    }
+
+    @EventListener
+    public void on(PluginIniciado e){
+        this.repositoryDb.findAll().forEach(jugador -> {
+            this.cache.put(jugador.getNombre(), jugador);
+        });
     }
 }

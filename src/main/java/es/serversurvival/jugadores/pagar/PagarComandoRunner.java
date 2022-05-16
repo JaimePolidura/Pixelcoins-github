@@ -1,5 +1,6 @@
 package es.serversurvival.jugadores.pagar;
 
+import es.jaime.EventBus;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.DependecyContainer;
@@ -22,7 +23,10 @@ public class PagarComandoRunner implements CommandRunnerArgs<PagarComando> {
     private final PagarUseCase pagarUseCase;
 
     public PagarComandoRunner() {
-        this.pagarUseCase = new PagarUseCase(DependecyContainer.get(JugadoresService.class));
+        this.pagarUseCase = new PagarUseCase(
+                DependecyContainer.get(JugadoresService.class),
+                DependecyContainer.get(EventBus.class)
+        );
     }
 
     @Override

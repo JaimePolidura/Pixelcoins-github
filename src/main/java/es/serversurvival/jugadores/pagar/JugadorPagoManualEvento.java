@@ -6,10 +6,12 @@ import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.transacciones._shared.domain.Transaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.UUID;
 
 @AllArgsConstructor
+@ToString
 public final class JugadorPagoManualEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
     @Getter private final String pagador;
     @Getter private final String pagado;

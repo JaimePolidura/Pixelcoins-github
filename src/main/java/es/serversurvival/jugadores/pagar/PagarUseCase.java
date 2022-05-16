@@ -1,19 +1,19 @@
 package es.serversurvival.jugadores.pagar;
 
+import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
-import es.serversurvival.Pixelcoin;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
-import org.junit.runner.RunWith;
 
 public final class PagarUseCase {
     private final JugadoresService jugadoresService;
+    private final EventBus eventBus;
 
-    public PagarUseCase(JugadoresService jugadoresService){
+    public PagarUseCase(JugadoresService jugadoresService, EventBus eventBus){
         this.jugadoresService = jugadoresService;
+        this.eventBus = eventBus;
     }
 
     public void realizarPago(String nombrePagador, String nombrePagado, double pixelcoins) {
@@ -25,7 +25,7 @@ public final class PagarUseCase {
 
         this.jugadoresService.realizarTransferenciaConEstadisticas(jugadorPagador, jugadorPagado, pixelcoins);
 
-        Pixelcoin.publish(new JugadorPagoManualEvento(nombrePagador, nombrePagado, pixelcoins));
+        this.eventBus.publish(new JugadorPagoManualEvento(nombrePagador, nombrePagado, pixelcoins));
     }
 
     private void ensureNotSamePlayer(String pagador, String pagado){

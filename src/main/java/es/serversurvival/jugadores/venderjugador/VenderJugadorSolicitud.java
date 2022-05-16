@@ -1,5 +1,6 @@
 package es.serversurvival.jugadores.venderjugador;
 
+import es.jaime.EventBus;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.menus.Menu;
@@ -39,7 +40,10 @@ public class VenderJugadorSolicitud extends Menu implements Solicitud {
         this.precio = precio;
         this.inventory = buildInventory();
         this.slotItemVender = jugadorVendedor.getInventory().getHeldItemSlot();
-        this.pagarUseCase = new PagarUseCase(DependecyContainer.get(JugadoresService.class));
+        this.pagarUseCase = new PagarUseCase(
+                DependecyContainer.get(JugadoresService.class),
+                DependecyContainer.get(EventBus.class)
+        );
 
         enviarSolicitud();
     }

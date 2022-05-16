@@ -6,10 +6,10 @@ import java.util.UUID;
 
 public class JugadoresTestMother {
     public Jugador createJugador(String nombre){
-        return new Jugador(UUID.randomUUID(), nombre, 1, 1, 1, 1, 1, 1, 1);
+        return new Jugador(UUID.randomUUID(), nombre, 0, 0, 0, 0, 0, 0, 0);
     }
 
     public Jugador createJugador(String nombre, double pixelcoins){
-        return new Jugador(UUID.randomUUID(), nombre, pixelcoins, 1, 1, 1, 1, 1, 1);
+        return new Jugador(UUID.randomUUID(), nombre, pixelcoins, 0, 0, 0, 0, 0, 0);
     }
 }
