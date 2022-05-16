@@ -30,7 +30,7 @@ public final class EmpresasService {
 
     public void save(String nombre, String jugadorNombre, String descripccion){
         this.save(new Empresa(UUID.randomUUID(), nombre, jugadorNombre, 0, 0,
-                0, "DIAMOND_PICKAXE", descripccion, false));
+                0, "DIAMOND_PICKAXE", descripccion, false, 0));
     }
 
     public void save(Empresa empresa) {

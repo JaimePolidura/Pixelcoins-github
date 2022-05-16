@@ -25,4 +25,12 @@ public final class AccionEmpresaServer extends Aggregate {
         return new AccionEmpresaServer(accionEmpresaServerId, nombreAccionista, tipoAccionista, empresa,
                 this.cantidad - cantidad, precioApertura, fechaApertura);
     }
+
+    public boolean esJugador(){
+        return this.tipoAccionista == TipoAccionista.JUGADOR;
+    }
+
+    public boolean esEmpresa(){
+        return this.tipoAccionista == TipoAccionista.EMPRESA;
+    }
 }

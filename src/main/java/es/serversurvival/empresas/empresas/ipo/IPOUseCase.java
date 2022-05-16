@@ -46,7 +46,8 @@ public final class IPOUseCase {
         this.accionistasEmpresasServerService.save(playerName, JUGADOR, command.getEmpresa(), command.getAccionesOwner(),
                  command.getPrecioPorAccion());
 
-        this.empresasService.save(empresaToIPO.setCotizadaToTrue());
+        this.empresasService.save(empresaToIPO.setCotizadaToTrue()
+                .withAccionesTotales(command.getAccionesTotales()));
     }
 
     private void ensureNotAlreadyCotizada(Empresa empresa){

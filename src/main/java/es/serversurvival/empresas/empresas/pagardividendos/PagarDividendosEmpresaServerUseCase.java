@@ -1,56 +1,55 @@
 package es.serversurvival.empresas.empresas.pagardividendos;
 
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasEmpresasServerService;
+import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionEmpresaServer;
+import es.serversurvival.empresas.empresas._shared.domain.Empresa;
+import es.serversurvival.empresas.empresas.pagardividendos.eventos.EmpresaServerDividendoPagadoEmpresa;
+import es.serversurvival.empresas.empresas.pagardividendos.eventos.EmpresaServerDividendoPagadoJugador;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
-import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
-import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
-import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.Pixelcoin;
-
-import java.util.List;
-import java.util.Map;
 
 public final class PagarDividendosEmpresaServerUseCase {
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;
-    private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
-    private final OfertasAccionesServerService ofertasAccionesServerService;
+    private final AccionistasEmpresasServerService accionistasEmpresasServerService;
 
     public PagarDividendosEmpresaServerUseCase(){
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
-        this.ofertasAccionesServerService = DependecyContainer.get(OfertasAccionesServerService.class);
+        this.accionistasEmpresasServerService = DependecyContainer.get(AccionistasEmpresasServerService.class);
     }
 
-    public void pagarDividendoAccionServer(String nombreEmpresa, double dividendoPorAccion, double totalAPagar) {
+    public void pagarDividendoAccionServer(String nombreEmpresa, double dividendoPorAccion) {
         var empresa = this.empresasService.getByNombre(nombreEmpresa);
-        //TODO
-        List<PosicionAbierta> posicionesAccionDeEmpresa = posicionesAbiertasSerivce.findAll().stream()
-                .filter(posicionAbierta -> posicionAbierta.getNombreActivo().equalsIgnoreCase(nombreEmpresa))
-                .toList();
-        List<OfertaAccionServer> ofertasAccion =  ofertasAccionesServerService.findByEmpresa(nombreEmpresa, OfertaAccionServer::esTipoOfertanteJugador);
 
-        Map<String, Jugador> allJugadoresMap = jugadoresService.getMapAllJugadores();
-
-        posicionesAccionDeEmpresa.forEach(posicion -> {
-            pagarDividendoAccionAJugador(allJugadoresMap.get(posicion.getJugador()), posicion.getCantidad(), dividendoPorAccion, nombreEmpresa);
+        this.accionistasEmpresasServerService.findByEmpresa(nombreEmpresa, AccionEmpresaServer::esJugador).forEach(accionista -> {
+            pagarDividendoAccionAJugador(accionista, dividendoPorAccion, nombreEmpresa);
         });
-        ofertasAccion.forEach(oferta -> {
-            pagarDividendoAccionAJugador(allJugadoresMap.get(oferta.getNombreOfertante()), oferta.getCantidad(), dividendoPorAccion, nombreEmpresa);
+        this.accionistasEmpresasServerService.findByEmpresa(nombreEmpresa, AccionEmpresaServer::esEmpresa).forEach(accionista -> {
+            pagarDividendoAEmpresa(dividendoPorAccion, empresa, accionista);
         });
 
-        this.empresasService.save(empresa.decrementPixelcoinsBy(totalAPagar));
+        this.empresasService.save(empresa.decrementPixelcoinsBy(dividendoPorAccion * empresa.getAccionesTotales()));
     }
 
-    private void pagarDividendoAccionAJugador (Jugador jugador, int cantidad, double dividendoPorAccion, String nombreEmpresa) {
-        double dividendoTotal = cantidad * dividendoPorAccion;
+    private void pagarDividendoAEmpresa(double dividendoPorAccion, Empresa empresa, AccionEmpresaServer accionista) {
+        double totalACobrar = accionista.getCantidad() * dividendoPorAccion;
+
+        this.empresasService.save(empresa.incrementPixelcoinsBy(totalACobrar));
+
+        Pixelcoin.publish(new EmpresaServerDividendoPagadoEmpresa(empresa.getNombre(), dividendoPorAccion * accionista.getCantidad()));
+    }
+
+    private void pagarDividendoAccionAJugador (AccionEmpresaServer accionista, double dividendoPorAccion, String nombreEmpresa) {
+        double dividendoTotal = accionista.getCantidad() * dividendoPorAccion;
+        var jugador = this.jugadoresService.getByNombre(accionista.getNombreAccionista());
         this.jugadoresService.save(jugador.incrementPixelcoinsBy(dividendoTotal)
                 .incrementIngresosBy(dividendoTotal));
 
-        Pixelcoin.publish(new EmpresaServerDividendoPagadoEvento(jugador.getNombre(), nombreEmpresa, dividendoTotal));
+        Pixelcoin.publish(new EmpresaServerDividendoPagadoJugador(jugador.getNombre(), nombreEmpresa, dividendoTotal));
     }
 }

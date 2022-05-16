@@ -1,4 +1,4 @@
-package es.serversurvival.empresas.empresas.pagardividendos;
+package es.serversurvival.empresas.empresas.pagardividendos.eventos;
 
 import es.serversurvival.transacciones._shared.domain.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
@@ -11,7 +11,7 @@ import java.util.UUID;
 import static es.serversurvival.transacciones._shared.domain.TipoTransaccion.*;
 
 @AllArgsConstructor
-public final class EmpresaServerDividendoPagadoEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
+public final class EmpresaServerDividendoPagadoJugador extends PixelcoinsEvento implements EventoTipoTransaccion {
     @Getter private final String jugador;
     @Getter private final String empresa;
     @Getter private final double pixelcoins;

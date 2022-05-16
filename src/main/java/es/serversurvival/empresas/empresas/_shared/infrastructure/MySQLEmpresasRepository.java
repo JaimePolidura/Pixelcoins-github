@@ -70,6 +70,7 @@ public final class MySQLEmpresasRepository extends DataBaseRepository<Empresa, U
                 rs.getDouble("gastos"),
                 rs.getString("icono"),
                 rs.getString("descripcion"),
-                rs.getBoolean("cotizada")
+                rs.getBoolean("cotizada"),
+                rs.getInt("accionesTotales")
         );}
 }

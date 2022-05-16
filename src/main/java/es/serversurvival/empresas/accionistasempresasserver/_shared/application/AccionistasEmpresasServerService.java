@@ -9,6 +9,7 @@ import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoA
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 
@@ -40,6 +41,12 @@ public final class AccionistasEmpresasServerService {
 
     public List<AccionEmpresaServer> findByEmpresa(String empresa) {
         return this.repositoryDb.findByEmpresa(empresa);
+    }
+
+    public List<AccionEmpresaServer> findByEmpresa(String empresa, Predicate<? super AccionEmpresaServer> condition) {
+        return this.repositoryDb.findByEmpresa(empresa).stream()
+                .filter(condition)
+                .toList();
     }
 
     public List<AccionEmpresaServer> findByNombreAccionista(String nombreAccionista) {

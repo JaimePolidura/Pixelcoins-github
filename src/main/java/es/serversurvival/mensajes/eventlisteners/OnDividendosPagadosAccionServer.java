@@ -1,7 +1,7 @@
 package es.serversurvival.mensajes.eventlisteners;
 
 import es.jaime.EventListener;
-import es.serversurvival.empresas.empresas.pagardividendos.EmpresaServerDividendoPagadoEvento;
+import es.serversurvival.empresas.empresas.pagardividendos.eventos.EmpresaServerDividendoPagadoJugador;
 import es.serversurvival._shared.utils.Funciones;
 
 import java.text.DecimalFormat;
@@ -14,7 +14,7 @@ public final class OnDividendosPagadosAccionServer {
     private final DecimalFormat formatea = Funciones.FORMATEA;
 
     @EventListener
-    public void onDividendosPagados (EmpresaServerDividendoPagadoEvento e) {
+    public void onDividendosPagados (EmpresaServerDividendoPagadoJugador e) {
         String mensajeOnline = GOLD + "Has cobrado " + GREEN + "%s PC" + GOLD + " en dividendo de la empresa " + e.getEmpresa();
         String mensajeOffline = GOLD + "Has cobrado %s PC en dividendo de la empresa " + e.getEmpresa();
 

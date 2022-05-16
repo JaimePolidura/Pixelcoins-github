@@ -2,6 +2,8 @@ package es.serversurvival.empresas.empresas.miempresa;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasEmpresasServerService;
+import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionEmpresaServer;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
@@ -14,31 +16,34 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 public class VerEmpresaInventoryFactory extends InventoryFactory {
-    private final String empresaNombre;
+    private final Empresa empresa;
     private final EmpresasService empresasService;
     private final EmpleadosService empleadosService;
+    private final AccionistasEmpresasServerService accionistasEmpresasServerService;
 
     public VerEmpresaInventoryFactory (String empresa) {
-        this.empresaNombre = empresa;
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.empleadosService = DependecyContainer.get(EmpleadosService.class);
+        this.accionistasEmpresasServerService = DependecyContainer.get(AccionistasEmpresasServerService.class);
+        this.empresa = this.empresasService.getByNombre(empresa);
     }
 
     @Override
     protected Inventory buildInventory(String jugador) {
-        Inventory inventory = Bukkit.createInventory(null, 54, DARK_RED + "" + BOLD + "      "  + empresaNombre.toUpperCase());
+        Inventory inventory = Bukkit.createInventory(null, 54, DARK_RED + "" + BOLD + "      "  + this.empresa.getNombre().toUpperCase());
 
         inventory.setItem(0, buildItemInfo());
         inventory.setItem(1, buildItemsEmpresas());
         inventory.setItem(8, buildItemBorrarEmpresa());
         inventory.setItem(53, buildItemGoBack());
-        if(empresasService.isCotizada(empresaNombre)){
+        if(empresa.isCotizada()){
             inventory.setItem(2, buildItemAccionistas());
             inventory.setItem(3, buildItemDividendo());
         }
@@ -56,33 +61,31 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildItemsEmpresas () {
-        Empresa empresaAVer = empresasService.getByNombre(empresaNombre);
-
-        String displayName = GOLD + "" + BOLD + "" + empresaNombre.toUpperCase();
+        String displayName = GOLD + "" + BOLD + "" + empresa.getNombre().toUpperCase();
         List<String> lore = new ArrayList<>();
         lore.add(GOLD + "Descripccion:");
 
-        List<String> descripccion = Funciones.dividirDesc(empresaAVer.getDescripcion(), 40);
+        List<String> descripccion = Funciones.dividirDesc(empresa.getDescripcion(), 40);
         lore.addAll(1, descripccion);
         lore.add("  ");
-        lore.add(GOLD + "Pixelcoins: " + GREEN + FORMATEA.format(empresaAVer.getPixelcoins()) + " PC");
-        lore.add(GOLD + "Ingresos: " + GREEN + FORMATEA.format(empresaAVer.getIngresos()) + " PC");
-        lore.add(GOLD + "Gastos: " + GREEN + FORMATEA.format(empresaAVer.getGastos()) + " PC");
-        double beneficiosPerdidas = empresaAVer.getIngresos() - empresaAVer.getGastos();
+        lore.add(GOLD + "Pixelcoins: " + GREEN + FORMATEA.format(empresa.getPixelcoins()) + " PC");
+        lore.add(GOLD + "Ingresos: " + GREEN + FORMATEA.format(empresa.getIngresos()) + " PC");
+        lore.add(GOLD + "Gastos: " + GREEN + FORMATEA.format(empresa.getGastos()) + " PC");
+        double beneficiosPerdidas = empresa.getIngresos() - empresa.getGastos();
         if(beneficiosPerdidas >= 0){
             lore.add(GOLD + "Beneficios: "  +  GREEN + "+" +  FORMATEA.format(beneficiosPerdidas) + " PC");
-            lore.add(GOLD + "Rentabilidad: " + GREEN + "+" + Funciones.redondeoDecimales(Funciones.rentabilidad(empresaAVer.getIngresos(), beneficiosPerdidas),1) + "%");
+            lore.add(GOLD + "Rentabilidad: " + GREEN + "+" + Funciones.redondeoDecimales(Funciones.rentabilidad(empresa.getIngresos(), beneficiosPerdidas),1) + "%");
         }else{
             lore.add(GOLD + "Perdidas: " + RED + FORMATEA.format(beneficiosPerdidas) + " PC");
-            lore.add(GOLD + "Rentabilidad: " + RED + Funciones.redondeoDecimales(Funciones.rentabilidad(empresaAVer.getIngresos(), beneficiosPerdidas),1) + "%");
+            lore.add(GOLD + "Rentabilidad: " + RED + Funciones.redondeoDecimales(Funciones.rentabilidad(empresa.getIngresos(), beneficiosPerdidas),1) + "%");
         }
         lore.add("   ");
-        lore.add("/empresas depositar " + empresaNombre + " <pixelcoins>");
-        lore.add("/empresas sacar " + empresaNombre + " <pixelcoins>");
-        lore.add("/empresas logotipo " + empresaNombre + "");
-        lore.add("/empresas editardescripccion " + empresaNombre);
+        lore.add("/empresas depositar " + empresa + " <pixelcoins>");
+        lore.add("/empresas sacar " + empresa + " <pixelcoins>");
+        lore.add("/empresas logotipo " + empresa + "");
+        lore.add("/empresas editardescripccion " + empresa);
         lore.add("  <nueva desc>");
-        lore.add("/empresas editarnombre " + empresaNombre + " <nombre>");
+        lore.add("/empresas editarnombre " + empresa + " <nombre>");
         lore.add("Mas info en /ayuda empresario o:");
         lore.add("http://serversurvival.ddns.net/perfil");
 
@@ -118,7 +121,7 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
 
     private List<ItemStack> buildItemsEmpleados () {
         List<ItemStack> itemsEmpleados = new ArrayList<>();
-        List<Empleado> empleados = this.empleadosService.findByEmpresa(empresaNombre);
+        List<Empleado> empleados = this.empleadosService.findByEmpresa(empresa.getNombre());
 
         empleados.forEach( (empleado) -> {
             List<String> lore = new ArrayList<>();
@@ -128,11 +131,11 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
             lore.add(GOLD + "Sueldo: " + GREEN + FORMATEA.format(empleado.getSueldo()) + " PC/" + empleado.getTipoSueldo().nombre);
             lore.add(GOLD + "ID: " + empleado.getEmpleadoId());
             lore.add("   ");
-            lore.add("/empresas despedir " + empresaNombre + " " + empleado.getNombre());
+            lore.add("/empresas despedir " + empresa + " " + empleado.getNombre());
             lore.add("  <razon>");
-            lore.add("/empresas editarempleado " + empresaNombre + " " + empleado.getNombre());
+            lore.add("/empresas editarempleado " + empresa + " " + empleado.getNombre());
             lore.add("  sueldo <sueldo>");
-            lore.add("/empresas editarempleado " + empresaNombre + " " + empleado.getNombre());
+            lore.add("/empresas editarempleado " + empresa + " " + empleado.getNombre());
             lore.add("  tiposueldo <tipo (ver en info)>");
 
             itemsEmpleados.add(ItemBuilder.of(Material.PLAYER_HEAD).lore(lore).title(RED + "" + BOLD + "" + UNDERLINE + "CLICK PARA DESPEDIR").build());
@@ -145,16 +148,18 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
         String displayName = GOLD + "" + BOLD + "ACCIONISTAS";
         List<String> lore = new ArrayList<>();
         //TODO XD
-//        Map<String, Integer> jugadoresAccionistas = ofertasMercadoServerMySQL.getAccionistasEmpresaServer(empresaNombre);
-//
-//        jugadoresAccionistas.forEach((jugador, peso) -> {
-//            if(jugador.equalsIgnoreCase(empresaNombre)){
-//                lore.add(GOLD + "" + "EMPRESA : " + GREEN + FORMATEA.format(peso) + "%");
-//            }else{
-//                lore.add(GOLD + jugador + ": " + GREEN + FORMATEA.format(peso) + "%");
-//            }
-//
-//        });
+        var jugadoresAccionistas = accionistasEmpresasServerService.findByEmpresa(empresa.getNombre()).stream()
+                .sorted(Comparator.comparingInt(AccionEmpresaServer::getCantidad))
+                .toList();
+
+        for (AccionEmpresaServer accionista : jugadoresAccionistas) {
+            if(accionista.getNombreAccionista().equalsIgnoreCase(this.empresa.getNombre()))
+                lore.add(GOLD + "" + "EMPRESA : " + GREEN + FORMATEA.format(accionista.getCantidad()
+                        / this.empresa.getAccionesTotales()) + "%");
+            else
+                lore.add(GOLD + accionista.getNombreAccionista() + ": " + GREEN + FORMATEA.format(accionista.getCantidad()
+                        / this.empresa.getAccionesTotales()) + "%");
+        }
 
         return ItemBuilder.of(Material.NETHERITE_SCRAP).title(displayName).lore(lore).build();
     }
