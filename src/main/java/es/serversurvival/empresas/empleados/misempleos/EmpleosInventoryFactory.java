@@ -60,7 +60,7 @@ public class EmpleosInventoryFactory extends InventoryFactory {
 
         List<ItemStack> itemsEmpleos = new ArrayList<>();
         empleaosJugador.forEach( (empleado) -> {
-            String icono = empresasService.getEmpresaByNombre(empleado.getEmpresa()).getIcono();
+            String icono = empresasService.getByNombre(empleado.getEmpresa()).getIcono();
             String displayName = ChatColor.RED + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA IRTE";
 
             List<String> lore = new ArrayList<>();

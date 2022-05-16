@@ -111,7 +111,7 @@ public class ComprarAccionesServerConfirmacion extends Menu implements AumentoCo
                     FORMATEA.format(precioTotal) + "PC";
 
             //TODO
-            enviarMensaje(this.empresasService.getEmpresaByNombre(nombreEmpresa).getOwner(), mensajeOnline, mensajeOnline);
+            enviarMensaje(this.empresasService.getByNombre(nombreEmpresa).getOwner(), mensajeOnline, mensajeOnline);
         }else{
             double beneficiosPerdidas = (oferta.getPrecio() - oferta.getPrecioApertura()) * cantidadAComprar;
             double rentabilidad = redondeoDecimales(diferenciaPorcntual(oferta.getPrecioApertura(), oferta.getPrecio()), 3);

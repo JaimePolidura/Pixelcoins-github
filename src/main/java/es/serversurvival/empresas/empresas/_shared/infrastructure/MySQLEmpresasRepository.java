@@ -27,12 +27,12 @@ public final class MySQLEmpresasRepository extends DataBaseRepository<Empresa, U
     }
 
     @Override
-    public Optional<Empresa> findByEmpresaId(UUID empresaId) {
+    public Optional<Empresa> findById(UUID empresaId) {
         return super.findById(empresaId);
     }
 
     @Override
-    public Optional<Empresa> findEmpresaByNombre(String nombre) {
+    public Optional<Empresa> findByNombre(String nombre) {
         return buildObjectFromQuery(Select.from(TABLE_NAME).where("nombre").equal(nombre));
     }
 
@@ -47,7 +47,7 @@ public final class MySQLEmpresasRepository extends DataBaseRepository<Empresa, U
     }
 
     @Override
-    public void deleteByEmpresaId(UUID empresaId) {
+    public void deleteById(UUID empresaId) {
         super.deleteById(empresaId);
     }
 

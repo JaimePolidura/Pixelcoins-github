@@ -39,13 +39,13 @@ public final class EmpresasService {
     }
 
     public Empresa getByEmpresaId(UUID empresaId) {
-        return cache.findValueIf(empresa -> empresa.getEmpresaId() == empresaId).orElseGet(() -> this.repostioryDb.findByEmpresaId(empresaId)
+        return cache.findValueIf(empresa -> empresa.getEmpresaId() == empresaId).orElseGet(() -> this.repostioryDb.findById(empresaId)
                 .map(saveEmpresaToCache())
                 .orElseThrow(() -> new ResourceNotFound("Empresa no encontrada")));
     }
 
-    public Empresa getEmpresaByNombre(String nombre) {
-        return cache.find(nombre).orElseGet(() -> this.repostioryDb.findEmpresaByNombre(nombre)
+    public Empresa getByNombre(String nombre) {
+        return cache.find(nombre).orElseGet(() -> this.repostioryDb.findByNombre(nombre)
                 .map(saveEmpresaToCache())
                 .orElseThrow(() -> new ResourceNotFound("Empresa no encontrada")));
     }
@@ -67,12 +67,12 @@ public final class EmpresasService {
     }
 
     public void deleteByEmpresaId(UUID empresaId) {
-        this.repostioryDb.deleteByEmpresaId(empresaId);
+        this.repostioryDb.deleteById(empresaId);
         this.cache.remove(empresa -> empresa.getEmpresaId().equals(empresaId));
     }
 
     public boolean isCotizada(String nombre){
-        return this.getEmpresaByNombre(nombre).isCotizada();
+        return this.getByNombre(nombre).isCotizada();
     }
 
     public Map<String, List<Empresa>> getAllEmpresasJugadorMap () {

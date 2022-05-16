@@ -22,7 +22,7 @@ public final class EditarDescUseCase {
     }
 
     private Empresa ensureEmpresaExists(String nombreEmpresa){
-        return this.empresasService.getEmpresaByNombre(nombreEmpresa);
+        return this.empresasService.getByNombre(nombreEmpresa);
     }
 
     private void ensureOwner(String owner, Empresa empresa){

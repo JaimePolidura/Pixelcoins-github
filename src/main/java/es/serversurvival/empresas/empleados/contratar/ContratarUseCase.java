@@ -63,7 +63,7 @@ public final class ContratarUseCase {
     }
 
     private Empresa ensureEmpresaExists(String empresaNombre) {
-        return this.empresasService.getEmpresaByNombre(empresaNombre);
+        return this.empresasService.getByNombre(empresaNombre);
     }
 
     private void ensureOwner(String owner, Empresa empresa){

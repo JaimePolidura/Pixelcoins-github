@@ -15,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
@@ -57,7 +56,7 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
     }
 
     private ItemStack buildItemsEmpresas () {
-        Empresa empresaAVer = empresasService.getEmpresaByNombre(empresaNombre);
+        Empresa empresaAVer = empresasService.getByNombre(empresaNombre);
 
         String displayName = GOLD + "" + BOLD + "" + empresaNombre.toUpperCase();
         List<String> lore = new ArrayList<>();

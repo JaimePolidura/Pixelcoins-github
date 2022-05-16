@@ -27,7 +27,7 @@ public final class PagarDividendosEmpresaServerUseCase {
     }
 
     public void pagarDividendoAccionServer(String nombreEmpresa, double dividendoPorAccion, double totalAPagar) {
-        var empresa = this.empresasService.getEmpresaByNombre(nombreEmpresa);
+        var empresa = this.empresasService.getByNombre(nombreEmpresa);
         //TODO
         List<PosicionAbierta> posicionesAccionDeEmpresa = posicionesAbiertasSerivce.findAll().stream()
                 .filter(posicionAbierta -> posicionAbierta.getNombreActivo().equalsIgnoreCase(nombreEmpresa))

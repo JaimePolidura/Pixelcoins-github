@@ -33,7 +33,7 @@ public final class ComprarOfertaMercadoUseCase {
     public void comprarOfertaMercadoAccionServer (String compradorName, UUID idOfeta, int cantidadAComprar) {
         var ofertaAComprar = ofertasAccionesServerService.getById(idOfeta);
         var jugadorComprador = this.jugadoresService.getByNombre(compradorName);
-        var empresa = this.empresasService.getEmpresaByNombre(ofertaAComprar.getEmpresa());
+        var empresa = this.empresasService.getByNombre(ofertaAComprar.getEmpresa());
         var accionistaEmpresaServer = this.accionistasEmpresasServerService.getById(ofertaAComprar.getAccionistaEmpresaServerId());
         this.ensusureCorrectQuantityCantidad(cantidadAComprar, ofertaAComprar);
         this.ensureCompradorNotHisSelf(compradorName, ofertaAComprar);

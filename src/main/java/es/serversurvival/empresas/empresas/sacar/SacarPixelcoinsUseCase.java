@@ -21,7 +21,7 @@ public final class SacarPixelcoinsUseCase {
     public void sacar (String playerName, String empresaNombre, double pixelcoinsASacar) {
         this.ensureCorrectFormatPixelcoins(pixelcoinsASacar);
         Jugador jugador = this.jugadoresService.getByNombre(playerName);
-        Empresa empresaASacar = this.empresasService.getEmpresaByNombre(empresaNombre);
+        Empresa empresaASacar = this.empresasService.getByNombre(empresaNombre);
         this.ensureOwnerOfEmpresa(empresaASacar, playerName);
 
         pixelcoinsASacar = pixelcoinsASacar > empresaASacar.getPixelcoins() ?

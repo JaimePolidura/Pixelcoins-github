@@ -18,7 +18,7 @@ public final class IrseEmpresaUseCase {
     }
 
     public void irse (String empleadoNombre, String empresaNombre) {
-        Empresa empresa = this.empresasService.getEmpresaByNombre(empresaNombre);
+        Empresa empresa = this.empresasService.getByNombre(empresaNombre);
         this.ensureOwnerNotLeavingEmpresa(empresaNombre, empresa);
         Empleado empleado = this.empleadosService.getEmpleadoInEmpresa(empleadoNombre, empresaNombre);
 

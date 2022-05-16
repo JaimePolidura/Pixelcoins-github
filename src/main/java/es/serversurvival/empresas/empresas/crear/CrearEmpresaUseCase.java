@@ -37,7 +37,7 @@ public final class CrearEmpresaUseCase {
     }
 
     private void ensureNameNotTaken(String nombre){
-        var taken = (Try.of(() -> this.empresasService.getEmpresaByNombre(nombre))).isFailure();
+        var taken = (Try.of(() -> this.empresasService.getByNombre(nombre))).isFailure();
 
         if(!taken)
             throw new AlreadyExists("El nombre ya esta cogido");

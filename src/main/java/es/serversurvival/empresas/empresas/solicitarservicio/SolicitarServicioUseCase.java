@@ -22,7 +22,7 @@ public final class SolicitarServicioUseCase {
     }
 
     public void solicitar (String quienSolicita, String empresaNombre) {
-        Empresa empresa = this.empresasService.getEmpresaByNombre(empresaNombre);
+        Empresa empresa = this.empresasService.getByNombre(empresaNombre);
 
         String mensajeOnline = ChatColor.GOLD + quienSolicita + " te ha solicitado el servicio de tu empresa: " + empresaNombre;
         String mensajeOffline = quienSolicita + " te ha solicitado el servicio de tu empresa: " + empresaNombre;

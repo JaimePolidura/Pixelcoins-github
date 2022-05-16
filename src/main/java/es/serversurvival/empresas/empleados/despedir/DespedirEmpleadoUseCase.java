@@ -25,7 +25,7 @@ public final class DespedirEmpleadoUseCase {
     public void despedir (String owner, String empleadoNombreADespedir, String empresaNombre, String razon) {
         this.ensureNotHisSelf(owner, empleadoNombreADespedir);
         this.ensureRazonCorrectFormat(razon);
-        var empresa = this.empresasService.getEmpresaByNombre(empresaNombre);
+        var empresa = this.empresasService.getByNombre(empresaNombre);
         this.ensureOwnerOfEmpresa(empresa, owner);
         var empeladoADespedir = this.ensureEmpeladoWorks(empresaNombre, empleadoNombreADespedir);
 

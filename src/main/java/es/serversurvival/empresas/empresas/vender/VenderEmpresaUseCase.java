@@ -24,7 +24,7 @@ public final class VenderEmpresaUseCase {
 
     public void vender (String vendedor, String comprador, double precioEmpresa, String nombreEmpresa) {
         this.ensureCorrectFormatPixelcoins(precioEmpresa);
-        var empresa = empresasService.getEmpresaByNombre(nombreEmpresa);
+        var empresa = empresasService.getByNombre(nombreEmpresa);
         this.ensureOwnerOfEmpresa(vendedor, empresa);
         var jugadorComprador = this.jugadoresService.getByNombre(comprador);
         var jugadorVendedor = this.jugadoresService.getByNombre(vendedor);

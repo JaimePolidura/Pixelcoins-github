@@ -47,7 +47,7 @@ public final class DepositarPixelcoinsUseCase {
     }
 
     private Empresa ensureEmpresasExists(String empresaNombre){
-        return this.empresasService.getEmpresaByNombre(empresaNombre);
+        return this.empresasService.getByNombre(empresaNombre);
     }
 
     private void ensureOwnerOfEmpresa(Empresa empresa, String jugador){

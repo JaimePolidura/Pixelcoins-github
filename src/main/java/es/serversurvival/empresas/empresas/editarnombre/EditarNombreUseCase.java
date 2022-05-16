@@ -19,7 +19,7 @@ public final class EditarNombreUseCase {
     public void editar (String antiguoNombre, String nuevoNombre, String playerName) {
         this.ensureNombreEmpresaCorrectFormat(nuevoNombre);
         this.ensureNewNameNotTaken(nuevoNombre);
-        var empresa = this.empresasService.getEmpresaByNombre(antiguoNombre);
+        var empresa = this.empresasService.getByNombre(antiguoNombre);
         this.ensureOwnerOfEmpresa(empresa, playerName);
 
         empresasService.save(empresa.withNombre(nuevoNombre));
@@ -38,7 +38,7 @@ public final class EditarNombreUseCase {
     }
 
     private void ensureNewNameNotTaken(String nombre){
-        var taken = (Try.of(() -> this.empresasService.getEmpresaByNombre(nombre))).isFailure();
+        var taken = (Try.of(() -> this.empresasService.getByNombre(nombre))).isFailure();
 
         if(!taken)
             throw new AlreadyExists("El nombre ya esta cogido");

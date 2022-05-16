@@ -7,15 +7,15 @@ import java.util.UUID;
 public interface EmpresasRepostiory {
     void save(Empresa empresa);
 
-    Optional<Empresa> findEmpresaByNombre(String nombre);
+    Optional<Empresa> findByNombre(String nombre);
 
-    Optional<Empresa> findByEmpresaId(UUID empresaId);
+    Optional<Empresa> findById(UUID empresaId);
 
     List<Empresa> findByOwner(String owner);
 
     List<Empresa> findAll();
 
-    void deleteByEmpresaId(UUID empresaId);
+    void deleteById(UUID empresaId);
 
 
 }

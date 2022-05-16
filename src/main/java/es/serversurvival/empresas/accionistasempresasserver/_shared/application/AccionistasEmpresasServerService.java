@@ -18,12 +18,15 @@ public final class AccionistasEmpresasServerService {
     public AccionistasEmpresasServerService() {
         this.repositoryDb = DependecyContainer.get(AccionistasEmpresasServerRepository.class);
     }
-    public void save(String accionistaName, TipoAccionista tipoAccionista, String empresaName, int cantidad, double precioApertura){
+    public UUID save(String accionistaName, TipoAccionista tipoAccionista, String empresaName, int cantidad, double precioApertura){
         String date = DATE_FORMATER_LEGACY.format(new Date());
+        UUID idAccionista = UUID.randomUUID();
 
         this.save(new AccionEmpresaServer(
-                UUID.randomUUID(), accionistaName, tipoAccionista, empresaName, cantidad, precioApertura, date
+                idAccionista, accionistaName, tipoAccionista, empresaName, cantidad, precioApertura, date
         ));
+
+        return idAccionista;
     }
 
     public void save(AccionEmpresaServer accionistaEmpresaServer) {

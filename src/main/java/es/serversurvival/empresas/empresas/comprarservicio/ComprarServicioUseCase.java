@@ -21,7 +21,7 @@ public final class ComprarServicioUseCase {
 
     public Empresa comprar (String jugador, String empresa, double pixelcoins) {
         this.ensurePixelcoinsCorrectFormat(pixelcoins);
-        Empresa empresaAComprarServicio = empresasService.getEmpresaByNombre(empresa);
+        Empresa empresaAComprarServicio = empresasService.getByNombre(empresa);
         this.ensureNotOwnerOfEmpresa(jugador, empresaAComprarServicio);
         var jugadorComprador = this.ensureEnoughPixelcoins(jugador, pixelcoins);
         

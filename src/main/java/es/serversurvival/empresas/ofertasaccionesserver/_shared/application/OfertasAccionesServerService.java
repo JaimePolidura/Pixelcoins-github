@@ -21,11 +21,11 @@ public final class OfertasAccionesServerService {
         this.repositoryDb = DependecyContainer.get(OfertasAccionesServerRepository.class);
     }
 
-    public void save(String jugador, String empresa, double precio, int cantidad, TipoAccionista tipoOfertante,
+    public void save(String nombreOfertante, String empresa, double precio, int cantidad, TipoAccionista tipoOfertante,
                      double precioApertura, UUID accionEmpresServerId){
 
         String fecha = DATE_FORMATER_LEGACY.format(new Date());
-        this.repositoryDb.save(new OfertaAccionServer(UUID.randomUUID(), jugador, empresa, precio, cantidad,
+        this.repositoryDb.save(new OfertaAccionServer(UUID.randomUUID(), nombreOfertante, empresa, precio, cantidad,
                 fecha, tipoOfertante, precioApertura, accionEmpresServerId));
     }
 

@@ -16,7 +16,7 @@ public final class CambiarLogitpoUseCase {
 
     public void cambiar (String empresaNombre, Material logotipo, String playerName) {
         this.ensureCorrectFormatLogotipo(logotipo);
-        var empresa = this.empresasService.getEmpresaByNombre(empresaNombre);
+        var empresa = this.empresasService.getByNombre(empresaNombre);
         this.ensureOwner(playerName, empresa);
 
         this.empresasService.save(empresa.withIcono(logotipo));

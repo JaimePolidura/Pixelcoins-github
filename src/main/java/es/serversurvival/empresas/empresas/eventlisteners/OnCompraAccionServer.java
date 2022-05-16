@@ -20,7 +20,7 @@ public final class OnCompraAccionServer {
         OfertaAccionServer ofertaComprada = evento.getOferta();
 
         if(evento.getOferta().getTipoOfertante() == TipoAccionista.EMPRESA){
-            Empresa empresa = this.empresasService.getEmpresaByNombre(ofertaComprada.getEmpresa());
+            Empresa empresa = this.empresasService.getByNombre(ofertaComprada.getEmpresa());
 
             empresasService.save(empresa.incrementPixelcoinsBy(evento.getPixelcoins())
                     .incrementIngresosBy(evento.getPixelcoins()));

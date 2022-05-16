@@ -35,7 +35,7 @@ public class PagarDividendoConfirmacion extends Menu implements AumentoConfirmac
 //        this.accionesTotales = AllMySQLTablesInstances.ofertasMercadoServerMySQL.getAccionesTotalesParaPagarDividendo(nombreEmpresa);
         //TODO XD
         this.accionesTotales = 0;
-        this.empresa = this.empresasService.getEmpresaByNombre(nombreEmpresa);
+        this.empresa = this.empresasService.getByNombre(nombreEmpresa);
 
         this.player = player;
         this.dividendoPorAccion = 1;

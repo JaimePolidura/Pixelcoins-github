@@ -30,7 +30,7 @@ public final class OwnerDeEmpresa implements Validator {
         try{
             String empresaNombre = String.valueOf(o);
 
-            return this.empresasService.getEmpresaByNombre(empresaNombre).getOwner().equalsIgnoreCase(jugador) ?
+            return this.empresasService.getByNombre(empresaNombre).getOwner().equalsIgnoreCase(jugador) ?
                     ValidationResult.success() :
                     ValidationResult.failed(messageOnFailed);
         }catch (Exception e) {

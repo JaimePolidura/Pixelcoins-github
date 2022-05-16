@@ -21,7 +21,7 @@ public final class BorrarEmpresaUseCase {
     }
 
     public void borrar (String owner, String empresaNombre) {
-        Empresa empresaABorrar = this.empresasService.getEmpresaByNombre(empresaNombre);
+        Empresa empresaABorrar = this.empresasService.getByNombre(empresaNombre);
         this.ensureOwner(empresaABorrar, owner);
         var jugadorOwner = jugadoresService.getByNombre(empresaABorrar.getOwner());
         var empleados = this.empleadosService.findByEmpresa(empresaNombre);

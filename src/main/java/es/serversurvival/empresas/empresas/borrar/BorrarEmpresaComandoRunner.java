@@ -25,7 +25,7 @@ public class BorrarEmpresaComandoRunner implements CommandRunnerArgs<BorrarEmpre
     public void execute(BorrarEmpresaComando borrarEmpresaComando, CommandSender player) {
         String empresa = borrarEmpresaComando.getNombre();
 
-        if(!this.empresasService.getEmpresaByNombre(empresa).getOwner().equalsIgnoreCase(player.getName())){
+        if(!this.empresasService.getByNombre(empresa).getOwner().equalsIgnoreCase(player.getName())){
             player.sendMessage(DARK_RED + "No eres el owner de la empresa");
             return;
         }
