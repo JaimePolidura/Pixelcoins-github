@@ -1,6 +1,7 @@
 package es.serversurvival.jugadores._shared.application;
 
 import es.jaime.EventListener;
+import es.jaime.Priority;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.Cache;
@@ -107,7 +108,7 @@ public class JugadoresService {
         };
     }
 
-    @EventListener
+    @EventListener(pritority = Priority.HIGHEST)
     public void on(PluginIniciado e){
         this.repositoryDb.findAll().forEach(jugador -> {
             this.cache.put(jugador.getNombre(), jugador);

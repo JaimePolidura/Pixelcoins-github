@@ -43,7 +43,7 @@ public class LRUCache<K, V> implements LimitedCache<K, V> {
     public Optional<V> find(K key) {
         int index = 0;
 
-        for (CacheItem<K, V> actualCacheItem : this.items) {
+        for (CacheItem<K, V> actualCacheItem : new LinkedList<>(this.items)) {
             if(actualCacheItem.key.equals(key)){
                 this.moveItemToFirstPosition(index, actualCacheItem);
 
@@ -67,7 +67,7 @@ public class LRUCache<K, V> implements LimitedCache<K, V> {
     public Optional<V> findValueIf(Predicate<V> valueCondition) {
         int index = 0;
 
-        for (CacheItem<K, V> actualCacheItem : this.items) {
+        for (CacheItem<K, V> actualCacheItem : new LinkedList<>(this.items)) {
             if(valueCondition.test(actualCacheItem.value)){
                 this.moveItemToFirstPosition(index, actualCacheItem);
 
@@ -86,7 +86,8 @@ public class LRUCache<K, V> implements LimitedCache<K, V> {
         List<V> valuesFound = new LinkedList<>();
         int index = 0;
 
-        for (CacheItem<K, V> actualCacheItem : this.items) {
+        //Create copy to ensure not concurrent exception
+        for (CacheItem<K, V> actualCacheItem : new LinkedList<>(this.items)) {
             if(valueCondition.test(actualCacheItem.value)){
                 this.moveItemToFirstPosition(index, actualCacheItem);
 

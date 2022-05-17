@@ -1,5 +1,6 @@
 package es.serversurvival.tienda.comprar;
 
+import es.jaime.EventBus;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
@@ -15,10 +16,12 @@ import java.util.UUID;
 public final class ComprarOfertaUseCase {
     private final TiendaService tiendaService;
     private final JugadoresService jugadoresService;
+    private final EventBus eventBus;
 
     public ComprarOfertaUseCase () {
         this.tiendaService = DependecyContainer.get(TiendaService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+        this.eventBus = DependecyContainer.get(EventBus.class);
     }
 
     public ItemStack realizarVenta(String comprador, UUID tiendaObjetoId) {
@@ -42,7 +45,7 @@ public final class ComprarOfertaUseCase {
         else
             this.tiendaService.save(tiendaObjetoAComprar.decrementCantidadByOne());
 
-        Pixelcoin.publish(new ObjetoTiendaComprado(vendedor, comprador, objeto, cantidad, precio));
+        this.eventBus.publish(new ObjetoTiendaComprado(vendedor, comprador, objeto, cantidad, precio));
 
         return itemAComprar;
     }

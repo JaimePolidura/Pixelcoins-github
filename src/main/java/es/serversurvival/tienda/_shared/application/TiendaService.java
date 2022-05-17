@@ -1,10 +1,13 @@
 package es.serversurvival.tienda._shared.application;
 
+import es.jaime.EventListener;
+import es.jaime.Priority;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.Cache;
 import es.serversurvival._shared.cache.LRUCache;
 import es.serversurvival._shared.cache.LimitedCache;
+import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
 import es.serversurvival.tienda._shared.domain.EncantamientoObjecto;
 import es.serversurvival.tienda._shared.domain.TiendaObjeto;
 import es.serversurvival.tienda._shared.domain.TiendaRepository;
@@ -19,6 +22,11 @@ public final class TiendaService {
 
     public TiendaService(){
         this.repositoryDb = DependecyContainer.get(TiendaRepository.class);
+        this.cache = new LRUCache<>(150);
+    }
+
+    public TiendaService(TiendaRepository tiendaRepository){
+        this.repositoryDb = tiendaRepository;
         this.cache = new LRUCache<>(150);
     }
 
@@ -70,5 +78,12 @@ public final class TiendaService {
 
             return tiendaObjeto;
         };
+    }
+
+    @EventListener(pritority = Priority.HIGHEST)
+    public void onInit(PluginIniciado e){
+        this.repositoryDb.findAll().forEach((tiendaObjeto -> {
+            this.cache.put(tiendaObjeto.getTiendaObjetoId(), tiendaObjeto);
+        }));
     }
 }
