@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 
-public final class AccionistasEmpresasServerService {
+public class AccionistasEmpresasServerService {
     private final AccionistasEmpresasServerRepository repositoryDb;
 
     public AccionistasEmpresasServerService() {
@@ -44,7 +44,7 @@ public final class AccionistasEmpresasServerService {
     }
 
     public List<AccionEmpresaServer> findByEmpresa(String empresa, Predicate<? super AccionEmpresaServer> condition) {
-        return this.repositoryDb.findByEmpresa(empresa).stream()
+        return this.findByEmpresa(empresa).stream()
                 .filter(condition)
                 .toList();
     }

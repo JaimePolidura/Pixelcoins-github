@@ -1,36 +1,42 @@
 package es.serversurvival.empresas.empresas.pagardividendos;
 
+import es.jaime.EventBus;
+import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
+import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasEmpresasServerService;
 import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionEmpresaServer;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.empresas.pagardividendos.eventos.EmpresaServerDividendoPagadoEmpresa;
 import es.serversurvival.empresas.empresas.pagardividendos.eventos.EmpresaServerDividendoPagadoJugador;
-import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
-import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
-import es.serversurvival.Pixelcoin;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public final class PagarDividendosEmpresaServerUseCase {
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;
     private final AccionistasEmpresasServerService accionistasEmpresasServerService;
+    private final EventBus eventBus;
 
     public PagarDividendosEmpresaServerUseCase(){
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.accionistasEmpresasServerService = DependecyContainer.get(AccionistasEmpresasServerService.class);
+        this.eventBus = DependecyContainer.get(EventBus.class);
     }
 
-    public void pagarDividendoAccionServer(String nombreEmpresa, double dividendoPorAccion) {
+    public void pagar(String jugadorNombre, String nombreEmpresa, double dividendoPorAccion) {
+        this.ensureDividendoCorrectFormat(dividendoPorAccion);
         var empresa = this.empresasService.getByNombre(nombreEmpresa);
+        this.ensureOwnerOfEmpresa(jugadorNombre, empresa);
 
-        this.accionistasEmpresasServerService.findByEmpresa(nombreEmpresa, AccionEmpresaServer::esJugador).forEach(accionista -> {
-            pagarDividendoAccionAJugador(accionista, dividendoPorAccion, nombreEmpresa);
-        });
-        this.accionistasEmpresasServerService.findByEmpresa(nombreEmpresa, AccionEmpresaServer::esEmpresa).forEach(accionista -> {
-            pagarDividendoAEmpresa(dividendoPorAccion, empresa, accionista);
+        this.accionistasEmpresasServerService.findByEmpresa(nombreEmpresa).forEach(accionista -> {
+            if(accionista.esEmpresa())
+                pagarDividendoAEmpresa(dividendoPorAccion, empresa, accionista);
+            else
+                pagarDividendoAccionAJugador(accionista, dividendoPorAccion, nombreEmpresa);
         });
 
         this.empresasService.save(empresa.decrementPixelcoinsBy(dividendoPorAccion * empresa.getAccionesTotales()));
@@ -41,7 +47,7 @@ public final class PagarDividendosEmpresaServerUseCase {
 
         this.empresasService.save(empresa.incrementPixelcoinsBy(totalACobrar));
 
-        Pixelcoin.publish(new EmpresaServerDividendoPagadoEmpresa(empresa.getNombre(), dividendoPorAccion * accionista.getCantidad()));
+        this.eventBus.publish(new EmpresaServerDividendoPagadoEmpresa(empresa.getNombre(), dividendoPorAccion * accionista.getCantidad()));
     }
 
     private void pagarDividendoAccionAJugador (AccionEmpresaServer accionista, double dividendoPorAccion, String nombreEmpresa) {
@@ -50,6 +56,16 @@ public final class PagarDividendosEmpresaServerUseCase {
         this.jugadoresService.save(jugador.incrementPixelcoinsBy(dividendoTotal)
                 .incrementIngresosBy(dividendoTotal));
 
-        Pixelcoin.publish(new EmpresaServerDividendoPagadoJugador(jugador.getNombre(), nombreEmpresa, dividendoTotal));
+        this.eventBus.publish(new EmpresaServerDividendoPagadoJugador(jugador.getNombre(), nombreEmpresa, dividendoTotal));
+    }
+
+    private void ensureDividendoCorrectFormat(double dividendoPorAccion){
+        if(dividendoPorAccion <= 0)
+            throw new IllegalQuantity("El dividendo tiene que ser mayor que cero");
+    }
+
+    private void ensureOwnerOfEmpresa(String jugadorNombre, Empresa empresa){
+        if(!empresa.getOwner().equalsIgnoreCase(jugadorNombre))
+            throw new NotTheOwner("No eres el owner de la empresa");
     }
 }

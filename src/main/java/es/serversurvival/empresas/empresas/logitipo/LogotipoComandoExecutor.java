@@ -15,10 +15,10 @@ import org.bukkit.entity.Player;
         explanation = "Cambiar el logotipo de tu empresa. Para esto selecciona un item en la mano y ejecuta el comando"
 )
 public class LogotipoComandoExecutor implements CommandRunnerArgs<LogotipoComando> {
-    private final CambiarLogitpoUseCase useCase;
+    private final EditarLogitpoUseCase useCase;
 
     public LogotipoComandoExecutor() {
-        this.useCase = new CambiarLogitpoUseCase();
+        this.useCase = new EditarLogitpoUseCase();
     }
 
     @Override

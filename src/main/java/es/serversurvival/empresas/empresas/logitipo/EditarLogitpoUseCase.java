@@ -5,12 +5,14 @@ import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
+import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 
-public final class CambiarLogitpoUseCase {
+@AllArgsConstructor
+public final class EditarLogitpoUseCase {
     private final EmpresasService empresasService;
 
-    public CambiarLogitpoUseCase() {
+    public EditarLogitpoUseCase() {
         this.empresasService = DependecyContainer.get(EmpresasService.class);
     }
 

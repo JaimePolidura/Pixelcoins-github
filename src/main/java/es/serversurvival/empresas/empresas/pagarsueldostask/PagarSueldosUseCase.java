@@ -1,5 +1,6 @@
 package es.serversurvival.empresas.empresas.pagarsueldostask;
 
+import es.jaime.EventBus;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
@@ -9,6 +10,7 @@ import es.serversurvival.empresas.empleados._shared.domain.TipoSueldo;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 
 import java.util.Date;
@@ -16,15 +18,18 @@ import java.util.List;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 
+@AllArgsConstructor
 public final class PagarSueldosUseCase {
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;
     private final EmpleadosService empleadosService;
+    private final EventBus eventBus;
 
     public PagarSueldosUseCase() {
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.empleadosService = DependecyContainer.get(EmpleadosService.class);
+        this.eventBus = DependecyContainer.get(EventBus.class);
     }
 
     public void pagarSueldos (Empresa empresa, List<Empleado> empleados) {
@@ -40,13 +45,15 @@ public final class PagarSueldosUseCase {
                 continue;
             }
 
-            pagarSueldo(empleado, empresa);
+            pagarSueldo(empleado, empresa.getNombre());
         }
     }
 
-    private void pagarSueldo (Empleado empleado, Empresa empresa)  {
+    private void pagarSueldo (Empleado empleado, String empresaNombre)  {
+        var empresa = this.empresasService.getByNombre(empresaNombre);
+
         if (empresa.getPixelcoins() < empleado.getSueldo()) {
-            Pixelcoin.publish(new ErrorPagandoSueldo(empleado.getNombre(), empresa.getNombre(), "No hay las suficientes pixelcoins"));
+            this.eventBus.publish(new ErrorPagandoSueldo(empleado.getNombre(), empresa.getNombre(), "No hay las suficientes pixelcoins"));
             return;
         }
 
@@ -58,7 +65,7 @@ public final class PagarSueldosUseCase {
                 .incrementIngresosBy(empleado.getSueldo()));
         this.empleadosService.save(empleado.withFechaUltimaPaga(hoy()));
 
-        Pixelcoin.publish(new SueldoPagadoEvento(empleado.getNombre(), empleado.getEmpleadoId(), empresa.getNombre(), empleado.getSueldo()));
+        this.eventBus.publish(new SueldoPagadoEvento(empleado.getNombre(), empleado.getEmpleadoId(), empresa.getNombre(), empleado.getSueldo()));
     }
 
     @SneakyThrows

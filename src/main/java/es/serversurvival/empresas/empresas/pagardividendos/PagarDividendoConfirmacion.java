@@ -74,7 +74,7 @@ public class PagarDividendoConfirmacion extends Menu implements AumentoConfirmac
 
     @Override
     public void confirmar() {
-        useCase.pagarDividendoAccionServer(empresa.getNombre(), dividendoPorAccion);
+        useCase.pagar(player.getName(), empresa.getNombre(), dividendoPorAccion);
 
         Funciones.enviarMensajeYSonido(player, GOLD + "Se han pagado todos los dividendos", Sound.ENTITY_PLAYER_LEVELUP);
 

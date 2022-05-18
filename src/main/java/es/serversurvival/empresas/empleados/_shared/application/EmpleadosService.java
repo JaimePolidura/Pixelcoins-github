@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public final class EmpleadosService {
+public class EmpleadosService {
     public static final int MAX_CARGO_LENGTH = 16;
     public static final int MIN_CARGO_LENGTH = 3;
     public static final int MIN_DESPEDIR_RAZON_LENGH = 3;
