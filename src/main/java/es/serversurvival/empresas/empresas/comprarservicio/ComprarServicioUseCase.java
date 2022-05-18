@@ -1,22 +1,26 @@
 package es.serversurvival.empresas.empresas.comprarservicio;
 
+import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
-import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public final class ComprarServicioUseCase {
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;
+    private final EventBus eventBus;
 
     public ComprarServicioUseCase() {
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+        this.eventBus = DependecyContainer.get(EventBus.class);
     }
 
     public Empresa comprar (String jugador, String empresa, double pixelcoins) {
@@ -31,7 +35,7 @@ public final class ComprarServicioUseCase {
         this.jugadoresService.save(jugadorComprador.decrementPixelcoinsBy(pixelcoins)
                 .incrementGastosBy(pixelcoins));
 
-        Pixelcoin.publish(new EmpresaServicioCompradoEvento(jugador, empresaAComprarServicio, pixelcoins));
+        this.eventBus.publish(new EmpresaServicioCompradoEvento(jugador, empresaAComprarServicio, pixelcoins));
 
         return empresaAComprarServicio;
     }

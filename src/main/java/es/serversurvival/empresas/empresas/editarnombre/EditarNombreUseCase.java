@@ -1,5 +1,6 @@
 package es.serversurvival.empresas.empresas.editarnombre;
 
+import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.AlreadyExists;
 import es.jaime.javaddd.domain.exceptions.IllegalLength;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
@@ -8,15 +9,19 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import io.vavr.control.Try;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public final class EditarNombreUseCase {
     private final EmpresasService empresasService;
+    private final EventBus eventBus;
 
     public EditarNombreUseCase(){
         this.empresasService = DependecyContainer.get(EmpresasService.class);
+        this.eventBus = DependecyContainer.get(EventBus.class);
     }
 
-    public void editar (String antiguoNombre, String nuevoNombre, String playerName) {
+    public void edit(String antiguoNombre, String nuevoNombre, String playerName) {
         this.ensureNombreEmpresaCorrectFormat(nuevoNombre);
         this.ensureNewNameNotTaken(nuevoNombre);
         var empresa = this.empresasService.getByNombre(antiguoNombre);
@@ -24,7 +29,7 @@ public final class EditarNombreUseCase {
 
         empresasService.save(empresa.withNombre(nuevoNombre));
 
-        Pixelcoin.publish(new EmpresaNombreEditadoEvento(antiguoNombre, nuevoNombre));
+        this.eventBus.publish(new EmpresaNombreEditadoEvento(antiguoNombre, nuevoNombre));
     }
 
     private void ensureOwnerOfEmpresa(Empresa empresa, String playerName){
@@ -38,9 +43,9 @@ public final class EditarNombreUseCase {
     }
 
     private void ensureNewNameNotTaken(String nombre){
-        var taken = (Try.of(() -> this.empresasService.getByNombre(nombre))).isFailure();
+        var taken = (Try.of(() -> this.empresasService.getByNombre(nombre))).isSuccess();
 
-        if(!taken)
+        if(taken)
             throw new AlreadyExists("El nombre ya esta cogido");
     }
 }

@@ -22,7 +22,7 @@ public class EditarNombreComandoRunner implements CommandRunnerArgs<EditarNombre
 
     @Override
     public void execute(EditarNombreComando editarNombreComando, CommandSender sender) {
-        useCase.editar(editarNombreComando.getEmpresa(), editarNombreComando.getNuevoNombre(), sender.getName());
+        useCase.edit(editarNombreComando.getEmpresa(), editarNombreComando.getNuevoNombre(), sender.getName());
 
         Funciones.enviarMensajeYSonido((Player) sender, ChatColor.GOLD + "Has cambiado de nombre a tu empresa!", Sound.ENTITY_PLAYER_LEVELUP);
     }
