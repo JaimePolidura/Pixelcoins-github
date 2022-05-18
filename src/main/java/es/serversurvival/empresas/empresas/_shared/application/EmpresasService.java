@@ -15,7 +15,7 @@ import java.util.function.Function;
 
 import static es.serversurvival._shared.utils.CollectionUtils.*;
 
-public final class EmpresasService {
+public class EmpresasService {
     public static final int MAX_EMPRESAS_PER_JUGADOR = 5;
     public static final int MAX_NOMBRE_LONGITUD = 16;
     public static final int MAX_DESC_LONGITUD = 200;

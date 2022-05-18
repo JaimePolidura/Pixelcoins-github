@@ -1,5 +1,6 @@
 package es.serversurvival.empresas.empresas.sacar;
 
+import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival.Pixelcoin;
@@ -8,14 +9,18 @@ import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public final class SacarPixelcoinsUseCase {
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;
+    private final EventBus eventBus;
 
     public SacarPixelcoinsUseCase(){
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+        this.eventBus = DependecyContainer.get(EventBus.class);
     }
 
     public void sacar (String playerName, String empresaNombre, double pixelcoinsASacar) {
@@ -31,7 +36,7 @@ public final class SacarPixelcoinsUseCase {
         empresasService.save(empresaASacar.decrementPixelcoinsBy(pixelcoinsASacar));
         jugadoresService.save(jugador.incrementPixelcoinsBy(pixelcoinsASacar));
 
-        Pixelcoin.publish(new PixelcoinsSacadasEvento(jugador, empresaASacar, pixelcoinsASacar));
+        this.eventBus.publish(new PixelcoinsSacadasEvento(jugador, empresaASacar, pixelcoinsASacar));
     }
 
 

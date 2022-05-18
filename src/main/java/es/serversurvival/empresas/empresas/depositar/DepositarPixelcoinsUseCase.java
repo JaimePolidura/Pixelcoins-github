@@ -1,5 +1,6 @@
 package es.serversurvival.empresas.empresas.depositar;
 
+import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival.Pixelcoin;
@@ -9,14 +10,18 @@ import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public final class DepositarPixelcoinsUseCase {
     private final JugadoresService jugadoresService;
     private final EmpresasService empresasService;
+    private final EventBus eventBus;
 
     public DepositarPixelcoinsUseCase() {
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.empresasService = DependecyContainer.get(EmpresasService.class);
+        this.eventBus = DependecyContainer.get(EventBus.class);
     }
 
     public void depositar (String empresaNomrbeADepositar, String jugadorNombre, double pixelcoins) {
@@ -28,7 +33,7 @@ public final class DepositarPixelcoinsUseCase {
         this.empresasService.save(empresaADepositoar.incrementPixelcoinsBy(pixelcoins));
         this.jugadoresService.save(jugador.decrementPixelcoinsBy(pixelcoins));
 
-        Pixelcoin.publish(new PixelcoinsDepositadasEvento(jugador, empresaADepositoar, pixelcoins));
+        this.eventBus.publish(new PixelcoinsDepositadasEvento(jugador, empresaADepositoar, pixelcoins));
     }
 
 
@@ -40,7 +45,7 @@ public final class DepositarPixelcoinsUseCase {
     private Jugador ensureEnoughPixelcoins(String jugadorNombre, double pixelcoinsADepositar){
         var jugador = this.jugadoresService.getByNombre(jugadorNombre);
 
-        if(jugador.getPixelcoins() > pixelcoinsADepositar)
+        if(jugador.getPixelcoins() < pixelcoinsADepositar)
             throw new NotEnoughPixelcoins("No tienes las suficientes pixelcoins para depositar");
 
         return jugador;
