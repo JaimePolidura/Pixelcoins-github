@@ -17,11 +17,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static es.serversurvival.jugadores.JugadoresTestMother.createJugador;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public final class PagarUseCaseTest extends JugadoresTestMother {
+public final class PagarUseCaseTest {
     @Mock private JugadoresRepository jugadoresRepository;
     @Mock private EventBus eventBus;
     private PagarUseCase pagarUseCase;

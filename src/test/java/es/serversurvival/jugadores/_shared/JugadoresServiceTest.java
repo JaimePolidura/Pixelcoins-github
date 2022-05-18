@@ -15,11 +15,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static es.serversurvival.jugadores.JugadoresTestMother.createJugador;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class JugadoresServiceTest extends JugadoresTestMother {
+public class JugadoresServiceTest {
     @Mock
     private JugadoresRepository jugadoresRepository;
     private JugadoresService jugadoresService;

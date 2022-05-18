@@ -15,12 +15,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static es.serversurvival.tienda.TiendaTestMother.createTiendaObjeto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public final class TiendaServiceTest extends TiendaTestMother {
+public final class TiendaServiceTest {
     @Mock
     private TiendaRepository tiendaRepository;
     private TiendaService tiendaService;
@@ -39,7 +40,7 @@ public final class TiendaServiceTest extends TiendaTestMother {
 
     @Test
     public void saveWithoutErrors(){
-        this.tiendaService.save(super.createTiendaObjeto("jaime"));
+        this.tiendaService.save(createTiendaObjeto("jaime"));
     }
 
     @Test

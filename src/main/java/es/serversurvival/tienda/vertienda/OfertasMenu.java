@@ -14,7 +14,7 @@ import es.serversurvival._shared.menus.Clickable;
 import es.serversurvival._shared.menus.Paginated;
 import es.serversurvival._shared.menus.RefreshcableOnPaginated;
 import es.serversurvival.tienda._shared.domain.TiendaObjeto;
-import es.serversurvival.tienda.comprar.ComprarOfertaUseCase;
+import es.serversurvival.tienda.comprar.ComprarTiendaObjetoUseCase;
 import es.serversurvival.tienda.retirar.RetirarOfertaUseCase;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.utils.MinecraftUtils;
@@ -35,7 +35,7 @@ import static org.bukkit.ChatColor.*;
 public class OfertasMenu extends Menu implements Clickable, Paginated, RefreshcableOnPaginated {
     private final JugadoresService jugadoresService;
     private final TiendaService tiendaService;
-    private final ComprarOfertaUseCase comprarOfertaUseCase;
+    private final ComprarTiendaObjetoUseCase comprarOfertaUseCase;
     private final RetirarOfertaUseCase retirarOfertaUseCase;
 
     private OfertaInventoryFactory inventoryFactory = new OfertaInventoryFactory();
@@ -48,7 +48,7 @@ public class OfertasMenu extends Menu implements Clickable, Paginated, Refreshca
     public OfertasMenu(Player player) {
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.tiendaService = DependecyContainer.get(TiendaService.class);
-        this.comprarOfertaUseCase = new ComprarOfertaUseCase();
+        this.comprarOfertaUseCase = new ComprarTiendaObjetoUseCase();
         this.retirarOfertaUseCase = new RetirarOfertaUseCase();
 
         this.inventory = InventoryCreator.createInventoryMenu(inventoryFactory, player.getName());

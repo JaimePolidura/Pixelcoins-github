@@ -28,6 +28,11 @@ public final class EmpresasService {
         this.cache = new LRUCache<>(200);
     }
 
+    public EmpresasService(EmpresasRepostiory repostioryDb) {
+        this.repostioryDb = repostioryDb;
+        this.cache = new LRUCache<>(200);
+    }
+
     public void save(String nombre, String jugadorNombre, String descripccion){
         this.save(new Empresa(UUID.randomUUID(), nombre, jugadorNombre, 0, 0,
                 0, "DIAMOND_PICKAXE", descripccion, false, 0));
@@ -38,7 +43,7 @@ public final class EmpresasService {
         this.cache.put(empresa.getNombre(), empresa);
     }
 
-    public Empresa getByEmpresaId(UUID empresaId) {
+    public Empresa getById(UUID empresaId) {
         return cache.findValueIf(empresa -> empresa.getEmpresaId() == empresaId).orElseGet(() -> this.repostioryDb.findById(empresaId)
                 .map(saveEmpresaToCache())
                 .orElseThrow(() -> new ResourceNotFound("Empresa no encontrada")));
@@ -69,10 +74,6 @@ public final class EmpresasService {
     public void deleteByEmpresaId(UUID empresaId) {
         this.repostioryDb.deleteById(empresaId);
         this.cache.remove(empresa -> empresa.getEmpresaId().equals(empresaId));
-    }
-
-    public boolean isCotizada(String nombre){
-        return this.getByNombre(nombre).isCotizada();
     }
 
     public Map<String, List<Empresa>> getAllEmpresasJugadorMap () {
