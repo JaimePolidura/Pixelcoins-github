@@ -6,7 +6,6 @@ import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
-import es.serversurvival.empresas.empresas.depositar.PixelcoinsDepositadasEvento;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import org.junit.jupiter.api.BeforeEach;
@@ -66,7 +65,7 @@ public final class SacarPixelcoinsEmpresaTest {
     }
 
     @Test
-    public void incorrectFormatPixelcoins(){
+    public void correctFormatPixelcoins(){
         assertThatCode(() -> this.useCase.sacar("", "", -1)).isInstanceOf(IllegalQuantity.class);
         assertThatCode(() -> this.useCase.sacar("", "", 0)).isInstanceOf(IllegalQuantity.class);
     }

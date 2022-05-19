@@ -1,28 +1,32 @@
 package es.serversurvival.empresas.empresas.ipo;
 
+import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasEmpresasServerService;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
+import lombok.AllArgsConstructor;
 
 import java.util.UUID;
 
 import static es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista.*;
 
-public final class IPOUseCase {
+@AllArgsConstructor
+public final class RealizarIPOUseCase {
     private final EmpresasService empresasService;
     private final OfertasAccionesServerService ofertasAccionesServerService;
     private final AccionistasEmpresasServerService accionistasEmpresasServerService;
+    private final EventBus eventBus;
 
-    public IPOUseCase() {
+    public RealizarIPOUseCase() {
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.ofertasAccionesServerService = DependecyContainer.get(OfertasAccionesServerService.class);
         this.accionistasEmpresasServerService = DependecyContainer.get(AccionistasEmpresasServerService.class);
+        this.eventBus = DependecyContainer.get(EventBus.class);
     }
 
     public void makeIPO(String playerName, IPOCommand command){
@@ -48,6 +52,8 @@ public final class IPOUseCase {
 
         this.empresasService.save(empresaToIPO.setCotizadaToTrue()
                 .withAccionesTotales(command.getAccionesTotales()));
+
+        this.eventBus.publish(new IPORealizada(empresaToIPO, command.getPrecioPorAccion(), cantidadAVender, command.getAccionesOwner()));
     }
 
     private void ensureNotAlreadyCotizada(Empresa empresa){

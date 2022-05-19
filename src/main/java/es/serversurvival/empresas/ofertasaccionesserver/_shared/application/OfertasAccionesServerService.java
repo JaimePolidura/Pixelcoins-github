@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 import static es.serversurvival._shared.utils.Funciones.DATE_FORMATER_LEGACY;
 
-public final class OfertasAccionesServerService {
+public class OfertasAccionesServerService {
     private final OfertasAccionesServerRepository repositoryDb;
 
     public OfertasAccionesServerService() {

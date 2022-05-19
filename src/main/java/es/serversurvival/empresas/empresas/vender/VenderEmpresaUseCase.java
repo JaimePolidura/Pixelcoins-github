@@ -1,8 +1,9 @@
 package es.serversurvival.empresas.empresas.vender;
 
+import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
+import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
@@ -10,16 +11,20 @@ import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public final class VenderEmpresaUseCase {
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;
     private final EmpleadosService empleadosService;
+    private final EventBus eventBus;
 
     public VenderEmpresaUseCase() {
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.empleadosService = DependecyContainer.get(EmpleadosService.class);
+        this.eventBus = DependecyContainer.get(EventBus.class);
     }
 
     public void vender (String vendedor, String comprador, double precioEmpresa, String nombreEmpresa) {
@@ -28,7 +33,7 @@ public final class VenderEmpresaUseCase {
         this.ensureOwnerOfEmpresa(vendedor, empresa);
         var jugadorComprador = this.jugadoresService.getByNombre(comprador);
         var jugadorVendedor = this.jugadoresService.getByNombre(vendedor);
-        this.ensureVendedorHasEnoughPixelcoins(jugadorVendedor, precioEmpresa);
+        this.ensureCompradorHasEnoughPixelcoins(jugadorComprador, precioEmpresa);
 
         this.empresasService.save(empresa.withOwner(comprador));
         this.jugadoresService.realizarTransferenciaConEstadisticas(jugadorComprador, jugadorVendedor, precioEmpresa);
@@ -37,10 +42,10 @@ public final class VenderEmpresaUseCase {
                 .findFirst()
                 .ifPresent(empleado -> this.empleadosService.deleteById(empleado.getEmpleadoId()));
 
-        Pixelcoin.publish(new EmpresaVendedida(comprador, vendedor, precioEmpresa, nombreEmpresa));
+        this.eventBus.publish(new EmpresaVendedida(comprador, vendedor, precioEmpresa, nombreEmpresa));
     }
 
-    private void ensureVendedorHasEnoughPixelcoins(Jugador vendedor, double pixelcoins){
+    private void ensureCompradorHasEnoughPixelcoins(Jugador vendedor, double pixelcoins){
         if(vendedor.getPixelcoins() < pixelcoins)
             throw new NotEnoughPixelcoins("No tienes las suficientes pixelcoins");
     }

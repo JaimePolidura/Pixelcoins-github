@@ -47,13 +47,7 @@ public class JugadoresService {
     }
 
     public Jugador getByNombre(String nombre){
-        var cachedJugador = this.cache.find(nombre);
-
-        cachedJugador.ifPresent(jugador -> {
-            System.out.println(jugador.getNVentas());
-        });
-
-        return cachedJugador.orElseGet(() -> this.repositoryDb.findByNombre(nombre)
+        return this.cache.find(nombre).orElseGet(() -> this.repositoryDb.findByNombre(nombre)
                 .map(saveJugadorToCache())
                 .orElseThrow(() -> new ResourceNotFound("Jugador no encontrado")));
     }

@@ -1,37 +1,43 @@
 package es.serversurvival.empresas.empresas.borrar;
 
+import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasEmpresasServerService;
 import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionEmpresaServer;
+import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public final class BorrarEmpresaUseCase {
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;
     private final EmpleadosService empleadosService;
     private final AccionistasEmpresasServerService accionistasEmpresasServerService;
+    private final EventBus eventBus;
 
     public BorrarEmpresaUseCase() {
         this.accionistasEmpresasServerService = DependecyContainer.get(AccionistasEmpresasServerService.class);
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.empleadosService = DependecyContainer.get(EmpleadosService.class);
+        this.eventBus = DependecyContainer.get(EventBus.class);
     }
 
     public void borrar (String owner, String empresaNombre) {
         var empresaABorrar = this.empresasService.getByNombre(empresaNombre);
-        var jugadorOwner = jugadoresService.getByNombre(empresaABorrar.getOwner());
+        var jugadorOwner = jugadoresService.getByNombre(owner);
         var empleados = this.empleadosService.findByEmpresa(empresaNombre);
         this.ensureOwner(empresaABorrar, owner);
 
         if(empresaABorrar.isCotizada()){
-            this.accionistasEmpresasServerService.findByEmpresa(empresaNombre, AccionEmpresaServer::esJugador).forEach(accionista -> {
+            this.accionistasEmpresasServerService.findByEmpresa(empresaNombre).stream().filter(AccionEmpresaServer::esJugador).forEach(accionista -> {
                 var jugadorAccionista = this.jugadoresService.getByNombre(accionista.getNombreAccionista());
                 double ownershipPercentaje = accionista.getCantidad() / empresaABorrar.getAccionesTotales();
 
@@ -42,11 +48,11 @@ public final class BorrarEmpresaUseCase {
         }
 
         this.empresasService.deleteByEmpresaId(empresaABorrar.getEmpresaId());
-        this.empleadosService.findByEmpresa(empresaNombre).forEach(empleado -> {
+        empleados.forEach(empleado -> {
             this.empleadosService.deleteById(empleado.getEmpleadoId());
         });
 
-        Pixelcoin.publish(new EmpresaBorradaEvento(owner, empresaNombre, empresaABorrar.getPixelcoins(),
+        this.eventBus.publish(new EmpresaBorradaEvento(owner, empresaNombre, empresaABorrar.getPixelcoins(),
                 empleados.stream().map(Empleado::getNombre).toList()));
     }
 
