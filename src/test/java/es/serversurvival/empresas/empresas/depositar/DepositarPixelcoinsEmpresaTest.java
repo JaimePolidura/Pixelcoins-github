@@ -4,6 +4,7 @@ import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.serversurvival.MockitoArgEqualsMatcher;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.empresas.empresas.EmpresasTestMother;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
@@ -19,6 +20,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static es.serversurvival.MockitoArgEqualsMatcher.*;
 import static es.serversurvival.empresas.empresas.EmpresasTestMother.createEmpresa;
 import static es.serversurvival.jugadores.JugadoresTestMother.*;
 import static org.assertj.core.api.Assertions.*;
@@ -39,14 +41,26 @@ public final class DepositarPixelcoinsEmpresaTest {
 
     @Test
     public void shouldMakeDeposit(){
-        when(this.jugadoresService.getByNombre("jaime")).thenReturn(createJugador("jaime", 10));
-        when(this.empresasService.getByNombre("empresa")).thenReturn(createEmpresa("empresa", "jaime"));
+        Empresa empresaToDeposit = createEmpresa("empresa", "jaime");
+        Jugador jugadorDepositador = createJugador("jaime", 10);
+
+        when(this.jugadoresService.getByNombre("jaime")).thenReturn(jugadorDepositador);
+        when(this.empresasService.getByNombre("empresa")).thenReturn(empresaToDeposit);
 
         this.useCase.depositar("empresa", "jaime", 5);
 
-        verify(this.empresasService, times(1)).save(Mockito.any(Empresa.class));
-        verify(this.jugadoresService, times(1)).save(Mockito.any(Jugador.class));
-        verify(this.eventBus, times(1)).publish(Mockito.any(PixelcoinsDepositadasEvento.class));
+        empresaToDeposit = empresaToDeposit.incrementPixelcoinsBy(5);
+        jugadorDepositador = jugadorDepositador.decrementPixelcoinsBy(5);
+
+        verify(this.empresasService, times(1)).save(argThat(of(
+                empresaToDeposit
+        )));
+        verify(this.jugadoresService, times(1)).save(argThat(of(
+                jugadorDepositador
+        )));
+        verify(this.eventBus, times(1)).publish(argThat(of(
+                PixelcoinsDepositadasEvento.of(jugadorDepositador, empresaToDeposit, 5)
+        )));
     }
 
     @Test

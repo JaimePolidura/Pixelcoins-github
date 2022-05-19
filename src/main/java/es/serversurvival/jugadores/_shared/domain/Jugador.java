@@ -2,11 +2,15 @@ package es.serversurvival.jugadores._shared.domain;
 
 import es.jaime.javaddd.domain.Aggregate;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.UUID;
 
 @AllArgsConstructor
+@ToString
+@EqualsAndHashCode(callSuper = false)
 public final class Jugador extends Aggregate {
     @Getter private final UUID jugadorId;
     @Getter private final String nombre;

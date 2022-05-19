@@ -33,7 +33,8 @@ public final class DepositarPixelcoinsUseCase {
         this.empresasService.save(empresaADepositoar.incrementPixelcoinsBy(pixelcoins));
         this.jugadoresService.save(jugador.decrementPixelcoinsBy(pixelcoins));
 
-        this.eventBus.publish(new PixelcoinsDepositadasEvento(jugador, empresaADepositoar, pixelcoins));
+        this.eventBus.publish(new PixelcoinsDepositadasEvento(jugador.decrementPixelcoinsBy(pixelcoins),
+                empresaADepositoar.incrementPixelcoinsBy(5), pixelcoins));
     }
 
 

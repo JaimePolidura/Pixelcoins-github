@@ -64,7 +64,6 @@ public final class PagarUseCaseTest {
     public void shouldFindPlayer(){
         when(jugadoresRepository.findByNombre("jaime")).thenReturn(Optional.of(createJugador("jaime")));
         when(jugadoresRepository.findByNombre("pedro")).thenReturn(Optional.of(createJugador("pedro")));
-        //TODO Fix
         when(jugadoresRepository.findByNombre("1")).thenThrow(ResourceNotFound.class);
         when(jugadoresRepository.findByNombre("2")).thenThrow(ResourceNotFound.class);
 

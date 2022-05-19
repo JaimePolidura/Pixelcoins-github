@@ -2,13 +2,18 @@ package es.serversurvival.empresas.empresas._shared.domain;
 
 import es.jaime.javaddd.domain.Aggregate;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import org.bukkit.Material;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class Empresa extends Aggregate {
+@EqualsAndHashCode(callSuper = false)
+@ToString
+public final class Empresa extends Aggregate{
     @Getter private final UUID empresaId;
     @Getter private final String nombre;
     @Getter private final String owner;
