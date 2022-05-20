@@ -10,17 +10,20 @@ import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empleados._shared.domain.EmpleadosRepository;
 import es.serversurvival.empresas.empleados._shared.domain.TipoSueldo;
+import lombok.AllArgsConstructor;
+import org.checkerframework.common.util.report.qual.ReportCall;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+@AllArgsConstructor
 public class EmpleadosService {
     public static final int MAX_CARGO_LENGTH = 16;
     public static final int MIN_CARGO_LENGTH = 3;
     public static final int MIN_DESPEDIR_RAZON_LENGH = 3;
-    public static final int MAX_DESPEDIR_RAZON_LENGH = 3;
+    public static final int MAX_DESPEDIR_RAZON_LENGH = 16;
 
     private final EmpleadosRepository repositoryDb;
     private final Cache<UUID, Empleado> cache;
@@ -42,15 +45,17 @@ public class EmpleadosService {
     }
 
     public Empleado getById(UUID empleadoId) {
-        return this.cache.find(empleadoId).orElseGet(() -> this.cache.find(empleadoId)
+        return this.cache.find(empleadoId)
+                .orElseGet(() -> this.repositoryDb.findById(empleadoId)
                 .map(saveToCache())
                 .orElseThrow(() -> new ResourceNotFound("Empleado no encontrado")));
     }
 
-    public Empleado getEmpleadoInEmpresa (String nombre, String empresa) {
-        return this.findByJugador(nombre).stream()
+    public Empleado getEmpleadoInEmpresa (String empleadoNombre, String empresa) {
+        return this.repositoryDb.findByJugador(empleadoNombre).stream()
                 .filter(empleo -> empleo.getEmpresa().equalsIgnoreCase(empresa))
                 .findAny()
+                .map(saveToCache())
                 .orElseThrow(() -> new ResourceNotFound("Empleo no encontrado"));
     }
 
@@ -73,10 +78,6 @@ public class EmpleadosService {
     public void deleteById(UUID id) {
         this.repositoryDb.deleteById(id);
         this.cache.remove(id);
-    }
-
-    public Map<String, List<Empleado>> getAllEmpleadosEmpresas () {
-        return CollectionUtils.mergeMapList(this.findAll(), Empleado::getEmpresa);
     }
 
     private Function<Empleado, Empleado> saveToCache(){

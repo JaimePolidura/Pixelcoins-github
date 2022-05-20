@@ -1,5 +1,6 @@
 package es.serversurvival.empresas.empleados.contratar;
 
+import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.*;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
@@ -7,16 +8,20 @@ import es.serversurvival.empresas.empleados._shared.application.EmpleadosService
 import es.serversurvival.empresas.empleados._shared.domain.TipoSueldo;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
+import lombok.AllArgsConstructor;
 
 import static es.serversurvival.empresas.empleados._shared.application.EmpleadosService.*;
 
+@AllArgsConstructor
 public final class ContratarUseCase {
     private final EmpleadosService empleadosService;
     private final EmpresasService empresasService;
+    private final EventBus eventBus;
 
     public ContratarUseCase() {
         this.empleadosService = DependecyContainer.get(EmpleadosService.class);
         this.empresasService = DependecyContainer.get(EmpresasService.class);
+        this.eventBus = DependecyContainer.get(EventBus.class);
     }
 
     public void contratar (String ownerEmpresa, String jugadorAContratar, String empresaNombre, double salario, TipoSueldo tipoSueldo, String cargo) {
@@ -30,7 +35,7 @@ public final class ContratarUseCase {
 
         this.empleadosService.save(jugadorAContratar, empresaNombre, salario, tipoSueldo, cargo);
 
-        Pixelcoin.publish(new JugadorContratado(jugadorAContratar, empresaNombre, cargo));
+        this.eventBus.publish(new JugadorContratado(jugadorAContratar, empresaNombre, cargo));
     }
 
     private void ensureNotHisSelf(String owner, String jugadorAContratar){
@@ -46,7 +51,7 @@ public final class ContratarUseCase {
 
     private void ensureCorrectTipoSueldo(TipoSueldo tipoSueldo){
         if(tipoSueldo == null)
-            throw new CannotBeNull("El tipo sueldo no puede ser nulo, /empresa help");
+            throw new IllegalQuantity("El tipo sueldo no puede ser nulo, /empresa help");
     }
 
     private void ensureCorrectFormatPixelcoins(double pixelcoins){
@@ -67,7 +72,7 @@ public final class ContratarUseCase {
     }
 
     private void ensureOwner(String owner, Empresa empresa){
-        if(empresa.getOwner().equalsIgnoreCase(owner))
-            throw new NotTheOwner("Empresa incorrecta");
+        if(!empresa.getOwner().equalsIgnoreCase(owner))
+            throw new NotTheOwner("El contratador no es el owner de la empresa");
     }
 }
