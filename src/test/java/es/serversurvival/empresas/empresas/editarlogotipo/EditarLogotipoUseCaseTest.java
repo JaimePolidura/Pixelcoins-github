@@ -3,6 +3,7 @@ package es.serversurvival.empresas.empresas.editarlogotipo;
 import es.jaime.javaddd.domain.exceptions.IllegalType;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.serversurvival.MockitoArgEqualsMatcher;
 import es.serversurvival.empresas.empresas.EmpresasTestMother;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
@@ -14,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import static es.serversurvival.MockitoArgEqualsMatcher.of;
 import static es.serversurvival.empresas.empresas.EmpresasTestMother.createEmpresa;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -30,10 +32,14 @@ public final class EditarLogotipoUseCaseTest {
 
     @Test
     public void shouldEditLogotipo(){
-        when(this.empresasService.getByNombre("empresa")).thenReturn(createEmpresa("empresa", "jaime"));
+        Empresa empresaToEdit = createEmpresa("empresa", "jaime");
+        
+        when(this.empresasService.getByNombre("empresa")).thenReturn(empresaToEdit);
         this.useCase.cambiar("empresa", Material.COAL, "jaime");
 
-        verify(this.empresasService, times(1)).save(Mockito.any(Empresa.class));
+        verify(this.empresasService, times(1)).save(argThat(of(
+                empresaToEdit.withIcono(Material.COAL)
+        )));
     }
 
     @Test

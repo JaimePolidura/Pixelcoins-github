@@ -53,7 +53,8 @@ public final class RealizarIPOUseCase {
         this.empresasService.save(empresaToIPO.setCotizadaToTrue()
                 .withAccionesTotales(command.getAccionesTotales()));
 
-        this.eventBus.publish(new IPORealizada(empresaToIPO, command.getPrecioPorAccion(), cantidadAVender, command.getAccionesOwner()));
+        this.eventBus.publish(IPORealizada.of(empresaToIPO.getNombre(), command.getPrecioPorAccion(),
+                command.getAccionesTotales(), command.getAccionesOwner()));
     }
 
     private void ensureNotAlreadyCotizada(Empresa empresa){

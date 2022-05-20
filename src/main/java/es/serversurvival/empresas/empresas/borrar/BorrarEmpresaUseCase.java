@@ -2,11 +2,9 @@ package es.serversurvival.empresas.empresas.borrar;
 
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasEmpresasServerService;
 import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionEmpresaServer;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
@@ -37,11 +35,12 @@ public final class BorrarEmpresaUseCase {
         this.ensureOwner(empresaABorrar, owner);
 
         if(empresaABorrar.isCotizada()){
-            this.accionistasEmpresasServerService.findByEmpresa(empresaNombre).stream().filter(AccionEmpresaServer::esJugador).forEach(accionista -> {
-                var jugadorAccionista = this.jugadoresService.getByNombre(accionista.getNombreAccionista());
+            this.accionistasEmpresasServerService.findByEmpresa(empresaNombre).forEach(accionista -> {
                 double ownershipPercentaje = accionista.getCantidad() / empresaABorrar.getAccionesTotales();
+                String jugadorNombre = accionista.esJugador() ? accionista.getNombreAccionista() : empresaABorrar.getOwner();
+                var jugadorAPagar = jugadoresService.getByNombre(jugadorNombre);
 
-                this.jugadoresService.save(jugadorAccionista.incrementPixelcoinsBy(ownershipPercentaje * empresaABorrar.getPixelcoins()));
+                this.jugadoresService.save(jugadorAPagar.incrementPixelcoinsBy(ownershipPercentaje * empresaABorrar.getPixelcoins()));
             });
         }else{
             this.jugadoresService.save(jugadorOwner.incrementPixelcoinsBy(empresaABorrar.getPixelcoins()));
@@ -52,7 +51,7 @@ public final class BorrarEmpresaUseCase {
             this.empleadosService.deleteById(empleado.getEmpleadoId());
         });
 
-        this.eventBus.publish(new EmpresaBorradaEvento(owner, empresaNombre, empresaABorrar.getPixelcoins(),
+        this.eventBus.publish(new EmpresaBorrada(owner, empresaNombre, empresaABorrar.getPixelcoins(),
                 empleados.stream().map(Empleado::getNombre).toList()));
     }
 

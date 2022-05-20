@@ -4,6 +4,8 @@ import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.serversurvival.MockitoArgEqualsMatcher;
+import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
@@ -16,6 +18,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static es.serversurvival.MockitoArgEqualsMatcher.of;
 import static es.serversurvival.empresas.empresas.EmpresasTestMother.createEmpresa;
 import static es.serversurvival.jugadores.JugadoresTestMother.createJugador;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -36,14 +39,33 @@ public final class SacarPixelcoinsEmpresaTest {
 
     @Test
     public void shouldSacar(){
+        final double PIXELCOINS_A_SACAR = 10;
+        Empresa empresaToSacar = createEmpresa("empresa", "jaime", 100);
+        Jugador jugador = createJugador("jaime", 10);
+
+        when(this.jugadoresService.getByNombre("jaime")).thenReturn(jugador);
+        when(this.empresasService.getByNombre("empresa")).thenReturn(empresaToSacar);
+
+        this.useCase.sacar("jaime", "empresa", PIXELCOINS_A_SACAR);
+
+        verify(this.empresasService, times(1)).save(argThat(of(
+                empresaToSacar.decrementPixelcoinsBy(PIXELCOINS_A_SACAR)
+        )));
+        verify(this.jugadoresService, times(1)).save(argThat(of(
+                jugador.incrementPixelcoinsBy(PIXELCOINS_A_SACAR)
+        )));
+        verify(this.eventBus, times(1)).publish(argThat(of(
+                PixelcoinsSacadasEvento.of("jaime", "empresa", PIXELCOINS_A_SACAR)
+        )));
+    }
+
+    @Test
+    public void enoughPixelcoins(){
         when(this.jugadoresService.getByNombre("jaime")).thenReturn(createJugador("jaime", 10));
         when(this.empresasService.getByNombre("empresa")).thenReturn(createEmpresa("empresa", "jaime"));
 
-        this.useCase.sacar("jaime", "empresa", 5);
-
-        verify(this.empresasService, times(1)).save(Mockito.any(Empresa.class));
-        verify(this.jugadoresService, times(1)).save(Mockito.any(Jugador.class));
-        verify(this.eventBus, times(1)).publish(Mockito.any(PixelcoinsSacadasEvento.class));
+        assertThatCode(() -> this.useCase.sacar("jaime", "empresa", 5))
+                .isInstanceOf(NotEnoughPixelcoins.class);
     }
 
     @Test

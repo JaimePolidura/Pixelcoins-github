@@ -5,6 +5,7 @@ import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
@@ -28,17 +29,19 @@ public final class SacarPixelcoinsUseCase {
         Jugador jugador = this.jugadoresService.getByNombre(playerName);
         Empresa empresaASacar = this.empresasService.getByNombre(empresaNombre);
         this.ensureOwnerOfEmpresa(empresaASacar, playerName);
+        this.ensureHasEnoughPixelcions(empresaASacar, pixelcoinsASacar);
 
-        pixelcoinsASacar = pixelcoinsASacar > empresaASacar.getPixelcoins() ?
-                empresaASacar.getPixelcoins() :
-                pixelcoinsASacar;
+        this.empresasService.save(empresaASacar.decrementPixelcoinsBy(pixelcoinsASacar));
+        this.jugadoresService.save(jugador.incrementPixelcoinsBy(pixelcoinsASacar));
 
-        empresasService.save(empresaASacar.decrementPixelcoinsBy(pixelcoinsASacar));
-        jugadoresService.save(jugador.incrementPixelcoinsBy(pixelcoinsASacar));
-
-        this.eventBus.publish(new PixelcoinsSacadasEvento(jugador, empresaASacar, pixelcoinsASacar));
+        this.eventBus.publish(new PixelcoinsSacadasEvento(jugador.getNombre(), empresaASacar.getNombre(), pixelcoinsASacar));
     }
 
+
+    private void ensureHasEnoughPixelcions(Empresa empresa, double pixelcoins){
+        if(empresa.getPixelcoins() < pixelcoins)
+            throw new NotEnoughPixelcoins("La empresa notiene las suficientes pixelcoins para sacar");
+    }
 
     private void ensureOwnerOfEmpresa(Empresa empresa, String playerName){
         if(!empresa.getOwner().equalsIgnoreCase(playerName))

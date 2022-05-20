@@ -5,9 +5,12 @@ import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.serversurvival.MockitoArgEqualsMatcher;
 import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasEmpresasServerService;
+import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
 import es.serversurvival.empresas.empresas.EmpresasTestMother;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
+import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,8 +19,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.UUID;
+
+import static es.serversurvival.MockitoArgEqualsMatcher.*;
 import static es.serversurvival.empresas.empresas.EmpresasTestMother.createEmpresa;
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,14 +48,22 @@ public final class RealizarIPOUseCaseTest {
 
      @Test
      public void makeTheIPO(){
-          when(this.empresasService.getByNombre("empresa")).thenReturn(createEmpresa("empresa", "jaime"));
+          Empresa empresaToIPO = createEmpresa("empresa", "jaime");
+          when(this.empresasService.getByNombre("empresa")).thenReturn(empresaToIPO);
 
           this.useCase.makeIPO("jaime", new IPOCommand("empresa", 5, 2, 1));
 
-          verify(this.accionistasEmpresasServerService, times(2)).save(any(), any(), any(), anyInt(), anyDouble());
-          verify(this.ofertasAccionesServerService, times(1)).save(any(), any(), anyDouble(), anyInt(), any(), anyDouble(), any());
-          verify(this.empresasService, times(1)).save(any());
-          verify(this.eventBus, times(1)).publish(any(IPORealizada.class));
+          verify(this.accionistasEmpresasServerService, times(1)).save(
+                  argThat(of("jaime")), argThat(of(TipoAccionista.JUGADOR)), argThat(of(empresaToIPO.getNombre())), anyInt(), anyDouble()
+          );
+
+          verify(this.empresasService, times(1)).save(argThat(of(
+                  empresaToIPO.setCotizadaToTrue().withAccionesTotales(5)
+          )));
+
+          verify(this.eventBus, times(1)).publish(argThat(of(
+                  IPORealizada.of("empresa", 1, 5, 2)
+          )));
      }
 
      @Test

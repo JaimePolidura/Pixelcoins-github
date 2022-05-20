@@ -5,6 +5,7 @@ import es.jaime.javaddd.domain.exceptions.AlreadyExists;
 import es.jaime.javaddd.domain.exceptions.IllegalLength;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.serversurvival.MockitoArgEqualsMatcher;
 import es.serversurvival.empresas.empresas.EmpresasTestMother;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static es.serversurvival.MockitoArgEqualsMatcher.of;
 import static es.serversurvival.empresas.empresas.EmpresasTestMother.createEmpresa;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,7 +47,9 @@ public final class CreateEmpresaTest {
 
         this.useCase.crear("jaime", "empresaacalaks", "empresa");
 
-        verify(this.eventBus, times(1)).publish(any(EmpresaCreadaEvento.class));
+        verify(this.eventBus, times(1)).publish(argThat(of(
+                EmpresaCreadaEvento.of("jaime", "empresaacalaks")
+        )));
     }
 
     @Test

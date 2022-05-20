@@ -5,11 +5,13 @@ import es.serversurvival.transacciones._shared.domain.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.transacciones._shared.domain.Transaccion;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.UUID;
 
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public final class EmpresaVendedida extends PixelcoinsEvento implements EventoTipoTransaccion {
     @Getter private final String comprador;
     @Getter private final String vendedor;
@@ -19,5 +21,9 @@ public final class EmpresaVendedida extends PixelcoinsEvento implements EventoTi
     @Override
     public Transaccion buildTransaccion() {
         return new Transaccion(UUID.randomUUID(), formatFecha(), comprador, vendedor, (int) pixelcoins, empresaNombre, TipoTransaccion.EMPRESA_VENTA);
+    }
+
+    public static EmpresaVendedida of (String comprador, String vendedor, double pixelcoins, String empresaNombre){
+        return new EmpresaVendedida(comprador, vendedor, pixelcoins, empresaNombre);
     }
 }

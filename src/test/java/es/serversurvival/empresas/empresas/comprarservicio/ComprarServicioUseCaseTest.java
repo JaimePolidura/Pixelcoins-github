@@ -4,6 +4,7 @@ import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.serversurvival.MockitoArgEqualsMatcher;
 import es.serversurvival.empresas.empresas.EmpresasTestMother;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
@@ -18,6 +19,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static es.serversurvival.MockitoArgEqualsMatcher.*;
 import static es.serversurvival.empresas.empresas.EmpresasTestMother.createEmpresa;
 import static es.serversurvival.jugadores.JugadoresTestMother.createJugador;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -38,14 +40,24 @@ public final class ComprarServicioUseCaseTest {
 
     @Test
     public void shouldComprarServicio(){
-        when(this.empresasService.getByNombre("empresa")).thenReturn(createEmpresa("empresa", "other"));
-        when(this.jugadoresService.getByNombre("jaime")).thenReturn(createJugador("jaime", 100));
+        Empresa empresa = createEmpresa("empresa", "other");
+        Jugador comprador = createJugador("jaime", 100);
+        when(this.empresasService.getByNombre("empresa")).thenReturn(empresa);
+        when(this.jugadoresService.getByNombre("jaime")).thenReturn(comprador);
 
         this.useCase.comprar("jaime", "empresa", 10);
 
-        verify(this.empresasService, times(1)).save(Mockito.any(Empresa.class));
-        verify(this.jugadoresService, times(1)).save(Mockito.any(Jugador.class));
-        verify(this.eventBus, times(1)).publish(Mockito.any(EmpresaServicioCompradoEvento.class));
+        verify(this.empresasService, times(1)).save(argThat(of(
+                empresa.incrementPixelcoinsBy(10).incrementIngresosBy(10)
+        )));
+
+        verify(this.jugadoresService, times(1)).save(argThat(of(
+                comprador.decrementPixelcoinsBy(10).incrementGastosBy(10)
+        )));
+
+        verify(this.eventBus, times(1)).publish(argThat(of(
+                EmpresaServicioCompradoEvento.of("jaime", empresa.getNombre(), 10)
+        )));
     }
 
     @Test

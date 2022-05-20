@@ -5,6 +5,7 @@ import es.jaime.javaddd.domain.exceptions.AlreadyExists;
 import es.jaime.javaddd.domain.exceptions.IllegalLength;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.serversurvival.MockitoArgEqualsMatcher;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.empresas.editardescripccion.EditarDescUseCase;
@@ -16,8 +17,10 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static es.serversurvival.MockitoArgEqualsMatcher.*;
 import static es.serversurvival.empresas.empresas.EmpresasTestMother.createEmpresa;
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -35,12 +38,14 @@ public final class EditarNombreUseCaseTest {
 
     @Test
     public void shouldEditName(){
-        when(this.empresasService.getByNombre("empresa")).thenReturn(createEmpresa("empresa", "jaime"));
+        Empresa empresaToEdit = createEmpresa("empresa", "jaime");
+        when(this.empresasService.getByNombre("empresa")).thenReturn(empresaToEdit);
 
         this.useCase.edit("empresa", "gola", "jaime");
 
-        verify(this.empresasService).save(Mockito.any(Empresa.class));
-        verify(this.eventBus).publish(Mockito.any(EmpresaNombreEditadoEvento.class));
+        verify(this.empresasService).save(argThat(of(empresaToEdit.withNombre("gola"))));
+
+        verify(this.eventBus).publish(argThat(of(EmpresaNombreEditadoEvento.of("empresa", "gola"))));
     }
 
     @Test

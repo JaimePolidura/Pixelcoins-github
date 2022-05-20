@@ -22,9 +22,9 @@ public final class OnPixelcoinsSacadasEvento {
 
     @EventListener
     public void on(PixelcoinsSacadasEvento evento){
-        String empresaNombre = evento.getEmpresa().getNombre();
-        String mensajeOnline = format(GOLD + "La empresa %s de la que eres accionista el owner ha sacado %s pixelcoins para el");
-        String mensajeOffline = format(GOLD + "La empresa %s de la que eres accionista el owner ha sacado %s pixelcoins para el");
+        String empresaNombre = evento.getEmpresaNombre();
+        String mensajeOnline = format(GOLD + "La empresa %s de la que eres accionista el owner ha sacado %s pixelcoins para el", empresaNombre);
+        String mensajeOffline = format(GOLD + "La empresa %s de la que eres accionista el owner ha sacado %s pixelcoins para el", empresaNombre);
         Set<String> jugadoresMensajesYaEnviados = new HashSet<>();
 
         this.accionistasEmpresasServerService.findByEmpresa(empresaNombre, AccionEmpresaServer::esJugador).forEach(accionista -> {

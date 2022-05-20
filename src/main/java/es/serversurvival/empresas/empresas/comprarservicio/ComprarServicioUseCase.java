@@ -35,7 +35,7 @@ public final class ComprarServicioUseCase {
         this.jugadoresService.save(jugadorComprador.decrementPixelcoinsBy(pixelcoins)
                 .incrementGastosBy(pixelcoins));
 
-        this.eventBus.publish(new EmpresaServicioCompradoEvento(jugador, empresaAComprarServicio, pixelcoins));
+        this.eventBus.publish(new EmpresaServicioCompradoEvento(jugador, empresaAComprarServicio.getNombre(), pixelcoins));
 
         return empresaAComprarServicio;
     }

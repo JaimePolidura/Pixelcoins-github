@@ -38,14 +38,11 @@ public final class PagarSueldosUseCase {
         for (Empleado empleado : empleados) {
             Date actualEmpl = formatFechaDeLaBaseDatosException(empleado.getFechaUltimaPaga());
             String tipoSueldo = empleado.getTipoSueldo().codigo;
-
             int diferenciaDias = (int) diferenciaDias(hoy, actualEmpl);
 
-            if(TipoSueldo.dentroDeLosDias(tipoSueldo, diferenciaDias)){
-                continue;
+            if(!TipoSueldo.dentroDeLosDias(tipoSueldo, diferenciaDias)){
+                pagarSueldo(empleado, empresa.getNombre());
             }
-
-            pagarSueldo(empleado, empresa.getNombre());
         }
     }
 

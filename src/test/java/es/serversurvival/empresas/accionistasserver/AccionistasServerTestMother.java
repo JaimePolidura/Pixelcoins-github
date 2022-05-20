@@ -11,7 +11,15 @@ public final class AccionistasServerTestMother {
         return new AccionEmpresaServer(UUID.randomUUID(), username, JUGADOR, empresa, 1, 1, null);
     }
 
+    public static AccionEmpresaServer createAccionnistaTipoJugaodor(String username, String empresa, int cantidad){
+        return new AccionEmpresaServer(UUID.randomUUID(), username, JUGADOR, empresa, cantidad, 1, null);
+    }
+
     public static AccionEmpresaServer createAccionistaTipoEmpresa(String username, String empresa){
         return new AccionEmpresaServer(UUID.randomUUID(), username, EMPRESA, empresa, 1, 1, null);
+    }
+
+    public static AccionEmpresaServer createAccionistaTipoEmpresa(String username, String empresa, int cantidad){
+        return new AccionEmpresaServer(UUID.randomUUID(), username, EMPRESA, empresa, cantidad, 1, null);
     }
 }

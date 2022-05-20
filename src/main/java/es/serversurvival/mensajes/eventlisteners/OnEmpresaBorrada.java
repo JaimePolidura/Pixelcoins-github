@@ -2,14 +2,14 @@ package es.serversurvival.mensajes.eventlisteners;
 
 import es.jaime.EventListener;
 import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.empresas.empresas.borrar.EmpresaBorradaEvento;
+import es.serversurvival.empresas.empresas.borrar.EmpresaBorrada;
 import org.bukkit.ChatColor;
 
 import java.util.List;
 
 public final class OnEmpresaBorrada {
     @EventListener
-    public void onEmpresaBorrada (EmpresaBorradaEvento evento) {
+    public void onEmpresaBorrada (EmpresaBorrada evento) {
         List<String> empleados = evento.getAntiguosEmpleadosNombre();
 
         empleados.forEach( (empleado) -> {
