@@ -1,5 +1,6 @@
 package es.serversurvival.empresas.empleados.irse;
 
+import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
@@ -7,24 +8,28 @@ import es.serversurvival.empresas.empleados._shared.application.EmpleadosService
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public final class IrseEmpresaUseCase {
     private final EmpresasService empresasService;
     private final EmpleadosService empleadosService;
+    private final EventBus eventBus;
 
     public IrseEmpresaUseCase() {
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.empleadosService = DependecyContainer.get(EmpleadosService.class);
+        this.eventBus = DependecyContainer.get(EventBus.class);
     }
 
     public void irse (String empleadoNombre, String empresaNombre) {
         Empresa empresa = this.empresasService.getByNombre(empresaNombre);
-        this.ensureOwnerNotLeavingEmpresa(empresaNombre, empresa);
+        this.ensureOwnerNotLeavingEmpresa(empleadoNombre, empresa);
         Empleado empleado = this.empleadosService.getEmpleadoInEmpresa(empleadoNombre, empresaNombre);
 
         this.empleadosService.deleteById(empleado.getEmpleadoId());
 
-        Pixelcoin.publish(new EmpleadoDejaEmpresaEvento(empleadoNombre, empresa));
+        this.eventBus.publish(new EmpleadoDejaEmpresaEvento(empleadoNombre, empresa.getNombre(), empresa.getOwner()));
     }
 
     private void ensureOwnerNotLeavingEmpresa(String owner, Empresa empresa){

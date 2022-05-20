@@ -5,10 +5,9 @@ import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.serversurvival.MockitoArgEqualsMatcher;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
-import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasEmpresasServerService;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionEmpresaServer;
+import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasServerService;
+import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistaServer;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.empresas.pagardividendos.eventos.EmpresaServerDividendoPagadoEmpresa;
@@ -19,7 +18,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -37,7 +35,7 @@ import static org.mockito.Mockito.*;
 public final class PagarDividendosEmpresaServerUseCaseTest {
     @Mock private EmpresasService empresasService;
     @Mock private JugadoresService jugadoresService;
-    @Mock private AccionistasEmpresasServerService accionistasEmpresasServerService;
+    @Mock private AccionistasServerService accionistasEmpresasServerService;
     @Mock private EventBus eventBus;
     private PagarDividendosEmpresaServerUseCase useCase;
 
@@ -58,10 +56,10 @@ public final class PagarDividendosEmpresaServerUseCaseTest {
         final int accionesJugador1 = 4;
         Empresa empresaToPayDividend = createEmpresa("empresa", "jaime", 1000).setCotizadaToTrue().withAccionesTotales(10);
         when(this.empresasService.getByNombre("empresa")).thenReturn(empresaToPayDividend);
-        AccionEmpresaServer accionista1 = createAccionnistaTipoJugaodor("pedro", "empresa", accionesJugador1);
+        AccionistaServer accionista1 = createAccionnistaTipoJugaodor("pedro", "empresa", accionesJugador1);
         Jugador jugadorAccionista1 = createJugador("pedro");
-        AccionEmpresaServer accionista3 = createAccionistaTipoEmpresa("empresa", "empresa", accionesEmpresa);
-        List<AccionEmpresaServer> accionistas = List.of(accionista1, accionista3);
+        AccionistaServer accionista3 = createAccionistaTipoEmpresa("empresa", "empresa", accionesEmpresa);
+        List<AccionistaServer> accionistas = List.of(accionista1, accionista3);
         when(this.accionistasEmpresasServerService.findByEmpresa("empresa")).thenReturn(accionistas);
         when(this.jugadoresService.getByNombre("pedro")).thenReturn(jugadorAccionista1);
 

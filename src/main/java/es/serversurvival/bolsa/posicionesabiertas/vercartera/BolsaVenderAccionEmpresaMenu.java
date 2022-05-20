@@ -1,8 +1,8 @@
 package es.serversurvival.bolsa.posicionesabiertas.vercartera;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionEmpresaServer;
-import es.serversurvival.empresas.ofertasaccionesserver.venderofertameracadoaserver.VenderOfertaAccionServerUseCase;
+import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistaServer;
+import es.serversurvival.empresas.ofertasaccionesserver.venderofertaaccionaserver.VenderOfertaAccionServerUseCase;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.confirmaciones.Confirmacion;
 import es.serversurvival._shared.utils.Funciones;
@@ -29,12 +29,12 @@ public class BolsaVenderAccionEmpresaMenu extends Menu implements Confirmacion {
 
     private final Inventory inventory;
     private final Player player;
-    private final AccionEmpresaServer accionEmpresaAVender;
+    private final AccionistaServer accionEmpresaAVender;
     private final String empresa;
     private final double precioApertura;
     private double precioVenta;
 
-    public BolsaVenderAccionEmpresaMenu(Player player, AccionEmpresaServer accionEmpresaAVender) {
+    public BolsaVenderAccionEmpresaMenu(Player player, AccionistaServer accionEmpresaAVender) {
         this.player = player;
         this.accionEmpresaAVender = accionEmpresaAVender;
         this.venderOfertaUseCase = new VenderOfertaAccionServerUseCase();

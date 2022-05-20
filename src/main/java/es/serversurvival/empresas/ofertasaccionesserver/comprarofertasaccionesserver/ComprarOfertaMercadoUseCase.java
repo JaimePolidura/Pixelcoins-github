@@ -1,12 +1,12 @@
-package es.serversurvival.empresas.ofertasaccionesserver.comprarofertasmercadoserver;
+package es.serversurvival.empresas.ofertasaccionesserver.comprarofertasaccionesserver;
 
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
-import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasEmpresasServerService;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionEmpresaServer;
+import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasServerService;
+import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistaServer;
 import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
@@ -20,13 +20,13 @@ import java.util.UUID;
 public final class ComprarOfertaMercadoUseCase {
     private final JugadoresService jugadoresService;
     private final OfertasAccionesServerService ofertasAccionesServerService;
-    private final AccionistasEmpresasServerService accionistasEmpresasServerService;
+    private final AccionistasServerService accionistasEmpresasServerService;
     private final EmpresasService empresasService;
 
     public ComprarOfertaMercadoUseCase () {
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.ofertasAccionesServerService= DependecyContainer.get(OfertasAccionesServerService.class);
-        this.accionistasEmpresasServerService = DependecyContainer.get(AccionistasEmpresasServerService.class);
+        this.accionistasEmpresasServerService = DependecyContainer.get(AccionistasServerService.class);
         this.empresasService = DependecyContainer.get(EmpresasService.class);
     }
 
@@ -65,7 +65,7 @@ public final class ComprarOfertaMercadoUseCase {
             this.jugadoresService.save(vendedor.incrementPixelcoinsBy(precioTotalAPagar).incrementIngresosBy(beneficiosPerdidas));
     }
 
-    private void decreaseAccionistaEmpresaServerCantidadOrRemove(int cantidadAComprar, AccionEmpresaServer accionsta){
+    private void decreaseAccionistaEmpresaServerCantidadOrRemove(int cantidadAComprar, AccionistaServer accionsta){
         if(accionsta.getCantidad() - cantidadAComprar <= 0)
             this.accionistasEmpresasServerService.deleteById(accionsta.getAccionEmpresaServerId());
         else
@@ -74,7 +74,7 @@ public final class ComprarOfertaMercadoUseCase {
 
     private void decreaseOfertaCantidadOrRemove(int cantidadAComprar, OfertaAccionServer ofertaAComprar) {
         if(ofertaAComprar.getCantidad() - cantidadAComprar <= 0)
-            this.ofertasAccionesServerService.deleteById(ofertaAComprar.getOfertasAccionesServerId());
+            this.ofertasAccionesServerService.deleteById(ofertaAComprar.getOfertaAccioneServerId());
         else
             this.ofertasAccionesServerService.save(ofertaAComprar.decreaseCantidadBy(cantidadAComprar));
     }

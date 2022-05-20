@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public final class MySQLOfertasAccionesServerRepository extends DataBaseRepository<OfertaAccionServer, UUID> implements OfertasAccionesServerRepository {
     private static final String TABLE_NAME = "ofertasAccionesServer";
-    private static final String ID_FIELD_NAME = "ofertasAccionesServerId";
+    private static final String ID_FIELD_NAME = "ofertaAccionServerId";
 
     public MySQLOfertasAccionesServerRepository(DatabaseConfiguration databaseConnection) {
         super(databaseConnection);

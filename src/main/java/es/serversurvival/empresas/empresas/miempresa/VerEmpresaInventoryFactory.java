@@ -2,8 +2,8 @@ package es.serversurvival.empresas.empresas.miempresa;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasEmpresasServerService;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionEmpresaServer;
+import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasServerService;
+import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistaServer;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
@@ -26,12 +26,12 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
     private final Empresa empresa;
     private final EmpresasService empresasService;
     private final EmpleadosService empleadosService;
-    private final AccionistasEmpresasServerService accionistasEmpresasServerService;
+    private final AccionistasServerService accionistasEmpresasServerService;
 
     public VerEmpresaInventoryFactory (String empresa) {
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.empleadosService = DependecyContainer.get(EmpleadosService.class);
-        this.accionistasEmpresasServerService = DependecyContainer.get(AccionistasEmpresasServerService.class);
+        this.accionistasEmpresasServerService = DependecyContainer.get(AccionistasServerService.class);
         this.empresa = this.empresasService.getByNombre(empresa);
     }
 
@@ -149,10 +149,10 @@ public class VerEmpresaInventoryFactory extends InventoryFactory {
         List<String> lore = new ArrayList<>();
         //TODO XD
         var jugadoresAccionistas = accionistasEmpresasServerService.findByEmpresa(empresa.getNombre()).stream()
-                .sorted(Comparator.comparingInt(AccionEmpresaServer::getCantidad))
+                .sorted(Comparator.comparingInt(AccionistaServer::getCantidad))
                 .toList();
 
-        for (AccionEmpresaServer accionista : jugadoresAccionistas) {
+        for (AccionistaServer accionista : jugadoresAccionistas) {
             if(accionista.getNombreAccionista().equalsIgnoreCase(this.empresa.getNombre()))
                 lore.add(GOLD + "" + "EMPRESA : " + GREEN + FORMATEA.format(accionista.getCantidad()
                         / this.empresa.getAccionesTotales()) + "%");

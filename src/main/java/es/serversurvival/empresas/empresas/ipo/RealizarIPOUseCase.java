@@ -5,7 +5,7 @@ import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasEmpresasServerService;
+import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
@@ -19,13 +19,13 @@ import static es.serversurvival.empresas.accionistasempresasserver._shared.domai
 public final class RealizarIPOUseCase {
     private final EmpresasService empresasService;
     private final OfertasAccionesServerService ofertasAccionesServerService;
-    private final AccionistasEmpresasServerService accionistasEmpresasServerService;
+    private final AccionistasServerService accionistasEmpresasServerService;
     private final EventBus eventBus;
 
     public RealizarIPOUseCase() {
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.ofertasAccionesServerService = DependecyContainer.get(OfertasAccionesServerService.class);
-        this.accionistasEmpresasServerService = DependecyContainer.get(AccionistasEmpresasServerService.class);
+        this.accionistasEmpresasServerService = DependecyContainer.get(AccionistasServerService.class);
         this.eventBus = DependecyContainer.get(EventBus.class);
     }
 

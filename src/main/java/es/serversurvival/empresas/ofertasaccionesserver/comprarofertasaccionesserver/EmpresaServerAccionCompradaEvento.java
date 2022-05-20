@@ -1,4 +1,4 @@
-package es.serversurvival.empresas.ofertasaccionesserver.comprarofertasmercadoserver;
+package es.serversurvival.empresas.ofertasaccionesserver.comprarofertasaccionesserver;
 
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.transacciones._shared.domain.TipoTransaccion;

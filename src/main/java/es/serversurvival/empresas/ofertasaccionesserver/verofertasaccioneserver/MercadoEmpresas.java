@@ -1,4 +1,4 @@
-package es.serversurvival.empresas.ofertasaccionesserver.verofertasmercadoserver;
+package es.serversurvival.empresas.ofertasaccionesserver.verofertasaccioneserver;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;

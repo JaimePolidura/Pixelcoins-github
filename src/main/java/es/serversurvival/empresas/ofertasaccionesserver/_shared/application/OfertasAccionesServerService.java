@@ -5,6 +5,7 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertasAccionesServerRepository;
 import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
+import lombok.AllArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 
 import static es.serversurvival._shared.utils.Funciones.DATE_FORMATER_LEGACY;
 
+@AllArgsConstructor
 public class OfertasAccionesServerService {
     private final OfertasAccionesServerRepository repositoryDb;
 

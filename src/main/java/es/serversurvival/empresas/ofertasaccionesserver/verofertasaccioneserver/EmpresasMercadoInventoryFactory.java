@@ -1,4 +1,4 @@
-package es.serversurvival.empresas.ofertasaccionesserver.verofertasmercadoserver;
+package es.serversurvival.empresas.ofertasaccionesserver.verofertasaccioneserver;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;

@@ -6,8 +6,8 @@ import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
-import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasEmpresasServerService;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionEmpresaServer;
+import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasServerService;
+import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistaServer;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.empresas.pagardividendos.eventos.EmpresaServerDividendoPagadoEmpresa;
 import es.serversurvival.empresas.empresas.pagardividendos.eventos.EmpresaServerDividendoPagadoJugador;
@@ -19,13 +19,13 @@ import lombok.AllArgsConstructor;
 public final class PagarDividendosEmpresaServerUseCase {
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;
-    private final AccionistasEmpresasServerService accionistasEmpresasServerService;
+    private final AccionistasServerService accionistasEmpresasServerService;
     private final EventBus eventBus;
 
     public PagarDividendosEmpresaServerUseCase(){
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.accionistasEmpresasServerService = DependecyContainer.get(AccionistasEmpresasServerService.class);
+        this.accionistasEmpresasServerService = DependecyContainer.get(AccionistasServerService.class);
         this.eventBus = DependecyContainer.get(EventBus.class);
     }
 
@@ -56,7 +56,7 @@ public final class PagarDividendosEmpresaServerUseCase {
             throw new IllegalState("La empresa tiene que cotizar en bolsa para que puedes repartir dividendos");
     }
 
-    private void pagarDividendoAEmpresa(double dividendoPorAccion, Empresa empresa, AccionEmpresaServer accionista) {
+    private void pagarDividendoAEmpresa(double dividendoPorAccion, Empresa empresa, AccionistaServer accionista) {
         double totalACobrar = accionista.getCantidad() * dividendoPorAccion;
 
         this.empresasService.save(empresa.incrementPixelcoinsBy(totalACobrar));
@@ -64,7 +64,7 @@ public final class PagarDividendosEmpresaServerUseCase {
         this.eventBus.publish(new EmpresaServerDividendoPagadoEmpresa(empresa.getNombre(), dividendoPorAccion * accionista.getCantidad()));
     }
 
-    private void pagarDividendoAccionAJugador (AccionEmpresaServer accionista, double dividendoPorAccion, String nombreEmpresa) {
+    private void pagarDividendoAccionAJugador (AccionistaServer accionista, double dividendoPorAccion, String nombreEmpresa) {
         double dividendoTotal = accionista.getCantidad() * dividendoPorAccion;
         var jugador = this.jugadoresService.getByNombre(accionista.getNombreAccionista());
         this.jugadoresService.save(jugador.incrementPixelcoinsBy(dividendoTotal)

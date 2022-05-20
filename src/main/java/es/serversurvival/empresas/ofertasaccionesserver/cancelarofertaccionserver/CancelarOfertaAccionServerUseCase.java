@@ -1,14 +1,14 @@
-package es.serversurvival.empresas.ofertasaccionesserver.cancelarofertamercadoserver;
+package es.serversurvival.empresas.ofertasaccionesserver.cancelarofertaccionserver;
 
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
-import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasEmpresasServerService;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
+import lombok.AllArgsConstructor;
 
 import java.util.UUID;
 
+@AllArgsConstructor
 public final class CancelarOfertaAccionServerUseCase {
     private final OfertasAccionesServerService ofertasAccionesServerService;
 
@@ -20,7 +20,7 @@ public final class CancelarOfertaAccionServerUseCase {
         var oferta = ofertasAccionesServerService.getById(id);
         this.ensureOwnsOferta(player, oferta);
 
-        this.ofertasAccionesServerService.deleteById(oferta.getOfertasAccionesServerId());
+        this.ofertasAccionesServerService.deleteById(oferta.getOfertaAccioneServerId());
     }
 
     private void ensureOwnsOferta(String playerName, OfertaAccionServer oferta){

@@ -3,9 +3,8 @@ package es.serversurvival.empresas.empresas.borrar;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.serversurvival.MockitoArgEqualsMatcher;
-import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasEmpresasServerService;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionEmpresaServer;
+import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasServerService;
+import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistaServer;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
@@ -23,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import static es.serversurvival.MockitoArgEqualsMatcher.*;
 import static es.serversurvival.MockitoArgEqualsMatcher.of;
 import static es.serversurvival.empresas.accionistasserver.AccionistasServerTestMother.*;
 import static es.serversurvival.empresas.accionistasserver.AccionistasServerTestMother.createAccionnistaTipoJugaodor;
@@ -39,7 +37,7 @@ public final class BorrarEmpresaUseCaseTest {
     @Mock private EmpresasService empresasService;
     @Mock private JugadoresService jugadoresService;
     @Mock private EmpleadosService empleadosService;
-    @Mock private AccionistasEmpresasServerService accionistasEmpresasServerService;
+    @Mock private AccionistasServerService accionistasEmpresasServerService;
     @Mock private EventBus eventBus;
     private BorrarEmpresaUseCase useCase;
 
@@ -64,9 +62,9 @@ public final class BorrarEmpresaUseCaseTest {
                 .withAccionesTotales(accionesTotales);
         when(this.empresasService.getByNombre("empresa")).thenReturn(empresaABorrar);
 
-        AccionEmpresaServer accionionista = createAccionnistaTipoJugaodor("alksj", "empresa", 5);
-        AccionEmpresaServer accionionistaEmpresa = createAccionistaTipoEmpresa("jaime", "empresa", 5);
-        List<AccionEmpresaServer> accionistas = List.of(accionionista, accionionistaEmpresa);
+        AccionistaServer accionionista = createAccionnistaTipoJugaodor("alksj", "empresa", 5);
+        AccionistaServer accionionistaEmpresa = createAccionistaTipoEmpresa("jaime", "empresa", 5);
+        List<AccionistaServer> accionistas = List.of(accionionista, accionionistaEmpresa);
         when(this.accionistasEmpresasServerService.findByEmpresa("empresa")).thenReturn(accionistas);
 
         Jugador jugadorAccionista = createJugador("alksj");

@@ -1,7 +1,7 @@
-package es.serversurvival.empresas.ofertasaccionesserver.verofertasmercadoserver;
+package es.serversurvival.empresas.ofertasaccionesserver.verofertasaccioneserver;
 
-import es.serversurvival.empresas.ofertasaccionesserver.cancelarofertamercadoserver.CancelarOfertaAccionServerUseCase;
-import es.serversurvival.empresas.ofertasaccionesserver.comprarofertasmercadoserver.ComprarAccionesServerConfirmacion;
+import es.serversurvival.empresas.ofertasaccionesserver.cancelarofertaccionserver.CancelarOfertaAccionServerUseCase;
+import es.serversurvival.empresas.ofertasaccionesserver.comprarofertasaccionesserver.ComprarAccionesServerConfirmacion;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;

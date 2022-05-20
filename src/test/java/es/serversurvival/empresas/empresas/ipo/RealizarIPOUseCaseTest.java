@@ -5,10 +5,8 @@ import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.serversurvival.MockitoArgEqualsMatcher;
-import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasEmpresasServerService;
+import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
-import es.serversurvival.empresas.empresas.EmpresasTestMother;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
@@ -18,8 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.UUID;
 
 import static es.serversurvival.MockitoArgEqualsMatcher.*;
 import static es.serversurvival.empresas.empresas.EmpresasTestMother.createEmpresa;
@@ -31,7 +27,7 @@ import static org.mockito.Mockito.*;
 public final class RealizarIPOUseCaseTest {
      @Mock private EmpresasService empresasService;
      @Mock private OfertasAccionesServerService ofertasAccionesServerService;
-     @Mock private AccionistasEmpresasServerService accionistasEmpresasServerService;
+     @Mock private AccionistasServerService accionistasEmpresasServerService;
      @Mock private EventBus eventBus;
      private RealizarIPOUseCase useCase;
 

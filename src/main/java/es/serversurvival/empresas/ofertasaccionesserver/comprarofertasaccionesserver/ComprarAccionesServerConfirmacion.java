@@ -1,4 +1,4 @@
-package es.serversurvival.empresas.ofertasaccionesserver.comprarofertasmercadoserver;
+package es.serversurvival.empresas.ofertasaccionesserver.comprarofertasaccionesserver;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
@@ -93,7 +93,7 @@ public class ComprarAccionesServerConfirmacion extends Menu implements AumentoCo
             return;
         }
 
-        useCase.comprarOfertaMercadoAccionServer(player.getName(), oferta.getOfertasAccionesServerId(), this.cantidadAComprar);
+        useCase.comprarOfertaMercadoAccionServer(player.getName(), oferta.getOfertaAccioneServerId(), this.cantidadAComprar);
 
         sendMessage();
 
