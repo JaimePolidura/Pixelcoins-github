@@ -28,7 +28,7 @@ public final class PrestarUseCase {
         this.ensureAcredorHasEnoughPixelcoins(acredorJugador, pixelcoinsMasInteres);
 
         this.deudasService.save(deudor, acredor, pixelcoins, dias, interes);
-        this.jugadoresService.realizarTransferenciaConEstadisticas(
+        this.jugadoresService.realizarTransferencia(
                 acredorJugador, deudorJugador, pixelcoinsMasInteres
         );
 

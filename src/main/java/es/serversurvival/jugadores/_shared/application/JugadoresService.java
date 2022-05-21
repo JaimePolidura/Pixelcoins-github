@@ -3,15 +3,10 @@ package es.serversurvival.jugadores._shared.application;
 import es.jaime.EventListener;
 import es.jaime.Priority;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.cache.Cache;
-import es.serversurvival._shared.cache.LRUCache;
-import es.serversurvival._shared.cache.LimitedCache;
 import es.serversurvival._shared.cache.UnlimitedCacheSize;
 import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
 import es.serversurvival.jugadores._shared.domain.JugadoresRepository;
 import es.serversurvival.jugadores._shared.domain.Jugador;
-import lombok.Setter;
 
 import java.util.*;
 import java.util.function.Function;
@@ -78,7 +73,7 @@ public class JugadoresService {
                 .collect(Collectors.toList());
     }
 
-    public void realizarTransferenciaConEstadisticas (Jugador pagador, Jugador pagado, double pixelcoins) {
+    public void realizarTransferencia(Jugador pagador, Jugador pagado, double pixelcoins) {
         this.save(pagador.decrementPixelcoinsBy(pixelcoins)
                 .incrementGastosBy(pixelcoins));
 

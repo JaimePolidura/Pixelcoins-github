@@ -1,5 +1,6 @@
 package es.serversurvival.deudas.pagarTodo;
 
+import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
@@ -8,16 +9,20 @@ import es.serversurvival.deudas._shared.domain.Deuda;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
+import lombok.AllArgsConstructor;
 
 import java.util.UUID;
 
+@AllArgsConstructor
 public final class PagarDeudaCompletaUseCase {
     private final DeudasService deudasService;
     private final JugadoresService jugadoresService;
+    private final EventBus eventBus;
 
     public PagarDeudaCompletaUseCase() {
         this.deudasService = DependecyContainer.get(DeudasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+        this.eventBus = DependecyContainer.get(EventBus.class);
     }
 
     public Deuda pagarDeuda(UUID deudaId, String deudorName) {
@@ -25,14 +30,13 @@ public final class PagarDeudaCompletaUseCase {
         this.ensureIsDeudor(deudaAPagar, deudorName);
         var deudorJugador = this.ensureDeudorHasEnoughPixelcoins(deudaAPagar);
 
-        int pixelcoinsDeuda = deudaAPagar.getPixelcoinsRestantes();
         String acredorNombre = deudaAPagar.getAcredor();
-        Jugador acredor = jugadoresService.getByNombre(deudaAPagar.getAcredor());
+        Jugador acredorJugador = jugadoresService.getByNombre(deudaAPagar.getAcredor());
 
-        this.makeTransference(deudaAPagar, acredor, deudorJugador);
+        this.jugadoresService.realizarTransferencia(deudorJugador, acredorJugador, deudaAPagar.getPixelcoinsRestantes());
         this.deudasService.deleteById(deudaId);
 
-        Pixelcoin.publish(new DeudaPagadaCompletaEvento(acredorNombre, deudaAPagar.getDeudor(), pixelcoinsDeuda));
+        this.eventBus.publish(new DeudaPagadaCompletaEvento(acredorNombre, deudaAPagar.getDeudor(), deudaAPagar.getPixelcoinsRestantes()));
 
         return deudaAPagar;
     }
@@ -56,9 +60,6 @@ public final class PagarDeudaCompletaUseCase {
     }
 
     private void makeTransference(Deuda deudaAPagar, Jugador acredor, Jugador deudorJugador) {
-        this.jugadoresService.realizarTransferenciaConEstadisticas(
-                deudorJugador, acredor, deudorJugador.getPixelcoins()
-        );
     }
 
 }

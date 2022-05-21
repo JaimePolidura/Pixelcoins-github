@@ -2,7 +2,6 @@ package es.serversurvival.empresas.empresas.vender;
 
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
-import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
@@ -36,7 +35,7 @@ public final class VenderEmpresaUseCase {
         this.ensureCompradorHasEnoughPixelcoins(jugadorComprador, precioEmpresa);
 
         this.empresasService.save(empresa.withOwner(comprador));
-        this.jugadoresService.realizarTransferenciaConEstadisticas(jugadorComprador, jugadorVendedor, precioEmpresa);
+        this.jugadoresService.realizarTransferencia(jugadorComprador, jugadorVendedor, precioEmpresa);
         this.empleadosService.findByEmpresa(nombreEmpresa).stream()
                 .filter(empleado -> empleado.getNombre().equalsIgnoreCase(comprador))
                 .findFirst()

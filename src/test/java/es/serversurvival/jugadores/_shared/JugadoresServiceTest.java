@@ -1,7 +1,6 @@
 package es.serversurvival.jugadores._shared;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.serversurvival.jugadores.JugadoresTestMother;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.jugadores._shared.domain.JugadoresRepository;
@@ -36,7 +35,7 @@ public class JugadoresServiceTest {
         Jugador pagador = createJugador("jaime", 10);
         Jugador pagado = createJugador("pedro", 5);
 
-        this.jugadoresService.realizarTransferenciaConEstadisticas(pagador, pagado, 5);
+        this.jugadoresService.realizarTransferencia(pagador, pagado, 5);
 
         assertThat(this.jugadoresService.getByNombre("jaime"))
                 .matches(jugaodr -> jugaodr.getPixelcoins() == 5);

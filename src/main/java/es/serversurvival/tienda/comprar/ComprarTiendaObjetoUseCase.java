@@ -41,7 +41,7 @@ public final class ComprarTiendaObjetoUseCase {
         ItemStack itemAComprar = ItemsUtils.getItemStakcByTiendaObjeto(tiendaObjetoAComprar);
         itemAComprar.setAmount(1);
 
-        jugadoresService.realizarTransferenciaConEstadisticas(jugadorComprador, jugadorVendedor, tiendaObjetoAComprar.getPrecio());
+        jugadoresService.realizarTransferencia(jugadorComprador, jugadorVendedor, tiendaObjetoAComprar.getPrecio());
 
         if(tiendaObjetoAComprar.getCantidad() == 1)
             this.tiendaService.deleteById(tiendaObjetoId);

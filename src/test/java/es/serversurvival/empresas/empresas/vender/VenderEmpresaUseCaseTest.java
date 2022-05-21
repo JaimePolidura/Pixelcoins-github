@@ -4,9 +4,7 @@ import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.serversurvival.MockitoArgEqualsMatcher;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
-import es.serversurvival.empresas.empleados.EmpleadosTestMother;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
@@ -17,12 +15,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.UUID;
 
 import static es.serversurvival.MockitoArgEqualsMatcher.of;
 import static es.serversurvival.empresas.empleados.EmpleadosTestMother.createEmpleado;
@@ -70,7 +66,7 @@ public final class VenderEmpresaUseCaseTest {
         verify(this.empresasService, times(1)).save(argThat(of(
                 empresa.withOwner(comprador.getNombre())
         )));
-        verify(this.jugadoresService, times(1)).realizarTransferenciaConEstadisticas(
+        verify(this.jugadoresService, times(1)).realizarTransferencia(
                 argThat(of(comprador)), argThat(of(vendedor)), anyDouble()
         );
         verify(this.empleadosService, times(1)).deleteById(argThat(of(empleado.getEmpleadoId())));

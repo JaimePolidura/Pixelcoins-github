@@ -12,7 +12,7 @@ import java.util.*;
 import static es.serversurvival._shared.utils.CollectionUtils.*;
 
 @AllArgsConstructor
-public final class DeudasService {
+public class DeudasService {
     private final DeudasRepository deudasRepository;
 
     public DeudasService(){
@@ -20,7 +20,7 @@ public final class DeudasService {
     }
 
     public UUID save(String deudor, String acredor, int pixelcoins, int tiempo, int interes) {
-        String fechaHoy = Funciones.DATE_FORMATER_LEGACY.format(new Date());
+        String fechaHoy = Funciones.hoy();
         int cuota = (int) Math.round((double) pixelcoins / tiempo);
         UUID deudaID = UUID.randomUUID();
 

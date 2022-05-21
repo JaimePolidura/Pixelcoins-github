@@ -23,7 +23,7 @@ public final class PagarUseCase {
         var jugadorPagador = this.ensureJugadorExists(nombrePagador);
         this.ensureEnoughPixelcoins(jugadorPagador, pixelcoins);
 
-        this.jugadoresService.realizarTransferenciaConEstadisticas(jugadorPagador, jugadorPagado, pixelcoins);
+        this.jugadoresService.realizarTransferencia(jugadorPagador, jugadorPagado, pixelcoins);
 
         this.eventBus.publish(new JugadorPagoManualEvento(nombrePagador, nombrePagado, pixelcoins));
     }
