@@ -31,7 +31,7 @@ public final class PagarDeudasCuotasUseCase {
 
         todasLasDeudas.forEach( (deuda) -> {
             Date fechaHoy = formatFehcaDeHoyException();
-            Date fechaUltimaPagaBaseDatos = formatFechaDeLaBaseDatosException(deuda.getFecha_ultimapaga());
+            Date fechaUltimaPagaBaseDatos = formatFechaDeLaBaseDatosException(deuda.getFechaUltimapaga());
             Jugador deudor = allJugadores.get(deuda.getDeudor());
             Jugador acredor = allJugadores.get(deuda.getAcredor());
 
@@ -51,7 +51,7 @@ public final class PagarDeudasCuotasUseCase {
         String acredorNombre = acredor.getNombre();
         int cuota = deuda.getCouta();
         UUID deudaId = deuda.getDeudaId();
-        int tiempo = deuda.getTiempo_restante();
+        int tiempo = deuda.getTiempoRestante();
 
         if(tiempo == 1){
             this.deudasService.deleteById(deudaId);

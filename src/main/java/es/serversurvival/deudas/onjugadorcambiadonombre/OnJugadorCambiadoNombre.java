@@ -14,10 +14,10 @@ public final class OnJugadorCambiadoNombre {
 
     @EventListener
     public void on (JugadorCambiadoDeNombreEvento evento) {
-        this.deudasService.findDeudasByAcredor(evento.getAntiguoNombre()).forEach(deudaAcredor -> {
+        this.deudasService.findByAcredor(evento.getAntiguoNombre()).forEach(deudaAcredor -> {
             this.deudasService.save(deudaAcredor.withAcredor(evento.getNuevoNombre()));
         });
-        this.deudasService.findDeudasByDeudor(evento.getAntiguoNombre()).forEach(deudaDeudor -> {
+        this.deudasService.findByDeudor(evento.getAntiguoNombre()).forEach(deudaDeudor -> {
             this.deudasService.save(deudaDeudor.withDeudor(evento.getNuevoNombre()));
         });
     }

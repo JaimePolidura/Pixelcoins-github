@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa.posicionesabiertas.vercartera;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistaServer;
+import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
 import es.serversurvival.empresas.ofertasaccionesserver.venderofertaaccionaserver.VenderOfertaAccionServerUseCase;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.confirmaciones.Confirmacion;

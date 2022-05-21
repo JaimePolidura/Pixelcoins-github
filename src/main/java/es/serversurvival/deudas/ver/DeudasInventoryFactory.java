@@ -46,8 +46,8 @@ public class DeudasInventoryFactory extends InventoryFactory {
     private List<ItemStack> buildItemsDeudas (String jugador) {
         List<ItemStack> itemsDeLasDeudas = new ArrayList<>();
 
-        List<Deuda> deudasJugadorDebe = this.deudasService.findDeudasByDeudor(jugador);
-        List<Deuda> deudasJugadorDeben = this.deudasService.findDeudasByDeudor(jugador);
+        List<Deuda> deudasJugadorDebe = this.deudasService.findByDeudor(jugador);
+        List<Deuda> deudasJugadorDeben = this.deudasService.findByDeudor(jugador);
 
         deudasJugadorDebe.forEach(deuda -> itemsDeLasDeudas.add(buildItemFromDeudaDeudor(deuda)));
         deudasJugadorDeben.forEach(deuda -> itemsDeLasDeudas.add(buildItemFromDeudaAcredor(deuda)));
@@ -60,8 +60,8 @@ public class DeudasInventoryFactory extends InventoryFactory {
         List<String> lore = new ArrayList<>();
         lore.add("   ");
         lore.add(ChatColor.GOLD + "Debes a: " + deuda.getAcredor());
-        lore.add(ChatColor.GOLD + "Te queda de pagar: " + ChatColor.GREEN +  FORMATEA.format(deuda.getPixelcoins_restantes()) + " PC" );
-        lore.add(ChatColor.GOLD + "Vence en: " + deuda.getTiempo_restante() + " dias");
+        lore.add(ChatColor.GOLD + "Te queda de pagar: " + ChatColor.GREEN +  FORMATEA.format(deuda.getPixelcoinsRestantes()) + " PC" );
+        lore.add(ChatColor.GOLD + "Vence en: " + deuda.getTiempoRestante() + " dias");
         lore.add(ChatColor.GOLD + "ID: " + deuda.getDeudaId());
 
         return ItemBuilder.of(Material.RED_BANNER).lore(lore).title(displayName).build();
@@ -72,8 +72,8 @@ public class DeudasInventoryFactory extends InventoryFactory {
         List<String> lore = new ArrayList<>();
         lore.add("   ");
         lore.add(ChatColor.GOLD + "Te debe: " + deuda.getDeudor());
-        lore.add(ChatColor.GOLD + "Le queda de pagar: " + ChatColor.GREEN +  FORMATEA.format(deuda.getPixelcoins_restantes()) + " PC" );
-        lore.add(ChatColor.GOLD + "Vence en: " + deuda.getTiempo_restante() + " dias");
+        lore.add(ChatColor.GOLD + "Le queda de pagar: " + ChatColor.GREEN +  FORMATEA.format(deuda.getPixelcoinsRestantes()) + " PC" );
+        lore.add(ChatColor.GOLD + "Vence en: " + deuda.getTiempoRestante() + " dias");
         lore.add(ChatColor.GOLD + "ID: " + deuda.getDeudaId());
 
         return ItemBuilder.of(Material.GREEN_BANNER).lore(lore).title(displayName).build();

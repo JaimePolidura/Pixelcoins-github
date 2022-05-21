@@ -84,10 +84,10 @@ public class DeudasMenu extends Menu implements Clickable, Refreshcable, CanGoBa
     }
 
     private void pagarDeuda (UUID deudaId) {
-        Deuda deudaAPagar = this.deudasService.getDeudaById(deudaId);
+        Deuda deudaAPagar = this.deudasService.getById(deudaId);
 
         Player jugadorQueVaAPagar = Bukkit.getPlayer(deudaAPagar.getDeudor());
-        double pixelcoinsAPagar = deudaAPagar.getPixelcoins_restantes();
+        double pixelcoinsAPagar = deudaAPagar.getPixelcoinsRestantes();
 
         if(jugadoresService.getByNombre(jugadorQueVaAPagar.getName()).getPixelcoins() < pixelcoinsAPagar){
             jugadorQueVaAPagar.sendMessage(DARK_RED + "No tienes el suficiente dinero");
@@ -98,12 +98,12 @@ public class DeudasMenu extends Menu implements Clickable, Refreshcable, CanGoBa
         Deuda deudaPagada = pagarDeudaUseCase.pagarDeuda(deudaId, jugadorQueVaAPagar.getName());
 
         Funciones.enviarMensajeYSonido(player, GOLD + "Has pagado a " + deudaPagada.getAcredor() + " toda la deuda: "
-                + GREEN + FORMATEA.format(deudaPagada.getPixelcoins_restantes()) + " PC", ENTITY_PLAYER_LEVELUP);
+                + GREEN + FORMATEA.format(deudaPagada.getPixelcoinsRestantes()) + " PC", ENTITY_PLAYER_LEVELUP);
 
         String mensajeOnline = GOLD + player.getName() + " ta ha pagado toda la deuda: " + GREEN +
-                FORMATEA.format(deudaPagada.getPixelcoins_restantes()) + " PC";
+                FORMATEA.format(deudaPagada.getPixelcoinsRestantes()) + " PC";
 
-        String mensajeOffline = player.getName() + " ta ha pagado toda la deuda: " + deudaPagada.getPixelcoins_restantes() + " PC";
+        String mensajeOffline = player.getName() + " ta ha pagado toda la deuda: " + deudaPagada.getPixelcoinsRestantes() + " PC";
         Funciones.enviarMensaje(deudaPagada.getAcredor(), mensajeOnline, mensajeOffline, ENTITY_PLAYER_LEVELUP, 10, 1);
 
         refresh();
@@ -115,7 +115,7 @@ public class DeudasMenu extends Menu implements Clickable, Refreshcable, CanGoBa
         Funciones.enviarMensajeYSonido(player, GOLD + "Has cancelado la deuda a " + deudaCancelada.getDeudor() + "!", ENTITY_PLAYER_LEVELUP);
 
         String mensajeOnline = GOLD + player.getName() + " te ha cancelado la deuda de " + GREEN +
-                FORMATEA.format(deudaCancelada.getPixelcoins_restantes()) + " PC";
+                FORMATEA.format(deudaCancelada.getPixelcoinsRestantes()) + " PC";
         Funciones.enviarMensaje(deudaCancelada.getDeudor(), mensajeOnline, mensajeOnline, ENTITY_PLAYER_LEVELUP, 10, 1);
 
         refresh();

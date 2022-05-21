@@ -1,14 +1,10 @@
-package es.serversurvival.empresas.ofertasaccionesserer._shared;
+package es.serversurvival.empresas.ofertasaccionesserver._shared;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.serversurvival.MockitoArgEqualsMatcher;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistaServer;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
-import es.serversurvival.empresas.ofertasaccionesserer.OfertasAccionesServerTestMother;
+import es.serversurvival.empresas.accionistasserver._shared.domain.TipoAccionista;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertasAccionesServerRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static es.serversurvival.MockitoArgEqualsMatcher.of;
-import static es.serversurvival.empresas.ofertasaccionesserer.OfertasAccionesServerTestMother.createOfertAccionServerJugador;
+import static es.serversurvival.empresas.ofertasaccionesserver.OfertasAccionesServerTestMother.createOfertAccionServerJugador;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;

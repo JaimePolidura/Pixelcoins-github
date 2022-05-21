@@ -2,11 +2,8 @@ package es.serversurvival.empresas.accionistasserver.cancelarofertaccionserver;
 
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.serversurvival.empresas.ofertasaccionesserer.OfertasAccionesServerTestMother;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import es.serversurvival.empresas.ofertasaccionesserver.cancelarofertaccionserver.CancelarOfertaAccionServerUseCase;
-import org.assertj.core.api.Assertions;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
-import static es.serversurvival.empresas.ofertasaccionesserer.OfertasAccionesServerTestMother.createOfertAccionServerJugador;
+import static es.serversurvival.empresas.ofertasaccionesserver.OfertasAccionesServerTestMother.createOfertAccionServerJugador;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.Mockito.*;
 

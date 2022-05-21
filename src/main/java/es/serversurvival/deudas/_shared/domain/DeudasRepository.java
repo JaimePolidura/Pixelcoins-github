@@ -7,11 +7,11 @@ import java.util.UUID;
 public interface DeudasRepository {
     void save(Deuda deuda);
 
-    Optional<Deuda> findByDeudaId(UUID id);
+    Optional<Deuda> findById(UUID id);
 
-    List<Deuda> findDeudasByAcredor(String acredor);
+    List<Deuda> findByAcredor(String acredor);
 
-    List<Deuda> findDeudasByDeudor(String deudor);
+    List<Deuda> findByDeudor(String deudor);
 
     List<Deuda> findAll();
 

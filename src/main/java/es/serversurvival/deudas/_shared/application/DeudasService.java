@@ -2,15 +2,16 @@ package es.serversurvival.deudas._shared.application;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.utils.CollectionUtils;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.deudas._shared.domain.Deuda;
 import es.serversurvival.deudas._shared.domain.DeudasRepository;
+import lombok.AllArgsConstructor;
 
 import java.util.*;
 
 import static es.serversurvival._shared.utils.CollectionUtils.*;
 
+@AllArgsConstructor
 public final class DeudasService {
     private final DeudasRepository deudasRepository;
 
@@ -18,34 +19,31 @@ public final class DeudasService {
         this.deudasRepository = DependecyContainer.get(DeudasRepository.class);
     }
 
-    public void save(String deudor, String acredor, int pixelcoins, int tiempo, int interes) {
+    public UUID save(String deudor, String acredor, int pixelcoins, int tiempo, int interes) {
         String fechaHoy = Funciones.DATE_FORMATER_LEGACY.format(new Date());
         int cuota = (int) Math.round((double) pixelcoins / tiempo);
+        UUID deudaID = UUID.randomUUID();
 
-        this.deudasRepository.save(new Deuda(UUID.randomUUID(), deudor, acredor, pixelcoins, tiempo, interes, cuota, fechaHoy));
+        this.deudasRepository.save(new Deuda(deudaID, deudor, acredor, pixelcoins, tiempo, interes, cuota, fechaHoy));
+
+        return deudaID;
     }
 
     public void save(Deuda deuda){
         this.deudasRepository.save(deuda);
     }
 
-    public Deuda getDeudaById(UUID id) {
-        return this.deudasRepository.findByDeudaId(id)
+    public Deuda getById(UUID id) {
+        return this.deudasRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFound("Deuda not found exception"));
     }
 
-    public List<Deuda> findDeudasByAcredor(String acredor) {
-        return this.deudasRepository.findDeudasByAcredor(acredor);
+    public List<Deuda> findByAcredor(String acredor) {
+        return this.deudasRepository.findByAcredor(acredor);
     }
 
-    public List<Deuda> findDeudasByDeudor(String deudor) {
-        return this.deudasRepository.findDeudasByDeudor(deudor);
-    }
-
-    public boolean isDeudor(UUID deudaId, String jugador){
-        var deudaOptional = this.deudasRepository.findByDeudaId(deudaId);
-
-        return deudaOptional.isPresent() && deudaOptional.get().getDeudor().equals(jugador);
+    public List<Deuda> findByDeudor(String deudor) {
+        return this.deudasRepository.findByDeudor(deudor);
     }
 
     public List<Deuda> findAll() {
@@ -53,11 +51,11 @@ public final class DeudasService {
     }
 
     public int getAllPixelcoinsDeudasAcredor (String jugador) {
-        return getSumaTotalListInteger( findDeudasByAcredor(jugador), Deuda::getPixelcoins_restantes);
+        return getSumaTotalListInteger( findByAcredor(jugador), Deuda::getPixelcoinsRestantes);
     }
 
     public int getAllPixelcoinsDeudasDeudor (String jugador) {
-        return getSumaTotalListInteger( findDeudasByDeudor(jugador), Deuda::getPixelcoins_restantes);
+        return getSumaTotalListInteger( findByDeudor(jugador), Deuda::getPixelcoinsRestantes);
     }
 
     public Map<String, List<Deuda>> getAllDeudasDeudorMap () {
@@ -65,7 +63,7 @@ public final class DeudasService {
     }
 
     public Map<String, List<Deuda>> getAllDeudasAcredorMap () {
-        return mergeMapList(this.findAll(), Deuda::getDeudor);
+        return mergeMapList(this.findAll(), Deuda::getAcredor);
     }
 
     public void deleteById(UUID id) {

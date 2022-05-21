@@ -1,4 +1,4 @@
-package es.serversurvival.empresas.accionistasempresasserver._shared.domain;
+package es.serversurvival.empresas.accionistasserver._shared.domain;
 
 import java.util.List;
 import java.util.Optional;

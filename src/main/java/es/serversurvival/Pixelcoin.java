@@ -20,9 +20,9 @@ import es.serversurvival.bolsa.posicionesabiertas._shared.infrastructure.MySQLPo
 import es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionesCerradasRepository;
 import es.serversurvival.bolsa.posicionescerradas._shared.infrastructure.MySQLPosicionesCerradasRepository;
-import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasServerService;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistasServerRepository;
-import es.serversurvival.empresas.accionistasempresasserver._shared.infrastructure.MySQLAccionistasServerRepository;
+import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
+import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistasServerRepository;
+import es.serversurvival.empresas.accionistasserver._shared.infrastructure.MySQLAccionistasServerRepository;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertasAccionesServerRepository;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.infrastructure.MySQLOfertasAccionesServerRepository;

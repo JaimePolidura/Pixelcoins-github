@@ -4,7 +4,7 @@ import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
+import es.serversurvival.empresas.accionistasserver._shared.domain.TipoAccionista;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.AumentoConfirmacion;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;

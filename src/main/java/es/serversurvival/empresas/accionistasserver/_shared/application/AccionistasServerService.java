@@ -1,10 +1,10 @@
-package es.serversurvival.empresas.accionistasempresasserver._shared.application;
+package es.serversurvival.empresas.accionistasserver._shared.application;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistaServer;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistasServerRepository;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
+import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
+import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistasServerRepository;
+import es.serversurvival.empresas.accionistasserver._shared.domain.TipoAccionista;
 import lombok.AllArgsConstructor;
 
 import java.util.Date;

@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.function.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import es.serversurvival._shared.DependecyContainer;
@@ -23,7 +22,6 @@ import es.serversurvival.bolsa.posicionesabiertas._shared.application.Posiciones
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival.deudas._shared.application.DeudasService;
 import es.serversurvival.deudas._shared.domain.Deuda;
-import es.serversurvival.deudas._shared.domain.DeudasRepository;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
@@ -135,14 +133,14 @@ public final class Funciones {
             // Deudas acredor
             if(mapDeudasAcredor.get(jugador.getNombre()) != null){
                 activosTotales += mapDeudasAcredor.get(jugador.getNombre()).stream()
-                        .mapToInt(Deuda::getPixelcoins_restantes)
+                        .mapToInt(Deuda::getPixelcoinsRestantes)
                         .sum();
             }
 
             //Deudas deudor
             if(mapDeudasDeudor.get(jugador.getNombre()) != null){
                 activosTotales -= mapDeudasDeudor.get(jugador.getNombre()).stream()
-                        .mapToInt(Deuda::getPixelcoins_restantes)
+                        .mapToInt(Deuda::getPixelcoinsRestantes)
                         .sum();
             }
 

@@ -1,10 +1,10 @@
 package es.serversurvival.empresas.accionistasserver;
 
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistaServer;
+import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
 
 import java.util.UUID;
 
-import static es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista.*;
+import static es.serversurvival.empresas.accionistasserver._shared.domain.TipoAccionista.*;
 
 public final class AccionistasServerTestMother {
     public static AccionistaServer createAccionnistaTipoJugaodor(String username, String empresa){

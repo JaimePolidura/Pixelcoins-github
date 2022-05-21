@@ -1,11 +1,9 @@
 package es.serversurvival.empresas.accionistasserver._shared;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.serversurvival.MockitoArgEqualsMatcher;
-import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasServerService;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistaServer;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistasServerRepository;
-import org.assertj.core.api.Assertions;
+import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
+import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
+import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistasServerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static es.serversurvival.MockitoArgEqualsMatcher.of;
-import static es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista.EMPRESA;
+import static es.serversurvival.empresas.accionistasserver._shared.domain.TipoAccionista.EMPRESA;
 import static es.serversurvival.empresas.accionistasserver.AccionistasServerTestMother.createAccionnistaTipoJugaodor;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;

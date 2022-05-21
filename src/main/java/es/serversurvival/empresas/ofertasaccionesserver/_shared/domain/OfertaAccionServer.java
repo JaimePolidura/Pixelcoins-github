@@ -1,13 +1,17 @@
 package es.serversurvival.empresas.ofertasaccionesserver._shared.domain;
 
 import es.jaime.javaddd.domain.Aggregate;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
+import es.serversurvival.empresas.accionistasserver._shared.domain.TipoAccionista;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.UUID;
 
 @AllArgsConstructor
+@ToString
+@EqualsAndHashCode(callSuper = false)
 public final class OfertaAccionServer extends Aggregate {
     @Getter private final UUID ofertaAccioneServerId;
     @Getter private final String nombreOfertante;

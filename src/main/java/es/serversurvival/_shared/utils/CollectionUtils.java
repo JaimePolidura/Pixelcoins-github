@@ -66,7 +66,7 @@ public final class CollectionUtils {
         for(V element : toIteratem){
             K mappedKey = keyMapper.apply(element);
 
-            if(acumulator.get(element) == null){
+            if(acumulator.get(mappedKey) == null){
                 acumulator.put(mappedKey, listOf(element));
             }else{
                 List<V> listOfValues = acumulator.get(mappedKey);

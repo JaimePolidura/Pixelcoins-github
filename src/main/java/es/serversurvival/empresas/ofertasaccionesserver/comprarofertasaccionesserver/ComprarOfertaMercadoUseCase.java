@@ -1,75 +1,73 @@
 package es.serversurvival.empresas.ofertasaccionesserver.comprarofertasaccionesserver;
 
+import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
-import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
-import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasServerService;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistaServer;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
+import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
+import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
+import es.serversurvival.empresas.accionistasserver._shared.domain.TipoAccionista;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
+import lombok.AllArgsConstructor;
 
 import java.util.UUID;
 
-
+@AllArgsConstructor
 public final class ComprarOfertaMercadoUseCase {
     private final JugadoresService jugadoresService;
     private final OfertasAccionesServerService ofertasAccionesServerService;
-    private final AccionistasServerService accionistasEmpresasServerService;
+    private final AccionistasServerService accionistasServerService;
     private final EmpresasService empresasService;
+    private final EventBus eventBus;
 
     public ComprarOfertaMercadoUseCase () {
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.ofertasAccionesServerService= DependecyContainer.get(OfertasAccionesServerService.class);
-        this.accionistasEmpresasServerService = DependecyContainer.get(AccionistasServerService.class);
+        this.accionistasServerService = DependecyContainer.get(AccionistasServerService.class);
         this.empresasService = DependecyContainer.get(EmpresasService.class);
+        this.eventBus = DependecyContainer.get(EventBus.class);
     }
 
     public void comprarOfertaMercadoAccionServer (String compradorName, UUID idOfeta, int cantidadAComprar) {
         var ofertaAComprar = ofertasAccionesServerService.getById(idOfeta);
         var jugadorComprador = this.jugadoresService.getByNombre(compradorName);
         var empresa = this.empresasService.getByNombre(ofertaAComprar.getEmpresa());
-        var accionistaEmpresaServer = this.accionistasEmpresasServerService.getById(ofertaAComprar.getAccionistaEmpresaServerId());
+        var accionistaEmpresaServer = this.accionistasServerService.getById(ofertaAComprar.getAccionistaEmpresaServerId());
         this.ensusureCorrectQuantityCantidad(cantidadAComprar, ofertaAComprar);
         this.ensureCompradorNotHisSelf(compradorName, ofertaAComprar);
         this.ensureHasPixelcoins(ofertaAComprar, jugadorComprador, cantidadAComprar);
         double precioTotalAPagar = ofertaAComprar.getPrecio() * cantidadAComprar;
 
         this.decreaseOfertaCantidadOrRemove(cantidadAComprar, ofertaAComprar);
-        this.decreaseAccionistaEmpresaServerCantidadOrRemove(cantidadAComprar, accionistaEmpresaServer);
-        this.accionistasEmpresasServerService.save(compradorName, TipoAccionista.JUGADOR, empresa.getNombre(),
+        this.decreaseAccionistaServerCantidadOrRemove(cantidadAComprar, accionistaEmpresaServer);
+        this.accionistasServerService.save(compradorName, TipoAccionista.JUGADOR, empresa.getNombre(),
                 cantidadAComprar, ofertaAComprar.getPrecio());
-
         this.jugadoresService.save(jugadorComprador.decrementPixelcoinsBy(precioTotalAPagar).incrementGastosBy(precioTotalAPagar));
         if(ofertaAComprar.esTipoOfertanteJugador())
-            payPixelcoinsToJugadorVendedor(cantidadAComprar, ofertaAComprar, precioTotalAPagar);
+            payPixelcoinsToJugadorVendedor(ofertaAComprar, precioTotalAPagar);
         else
             this.empresasService.save(empresa.incrementPixelcoinsBy(precioTotalAPagar));
 
-        Pixelcoin.publish(new EmpresaServerAccionCompradaEvento(compradorName, precioTotalAPagar, cantidadAComprar, ofertaAComprar, ofertaAComprar.getEmpresa()));
+        this.eventBus.publish(EmpresaServerAccionComprada.of(compradorName, ofertaAComprar.getNombreOfertante(), ofertaAComprar.getTipoOfertante(),
+                empresa.getNombre(), precioTotalAPagar, cantidadAComprar));
     }
 
-    private void payPixelcoinsToJugadorVendedor(int cantidadAComprar, OfertaAccionServer ofertaAComprar, double precioTotalAPagar) {
+    private void payPixelcoinsToJugadorVendedor(OfertaAccionServer ofertaAComprar, double precioTotalAPagar) {
         var vendedor = jugadoresService.getByNombre(ofertaAComprar.getNombreOfertante());
 
-        double beneficiosPerdidas = (ofertaAComprar.getPrecio() - ofertaAComprar.getPrecioApertura()) * cantidadAComprar;
-
-        if(beneficiosPerdidas >= 0)
-            this.jugadoresService.save(vendedor.incrementPixelcoinsBy(precioTotalAPagar).incrementGastosBy(beneficiosPerdidas));
-        else
-            this.jugadoresService.save(vendedor.incrementPixelcoinsBy(precioTotalAPagar).incrementIngresosBy(beneficiosPerdidas));
+        this.jugadoresService.save(vendedor.incrementPixelcoinsBy(precioTotalAPagar).incrementIngresosBy(precioTotalAPagar));
     }
 
-    private void decreaseAccionistaEmpresaServerCantidadOrRemove(int cantidadAComprar, AccionistaServer accionsta){
+    private void decreaseAccionistaServerCantidadOrRemove(int cantidadAComprar, AccionistaServer accionsta){
         if(accionsta.getCantidad() - cantidadAComprar <= 0)
-            this.accionistasEmpresasServerService.deleteById(accionsta.getAccionEmpresaServerId());
+            this.accionistasServerService.deleteById(accionsta.getAccionEmpresaServerId());
         else
-            this.accionistasEmpresasServerService.save(accionsta.decreaseCantidad(cantidadAComprar));
+            this.accionistasServerService.save(accionsta.decreaseCantidad(cantidadAComprar));
     }
 
     private void decreaseOfertaCantidadOrRemove(int cantidadAComprar, OfertaAccionServer ofertaAComprar) {
@@ -85,8 +83,9 @@ public final class ComprarOfertaMercadoUseCase {
     }
 
     private void ensureCompradorNotHisSelf(String compradorName, OfertaAccionServer ofertaAComprar){
-        if(compradorName.equalsIgnoreCase(ofertaAComprar.getNombreOfertante()))
+        if(compradorName.equalsIgnoreCase(ofertaAComprar.getNombreOfertante())){
             throw new CannotBeYourself("No te puedes autocomprar las accioens");
+        }
     }
 
     private void ensusureCorrectQuantityCantidad(int cantidad, OfertaAccionServer ofertaAComprar){

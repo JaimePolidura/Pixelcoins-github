@@ -1,12 +1,12 @@
-package es.serversurvival.empresas.accionistasempresasserver._shared.infrastructure;
+package es.serversurvival.empresas.accionistasserver._shared.infrastructure;
 
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
 import es.jaimetruman.select.Select;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistaServer;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistasServerRepository;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
+import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
+import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistasServerRepository;
+import es.serversurvival.empresas.accionistasserver._shared.domain.TipoAccionista;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

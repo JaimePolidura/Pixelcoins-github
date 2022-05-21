@@ -4,7 +4,7 @@ import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertasAccionesServerRepository;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
+import es.serversurvival.empresas.accionistasserver._shared.domain.TipoAccionista;
 import lombok.AllArgsConstructor;
 
 import java.util.Date;

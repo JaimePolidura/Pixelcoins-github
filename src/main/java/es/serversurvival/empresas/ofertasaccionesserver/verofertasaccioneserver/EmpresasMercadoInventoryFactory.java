@@ -5,7 +5,7 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
+import es.serversurvival.empresas.accionistasserver._shared.domain.TipoAccionista;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;

@@ -27,17 +27,17 @@ public final class MySQLDeudasRepository extends DataBaseRepository<Deuda, UUID>
     }
 
     @Override
-    public Optional<Deuda> findByDeudaId(UUID id) {
+    public Optional<Deuda> findById(UUID id) {
         return super.findById(id);
     }
 
     @Override
-    public List<Deuda> findDeudasByAcredor(String acredor) {
+    public List<Deuda> findByAcredor(String acredor) {
         return buildListFromQuery(Select.from(TABLE_NAME).where("acredor").equal(acredor));
     }
 
     @Override
-    public List<Deuda> findDeudasByDeudor(String deudor) {
+    public List<Deuda> findByDeudor(String deudor) {
         return buildListFromQuery(Select.from(TABLE_NAME).where("deudor").equal(deudor));
     }
 

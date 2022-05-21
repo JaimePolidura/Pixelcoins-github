@@ -5,7 +5,7 @@ import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasServerService;
+import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 
 import java.util.UUID;
 
-import static es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista.*;
+import static es.serversurvival.empresas.accionistasserver._shared.domain.TipoAccionista.*;
 
 @AllArgsConstructor
 public final class RealizarIPOUseCase {

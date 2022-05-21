@@ -21,13 +21,13 @@ public final class CancelarDeudaUseCase {
 
         this.deudasService.deleteById(deudaId);
 
-        Pixelcoin.publish(new DeudaCanceladaEvento(playerName, deudaACancelar.getDeudor(), deudaACancelar.getPixelcoins_restantes()));
+        Pixelcoin.publish(new DeudaCanceladaEvento(playerName, deudaACancelar.getDeudor(), deudaACancelar.getPixelcoinsRestantes()));
 
         return deudaACancelar;
     }
 
     private Deuda ensureDeudaExist(UUID deudaId){
-        return this.deudasService.getDeudaById(deudaId);
+        return this.deudasService.getById(deudaId);
     }
 
     private void ensureIsAcredor(Deuda deuda, String playerName){

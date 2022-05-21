@@ -1,10 +1,10 @@
-package es.serversurvival.empresas.accionistasempresasserver.onpixelcoinssacadas;
+package es.serversurvival.empresas.accionistasserver.onpixelcoinssacadas;
 
 import es.jaime.EventListener;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasServerService;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistaServer;
+import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
+import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
 import es.serversurvival.empresas.empresas.sacar.PixelcoinsSacadasEvento;
 
 import java.util.HashSet;

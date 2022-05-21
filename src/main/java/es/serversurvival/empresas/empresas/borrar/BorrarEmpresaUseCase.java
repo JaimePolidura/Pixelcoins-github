@@ -3,7 +3,7 @@ package es.serversurvival.empresas.empresas.borrar;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasServerService;
+import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;

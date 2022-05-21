@@ -1,9 +1,9 @@
-package es.serversurvival.empresas.accionistasempresasserver.onempresaborrada;
+package es.serversurvival.empresas.accionistasserver.onempresaborrada;
 
 import es.jaime.EventListener;
 import es.jaime.Priority;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasServerService;
+import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.empresas.borrar.EmpresaBorrada;
 
 public final class OnEmpresaBorrada {

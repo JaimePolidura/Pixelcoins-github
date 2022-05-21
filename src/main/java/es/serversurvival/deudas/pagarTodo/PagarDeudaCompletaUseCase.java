@@ -25,7 +25,7 @@ public final class PagarDeudaCompletaUseCase {
         this.ensureIsDeudor(deudaAPagar, deudorName);
         var deudorJugador = this.ensureDeudorHasEnoughPixelcoins(deudaAPagar);
 
-        int pixelcoinsDeuda = deudaAPagar.getPixelcoins_restantes();
+        int pixelcoinsDeuda = deudaAPagar.getPixelcoinsRestantes();
         String acredorNombre = deudaAPagar.getAcredor();
         Jugador acredor = jugadoresService.getByNombre(deudaAPagar.getAcredor());
 
@@ -40,14 +40,14 @@ public final class PagarDeudaCompletaUseCase {
     private Jugador ensureDeudorHasEnoughPixelcoins(Deuda deuda){
         Jugador jugadorDeudor = this.jugadoresService.getByNombre(deuda.getDeudor());
 
-        if(jugadorDeudor.getPixelcoins() < deuda.getPixelcoins_restantes())
+        if(jugadorDeudor.getPixelcoins() < deuda.getPixelcoinsRestantes())
             throw new NotEnoughPixelcoins("No tienes las suficientes pixelcoins para pagar la dueda");
 
         return jugadorDeudor;
     }
 
     private Deuda ensureDeudaExists(UUID deudaId){
-        return this.deudasService.getDeudaById(deudaId);
+        return this.deudasService.getById(deudaId);
     }
 
     private void ensureIsDeudor(Deuda deuda, String deudorName){

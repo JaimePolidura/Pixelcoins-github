@@ -2,8 +2,8 @@ package es.serversurvival.empresas.empresas.miempresa;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.empresas.accionistasempresasserver._shared.application.AccionistasServerService;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.AccionistaServer;
+import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
+import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;

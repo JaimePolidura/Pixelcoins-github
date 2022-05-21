@@ -6,7 +6,7 @@ import es.jaime.repository.DataBaseRepository;
 import es.jaimetruman.select.Select;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertasAccionesServerRepository;
-import es.serversurvival.empresas.accionistasempresasserver._shared.domain.TipoAccionista;
+import es.serversurvival.empresas.accionistasserver._shared.domain.TipoAccionista;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
