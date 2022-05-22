@@ -14,7 +14,7 @@ import java.util.UUID;
 public final class PixelcoinsPrestadasEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
     @Getter private final String acredor;
     @Getter private final String deudor;
-    @Getter private final int pixelcoins;
+    @Getter private final double pixelcoins;
     @Getter private final int intereses;
     @Getter private final int dias;
 

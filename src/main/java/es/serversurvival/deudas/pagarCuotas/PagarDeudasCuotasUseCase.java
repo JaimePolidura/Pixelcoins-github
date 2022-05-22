@@ -49,7 +49,7 @@ public final class PagarDeudasCuotasUseCase {
     private void pagarDeudaYBorrarSiEsNecesario(Deuda deuda, Jugador acredor, Jugador deudor) {
         String deudorNombre = deudor.getNombre();
         String acredorNombre = acredor.getNombre();
-        int cuota = deuda.getCouta();
+        double cuota = deuda.getCouta();
         UUID deudaId = deuda.getDeudaId();
         int tiempo = deuda.getTiempoRestante();
 

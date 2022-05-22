@@ -27,8 +27,8 @@ public class DeudasDisplayScoreboard implements SingleScoreboard {
         Objective objective = scoreboard.getObjective("deudas");
 
         Jugador jugadorScoreboear = jugadoresService.getByNombre(jugador);
-        int totalAPagar = this.deudasService.getAllPixelcoinsDeudasDeudor(jugador);
-        int totalASerPagado = this.deudasService.getAllPixelcoinsDeudasDeudor(jugador);
+        double totalAPagar = this.deudasService.getAllPixelcoinsDeudasDeudor(jugador);
+        double totalASerPagado = this.deudasService.getAllPixelcoinsDeudasDeudor(jugador);
 
         addLineToScoreboard(objective, ChatColor.GOLD + "Pixelcoins que debes: " + ChatColor.GREEN + FORMATEA.format(totalAPagar) + " PC", 0);
         addLineToScoreboard(objective, ChatColor.GOLD + "Pixelcoins que te deben: " + ChatColor.GREEN + FORMATEA.format(totalASerPagado) + " PC", -1);

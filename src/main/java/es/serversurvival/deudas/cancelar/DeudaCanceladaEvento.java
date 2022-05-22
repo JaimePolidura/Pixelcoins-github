@@ -12,7 +12,7 @@ import lombok.ToString;
 public final class DeudaCanceladaEvento extends PixelcoinsEvento {
     @Getter private final String acredor;
     @Getter private final String deudor;
-    @Getter private final int pixelcoinsRestantes;
+    @Getter private final double pixelcoinsRestantes;
 
     public static DeudaCanceladaEvento of(String acredor, String deudor, int pixelcoinsRestantes){
         return new DeudaCanceladaEvento(acredor, deudor, pixelcoinsRestantes);

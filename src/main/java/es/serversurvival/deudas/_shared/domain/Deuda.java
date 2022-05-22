@@ -16,13 +16,13 @@ public final class Deuda extends Aggregate {
     @Getter private final UUID deudaId;
     @Getter private final String deudor;
     @Getter private final String acredor;
-    @Getter private final int pixelcoinsRestantes;
+    @Getter private final double pixelcoinsRestantes;
     @Getter private final int tiempoRestante;
     @Getter private final int interes;
-    @Getter private final int couta;
+    @Getter private final double couta;
     @Getter private final String fechaUltimapaga;
 
-    public Deuda decrementPixelcoinsRestantes(int pixelcoinsRestantes){
+    public Deuda decrementPixelcoinsRestantes(double pixelcoinsRestantes){
         return new Deuda(deudaId, deudor, acredor, this.pixelcoinsRestantes - pixelcoinsRestantes,
                 tiempoRestante, interes, couta, fechaUltimapaga);
     }

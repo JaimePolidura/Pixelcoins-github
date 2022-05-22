@@ -19,7 +19,7 @@ public class DeudasService {
         this.deudasRepository = DependecyContainer.get(DeudasRepository.class);
     }
 
-    public UUID save(String deudor, String acredor, int pixelcoins, int tiempo, int interes) {
+    public UUID save(String deudor, String acredor, double pixelcoins, int tiempo, int interes) {
         String fechaHoy = Funciones.hoy();
         int cuota = (int) Math.round((double) pixelcoins / tiempo);
         UUID deudaID = UUID.randomUUID();
@@ -50,12 +50,12 @@ public class DeudasService {
         return this.deudasRepository.findAll();
     }
 
-    public int getAllPixelcoinsDeudasAcredor (String jugador) {
-        return getSumaTotalListInteger( findByAcredor(jugador), Deuda::getPixelcoinsRestantes);
+    public double getAllPixelcoinsDeudasAcredor (String jugador) {
+        return getSumaTotalListDouble( findByAcredor(jugador), Deuda::getPixelcoinsRestantes);
     }
 
-    public int getAllPixelcoinsDeudasDeudor (String jugador) {
-        return getSumaTotalListInteger( findByDeudor(jugador), Deuda::getPixelcoinsRestantes);
+    public double getAllPixelcoinsDeudasDeudor (String jugador) {
+        return getSumaTotalListDouble( findByDeudor(jugador), Deuda::getPixelcoinsRestantes);
     }
 
     public Map<String, List<Deuda>> getAllDeudasDeudorMap () {

@@ -133,14 +133,14 @@ public final class Funciones {
             // Deudas acredor
             if(mapDeudasAcredor.get(jugador.getNombre()) != null){
                 activosTotales += mapDeudasAcredor.get(jugador.getNombre()).stream()
-                        .mapToInt(Deuda::getPixelcoinsRestantes)
+                        .mapToDouble(Deuda::getPixelcoinsRestantes)
                         .sum();
             }
 
             //Deudas deudor
             if(mapDeudasDeudor.get(jugador.getNombre()) != null){
                 activosTotales -= mapDeudasDeudor.get(jugador.getNombre()).stream()
-                        .mapToInt(Deuda::getPixelcoinsRestantes)
+                        .mapToDouble(Deuda::getPixelcoinsRestantes)
                         .sum();
             }
 
