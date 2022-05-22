@@ -18,6 +18,10 @@ public final class DependecyContainer {
         dependencies.putAll(dependenciesToAdd);
     }
 
+    public static void clear(){
+        dependencies.clear();
+    }
+
     public static <T> T get(Class<T> depencyClass){
         return (T) dependencies.get(depencyClass);
     }

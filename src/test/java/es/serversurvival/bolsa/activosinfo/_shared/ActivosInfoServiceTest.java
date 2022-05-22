@@ -1,9 +1,15 @@
 package es.serversurvival.bolsa.activosinfo._shared;
 
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.bolsa.activosinfo.DepencyContainerTipoActivoInfoMocks;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfoCacheRepository;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.acciones.AccionesApiService;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.criptomonedas.CriptomonedasApiService;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.materiasprimas.MateriasPrimasApiService;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +28,10 @@ import static org.mockito.Mockito.*;
 public final class ActivosInfoServiceTest {
     @Mock private ActivoInfoCacheRepository repositoryCache;
     private ActivosInfoService service;
+
+    static  {
+        DepencyContainerTipoActivoInfoMocks.loadDepencyContainer();
+    }
 
     @BeforeEach
     public void init(){
