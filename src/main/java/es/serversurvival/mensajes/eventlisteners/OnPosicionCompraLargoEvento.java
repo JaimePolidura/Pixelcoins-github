@@ -2,7 +2,7 @@ package es.serversurvival.mensajes.eventlisteners;
 
 import es.jaime.EventListener;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.PosicionCompraLargoEvento;
+import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbiertaEvento;
 import es.serversurvival.mensajes._shared.application.MensajesService;
 
 public final class OnPosicionCompraLargoEvento {
@@ -13,7 +13,7 @@ public final class OnPosicionCompraLargoEvento {
     }
 
     @EventListener
-    public void on(PosicionCompraLargoEvento evento){
+    public void on(PosicionAbiertaEvento evento){
         mensajesService.save(evento.getComprador(), "Se ha ejecutado la orden de: " + evento.getNombreActivo() + " -" + evento.getCantidadPosicion() * evento.getPrecioUnidad() + " PC");
     }
 }

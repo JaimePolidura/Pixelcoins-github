@@ -88,7 +88,7 @@ public final class EjecutarOrdenesPreMarketUseCase {
             cantidad = (int) (pixelcoinsJugador / activoInfo.getPrecio());
 
         if(cantidad == 0) {
-            Pixelcoin.publish(new OrdenNoEjecutadoEvento(jugador, orden));
+            Pixelcoin.publish(new OrdenNoEjecutadoEvento(jugador, orden.getNombreActivo(), orden.getCantidad()));
             return;
         }
 
@@ -110,7 +110,7 @@ public final class EjecutarOrdenesPreMarketUseCase {
         double comision = redondeoDecimales(reducirPorcentaje(valorTotal, 100 - PORCENTAJE_CORTO), 2);
 
         if(comision > dineroJugador){
-            Pixelcoin.publish(new OrdenNoEjecutadoEvento(jugador.getNombre(), orden));
+            Pixelcoin.publish(new OrdenNoEjecutadoEvento(jugador.getNombre(), orden.getNombreActivo(), orden.getCantidad()));
             return;
         }
 

@@ -11,6 +11,8 @@ import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenPremarketCo
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.OrdenAbiertaEvento;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
+import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbiertaEvento;
+import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival._shared.utils.Funciones;
@@ -82,7 +84,9 @@ public class VenderCortoComandoRunner implements CommandRunnerArgs<VenderCortoCo
     }
 
     @EventListener
-    public void onVentaCortoBolsa (PosicionVentaCortoEvento evento) {
+    public void onVentaCortoBolsa (PosicionAbiertaEvento evento) {
+        if(evento.getTipoPosicion() == TipoPosicion.LARGO) return;
+
         Player player = Bukkit.getPlayer(evento.getComprador());
 
         Funciones.enviarMensajeYSonido( player, GOLD + "Te has puesto corto en " + evento.getNombreActivo() + " en " +

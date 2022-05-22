@@ -26,7 +26,7 @@ public final class PosicionVentaLargoEvento extends PosicionCerradaEvento {
 
     @Override
     public Transaccion buildTransaccion() {
-        return new Transaccion(UUID.randomUUID(), formatFecha(), ticker, vendedor, (int) valorTotal, "", TipoTransaccion.BOLSA_VENTA);
+        return new Transaccion(UUID.randomUUID(), formatFecha(), ticker, vendedor, (int) valorTotal, "", TipoTransaccion.BOLSA_LARGO_VENTA);
     }
 
     @Override

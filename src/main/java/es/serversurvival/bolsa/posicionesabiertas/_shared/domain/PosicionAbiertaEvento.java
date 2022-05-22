@@ -2,26 +2,38 @@ package es.serversurvival.bolsa.posicionesabiertas._shared.domain;
 
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.transacciones._shared.domain.EventoTipoTransaccion;
+import es.serversurvival.transacciones._shared.domain.Transaccion;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
-public abstract class PosicionAbiertaEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
-    @Getter protected final String comprador;
-    @Getter protected final String ticker;
-    @Getter protected final int cantidadPosicion;
-    @Getter protected final double precioUnidad;
-    @Getter protected final SupportedTipoActivo tipoActivo;
-    @Getter protected final double precioTotal;
-    @Getter protected final String nombreActivo;
+import java.util.UUID;
 
-    public PosicionAbiertaEvento(String comprador, double precioUnidad, int cantidad, double precioTotal, String ticker,
-                                 SupportedTipoActivo tipoActivo, String nombreValor) {
-        this.cantidadPosicion = cantidad;
-        this.tipoActivo = tipoActivo;
-        this.precioUnidad = precioUnidad;
-        this.ticker = ticker;
-        this.precioTotal = precioTotal;
-        this.nombreActivo = nombreValor;
-        this.comprador = comprador;
+import static es.serversurvival.transacciones._shared.domain.TipoTransaccion.BOLSA_LARGO_COMPRA;
+import static es.serversurvival.transacciones._shared.domain.TipoTransaccion.BOLSA_CORTO_VENTA;
+
+@AllArgsConstructor
+@ToString
+public final class PosicionAbiertaEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
+    @Getter private final String comprador;
+    @Getter private final String ticker;
+    @Getter private final int cantidadPosicion;
+    @Getter private final double precioUnidad;
+    @Getter private final SupportedTipoActivo tipoActivo;
+    @Getter private final double precioTotal;
+    @Getter private final String nombreActivo;
+    @Getter private final TipoPosicion tipoPosicion;
+
+    @Override
+    public Transaccion buildTransaccion() {
+        return new Transaccion(UUID.randomUUID(), formatFecha(), ticker, comprador,
+                (int) precioTotal, ticker, tipoPosicion == TipoPosicion.LARGO ? BOLSA_LARGO_COMPRA : BOLSA_CORTO_VENTA);
+    }
+
+    public static PosicionAbiertaEvento of(String comprador, String ticker, int cantidadPosicion, double precioUnidad,
+                                           SupportedTipoActivo tipoActivo, double precioTotal, String nombreActivo, TipoPosicion tipoPosicion){
+        return new PosicionAbiertaEvento(comprador, ticker, cantidadPosicion, precioUnidad, tipoActivo, precioTotal, nombreActivo, tipoPosicion);
     }
 }

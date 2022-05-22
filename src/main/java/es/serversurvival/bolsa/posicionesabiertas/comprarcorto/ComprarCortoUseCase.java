@@ -46,7 +46,7 @@ public final class ComprarCortoUseCase {
         this.addPixelcoinsToJugaodor(jugador, revalorizacionTotal, pixelcoinsJugador);
 
         Pixelcoin.publish(new PosicionCompraCortoEvento(poscionAComprarCorto.getJugador(), ticker, activoInfo.getNombreActivoLargo(),
-                precioApertura, fechaApertura, activoInfo.getPrecio(), cantidad, rentabilidad, ACCIONES));
+                precioApertura, fechaApertura, activoInfo.getPrecio(), cantidad, ACCIONES));
     }
 
     private void ensureCantidadCorrectFormat(PosicionAbierta posicionAbierta, int cantidad){

@@ -14,7 +14,7 @@ public final class OnOrdenNoEjutada {
 
     @EventListener
     public void on (OrdenNoEjecutadoEvento e) {
-        this.mensajesService.save(e.getJugador(), "No se ha podido ejecutar la orden de "
-                + e.getOrden().getNombreActivo() + " por que no tenias las suficintes pixelcoins");
+        this.mensajesService.save(e.getJugadorNombre(), "No se ha podido ejecutar la orden de "
+                + e.getNombreActivo() + " por que no tenias las suficintes pixelcoins");
     }
 }

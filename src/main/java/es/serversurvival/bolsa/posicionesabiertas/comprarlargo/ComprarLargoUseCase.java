@@ -5,10 +5,13 @@ import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbiertaEvento;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
+
+import static es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion.*;
 
 public final class ComprarLargoUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
@@ -27,10 +30,11 @@ public final class ComprarLargoUseCase {
 
         double totalPrice = precioUnidad * cantidad;
 
-        this.posicionesAbiertasSerivce.save(jugadorNombre, tipoActivo, nombreActivo, cantidad, precioUnidad, TipoPosicion.LARGO);
+        this.posicionesAbiertasSerivce.save(jugadorNombre, tipoActivo, nombreActivo, cantidad, precioUnidad, LARGO);
         this.jugadoresService.save(jugador.decrementPixelcoinsBy(totalPrice));
 
-        Pixelcoin.publish(new PosicionCompraLargoEvento(jugadorNombre, precioUnidad, cantidad, cantidad*precioUnidad, nombreActivo, tipoActivo));
+        Pixelcoin.publish(PosicionAbiertaEvento.of(jugadorNombre, nombreActivo, cantidad, precioUnidad, tipoActivo,
+                precioUnidad * cantidad, nombreActivo, LARGO));
     }
 
     private double getPrice(SupportedTipoActivo tipoActivo, String nombreActivo){

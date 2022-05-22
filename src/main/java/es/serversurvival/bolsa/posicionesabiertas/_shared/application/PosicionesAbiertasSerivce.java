@@ -17,7 +17,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 
-public final class PosicionesAbiertasSerivce {
+public class PosicionesAbiertasSerivce {
     public static final double PORCENTAJE_CORTO = 5;
 
     private final PosicionesAbiertasRepository repositoryDb;
@@ -73,7 +73,7 @@ public final class PosicionesAbiertasSerivce {
         return this.repositoryDb.findByNombreActivo(nombreActivo);
     }
 
-    public boolean existsNombreActivo(String nombreActivo){
+    public boolean existsByNombreActivo(String nombreActivo){
         return this.findByNombreActivo(nombreActivo).stream()
                 .anyMatch(posicionAbierta -> posicionAbierta.getNombreActivo().equalsIgnoreCase(nombreActivo));
     }

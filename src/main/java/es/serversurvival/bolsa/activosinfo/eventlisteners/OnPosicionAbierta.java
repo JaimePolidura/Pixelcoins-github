@@ -6,8 +6,10 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbiertaEvento;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 
+@AllArgsConstructor
 public final class OnPosicionAbierta {
     private final ActivosInfoService activoInfoService;
 
@@ -18,13 +20,13 @@ public final class OnPosicionAbierta {
     @SneakyThrows
     @EventListener(pritority = Priority.LOWEST)
     public void onOpenedPosition (PosicionAbiertaEvento e) {
-        String nombreActivo = e.getNombreActivo();
-
-        if(!this.activoInfoService.existsByNombreActivo(nombreActivo)){
-            String nombreActivoLargo = e.getTipoActivo().getTipoActivoService().getNombreActivoLargo(nombreActivo);
+        if(!this.activoInfoService.existsByNombreActivo(e.getTicker())){
+            String nombreActivoLargo = e.getNombreActivo() == null ?
+                    e.getTipoActivo().getTipoActivoService().getNombreActivoLargo(e.getTicker()) :
+                    e.getNombreActivo();
 
             this.activoInfoService.save(new ActivoInfo(
-                    nombreActivo, e.getPrecioUnidad(), e.getTipoActivo(), nombreActivoLargo
+                    e.getTicker(), e.getPrecioUnidad(), e.getTipoActivo(), nombreActivoLargo
             ));
         }
 

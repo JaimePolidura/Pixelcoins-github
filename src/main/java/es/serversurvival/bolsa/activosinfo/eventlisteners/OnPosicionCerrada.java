@@ -6,7 +6,9 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerradaEvento;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public final class OnPosicionCerrada {
     private final ActivosInfoService activoInfoService;
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
@@ -18,9 +20,9 @@ public final class OnPosicionCerrada {
 
     @EventListener(pritority = Priority.LOWEST)
     public void on (PosicionCerradaEvento e) {
-        String nombreActivo = e.getNombreAcitvo();
+        String nombreActivo = e.getTicker();
 
-        if(!this.posicionesAbiertasSerivce.existsNombreActivo(nombreActivo)){
+        if(!this.posicionesAbiertasSerivce.existsByNombreActivo(nombreActivo)){
             this.activoInfoService.deleteByNombreActivo(nombreActivo);
         }
     }
