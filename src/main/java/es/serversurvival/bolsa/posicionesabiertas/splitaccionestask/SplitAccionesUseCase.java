@@ -2,13 +2,12 @@ package es.serversurvival.bolsa.posicionesabiertas.splitaccionestask;
 
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.tipoactivos.acciones.AccionesService;
+import es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos.AccionesApiServiceIEXCloud;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
-import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
 import lombok.SneakyThrows;
 import org.json.simple.JSONObject;
 
@@ -21,11 +20,11 @@ import static es.serversurvival._shared.utils.Funciones.diferenciaDias;
 
 public final class SplitAccionesUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
-    private final ActivoInfoService activoInfoService;
+    private final ActivosInfoService activoInfoService;
 
     public SplitAccionesUseCase() {
         this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
-        this.activoInfoService = DependecyContainer.get(ActivoInfoService.class);
+        this.activoInfoService = DependecyContainer.get(ActivosInfoService.class);
     }
 
     public void actualizarSplits () {
@@ -53,7 +52,7 @@ public final class SplitAccionesUseCase {
     }
 
     private JSONObject getSplitData(ActivoInfo activoInfo) throws Exception {
-        return (JSONObject) ((AccionesService) SupportedTipoActivo.ACCIONES.getTipoActivoService())
+        return (JSONObject) ((AccionesApiServiceIEXCloud) SupportedTipoActivo.ACCIONES.getTipoActivoService())
                 .getSplitData(activoInfo.getNombreActivo());
     }
 

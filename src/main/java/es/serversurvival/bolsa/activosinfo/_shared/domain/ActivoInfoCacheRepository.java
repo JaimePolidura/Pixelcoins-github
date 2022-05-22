@@ -10,7 +10,5 @@ public interface ActivoInfoCacheRepository {
 
     List<ActivoInfo> findAll();
 
-    boolean existsByNombreActivo(String nombreActivo);
-
     void deleteByNombreActivo(String nombreActivo);
 }

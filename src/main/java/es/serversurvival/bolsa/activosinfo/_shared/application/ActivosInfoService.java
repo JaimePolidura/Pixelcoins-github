@@ -4,34 +4,42 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfoCacheRepository;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public final class ActivoInfoService {
-    private final ActivoInfoCacheRepository repositoryCache;
+@AllArgsConstructor
+public class ActivosInfoService {
+    private final ActivoInfoCacheRepository respotiroy;
 
-    public ActivoInfoService() {
-        this.repositoryCache = DependecyContainer.get(ActivoInfoCacheRepository.class);
+    public ActivosInfoService() {
+        this.respotiroy = DependecyContainer.get(ActivoInfoCacheRepository.class);
     }
 
     public void save(ActivoInfo activoApiCache) {
-        this.repositoryCache.save(activoApiCache);
+        this.respotiroy.save(activoApiCache);
     }
 
     public ActivoInfo getByNombreActivo(String nombreActivo, SupportedTipoActivo supportedTipoActivo) {
-        return this.repositoryCache.findByNombreActivo(nombreActivo).orElseGet(() -> {
-            String nombreActivoLargo = supportedTipoActivo.getTipoActivoService().getNombreActivoLargo(nombreActivo);
-            double preico = supportedTipoActivo.getTipoActivoService().getPrecio(nombreActivo);
-
-            return new ActivoInfo(nombreActivo, preico, supportedTipoActivo, nombreActivoLargo);
+        return this.respotiroy.findByNombreActivo(nombreActivo).orElseGet(() -> {
+            return getActivoInfoFromAPI(nombreActivo, supportedTipoActivo);
         });
     }
 
+    @SneakyThrows
+    private ActivoInfo getActivoInfoFromAPI(String nombreActivo, SupportedTipoActivo supportedTipoActivo) {
+        String nombreActivoLargo = supportedTipoActivo.getTipoActivoService().getNombreActivoLargo(nombreActivo);
+        double preico = supportedTipoActivo.getTipoActivoService().getPrecio(nombreActivo);
+
+        return new ActivoInfo(nombreActivo, preico, supportedTipoActivo, nombreActivoLargo);
+    }
+
     public List<ActivoInfo> findAll() {
-        return this.repositoryCache.findAll();
+        return this.respotiroy.findAll();
     }
 
     public Map<String, ActivoInfo> findAllToMap(){
@@ -46,10 +54,10 @@ public final class ActivoInfoService {
     }
 
     public void deleteByNombreActivo(String nombreActivo) {
-        this.repositoryCache.deleteByNombreActivo(nombreActivo);
+        this.respotiroy.deleteByNombreActivo(nombreActivo);
     }
 
     public boolean existsByNombreActivo(String nombreActivo) {
-        return this.repositoryCache.existsByNombreActivo(nombreActivo);
+        return this.respotiroy.findByNombreActivo(nombreActivo).isPresent();
     }
 }

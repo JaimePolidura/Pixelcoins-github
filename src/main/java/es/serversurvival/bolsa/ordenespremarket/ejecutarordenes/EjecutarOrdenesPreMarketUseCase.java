@@ -2,7 +2,7 @@ package es.serversurvival.bolsa.ordenespremarket.ejecutarordenes;
 
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrdenesPremarketService;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
@@ -27,7 +27,7 @@ public final class EjecutarOrdenesPreMarketUseCase {
     private final JugadoresService jugadoresService;
     private final OrdenesPremarketService ordenesPremarketService;
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
-    private final ActivoInfoService activoInfoService;
+    private final ActivosInfoService activoInfoService;
 
     private final ComprarLargoUseCase comprarLargoUseCase;
     private final VenderLargoUseCase venderLargoUseCase;
@@ -38,7 +38,7 @@ public final class EjecutarOrdenesPreMarketUseCase {
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.ordenesPremarketService = DependecyContainer.get(OrdenesPremarketService.class);
         this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
-        this.activoInfoService = DependecyContainer.get(ActivoInfoService.class);
+        this.activoInfoService = DependecyContainer.get(ActivosInfoService.class);
 
         this.comprarLargoUseCase = new ComprarLargoUseCase();
         this.venderCortoUseCase = new VenderCortoUseCase();

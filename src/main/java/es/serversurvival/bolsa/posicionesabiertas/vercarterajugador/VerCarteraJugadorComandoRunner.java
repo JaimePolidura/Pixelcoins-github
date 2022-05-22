@@ -3,7 +3,7 @@ package es.serversurvival.bolsa.posicionesabiertas.vercarterajugador;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
@@ -22,10 +22,10 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
         explanation = "Ver la cartera de la bolsa de otro jugador"
 )
 public class VerCarteraJugadorComandoRunner implements CommandRunnerArgs<VerCarteraJugadorComando> {
-    private final ActivoInfoService activoInfoService;
+    private final ActivosInfoService activoInfoService;
 
     public VerCarteraJugadorComandoRunner() {
-        this.activoInfoService = DependecyContainer.get(ActivoInfoService.class);
+        this.activoInfoService = DependecyContainer.get(ActivosInfoService.class);
     }
 
     @Override

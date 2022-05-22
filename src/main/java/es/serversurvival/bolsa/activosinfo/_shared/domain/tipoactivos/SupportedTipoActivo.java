@@ -1,14 +1,18 @@
 package es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos;
 
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.tipoactivos.acciones.AccionesService;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.tipoactivos.criptomonedas.CriptomonedasService;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.tipoactivos.materiasprimas.MateriasPrimasService;
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.acciones.AccionesApiService;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.criptomonedas.CriptomonedasApiService;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.materiasprimas.MateriasPrimasApiService;
+import es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos.AccionesApiServiceIEXCloud;
+import es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos.CriptomonedasApiServiceIEXCloud;
+import es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos.MateriasPrimasApiServiceIEXCloud;
 import lombok.Getter;
 
 public enum SupportedTipoActivo {
-    CRIPTOMONEDAS(new CriptomonedasService(), "monedas"),
-    MATERIAS_PRIMAS(new MateriasPrimasService(), "unidades"),
-    ACCIONES(new AccionesService(), "acciones");
+    CRIPTOMONEDAS(DependecyContainer.get(CriptomonedasApiService.class), "monedas"),
+    MATERIAS_PRIMAS(DependecyContainer.get(MateriasPrimasApiService.class), "unidades"),
+    ACCIONES(DependecyContainer.get(AccionesApiService.class), "acciones");
 
     @Getter private final TipoActivoService tipoActivoService;
     @Getter private final String alias;

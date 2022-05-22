@@ -6,11 +6,18 @@ import es.serversurvival.transacciones._shared.domain.Transaccion;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.transacciones._shared.domain.TipoTransaccion;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.UUID;
 
+import static es.serversurvival._shared.utils.Funciones.*;
+import static es.serversurvival.transacciones._shared.domain.TipoTransaccion.*;
+
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@ToString
 public final class PixelcoinsPrestadasEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
     @Getter private final String acredor;
     @Getter private final String deudor;
@@ -20,6 +27,11 @@ public final class PixelcoinsPrestadasEvento extends PixelcoinsEvento implements
 
     @Override
     public Transaccion buildTransaccion() {
-        return new Transaccion(UUID.randomUUID(), formatFecha(), acredor, deudor, Funciones.aumentarPorcentaje(pixelcoins, intereses), "", TipoTransaccion.DEUDAS_PRIMERA_TRANSFERENCIA);
+        return new Transaccion(UUID.randomUUID(), formatFecha(), acredor, deudor, aumentarPorcentaje(pixelcoins, intereses), "",
+                DEUDAS_PRIMERA_TRANSFERENCIA);
+    }
+
+    public static PixelcoinsPrestadasEvento of(String acredor, String deudor, double pixelcoins, int intereses, int dias){
+        return new PixelcoinsPrestadasEvento(acredor, deudor, pixelcoins, intereses, dias);
     }
 }

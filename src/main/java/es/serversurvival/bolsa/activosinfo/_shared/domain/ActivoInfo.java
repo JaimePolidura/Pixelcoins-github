@@ -3,9 +3,13 @@ package es.serversurvival.bolsa.activosinfo._shared.domain;
 import es.jaime.javaddd.domain.Aggregate;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@ToString
 public final class ActivoInfo extends Aggregate {
     @Getter private final String nombreActivo;
     @Getter private final double precio;

@@ -8,10 +8,10 @@ import org.bukkit.Bukkit;
 
 @Task(3 * BukkitTimeUnit.MINUTE)
 public class ActualizarActivosInfoTask implements TaskRunner {
-    private final ActualizarPreciosUseCase actualizarActivosInfo;
+    private final ActualizarActivosInfoUseCase actualizarActivosInfo;
 
     public ActualizarActivosInfoTask() {
-        this.actualizarActivosInfo = DependecyContainer.get(ActualizarPreciosUseCase.class);
+        this.actualizarActivosInfo = DependecyContainer.get(ActualizarActivosInfoUseCase.class);
     }
 
     @Override

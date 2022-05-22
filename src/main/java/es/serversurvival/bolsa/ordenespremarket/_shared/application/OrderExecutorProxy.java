@@ -1,4 +1,4 @@
-package es.serversurvival.bolsa._shared.application;
+package es.serversurvival.bolsa.ordenespremarket._shared.application;
 
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenPremarketCommand;

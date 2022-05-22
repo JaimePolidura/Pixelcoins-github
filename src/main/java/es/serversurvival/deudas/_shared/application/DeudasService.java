@@ -21,7 +21,7 @@ public class DeudasService {
 
     public UUID save(String deudor, String acredor, double pixelcoins, int tiempo, int interes) {
         String fechaHoy = Funciones.hoy();
-        int cuota = (int) Math.round((double) pixelcoins / tiempo);
+        int cuota = (int) Math.round(pixelcoins / tiempo);
         UUID deudaID = UUID.randomUUID();
 
         this.deudasRepository.save(new Deuda(deudaID, deudor, acredor, pixelcoins, tiempo, interes, cuota, fechaHoy));

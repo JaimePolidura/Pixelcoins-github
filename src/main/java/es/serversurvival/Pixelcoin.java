@@ -8,9 +8,15 @@ import es.jaimetruman.task.BukkitTimeUnit;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
 import es.serversurvival._shared.mysql.MySQLConfiguration;
-import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfoCacheRepository;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.acciones.AccionesApiService;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.criptomonedas.CriptomonedasApiService;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.materiasprimas.MateriasPrimasApiService;
 import es.serversurvival.bolsa.activosinfo._shared.infrastructure.InMemoryActivoInfoCacheRepository;
+import es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos.AccionesApiServiceIEXCloud;
+import es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos.CriptomonedasApiServiceIEXCloud;
+import es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos.MateriasPrimasApiServiceIEXCloud;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrdenesPremarketService;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.OrderesPremarketRepository;
 import es.serversurvival.bolsa.ordenespremarket._shared.infrastructure.MySQLOrdenesPremarketRepository;
@@ -182,9 +188,12 @@ public final class Pixelcoin extends JavaPlugin {
             put(OrdenesPremarketService.class, new OrdenesPremarketService());
             put(PosicionesAbiertasSerivce.class, new PosicionesAbiertasSerivce());
             put(PosicionesCerradasService.class, new PosicionesCerradasService());
-            put(ActivoInfoService.class, new ActivoInfoService());
+            put(ActivosInfoService.class, new ActivosInfoService());
             put(OfertasAccionesServerService.class, new OfertasAccionesServerService());
             put(AccionistasServerService.class, new AccionistasServerService());
+            put(AccionesApiService.class, new AccionesApiServiceIEXCloud());
+            put(MateriasPrimasApiService.class, new MateriasPrimasApiServiceIEXCloud());
+            put(CriptomonedasApiService.class, new CriptomonedasApiServiceIEXCloud());
         }});
     }
 }

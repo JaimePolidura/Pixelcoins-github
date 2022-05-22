@@ -31,11 +31,6 @@ public final class InMemoryActivoInfoCacheRepository implements ActivoInfoCacheR
     }
 
     @Override
-    public boolean existsByNombreActivo(String nombreActivo) {
-        return this.cache.find(nombreActivo).isPresent();
-    }
-
-    @Override
     public void deleteByNombreActivo(String nombreActivo) {
         cache.remove(nombreActivo);
     }

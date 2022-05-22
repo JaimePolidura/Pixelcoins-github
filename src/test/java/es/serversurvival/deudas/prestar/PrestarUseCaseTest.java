@@ -3,19 +3,25 @@ package es.serversurvival.deudas.prestar;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
+import es.serversurvival.MockitoArgEqualsMatcher;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.deudas._shared.application.DeudasService;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static es.serversurvival.MockitoArgEqualsMatcher.of;
 import static es.serversurvival.jugadores.JugadoresTestMother.createJugador;
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public final class PrestarUseCaseTest {
@@ -34,7 +40,34 @@ public final class PrestarUseCaseTest {
         );
     }
 
+    @Test
+    public void shoulPrestar(){
+        Jugador acredorJugador = createJugador("acredor", 100);
+        Jugador deudorJugador = createJugador("deudor", 10);
+        when(this.jugadoresService.getByNombre("acredor")).thenReturn(acredorJugador);
+        when(this.jugadoresService.getByNombre("deudor")).thenReturn(deudorJugador);
+        ArgumentCaptor<Double> pixelcoinsConInteresesCapturar = ArgumentCaptor.forClass(Double.class);
+        ArgumentCaptor<Integer> interesesCapturar = ArgumentCaptor.forClass(Integer.class);
+        ArgumentCaptor<Integer> diasCapturar = ArgumentCaptor.forClass(Integer.class);
 
+        this.useCase.prestar("acredor", "deudor", 10, 20, 2);
+
+        verify(this.deudasService, times(1)).save(
+                argThat(of("deudor")), argThat(of("acredor")), pixelcoinsConInteresesCapturar.capture(),
+                diasCapturar.capture(), interesesCapturar.capture()
+        );
+
+        assertThat(pixelcoinsConInteresesCapturar.getValue()).isEqualTo(12);
+        assertThat(interesesCapturar.getValue()).isEqualTo(20);
+        assertThat(diasCapturar.getValue()).isEqualTo(2);
+
+        verify(this.jugadoresService, times(1)).realizarTransferencia(
+                argThat(of(acredorJugador)), argThat(of(deudorJugador)), anyDouble()
+        );
+        verify(this.eventBus, times(1)).publish(argThat(of(
+                PixelcoinsPrestadasEvento.of("acredor", "deudor", 10, 20, 2)
+        )));
+    }
 
     @Test
     public void acredorHasEnoughPixelcoins(){
@@ -42,7 +75,7 @@ public final class PrestarUseCaseTest {
         assertThatCode(() -> this.useCase.prestar("acredor", "otro", 20, 1, 2))
                 .isInstanceOf(NotEnoughPixelcoins.class);
 
-        assertThatCode(() -> this.useCase.prestar("jaime", "otro", 10, 1, 1))
+        assertThatCode(() -> this.useCase.prestar("acredor", "otro", 10, 5, 1))
                 .isInstanceOf(NotEnoughPixelcoins.class);
     }
 

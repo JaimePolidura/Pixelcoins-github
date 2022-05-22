@@ -2,7 +2,7 @@ package es.serversurvival.bolsa.activosinfo.vervalores.acciones;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival._shared.menus.inventory.InventoryFactory;
 import es.serversurvival._shared.menus.Paginated;
@@ -22,10 +22,10 @@ import static es.serversurvival._shared.utils.Funciones.DATE_FORMATER_LEGACY;
 public class AccionesInventoryFactory extends InventoryFactory {
     private final HashMap<String, String> accionesPagina1 = new HashMap<>();
     private final HashMap<String, String> accionesPagina2 = new HashMap<>();
-    private final ActivoInfoService activoInfoService;
+    private final ActivosInfoService activoInfoService;
 
     public AccionesInventoryFactory() {
-        this.activoInfoService= DependecyContainer.get(ActivoInfoService.class);
+        this.activoInfoService= DependecyContainer.get(ActivosInfoService.class);
 
         buildPagina1();
         buildPagina2();

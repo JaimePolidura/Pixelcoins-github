@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa.posicionesabiertas.venderlargo;
 
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival.Pixelcoin;
@@ -11,12 +11,12 @@ import es.serversurvival.jugadores._shared.domain.Jugador;
 public final class VenderLargoUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final JugadoresService jugadoresService;
-    private final ActivoInfoService activoInfoService;
+    private final ActivosInfoService activoInfoService;
 
     public VenderLargoUseCase() {
         this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.activoInfoService = DependecyContainer.get(ActivoInfoService.class);
+        this.activoInfoService = DependecyContainer.get(ActivosInfoService.class);
     }
     
     public void venderPosicion(PosicionAbierta posicionAVender, int cantidad, String nombreJugador) {

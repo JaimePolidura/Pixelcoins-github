@@ -32,9 +32,10 @@ public final class PrestarUseCase {
         Jugador deudorJugador = this.jugadoresService.getByNombre(deudor);
         this.ensurePixelcionsAndDiasPositiveAndNotBigger(pixelcoins, dias, interes);
         double pixelcoinsMasInteres = redondeoDecimales(aumentarPorcentaje(pixelcoins, interes), 2);
+
         this.ensureAcredorHasEnoughPixelcoins(acredorJugador, pixelcoinsMasInteres);
 
-        this.deudasService.save(deudor, acredor, pixelcoins, dias, interes);
+        this.deudasService.save(deudor, acredor, pixelcoinsMasInteres, dias, interes);
         this.jugadoresService.realizarTransferencia(
                 acredorJugador, deudorJugador, pixelcoinsMasInteres
         );

@@ -16,7 +16,7 @@ import java.util.concurrent.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
@@ -112,7 +112,7 @@ public final class Funciones {
         var deudasMyService = DependecyContainer.get(DeudasService.class);
         var jugadoresService = DependecyContainer.get(JugadoresService.class);
         var empresasService = DependecyContainer.get(EmpresasService.class);
-        var activoInfoService = DependecyContainer.get(ActivoInfoService.class);
+        var activoInfoService = DependecyContainer.get(ActivosInfoService.class);
 
         List<Jugador> allJugadordes = jugadoresService.findAll();
         Map<String, ActivoInfo> mapAllLlamadas = activoInfoService.findAllToMap();

@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa.posicionesabiertas.vercartera;
 
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
@@ -16,10 +16,10 @@ import static es.serversurvival._shared.utils.MinecraftUtils.*;
 
 public class BolsaCarteraScoreboard implements SingleScoreboard {
     private Map<String, ActivoInfo> llamadasApiMap;
-    private final ActivoInfoService activoInfoService;
+    private final ActivosInfoService activoInfoService;
 
     public BolsaCarteraScoreboard() {
-        this.activoInfoService = DependecyContainer.get(ActivoInfoService.class);
+        this.activoInfoService = DependecyContainer.get(ActivosInfoService.class);
     }
 
     @Override

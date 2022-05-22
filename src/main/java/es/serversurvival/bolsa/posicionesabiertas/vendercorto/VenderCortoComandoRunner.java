@@ -4,8 +4,8 @@ import es.jaime.EventListener;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa._shared.application.OrderExecutorProxy;
-import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
+import es.serversurvival.bolsa.ordenespremarket._shared.application.OrderExecutorProxy;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenPremarketCommand;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
@@ -38,12 +38,12 @@ import static org.bukkit.Sound.ENTITY_PLAYER_LEVELUP;
 public class VenderCortoComandoRunner implements CommandRunnerArgs<VenderCortoComando> {
     private final AbrirOrdenUseCase abrirOrdenUseCase;
     private final JugadoresService jugadoresService;
-    private final ActivoInfoService activoInfoService;
+    private final ActivosInfoService activoInfoService;
 
     public VenderCortoComandoRunner(){
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.abrirOrdenUseCase = new AbrirOrdenUseCase();
-        this.activoInfoService = DependecyContainer.get(ActivoInfoService.class);
+        this.activoInfoService = DependecyContainer.get(ActivosInfoService.class);
     }
 
     @Override

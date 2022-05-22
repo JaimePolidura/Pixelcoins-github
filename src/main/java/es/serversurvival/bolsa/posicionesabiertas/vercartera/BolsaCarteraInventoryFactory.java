@@ -2,7 +2,7 @@ package es.serversurvival.bolsa.posicionesabiertas.vercartera;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
@@ -27,7 +27,7 @@ import static org.bukkit.ChatColor.*;
 public class BolsaCarteraInventoryFactory extends InventoryFactory {
     private final JugadoresService jugadoresService;
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
-    private final ActivoInfoService activoInfoService;
+    private final ActivosInfoService activoInfoService;
 
     private final List<ItemStack> itemExcessInventory = new ArrayList<>();
     private double resultadoTotal;
@@ -37,7 +37,7 @@ public class BolsaCarteraInventoryFactory extends InventoryFactory {
     private Map<String, Integer> posicionesAbiertasPeso;
 
     public BolsaCarteraInventoryFactory() {
-        this.activoInfoService = DependecyContainer.get(ActivoInfoService.class);
+        this.activoInfoService = DependecyContainer.get(ActivosInfoService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
     }

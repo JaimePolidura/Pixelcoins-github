@@ -1,4 +1,4 @@
-package es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.tipoactivos.materiasprimas;
+package es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.materiasprimas;
 
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 

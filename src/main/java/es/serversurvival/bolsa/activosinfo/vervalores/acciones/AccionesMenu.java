@@ -3,7 +3,6 @@ package es.serversurvival.bolsa.activosinfo.vervalores.acciones;
 import es.serversurvival._shared.menus.Clickable;
 import es.serversurvival._shared.menus.Paginated;
 import es.serversurvival._shared.menus.PostLoading;
-import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
@@ -22,7 +21,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static es.serversurvival._shared.utils.Funciones.DATE_FORMATER_LEGACY;
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 
 public class AccionesMenu extends Menu implements Clickable, Paginated, PostLoading {

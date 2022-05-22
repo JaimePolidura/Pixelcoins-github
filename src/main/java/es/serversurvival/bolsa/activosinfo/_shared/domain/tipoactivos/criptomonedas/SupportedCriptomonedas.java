@@ -1,4 +1,4 @@
-package es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.tipoactivos.criptomonedas;
+package es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.criptomonedas;
 
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 

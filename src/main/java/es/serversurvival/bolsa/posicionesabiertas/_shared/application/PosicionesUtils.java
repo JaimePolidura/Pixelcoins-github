@@ -1,8 +1,7 @@
 package es.serversurvival.bolsa.posicionesabiertas._shared.application;
 
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.utils.CollectionUtils;
-import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoService;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
@@ -20,7 +19,7 @@ public final class PosicionesUtils {
 
     public static double getAllPixeloinsEnValores(String jugador) {
         var posicionesAbiertasService = DependecyContainer.get(PosicionesAbiertasSerivce.class);
-        var activosInfoService = DependecyContainer.get(ActivoInfoService.class);
+        var activosInfoService = DependecyContainer.get(ActivosInfoService.class);
 
         var posLargas = posicionesAbiertasService.findByJugador(jugador, PosicionAbierta::esLargo);
         var posCortas = posicionesAbiertasService.findByJugador(jugador, PosicionAbierta::esCorto);
@@ -37,7 +36,7 @@ public final class PosicionesUtils {
 
      public static Map<PosicionAbierta, Integer> getPosicionesAbiertasConPesoJugador(String jugador, double totalInverito) {
          var posicionesAbiertasService = DependecyContainer.get(PosicionesAbiertasSerivce.class);
-         var activosInfoService = DependecyContainer.get(ActivoInfoService.class);
+         var activosInfoService = DependecyContainer.get(ActivosInfoService.class);
 
         List<PosicionAbierta> posicionAbiertasJugador = posicionesAbiertasService.findByJugador(jugador);
 
@@ -59,7 +58,7 @@ public final class PosicionesUtils {
 
     public static Map<PosicionAbierta, Double> calcularTopPosicionesAbiertas (String jugador) {
         var posicionesAbiertasService = DependecyContainer.get(PosicionesAbiertasSerivce.class);
-        var activosInfoService = DependecyContainer.get(ActivoInfoService.class);
+        var activosInfoService = DependecyContainer.get(ActivosInfoService.class);
 
         List<PosicionAbierta> posicionAbiertas = posicionesAbiertasService.findByJugador(jugador, PosicionAbierta::esLargo);
         Map<PosicionAbierta, Double> posicionAbiertasConRentabilidad = new HashMap<>();
