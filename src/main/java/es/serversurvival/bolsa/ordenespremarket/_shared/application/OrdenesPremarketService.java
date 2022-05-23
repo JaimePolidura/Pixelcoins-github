@@ -1,21 +1,35 @@
 package es.serversurvival.bolsa.ordenespremarket._shared.application;
 
+import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.OrdenPremarket;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.OrderesPremarketRepository;
+import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.UUID;
 
-public final class OrdenesPremarketService {
+@AllArgsConstructor
+public class OrdenesPremarketService {
     private final OrderesPremarketRepository repositoryDb;
 
     public OrdenesPremarketService() {
         this.repositoryDb = DependecyContainer.get(OrderesPremarketRepository.class);
     }
 
+    public void save(String jugador, String nombreActivo, int cantidad, TipoAccion tipoAccion, UUID posicionAbiertaId){
+        this.repositoryDb.save(new OrdenPremarket(UUID.randomUUID(), jugador, nombreActivo, cantidad,
+                tipoAccion, posicionAbiertaId));
+    }
+
     public void save(OrdenPremarket orden) {
         this.repositoryDb.save(orden);
+    }
+
+    public OrdenPremarket getById(UUID id){
+        return this.repositoryDb.findById(id)
+                .orElseThrow(() -> new ResourceNotFound("Orden no encontrada para esa id"));
     }
 
     public boolean isOrdenRegisteredFromPosicionAbierta (String jugador, UUID posicionAbiertaId) {

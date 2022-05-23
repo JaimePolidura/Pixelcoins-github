@@ -48,7 +48,7 @@ public class BolsaOrdenesMenu extends Menu implements Clickable {
 
         Try<UUID> idTry = getIdOrdenFromItem(itemClicked);
         if(idTry.isSuccess()){
-            cancelarOrdenUseCase.cancelar(idTry.get());
+            cancelarOrdenUseCase.cancelar(player.getName(), idTry.get());
             player.sendMessage(ChatColor.RED + "Has cancelado la orden");
 
             closeMenu();

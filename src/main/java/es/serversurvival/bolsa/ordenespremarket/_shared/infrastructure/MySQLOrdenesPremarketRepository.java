@@ -11,6 +11,7 @@ import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public final class MySQLOrdenesPremarketRepository extends DataBaseRepository<OrdenPremarket, UUID> implements OrderesPremarketRepository {
@@ -24,6 +25,11 @@ public final class MySQLOrdenesPremarketRepository extends DataBaseRepository<Or
     @Override
     public void save(OrdenPremarket orden) {
         super.save(orden);
+    }
+
+    @Override
+    public Optional<OrdenPremarket> findById(UUID ordenId) {
+        return super.findById(ordenId);
     }
 
     @Override
