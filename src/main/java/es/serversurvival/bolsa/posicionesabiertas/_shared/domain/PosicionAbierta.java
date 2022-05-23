@@ -4,12 +4,16 @@ import es.jaime.javaddd.domain.Aggregate;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.UUID;
 
 
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@ToString
 public final class PosicionAbierta extends Aggregate {
     @Getter private final UUID posicionAbiertaId;
     @Getter private final String jugador;

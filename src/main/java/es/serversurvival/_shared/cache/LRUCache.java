@@ -1,7 +1,9 @@
 package es.serversurvival._shared.cache;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -137,6 +139,8 @@ public class LRUCache<K, V> implements LimitedCache<K, V> {
     }
 
     @AllArgsConstructor
+    @ToString
+    @EqualsAndHashCode
     private static class CacheItem<K, V>{
         @Getter private final K key;
         @Getter private final V value;

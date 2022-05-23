@@ -1,4 +1,4 @@
-package es.serversurvival.bolsa;
+package es.serversurvival.bolsa.posicionesabiertas;
 
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 

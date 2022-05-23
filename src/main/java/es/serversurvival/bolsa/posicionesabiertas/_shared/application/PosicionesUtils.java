@@ -34,9 +34,9 @@ public final class PosicionesUtils {
         return pixelcoinsEnLargos + pixelcoinsEnCortos;
     }
 
-     public static Map<PosicionAbierta, Integer> getPosicionesAbiertasConPesoJugador(String jugador, double totalInverito) {
-         var posicionesAbiertasService = DependecyContainer.get(PosicionesAbiertasSerivce.class);
-         var activosInfoService = DependecyContainer.get(ActivosInfoService.class);
+    public static Map<PosicionAbierta, Integer> getPosicionesAbiertasConPesoJugador(String jugador, double totalInverito) {
+        var posicionesAbiertasService = DependecyContainer.get(PosicionesAbiertasSerivce.class);
+        var activosInfoService = DependecyContainer.get(ActivosInfoService.class);
 
         List<PosicionAbierta> posicionAbiertasJugador = posicionesAbiertasService.findByJugador(jugador);
 
@@ -75,7 +75,6 @@ public final class PosicionesUtils {
 
         return sortMapByValueDecre(posicionAbiertasConRentabilidad);
     }
-
 
     public static Map<String, List<PosicionAbierta>> getAllPosicionesAbiertasMap (Predicate<PosicionAbierta> condition) {
         var posicionesAbiertasService = DependecyContainer.get(PosicionesAbiertasSerivce.class);

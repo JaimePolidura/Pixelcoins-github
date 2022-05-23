@@ -8,7 +8,7 @@ import es.serversurvival.Pixelcoin;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 
-public final class VenderLargoUseCase {
+public class VenderLargoUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final JugadoresService jugadoresService;
     private final ActivosInfoService activoInfoService;

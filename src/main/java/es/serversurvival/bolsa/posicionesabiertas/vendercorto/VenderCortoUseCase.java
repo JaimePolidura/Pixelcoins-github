@@ -14,7 +14,7 @@ import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.Sup
 import static es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce.PORCENTAJE_CORTO;
 import static es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion.*;
 
-public final class VenderCortoUseCase {
+public class VenderCortoUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final JugadoresService jugadoresService;
 

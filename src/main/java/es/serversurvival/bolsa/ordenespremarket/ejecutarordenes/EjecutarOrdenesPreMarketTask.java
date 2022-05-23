@@ -17,7 +17,7 @@ public class EjecutarOrdenesPreMarketTask implements TaskRunner {
 
     @Override
     public void run() {
-        if (mercadoEstaAbierto()) {
+        if (mercadoEstaAbierto() && !useCase.isLoading()) {
             useCase.ejecutarOrdenes();
         }
     }

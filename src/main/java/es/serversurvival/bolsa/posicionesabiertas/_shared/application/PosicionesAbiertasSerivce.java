@@ -9,6 +9,7 @@ import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedT
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionesAbiertasRepository;
+import lombok.AllArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-
+@AllArgsConstructor
 public class PosicionesAbiertasSerivce {
     public static final double PORCENTAJE_CORTO = 5;
 
@@ -28,12 +29,15 @@ public class PosicionesAbiertasSerivce {
         this.cache = new LRUCache<>(150);
     }
 
-    public void save(String jugador, SupportedTipoActivo tipoAcivo, String nombreActivo, int cantidad,
+    public UUID save(String jugador, SupportedTipoActivo tipoAcivo, String nombreActivo, int cantidad,
                      double precioApertura, TipoPosicion tipoPosicion) {
-        String fecha = Funciones.DATE_FORMATER_LEGACY.format(new Date());
 
-        this.save(new PosicionAbierta(UUID.randomUUID(), jugador, tipoAcivo, nombreActivo, cantidad, precioApertura,
-                fecha, tipoPosicion));
+        UUID idPosicion = UUID.randomUUID();
+
+        this.save(new PosicionAbierta(idPosicion, jugador, tipoAcivo, nombreActivo, cantidad, precioApertura,
+                Funciones.hoy(), tipoPosicion));
+
+        return idPosicion;
     }
 
     public void save(PosicionAbierta posicionAbierta) {
@@ -42,7 +46,8 @@ public class PosicionesAbiertasSerivce {
     }
 
     public PosicionAbierta getById(UUID posicionAbiertaId) {
-        return this.cache.find(posicionAbiertaId).orElseGet(() -> this.repositoryDb.findById(posicionAbiertaId)
+        return this.cache.find(posicionAbiertaId)
+                .orElseGet(() -> this.repositoryDb.findById(posicionAbiertaId)
                 .map(saveToCache())
                 .orElseThrow(() -> new ResourceNotFound("Posicion abierta no encontrada")));
     }
@@ -74,8 +79,7 @@ public class PosicionesAbiertasSerivce {
     }
 
     public boolean existsByNombreActivo(String nombreActivo){
-        return this.findByNombreActivo(nombreActivo).stream()
-                .anyMatch(posicionAbierta -> posicionAbierta.getNombreActivo().equalsIgnoreCase(nombreActivo));
+        return !this.findByNombreActivo(nombreActivo).isEmpty();
     }
 
     public void deleteById(UUID posicionAbiertaId) {

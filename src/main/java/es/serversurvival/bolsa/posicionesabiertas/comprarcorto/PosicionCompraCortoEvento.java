@@ -38,6 +38,11 @@ public final class PosicionCompraCortoEvento extends PosicionCerradaEvento {
                 fechaApertura, precioCierre, fechaCierre, TipoPosicion.CORTO);
     }
 
+    public static PosicionCompraCortoEvento of(String jugaodor, String nombreActivo, String nombreActivoLargo, double precioApertura,
+                                               String fechaApertura, double precioCierre, int cantidad, SupportedTipoActivo tipoActivo){
+        return new PosicionCompraCortoEvento(jugaodor, nombreActivo, nombreActivoLargo, precioApertura, fechaApertura, precioCierre, cantidad, tipoActivo);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -8,6 +8,7 @@ import es.jaimetruman.task.BukkitTimeUnit;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
 import es.serversurvival._shared.mysql.MySQLConfiguration;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfoCacheRepository;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.acciones.AccionesApiService;
@@ -62,6 +63,7 @@ import es.serversurvival.web.webconnection.RabbitMQConsumerTask;
 import es.serversurvival._shared.scoreboards.ScoreBoardManager;
 import es.serversurvival._shared.scoreboards.ScoreboardUpdateTask;
 
+import org.apache.ibatis.javassist.bytecode.analysis.Executor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -153,6 +155,7 @@ public final class Pixelcoin extends JavaPlugin {
         DependecyContainer.addAll(new HashMap<>() {{
             put(MySQLConfiguration.class, mysqlCOnfiguration);
             put(EventBus.class, new EventBusSynch("es.serversurvival"));
+            put(Executor.class, Funciones.POOL);
         }});
 
         DependecyContainer.addAll(new HashMap<>(){{

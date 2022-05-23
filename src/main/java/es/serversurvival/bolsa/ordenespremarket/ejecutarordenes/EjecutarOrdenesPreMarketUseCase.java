@@ -1,5 +1,6 @@
 package es.serversurvival.bolsa.ordenespremarket.ejecutarordenes;
 
+import es.jaime.EventBus;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
@@ -15,19 +16,26 @@ import es.serversurvival.bolsa.posicionesabiertas.vendercorto.VenderCortoUseCase
 import es.serversurvival.bolsa.posicionesabiertas.venderlargo.VenderLargoUseCase;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
+import lombok.AllArgsConstructor;
 
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 import static es.serversurvival._shared.utils.Funciones.reducirPorcentaje;
 import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo.ACCIONES;
 import static es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce.PORCENTAJE_CORTO;
 
+@AllArgsConstructor
 public final class EjecutarOrdenesPreMarketUseCase {
+    private final AtomicBoolean isLoading;
+
     private final JugadoresService jugadoresService;
     private final OrdenesPremarketService ordenesPremarketService;
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final ActivosInfoService activoInfoService;
+    private final EventBus eventBus;
 
     private final ComprarLargoUseCase comprarLargoUseCase;
     private final VenderLargoUseCase venderLargoUseCase;
@@ -35,10 +43,13 @@ public final class EjecutarOrdenesPreMarketUseCase {
     private final ComprarCortoUseCase comprarCortoUseCase;
 
     public EjecutarOrdenesPreMarketUseCase() {
+        this.isLoading = new AtomicBoolean(false);
+
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.ordenesPremarketService = DependecyContainer.get(OrdenesPremarketService.class);
         this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
         this.activoInfoService = DependecyContainer.get(ActivosInfoService.class);
+        this.eventBus = DependecyContainer.get(EventBus.class);
 
         this.comprarLargoUseCase = new ComprarLargoUseCase();
         this.venderCortoUseCase = new VenderCortoUseCase();
@@ -47,48 +58,53 @@ public final class EjecutarOrdenesPreMarketUseCase {
     }
 
     public void ejecutarOrdenes () {
+        isLoading.set(true);
+
         List<OrdenPremarket> todasLasOrdenes = ordenesPremarketService.findAll();
 
-        POOL.submit(() -> {
-            todasLasOrdenes.forEach(orden -> {
-                if(orden.getTipoAccion() == TipoAccion.LARGO_COMPRA){
-                    ejecutarOrdenCompraLargo(orden);
+        todasLasOrdenes.forEach(orden -> {
+            if(orden.getTipoAccion() == TipoAccion.LARGO_COMPRA){
+                ejecutarOrdenCompraLargo(orden);
 
-                }else if (orden.getTipoAccion() == TipoAccion.LARGO_VENTA){
-                    ejecutarOrdenVentaLargo(orden);
+            }else if (orden.getTipoAccion() == TipoAccion.LARGO_VENTA){
+                ejecutarOrdenVentaLargo(orden);
 
-                }else if (orden.getTipoAccion() == TipoAccion.CORTO_VENTA) {
-                    ejecutarOrdenVentaCorto(orden);
+            }else if (orden.getTipoAccion() == TipoAccion.CORTO_VENTA) {
+                ejecutarOrdenVentaCorto(orden);
 
-                }else if (orden.getTipoAccion() == TipoAccion.CORTO_COMPRA){
-                    ejecutarOrdenCompraCorto(orden);
-                }
+            }else if (orden.getTipoAccion() == TipoAccion.CORTO_COMPRA){
+                ejecutarOrdenCompraCorto(orden);
+            }
 
-                ordenesPremarketService.deleteById(orden.getOrderPremarketId());
-            });
+            ordenesPremarketService.deleteById(orden.getOrderPremarketId());
         });
+
+        isLoading.set(false);
     }
 
     private void ejecutarOrdenVentaLargo(OrdenPremarket orden) {
-        int cantidad = orden.getCantidad();
+        int orderCantidad = orden.getCantidad();
         String jugador = orden.getJugador();
         PosicionAbierta posicionAbierta = posicionesAbiertasSerivce.getById(orden.getPosicionAbiertaId());
 
-        venderLargoUseCase.venderPosicion(posicionAbierta, cantidad, jugador);
+        if(orderCantidad > posicionAbierta.getCantidad()){
+            this.eventBus.publish(new OrdenNoEjecutadoEvento(jugador, orden.getNombreActivo(), orden.getCantidad()));
+            return;
+        }
+
+        venderLargoUseCase.venderPosicion(posicionAbierta, orderCantidad, jugador);
     }
 
     private void ejecutarOrdenCompraLargo(OrdenPremarket orden) {
         String ticker = orden.getNombreActivo();
         int cantidad = orden.getCantidad();
+
         String jugador = orden.getJugador();
         ActivoInfo activoInfo  = activoInfoService.getByNombreActivo(ticker, ACCIONES);
         double pixelcoinsJugador = jugadoresService.getByNombre(jugador).getPixelcoins();
 
-        if(cantidad * activoInfo.getPrecio() >= pixelcoinsJugador)
-            cantidad = (int) (pixelcoinsJugador / activoInfo.getPrecio());
-
-        if(cantidad == 0) {
-            Pixelcoin.publish(new OrdenNoEjecutadoEvento(jugador, orden.getNombreActivo(), orden.getCantidad()));
+        if(cantidad * activoInfo.getPrecio() >= pixelcoinsJugador) {
+            this.eventBus.publish(new OrdenNoEjecutadoEvento(jugador, orden.getNombreActivo(), orden.getCantidad()));
             return;
         }
 
@@ -96,6 +112,10 @@ public final class EjecutarOrdenesPreMarketUseCase {
     }
 
     private void ejecutarOrdenCompraCorto (OrdenPremarket orden) {
+        var posicionAbierta = this.posicionesAbiertasSerivce.getById(orden.getPosicionAbiertaId());
+        if(posicionAbierta.getCantidad() < orden.getCantidad())
+            this.eventBus.publish(new OrdenNoEjecutadoEvento(orden.getJugador(), orden.getNombreActivo(), orden.getCantidad()));
+
         comprarCortoUseCase.comprarPosicionCorto(orden.getPosicionAbiertaId(), orden.getCantidad(), orden.getJugador());
     }
 
@@ -110,10 +130,14 @@ public final class EjecutarOrdenesPreMarketUseCase {
         double comision = redondeoDecimales(reducirPorcentaje(valorTotal, 100 - PORCENTAJE_CORTO), 2);
 
         if(comision > dineroJugador){
-            Pixelcoin.publish(new OrdenNoEjecutadoEvento(jugador.getNombre(), orden.getNombreActivo(), orden.getCantidad()));
+            this.eventBus.publish(new OrdenNoEjecutadoEvento(jugador.getNombre(), orden.getNombreActivo(), orden.getCantidad()));
             return;
         }
 
         venderCortoUseCase.venderEnCortoBolsa(jugador.getNombre(), orden.getNombreActivo(), nombreActivoLargo, orden.getCantidad(), precio);
+    }
+
+    public boolean isLoading(){
+        return this.isLoading.get();
     }
 }

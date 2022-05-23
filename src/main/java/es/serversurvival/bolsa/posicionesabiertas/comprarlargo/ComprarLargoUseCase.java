@@ -13,7 +13,7 @@ import es.serversurvival.jugadores._shared.domain.Jugador;
 
 import static es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion.*;
 
-public final class ComprarLargoUseCase {
+public class ComprarLargoUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final JugadoresService jugadoresService;
     private final ActivosInfoService activoInfoService;
