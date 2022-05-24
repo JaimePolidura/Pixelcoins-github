@@ -118,14 +118,12 @@ public final class EjecutarOrdenesPreMarketUseCaseTest {
         this.useCase.ejecutarOrdenes();
 
         ArgumentCaptor<Integer> cantidadArgCapturer = ArgumentCaptor.forClass(int.class);
-        ArgumentCaptor<Double> precioArgCapturer = ArgumentCaptor.forClass(double.class);
         verify(this.venderCortoUseCase, times(1)).venderEnCortoBolsa(
                 argThat(of("jaime")),
                 argThat(of("AMZN")),
                 cantidadArgCapturer.capture()
         );
         assertThat(cantidadArgCapturer.getValue()).isEqualTo(ordenCompraLargo.getCantidad());
-        assertThat(precioArgCapturer.getValue()).isEqualTo(activoInfo.getPrecio());
         verify(this.ordenesPremarketService, times(1)).deleteById(ordenCompraLargo.getOrderPremarketId());
     }
 

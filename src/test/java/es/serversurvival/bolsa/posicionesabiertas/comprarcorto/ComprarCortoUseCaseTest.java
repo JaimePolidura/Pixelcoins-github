@@ -49,6 +49,29 @@ public final class ComprarCortoUseCaseTest {
     }
 
     @Test
+    public void shouldComprarCortoPartial(){
+        var activoInfo = createActivoInfoAcciones("AMZN").withNombreActivoLargo("Amazon").withPrecio(20);
+        when(this.activoInfoService.getByNombreActivo("AMZN", ACCIONES)).thenReturn(activoInfo);
+        var posicionAbierta = createPosicionAbierta("jaime", "AMZN").withCantidad(2);
+        when(this.posicionesAbiertasSerivce.getById(posicionAbierta.getPosicionAbiertaId())).thenReturn(posicionAbierta);
+        Jugador jugador = JugadoresTestMother.createJugador("jaime", 1000);
+        when(this.jugadoresService.getByNombre("jaime")).thenReturn(jugador);
+
+        double valorTotal = (posicionAbierta.getPrecioApertura() - activoInfo.getPrecio()) * (posicionAbierta.getCantidad() - 1);
+
+        this.useCase.comprarPosicionCorto(posicionAbierta.getPosicionAbiertaId(), posicionAbierta.getCantidad() - 1, "jaime");
+
+        verify(this.posicionesAbiertasSerivce, times(1)).save(posicionAbierta.withCantidad(posicionAbierta.getCantidad() - 1));
+        verify(this.jugadoresService, times(1)).save(argThat(of(
+                jugador.incrementPixelcoinsBy(valorTotal).incrementGastosBy(valorTotal)
+        )));
+        verify(this.eventBus, times(1)).publish(argThat(of(
+                PosicionCompraCortoEvento.of("jaime", "AMZN", "Amazon", posicionAbierta.getPrecioApertura(),
+                        posicionAbierta.getFechaApertura(), activoInfo.getPrecio(), posicionAbierta.getCantidad() - 1, ACCIONES)
+        )));
+    }
+
+    @Test
     public void shouldComprarCortoTotal(){
         var activoInfo = createActivoInfoAcciones("AMZN").withNombreActivoLargo("Amazon").withPrecio(20);
         when(this.activoInfoService.getByNombreActivo("AMZN", ACCIONES)).thenReturn(activoInfo);

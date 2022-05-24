@@ -122,7 +122,6 @@ public final class EjecutarOrdenesPreMarketUseCase {
     private void ejecutarOrdenVentaCorto (OrdenPremarket orden) {
         ActivoInfo activoInfo = activoInfoService.getByNombreActivo(orden.getNombreActivo(), ACCIONES);
         double precio = activoInfo.getPrecio();
-        String nombreActivoLargo = activoInfo.getNombreActivoLargo();
 
         Jugador jugador = jugadoresService.getByNombre(orden.getJugador());
         double dineroJugador = jugador.getPixelcoins();
