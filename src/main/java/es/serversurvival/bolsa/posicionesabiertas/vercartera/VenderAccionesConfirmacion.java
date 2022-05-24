@@ -84,7 +84,7 @@ public class VenderAccionesConfirmacion extends Menu implements Confirmacion {
                     posicion.getPosicionAbiertaId()
         ), () -> {
             if(tipoPosicion == TipoPosicion.LARGO)
-                venderLargoUseCase.venderPosicion(posicion, posicion.getCantidad(), player.getName());
+                venderLargoUseCase.venderPosicion(posicion.getPosicionAbiertaId(), posicion.getCantidad(), player.getName());
             else
                 comprarCortoUseCase.comprarPosicionCorto(posicion.getPosicionAbiertaId(), posicion.getCantidad(), posicion.getJugador());
         }

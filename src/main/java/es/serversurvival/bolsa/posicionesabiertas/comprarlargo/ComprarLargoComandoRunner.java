@@ -70,7 +70,7 @@ public class ComprarLargoComandoRunner implements CommandRunnerArgs<ComprarLargo
         }
 
         OrderExecutorProxy.execute(of(sender.getName(), ticker, cantidad, TipoAccion.LARGO_COMPRA, null), () -> {
-            comprarLargoUseCase.comprarLargo(SupportedTipoActivo.ACCIONES, ticker.toUpperCase(), cantidad, sender.getName());
+            comprarLargoUseCase.comprarLargo(sender.getName(), SupportedTipoActivo.ACCIONES, ticker.toUpperCase(), cantidad);
 
             Bukkit.broadcastMessage(GOLD + sender.getName() + " ha comprado " + cantidad + " acciones de "
                     + nombreValor + " a " + GREEN + FORMATEA.format(precio) + "PC");

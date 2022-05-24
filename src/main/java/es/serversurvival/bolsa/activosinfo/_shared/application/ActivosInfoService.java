@@ -30,12 +30,15 @@ public class ActivosInfoService {
         });
     }
 
-    @SneakyThrows
     private ActivoInfo getActivoInfoFromAPI(String nombreActivo, SupportedTipoActivo supportedTipoActivo) {
-        String nombreActivoLargo = supportedTipoActivo.getTipoActivoService().getNombreActivoLargo(nombreActivo);
-        double preico = supportedTipoActivo.getTipoActivoService().getPrecio(nombreActivo);
+        try {
+            String nombreActivoLargo = supportedTipoActivo.getTipoActivoService().getNombreActivoLargo(nombreActivo);
+            double preico = supportedTipoActivo.getTipoActivoService().getPrecio(nombreActivo);
 
-        return new ActivoInfo(nombreActivo, preico, supportedTipoActivo, nombreActivoLargo);
+            return new ActivoInfo(nombreActivo, preico, supportedTipoActivo, nombreActivoLargo);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<ActivoInfo> findAll() {

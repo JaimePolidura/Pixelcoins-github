@@ -89,13 +89,13 @@ public class VenderCortoComandoRunner implements CommandRunnerArgs<VenderCortoCo
 
         Player player = Bukkit.getPlayer(evento.getComprador());
 
-        Funciones.enviarMensajeYSonido( player, GOLD + "Te has puesto corto en " + evento.getNombreActivo() + " en " +
-                evento.getNombreActivo() + " cada una a " + GREEN + FORMATEA.format(evento.getPrecioUnidad()) + " PC " +
+        Funciones.enviarMensajeYSonido( player, GOLD + "Te has puesto corto en " + evento.getNombreActivoLargo() + " en " +
+                evento.getNombreActivoLargo() + " cada una a " + GREEN + FORMATEA.format(evento.getPrecioUnidad()) + " PC " +
                 GOLD + "Para recomprar las acciones: /bolsa comprarcorto <id>. /bolsa cartera" + GOLD +
                 "Ademas se te ha cobrado un 5% del valor total de la venta (" + GREEN  + FORMATEA.format(evento.getPrecioTotal())
                 + " PC" + GOLD + ") por lo cual: " + RED + "-" + FORMATEA.format(evento.getPrecioTotal()) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
 
-        Bukkit.broadcastMessage(GOLD + player.getName() + " se ha puesto en corto en " + evento.getNombreActivo());
+        Bukkit.broadcastMessage(GOLD + player.getName() + " se ha puesto en corto en " + evento.getNombreActivoLargo());
     }
 
     @EventListener

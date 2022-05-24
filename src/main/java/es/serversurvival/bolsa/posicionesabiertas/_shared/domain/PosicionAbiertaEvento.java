@@ -6,6 +6,7 @@ import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.transacciones._shared.domain.EventoTipoTransaccion;
 import es.serversurvival.transacciones._shared.domain.Transaccion;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -16,20 +17,21 @@ import static es.serversurvival.transacciones._shared.domain.TipoTransaccion.BOL
 
 @AllArgsConstructor
 @ToString
+@EqualsAndHashCode(callSuper = false)
 public final class PosicionAbiertaEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
     @Getter private final String comprador;
-    @Getter private final String ticker;
+    @Getter private final String nombreActivo;
     @Getter private final int cantidadPosicion;
     @Getter private final double precioUnidad;
     @Getter private final SupportedTipoActivo tipoActivo;
     @Getter private final double precioTotal;
-    @Getter private final String nombreActivo;
+    @Getter private final String nombreActivoLargo;
     @Getter private final TipoPosicion tipoPosicion;
 
     @Override
     public Transaccion buildTransaccion() {
-        return new Transaccion(UUID.randomUUID(), formatFecha(), ticker, comprador,
-                (int) precioTotal, ticker, tipoPosicion == TipoPosicion.LARGO ? BOLSA_LARGO_COMPRA : BOLSA_CORTO_VENTA);
+        return new Transaccion(UUID.randomUUID(), formatFecha(), nombreActivo, comprador,
+                (int) precioTotal, nombreActivo, tipoPosicion == TipoPosicion.LARGO ? BOLSA_LARGO_COMPRA : BOLSA_CORTO_VENTA);
     }
 
     public static PosicionAbiertaEvento of(String comprador, String ticker, int cantidadPosicion, double precioUnidad,

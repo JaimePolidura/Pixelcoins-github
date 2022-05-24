@@ -10,6 +10,7 @@ import es.serversurvival.transacciones._shared.domain.Transaccion;
 import lombok.Getter;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 public final class PosicionVentaLargoEvento extends PosicionCerradaEvento {
@@ -22,6 +23,19 @@ public final class PosicionVentaLargoEvento extends PosicionCerradaEvento {
 
         this.valorTotal = precioCierre * cantidad;
         this.resultado = (precioCierre - precioApertura) * cantidad;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PosicionVentaLargoEvento that = (PosicionVentaLargoEvento) o;
+        return Double.compare(that.valorTotal, valorTotal) == 0 && Double.compare(that.resultado, resultado) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(valorTotal, resultado, super.hashCode());
     }
 
     @Override

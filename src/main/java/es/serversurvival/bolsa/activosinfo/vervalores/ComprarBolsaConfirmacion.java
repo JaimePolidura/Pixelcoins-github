@@ -101,7 +101,7 @@ public class ComprarBolsaConfirmacion extends Menu implements AumentoConfirmacio
 
             OrderExecutorProxy.execute(AbrirOrdenPremarketCommand.of(player.getName(), simbolo, cantidadAComprar, TipoAccion.LARGO_COMPRA, null),
                     () -> {
-                        comprarLargoUseCase.comprarLargo(tipoActivo, nombreActivo, cantidadAComprar, player.getName());
+                        comprarLargoUseCase.comprarLargo(player.getName(), tipoActivo, nombreActivo, cantidadAComprar);
                     }
             );
 

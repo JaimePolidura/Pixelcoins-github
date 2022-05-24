@@ -12,6 +12,7 @@ import es.serversurvival.bolsa.posicionesabiertas.comprarcorto.ComprarCortoUseCa
 import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.ComprarLargoUseCase;
 import es.serversurvival.bolsa.posicionesabiertas.vendercorto.VenderCortoUseCase;
 import es.serversurvival.bolsa.posicionesabiertas.venderlargo.VenderLargoUseCase;
+import es.serversurvival.bolsa.posicionesabiertas.venderlargo.VenderLargoUseCaseTest;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import org.junit.jupiter.api.BeforeEach;
@@ -121,9 +122,7 @@ public final class EjecutarOrdenesPreMarketUseCaseTest {
         verify(this.venderCortoUseCase, times(1)).venderEnCortoBolsa(
                 argThat(of("jaime")),
                 argThat(of("AMZN")),
-                argThat(of("Amazon")),
-                cantidadArgCapturer.capture(),
-                precioArgCapturer.capture()
+                cantidadArgCapturer.capture()
         );
         assertThat(cantidadArgCapturer.getValue()).isEqualTo(ordenCompraLargo.getCantidad());
         assertThat(precioArgCapturer.getValue()).isEqualTo(activoInfo.getPrecio());
@@ -156,7 +155,7 @@ public final class EjecutarOrdenesPreMarketUseCaseTest {
 
         ArgumentCaptor<Integer> quantityArgumentCapturer = ArgumentCaptor.forClass(Integer.class);
         verify(this.venderLargoUseCase, times(1)).venderPosicion(
-                argThat(of(posicionAbierta)),
+                argThat(of(posicionAbierta.getPosicionAbiertaId())),
                 quantityArgumentCapturer.capture(),
                 argThat(of("jaime"))
         );
@@ -194,10 +193,10 @@ public final class EjecutarOrdenesPreMarketUseCaseTest {
 
         ArgumentCaptor<Integer> cantidadArgCapturer = ArgumentCaptor.forClass(int.class);
         verify(this.comprarLargoUseCase, times(1)).comprarLargo(
+                argThat(of("jaime")),
                 argThat(of(ACCIONES)),
                 argThat(of("AMZN")),
-                cantidadArgCapturer.capture(),
-                argThat(of("jaime"))
+                cantidadArgCapturer.capture()
         );
         assertThat(cantidadArgCapturer.getValue()).isEqualTo(ordenCompraLargo.getCantidad());
         verify(this.ordenesPremarketService, times(1)).deleteById(ordenCompraLargo.getOrderPremarketId());

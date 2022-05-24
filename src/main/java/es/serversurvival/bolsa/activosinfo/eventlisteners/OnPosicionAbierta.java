@@ -20,13 +20,13 @@ public final class OnPosicionAbierta {
     @SneakyThrows
     @EventListener(pritority = Priority.LOWEST)
     public void onOpenedPosition (PosicionAbiertaEvento e) {
-        if(!this.activoInfoService.existsByNombreActivo(e.getTicker())){
-            String nombreActivoLargo = e.getNombreActivo() == null ?
-                    e.getTipoActivo().getTipoActivoService().getNombreActivoLargo(e.getTicker()) :
-                    e.getNombreActivo();
+        if(!this.activoInfoService.existsByNombreActivo(e.getNombreActivo())){
+            String nombreActivoLargo = e.getNombreActivoLargo() == null ?
+                    e.getTipoActivo().getTipoActivoService().getNombreActivoLargo(e.getNombreActivo()) :
+                    e.getNombreActivoLargo();
 
             this.activoInfoService.save(new ActivoInfo(
-                    e.getTicker(), e.getPrecioUnidad(), e.getTipoActivo(), nombreActivoLargo
+                    e.getNombreActivo(), e.getPrecioUnidad(), e.getTipoActivo(), nombreActivoLargo
             ));
         }
 

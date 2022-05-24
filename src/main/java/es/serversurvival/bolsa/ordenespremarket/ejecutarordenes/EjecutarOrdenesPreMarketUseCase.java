@@ -92,7 +92,7 @@ public final class EjecutarOrdenesPreMarketUseCase {
             return;
         }
 
-        venderLargoUseCase.venderPosicion(posicionAbierta, orderCantidad, jugador);
+        venderLargoUseCase.venderPosicion(posicionAbierta.getPosicionAbiertaId(), orderCantidad, jugador);
     }
 
     private void ejecutarOrdenCompraLargo(OrdenPremarket orden) {
@@ -108,7 +108,7 @@ public final class EjecutarOrdenesPreMarketUseCase {
             return;
         }
 
-        comprarLargoUseCase.comprarLargo(ACCIONES, ticker, cantidad, jugador);
+        comprarLargoUseCase.comprarLargo(jugador, ACCIONES, ticker, cantidad);
     }
 
     private void ejecutarOrdenCompraCorto (OrdenPremarket orden) {
@@ -134,7 +134,7 @@ public final class EjecutarOrdenesPreMarketUseCase {
             return;
         }
 
-        venderCortoUseCase.venderEnCortoBolsa(jugador.getNombre(), orden.getNombreActivo(), nombreActivoLargo, orden.getCantidad(), precio);
+        venderCortoUseCase.venderEnCortoBolsa(jugador.getNombre(), orden.getNombreActivo(), orden.getCantidad());
     }
 
     public boolean isLoading(){
