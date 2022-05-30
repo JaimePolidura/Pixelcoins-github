@@ -4,6 +4,8 @@ import es.jaime.Event;
 import es.jaime.EventBus;
 import es.jaime.impl.EventBusSynch;
 import es.jaimetruman.Mapper;
+import es.jaimetruman._shared.utils.ClassMapperInstanceProvider;
+import es.jaimetruman.menus.MenuService;
 import es.jaimetruman.task.BukkitTimeUnit;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
@@ -156,6 +158,7 @@ public final class Pixelcoin extends JavaPlugin {
             put(MySQLConfiguration.class, mysqlCOnfiguration);
             put(EventBus.class, new EventBusSynch("es.serversurvival"));
             put(Executor.class, Funciones.POOL);
+            put(MenuService.class, ClassMapperInstanceProvider.MENU_SERVICE);
         }});
 
         DependecyContainer.addAll(new HashMap<>(){{

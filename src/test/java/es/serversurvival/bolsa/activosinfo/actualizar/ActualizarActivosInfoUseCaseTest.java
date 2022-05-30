@@ -42,6 +42,8 @@ public final class ActualizarActivosInfoUseCaseTest {
     @Test
     @SneakyThrows
     public void shouldUpdate(){
+        loadDepencyContainer();
+
         when(accionesApiService.getPrecio("AMZN")).thenReturn(Double.valueOf(2100));
         when(accionesApiService.getNombreActivoLargo("AMZN")).thenReturn("AMAZON");
         when(criptomonedasApiService.getPrecio("BTC")).thenReturn(Double.valueOf(30000));

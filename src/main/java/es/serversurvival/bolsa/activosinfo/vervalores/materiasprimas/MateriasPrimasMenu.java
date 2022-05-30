@@ -1,99 +1,128 @@
 package es.serversurvival.bolsa.activosinfo.vervalores.materiasprimas;
 
-import es.serversurvival.Pixelcoin;
+import es.jaimetruman.ItemBuilder;
+import es.jaimetruman.ItemUtils;
+import es.jaimetruman.menus.Menu;
+import es.jaimetruman.menus.MenuService;
+import es.jaimetruman.menus.Page;
+import es.jaimetruman.menus.configuration.MenuConfiguration;
+import es.jaimetruman.menus.menustate.AfterShow;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
-import es.serversurvival.bolsa.activosinfo.vervalores.ComprarBolsaConfirmacion;
-import es.serversurvival._shared.menus.Clickable;
-import es.serversurvival._shared.menus.PostLoading;
-import es.serversurvival._shared.menus.Menu;
-import es.serversurvival._shared.menus.inventory.InventoryCreator;
-import es.serversurvival._shared.utils.MinecraftUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import es.serversurvival.bolsa.activosinfo.vervalores.ComprarBolsaConfirmacionMenu;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executor;
 
-public class MateriasPrimasMenu extends Menu implements Clickable, PostLoading {
-    public final static String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "   Escoge para invertir";
-    private Inventory inventory;
-    private Player player;
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+import static es.serversurvival.bolsa.activosinfo.vervalores.materiasprimas.TodasMateriasPrimasVerValores.*;
+import static org.bukkit.ChatColor.*;
 
-    public MateriasPrimasMenu (Player player) {
-        this.player = player;
-        this.inventory = InventoryCreator.createInventoryMenu(new MateriasPrimasInventoryFactory(), player.getName());
+public final class MateriasPrimasMenu extends Menu implements AfterShow {
+    private final Executor executor;
+    private final MenuService menuService;
 
-        postLoad();
-        openMenu();
+    public MateriasPrimasMenu() {
+        this.executor = DependecyContainer.get(Executor.class);
+        this.menuService = DependecyContainer.get(MenuService.class);
     }
 
     @Override
-    public Inventory getInventory() {
-        return inventory;
+    public int[][] items() {
+        return new int[][]{{1, 2, 0, 0, 0}};
     }
 
     @Override
-    public Player getPlayer() {
-        return player;
+    public MenuConfiguration configuration() {
+        return MenuConfiguration.builder()
+                .title(DARK_RED + "" + BOLD + "   Escoge para invertir")
+                .fixedItems()
+                .item(1, itemInfo())
+                .items(2, itemsCriptomonedas(), this::onMateriaPrimaItemClick)
+                .build();
     }
 
-    @Override
-    public void onOherClick(InventoryClickEvent event) {
-        ItemStack itemStack = event.getCurrentItem();
-        if(itemStack == null || !itemStack.getType().toString().equalsIgnoreCase("COAL")){
-            return;
+    private void onMateriaPrimaItemClick(Player player, InventoryClickEvent event) {
+        if(hasLoaded(event.getCurrentItem())) return;
+
+        ItemStack itemClicked = event.getCurrentItem();
+        double precio = Double.parseDouble(ItemUtils.getLore(itemClicked, 1).split(" ")[1]);
+        String nombreActivo = ItemUtils.getLore(itemClicked, 0).split(" ")[1];
+
+        this.menuService.open(player, new ComprarBolsaConfirmacionMenu(
+                nombreActivo, SupportedTipoActivo.MATERIAS_PRIMAS, player.getName(), precio
+        ));
+    }
+
+    private boolean hasLoaded(ItemStack itemStack){
+        return itemStack.getItemMeta().getLore().stream()
+                .noneMatch(lore -> lore.contains("Cargando"));
+    }
+
+    private List<ItemStack> itemsCriptomonedas() {
+        List<ItemStack> toReturn = new ArrayList<>(MATERIAS_PRIMAS.size());
+
+        for(var entry: MATERIAS_PRIMAS.entrySet()){
+            String nombreActivoLargo = entry.getValue();
+
+            List<String> lore = List.of(
+                    GOLD + "Simbolo: " + entry.getKey(),
+                    RED + "Cargando..."
+            );
+
+            toReturn.add(ItemBuilder.of(Material.COAL)
+                    .title(GOLD + "" + BOLD + nombreActivoLargo)
+                    .lore(lore)
+                    .build());
         }
 
-        String nombreValor = itemStack.getItemMeta().getDisplayName().substring(4);
-        List<String> lore = itemStack.getItemMeta().getLore();
-        String precioLore = lore.get(1);
-        if (precioLore.equalsIgnoreCase(ChatColor.RED + "Cargando...")) {
-            return;
-        }
+        return toReturn;
+    }
 
-        double precio = Double.parseDouble(lore.get(1).split(" ")[1]);
-        String simbolo = lore.get(0).split(" ")[1];
-
-        String alias;
-        if(simbolo.equalsIgnoreCase("DCOILBRENTEU")){
-            alias = "barriles";
-        }else if(simbolo.equalsIgnoreCase("DHHNGSP")){
-            alias = "galones";
-        }else{
-            alias = "galones";
-        }
-
-        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, SupportedTipoActivo.MATERIAS_PRIMAS, alias, player, precio);
+    private ItemStack itemInfo() {
+        return ItemBuilder.of(Material.PAPER)
+                .title(AQUA + "" + BOLD + "INFO")
+                .lore(List.of(
+                        "Para invertir en estas mateiras primass clickea en cualquiera de ellas y elige la cantidad a comprar"
+                ))
+                .build();
     }
 
     @Override
-    public void postLoad() {
-        Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
-            int pos = 0;
+    public void afterShow() {
+        List<ItemStack> items = this.getItemsAccionesToEdit();
 
-            for (ItemStack actual : inventory.getContents()) {
-                if (pos == 4 || actual == null || actual.getType().toString().equalsIgnoreCase("AIR")) {
-                    break;
-                }
-                pos++;
+        for (ItemStack item : items) {
+            this.executor.execute(() -> {
+                addPriceToItem(item);
+            });
+        }
+    }
 
-                List<String> precioLore = actual.getItemMeta().getLore();
-                precioLore.remove(1);
+    private void addPriceToItem(ItemStack item) {
+        try {
+            String nombreActivo = ItemUtils.getLore(item, 0).split(" ")[1];
+            double precio = SupportedTipoActivo.MATERIAS_PRIMAS.getTipoActivoService().getPrecio(nombreActivo);
 
-                String ticker = precioLore.get(0).split(" ")[1];
-                try {
-                    double precioMat = SupportedTipoActivo.MATERIAS_PRIMAS.getTipoActivoService().getPrecio(ticker);
+            ItemUtils.setLore(item, 1, GOLD + "Precio: " + GREEN + FORMATEA.format(precio) + " PC");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-                    precioLore.add(1, ChatColor.GOLD + "Precio/Unidad:" + ChatColor.GREEN + " " + precioMat + " $");
-
-                    MinecraftUtils.setLore(actual, precioLore);
-                } catch (Exception e) {
-                    player.sendMessage(ChatColor.DARK_RED + "No hagas spam del comando");
-                }
-            }
-        }, 0L);
+    private List<ItemStack> getItemsAccionesToEdit() {
+        return getPages().stream()
+                .map(Page::getInventory)
+                .map(Inventory::getContents)
+                .flatMap(Arrays::stream)
+                .filter(item -> item != null && item.getType().equals(Material.COAL))
+                .toList();
     }
 }

@@ -1,151 +1,174 @@
 package es.serversurvival.bolsa.activosinfo.vervalores.acciones;
 
-import es.serversurvival._shared.menus.Clickable;
+import es.jaimetruman.ItemBuilder;
+import es.jaimetruman.ItemUtils;
+import es.jaimetruman._shared.utils.ClassMapperInstanceProvider;
+import es.jaimetruman.menus.Menu;
+import es.jaimetruman.menus.MenuService;
+import es.jaimetruman.menus.Page;
+import es.jaimetruman.menus.configuration.MenuConfiguration;
+import es.jaimetruman.menus.menustate.AfterShow;
+import es.jaimetruman.menus.modules.pagination.PaginationConfiguration;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.menus.Paginated;
-import es.serversurvival._shared.menus.PostLoading;
-import es.serversurvival._shared.menus.Menu;
-import es.serversurvival._shared.menus.inventory.InventoryCreator;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
+import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
-import es.serversurvival.bolsa.activosinfo.vervalores.ComprarBolsaConfirmacion;
-import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival._shared.utils.MinecraftUtils;
-import org.bukkit.ChatColor;
+import es.serversurvival.bolsa.activosinfo.vervalores.ComprarBolsaConfirmacionMenu;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.*;
+import java.util.concurrent.Executor;
 
-import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+import static es.serversurvival._shared.utils.Funciones.*;
+import static org.bukkit.ChatColor.*;
 
-public class AccionesMenu extends Menu implements Clickable, Paginated, PostLoading {
-    public static final String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "   Escoge para invertir";
-    private static ExecutorService pool = Executors.newSingleThreadExecutor();
+public final class AccionesMenu extends Menu implements AfterShow {
+    private final ActivosInfoService activosInfoService;
+    private final MenuService menuService;
+    private final Executor executor;
+    private boolean hasLoaddedPrices;
 
-    private Player player;
-    private Inventory inventory;
-    private int currentIndex;
-    private List<Page> pages;
-    
-    public AccionesMenu(Player player) {
-        this.player = player;
-        this.currentIndex = 0;
-
-        this.pages = new ArrayList<>();
-        AccionesInventoryFactory inventoryFactory = new AccionesInventoryFactory();
-        pages.add(new Page(0, InventoryCreator.createInventoryMenu(inventoryFactory, player.getName())));
-        pages.add(new Page(1, inventoryFactory.buildInventoryPag2()));
-
-        this.inventory = this.pages.get(0).inventory;
-
-        postLoad();
-        openMenu();
+    public AccionesMenu() {
+        this.activosInfoService = DependecyContainer.get(ActivosInfoService.class);
+        this.executor = DependecyContainer.get(Executor.class);
+        this.menuService = DependecyContainer.get(MenuService.class);
     }
 
     @Override
-    public void onOherClick(InventoryClickEvent event) {
-        ItemStack itemStack = event.getCurrentItem();
-        if(!Funciones.cuincideNombre(itemStack.getType().toString(), "BOOK")){
-            return;
+    public int[][] items() {
+        return new int[][] {
+                {1, 2, 0, 0, 0, 0, 0, 0, 0 },
+                {0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                {0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                {0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                {0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                {0, 0, 0, 0, 0, 0, 7, 8, 9 }
+        };
+    }
+
+    @Override
+    public MenuConfiguration configuration() {
+        return MenuConfiguration.builder()
+                .title(DARK_RED + "" + BOLD + "   Escoge para invertir")
+                .fixedItems()
+                .item(1, itemInfo())
+                .items(2, itemsAcciones(), this::onAccoinClicked)
+                .breakpoint(7)
+                .paginated(PaginationConfiguration.builder()
+                        .backward(8, itemBackPage())
+                        .forward(9, itemNextPage())
+                        .build())
+                .build();
+    }
+
+    private void onAccoinClicked(Player player, InventoryClickEvent event) {
+        if(!hasLoaded(event.getCurrentItem())) return;
+
+        ItemStack itemClicked = event.getCurrentItem();
+        String ticker = ItemUtils.getLore(itemClicked, 0);
+        double precio = Double.parseDouble(ItemUtils.getLore(itemClicked, 1).split(" ")[1]);
+
+        this.menuService.open(player, new ComprarBolsaConfirmacionMenu(
+                ticker, SupportedTipoActivo.ACCIONES, player.getName(), precio
+        ));
+    }
+
+    private boolean hasLoaded(ItemStack item){
+        return item.getItemMeta().getLore().stream()
+                .noneMatch(lore -> lore.contains("cargando..."));
+    }
+
+    private List<ItemStack> itemsAcciones() {
+        Map<String, String> allAcciones = TodasAccionesVerValores.accciones;
+        List<ItemStack> items = new ArrayList<>(allAcciones.size());
+
+        for(Map.Entry<String, String> entry : allAcciones.entrySet()){
+            String ticker = entry.getKey();
+            String nombre = entry.getValue();
+
+            items.add(buildItemAccion(ticker, nombre));
         }
 
-        String nombreValor = itemStack.getItemMeta().getDisplayName().substring(4);
-        List<String> lore = itemStack.getItemMeta().getLore();
-        String precioLore = lore.get(1);
-        if (precioLore.equalsIgnoreCase(ChatColor.RED + "Cargando...")) {
-            return;
+        return items;
+    }
+
+    private ItemStack buildItemAccion(String ticker, String nombre) {
+        return ItemBuilder.of(Material.BOOK)
+                .title(BOLD + nombre)
+                .lore(List.of(
+                        RED + "Ticker: " + ticker,
+                        RED + "Cargando..."))
+                .build();
+    }
+
+    private ItemStack itemNextPage() {
+        return ItemBuilder.of(Material.GREEN_WOOL)
+                .title(Paginated.ITEM_NAME_GOFORDWARD)
+                .build();
+    }
+
+    private ItemStack itemBackPage () {
+        return ItemBuilder.of(Material.RED_WOOL)
+                .title(Paginated.ITEM_NAME_GOBACK)
+                .build();
+    }
+
+    private ItemStack itemInfo () {
+        List<String> infolore = new ArrayList<>();
+        infolore.add("Para invertir en estas acciones: /bolsa invertir <ticker> <nº acciones>");
+        infolore.add("                  ");
+        infolore.add("Estas acciones son ejemplos con las que se puede comprar, ");
+        infolore.add("si quieres comprar otra accion que no este en la lista adelante");
+        infolore.add(" solo que necesitas encontrar el ticker en internet, ");
+        infolore.add("se puede encontrar en cualquier pagina como por ejemplo");
+        infolore.add("es.investing.com. Hay que aclarar que hay acciones que se puede ");
+        infolore.add("y otras no la mayoria que se pueden son americanas.");
+
+        String displayname = AQUA + "" + BOLD + "INFO";
+
+        return ItemBuilder.of(Material.PAPER).title(displayname).lore(infolore).build();
+    }
+
+    @Override
+    public void afterShow() {
+        if(this.hasLoaddedPrices) return;
+
+        List<ItemStack> itemsToEdit = getItemsAccionesToEdit();
+        Map<String, ActivoInfo> allActivosInfo = this.activosInfoService.findAllToMap();
+
+        for (ItemStack itemToEdit : itemsToEdit) {
+            this.executor.execute(() -> {
+                addPriceToAccionItem(allActivosInfo, itemToEdit);
+            });
         }
 
-        double precio = Double.parseDouble(lore.get(1).split(" ")[1].split(",")[0]);
-        String ticker = lore.get(0).split(" ")[1];
-
-        closeMenu();
-        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(ticker, nombreValor, SupportedTipoActivo.ACCIONES, "acciones", player, precio);
+        this.hasLoaddedPrices = true;
     }
 
-    @Override
-    public void goFordward() {
-        this.inventory = pages.get(1).inventory;
-        this.currentIndex = 1;
-        openMenu();
-        postLoad();
-    }
+    private void addPriceToAccionItem(Map<String, ActivoInfo> allActivosInfo, ItemStack itemToEdit) {
+        try {
+            String ticker = ItemUtils.getLore(itemToEdit, 0).split(" ")[1];
+            double precio = allActivosInfo.get(ticker) == null ?
+                    SupportedTipoActivo.ACCIONES.getTipoActivoService().getPrecio(ticker) :
+                    allActivosInfo.get(ticker).getPrecio();
 
-    @Override
-    public void goBack() {
-        this.inventory = pages.get(0).inventory;
-        this.currentIndex = 0;
-        openMenu();
-    }
-
-    @Override
-    public void postLoad() {
-        for(int i = 0; i < inventory.getContents().length; i++){
-            ItemStack actual = inventory.getContents()[i];
-
-            if(i == 52 || actual == null || Funciones.esDeTipoItem(actual, "AIR")){
-                break;
-            }
-
-            ItemMeta actualMeta = actual.getItemMeta();
-            List<String> precio = actualMeta.getLore();
-
-            if(precio == null || precio.get(1) == null || !precio.get(1).equalsIgnoreCase(ChatColor.RED + "Cargando...")){
-                continue;
-            }
-
-            asynchLoadPrice(precio, actual);
+            ItemUtils.setLore(itemToEdit, 1, GOLD + "Precio: " + GREEN + FORMATEA.format(precio) + " PC");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    private void asynchLoadPrice (List<String> lore, ItemStack item) {
-        pool.submit(() -> {
-            lore.remove(1);
-
-            String ticker = lore.get(0).split(" ")[1];
-            try {
-                double precioAccion = SupportedTipoActivo.ACCIONES.getTipoActivoService().getPrecio(ticker);
-                lore.add(1, ChatColor.GOLD + "Precio/Accion:" + ChatColor.GREEN + " " + FORMATEA.format(precioAccion)  + " PC");
-
-                MinecraftUtils.setLore(item, lore);
-            } catch (Exception e) {
-                player.sendMessage(ChatColor.DARK_RED + "No hagas spam del comando");
-            }
-        });
-    }
-
-    @Override
-    public Inventory getInventory() {
-        return inventory;
-    }
-
-    @Override
-    public Player getPlayer() {
-        return player;
-    }
-
-    @Override
-    public int getCurrentIndex() {
-        return currentIndex;
-    }
-
-    @Override
-    public List<Page> getPages() {
-        return pages;
-    }
-
-    @Override
-    public String getNameItemGoBack() {
-        return ITEM_NAME_GOBACK;
-    }
-
-    @Override
-    public String getNameItemGoFordward() {
-        return ITEM_NAME_GOFORDWARD;
+    private List<ItemStack> getItemsAccionesToEdit() {
+        return getPages().stream()
+                .map(Page::getInventory)
+                .map(Inventory::getContents)
+                .flatMap(Arrays::stream)
+                .filter(item -> item != null && item.getType().equals(Material.BOOK))
+                .toList();
     }
 }

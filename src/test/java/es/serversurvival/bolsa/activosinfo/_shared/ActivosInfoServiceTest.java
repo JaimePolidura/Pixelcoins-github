@@ -94,8 +94,8 @@ public final class ActivosInfoServiceTest {
         ActivoInfo activoInfo = this.service.getByNombreActivo("AMZN", SupportedTipoActivo.ACCIONES);
         assertThat(activoInfo).isNotNull().isEqualTo(toReturn);
 
-        var activoInfoAPICall = this.service.getByNombreActivo("GOOG", SupportedTipoActivo.ACCIONES);
-        assertThat(activoInfoAPICall.getNombreActivo()).isEqualTo("GOOG");
+        var activoInfoAPICall = this.service.getByNombreActivo("AMZN", SupportedTipoActivo.ACCIONES);
+        assertThat(activoInfoAPICall.getNombreActivo()).isEqualTo("AMZN");
         assertThat(activoInfoAPICall.getTipoActivo() == SupportedTipoActivo.ACCIONES);
         assertThat(activoInfoAPICall.getPrecio() > 0);
     }

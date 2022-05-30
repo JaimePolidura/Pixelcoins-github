@@ -2,6 +2,8 @@ package es.serversurvival.bolsa.ordenespremarket.verordenespremarket;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
+import es.jaimetruman.menus.MenuService;
+import es.serversurvival._shared.DependecyContainer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -10,8 +12,14 @@ import org.bukkit.entity.Player;
         explanation = "Ver todas las ordenes de compra y venta de acciones pendientes a ejecutar cuando el mercado este cerrado"
 )
 public class OrdenesBolsa implements CommandRunnerNonArgs {
+    private final MenuService menuService;
+
+    public OrdenesBolsa() {
+        this.menuService = DependecyContainer.get(MenuService.class);
+    }
+
     @Override
     public void execute(CommandSender sender) {
-        BolsaOrdenesMenu menu = new BolsaOrdenesMenu((Player) sender);
+        this.menuService.open((Player) sender, new BolsaVerOrdernesMenu(sender.getName()));
     }
 }

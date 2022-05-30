@@ -1,4 +1,4 @@
-package es.serversurvival.bolsa.posicionesabiertas.vercartera;
+package es.serversurvival.empresas.ofertasaccionesserver;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
@@ -24,7 +24,7 @@ import static es.serversurvival._shared.utils.Funciones.enviarMensajeYSonido;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.BOLD;
 
-public class BolsaVenderAccionEmpresaMenu extends Menu implements Confirmacion {
+public class VenderAccionEmpresaMenu extends Menu implements Confirmacion {
     private final VenderOfertaAccionServerUseCase venderOfertaUseCase;
 
     private final Inventory inventory;
@@ -34,7 +34,7 @@ public class BolsaVenderAccionEmpresaMenu extends Menu implements Confirmacion {
     private final double precioApertura;
     private double precioVenta;
 
-    public BolsaVenderAccionEmpresaMenu(Player player, AccionistaServer accionEmpresaAVender) {
+    public VenderAccionEmpresaMenu(Player player, AccionistaServer accionEmpresaAVender) {
         this.player = player;
         this.accionEmpresaAVender = accionEmpresaAVender;
         this.venderOfertaUseCase = new VenderOfertaAccionServerUseCase();

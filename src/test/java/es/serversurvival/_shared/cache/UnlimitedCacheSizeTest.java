@@ -1,7 +1,7 @@
 package es.serversurvival._shared.cache;
 
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertTrue;
@@ -13,7 +13,7 @@ public final class UnlimitedCacheSizeTest {
         this.cache = new UnlimitedCacheSize<>();
     }
 
-    @BeforeTest
+    @BeforeEach
     public void beforeTest(){
         this.cache.clear();
     }

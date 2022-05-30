@@ -1,54 +1,55 @@
 package es.serversurvival.bolsa.activosinfo.vervalores;
 
+import es.jaimetruman.ItemBuilder;
+import es.jaimetruman.menus.Menu;
+import es.jaimetruman.menus.MenuService;
+import es.jaimetruman.menus.configuration.MenuConfiguration;
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.bolsa.activosinfo.vervalores.acciones.AccionesMenu;
 import es.serversurvival.bolsa.activosinfo.vervalores.criptomonedas.CriptomonedasMenu;
 import es.serversurvival.bolsa.activosinfo.vervalores.materiasprimas.MateriasPrimasMenu;
-import es.serversurvival.bolsa.activosinfo.vervalores.acciones.AccionesMenu;
-import es.serversurvival._shared.menus.Menu;
-import es.serversurvival._shared.menus.inventory.InventoryCreator;
-import es.serversurvival._shared.menus.Clickable;
-import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+public final class ElegirInversionMenu extends Menu {
+    private final MenuService menuService;
 
-public class ElegirInversionMenu extends Menu implements Clickable {
-    public final static String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + " ¿En que quieres invertir?";
-    private Inventory inventory;
-    private Player player;
-
-    public ElegirInversionMenu (Player player) {
-        this.player = player;
-        this.inventory = InventoryCreator.createInventoryMenu(new ElegirInversionInventoryFactory(), player.getName());
-        openMenu();
+    public ElegirInversionMenu() {
+        this.menuService = DependecyContainer.get(MenuService.class);
     }
 
     @Override
-    public Inventory getInventory() {
-        return inventory;
+    public int[][] items() {
+        return new int[][]{{1, 0, 2, 0, 3}};
     }
 
     @Override
-    public Player getPlayer() {
-        return player;
+    public MenuConfiguration configuration() {
+        return MenuConfiguration.builder()
+                .fixedItems()
+                .staticMenu()
+                .item(1, itemAcciones(), (p, e) -> this.menuService.open(p, new AccionesMenu()))
+                .item(2, itemCriptomonedas(), (p, e) -> this.menuService.open(p, new CriptomonedasMenu()))
+                .item(3, itemMateriasPrimas(), (p, e) -> this.menuService.open(p, new MateriasPrimasMenu()))
+                .build();
     }
 
-    @Override
-    public void onOherClick(InventoryClickEvent event) {
-        ItemStack itemStack = event.getCurrentItem();
-        if(itemStack == null || !Funciones.cuincideNombre(itemStack.getType().toString(), "GOLD_INGOT", "PAPER", "CHARCOAL")){
-            return;
-        }
+    private ItemStack itemMateriasPrimas() {
+        return ItemBuilder.of(Material.CHARCOAL)
+                .title(ChatColor.GOLD + "" + ChatColor.BOLD + "Materias primas")
+                .build();
+    }
 
-        if(itemStack.getType() == Material.PAPER){
-            AccionesMenu menu = new AccionesMenu(player);
-        }else if (itemStack.getType() == Material.GOLD_INGOT) {
-            CriptomonedasMenu menu = new CriptomonedasMenu(player);
-        }else if (itemStack.getType() == Material.CHARCOAL) {
-            MateriasPrimasMenu menu = new MateriasPrimasMenu(player);
-        }
+    private ItemStack itemCriptomonedas() {
+        return ItemBuilder.of(Material.GOLD_INGOT)
+                .title(ChatColor.GOLD + "" + ChatColor.BOLD + "Criptomonedas")
+                .build();
+    }
+
+    private ItemStack itemAcciones() {
+        return ItemBuilder.of(Material.PAPER)
+                .title(ChatColor.GOLD + "" + ChatColor.BOLD + "Acciones")
+                .build();
     }
 }

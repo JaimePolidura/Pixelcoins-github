@@ -3,7 +3,6 @@ package es.serversurvival.jugadores.perfil;
 import es.serversurvival._shared.menus.Clickable;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
-import es.serversurvival.bolsa.posicionesabiertas.vercartera.BolsaCarteraMenu;
 import es.serversurvival.deudas.ver.DeudasMenu;
 import es.serversurvival.empresas.empleados.misempleos.EmpleosMenu;
 import es.serversurvival.empresas.empresas.vertodas.EmpresasVerTodasMenu;
@@ -49,7 +48,6 @@ public class PerfilMenu extends Menu implements Clickable {
                 break;
 
             case "BOOK":
-                BolsaCarteraMenu menuPosAbiertas = new BolsaCarteraMenu(player);
                 break;
 
             case "GOLD_BLOCK":

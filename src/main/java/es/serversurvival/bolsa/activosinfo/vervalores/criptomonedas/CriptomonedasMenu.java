@@ -1,93 +1,128 @@
 package es.serversurvival.bolsa.activosinfo.vervalores.criptomonedas;
 
-import es.serversurvival.Pixelcoin;
+import es.jaimetruman.ItemBuilder;
+import es.jaimetruman.ItemUtils;
+import es.jaimetruman.menus.Menu;
+import es.jaimetruman.menus.MenuService;
+import es.jaimetruman.menus.Page;
+import es.jaimetruman.menus.configuration.MenuConfiguration;
+import es.jaimetruman.menus.menustate.AfterShow;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
-import es.serversurvival.bolsa.activosinfo.vervalores.ComprarBolsaConfirmacion;
-import es.serversurvival._shared.menus.Clickable;
-import es.serversurvival._shared.menus.PostLoading;
-import es.serversurvival._shared.menus.Menu;
-import es.serversurvival._shared.menus.inventory.InventoryCreator;
-import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival._shared.utils.MinecraftUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import es.serversurvival.bolsa.activosinfo.vervalores.ComprarBolsaConfirmacionMenu;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executor;
 
-import static es.serversurvival._shared.utils.Funciones.DATE_FORMATER_LEGACY;
+import static es.serversurvival._shared.utils.Funciones.*;
+import static es.serversurvival.bolsa.activosinfo.vervalores.criptomonedas.TodasCriptomodeasVerValores.*;
+import static org.bukkit.ChatColor.*;
 
-public class CriptomonedasMenu extends Menu implements Clickable, PostLoading {
-    public static final String titulo = ChatColor.DARK_RED + "" + ChatColor.BOLD + "   Escoge para invertir";
-    private Player player;
-    private Inventory inventory;
+public final class CriptomonedasMenu extends Menu implements AfterShow {
+    private final Executor executor;
+    private final MenuService menuService;
 
-    public CriptomonedasMenu (Player player) {
-        this.player = player;
-        this.inventory = InventoryCreator.createInventoryMenu(new CriptomonedasInventoryFactory(), player.getName());
-
-        postLoad();
-        openMenu();
+    public CriptomonedasMenu() {
+        this.executor = DependecyContainer.get(Executor.class);
+        this.menuService = DependecyContainer.get(MenuService.class);
     }
 
     @Override
-    public Inventory getInventory() {
-        return inventory;
+    public int[][] items() {
+        return new int[][]{{1, 2, 0, 0, 0}};
     }
 
     @Override
-    public Player getPlayer() {
-        return player;
+    public MenuConfiguration configuration() {
+        return MenuConfiguration.builder()
+                .title(DARK_RED + "" + BOLD + "   Escoge para invertir")
+                .fixedItems()
+                .item(1, itemInfo())
+                .items(2, itemsCriptomonedas(), this::onCriptomonedaItemClick)
+                .build();
     }
 
-    @Override
-    public void onOherClick(InventoryClickEvent event) {
-        ItemStack itemStack = event.getCurrentItem();
-        if(itemStack == null || !Funciones.cuincideNombre(itemStack.getType().toString(), Material.GOLD_BLOCK.toString())){
-            return;
+    private void onCriptomonedaItemClick(Player player, InventoryClickEvent event) {
+        if(hasLoaded(event.getCurrentItem())) return;
+
+        ItemStack itemClicked = event.getCurrentItem();
+        double precio = Double.parseDouble(ItemUtils.getLore(itemClicked, 1).split(" ")[1]);
+        String nombreActivo = ItemUtils.getLore(itemClicked, 0).split(" ")[1];
+
+        this.menuService.open(player, new ComprarBolsaConfirmacionMenu(
+                nombreActivo, SupportedTipoActivo.CRIPTOMONEDAS, player.getName(), precio
+        ));
+    }
+
+    private boolean hasLoaded(ItemStack itemStack){
+        return itemStack.getItemMeta().getLore().stream()
+                .noneMatch(lore -> lore.contains("Cargando"));
+    }
+
+    private List<ItemStack> itemsCriptomonedas() {
+        List<ItemStack> toReturn = new ArrayList<>(CRIPTOMONEDAS.size());
+
+        for(var entry: CRIPTOMONEDAS.entrySet()){
+            String nombreActivoLargo = entry.getValue();
+
+            List<String> lore = List.of(
+                    GOLD + "Simbolo: " + entry.getKey(),
+                    RED + "Cargando..."
+            );
+
+            toReturn.add(ItemBuilder.of(Material.GOLD_BLOCK)
+                    .title(GOLD + "" + BOLD + nombreActivoLargo)
+                    .lore(lore)
+                    .build());
         }
 
-        String nombreValor = itemStack.getItemMeta().getDisplayName().substring(4);
-        List<String> lore = itemStack.getItemMeta().getLore();
-        String precioLore = lore.get(1);
-        if (precioLore.equalsIgnoreCase(ChatColor.RED + "Cargando...")) {
-            return;
-        }
-        double precio = Double.parseDouble(lore.get(1).split(" ")[1]);
-        String simbolo = lore.get(0).split(" ")[1];
+        return toReturn;
+    }
 
-        ComprarBolsaConfirmacion confirmacion = new ComprarBolsaConfirmacion(simbolo, nombreValor, SupportedTipoActivo.CRIPTOMONEDAS, "monedas", player, precio);
+    private ItemStack itemInfo() {
+        return ItemBuilder.of(Material.PAPER)
+                .title(AQUA + "" + BOLD + "INFO")
+                .lore(List.of(
+                        "Para invertir en estas criptomonedas clickea en cualquiera de ellas y elige la cantidad a comprar"
+                ))
+                .build();
     }
 
     @Override
-    public void postLoad() {
-        Bukkit.getScheduler().scheduleAsyncDelayedTask(Pixelcoin.getInstance(), () -> {
-            int pos = 0;
+    public void afterShow() {
+        List<ItemStack> items = this.getItemsAccionesToEdit();
 
-            for (ItemStack actual : inventory.getContents()) {
-                if (pos == 4 || actual == null || actual.getType().toString().equalsIgnoreCase("AIR")) {
-                    break;
-                }
-                pos++;
+        for (ItemStack item : items) {
+            this.executor.execute(() -> {
+                addPriceToItem(item);
+            });
+        }
+    }
 
-                List<String> loreItem = actual.getItemMeta().getLore();
-                loreItem.remove(1);
-                String ticker = loreItem.get(0).split(" ")[1];
+    private void addPriceToItem(ItemStack item) {
+        try {
+            String nombreActivo = ItemUtils.getLore(item, 0).split(" ")[1];
+            double precio = SupportedTipoActivo.CRIPTOMONEDAS.getTipoActivoService().getPrecio(nombreActivo);
 
-                try {
-                    double precioMoneda = SupportedTipoActivo.CRIPTOMONEDAS.getTipoActivoService().getPrecio(ticker);
+            ItemUtils.setLore(item, 1, GOLD + "Precio: " + GREEN + FORMATEA.format(precio) + " PC");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-                    loreItem.add(1, ChatColor.GOLD + "Precio/Moneda:" + ChatColor.GREEN + " " + DATE_FORMATER_LEGACY.format(precioMoneda) + " $");
-
-                    MinecraftUtils.setLore(actual, loreItem);
-                } catch (Exception e) {
-                    player.sendMessage(ChatColor.DARK_RED + "No hagas spam del comando");
-                }
-            }
-        }, 0L);
+    private List<ItemStack> getItemsAccionesToEdit() {
+        return getPages().stream()
+                .map(Page::getInventory)
+                .map(Inventory::getContents)
+                .flatMap(Arrays::stream)
+                .filter(item -> item != null && item.getType().equals(Material.GOLD_BLOCK))
+                .toList();
     }
 }
