@@ -3,7 +3,6 @@ package es.serversurvival.jugadores.perfil;
 import es.serversurvival._shared.menus.Clickable;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
-import es.serversurvival.deudas.ver.DeudasMenu;
 import es.serversurvival.empresas.empleados.misempleos.EmpleosMenu;
 import es.serversurvival.empresas.empresas.vertodas.EmpresasVerTodasMenu;
 import es.serversurvival.jugadores.top.TopMenu;
@@ -44,7 +43,6 @@ public class PerfilMenu extends Menu implements Clickable {
 
         switch (itemClicked.getType().toString()){
             case "DIAMOND_SWORD":
-                DeudasMenu menu = new DeudasMenu(player);
                 break;
 
             case "BOOK":

@@ -2,6 +2,7 @@ package es.serversurvival.deudas._shared.application;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.utils.CollectionUtils;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.deudas._shared.domain.Deuda;
 import es.serversurvival.deudas._shared.domain.DeudasRepository;
@@ -44,6 +45,15 @@ public class DeudasService {
 
     public List<Deuda> findByDeudor(String deudor) {
         return this.deudasRepository.findByDeudor(deudor);
+    }
+
+    public List<Deuda> findByJugador(String jugador){
+        var deduasDeduor = this.deudasRepository.findByDeudor(jugador);
+        var deduasAcredor = this.deudasRepository.findByAcredor(jugador);
+
+        deduasAcredor.addAll(deduasDeduor);
+
+        return deduasAcredor;
     }
 
     public List<Deuda> findAll() {

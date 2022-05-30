@@ -2,6 +2,8 @@ package es.serversurvival.deudas.ver;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
+import es.jaimetruman.menus.MenuService;
+import es.serversurvival._shared.DependecyContainer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -10,8 +12,14 @@ import org.bukkit.entity.Player;
         explanation = "Ver todas las deudas que tengas y que tengan contigo"
 )
 public class VerDeudasComandoExecutor implements CommandRunnerNonArgs {
+    private final MenuService menuService;
+
+    public VerDeudasComandoExecutor() {
+        this.menuService = DependecyContainer.get(MenuService.class);
+    }
+
     @Override
     public void execute(CommandSender sender) {
-        DeudasMenu menu = new DeudasMenu((Player) sender);
+        this.menuService.open((Player) sender, new VerDeudasMenu(sender.getName()));
     }
 }
