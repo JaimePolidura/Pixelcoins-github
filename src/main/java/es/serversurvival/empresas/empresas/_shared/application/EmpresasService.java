@@ -10,6 +10,7 @@ import es.serversurvival.empresas.empresas._shared.domain.EmpresasRepostiory;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -43,6 +44,12 @@ public class EmpresasService {
         this.cache.put(empresa.getNombre(), empresa);
     }
 
+    public boolean isOwner(String jugadorNombre, String empresaNombre){
+        Optional<Empresa> empresaByNombre = this.repostioryDb.findByNombre(empresaNombre);
+
+        return empresaByNombre.isPresent() && empresaByNombre.get().getOwner().equalsIgnoreCase(jugadorNombre);
+    }
+
     public Empresa getById(UUID empresaId) {
         return cache.findValueIf(empresa -> empresa.getEmpresaId() == empresaId).orElseGet(() -> this.repostioryDb.findById(empresaId)
                 .map(saveEmpresaToCache())
@@ -61,7 +68,7 @@ public class EmpresasService {
                 .toList();
     }
 
-    public List<Empresa> getAll() {
+    public List<Empresa> findAll() {
         return this.repostioryDb.findAll().stream()
                 .map(saveEmpresaToCache())
                 .toList();
@@ -77,7 +84,7 @@ public class EmpresasService {
     }
 
     public Map<String, List<Empresa>> getAllEmpresasJugadorMap () {
-        return CollectionUtils.mergeMapList(this.getAll(), Empresa::getOwner);
+        return CollectionUtils.mergeMapList(this.findAll(), Empresa::getOwner);
     }
 
     private Function<Empresa, Empresa> saveEmpresaToCache(){

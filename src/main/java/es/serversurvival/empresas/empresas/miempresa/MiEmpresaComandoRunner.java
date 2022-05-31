@@ -2,6 +2,8 @@ package es.serversurvival.empresas.empresas.miempresa;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
+import es.jaimetruman.menus.MenuService;
+import es.serversurvival._shared.DependecyContainer;
 import main.ValidationResult;
 import main.ValidatorService;
 import org.bukkit.ChatColor;
@@ -18,6 +20,11 @@ import static org.bukkit.ChatColor.DARK_RED;
 )
 public class MiEmpresaComandoRunner implements CommandRunnerArgs<MiEmpresaComando> {
     private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /empresas miempresa <empresa>";
+    private final MenuService menuService;
+
+    public MiEmpresaComandoRunner() {
+        this.menuService = DependecyContainer.get(MenuService.class);
+    }
 
     @Override
     public void execute(MiEmpresaComando miEmpresaComando, CommandSender sender) {
@@ -32,6 +39,6 @@ public class MiEmpresaComandoRunner implements CommandRunnerArgs<MiEmpresaComand
             return;
         }
 
-        EmpresasVerMenu menu = new EmpresasVerMenu((Player) sender, empresa);
+        this.menuService.open((Player) sender, new VerEmpresaMenu(empresa));
     }
 }

@@ -3,8 +3,6 @@ package es.serversurvival.jugadores.perfil;
 import es.serversurvival._shared.menus.Clickable;
 import es.serversurvival._shared.menus.Menu;
 import es.serversurvival._shared.menus.inventory.InventoryCreator;
-import es.serversurvival.empresas.empleados.misempleos.EmpleosMenu;
-import es.serversurvival.empresas.empresas.vertodas.EmpresasVerTodasMenu;
 import es.serversurvival.jugadores.top.TopMenu;
 import es.serversurvival.tienda.vertienda.OfertasMenu;
 import org.bukkit.ChatColor;
@@ -49,11 +47,9 @@ public class PerfilMenu extends Menu implements Clickable {
                 break;
 
             case "GOLD_BLOCK":
-                EmpresasVerTodasMenu todasEmpresas = new EmpresasVerTodasMenu(player);
                 break;
 
             case "GOLDEN_APPLE":
-                EmpleosMenu menuEmpleos = new EmpleosMenu(player);
                 break;
 
             case "PLAYER_HEAD":

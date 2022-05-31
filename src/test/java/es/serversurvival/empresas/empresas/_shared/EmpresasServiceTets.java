@@ -58,7 +58,7 @@ public final class EmpresasServiceTets {
                 createEmpresa("jaime", "jaime"), createEmpresa("jaime2", "jaime")
         ));
 
-        assertThat(this.empresasService.getAll()).hasSize(2);
+        assertThat(this.empresasService.findAll()).hasSize(2);
     }
 
     @Test

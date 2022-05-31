@@ -26,7 +26,7 @@ public final class PagarSueldosTask implements TaskRunner {
 
     @Override
     public void run() {
-        List<Empresa> allEmpresas = empresasService.getAll();
+        List<Empresa> allEmpresas = empresasService.findAll();
 
         for (Empresa empresa : allEmpresas) {
             useCase.pagarSueldos(empresa, empleadosService.findByEmpresa(empresa.getNombre()));
