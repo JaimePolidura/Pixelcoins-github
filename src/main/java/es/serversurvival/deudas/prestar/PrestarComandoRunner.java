@@ -2,10 +2,13 @@ package es.serversurvival.deudas.prestar;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
+import es.jaimetruman.menus.MenuService;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.menus.MenuManager;
 import main.ValidationResult;
 import main.ValidatorService;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
 import static org.bukkit.ChatColor.*;
@@ -16,6 +19,12 @@ import static org.bukkit.ChatColor.*;
         explanation = "Prestar dinero a un jugador durante dias. La deuda se pagara cada dia"
 )
 public class PrestarComandoRunner implements CommandRunnerArgs<PrestarComando> {
+    private final MenuService menuService;
+
+    public PrestarComandoRunner() {
+        this.menuService = DependecyContainer.get(MenuService.class);
+    }
+
     @Override
     public void execute(PrestarComando comando, CommandSender player) {
         String jugador = comando.getJugador();
@@ -32,13 +41,12 @@ public class PrestarComandoRunner implements CommandRunnerArgs<PrestarComando> {
             return;
         }
 
-        new PrestamoSolicitud(
-                player.getName(),
+        this.menuService.open((Player) player, new PrestamoConfirmacionMenu(
                 jugador,
+                player.getName(),
                 pixelcoins,
                 dias,
                 interes
-        );
-
+        ) );
     }
 }

@@ -2,15 +2,17 @@ package es.serversurvival.empresas.empresas.contratar;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
+import es.jaimetruman.menus.MenuService;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empleados._shared.domain.TipoSueldo;
-import es.serversurvival.empresas.empleados.contratar.ContratarSolicitud;
+import es.serversurvival.empresas.empleados.contratar.ContratarConfirmacionMenu;
 import main.ValidationResult;
 import main.ValidatorService;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
-import static org.bukkit.ChatColor.DARK_RED;
 
 @Command(
         value = "empresas contratar",
@@ -19,11 +21,15 @@ import static org.bukkit.ChatColor.DARK_RED;
                 "2s (cada 2 semanas), m (cada mes)"
 )
 public class ContratarComandoRunner implements CommandRunnerArgs<ContratarComando> {
-    private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /empresas contratar <jugador> <empresa> <sueldo> <tipo sueldo (/ayuda empresas)> [cargo]";
+    private final MenuService menuService;
+
+    public ContratarComandoRunner() {
+        this.menuService = DependecyContainer.get(MenuService.class);
+    }
 
     @Override
     public void execute(ContratarComando contratarComando, CommandSender player) {
-        String jugador = contratarComando.getJugador();
+        String destinoJugadorNOmbre = contratarComando.getJugador();
         String empresa = contratarComando.getEmpresa();
         double sueldo = contratarComando.getSueldo();
         String tipoSueldoString = contratarComando.getTipoSueldo();
@@ -31,8 +37,10 @@ public class ContratarComandoRunner implements CommandRunnerArgs<ContratarComand
 
         ValidationResult result = ValidatorService
                 .startValidating(sueldo, NaturalNumber)
-                .and(jugador, JugadorOnline, NoLeHanEnviadoSolicitud, NotEqualsIgnoreCase.of(player.getName(), "No te puedes contratar a ti mismo"))
-                .and(TipoSueldo.codigoCorrecto(tipoSueldoString), True.of("El tipo de sueldo solo puede ser d: cdda dia, s: cada semana, 2s: cada dos semanas, m: cada mes"))
+                .and(destinoJugadorNOmbre, JugadorOnline, NoLeHanEnviadoSolicitud, NotEqualsIgnoreCase.of(player.getName(),
+                        "No te puedes contratar a ti mismo"))
+                .and(TipoSueldo.codigoCorrecto(tipoSueldoString), True.of("El tipo de sueldo solo puede ser d: cdda dia, s: " +
+                        "cada semana, 2s: cada dos semanas, m: cada mes"))
                 .and(empresa, OwnerDeEmpresa.of(player.getName()))
                 .validateAll();
 
@@ -44,6 +52,6 @@ public class ContratarComandoRunner implements CommandRunnerArgs<ContratarComand
 
         TipoSueldo tipoSueldo = TipoSueldo.ofCodigo(tipoSueldoString);
 
-        ContratarSolicitud solicitud = new ContratarSolicitud(player.getName(), jugador, empresa, sueldo, tipoSueldo, cargo);
+        this.menuService.open((Player) player, new ContratarConfirmacionMenu(player.getName(), destinoJugadorNOmbre, empresa, cargo, sueldo, tipoSueldo));
     }
 }

@@ -13,6 +13,8 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public final class BorrarEmpresaUseCase {
+    public static final BorrarEmpresaUseCase INSTANCE = new BorrarEmpresaUseCase();
+
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;
     private final EmpleadosService empleadosService;

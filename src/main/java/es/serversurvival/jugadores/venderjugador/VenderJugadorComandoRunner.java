@@ -2,6 +2,8 @@ package es.serversurvival.jugadores.venderjugador;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
+import es.jaimetruman.menus.MenuService;
+import es.serversurvival._shared.DependecyContainer;
 import main.ValidationResult;
 import main.ValidatorService;
 import org.bukkit.command.CommandSender;
@@ -16,6 +18,12 @@ import static org.bukkit.ChatColor.DARK_RED;
         explanation = "Vender a un jugador el item que tengas en la mano"
 )
 public class VenderJugadorComandoRunner implements CommandRunnerArgs<VenderJugadorComando> {
+    private final MenuService menuService;
+
+    public VenderJugadorComandoRunner() {
+        this.menuService = DependecyContainer.get(MenuService.class);
+    }
+
     @Override
     public void execute(VenderJugadorComando venderJugadorComando, CommandSender sender) {
         Player player = (Player) sender;
@@ -34,11 +42,12 @@ public class VenderJugadorComandoRunner implements CommandRunnerArgs<VenderJugad
             return;
         }
 
-        VenderJugadorSolicitud solicitud = new VenderJugadorSolicitud(
-                player,
+        this.menuService.open((Player) sender, new VenderJugadorConfirmacionMenu(
                 comprador,
+                player,
                 player.getInventory().getItemInMainHand(),
+                ((Player) sender).getInventory().getHeldItemSlot(),
                 pixelcoins
-        );
+        ));
     }
 }

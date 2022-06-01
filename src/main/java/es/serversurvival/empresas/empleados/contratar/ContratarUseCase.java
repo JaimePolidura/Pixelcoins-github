@@ -14,6 +14,8 @@ import static es.serversurvival.empresas.empleados._shared.application.Empleados
 
 @AllArgsConstructor
 public final class ContratarUseCase {
+    public static final ContratarUseCase INSTANCE = new ContratarUseCase();
+
     private final EmpleadosService empleadosService;
     private final EmpresasService empresasService;
     private final EventBus eventBus;

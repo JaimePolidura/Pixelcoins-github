@@ -3,17 +3,20 @@ package es.serversurvival.jugadores.pagar;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public final class PagarUseCase {
     private final JugadoresService jugadoresService;
     private final EventBus eventBus;
 
-    public PagarUseCase(JugadoresService jugadoresService, EventBus eventBus){
-        this.jugadoresService = jugadoresService;
-        this.eventBus = eventBus;
+    public PagarUseCase(){
+        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+        this.eventBus = DependecyContainer.get(EventBus.class);
     }
 
     public void realizarPago(String nombrePagador, String nombrePagado, double pixelcoins) {

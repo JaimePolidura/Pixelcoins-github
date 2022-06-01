@@ -16,6 +16,8 @@ import static es.serversurvival._shared.utils.Funciones.*;
 
 @AllArgsConstructor
 public final class PrestarUseCase {
+    public static final PrestarUseCase INSTANCE = new PrestarUseCase();
+
     private final JugadoresService jugadoresService;
     private final DeudasService deudasService;
     private final EventBus eventBus;
