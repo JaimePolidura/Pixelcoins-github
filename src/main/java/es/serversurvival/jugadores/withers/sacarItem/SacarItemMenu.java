@@ -1,102 +1,110 @@
 package es.serversurvival.jugadores.withers.sacarItem;
 
+import es.jaimetruman.ItemBuilder;
+import es.jaimetruman.menus.Menu;
+import es.jaimetruman.menus.configuration.MenuConfiguration;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.jugadores.withers.CambioPixelcoins;
-import es.serversurvival._shared.menus.Menu;
-import es.serversurvival._shared.menus.MenuManager;
-import es.serversurvival._shared.menus.inventory.InventoryCreator;
-import es.serversurvival._shared.menus.Clickable;
-import es.serversurvival._shared.menus.Refreshcable;
-import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+import static es.serversurvival.jugadores.withers.CambioPixelcoins.*;
 import static org.bukkit.ChatColor.DARK_RED;
 
-public class SacarItemMenu extends Menu implements Clickable, Refreshcable {
+public final class SacarItemMenu extends Menu {
+    public static final String TITULO = ChatColor.DARK_RED + "" + org.bukkit.ChatColor.BOLD + "   ELIGE ITEM PARA SACAR";
+
+    private Jugador jugador;
     private final JugadoresService jugadoresService;
-    private Player player;
-    private Inventory inventory;
-    private double pixelcoinsJugador;
 
-    public SacarItemMenu(Player player) {
-        this.player = player;
+    public SacarItemMenu(String jugadorNombre) {
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.pixelcoinsJugador = this.jugadoresService.getByNombre(player.getName()).getPixelcoins();
-
-        this.inventory = InventoryCreator.createInventoryMenu(new SacarItemInventoryFactory(pixelcoinsJugador), player.getName());
-        openMenu();
+        this.jugador = this.jugadoresService.getByNombre(jugadorNombre);
     }
 
     @Override
-    public Inventory getInventory() {
-        return inventory;
+    public int[][] items() {
+        return new int[][] {
+                {0, 0, 0, 0, 1, 0, 0, 0, 0},
+                {2, 0, 3, 0, 4, 0, 5, 0, 6},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0}
+        };
     }
 
     @Override
-    public Player getPlayer() {
-        return player;
+    public MenuConfiguration configuration() {
+        return MenuConfiguration.builder()
+                .title(TITULO)
+                .fixedItems()
+                .item(1, buildItemInfo())
+                .item(2, buildItem("DIAMANTE", DIAMANTE, Material.DIAMOND), this::onClick)
+                .item(3, buildItem("BLOQUE DE DIAMANTE", DIAMANTE * 9, Material.DIAMOND_BLOCK), this::onClick)
+                .item(4, buildItem("LAPISLAZULI", LAPISLAZULI, Material.LAPIS_LAZULI), this::onClick)
+                .item(5, buildItem("BLOQUE DE LAPISLAZULI", LAPISLAZULI * 9, Material.LAPIS_BLOCK), this::onClick)
+                .item(6, buildItem("CUARZO", CUARZO, Material.QUARTZ_BLOCK), this::onClick)
+                .build();
     }
 
-    @Override
-    public void onOherClick(InventoryClickEvent event) {
+    private void onClick(Player player, InventoryClickEvent event) {
         ItemStack itemClickeado = event.getCurrentItem();
-        if(itemClickeado == null || itemClickeado.getType().toString().equalsIgnoreCase("AIR")){
-            return;
-        }
-        Player player = (Player) event.getWhoClicked();
         int espacios = Funciones.getEspaciosOcupados(player.getInventory());
 
-        boolean inventarioLleno = espacios == 36 || (Funciones.esDeTipoItem(itemClickeado, "DIAMOND", "DIAMOND_BLOCK", "QUARTZ_BLOCK", "LAPIS_LAZULI", "LAPIS_BLOCK") && itemClickeado.getAmount() == 64);
+        boolean inventarioLleno = espacios == 36 || (Funciones.esDeTipoItem(itemClickeado, "DIAMOND", "DIAMOND_BLOCK", "QUARTZ_BLOCK",
+                "LAPIS_LAZULI", "LAPIS_BLOCK") && itemClickeado.getAmount() == 64);
         if(inventarioLleno){
             player.sendMessage(ChatColor.DARK_RED + "Necesitas tener el inventario con espacios libres");
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
             return;
         }
 
-        Jugador jugadorASacar = this.jugadoresService.getByNombre(player.getName());
         String tipoItem = itemClickeado.getType().toString();
         double cambioPixelcoins = CambioPixelcoins.getCambioTotal(tipoItem, 1); //Pixelcoins a sacar
-
-        if(jugadorASacar.getPixelcoins() < cambioPixelcoins){
+        if(jugador.getPixelcoins() < cambioPixelcoins){
             Funciones.enviarMensajeYSonido(player, DARK_RED + "Necesitas tener minimo " + cambioPixelcoins + " pixelcoins para convertirlo", Sound.ENTITY_VILLAGER_NO);
             return;
         }
 
-        CambioPixelcoins.sacarItem(jugadorASacar, tipoItem);
+        CambioPixelcoins.sacarItem(jugador, tipoItem);
         player.getInventory().addItem(new ItemStack(Material.getMaterial(tipoItem), 1));
 
-        this.pixelcoinsJugador = pixelcoinsJugador - cambioPixelcoins;
+        this.jugador = jugador.decrementPixelcoinsBy(cambioPixelcoins);
 
-        refresh();
+        super.setItem(9, buildItem("DIAMANTE", DIAMANTE, Material.DIAMOND));
+        super.setItem(11, buildItem("BLOQUE DE DIAMANTE", DIAMANTE * 9, Material.DIAMOND_BLOCK));
+        super.setItem(13, buildItem("LAPISLAZULI", LAPISLAZULI, Material.LAPIS_LAZULI));
+        super.setItem(15, buildItem("BLOQUE DE LAPISLAZULI", LAPISLAZULI * 9, Material.LAPIS_BLOCK));
+        super.setItem(17, buildItem("CUARZO", CUARZO, Material.QUARTZ_BLOCK));
     }
 
-    @Override
-    public void setInventory(Inventory inventory) {
-        this.inventory = inventory;
+    private ItemStack buildItemInfo() {
+        return ItemBuilder.of(Material.PAPER)
+                .title(ChatColor.GOLD + "INFO")
+                .lore(List.of(
+                        "Una vez que tengas pixelcoins",
+                        "puedes intercambiarlas por estos",
+                        "bloques y viceversa"
+                ))
+                .build();
     }
 
-    @Override
-    public void refresh() {
-         Map<String, Menu> copyOfMenus = MenuManager.getCopyOfAllMenus();
+    public ItemStack buildItem (String itemACambiar, double cambio, Material itemMaterial) {
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR UN " + itemACambiar;
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.AQUA + "1 "+itemACambiar+" -> " + ChatColor.GREEN + cambio);
+        lore.add("    ");
+        lore.add(ChatColor.GOLD +"Tus pixelcoins disponibles: " + ChatColor.GREEN + FORMATEA.format(jugador.getNombre()));
 
-         copyOfMenus.forEach( (jugador, menu) -> {
-             if(jugador.equalsIgnoreCase(player.getName()) && menu instanceof Refreshcable){
-                 Inventory newInveotory = InventoryCreator.createInventoryMenu(new SacarItemInventoryFactory(pixelcoinsJugador), jugador);
-
-                 ((Refreshcable) menu).setInventory(newInveotory);
-                 MenuManager.nuevoMenu(jugador, menu);
-                 MenuManager.getByPlayer(jugador).openMenu();
-             }
-         });
+        return ItemBuilder.of(itemMaterial).title(displayName).lore(lore).build();
     }
 }

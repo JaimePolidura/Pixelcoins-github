@@ -1,60 +1,62 @@
 package es.serversurvival.jugadores.withers.sacarMaxItem;
 
+import es.jaimetruman.ItemBuilder;
+import es.jaimetruman.menus.Menu;
+import es.jaimetruman.menus.configuration.MenuConfiguration;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.jugadores.withers.CambioPixelcoins;
-import es.serversurvival._shared.menus.Menu;
-import es.serversurvival._shared.menus.inventory.InventoryCreator;
-import es.serversurvival._shared.menus.Clickable;
-import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+import static es.serversurvival.jugadores.withers.CambioPixelcoins.*;
 import static org.bukkit.ChatColor.DARK_RED;
 
-public class SacarMaxItemMenu extends Menu implements Clickable {
+public final class SacarMaxItemMenu extends Menu {
+    public static final String TITULO = ChatColor.DARK_RED + "" + ChatColor.BOLD + "ELLIGE ITEM PARA SACR MAX";
+
+    private final Jugador jugador;
     private final JugadoresService jugadoresService;
 
-    private final SacarMaxItemUseCase useCase;
-    private Inventory inventory;
-    private Player player;
-
-    public SacarMaxItemMenu(Player player) {
-        this.player = player;
-        this.inventory = InventoryCreator.createInventoryMenu(new SacarMaxItemInventoryFactory(), player.getName());
-        this.useCase = SacarMaxItemUseCase.INSTANCE;
+    public SacarMaxItemMenu(String jugadorNombre) {
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-
-        openMenu();
+        this.jugador = this.jugadoresService.getByNombre(jugadorNombre);
     }
 
     @Override
-    public Inventory getInventory() {
-        return inventory;
+    public int[][] items() {
+        return new int[][] {
+                {0, 0, 0, 0, 1, 0, 0, 0, 0},
+                {0, 2, 0, 0, 3, 0, 0, 4, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0}
+        };
     }
 
     @Override
-    public Player getPlayer() {
-        return player;
+    public MenuConfiguration configuration() {
+        return MenuConfiguration.builder()
+                .fixedItems()
+                .title(TITULO)
+                .item(4, buildItemInfo())
+                .item(2, buildItem(jugador.getPixelcoins(), "DIAMANTES", Material.DIAMOND_BLOCK, DIAMANTE), this::onClick)
+                .item(3, buildItem(jugador.getPixelcoins(), "LAPISLAZULI", Material.LAPIS_BLOCK, LAPISLAZULI), this::onClick)
+                .item(4, buildItem(jugador.getPixelcoins(), "CUARZO", Material.QUARTZ_BLOCK, CUARZO), this::onClick)
+                .build();
     }
 
-    @Override
-    public void onOherClick(InventoryClickEvent event) {
+    private void onClick(Player player, InventoryClickEvent event) {
         ItemStack itemClickeado = event.getCurrentItem();
 
-        if(itemClickeado == null || itemClickeado.getType().toString().equalsIgnoreCase("AIR")){
-            return;
-        }
-        if(Funciones.noEsDeTipoItem(itemClickeado, "DIAMOND_BLOCK", "QUARTZ_BLOCK", "LAPIS_BLOCK")) {
-            return;
-        }
-
-        Player player = (Player) event.getWhoClicked();
         String tipoItem = itemClickeado.getType().toString();
         int espacios = Funciones.getEspaciosOcupados(player.getInventory());
         Jugador jugador = this.jugadoresService.getByNombre(player.getName());
@@ -71,6 +73,27 @@ public class SacarMaxItemMenu extends Menu implements Clickable {
 
         String tipoItemClickeado = itemClickeado.getType().toString();
 
-        this.useCase.sacarMaxItem(tipoItemClickeado, jugador);
+        SacarMaxItemUseCase.INSTANCE.sacarMaxItem(tipoItemClickeado, jugador);
+    }
+
+    private ItemStack buildItemInfo() {
+        List<String> lore = new ArrayList<>() {{
+            add("Puedes convertir todas tus pixelcoins");
+            add("en el mayor numero posible de diamantes");
+            add("cuerzo o lapislazuli");
+        }};
+
+        return ItemBuilder.of(Material.PAPER).lore(lore).build();
+    }
+
+    private ItemStack buildItem (double pixelcoins, String item, Material material, int cambioPixelcoins) {
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR MAXIMO DE " + item;
+        List<String> lore = new ArrayList<String>() {{
+            add(ChatColor.BLUE + "1 DE "+item+" -> " + ChatColor.GREEN + cambioPixelcoins + " PC");
+            add("    ");
+            add("Tus pixelcoins disponibles: " + ChatColor.GREEN + FORMATEA.format(pixelcoins));
+        }};
+
+        return ItemBuilder.of(material).title(displayName).lore(lore).build();
     }
 }

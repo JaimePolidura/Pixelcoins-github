@@ -8,7 +8,6 @@ import es.serversurvival.bolsa.posicionescerradas._shared.application.Posiciones
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,9 +18,10 @@ import java.util.Map;
 import static es.serversurvival._shared.utils.Funciones.*;
 import static es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService.SORT_BY_RENTABILIDADES_ASC;
 import static es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion.*;
+import static org.bukkit.ChatColor.*;
 
 public final class TopMenu extends Menu {
-    public static final String TITULO = ChatColor.DARK_RED + "" + ChatColor.BOLD + "              TOP";
+    public static final String TITULO = DARK_RED + "" + BOLD + "              TOP";
 
     private final List<InfoJugador> infoJugadores = new ArrayList<>();
     private final PosicionesCerradasService posicionesCerradasService;
@@ -62,26 +62,26 @@ public final class TopMenu extends Menu {
     }
 
     private ItemStack buildMejoresComerciantes() {
-        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP COMERCIANTES MAS INTENSIVOS (MENOS MINAN)";
+        String displayName = GREEN + "" + BOLD + "TOP COMERCIANTES MAS INTENSIVOS (MENOS MINAN)";
         infoJugadores.sort( (inf1, inf2) -> Double.compare(inf2.porcentajePatrimonioIngresos, inf1.porcentajePatrimonioIngresos) );
         List<String> lore = new ArrayList<>();
 
         for (int i = 0; i < 5; i++) {
-            lore.add(ChatColor.GOLD + "" + (i + 1) + " " + infoJugadores.get(i).nombre + ": " + FORMATEA.format(redondeoDecimales(infoJugadores.get(i)
+            lore.add(GOLD + "" + (i + 1) + " " + infoJugadores.get(i).nombre + ": " + FORMATEA.format(redondeoDecimales(infoJugadores.get(i)
                     .porcentajePatrimonioIngresos, 3)) + "%");
         }
         lore.add(" ");
-        lore.add(ChatColor.GOLD + "Este muestra el porcentaje de tu patrimonio");
-        lore.add(ChatColor.GOLD + "(acciones,ahorrado,deudas etc) respecto los");
-        lore.add(ChatColor.GOLD + "beneficios que has tenido al comerciar");
-        lore.add(ChatColor.GOLD + "En otras palabras de cada 100 Pixelcoins que tienes");
-        lore.add(ChatColor.GOLD + "Cuantas las has conseguido comerciando");
+        lore.add(GOLD + "Este muestra el porcentaje de tu patrimonio");
+        lore.add(GOLD + "(acciones,ahorrado,deudas etc) respecto los");
+        lore.add(GOLD + "beneficios que has tenido al comerciar");
+        lore.add(GOLD + "En otras palabras de cada 100 Pixelcoins que tienes");
+        lore.add(GOLD + "Cuantas las has conseguido comerciando");
 
         return ItemBuilder.of(Material.EMERALD).title(displayName).lore(lore).build();
     }
 
     private ItemStack buildItemPeoresOperacioensBolsa() {
-        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP PEORES OPERAIONES BOLSA";
+        String displayName = GREEN + "" + BOLD + "TOP PEORES OPERAIONES BOLSA";
         List<PosicionCerrada> posicionesNotDuplicadas = getPosicionesCerradasNotDuplicated(posicionesCerradasService.findAll(SORT_BY_RENTABILIDADES_ASC));
 
         List<String> lore = new ArrayList<>();
@@ -91,8 +91,8 @@ public final class TopMenu extends Menu {
             double rentabilidad = redondeoDecimales(posicion.calculateRentabildiad(), 3);
             if(rentabilidad > 0) break;
 
-            lore.add("" + ChatColor.GOLD + (i + 1)  + "º "+(posicion.getTipoPosicion() == CORTO ? "(CORTO) " : "") + posicion.getJugador() + ": " +
-                    posicion.getNombreActivo() + ChatColor.RED + " " + rentabilidad + "%");
+            lore.add("" + GOLD + (i + 1)  + "º "+(posicion.getTipoPosicion() == CORTO ? "(CORTO) " : "") + posicion.getJugador() + ": " +
+                    posicion.getNombreActivo() + RED + " " + rentabilidad + "%");
         }
 
         return ItemBuilder.of(Material.COAL_BLOCK).title(displayName).lore(lore).build();
@@ -100,20 +100,20 @@ public final class TopMenu extends Menu {
 
     private ItemStack buildTopMenosFiablesJugadoresItem() {
         List<Jugador> listaMenosFiables = this.jugadoresService.sortJugadoresBy((j1, j2) -> j2.getNInpagosDeuda() - j1.getNInpagosDeuda());
-        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP MOROSOS";
+        String displayName = GREEN + "" + BOLD + "TOP MOROSOS";
         List<String> lore = new ArrayList<>();
 
         for (int i = 0; i < 5 || i < listaMenosFiables.size(); i++) {
             Jugador jugador = listaMenosFiables.get(i);
 
-            lore.add(ChatColor.GOLD + "" + i  + "º " + jugador.getNombre() + ": " + ChatColor.GREEN + FORMATEA.format(jugador.getNInpagosDeuda()));
+            lore.add(GOLD + "" + i  + "º " + jugador.getNombre() + ": " + GREEN + FORMATEA.format(jugador.getNInpagosDeuda()));
         }
 
         return ItemBuilder.of(Material.RED_WOOL).title(displayName).lore(lore).build();
     }
 
     private ItemStack buildItemTopOperacionesBolsa() {
-        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP MEJORES OPERAIONES BOLSA";
+        String displayName = GREEN + "" + BOLD + "TOP MEJORES OPERAIONES BOLSA";
 
         List<PosicionCerrada> allPosicionesCerradas = posicionesCerradasService.findAll(PosicionesCerradasService.SORT_BY_RENTABILIDADES_DESC);
         List<PosicionCerrada> posicionesnotduplicadas = getPosicionesCerradasNotDuplicated(allPosicionesCerradas);
@@ -125,8 +125,8 @@ public final class TopMenu extends Menu {
             double rentabilidad = redondeoDecimales(posicion.calculateRentabildiad(), 3);
             if(rentabilidad < 0) break;
 
-            lore.add("" + ChatColor.GOLD + (i + 1)  + "º " + (posicion.getTipoPosicion() == CORTO ? "(corto)" : "") + posicion.getJugador() + ": "
-                    + posicion + ChatColor.GREEN + " +" + rentabilidad + "%");
+            lore.add("" + GOLD + (i + 1)  + "º " + (posicion.getTipoPosicion() == CORTO ? "(corto)" : "") + posicion.getJugador() + ": "
+                    + posicion + GREEN + " +" + rentabilidad + "%");
         }
 
         return ItemBuilder.of(Material.DIAMOND_BLOCK).title(displayName).lore(lore).build();
@@ -142,12 +142,12 @@ public final class TopMenu extends Menu {
 
     private ItemStack buildTopFiablesJugadoresItem() {
         List<Jugador> listaFiables = this.jugadoresService.sortJugadoresBy((j1, j2) -> j2.getNPagosDeuda() - j1.getNPagosDeuda());
-        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP MENOS MOROSOS";
+        String displayName = GREEN + "" + BOLD + "TOP MENOS MOROSOS";
         List<String> lore = new ArrayList<>();
 
         for (int i = 0; i < listaFiables.size(); i++) {
             Jugador fiable = listaFiables.get(i);
-            lore.add(ChatColor.GOLD + "" + i  + "º " + fiable.getNombre() + ": " + ChatColor.GREEN + FORMATEA.format(fiable.getNPagosDeuda()));
+            lore.add(GOLD + "" + i  + "º " + fiable.getNombre() + ": " + GREEN + FORMATEA.format(fiable.getNPagosDeuda()));
         }
 
         return ItemBuilder.of(Material.GREEN_WOOL).title(displayName).lore(lore).build();
@@ -155,7 +155,7 @@ public final class TopMenu extends Menu {
 
     private ItemStack buildTopPobresJugadoresItem() {
         Map<String, Double> listaRicos = crearMapaTopPatrimonioPlayers(true);
-        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP POBRES";
+        String displayName = GREEN + "" + BOLD + "TOP POBRES";
         List<String> lore = new ArrayList<>();
         int pos = 1;
 
@@ -163,7 +163,7 @@ public final class TopMenu extends Menu {
             if(pos == 6) break;
             if(entry.getValue() == 0) continue;
 
-            lore.add(ChatColor.GOLD + "" + pos + "º " + entry.getKey() + ": " + ChatColor.GREEN + FORMATEA.format(entry.getValue()) + " PC");
+            lore.add(GOLD + "" + pos + "º " + entry.getKey() + ": " + GREEN + FORMATEA.format(entry.getValue()) + " PC");
             pos++;
         }
 
@@ -173,12 +173,12 @@ public final class TopMenu extends Menu {
     private ItemStack buildTopVendedoresJugadoresItem() {
         List<Jugador> listaVendedores = this.jugadoresService.sortJugadoresBy((j1, j2) -> j2.getNVentas() - j1.getNVentas());
 
-        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP VENDEDORES";
+        String displayName = GREEN + "" + BOLD + "TOP VENDEDORES";
         List<String> lore = new ArrayList<>();
 
         for (int i = 0; i < listaVendedores.size(); i++) {
             Jugador vendedor = listaVendedores.get(i);
-            lore.add(ChatColor.GOLD + "" + i + "º " + vendedor.getNombre() + ": " + ChatColor.GREEN + FORMATEA.format(vendedor.getNVentas()));
+            lore.add(GOLD + "" + i + "º " + vendedor.getNombre() + ": " + GREEN + FORMATEA.format(vendedor.getNVentas()));
         }
 
         return ItemBuilder.of(Material.GOLD_INGOT).title(displayName).lore(lore).build();
@@ -186,14 +186,14 @@ public final class TopMenu extends Menu {
 
     private ItemStack buildTopRicosJugadoresItem() {
         Map<String, Double> listaRicos = crearMapaTopPatrimonioPlayers(false);
-        String displayName = ChatColor.GREEN + "" + ChatColor.BOLD + "TOP RICOS";
+        String displayName = GREEN + "" + BOLD + "TOP RICOS";
         List<String> lore = new ArrayList<>();
         int pos = 1;
 
         for(Map.Entry<String, Double> entry : listaRicos.entrySet()){
             if(pos == 6) break;
 
-            lore.add(ChatColor.GOLD + "" + pos + "º " + entry.getKey() + ": " + ChatColor.GREEN + FORMATEA.format(entry.getValue()) + " PC");
+            lore.add(GOLD + "" + pos + "º " + entry.getKey() + ": " + GREEN + FORMATEA.format(entry.getValue()) + " PC");
             pos++;
         }
 
