@@ -6,6 +6,7 @@ import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.tienda._shared.application.TiendaService;
 import es.serversurvival.tienda._shared.domain.EncantamientoObjecto;
+import es.serversurvival.tienda._shared.domain.TiendaObjeto;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -14,6 +15,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 public final class VenderTiendaUseCase {
@@ -26,7 +28,7 @@ public final class VenderTiendaUseCase {
         this.tiendaService = DependecyContainer.get(TiendaService.class);
     }
 
-    public void crearOferta(String nombreJugador, ItemStack itemAVender, double precio) {
+    public TiendaObjeto crearOferta(String nombreJugador, ItemStack itemAVender, double precio) {
         this.ensureCorrectFormatPixelcoins(precio);
         this.ensureItemNotBanned(itemAVender);
         this.ensureHasItemsToUpload(nombreJugador);
@@ -37,6 +39,8 @@ public final class VenderTiendaUseCase {
         );
 
         Pixelcoin.publish(new NuevoTiendaObjetoAVender(tiendaObjeto.getTiendaObjetoId(), nombreJugador, itemAVender));
+
+        return tiendaObjeto;
     }
 
     private void ensureCorrectFormatPixelcoins(double precio){

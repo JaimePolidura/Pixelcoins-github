@@ -19,6 +19,8 @@ import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.empresas.vertodas.VerTodasEmpresasMenu;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
+import es.serversurvival.jugadores.top.TopMenu;
+import es.serversurvival.tienda.vertienda.TiendaMenu;
 import es.serversurvival.web.cuentasweb._shared.application.CuentasWebService;
 import es.serversurvival.web.cuentasweb._shared.domain.CuentaWeb;
 import org.bukkit.Bukkit;
@@ -78,8 +80,8 @@ public final class PerfileMenu extends Menu {
                 .title(TITULO)
                 .item(1, Material.BLACK_STAINED_GLASS_PANE)
                 .item(2, buildItemWeb())
-                .item(3, buildItemStats())
-                .item(4, buildItemTienda())
+                .item(3, buildItemStats(), (p, e) -> this.menuService.open(p, new TopMenu()))
+                .item(4, buildItemTienda(), (p, e) -> this.menuService.open(p, new TiendaMenu(p.getName())))
                 .item(5, buildItemDeudas(), (p, e) -> this.menuService.open(p, new VerDeudasMenu(p.getName())))
                 .item(6, buildItemBolsa(), (p, e) -> this.menuService.open(p, new VerBolsaCarteraMenu(p.getName())))
                 .item(7, buildItemEmpresa(), (p, e) -> this.menuService.open(p, new VerTodasEmpresasMenu(p)))

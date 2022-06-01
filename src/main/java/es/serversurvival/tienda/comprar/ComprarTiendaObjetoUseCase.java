@@ -16,6 +16,8 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 public final class ComprarTiendaObjetoUseCase {
+    public static final ComprarTiendaObjetoUseCase INSTANCE = new ComprarTiendaObjetoUseCase();
+
     private final TiendaService tiendaService;
     private final JugadoresService jugadoresService;
     private final EventBus eventBus;

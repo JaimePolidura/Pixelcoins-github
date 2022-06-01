@@ -2,7 +2,11 @@ package es.serversurvival.tienda.vender;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
+import es.jaimetruman.menus.modules.messaging.MessagingMenuService;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.tienda.vertienda.ItemNuevoTiendaMenuMessage;
+import es.serversurvival.tienda.vertienda.TiendaMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -20,9 +24,11 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 )
 public class VenderCommandRunner implements CommandRunnerArgs<VenderCommando> {
     private final VenderTiendaUseCase venderTiendaUseCase;
+    private final MessagingMenuService messagingMenuService;
 
     public VenderCommandRunner(){
         this.venderTiendaUseCase = new VenderTiendaUseCase();
+        this.messagingMenuService = DependecyContainer.get(MessagingMenuService.class);
     }
 
     @Override
@@ -32,12 +38,16 @@ public class VenderCommandRunner implements CommandRunnerArgs<VenderCommando> {
 
         Inventory inventarioJugador = player.getInventory();
 
-        this.venderTiendaUseCase.crearOferta(player.getName(), itemMano, comando.precio);
+        var tiendaObjeto = this.venderTiendaUseCase.crearOferta(player.getName(), itemMano, comando.precio);
 
         inventarioJugador.clear(player.getInventory().getHeldItemSlot());
 
         Funciones.enviarMensajeYSonido(player, ChatColor.GOLD + "Se ha añadido a la tienda. Para retirarlos /tienda y clikc izquierdo en ellos", Sound.ENTITY_VILLAGER_YES);
         Bukkit.getServer().broadcastMessage(ChatColor.GOLD + player.getName() + " ha añadido un objeto a la tienda por: " +
                 ChatColor.GREEN + FORMATEA.format(comando.getPrecio()) + " PC " + ChatColor.AQUA + "/tienda");
+
+        this.messagingMenuService.broadCastMessage(TiendaMenu.class, new ItemNuevoTiendaMenuMessage(
+                tiendaObjeto
+        ));
     }
 }

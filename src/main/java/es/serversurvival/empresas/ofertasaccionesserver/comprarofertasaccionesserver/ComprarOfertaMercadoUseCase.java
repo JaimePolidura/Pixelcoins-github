@@ -19,6 +19,8 @@ import java.util.UUID;
 
 @AllArgsConstructor
 public final class ComprarOfertaMercadoUseCase {
+    public final static ComprarOfertaMercadoUseCase INSTANCE = new ComprarOfertaMercadoUseCase();
+
     private final JugadoresService jugadoresService;
     private final OfertasAccionesServerService ofertasAccionesServerService;
     private final AccionistasServerService accionistasServerService;

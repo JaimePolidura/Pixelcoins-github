@@ -12,6 +12,8 @@ import java.util.UUID;
 public final class RetirarOfertaUseCase {
     private final TiendaService tiendaService;
 
+    public static RetirarOfertaUseCase INSTANCE = new RetirarOfertaUseCase();
+
     public RetirarOfertaUseCase() {
         this.tiendaService = DependecyContainer.get(TiendaService.class);
     }
