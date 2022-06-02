@@ -1,6 +1,6 @@
 package es.serversurvival.empresas.ofertasaccionesserver;
 
-import es.serversurvival._shared.menus2.NumberSelectorMenu;
+import es.serversurvival._shared.menus.NumberSelectorMenu;
 import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
 import es.serversurvival.empresas.ofertasaccionesserver.venderofertaaccionaserver.VenderOfertaAccionServerUseCase;
 import org.bukkit.Bukkit;

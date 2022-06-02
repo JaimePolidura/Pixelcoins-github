@@ -2,7 +2,7 @@ package es.serversurvival.bolsa.posicionesabiertas.vercartera;
 
 import es.jaimetruman.menus.MenuService;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.menus2.NumberSelectorMenu;
+import es.serversurvival._shared.menus.NumberSelectorMenu;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrderExecutorProxy;

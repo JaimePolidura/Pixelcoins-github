@@ -1,7 +1,7 @@
 package es.serversurvival.empresas.empresas.vender;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival._shared.menus2.ConfirmacionMenu;
+import es.serversurvival._shared.menus.ConfirmacionMenu;
 import es.serversurvival._shared.utils.Funciones;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;

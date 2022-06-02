@@ -1,4 +1,4 @@
-package es.serversurvival._shared.menus2;
+package es.serversurvival._shared.menus;
 
 import es.jaimetruman.ItemBuilder;
 import es.jaimetruman.menus.Menu;

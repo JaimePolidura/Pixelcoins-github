@@ -1,10 +1,9 @@
 package es.serversurvival.deudas.prestar;
 
 import es.jaimetruman.ItemBuilder;
-import es.serversurvival._shared.menus2.ConfirmacionMenu;
+import es.serversurvival._shared.menus.ConfirmacionMenu;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

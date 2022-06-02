@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa.activosinfo.vervalores;
 
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.menus2.NumberSelectorMenu;
+import es.serversurvival._shared.menus.NumberSelectorMenu;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrderExecutorProxy;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenPremarketCommand;

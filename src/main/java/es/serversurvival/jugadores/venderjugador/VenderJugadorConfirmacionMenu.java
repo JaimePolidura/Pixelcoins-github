@@ -2,7 +2,7 @@ package es.serversurvival.jugadores.venderjugador;
 
 import es.jaimetruman.ItemBuilder;
 import es.serversurvival.Pixelcoin;
-import es.serversurvival._shared.menus2.ConfirmacionMenu;
+import es.serversurvival._shared.menus.ConfirmacionMenu;
 import es.serversurvival.jugadores.pagar.PagarUseCase;
 import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;

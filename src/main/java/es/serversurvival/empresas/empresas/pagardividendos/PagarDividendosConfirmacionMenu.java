@@ -1,6 +1,6 @@
 package es.serversurvival.empresas.empresas.pagardividendos;
 
-import es.serversurvival._shared.menus2.NumberSelectorMenu;
+import es.serversurvival._shared.menus.NumberSelectorMenu;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import org.bukkit.Sound;

@@ -1,7 +1,7 @@
 package es.serversurvival.empresas.ofertasaccionesserver.comprarofertasaccionesserver;
 
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.menus2.NumberSelectorMenu;
+import es.serversurvival._shared.menus.NumberSelectorMenu;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
