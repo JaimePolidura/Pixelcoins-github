@@ -1,12 +1,8 @@
 package es.serversurvival.bolsa.posicionesabiertas.vercartera;
 
-import es.jaimetruman.ItemBuilder;
-import es.jaimetruman.menus.Menu;
 import es.jaimetruman.menus.MenuService;
-import es.jaimetruman.menus.configuration.MenuConfiguration;
-import es.jaimetruman.menus.modules.confirmation.ConfirmationConfiguration;
-import es.jaimetruman.menus.modules.numberselector.NumberSelectorMenuConfiguration;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.menus2.NumberSelectorMenu;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrderExecutorProxy;
@@ -15,24 +11,18 @@ import es.serversurvival.bolsa.posicionesabiertas._shared.application.Posiciones
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival.bolsa.posicionesabiertas.comprarcorto.ComprarCortoUseCase;
 import es.serversurvival.bolsa.posicionesabiertas.venderlargo.VenderLargoUseCase;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.UUID;
 
-import static es.jaimetruman.menus.modules.numberselector.NumberSelectActionType.DECREASE;
-import static es.jaimetruman.menus.modules.numberselector.NumberSelectActionType.INCREASE;
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival._shared.utils.Funciones.redondeoDecimales;
 import static es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenPremarketCommand.of;
 import static org.bukkit.ChatColor.*;
 
-public final class BolsaCerrarPosicionMenu extends Menu {
-    private static final String TITULO = DARK_RED + "" + BOLD  + "   CERRAR POSICION";
-
+public final class BolsaCerrarPosicionMenu extends NumberSelectorMenu {
     private final PosicionAbierta posicion;
     private final ActivoInfo activoInfoAVender;
     private final MenuService menuService;
@@ -49,87 +39,49 @@ public final class BolsaCerrarPosicionMenu extends Menu {
     }
 
     @Override
-    public int[][] items() {
-        return new int[][] {
-                {0, 0, 0, 0, 0, 0, 0, 0, 0  },
-                {1, 2, 3, 4, 0, 5, 6, 7, 8  },
-                {0, 0, 0, 0, 0, 0, 0, 0, 0  }
-        };
-    }
+    public void onAccept(Player player, InventoryClickEvent event) {
+        int cantidad = (int) super.getPropertyDouble("cantidad");
 
-    @Override
-    public MenuConfiguration configuration() {
-        return MenuConfiguration.builder()
-                .title(TITULO)
-                .fixedItems()
-                .confirmation(ConfirmationConfiguration.builder()
-                        .cancel(5, buildItemCancel(), this::onCancel)
-                        .accept(5, buildItemAccept(posicion.getCantidad()), this::onAccept)
-                        .build())
-                .numberSelector(NumberSelectorMenuConfiguration.builder()
-                        .initialValue(posicion.getCantidad())
-                        .minValue(1)
-                        .maxValue(posicion.getCantidad())
-                        .valuePropertyName("cantidad")
-                        .onValueChanged(this::onCantidadChangedChangeItemAcetpar)
-                        .item(1, DECREASE, 1, buildItemNumberSelector(-1))
-                        .item(2, DECREASE, 5, buildItemNumberSelector(-5))
-                        .item(3, DECREASE, 10, buildItemNumberSelector(-10))
-                        .item(6, INCREASE, 1, buildItemNumberSelector(1))
-                        .item(7, INCREASE, 5, buildItemNumberSelector(5))
-                        .item(8, INCREASE, 10, buildItemNumberSelector(10))
-                        .build())
-                .build();
-    }
-
-    private void onCantidadChangedChangeItemAcetpar(double nuevaCantidad) {
-        super.setItem(14, buildItemAccept((int) nuevaCantidad));
-    }
-
-    private void onAccept(Player player, InventoryClickEvent event) {
         OrderExecutorProxy.execute(of(
-                        player.getName(),
-                        posicion.getNombreActivo(),
-                        posicion.getCantidad(),
-                        posicion.esLargo() ? TipoAccion.LARGO_VENTA : TipoAccion.CORTO_COMPRA,
-                        posicion.getPosicionAbiertaId()
-                ), () -> {
+                player.getName(),
+                posicion.getNombreActivo(),
+                cantidad,
+                posicion.esLargo() ? TipoAccion.LARGO_VENTA : TipoAccion.CORTO_COMPRA,
+                posicion.getPosicionAbiertaId()), () -> {
                     if(posicion.esLargo())
-                        venderLargoUseCase.venderPosicion(posicion.getPosicionAbiertaId(), posicion.getCantidad(), player.getName());
+                        venderLargoUseCase.venderPosicion(posicion.getPosicionAbiertaId(), cantidad, player.getName());
                     else
-                        comprarCortoUseCase.comprarPosicionCorto(posicion.getPosicionAbiertaId(), posicion.getCantidad(), posicion.getJugador());
+                        comprarCortoUseCase.comprarPosicionCorto(posicion.getPosicionAbiertaId(), cantidad, posicion.getJugador());
                 }
         );
     }
 
-    private void onCancel(Player player, InventoryClickEvent event) {
+    @Override
+    public void onCancel(Player player, InventoryClickEvent event) {
         this.menuService.open(player, new VerBolsaCarteraMenu(player.getName()));
     }
 
-    private ItemStack buildItemAccept(int cantidadACerrar) {
-        return ItemBuilder.of(Material.GREEN_WOOL)
-                .title(GREEN + "" + BOLD + "CERRAR POSICION")
-                .lore(List.of(
-                        GOLD + "Cantidad: " + FORMATEA.format(cantidadACerrar),
-                        GOLD + "Valor total: " + GREEN + FORMATEA.format(redondeoDecimales(calcularValorTotal(cantidadACerrar), 2)),
-                        calcularResultado(cantidadACerrar) >= 0?
-                                GOLD + "Resuldao: " + GREEN + "+" + FORMATEA.format(redondeoDecimales(calcularValorTotal(cantidadACerrar), 2)) :
-                                GOLD + "Resuldao: " + RED + FORMATEA.format(redondeoDecimales(calcularValorTotal(cantidadACerrar), 2))
-                ))
-                .build();
+    @Override
+    public double maxValue() {
+        return posicion.getCantidad();
     }
 
-    private ItemStack buildItemCancel() {
-        return ItemBuilder.of(Material.RED_WOOL)
-                .title(RED + "" + BOLD + "Cancelar")
-                .build();
+    @Override
+    public double initialValue() {
+        return posicion.getCantidad();
     }
 
-    private ItemStack buildItemNumberSelector(int i) {
-        Material material = i < 0 ? Material.RED_BANNER : Material.GREEN_BANNER;
-        String title = i < 0 ? RED + "" + BOLD + i : GREEN + "" + BOLD + "+" + i;
+    @Override
+    public List<String> loreItemAceptar(double cantidad) {
+        int cantidadInt = (int) cantidad;
 
-        return ItemBuilder.of(material).title(title).build();
+        return List.of(
+                GOLD + "Cantidad: " + FORMATEA.format(cantidadInt),
+                GOLD + "Valor total: " + GREEN + FORMATEA.format(redondeoDecimales(calcularValorTotal(cantidadInt), 2)),
+                calcularResultado(cantidadInt) >= 0?
+                        GOLD + "Resuldao: " + GREEN + "+" + FORMATEA.format(redondeoDecimales(calcularValorTotal(cantidadInt), 2)) :
+                        GOLD + "Resuldao: " + RED + FORMATEA.format(redondeoDecimales(calcularValorTotal(cantidadInt), 2))
+        );
     }
 
     private double calcularValorTotal(int cantidadACerrar){
