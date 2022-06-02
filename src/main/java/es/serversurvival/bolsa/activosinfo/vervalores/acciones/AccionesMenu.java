@@ -2,7 +2,6 @@ package es.serversurvival.bolsa.activosinfo.vervalores.acciones;
 
 import es.jaimetruman.ItemBuilder;
 import es.jaimetruman.ItemUtils;
-import es.jaimetruman._shared.utils.ClassMapperInstanceProvider;
 import es.jaimetruman.menus.Menu;
 import es.jaimetruman.menus.MenuService;
 import es.jaimetruman.menus.Page;

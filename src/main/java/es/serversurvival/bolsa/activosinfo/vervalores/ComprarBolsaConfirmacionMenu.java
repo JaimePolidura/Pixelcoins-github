@@ -1,35 +1,26 @@
 package es.serversurvival.bolsa.activosinfo.vervalores;
 
-import es.jaimetruman.ItemBuilder;
-import es.jaimetruman.menus.Menu;
-import es.jaimetruman.menus.configuration.MenuConfiguration;
-import es.jaimetruman.menus.modules.confirmation.ConfirmationConfiguration;
-import es.jaimetruman.menus.modules.numberselector.NumberSelectorMenuConfiguration;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.menus2.NumberSelectorMenu;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrderExecutorProxy;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenPremarketCommand;
 import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.ComprarLargoUseCase;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-import static es.jaimetruman.menus.modules.numberselector.NumberSelectActionType.*;
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival._shared.utils.Funciones.POOL;
-import static es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion.*;
-import static org.bukkit.ChatColor.*;
+import static es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion.LARGO_COMPRA;
+import static org.bukkit.ChatColor.GOLD;
 import static org.bukkit.ChatColor.GREEN;
 
-public final class ComprarBolsaConfirmacionMenu extends Menu {
-    private static final String TITULO = DARK_RED + "" + BOLD + "   COMPRAR ";
-
+public final class ComprarBolsaConfirmacionMenu extends NumberSelectorMenu {
     private final ComprarLargoUseCase comprarLargoUseCase;
     private final JugadoresService jugadoresService;
 
@@ -52,40 +43,7 @@ public final class ComprarBolsaConfirmacionMenu extends Menu {
     }
 
     @Override
-    public int[][] items() {
-        return new int[][] {
-                {0, 0, 0, 0, 0, 0, 0, 0, 0  },
-                {1, 2, 3, 4, 0, 5, 6, 7, 8  },
-                {0, 0, 0, 0, 0, 0, 0, 0, 0  }
-        };
-    }
-
-    @Override
-    public MenuConfiguration configuration() {
-        return MenuConfiguration.builder()
-                .title(TITULO)
-                .fixedItems()
-                .confirmation(ConfirmationConfiguration.builder()
-                        .cancel(5, buildItemCancel(), this::onCancel)
-                        .accept(5, buildItemAccept(), this::onAccept)
-                        .build())
-                .numberSelector(NumberSelectorMenuConfiguration.builder()
-                        .initialValue(1)
-                        .minValue(1)
-                        .maxValue(dineroJugador / precioUnidad)
-                        .valuePropertyName("cantidad")
-                        .onValueChanged(this::onCantidadChangedChangeItemAcetpar)
-                        .item(1, DECREASE, 1, buildItemNumberSelector(-1))
-                        .item(2, DECREASE, 5, buildItemNumberSelector(-5))
-                        .item(3, DECREASE, 10, buildItemNumberSelector(-10))
-                        .item(6, INCREASE, 1, buildItemNumberSelector(1))
-                        .item(7, INCREASE, 5, buildItemNumberSelector(5))
-                        .item(8, INCREASE, 10, buildItemNumberSelector(10))
-                        .build())
-                .build();
-    }
-
-    private void onAccept(Player player, InventoryClickEvent event) {
+    public void onAccept(Player player, InventoryClickEvent event) {
         POOL.submit(() -> {
             int cantidadAComprar = (int) super.getPropertyDouble("cantidad");
             double pixelcoinsJugador = this.jugadoresService.getByNombre(jugadrNombre).getPixelcoins();
@@ -104,37 +62,23 @@ public final class ComprarBolsaConfirmacionMenu extends Menu {
         });
     }
 
-    private void onCantidadChangedChangeItemAcetpar(double nuevaCantidad) {
-        super.setItemLore(14, 0, GOLD + "Comprar " + nuevaCantidad);
-        super.setItemLore(14, 2, GOLD + "Precio/Total " + GREEN + FORMATEA.format(precioUnidad * nuevaCantidad) + " PC");
+    @Override
+    public double maxValue() {
+        return dineroJugador / precioUnidad;
     }
 
-    private ItemStack buildItemNumberSelector(int i) {
-        Material material = i < 0 ? Material.RED_BANNER : Material.GREEN_BANNER;
-        String title = i < 0 ? RED + "" + BOLD + i : GREEN + "" + BOLD + "+" + i;
-
-        return ItemBuilder.of(material).title(title).build();
+    @Override
+    public double initialValue() {
+        return 1;
     }
 
-    private ItemStack buildItemCancel() {
-        return ItemBuilder.of(Material.GREEN_BANNER)
-                .title(RED + "" + BOLD + "CANCELAR")
-                .build();
-    }
-
-    private void onCancel(Player player, InventoryClickEvent event) {
-        player.sendMessage(GOLD + "Has cancelado la compra");
-    }
-
-    private ItemStack buildItemAccept() {
-        return ItemBuilder.of(Material.GREEN_WOOL)
-                .title(GREEN + "" + BOLD + "ACEPTAR")
-                .lore(List.of(
-                        GOLD + "Comprar 1",
-                        GOLD + "Precio/Unidad" + GREEN + FORMATEA.format(precioUnidad) + " PC",
-                        GOLD + "Precio/Total " + GREEN + FORMATEA.format(precioUnidad * 1) + " PC",
-                        GOLD + "Tus pixelcoins" + GREEN + FORMATEA.format(dineroJugador) + " PC"
-                ))
-                .build();
+    @Override
+    public List<String> loreItemAceptar(double cantidad) {
+        return List.of(
+                GOLD + "Comprar " + cantidad,
+                GOLD + "Precio/Unidad" + GREEN + FORMATEA.format(precioUnidad) + " PC",
+                GOLD + "Precio/Total " + GREEN + FORMATEA.format(precioUnidad * cantidad) + " PC",
+                GOLD + "Tus pixelcoins" + GREEN + FORMATEA.format(dineroJugador) + " PC"
+        );
     }
 }
