@@ -58,12 +58,12 @@ public final class MySQLOrdenesPremarketRepository extends DataBaseRepository<Or
     @Override
     public OrdenPremarket buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new OrdenPremarket(
-                UUID.fromString(rs.getString("id")),
+                UUID.fromString(rs.getString("orderPremarketId")),
                 rs.getString("jugador"),
-                rs.getString("nombre_activo"),
+                rs.getString("nombreActivo"),
                 rs.getInt("cantidad"),
-                TipoAccion.valueOf(rs.getString("accion_orden")),
-                UUID.fromString(rs.getString("id_posicionabierta"))
+                TipoAccion.valueOf(rs.getString("tipoAccion")),
+                UUID.fromString(rs.getString("posicionAbiertaId"))
         );
     }
 }

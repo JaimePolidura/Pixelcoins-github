@@ -7,7 +7,6 @@ import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
-import es.serversurvival.empresas.empresas.EmpresasTestMother;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
@@ -107,7 +106,7 @@ public final class ComprarOfertaMercadoUseCaseTest {
 
         this.useCase.comprarOfertaMercadoAccionServer("comprador", idToTest, 2);
 
-        verify(this.ofertasAccionesServerService, times(1)).deleteById(oferta.getOfertaAccioneServerId());
+        verify(this.ofertasAccionesServerService, times(1)).deleteById(oferta.getOfertaAccionServerId());
         verify(this.accionistasServerService, times(1)).save(
                 argThat(of("comprador")), argThat(of(JUGADOR)), argThat(of("empresa")), anyInt(), anyDouble()
         );

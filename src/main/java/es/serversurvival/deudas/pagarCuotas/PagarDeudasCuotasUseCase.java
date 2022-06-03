@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import static es.serversurvival._shared.utils.Funciones.DATE_FORMATER_LEGACY;
@@ -37,7 +36,7 @@ public final class PagarDeudasCuotasUseCase {
 
             boolean esElDiaDeLaPaga = fechaHoy.compareTo(fechaUltimaPagaBaseDatos) != 0;
             if(esElDiaDeLaPaga){
-                if(deudor.getPixelcoins() >= deuda.getCouta()){
+                if(deudor.getPixelcoins() >= deuda.getCuota()){
                     pagarDeudaYBorrarSiEsNecesario(deuda, acredor, deudor);
                 }else{
                     sumarUnNinpagoAlDeudor(acredor, deudor, deuda.getDeudaId());
@@ -49,7 +48,7 @@ public final class PagarDeudasCuotasUseCase {
     private void pagarDeudaYBorrarSiEsNecesario(Deuda deuda, Jugador acredor, Jugador deudor) {
         String deudorNombre = deudor.getNombre();
         String acredorNombre = acredor.getNombre();
-        double cuota = deuda.getCouta();
+        double cuota = deuda.getCuota();
         UUID deudaId = deuda.getDeudaId();
         int tiempo = deuda.getTiempoRestante();
 

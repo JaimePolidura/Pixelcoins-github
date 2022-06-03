@@ -13,7 +13,7 @@ import java.util.UUID;
 @ToString
 @EqualsAndHashCode(callSuper = false)
 public final class OfertaAccionServer extends Aggregate {
-    @Getter private final UUID ofertaAccioneServerId;
+    @Getter private final UUID ofertaAccionServerId;
     @Getter private final String nombreOfertante;
     @Getter private final String empresa;
     @Getter private final double precio;
@@ -24,12 +24,12 @@ public final class OfertaAccionServer extends Aggregate {
     @Getter private final UUID accionistaEmpresaServerId;
 
     public OfertaAccionServer withNombreOfertante(String nombreOfertante){
-        return new OfertaAccionServer(ofertaAccioneServerId, nombreOfertante, empresa, precio,
+        return new OfertaAccionServer(ofertaAccionServerId, nombreOfertante, empresa, precio,
                 cantidad, fecha, tipoOfertante, precioApertura, accionistaEmpresaServerId);
     }
 
     public OfertaAccionServer decreaseCantidadBy(int cantidad){
-        return new OfertaAccionServer(ofertaAccioneServerId, nombreOfertante, empresa, precio,
+        return new OfertaAccionServer(ofertaAccionServerId, nombreOfertante, empresa, precio,
                 this.cantidad - cantidad, fecha, tipoOfertante, precioApertura, accionistaEmpresaServerId);
     }
 

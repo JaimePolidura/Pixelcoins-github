@@ -19,31 +19,31 @@ public final class Deuda extends Aggregate {
     @Getter private final double pixelcoinsRestantes;
     @Getter private final int tiempoRestante;
     @Getter private final int interes;
-    @Getter private final double couta;
+    @Getter private final double cuota;
     @Getter private final String fechaUltimapaga;
 
     public Deuda decrementPixelcoinsRestantes(double pixelcoinsRestantes){
         return new Deuda(deudaId, deudor, acredor, this.pixelcoinsRestantes - pixelcoinsRestantes,
-                tiempoRestante, interes, couta, fechaUltimapaga);
+                tiempoRestante, interes, cuota, fechaUltimapaga);
     }
 
     public Deuda decrementTiempoRestanteByOne(){
         return new Deuda(deudaId, deudor, acredor, pixelcoinsRestantes,
-                this.tiempoRestante - 1, interes, couta, fechaUltimapaga);
+                this.tiempoRestante - 1, interes, cuota, fechaUltimapaga);
     }
 
     public Deuda withFechaUltimoPago(String fecha){
         return new Deuda(deudaId, deudor, acredor, pixelcoinsRestantes,
-                tiempoRestante, interes, couta, fecha);
+                tiempoRestante, interes, cuota, fecha);
     }
 
     public Deuda withAcredor(String acredor){
         return new Deuda(deudaId, deudor, acredor, pixelcoinsRestantes,
-                tiempoRestante, interes, couta, fechaUltimapaga);
+                tiempoRestante, interes, cuota, fechaUltimapaga);
     }
 
     public Deuda withDeudor(String deudor){
         return new Deuda(deudaId, deudor, acredor, pixelcoinsRestantes,
-                tiempoRestante, interes, couta, fechaUltimapaga);
+                tiempoRestante, interes, cuota, fechaUltimapaga);
     }
 }

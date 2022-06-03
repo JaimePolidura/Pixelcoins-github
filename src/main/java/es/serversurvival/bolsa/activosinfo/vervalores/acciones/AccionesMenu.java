@@ -9,7 +9,6 @@ import es.jaimetruman.menus.configuration.MenuConfiguration;
 import es.jaimetruman.menus.menustate.AfterShow;
 import es.jaimetruman.menus.modules.pagination.PaginationConfiguration;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.menus.Paginated;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
@@ -107,13 +106,13 @@ public final class AccionesMenu extends Menu implements AfterShow {
 
     private ItemStack itemNextPage() {
         return ItemBuilder.of(Material.GREEN_WOOL)
-                .title(Paginated.ITEM_NAME_GOFORDWARD)
+                .title(GREEN + "" + BOLD + "->")
                 .build();
     }
 
     private ItemStack itemBackPage () {
         return ItemBuilder.of(Material.RED_WOOL)
-                .title(Paginated.ITEM_NAME_GOBACK)
+                .title(RED + "" + BOLD + "<-")
                 .build();
     }
 

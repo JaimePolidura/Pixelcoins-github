@@ -32,7 +32,7 @@ public final class ComprarAccionesServerConfirmacion extends NumberSelectorMenu 
         int cantidadToComprar = (int) super.getPropertyDouble("cantidad");
 
         new ComprarOfertaMercadoUseCase().comprarOfertaMercadoAccionServer(player.getName(),
-                oferta.getOfertaAccioneServerId(), cantidadToComprar);
+                oferta.getOfertaAccionServerId(), cantidadToComprar);
 
         enviarMensajeYSonido(player, GOLD + "Has comprado " + FORMATEA.format(cantidadToComprar) + " acciones a " + GREEN +
                 FORMATEA.format(oferta.getPrecio()) + " PC" + GOLD + " que es un total de " + GREEN + FORMATEA.format(

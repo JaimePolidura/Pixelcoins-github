@@ -65,11 +65,11 @@ public final class MySQLDeudasRepository extends DataBaseRepository<Deuda, UUID>
                 UUID.fromString(rs.getString(ID_FIELD_NAME)),
                 rs.getString("deudor"),
                 rs.getString("acredor"),
-                rs.getInt("pixelcoins_restantes"),
-                rs.getInt("tiempo_restante"),
+                rs.getInt("pixelcoinsRestantes"),
+                rs.getInt("tiempoRestante"),
                 rs.getInt("interes"),
                 rs.getInt("cuota"),
-                rs.getString("fecha_ultimapaga")
+                rs.getString("fechaUltimapaga")
         );
     }
 }

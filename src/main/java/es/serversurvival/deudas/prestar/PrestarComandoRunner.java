@@ -4,7 +4,6 @@ import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.jaimetruman.menus.MenuService;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.menus.MenuManager;
 import main.ValidationResult;
 import main.ValidatorService;
 import org.bukkit.command.CommandSender;
@@ -33,7 +32,6 @@ public class PrestarComandoRunner implements CommandRunnerArgs<PrestarComando> {
         int interes = comando.getInteres();
 
         ValidationResult result = ValidatorService.startValidating(jugador, JugadorOnline)
-                .and(MenuManager.getByPlayer(jugador) != null, False.of("Ya le han enviado una solicitud"))
                 .validateAll();
 
         if(result.isFailed()){

@@ -63,7 +63,7 @@ public final class MySQLOfertasAccionesServerRepository extends DataBaseReposito
     @Override
     public OfertaAccionServer buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new OfertaAccionServer(
-                UUID.fromString(rs.getString("ofertasAccionesServerId")),
+                UUID.fromString(rs.getString(ID_FIELD_NAME)),
                 rs.getString("nombreOfertante"),
                 rs.getString("empresa"),
                 rs.getDouble("precio"),

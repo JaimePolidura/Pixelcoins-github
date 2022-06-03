@@ -71,12 +71,12 @@ public final class PagarCuotasUseCaseTest {
         )));
         verify(this.eventBus, times(1)).publish(argThat(of(
                 DeudaCuotaPagadaEvento.of(deudaUltimoDIa.getDeudaId(), "acredor", "deudor",
-                        deudaUltimoDIa.getCouta(), deudaUltimoDIa.getTiempoRestante() - 1)
+                        deudaUltimoDIa.getCuota(), deudaUltimoDIa.getTiempoRestante() - 1)
         )));
 
         //Pedro deudor -> tiene pixelcoins para pagar la deuda, le quedan 5 dias
         verify(this.deudasService, times(1)).save(argThat(of(
-                deudaAPagar.decrementPixelcoinsRestantes(deudaAPagar.getCouta()).decrementTiempoRestanteByOne()
+                deudaAPagar.decrementPixelcoinsRestantes(deudaAPagar.getCuota()).decrementTiempoRestanteByOne()
                         .withFechaUltimoPago(Funciones.hoy())
         )));
         verify(this.jugadoresService, times(1)).realizarTransferencia(
@@ -87,7 +87,7 @@ public final class PagarCuotasUseCaseTest {
         )));
         verify(this.eventBus, times(1)).publish(argThat(of(
                 DeudaCuotaPagadaEvento.of(deudaAPagar.getDeudaId(), "jaime", "pedro",
-                        deudaAPagar.getCouta(), deudaAPagar.getTiempoRestante() - 1)
+                        deudaAPagar.getCuota(), deudaAPagar.getTiempoRestante() - 1)
         )));
 
         //Jaime deudor -> no tiene pixelcoins para pagar la deuda

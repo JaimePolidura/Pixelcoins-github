@@ -20,7 +20,7 @@ public final class CancelarOfertaAccionServerUseCase {
         var oferta = ofertasAccionesServerService.getById(id);
         this.ensureOwnsOferta(player, oferta);
 
-        this.ofertasAccionesServerService.deleteById(oferta.getOfertaAccioneServerId());
+        this.ofertasAccionesServerService.deleteById(oferta.getOfertaAccionServerId());
     }
 
     private void ensureOwnsOferta(String playerName, OfertaAccionServer oferta){

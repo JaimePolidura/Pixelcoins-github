@@ -74,7 +74,7 @@ public final class ComprarOfertaMercadoUseCase {
 
     private void decreaseOfertaCantidadOrRemove(int cantidadAComprar, OfertaAccionServer ofertaAComprar) {
         if(ofertaAComprar.getCantidad() - cantidadAComprar <= 0)
-            this.ofertasAccionesServerService.deleteById(ofertaAComprar.getOfertaAccioneServerId());
+            this.ofertasAccionesServerService.deleteById(ofertaAComprar.getOfertaAccionServerId());
         else
             this.ofertasAccionesServerService.save(ofertaAComprar.decreaseCantidadBy(cantidadAComprar));
     }

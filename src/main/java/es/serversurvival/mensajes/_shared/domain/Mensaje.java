@@ -8,12 +8,12 @@ import java.util.UUID;
 
 @AllArgsConstructor
 public final class Mensaje extends Aggregate {
-    @Getter private final UUID id;
+    @Getter private final UUID mensajeId;
     @Getter private final String enviador;
     @Getter private final String destinatario;
     @Getter private final String mensaje;
 
     public Mensaje withDestinatario(String destinatario){
-        return new Mensaje(id, enviador, destinatario, mensaje);
+        return new Mensaje(mensajeId, enviador, destinatario, mensaje);
     }
 }

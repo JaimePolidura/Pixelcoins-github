@@ -62,7 +62,7 @@ public final class MySQLEmpresasRepository extends DataBaseRepository<Empresa, U
     @Override
     public Empresa buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new Empresa(
-                UUID.fromString(rs.getString("id")),
+                UUID.fromString(rs.getString(ID_TABLE_NAME)),
                 rs.getString("nombre"),
                 rs.getString("owner"),
                 rs.getDouble("pixelcoins"),

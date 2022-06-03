@@ -37,7 +37,7 @@ public class ContratarComandoRunner implements CommandRunnerArgs<ContratarComand
 
         ValidationResult result = ValidatorService
                 .startValidating(sueldo, NaturalNumber)
-                .and(destinoJugadorNOmbre, JugadorOnline, NoLeHanEnviadoSolicitud, NotEqualsIgnoreCase.of(player.getName(),
+                .and(destinoJugadorNOmbre, JugadorOnline, NotEqualsIgnoreCase.of(player.getName(),
                         "No te puedes contratar a ti mismo"))
                 .and(TipoSueldo.codigoCorrecto(tipoSueldoString), True.of("El tipo de sueldo solo puede ser d: cdda dia, s: " +
                         "cada semana, 2s: cada dos semanas, m: cada mes"))

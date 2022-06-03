@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 public final class Transaccion extends Aggregate {
-    @Getter private final UUID id;
+    @Getter private final UUID transaccionId;
     @Getter private final String fecha;
     @Getter private final String comprador;
     @Getter private final String vendedor;
@@ -17,10 +17,10 @@ public final class Transaccion extends Aggregate {
     @Getter private final TipoTransaccion tipo;
 
     public Transaccion withComprador(String comprador){
-        return new Transaccion(id, fecha, comprador, vendedor, cantidad, objeto, tipo);
+        return new Transaccion(transaccionId, fecha, comprador, vendedor, cantidad, objeto, tipo);
     }
 
     public Transaccion withVendedor(String vendedor){
-        return new Transaccion(id, fecha, comprador, vendedor, cantidad, objeto, tipo);
+        return new Transaccion(transaccionId, fecha, comprador, vendedor, cantidad, objeto, tipo);
     }
 }

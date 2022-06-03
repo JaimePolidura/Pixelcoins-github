@@ -24,10 +24,7 @@ public final class Validaciones {
     public final static main.validators.booleans.False False = new False("error");
 
     public final static SuficinestesPixelcoins SuficientesPixelcoins = new SuficinestesPixelcoins("No tienes las suficientes pixelcoins");
-    public final static es.serversurvival._shared.utils.validaciones.misValidaciones.JugadorRegistrado JugadorRegistrado = new JugadorRegistrado("Jugador no encontrado");
-    public final static es.serversurvival._shared.utils.validaciones.misValidaciones.NoHaSidoCompradoItem NoHaSidoCompradoItem = new NoHaSidoCompradoItem("No puedes revender un item que ya has comprado");
     public final static JugadorOnline JugadorOnline = new JugadorOnline("Ese jugador no esta online");
     public final static es.serversurvival._shared.utils.validaciones.misValidaciones.InventarioNoLleno InventarioNoLleno = new InventarioNoLleno("No puedes tener el inventario lleno");
     public final static OwnerDeEmpresa OwnerDeEmpresa = new OwnerDeEmpresa("No eres el owner de la empresa");
-    public final static NoLeHanEnviadoSolicitud NoLeHanEnviadoSolicitud = new NoLeHanEnviadoSolicitud ("A ese jugador ya le has enviado una solicitud / ya le han enviado una solicitud");
 }

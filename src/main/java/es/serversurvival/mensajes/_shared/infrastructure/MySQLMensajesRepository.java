@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public final class MySQLMensajesRepository extends DataBaseRepository<Mensaje, UUID> implements MensajesRepository {
     private static final String TABLE_NAME = "mensajes";
-    private static final String ID_FIELD_NAME = "id";
+    private static final String ID_FIELD_NAME = "mensajeId";
 
     protected MySQLMensajesRepository(DatabaseConfiguration databaseConnection) {
         super(databaseConnection);
@@ -45,7 +45,7 @@ public final class MySQLMensajesRepository extends DataBaseRepository<Mensaje, U
 
     @Override
     public Mensaje buildObjectFromResultSet(ResultSet rs) throws SQLException {
-        return new Mensaje(UUID.fromString(rs.getString("id")),
+        return new Mensaje(UUID.fromString(rs.getString(ID_FIELD_NAME)),
                 rs.getString("enviador"),
                 rs.getString("destinatario"),
                 rs.getString("mensaje"));

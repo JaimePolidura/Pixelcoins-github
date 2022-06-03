@@ -46,7 +46,7 @@ public final class MySQLCuentasWebRepository extends DataBaseRepository<CuentaWe
     @Override
     public CuentaWeb buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new CuentaWeb(
-                UUID.fromString(rs.getString("cuentaWebId")),
+                UUID.fromString(rs.getString(ID_FIELD_NAME)),
                 rs.getString("username"),
                 rs.getString("password")
         );
