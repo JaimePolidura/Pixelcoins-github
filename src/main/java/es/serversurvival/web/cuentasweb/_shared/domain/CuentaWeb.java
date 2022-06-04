@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class CuentaWeb extends Aggregate {
+public final class CuentaWeb {
     @Getter private final UUID cuentaWebId;
     @Getter private final String username;
     @Getter private final String password;

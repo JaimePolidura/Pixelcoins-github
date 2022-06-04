@@ -4,6 +4,7 @@ import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
 import es.jaimetruman.menus.MenuService;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.tienda.vertienda.menu.TiendaMenu;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

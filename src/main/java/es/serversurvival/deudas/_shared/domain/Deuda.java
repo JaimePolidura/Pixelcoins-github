@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public final class Deuda extends Aggregate {
+public final class Deuda {
     @Getter private final UUID deudaId;
     @Getter private final String deudor;
     @Getter private final String acredor;

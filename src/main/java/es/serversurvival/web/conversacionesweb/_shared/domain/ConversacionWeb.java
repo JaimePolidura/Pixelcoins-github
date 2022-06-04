@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public final class ConversacionWeb extends Aggregate {
+public final class ConversacionWeb {
     @Getter private final String webNombre;
     @Getter private final String serverNombre;
 }

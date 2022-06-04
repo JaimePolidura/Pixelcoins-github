@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 
 @AllArgsConstructor
-public final class EncantamientoObjecto extends Aggregate {
+public final class EncantamientoObjecto {
     @Getter private final String nombre;
     @Getter private final int nivel;
 

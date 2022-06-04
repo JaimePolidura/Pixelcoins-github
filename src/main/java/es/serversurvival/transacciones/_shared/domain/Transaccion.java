@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class Transaccion extends Aggregate {
+public final class Transaccion {
     @Getter private final UUID transaccionId;
     @Getter private final String fecha;
     @Getter private final String comprador;

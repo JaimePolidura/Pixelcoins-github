@@ -8,7 +8,7 @@ import lombok.Getter;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class PosicionCerrada extends Aggregate {
+public final class PosicionCerrada {
     @Getter private final UUID posicionCerradaId;
     @Getter private final String jugador;
     @Getter private final SupportedTipoActivo tipoActivo;

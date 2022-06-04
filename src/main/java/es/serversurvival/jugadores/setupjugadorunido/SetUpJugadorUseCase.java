@@ -6,6 +6,8 @@ import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import org.bukkit.entity.Player;
 
+import java.util.Optional;
+
 public final class SetUpJugadorUseCase {
     private final JugadoresService jugadoresService;
 
@@ -14,23 +16,27 @@ public final class SetUpJugadorUseCase {
     }
 
     public void setUpJugadorUnido (Player player) {
-        Jugador jugadorPorUUID = jugadoresService.getById(player.getUniqueId());
+        Optional<Jugador> jugadorOptional = jugadoresService.findById(player.getUniqueId());
 
-        if(jugadorPorUUID == null){
-            Jugador jugadorPorNombre = jugadoresService.getByNombre(player.getName());
+        if(jugadorOptional.isEmpty()){
+            Optional<Jugador> jugadorPorNombre = jugadoresService.findByNombre(player.getName());
 
-            if(jugadorPorNombre == null){
+            if(jugadorPorNombre.isEmpty()){
                 jugadoresService.save(player.getUniqueId(), player.getName());
+            }else{
+                Pixelcoin.publish(new JugadorCambiadoDeNombreEvento(player.getName(), player.getName()));
             }
         }else{
-            if(!player.getName().equalsIgnoreCase(jugadorPorUUID.getNombre())){
-                jugadoresService.save(jugadorPorUUID.withNombre(jugadorPorUUID.getNombre()));
+            Jugador jugador = jugadorOptional.get();
 
-                Pixelcoin.publish(new JugadorCambiadoDeNombreEvento(jugadorPorUUID.getNombre(), player.getName()));
+            if(!player.getName().equalsIgnoreCase(jugador.getNombre())){
+                jugadoresService.save(jugador.withNombre(jugador.getNombre()));
+
+                Pixelcoin.publish(new JugadorCambiadoDeNombreEvento(jugador.getNombre(), player.getName()));
             }
 
-            if(jugadorPorUUID.getNumeroVerificacionCuenta() == 0){
-                jugadoresService.save(jugadorPorUUID.withNumeroCuenta(jugadoresService.generearNumeroCuenta()));
+            if(jugador.getNumeroVerificacionCuenta() == 0){
+                jugadoresService.save(jugador.withNumeroCuenta(jugadoresService.generearNumeroCuenta()));
             }
         }
     }

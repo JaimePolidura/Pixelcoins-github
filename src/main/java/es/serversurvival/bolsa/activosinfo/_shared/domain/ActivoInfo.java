@@ -10,7 +10,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public final class ActivoInfo extends Aggregate {
+public final class ActivoInfo {
     @Getter private final String nombreActivo;
     @Getter private final double precio;
     @Getter private final SupportedTipoActivo tipoActivo;

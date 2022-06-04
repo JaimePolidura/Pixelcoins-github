@@ -5,7 +5,6 @@ import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
-import es.serversurvival.jugadores.JugadoresTestMother;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.JugadoresRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,7 +46,7 @@ public final class PagarUseCaseTest {
                 .matches(j -> j.getGastos() == 2);
         assertThat(this.jugadoresService.getByNombre("pedro"))
                 .matches(j -> j.getPixelcoins() == 3)
-                .matches(j -> j.getNVentas() == 1)
+                .matches(j -> j.getNventas() == 1)
                 .matches(j -> j.getIngresos() == 2);
     }
 

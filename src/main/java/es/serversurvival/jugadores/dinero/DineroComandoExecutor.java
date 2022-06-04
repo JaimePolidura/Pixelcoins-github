@@ -27,7 +27,7 @@ public class DineroComandoExecutor implements CommandRunnerNonArgs {
         Player player = (Player) commandSender;
         String nombreJugador = player.getName();
 
-        double patrimonioJugador = Funciones.getPatrimonioJugador(nombreJugador);
+        double patrimonioJugador = Funciones.patrimonioJugador(nombreJugador);
         double totalAhorrado = jugadoresService.getByNombre(nombreJugador).getPixelcoins();
 
         patrimonioJugador = patrimonioJugador - totalAhorrado;

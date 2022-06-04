@@ -60,7 +60,7 @@ public class TiendaService {
     }
 
     public List<TiendaObjeto> findAll() {
-        return this.cache.isNotFull() ?
+        return !this.cache.isEmpty() ?
                 this.cache.all() :
                 this.repositoryDb.findAll().stream().peek(tiendaObjeto -> {
                     this.cache.put(tiendaObjeto.getTiendaObjetoId(), tiendaObjeto);

@@ -18,7 +18,7 @@ public final class MySQLTransaccionesRepository extends DataBaseRepository<Trans
     private static final String TABLE_NAME = "transacciones";
     private static final String ID_TABLE_NAME = "transaccionId";
 
-    protected MySQLTransaccionesRepository(DatabaseConfiguration databaseConnection) {
+    public MySQLTransaccionesRepository(DatabaseConfiguration databaseConnection) {
         super(databaseConnection);
     }
 

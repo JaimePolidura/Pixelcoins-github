@@ -5,6 +5,7 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.web.cuentasweb._shared.domain.CuentaWeb;
 import es.serversurvival.web.cuentasweb._shared.domain.CuentasWebRepository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public final class CuentasWebService {
@@ -28,5 +29,7 @@ public final class CuentasWebService {
                 .orElseThrow(() -> new ResourceNotFound("Cuenta no encontrada"));
     }
 
-
+    public Optional<CuentaWeb> findByUsername(String username) {
+        return this.repositoryDb.findByUsername(username);
+    }
 }

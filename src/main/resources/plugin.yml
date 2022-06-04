@@ -9,21 +9,24 @@ commands:
   pagar:
     description: pagar dinero a otro jugador
     usage: /<command> <nombre jugador> <cantidad>
+  normas:
+    description: Ver las normas del servidor
+    usage: /<command>
   estadisticas:
     description: Ver todos tus objetos vendidos, gastos, ingresos y beneficios
     usage: /<command>
   deudas:
     description: Comandos relacionados con las empresas
     usage: /<command> <subComandos...>
+  jugar:
+    description: Ver comandos de jugadr
+    usage: /<command>
   top:
     description: Ver a los jugadores que te deben y los que debes
     usage: /<command>
   tienda:
     description: mostrar la tienda de objetos
     usage: /<command>
-  vender:
-    description: vender objetos en la tienda a un precio, para retirarlos en /tienda
-    usage: /<command> <precio>
   mensajes:
     description: ver todos los mensajes pendientes
     usage: /<command>
@@ -42,7 +45,7 @@ commands:
   bolsa:
     description: comando relacionado con los comandos de la bolsa
     usage: /<command> <subComandos...>
-  cuenta:
+  cuentaweb:
     description: ver todas tu numero de cuenta para iniciar sesion
     usage: /<command>
   perfil:

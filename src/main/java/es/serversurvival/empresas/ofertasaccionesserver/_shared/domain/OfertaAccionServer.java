@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-public final class OfertaAccionServer extends Aggregate {
+public final class OfertaAccionServer {
     @Getter private final UUID ofertaAccionServerId;
     @Getter private final String nombreOfertante;
     @Getter private final String empresa;

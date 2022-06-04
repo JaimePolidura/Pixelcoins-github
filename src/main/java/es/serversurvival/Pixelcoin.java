@@ -33,9 +33,13 @@ import es.serversurvival.bolsa.posicionescerradas._shared.infrastructure.MySQLPo
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistasServerRepository;
 import es.serversurvival.empresas.accionistasserver._shared.infrastructure.MySQLAccionistasServerRepository;
+import es.serversurvival.empresas.empleados._shared.infrastructure.MySQLEmpleadosRepository;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertasAccionesServerRepository;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.infrastructure.MySQLOfertasAccionesServerRepository;
+import es.serversurvival.mensajes._shared.infrastructure.MySQLMensajesRepository;
+import es.serversurvival.tienda._shared.infrastructure.MySQLTiendaRepository;
+import es.serversurvival.transacciones._shared.infrastructure.MySQLTransaccionesRepository;
 import es.serversurvival.web.conversacionesweb._shared.application.ConversacionesWebService;
 import es.serversurvival.web.conversacionesweb._shared.domain.ConversacionesWebRepostiory;
 import es.serversurvival.web.conversacionesweb._shared.infrastructure.InMemoryConversacionesRepository;
@@ -123,10 +127,10 @@ public final class Pixelcoin extends JavaPlugin {
         getLogger().info("------------Plugin activado -------------");
         getServer().getConsoleSender().sendMessage(GREEN + "------------------------------");
 
-        this.setUpCommandsMobListenersTask();
-        this.setUpRabbitMQConsumer();
-        this.setUpScoreboardUpdater();
         this.loadAllDependenciesContainer();
+        this.setUpCommandsMobListenersTask();
+//        this.setUpRabbitMQConsumer();
+        this.setUpScoreboardUpdater();
 
         getServer().getConsoleSender().sendMessage(GREEN + "------------------------------");
 
@@ -165,12 +169,12 @@ public final class Pixelcoin extends JavaPlugin {
 
         DependecyContainer.addAll(new HashMap<>(){{
             put(JugadoresRepository.class, new MySQLJugadoresRepository(mysqlCOnfiguration));
-            put(MensajesRepository.class, new MySQLJugadoresRepository(mysqlCOnfiguration));
-            put(TransaccionesRepository.class, new MySQLJugadoresRepository(mysqlCOnfiguration));
+            put(MensajesRepository.class, new MySQLMensajesRepository(mysqlCOnfiguration));
+            put(TransaccionesRepository.class, new MySQLTransaccionesRepository(mysqlCOnfiguration));
             put(DeudasRepository.class, new MySQLDeudasRepository(mysqlCOnfiguration));
-            put(TiendaRepository.class, new MySQLDeudasRepository(mysqlCOnfiguration));
+            put(TiendaRepository.class, new MySQLTiendaRepository(mysqlCOnfiguration));
             put(EmpresasRepostiory.class, new MySQLEmpresasRepository(mysqlCOnfiguration));
-            put(EmpleadosRepository.class, new MySQLEmpresasRepository(mysqlCOnfiguration));
+            put(EmpleadosRepository.class, new MySQLEmpleadosRepository(mysqlCOnfiguration));
             put(CuentasWebRepository.class, new MySQLCuentasWebRepository(mysqlCOnfiguration));
             put(ConversacionesWebRepostiory.class, new InMemoryConversacionesRepository());
             put(VerificacionCuentaRepository.class, new InMemoryVerificacionCuentaRepository());

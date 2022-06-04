@@ -11,7 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public final class Empleado extends Aggregate {
+public final class Empleado {
     @Getter private final UUID empleadoId;
     @Getter private final String nombre;
     @Getter private final String empresa;

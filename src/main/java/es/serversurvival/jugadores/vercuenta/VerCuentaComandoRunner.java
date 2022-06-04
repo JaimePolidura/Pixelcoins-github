@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @Command(
-        value = "cuenta",
+        value = "cuentaweb",
         explanation = "Ver tu cuenta de la web"
 )
 public class VerCuentaComandoRunner implements CommandRunnerNonArgs {

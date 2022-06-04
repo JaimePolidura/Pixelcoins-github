@@ -14,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public final class PosicionAbierta extends Aggregate {
+public final class PosicionAbierta {
     @Getter private final UUID posicionAbiertaId;
     @Getter private final String jugador;
     @Getter private final SupportedTipoActivo tipoActivo;

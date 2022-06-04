@@ -68,7 +68,7 @@ public final class MySQLEmpleadosRepository extends DataBaseRepository<Empleado,
                 rs.getString("empresa"),
                 rs.getDouble("sueldo"),
                 rs.getString("cargo"),
-                TipoSueldo.ofCodigo(rs.getString("tipoSueldo")),
+                TipoSueldo.valueOf(rs.getString("tipoSueldo")),
                 rs.getString("fechaUltimapaga")
         );
     }

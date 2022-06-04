@@ -11,59 +11,59 @@ import java.util.UUID;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-public final class Jugador extends Aggregate {
+public final class Jugador {
     @Getter private final UUID jugadorId;
     @Getter private final String nombre;
     @Getter private final double pixelcoins;
-    @Getter private final int nVentas;
+    @Getter private final int nventas;
     @Getter private final double ingresos;
     @Getter private final double gastos;
-    @Getter private final int nInpagosDeuda;
-    @Getter private final int nPagosDeuda;
+    @Getter private final int ninpagosDeuda;
+    @Getter private final int npagosDeuda;
     @Getter private final int numeroVerificacionCuenta;
 
     public Jugador withNombre(String nombre){
-        return new Jugador(jugadorId, nombre, pixelcoins, nVentas, ingresos, gastos,
-                nInpagosDeuda, nPagosDeuda, numeroVerificacionCuenta);
+        return new Jugador(jugadorId, nombre, pixelcoins, nventas, ingresos, gastos,
+                ninpagosDeuda, npagosDeuda, numeroVerificacionCuenta);
     }
 
     public Jugador withNumeroCuenta(int numeroVerificacionCuenta){
-        return new Jugador(jugadorId, nombre, pixelcoins, nVentas, ingresos, gastos,
-                nInpagosDeuda, nPagosDeuda, numeroVerificacionCuenta);
+        return new Jugador(jugadorId, nombre, pixelcoins, nventas, ingresos, gastos,
+                ninpagosDeuda, npagosDeuda, numeroVerificacionCuenta);
     }
 
     public Jugador incrementGastosBy(double gastos){
-        return new Jugador(jugadorId, nombre, pixelcoins, nVentas, ingresos, this.gastos + gastos,
-                nInpagosDeuda, nPagosDeuda, numeroVerificacionCuenta);
+        return new Jugador(jugadorId, nombre, pixelcoins, nventas, ingresos, this.gastos + gastos,
+                ninpagosDeuda, npagosDeuda, numeroVerificacionCuenta);
     }
 
     public Jugador incrementIngresosBy(double ingresos){
-        return new Jugador(jugadorId, nombre, pixelcoins, nVentas, this.ingresos + ingresos, gastos,
-                nInpagosDeuda, nPagosDeuda, numeroVerificacionCuenta);
+        return new Jugador(jugadorId, nombre, pixelcoins, nventas, this.ingresos + ingresos, gastos,
+                ninpagosDeuda, npagosDeuda, numeroVerificacionCuenta);
     }
 
     public Jugador incrementNVentas(){
-        return new Jugador(jugadorId, nombre, pixelcoins, nVentas + 1, ingresos, gastos,
-                nInpagosDeuda, nPagosDeuda, numeroVerificacionCuenta);
+        return new Jugador(jugadorId, nombre, pixelcoins, nventas + 1, ingresos, gastos,
+                ninpagosDeuda, npagosDeuda, numeroVerificacionCuenta);
     }
 
     public Jugador incrementNInpago(){
-        return new Jugador(jugadorId, nombre, pixelcoins, nVentas, ingresos, gastos,
-                nInpagosDeuda + 1, nPagosDeuda, numeroVerificacionCuenta);
+        return new Jugador(jugadorId, nombre, pixelcoins, nventas, ingresos, gastos,
+                ninpagosDeuda + 1, npagosDeuda, numeroVerificacionCuenta);
     }
 
     public Jugador incrementNPagos(){
-        return new Jugador(jugadorId, nombre, pixelcoins, nVentas, ingresos, gastos,
-                nInpagosDeuda, nPagosDeuda + 1, numeroVerificacionCuenta);
+        return new Jugador(jugadorId, nombre, pixelcoins, nventas, ingresos, gastos,
+                ninpagosDeuda, npagosDeuda + 1, numeroVerificacionCuenta);
     }
 
     public Jugador incrementPixelcoinsBy(double pixelcoins){
-        return new Jugador(jugadorId, nombre, this.pixelcoins + pixelcoins, nVentas, ingresos, gastos,
-                nInpagosDeuda, nPagosDeuda, numeroVerificacionCuenta);
+        return new Jugador(jugadorId, nombre, this.pixelcoins + pixelcoins, nventas, ingresos, gastos,
+                ninpagosDeuda, npagosDeuda, numeroVerificacionCuenta);
     }
 
     public Jugador decrementPixelcoinsBy(double pixelcoins){
-        return new Jugador(jugadorId, nombre, this.pixelcoins - pixelcoins, nVentas, ingresos, gastos,
-                nInpagosDeuda, nPagosDeuda, numeroVerificacionCuenta);
+        return new Jugador(jugadorId, nombre, this.pixelcoins - pixelcoins, nventas, ingresos, gastos,
+                ninpagosDeuda, npagosDeuda, numeroVerificacionCuenta);
     }
 }

@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class Mensaje extends Aggregate {
+public final class Mensaje {
     @Getter private final UUID mensajeId;
     @Getter private final String enviador;
     @Getter private final String destinatario;

@@ -1,16 +1,21 @@
 package es.serversurvival.jugadores.venderjugador;
 
+import es.jaime.javaddd.domain.exceptions.*;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.jaimetruman.menus.MenuService;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.utils.Funciones;
 import main.ValidationResult;
 import main.ValidatorService;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
 import static org.bukkit.ChatColor.DARK_RED;
+import static org.bukkit.ChatColor.GOLD;
 
 @Command(
         value = "venderjugador",
@@ -30,24 +35,21 @@ public class VenderJugadorComandoRunner implements CommandRunnerArgs<VenderJugad
         Player comprador = venderJugadorComando.getComprador();
         double pixelcoins = venderJugadorComando.getPixelcoins();
 
-        ValidationResult result = ValidatorService
-                .startValidating(comprador, NotEqualsIgnoreCase.of(player.getName()), InventarioNoLleno)
-                .and(pixelcoins, PositiveNumber, SuficientesPixelcoins.of(comprador.getName(), pixelcoins, "El jugador no tiene las suficientes pixelcoins"))
-                .and(player.getInventory().getItemInMainHand(), NotNull)
-                .and(player.getInventory().getItemInMainHand().getType().toString(), NotEqualsIgnoreCase.of("AIR", "No puede ser aire"))
-                .validateAll();
+        if(player == null || !player.isOnline())
+            throw new ResourceNotFound("El jugador no esta online");
+        if(Funciones.getEspaciosOcupados(comprador.getInventory()) == 36)
+            throw new IllegalState("El jugador a vender, tiene el inventario lleno");
+        if(player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getType() == Material.AIR)
+            throw new IllegalState("Tiens que tener un objeto en la mano");
 
-        if(result.isFailed()){
-            player.sendMessage(DARK_RED + result.getMessage());
-            return;
-        }
-
-        this.menuService.open((Player) sender, new VenderJugadorConfirmacionMenu(
+        this.menuService.open(comprador, new VenderJugadorConfirmacionMenu(
                 comprador,
                 player,
                 player.getInventory().getItemInMainHand(),
                 ((Player) sender).getInventory().getHeldItemSlot(),
                 pixelcoins
         ));
+
+        sender.sendMessage(GOLD + "Has enviado la solicitud");
     }
 }

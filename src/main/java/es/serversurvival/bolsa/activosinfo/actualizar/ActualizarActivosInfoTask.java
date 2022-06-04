@@ -11,7 +11,7 @@ public class ActualizarActivosInfoTask implements TaskRunner {
     private final ActualizarActivosInfoUseCase actualizarActivosInfo;
 
     public ActualizarActivosInfoTask() {
-        this.actualizarActivosInfo = DependecyContainer.get(ActualizarActivosInfoUseCase.class);
+        this.actualizarActivosInfo = new ActualizarActivosInfoUseCase();
     }
 
     @Override

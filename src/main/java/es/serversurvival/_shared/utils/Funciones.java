@@ -48,7 +48,7 @@ public final class Funciones {
     public static int getEspaciosOcupados(Inventory inventory) {
         int espaciosLibres = 36;
         ItemStack[] items = inventory.getContents();
-
+        
         for(int i = 0; i < 36; i++){
             if(items[i] == null || esDeTipoItem(items[i], "AIR")) {
                 espaciosLibres--;
@@ -125,46 +125,8 @@ public final class Funciones {
         HashMap<String, Double> toReturn = new HashMap<>();
 
         allJugadordes.forEach((jugador) -> {
-            double activosTotales = 0;
-
-            //Liquidez
-            activosTotales = jugador.getPixelcoins();
-
-            // Deudas acredor
-            if(mapDeudasAcredor.get(jugador.getNombre()) != null){
-                activosTotales += mapDeudasAcredor.get(jugador.getNombre()).stream()
-                        .mapToDouble(Deuda::getPixelcoinsRestantes)
-                        .sum();
-            }
-
-            //Deudas deudor
-            if(mapDeudasDeudor.get(jugador.getNombre()) != null){
-                activosTotales -= mapDeudasDeudor.get(jugador.getNombre()).stream()
-                        .mapToDouble(Deuda::getPixelcoinsRestantes)
-                        .sum();
-            }
-
-            //Emrpesas
-            if(mapEmpresasJugador.get(jugador.getNombre()) != null){
-                activosTotales += mapEmpresasJugador.get(jugador.getNombre()).stream()
-                        .mapToDouble(Empresa::getPixelcoins)
-                        .sum();
-            }
-
-            ///Posiciones abiertas largas
-            if(mapPosicionesLargo.get(jugador.getNombre()) != null){
-                activosTotales += mapPosicionesLargo.get(jugador.getNombre()).stream()
-                        .mapToDouble(pos -> (mapAllLlamadas.get(pos.getNombreActivo()).getPrecio() * pos.getCantidad()))
-                        .sum();
-            }
-
-            //Posicioenes abiertas cortas
-            if(mapPosicionesCorto.get(jugador.getNombre()) != null){
-                activosTotales += mapPosicionesCorto.get(jugador.getNombre()).stream()
-                        .mapToDouble(pos -> (pos.getPrecioApertura() - mapAllLlamadas.get(pos.getNombreActivo()).getPrecio()) * pos.getCantidad())
-                        .sum();
-            }
-
+            double activosTotales = patrimonioJugador(mapAllLlamadas, mapDeudasAcredor, mapDeudasDeudor, mapEmpresasJugador,
+                    mapPosicionesLargo, mapPosicionesCorto, jugador);
 
             toReturn.put(jugador.getNombre(), activosTotales);
         });
@@ -173,6 +135,104 @@ public final class Funciones {
             return CollectionUtils.sortMapByValueCrec(toReturn);
         else
             return CollectionUtils.sortMapByValueDecre(toReturn);
+    }
+
+    public static double patrimonioJugador(String jugadorNombre){
+        var deudasMyService = DependecyContainer.get(DeudasService.class);
+        var jugadoresService = DependecyContainer.get(JugadoresService.class);
+        var empresasService = DependecyContainer.get(EmpresasService.class);
+        var activoInfoService = DependecyContainer.get(ActivosInfoService.class);
+
+        Map<String, ActivoInfo> mapAllLlamadas = activoInfoService.findAllToMap();
+        Map<String, List<Deuda>> mapDeudasAcredor = deudasMyService.getAllDeudasAcredorMap();
+        Map<String, List<Deuda>> mapDeudasDeudor = deudasMyService.getAllDeudasDeudorMap();
+        Map<String, List<Empresa>> mapEmpresasJugador = empresasService.getAllEmpresasJugadorMap();
+        Map<String, List<PosicionAbierta>> mapPosicionesLargo = PosicionesUtils.getAllPosicionesAbiertasMap(PosicionAbierta::esLargo);
+        Map<String, List<PosicionAbierta>> mapPosicionesCorto = PosicionesUtils.getAllPosicionesAbiertasMap(PosicionAbierta::esCorto);
+
+        double activos = 0;
+
+        activos += jugadoresService.getByNombre(jugadorNombre).getPixelcoins();
+
+        // Deudas acredor
+        if(mapDeudasAcredor.get(jugadorNombre) != null){
+            activos += mapDeudasAcredor.get(jugadorNombre).stream()
+                    .mapToDouble(Deuda::getPixelcoinsRestantes)
+                    .sum();
+        }
+
+        //Deudas deudor
+        if(mapDeudasDeudor.get(jugadorNombre) != null){
+            activos -= mapDeudasDeudor.get(jugadorNombre).stream()
+                    .mapToDouble(Deuda::getPixelcoinsRestantes)
+                    .sum();
+        }
+
+        //Emrpesas
+        if(mapEmpresasJugador.get(jugadorNombre) != null){
+            activos += mapEmpresasJugador.get(jugadorNombre).stream()
+                    .mapToDouble(Empresa::getPixelcoins)
+                    .sum();
+        }
+
+        ///Posiciones abiertas largas
+        if(mapPosicionesLargo.get(jugadorNombre) != null){
+            activos += mapPosicionesLargo.get(jugadorNombre).stream()
+                    .mapToDouble(pos -> (mapAllLlamadas.get(pos.getNombreActivo()).getPrecio() * pos.getCantidad()))
+                    .sum();
+        }
+
+        //Posicioenes abiertas cortas
+        if(mapPosicionesCorto.get(jugadorNombre) != null){
+            activos += mapPosicionesCorto.get(jugadorNombre).stream()
+                    .mapToDouble(pos -> (pos.getPrecioApertura() - mapAllLlamadas.get(pos.getNombreActivo()).getPrecio()) * pos.getCantidad())
+                    .sum();
+        }
+
+        return activos;
+    }
+
+    private static double patrimonioJugador(Map<String, ActivoInfo> mapAllLlamadas, Map<String, List<Deuda>> mapDeudasAcredor, Map<String, List<Deuda>> mapDeudasDeudor, Map<String, List<Empresa>> mapEmpresasJugador, Map<String, List<PosicionAbierta>> mapPosicionesLargo, Map<String, List<PosicionAbierta>> mapPosicionesCorto, Jugador jugador) {
+        double activosTotales = 0;
+
+        //Liquidez
+        activosTotales = jugador.getPixelcoins();
+
+        // Deudas acredor
+        if(mapDeudasAcredor.get(jugador.getNombre()) != null){
+            activosTotales += mapDeudasAcredor.get(jugador.getNombre()).stream()
+                    .mapToDouble(Deuda::getPixelcoinsRestantes)
+                    .sum();
+        }
+
+        //Deudas deudor
+        if(mapDeudasDeudor.get(jugador.getNombre()) != null){
+            activosTotales -= mapDeudasDeudor.get(jugador.getNombre()).stream()
+                    .mapToDouble(Deuda::getPixelcoinsRestantes)
+                    .sum();
+        }
+
+        //Emrpesas
+        if(mapEmpresasJugador.get(jugador.getNombre()) != null){
+            activosTotales += mapEmpresasJugador.get(jugador.getNombre()).stream()
+                    .mapToDouble(Empresa::getPixelcoins)
+                    .sum();
+        }
+
+        ///Posiciones abiertas largas
+        if(mapPosicionesLargo.get(jugador.getNombre()) != null){
+            activosTotales += mapPosicionesLargo.get(jugador.getNombre()).stream()
+                    .mapToDouble(pos -> (mapAllLlamadas.get(pos.getNombreActivo()).getPrecio() * pos.getCantidad()))
+                    .sum();
+        }
+
+        //Posicioenes abiertas cortas
+        if(mapPosicionesCorto.get(jugador.getNombre()) != null){
+            activosTotales += mapPosicionesCorto.get(jugador.getNombre()).stream()
+                    .mapToDouble(pos -> (pos.getPrecioApertura() - mapAllLlamadas.get(pos.getNombreActivo()).getPrecio()) * pos.getCantidad())
+                    .sum();
+        }
+        return activosTotales;
     }
 
     public static double getPatrimonioJugador(String nombreJugador){

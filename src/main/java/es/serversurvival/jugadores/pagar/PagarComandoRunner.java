@@ -41,8 +41,6 @@ public class PagarComandoRunner implements CommandRunnerArgs<PagarComando> {
 
     private void sendMessage (Player pagador, String pagado, double pixelcoins) {
         pagador.sendMessage(GOLD + "Has pagado: " + GREEN + FORMATEA.format(pixelcoins) + " PC " + GOLD + "a " + pagado);
-        String mensajeSiEstaOnline = GOLD + pagador.getName() + " te ha pagado: " + GREEN + "+" + FORMATEA.format(pixelcoins) + " PC " + AQUA + "(/estadisticas)";
-        Funciones.enviarMensaje(pagado, mensajeSiEstaOnline, mensajeSiEstaOnline, Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
         String mensajeOnline = GOLD + pagador.getName() + " te ha pagado " + GREEN + FORMATEA.format(pixelcoins) + "PC!";
         String mensajeOffline = pagador.getName() + " te ha pagado " + FORMATEA.format(pixelcoins) + "PC!";

@@ -28,9 +28,10 @@ public final class TopMenu extends Menu {
     private final JugadoresService jugadoresService;
 
     public TopMenu(){
-        this.initInfoJugadores();
         this.posicionesCerradasService = DependecyContainer.get(PosicionesCerradasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+
+        this.initInfoJugadores();
     }
 
     @Override
@@ -41,7 +42,7 @@ public final class TopMenu extends Menu {
                 {0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 4, 0, 0, 5, 0, 0, 6, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 7, 0, 0, 0, 8, 0, 0}
+                {0, 7, 0, 0, 0, 0, 0, 8, 0}
         };
     }
 
@@ -66,7 +67,9 @@ public final class TopMenu extends Menu {
         infoJugadores.sort( (inf1, inf2) -> Double.compare(inf2.porcentajePatrimonioIngresos, inf1.porcentajePatrimonioIngresos) );
         List<String> lore = new ArrayList<>();
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < infoJugadores.size(); i++) {
+            if(i == 5) break;
+
             lore.add(GOLD + "" + (i + 1) + " " + infoJugadores.get(i).nombre + ": " + FORMATEA.format(redondeoDecimales(infoJugadores.get(i)
                     .porcentajePatrimonioIngresos, 3)) + "%");
         }
@@ -86,7 +89,9 @@ public final class TopMenu extends Menu {
 
         List<String> lore = new ArrayList<>();
 
-        for(int i = 0; i < 5; i++){
+        for(int i = 0; i < posicionesNotDuplicadas.size(); i++){
+            if(i == 5) break;
+
             PosicionCerrada posicion = posicionesNotDuplicadas.get(i);
             double rentabilidad = redondeoDecimales(posicion.calculateRentabildiad(), 3);
             if(rentabilidad > 0) break;
@@ -99,14 +104,16 @@ public final class TopMenu extends Menu {
     }
 
     private ItemStack buildTopMenosFiablesJugadoresItem() {
-        List<Jugador> listaMenosFiables = this.jugadoresService.sortJugadoresBy((j1, j2) -> j2.getNInpagosDeuda() - j1.getNInpagosDeuda());
+        List<Jugador> listaMenosFiables = this.jugadoresService.sortJugadoresBy((j1, j2) -> j2.getNinpagosDeuda() - j1.getNinpagosDeuda());
         String displayName = GREEN + "" + BOLD + "TOP MOROSOS";
         List<String> lore = new ArrayList<>();
 
-        for (int i = 0; i < 5 || i < listaMenosFiables.size(); i++) {
+        for (int i = 0; i < listaMenosFiables.size(); i++) {
+            if(i == 5) break;
+
             Jugador jugador = listaMenosFiables.get(i);
 
-            lore.add(GOLD + "" + i  + "º " + jugador.getNombre() + ": " + GREEN + FORMATEA.format(jugador.getNInpagosDeuda()));
+            lore.add(GOLD + "" + i  + "º " + jugador.getNombre() + ": " + GREEN + FORMATEA.format(jugador.getNinpagosDeuda()));
         }
 
         return ItemBuilder.of(Material.RED_WOOL).title(displayName).lore(lore).build();
@@ -120,7 +127,9 @@ public final class TopMenu extends Menu {
 
         List<String> lore = new ArrayList<>();
 
-        for(int i = 0; i < 5; i++){
+        for(int i = 0; i < posicionesnotduplicadas.size(); i++){
+            if(i == 5) break;
+
             PosicionCerrada posicion = posicionesnotduplicadas.get(i);
             double rentabilidad = redondeoDecimales(posicion.calculateRentabildiad(), 3);
             if(rentabilidad < 0) break;
@@ -141,13 +150,15 @@ public final class TopMenu extends Menu {
     }
 
     private ItemStack buildTopFiablesJugadoresItem() {
-        List<Jugador> listaFiables = this.jugadoresService.sortJugadoresBy((j1, j2) -> j2.getNPagosDeuda() - j1.getNPagosDeuda());
+        List<Jugador> listaFiables = this.jugadoresService.sortJugadoresBy((j1, j2) -> j2.getNpagosDeuda() - j1.getNpagosDeuda());
         String displayName = GREEN + "" + BOLD + "TOP MENOS MOROSOS";
         List<String> lore = new ArrayList<>();
 
         for (int i = 0; i < listaFiables.size(); i++) {
+            if(i == 5) break;
+
             Jugador fiable = listaFiables.get(i);
-            lore.add(GOLD + "" + i  + "º " + fiable.getNombre() + ": " + GREEN + FORMATEA.format(fiable.getNPagosDeuda()));
+            lore.add(GOLD + "" + i  + "º " + fiable.getNombre() + ": " + GREEN + FORMATEA.format(fiable.getNpagosDeuda()));
         }
 
         return ItemBuilder.of(Material.GREEN_WOOL).title(displayName).lore(lore).build();
@@ -171,14 +182,16 @@ public final class TopMenu extends Menu {
     }
 
     private ItemStack buildTopVendedoresJugadoresItem() {
-        List<Jugador> listaVendedores = this.jugadoresService.sortJugadoresBy((j1, j2) -> j2.getNVentas() - j1.getNVentas());
+        List<Jugador> listaVendedores = this.jugadoresService.sortJugadoresBy((j1, j2) -> j2.getNventas() - j1.getNventas());
 
         String displayName = GREEN + "" + BOLD + "TOP VENDEDORES";
         List<String> lore = new ArrayList<>();
 
         for (int i = 0; i < listaVendedores.size(); i++) {
+            if(i == 5) break;
+
             Jugador vendedor = listaVendedores.get(i);
-            lore.add(GOLD + "" + i + "º " + vendedor.getNombre() + ": " + GREEN + FORMATEA.format(vendedor.getNVentas()));
+            lore.add(GOLD + "" + i + "º " + vendedor.getNombre() + ": " + GREEN + FORMATEA.format(vendedor.getNventas()));
         }
 
         return ItemBuilder.of(Material.GOLD_INGOT).title(displayName).lore(lore).build();

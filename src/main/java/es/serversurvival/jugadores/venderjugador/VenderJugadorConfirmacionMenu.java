@@ -19,7 +19,7 @@ import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
 public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu {
-    private final Player jugadorAVender;
+    private final Player jugadorComprador;
     private final Player jugadorVendedor;
     private final ItemStack itemAVender;
     private final int slotItemVender;
@@ -27,21 +27,34 @@ public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu {
 
     @Override
     public void onAceptar(Player player, InventoryClickEvent event) {
+        var itemToVenderIsIntVendedorInventory = this.isItemInInventory(jugadorVendedor, itemAVender, slotItemVender);
+        if(!itemToVenderIsIntVendedorInventory){
+            this.jugadorVendedor.sendMessage(DARK_RED + "casi maquina");
+            this.jugadorComprador.sendMessage(DARK_RED + "No se ha podido completar el pago, por que el jugador ha movido el objeto a venderte");
+            return;
+        }
+
         var pagarUseCase = new PagarUseCase();
 
-        pagarUseCase.realizarPago(jugadorAVender.getName(), jugadorVendedor.getName(), precio);
+        pagarUseCase.realizarPago(jugadorComprador.getName(), jugadorVendedor.getName(), precio);
 
-        jugadorAVender.getInventory().addItem(itemAVender);
+        jugadorComprador.getInventory().addItem(itemAVender);
         jugadorVendedor.getInventory().clear(slotItemVender);
 
-        jugadorVendedor.sendMessage(ChatColor.GOLD + jugadorAVender.getName() + " te ha compradoo " + itemAVender.getType() +
+        jugadorVendedor.sendMessage(ChatColor.GOLD + jugadorComprador.getName() + " te ha compradoo " + itemAVender.getType() +
                 " al precio de " + ChatColor.GREEN + FORMATEA.format(precio) + " PC");
         jugadorVendedor.playSound(jugadorVendedor.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
-        jugadorAVender.sendMessage(ChatColor.GOLD + "Has comprado el item");
-        jugadorAVender.playSound(jugadorAVender.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        jugadorComprador.sendMessage(ChatColor.GOLD + "Has comprado el item");
+        jugadorComprador.playSound(jugadorComprador.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
-        Pixelcoin.publish(new ItemVendidoJugadorEvento(jugadorAVender.getName(), jugadorVendedor.getName(), precio, itemAVender.getType().toString()));
+        Pixelcoin.publish(new ItemVendidoJugadorEvento(jugadorComprador.getName(), jugadorVendedor.getName(), precio, itemAVender.getType().toString()));
+    }
+
+    private boolean isItemInInventory(Player jugadorVendedor, ItemStack itemAVender, int slotItemVender) {
+        var itemAVenderEnInventario = jugadorVendedor.getInventory().getItem(slotItemVender);
+
+        return itemAVenderEnInventario != null && itemAVenderEnInventario.equals(itemAVender);
     }
 
     @Override
@@ -53,7 +66,10 @@ public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu {
     public ItemStack aceptarItem() {
         return ItemBuilder.of(Material.GREEN_WOOL)
                 .title(ChatColor.GREEN + "" + ChatColor.BOLD + "COMPRAR")
-                .lore(List.of(GOLD + "Cancelar la oferta de " + jugadorVendedor.getName()))
+                .lore(List.of(
+                        GOLD + "Aceptar la oferta de " + jugadorVendedor.getName(),
+                        GOLD + "Precio: " + GREEN + FORMATEA.format(precio) + "PC"
+                ))
                 .build();
     }
 }

@@ -64,7 +64,7 @@ public final class VenderTiendaUseCase {
                 item.getEnchantments();
 
         return enchantmentsBukkitTypes.keySet().stream()
-                .map(e -> new EncantamientoObjecto(e.toString(), enchantmentsBukkitTypes.get(e)))
+                .map(e -> new EncantamientoObjecto(e.getName(), enchantmentsBukkitTypes.get(e)))
                 .toList();
     }
 }

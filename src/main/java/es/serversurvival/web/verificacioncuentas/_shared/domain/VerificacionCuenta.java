@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public final class VerificacionCuenta extends Aggregate {
+public final class VerificacionCuenta {
     @Getter private final String jugador;
     @Getter private final int numero;
 }

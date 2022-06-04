@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public final class AccionistaServer extends Aggregate {
+public final class AccionistaServer {
     @Getter private final UUID accionEmpresaServerId;
     @Getter private final String nombreAccionista;
     @Getter private final TipoAccionista tipoAccionista;

@@ -21,7 +21,7 @@ public class RabbitMQConsumer {
     private final Map<String, SocketMessaggeExecutor> socketMessaggeExecutors = new HashMap<>();
     private final String QUEUE_NAME = "chat";
     private final ServerSocketWeb socket = ServerSocketWeb.INSTANCE;
-    private Connection connection;
+    private final Connection connection;
 
     @SneakyThrows
     public RabbitMQConsumer () {

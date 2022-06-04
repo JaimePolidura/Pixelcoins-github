@@ -8,6 +8,10 @@ public interface LimitedCache<K, V> extends Cache<K, V>{
         return this.size() == maxItemsCapacity();
     }
 
+    default boolean isEmpty(){
+        return this.size() == 0;
+    }
+
     default boolean isNotFull(){
         return !this.isFull();
     }

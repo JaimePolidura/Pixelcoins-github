@@ -32,15 +32,15 @@ public final class PagarUseCase {
     }
 
     private void ensureNotSamePlayer(String pagador, String pagado){
-        if(pagador.equals(pagado)){
+        System.out.println("Hola?");
+
+        if(pagador.equalsIgnoreCase(pagado))
             throw new CannotBeYourself("No te pudes pagar a ti mismo");
-        }
     }
 
     private void ensureCorrectFormatPixelcoins(double pixelcoins) {
-        if(pixelcoins <= 0){
+        if(pixelcoins <= 0)
             throw new IllegalQuantity("Las pixelcoins tienen que ser un numero positivo superior a 0");
-        }
     }
 
     private void ensureEnoughPixelcoins(Jugador jugador, double pixelcoins){

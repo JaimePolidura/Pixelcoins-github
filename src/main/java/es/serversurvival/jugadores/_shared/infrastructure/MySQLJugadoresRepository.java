@@ -1,5 +1,6 @@
 package es.serversurvival.jugadores._shared.infrastructure;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
@@ -10,6 +11,7 @@ import es.serversurvival.jugadores._shared.domain.Jugador;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,6 +21,17 @@ public final class MySQLJugadoresRepository extends DataBaseRepository<Jugador, 
 
     public MySQLJugadoresRepository(DatabaseConfiguration databaseConnection) {
         super(databaseConnection);
+    }
+
+    public static void main(String[] args) {
+        Jugador jugador = new Jugador(UUID.randomUUID(), "jaime", 0, 0, 0,
+                0, 0, 0, 0);
+
+        var mapper = new ObjectMapper();
+
+        var map =  mapper.convertValue(jugador, Map.class);
+
+        System.out.println(map);
     }
 
     @Override
@@ -55,11 +68,11 @@ public final class MySQLJugadoresRepository extends DataBaseRepository<Jugador, 
                 UUID.fromString(rs.getString(ID_FIELD_NAME)),
                 rs.getString("nombre"),
                 rs.getDouble("pixelcoins"),
-                rs.getInt("nVentas"),
+                rs.getInt("nventas"),
                 rs.getDouble("ingresos"),
                 rs.getDouble("gastos"),
-                rs.getInt("nInpagosDeuda"),
-                rs.getInt("nPagosDeuda"),
+                rs.getInt("ninpagosDeuda"),
+                rs.getInt("npagosDeuda"),
                 rs.getInt("numeroVerificacionCuenta")
         );
     }
