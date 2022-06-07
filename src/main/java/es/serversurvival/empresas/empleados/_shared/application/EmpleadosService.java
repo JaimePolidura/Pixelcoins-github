@@ -11,7 +11,6 @@ import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empleados._shared.domain.EmpleadosRepository;
 import es.serversurvival.empresas.empleados._shared.domain.TipoSueldo;
 import lombok.AllArgsConstructor;
-import org.checkerframework.common.util.report.qual.ReportCall;
 
 import java.util.Date;
 import java.util.List;

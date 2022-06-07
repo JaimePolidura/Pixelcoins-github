@@ -24,11 +24,9 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 )
 public class VenderCommandRunner implements CommandRunnerArgs<VenderCommando> {
     private final VenderTiendaUseCase venderTiendaUseCase;
-    private final MessagingMenuService messagingMenuService;
 
     public VenderCommandRunner(){
         this.venderTiendaUseCase = new VenderTiendaUseCase();
-        this.messagingMenuService = DependecyContainer.get(MessagingMenuService.class);
     }
 
     @Override
@@ -45,9 +43,5 @@ public class VenderCommandRunner implements CommandRunnerArgs<VenderCommando> {
         Funciones.enviarMensajeYSonido(player, ChatColor.GOLD + "Se ha añadido a la tienda. Para retirarlos /tienda y clikc izquierdo en ellos", Sound.ENTITY_VILLAGER_YES);
         Bukkit.getServer().broadcastMessage(ChatColor.GOLD + player.getName() + " ha añadido un objeto a la tienda por: " +
                 ChatColor.GREEN + FORMATEA.format(comando.getPrecio()) + " PC " + ChatColor.AQUA + "/tienda");
-
-        this.messagingMenuService.broadCastMessage(TiendaMenu.class, new ItemNuevoTiendaMenuMessage(
-                tiendaObjeto
-        ));
     }
 }

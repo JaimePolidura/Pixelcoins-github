@@ -5,9 +5,9 @@ import es.jaimetruman.ItemUtils;
 import es.jaimetruman.menus.Menu;
 import es.jaimetruman.menus.MenuService;
 import es.jaimetruman.menus.configuration.MenuConfiguration;
-import es.jaimetruman.menus.modules.messaging.MessagingConfiguration;
-import es.jaimetruman.menus.modules.messaging.MessagingMenuService;
 import es.jaimetruman.menus.modules.pagination.PaginationConfiguration;
+import es.jaimetruman.menus.modules.sync.SyncMenuConfiguration;
+import es.jaimetruman.menus.modules.sync.SyncMenuService;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.utils.ItemsUtils;
@@ -19,6 +19,7 @@ import es.serversurvival.tienda._shared.application.TiendaService;
 import es.serversurvival.tienda._shared.domain.TiendaObjeto;
 import es.serversurvival.tienda.comprar.ComprarTiendaObjetoUseCase;
 import es.serversurvival.tienda.retirar.RetirarOfertaUseCase;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -35,20 +36,22 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 public final class TiendaMenu extends Menu {
+    public final static String OWNER_TIENDAOBJETO_ITEM_NAME = RED + "" + BOLD + "CLICK PARA RETIRAR";
+    public final static String NO_OWNER_TIENDAOBJETO_ITEM_NAME = AQUA + "" + BOLD + "CLICK PARA COMPRAR";
     public final static String TITULO = ChatColor.DARK_RED + "" + ChatColor.BOLD + "            Tienda";
 
-    private final MessagingMenuService messagingMenuService;
     private final String jugador;
     private final MenuService menuService;
     private final TiendaService tiendaService;
     private final JugadoresService jugadoresService;
+    private final SyncMenuService syncMenuService;
 
     public TiendaMenu(String jugador) {
-        this.messagingMenuService = DependecyContainer.get(MessagingMenuService.class);
+        this.jugador = jugador;
         this.menuService = DependecyContainer.get(MenuService.class);
         this.tiendaService = DependecyContainer.get(TiendaService.class);
-        this.jugador = jugador;
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+        this.syncMenuService = DependecyContainer.get(SyncMenuService.class);
     }
 
     @Override
@@ -71,11 +74,8 @@ public final class TiendaMenu extends Menu {
                 .item(1, buildItemInfo())
                 .items(2, buildItemTiendas(), this::onItemTiendaOnClick)
                 .breakpoint(7, Material.GREEN_BANNER, (p,e) -> this.menuService.open(p, new PerfilMenu(p.getName())))
-                .messaging(MessagingConfiguration.builder()
-                        .onMessage(ItemParteCompradaTiendaMenuMessage.class, this::onItemCompradoTienda)
-                        .onMessage(ItemNuevoTiendaMenuMessage.class, this::onItemNuevoTienda)
-                        .onMessage(ItemRetiradoTiendaMenuMessage.class, this::onItemRetirado)
-                        .onMessage(ItemTodoCompradoTiendaMenuMessage.class, this::onItemTodoComprado)
+                .sync(SyncMenuConfiguration.builder()
+                        .mapper(this::onSyncItemMap)
                         .build())
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
@@ -111,9 +111,9 @@ public final class TiendaMenu extends Menu {
                 tiendaObjeto.getTiendaObjetoId());
 
         if(tiendaObjeto.getCantidad() == 1)
-            borrarItem(slotItem);
+            borrarItem();
         else
-            decrementarCantidadItem(slotItem, tiendaObjeto);
+            decrementarCantidadItem(slotItem);
 
         MinecraftUtils.setLore(itemComprado, Collections.singletonList("Comprado en la tienda"));
         playerWhoClicked.getInventory().addItem(itemComprado);
@@ -129,32 +129,23 @@ public final class TiendaMenu extends Menu {
                 Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
     }
 
-    private void borrarItem(int slotItem) {
-        this.getActualPage().getInventory().clear(slotItem);
-        this.messagingMenuService.broadCastMessage(this, new ItemTodoCompradoTiendaMenuMessage(
-                this.getActualPageNumber(), slotItem
-        ));
+    private void borrarItem() {
+        reloadMenu();
     }
 
-    private void decrementarCantidadItem(int slotItem, TiendaObjeto tiendaObjeto) {
+    private void decrementarCantidadItem(int slotItem) {
         ItemStack itemComprado = super.getActualPage().getInventory().getItem(slotItem);
-
         itemComprado.setAmount(itemComprado.getAmount() - 1);
-        this.messagingMenuService.broadCastMessage(this, new ItemParteCompradaTiendaMenuMessage(
-                tiendaObjeto, slotItem, super.getActualPageNumber()
-        ));
+
+        this.syncMenuService.sync(TiendaMenu.class, this.allPages());
     }
 
     private void retirarItemTienda(Player player, UUID itemTiendaId, Jugador jugador, int itemSlot) {
-        ItemStack itemRetirado = RetirarOfertaUseCase.INSTANCE.retirarOferta(jugador.getNombre(), itemTiendaId);
-        player.getInventory().addItem(itemRetirado);
-        super.getActualPage().getInventory().clear(itemSlot);
+        var item = RetirarOfertaUseCase.INSTANCE.retirarOferta(jugador.getNombre(), itemTiendaId);
 
-        player.sendMessage(GOLD + "Has retirado " + itemRetirado.getType() + " de la tienda");
+        player.getInventory().addItem(item);
 
-        this.messagingMenuService.broadCastMessage(this, new ItemRetiradoTiendaMenuMessage(
-                this.getActualPageNumber(), itemSlot
-        ));
+        reloadMenu();
     }
 
     private List<ItemStack> buildItemTiendas() {
@@ -173,8 +164,8 @@ public final class TiendaMenu extends Menu {
         lore.add("" + itemTienda.getTiendaObjetoId());
 
         String displayName = itemTienda.getJugador().equalsIgnoreCase(jugador) ?
-                ChatColor.RED + "" + ChatColor.BOLD + "CLICK PARA RETIRAR" :
-                ChatColor.AQUA + "" + ChatColor.BOLD + "CLICK PARA COMPRAR";
+                OWNER_TIENDAOBJETO_ITEM_NAME :
+                NO_OWNER_TIENDAOBJETO_ITEM_NAME;
 
         MinecraftUtils.setLoreAndDisplayName(itemStackAInsertar, lore, displayName);
 
@@ -190,27 +181,22 @@ public final class TiendaMenu extends Menu {
         return ItemBuilder.of(Material.PAPER).title(ChatColor.GOLD + "" + ChatColor.BOLD + "INFO").lore(lore).build();
     }
 
-    private void onItemTodoComprado(ItemTodoCompradoTiendaMenuMessage msg) {
-        this.getPages().get(msg.getPageNumber())
-                .getInventory()
-                .clear(msg.getSlotItem());
+    private ItemStack onSyncItemMap(ItemStack item, Integer itemNum) {
+        boolean isItemTienda = itemNum == 2;
+
+        return isItemTienda ? modifyItemTienda(item) : item;
     }
 
-    private void onItemRetirado(ItemRetiradoTiendaMenuMessage message) {
-        this.getPages().get(message.getPageNumber())
-                .getInventory()
-                .clear(message.getSlotItem());
+    private ItemStack modifyItemTienda(ItemStack item) {
+        boolean ownsItemTienda = ItemUtils.getLore(item, 1).split(" ")[1].equalsIgnoreCase(this.jugador);
+
+        return ItemUtils.setDisplayname(item, ownsItemTienda ? OWNER_TIENDAOBJETO_ITEM_NAME : NO_OWNER_TIENDAOBJETO_ITEM_NAME);
     }
 
-    private void onItemNuevoTienda(ItemNuevoTiendaMenuMessage message) {
-        ItemStack itemToAdd = this.buildItemTienda(message.getTiendaObjeto());
-        super.getPages().get(super.getPages().size() - 1).getInventory().addItem(itemToAdd);
-    }
+    private void reloadMenu() {
+        TiendaMenu newMenu = new TiendaMenu(jugador);
+        this.menuService.open(Bukkit.getPlayer(jugador), newMenu);
 
-    private void onItemCompradoTienda(ItemParteCompradaTiendaMenuMessage itemComprado) {
-        this.getPages().get(itemComprado.getPageNumber())
-                .getInventory()
-                .getItem(itemComprado.getSlot())
-                .setAmount(itemComprado.getTiendaObjeto().getCantidad());
+        this.syncMenuService.sync(newMenu);
     }
 }

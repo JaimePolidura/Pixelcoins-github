@@ -162,7 +162,7 @@ public final class AccionesMenu extends Menu implements AfterShow {
     }
 
     private List<ItemStack> getItemsAccionesToEdit() {
-        return getPages().stream()
+        return allPages().stream()
                 .map(Page::getInventory)
                 .map(Inventory::getContents)
                 .flatMap(Arrays::stream)

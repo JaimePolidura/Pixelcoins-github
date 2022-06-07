@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class NuevoTiendaObjetoAVender extends PixelcoinsEvento {
+public final class NuevoItemTienda extends PixelcoinsEvento {
     @Getter private final UUID tiendaObjetoId;
     @Getter private final String jugador;
     @Getter private final ItemStack item;

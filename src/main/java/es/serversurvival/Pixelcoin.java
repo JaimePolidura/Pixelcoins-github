@@ -7,6 +7,7 @@ import es.jaimetruman.Mapper;
 import es.jaimetruman._shared.utils.ClassMapperInstanceProvider;
 import es.jaimetruman.menus.MenuService;
 import es.jaimetruman.menus.modules.messaging.MessagingMenuService;
+import es.jaimetruman.menus.modules.sync.SyncMenuService;
 import es.jaimetruman.task.BukkitTimeUnit;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
@@ -164,7 +165,7 @@ public final class Pixelcoin extends JavaPlugin {
             put(EventBus.class, new EventBusSynch("es.serversurvival"));
             put(Executor.class, Funciones.POOL);
             put(MenuService.class, ClassMapperInstanceProvider.MENU_SERVICE);
-            put(MessagingMenuService.class, ClassMapperInstanceProvider.REFRESHCABLE_MENU_SERVICE);
+            put(SyncMenuService.class, ClassMapperInstanceProvider.SYNC_MENU_SERVICE);
         }});
 
         DependecyContainer.addAll(new HashMap<>(){{

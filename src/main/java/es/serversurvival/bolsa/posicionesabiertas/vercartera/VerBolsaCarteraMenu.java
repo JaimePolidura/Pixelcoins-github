@@ -168,7 +168,7 @@ public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
 
     @Override
     public void afterShow() {
-        super.setItemLore(8, List.of(
+        super.setItemLoreActualPage(8, List.of(
                 GOLD + "Valor total: " + GREEN + FORMATEA.format(redondeoDecimales(valorTotal, 2)) + "PC",
                 GOLD + "Resultado: " + GREEN + FORMATEA.format(redondeoDecimales(beneficiosOPerdidas, 2)) + "PC",
                 GOLD + "Rentabilidad: " + FORMATEA.format(redondeoDecimales(beneficiosOPerdidas/valorTotal, 0)) + "%"

@@ -72,7 +72,7 @@ public abstract class NumberSelectorMenu extends Menu {
     public abstract void onAccept(Player player, InventoryClickEvent event);
 
     public final void onCantidadChanged(double cantidad){
-        super.setItemLore(14, loreItemAceptar(cantidad));
+        super.setItemLoreActualPage(14, loreItemAceptar(cantidad));
     }
 
     public ItemStack buildItemAccept (){
