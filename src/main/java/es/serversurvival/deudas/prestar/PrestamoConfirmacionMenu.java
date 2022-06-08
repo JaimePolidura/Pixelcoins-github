@@ -11,6 +11,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 import static org.bukkit.ChatColor.*;
@@ -43,7 +44,9 @@ public final class PrestamoConfirmacionMenu extends ConfirmacionMenu {
         String descAceptarString = GOLD + "Prestamo de " + enviadorJugadorNombre + " de " + GREEN + FORMATEA.format(pixelcoins) +
                 GOLD + " a " + dias + " dias  con un interes del " + interes + "% (" + GREEN +
                 FORMATEA.format(aumentarPorcentaje(pixelcoins, interes)) + " PC" + GOLD + ")";
-        List<String> loreAceptar = dividirDesc(descAceptarString, 40);
+        List<String> loreAceptar = dividirDesc(descAceptarString, 40).stream()
+                .map(line -> GOLD + line)
+                .collect(Collectors.toList());
 
         return ItemBuilder.of(Material.GREEN_WOOL)
                 .title(GREEN + "" + BOLD + "ACEPTAR")

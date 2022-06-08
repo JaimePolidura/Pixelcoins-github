@@ -66,13 +66,26 @@ public final class VerDeudasMenu extends Menu {
     }
 
     private void onDeudaClicked(Player player, InventoryClickEvent event) {
-        UUID idDeuda = UUID.fromString(ItemUtils.getLore(event.getCurrentItem(), 5));
+        UUID idDeuda = UUID.fromString(ItemUtils.getLore(event.getCurrentItem(), 6));
         boolean esAcredor = event.getCurrentItem().getType() == Material.GREEN_BANNER;
 
-        if(esAcredor)
-            this.cancelarDeudaUseCase.cancelarDeuda(player.getName(), idDeuda);
-        else
-            this.pagarDeudaUseCase.pagarDeuda(idDeuda, player.getName());
+        if(esAcredor){
+            cancelarDeuda(player, idDeuda);
+        } else {
+            pagarDeudaComleto(player, idDeuda);
+        }
+    }
+
+    private void pagarDeudaComleto(Player player, UUID idDeuda) {
+        this.pagarDeudaUseCase.pagarDeuda(idDeuda, player.getName());
+        player.sendMessage(GOLD + "Has pagado toda la deuda");
+        player.closeInventory();
+    }
+
+    private void cancelarDeuda(Player player, UUID idDeuda) {
+        this.cancelarDeudaUseCase.cancelarDeuda(player.getName(), idDeuda);
+        player.sendMessage(GOLD + "Has pagado cancelado la deuda");
+        player.closeInventory();
     }
 
     private void goBackToProfile(Player player, InventoryClickEvent event) {
@@ -91,10 +104,11 @@ public final class VerDeudasMenu extends Menu {
         return ItemBuilder.of(esAcredor ? Material.GREEN_BANNER : Material.RED_BANNER)
                 .title(GOLD + "" + BOLD + "CLICK PARA " + (esAcredor ? "CANCELAR" : "PAGAR"))
                 .lore(List.of(
+                        GOLD + (esAcredor ? "Te debe" : "Debes"),
                         GOLD + "Acredor: " + deuda.getAcredor(),
                         GOLD + "Deudor: " + deuda.getDeudor(),
                         GOLD + "Pixelcoins: " + GREEN + FORMATEA.format(deuda.getPixelcoinsRestantes()) + " PC",
-                        GOLD + "Dias restantes" + deuda.getTiempoRestante(),
+                        GOLD + "Dias restantes: " + deuda.getTiempoRestante(),
                         "   ",
                         String.valueOf(deuda.getDeudaId())
                 ))
