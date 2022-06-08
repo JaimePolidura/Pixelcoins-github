@@ -1,7 +1,6 @@
 package es.serversurvival.tienda._shared;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.serversurvival.tienda.TiendaTestMother;
 import es.serversurvival.tienda._shared.application.TiendaService;
 import es.serversurvival.tienda._shared.domain.TiendaRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,8 +33,6 @@ public final class TiendaServiceTest {
         when(this.tiendaRepository.findAll()).thenReturn(List.of(
                 createTiendaObjeto("jaime"), createTiendaObjeto("jaime")
         ));
-
-        this.tiendaService.onInit(null);
     }
 
     @Test

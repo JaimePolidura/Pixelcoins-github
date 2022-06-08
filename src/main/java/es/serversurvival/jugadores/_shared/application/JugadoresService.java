@@ -1,10 +1,7 @@
 package es.serversurvival.jugadores._shared.application;
 
-import es.jaime.EventListener;
-import es.jaime.Priority;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.cache.UnlimitedCacheSize;
-import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
 import es.serversurvival.jugadores._shared.domain.JugadoresRepository;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 
@@ -110,8 +107,7 @@ public class JugadoresService {
         };
     }
 
-    @EventListener(pritority = Priority.HIGHEST)
-    public void on(PluginIniciado e){
+    public void initalizeCache(){
         this.repositoryDb.findAll().forEach(jugador -> {
             this.cache.put(jugador.getNombre(), jugador);
         });

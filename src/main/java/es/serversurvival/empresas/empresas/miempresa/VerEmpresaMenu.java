@@ -94,7 +94,7 @@ public final class VerEmpresaMenu extends Menu implements AfterShow {
         String mensajeOnline = ChatColor.RED + "Has sido despedido de " + empresa + " razon: " + "Despedido";
         enviarMensaje(empleadoNombre, mensajeOnline, mensajeOnline, Sound.BLOCK_ANVIL_LAND, 10, 1);
 
-        super.deleteItem(event.getSlot());
+        super.deleteItem(event.getSlot(), super.getActualPageNumber());
     }
 
 

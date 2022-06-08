@@ -1,10 +1,7 @@
 package es.serversurvival.tienda._shared.application;
 
-import es.jaime.EventListener;
-import es.jaime.Priority;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.cache.Cache;
 import es.serversurvival._shared.cache.LRUCache;
 import es.serversurvival._shared.cache.LimitedCache;
 import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
@@ -80,8 +77,7 @@ public class TiendaService {
         };
     }
 
-    @EventListener(pritority = Priority.HIGHEST)
-    public void onInit(PluginIniciado e){
+    public void initializeCache(){
         this.repositoryDb.findAll().forEach((tiendaObjeto -> {
             this.cache.put(tiendaObjeto.getTiendaObjetoId(), tiendaObjeto);
         }));

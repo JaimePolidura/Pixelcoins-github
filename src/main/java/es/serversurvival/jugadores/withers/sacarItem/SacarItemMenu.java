@@ -80,11 +80,11 @@ public final class SacarItemMenu extends Menu {
 
         this.jugador = jugador.decrementPixelcoinsBy(cambioPixelcoins);
 
-        super.setItemActualPage(9, buildItem("DIAMANTE", DIAMANTE, Material.DIAMOND));
-        super.setItemActualPage(11, buildItem("BLOQUE DE DIAMANTE", DIAMANTE * 9, Material.DIAMOND_BLOCK));
-        super.setItemActualPage(13, buildItem("LAPISLAZULI", LAPISLAZULI, Material.LAPIS_LAZULI));
-        super.setItemActualPage(15, buildItem("BLOQUE DE LAPISLAZULI", LAPISLAZULI * 9, Material.LAPIS_BLOCK));
-        super.setItemActualPage(17, buildItem("CUARZO", CUARZO, Material.QUARTZ_BLOCK));
+        super.setItemActualPage(9, buildItem("DIAMANTE", DIAMANTE, Material.DIAMOND), 2);
+        super.setItemActualPage(11, buildItem("BLOQUE DE DIAMANTE", DIAMANTE * 9, Material.DIAMOND_BLOCK), 3);
+        super.setItemActualPage(13, buildItem("LAPISLAZULI", LAPISLAZULI, Material.LAPIS_LAZULI), 4);
+        super.setItemActualPage(15, buildItem("BLOQUE DE LAPISLAZULI", LAPISLAZULI * 9, Material.LAPIS_BLOCK), 5);
+        super.setItemActualPage(17, buildItem("CUARZO", CUARZO, Material.QUARTZ_BLOCK), 6);
     }
 
     private ItemStack buildItemInfo() {

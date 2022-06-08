@@ -123,14 +123,14 @@ public final class Pixelcoin extends JavaPlugin {
         plugin = this;
 
         this.scoreBoardManager = new ScoreBoardManager();
-        this.eventBus = new EventBusSynch("es.serversurvival");
 
         getLogger().info("------------Plugin activado -------------");
         getServer().getConsoleSender().sendMessage(GREEN + "------------------------------");
 
+        this.eventBus = new EventBusSynch("es.serversurvival");
+
         this.loadAllDependenciesContainer();
         this.setUpCommandsMobListenersTask();
-//        this.setUpRabbitMQConsumer();
         this.setUpScoreboardUpdater();
 
         getServer().getConsoleSender().sendMessage(GREEN + "------------------------------");
@@ -162,7 +162,7 @@ public final class Pixelcoin extends JavaPlugin {
 
         DependecyContainer.addAll(new HashMap<>() {{
             put(MySQLConfiguration.class, mysqlCOnfiguration);
-            put(EventBus.class, new EventBusSynch("es.serversurvival"));
+            put(EventBus.class, eventBus);
             put(Executor.class, Funciones.POOL);
             put(MenuService.class, ClassMapperInstanceProvider.MENU_SERVICE);
             put(SyncMenuService.class, ClassMapperInstanceProvider.SYNC_MENU_SERVICE);
