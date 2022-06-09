@@ -28,7 +28,7 @@ public abstract class NumberSelectorMenu extends Menu {
     }
 
     protected String titulo(){
-        return DARK_RED + "" + BOLD  + "    CONFIRMAR";
+        return DARK_RED + "" + BOLD  + "          CONFIRMAR";
     }
 
     @Override
@@ -37,7 +37,7 @@ public abstract class NumberSelectorMenu extends Menu {
                 .title(titulo())
                 .fixedItems()
                 .confirmation(ConfirmationConfiguration.builder()
-                        .cancel(5, buildItemCancel(), this::onCancel)
+                        .cancel(4, buildItemCancel(), this::onCancel)
                         .accept(5, buildItemAccept(), this::onAccept)
                         .build())
                 .numberSelector(NumberSelectorMenuConfiguration.builder()
@@ -46,9 +46,9 @@ public abstract class NumberSelectorMenu extends Menu {
                         .maxValue(maxValue())
                         .valuePropertyName("cantidad")
                         .onValueChanged(this::onCantidadChanged)
-                        .item(1, DECREASE, 1, buildItemNumberSelector(-1))
+                        .item(1, DECREASE, 10, buildItemNumberSelector(-10))
                         .item(2, DECREASE, 5, buildItemNumberSelector(-5))
-                        .item(3, DECREASE, 10, buildItemNumberSelector(-10))
+                        .item(3, DECREASE, 1, buildItemNumberSelector(-1))
                         .item(6, INCREASE, 1, buildItemNumberSelector(1))
                         .item(7, INCREASE, 5, buildItemNumberSelector(5))
                         .item(8, INCREASE, 10, buildItemNumberSelector(10))
@@ -76,11 +76,9 @@ public abstract class NumberSelectorMenu extends Menu {
     }
 
     public ItemStack buildItemAccept (){
-        double cantidad = super.getPropertyDouble("cantidad");
-
         return ItemBuilder.of(Material.GREEN_WOOL)
                 .title(GREEN + "" + BOLD + "ACEPTAR")
-                .lore(loreItemAceptar(cantidad))
+                .lore(loreItemAceptar(initialValue()))
                 .build();
     }
 

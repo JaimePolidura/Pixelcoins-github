@@ -10,7 +10,10 @@ import es.jaimetruman.menus.menustate.AfterShow;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.activosinfo.vervalores.ComprarBolsaConfirmacionMenu;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -20,18 +23,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival.bolsa.activosinfo.vervalores.materiasprimas.TodasMateriasPrimasVerValores.*;
 import static org.bukkit.ChatColor.*;
 
 public final class MateriasPrimasMenu extends Menu implements AfterShow {
-    private final Executor executor;
+    private final ExecutorService executor;
     private final MenuService menuService;
+    private final Jugador jugador;
 
-    public MateriasPrimasMenu() {
-        this.executor = DependecyContainer.get(Executor.class);
+    public MateriasPrimasMenu(String jugadorNombre) {
+        this.executor = DependecyContainer.get(ExecutorService.class);
         this.menuService = DependecyContainer.get(MenuService.class);
+        this.jugador = DependecyContainer.get(JugadoresService.class).getByNombre(jugadorNombre);
     }
 
     @Override
@@ -50,10 +57,18 @@ public final class MateriasPrimasMenu extends Menu implements AfterShow {
     }
 
     private void onMateriaPrimaItemClick(Player player, InventoryClickEvent event) {
-        if(hasLoaded(event.getCurrentItem())) return;
+        if(!hasLoaded(event.getCurrentItem())) return;
 
         ItemStack itemClicked = event.getCurrentItem();
-        double precio = Double.parseDouble(ItemUtils.getLore(itemClicked, 1).split(" ")[1]);
+        String precioString = ItemUtils.getLore(itemClicked, 1).split(" ")[1].replace(",", ".");
+        double precio = Double.parseDouble(precioString);
+
+        if(precio > this.jugador.getPixelcoins()){
+            player.sendMessage(DARK_RED + "No tienes las suficientes pixelcoins");
+            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
+            return;
+        }
+
         String nombreActivo = ItemUtils.getLore(itemClicked, 0).split(" ")[1];
 
         this.menuService.open(player, new ComprarBolsaConfirmacionMenu(
@@ -90,7 +105,8 @@ public final class MateriasPrimasMenu extends Menu implements AfterShow {
         return ItemBuilder.of(Material.PAPER)
                 .title(AQUA + "" + BOLD + "INFO")
                 .lore(List.of(
-                        "Para invertir en estas mateiras primass clickea en cualquiera de ellas y elige la cantidad a comprar"
+                        GOLD + "Para invertir en estas mateiras primas clickea en",
+                        GOLD + "cualquiera de ellas y elige la cantidad a comprar"
                 ))
                 .build();
     }

@@ -71,10 +71,11 @@ import es.serversurvival.web.webconnection.RabbitMQConsumerTask;
 import es.serversurvival._shared.scoreboards.ScoreBoardManager;
 import es.serversurvival._shared.scoreboards.ScoreboardUpdateTask;
 
-import org.apache.ibatis.javassist.bytecode.analysis.Executor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static org.bukkit.ChatColor.*;
 
@@ -163,7 +164,7 @@ public final class Pixelcoin extends JavaPlugin {
         DependecyContainer.addAll(new HashMap<>() {{
             put(MySQLConfiguration.class, mysqlCOnfiguration);
             put(EventBus.class, eventBus);
-            put(Executor.class, Funciones.POOL);
+            put(ExecutorService.class, Funciones.POOL);
             put(MenuService.class, ClassMapperInstanceProvider.MENU_SERVICE);
             put(SyncMenuService.class, ClassMapperInstanceProvider.SYNC_MENU_SERVICE);
         }});

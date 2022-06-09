@@ -13,14 +13,18 @@ import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoServic
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.activosinfo.vervalores.ComprarBolsaConfirmacionMenu;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.jugadores._shared.domain.Jugador;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.junit.runners.model.TestTimedOutException;
 
 import java.util.*;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 import static org.bukkit.ChatColor.*;
@@ -28,24 +32,26 @@ import static org.bukkit.ChatColor.*;
 public final class AccionesMenu extends Menu implements AfterShow {
     private final ActivosInfoService activosInfoService;
     private final MenuService menuService;
-    private final Executor executor;
+    private final ExecutorService executor;
     private boolean hasLoaddedPrices;
+    private final Jugador jugador;
 
-    public AccionesMenu() {
+    public AccionesMenu(String jugadorNombre) {
         this.activosInfoService = DependecyContainer.get(ActivosInfoService.class);
-        this.executor = DependecyContainer.get(Executor.class);
+        this.executor = DependecyContainer.get(ExecutorService.class);
         this.menuService = DependecyContainer.get(MenuService.class);
+        this.jugador = DependecyContainer.get(JugadoresService.class).getByNombre(jugadorNombre);
     }
 
     @Override
     public int[][] items() {
         return new int[][] {
-                {1, 2, 0, 0, 0, 0, 0, 0, 0 },
-                {0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                {0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                {0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                {0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                {0, 0, 0, 0, 0, 0, 7, 8, 9 }
+                {1, 2, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 7, 8, 9}
         };
     }
 
@@ -55,7 +61,7 @@ public final class AccionesMenu extends Menu implements AfterShow {
                 .title(DARK_RED + "" + BOLD + "   Escoge para invertir")
                 .fixedItems()
                 .item(1, itemInfo())
-                .items(2, itemsAcciones(), this::onAccoinClicked)
+                .items(2, itemsAcciones(), this::onAccionClicked)
                 .breakpoint(7)
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, itemBackPage())
@@ -64,12 +70,21 @@ public final class AccionesMenu extends Menu implements AfterShow {
                 .build();
     }
 
-    private void onAccoinClicked(Player player, InventoryClickEvent event) {
+    private void onAccionClicked(Player player, InventoryClickEvent event) {
         if(!hasLoaded(event.getCurrentItem())) return;
 
         ItemStack itemClicked = event.getCurrentItem();
         String ticker = ItemUtils.getLore(itemClicked, 0);
-        double precio = Double.parseDouble(ItemUtils.getLore(itemClicked, 1).split(" ")[1]);
+        String priceString = ItemUtils.getLore(itemClicked, 1).split(" ")[1]
+                .replace(",", ".");
+
+        double precio = Double.parseDouble(priceString);
+
+        if(precio > this.jugador.getPixelcoins()){
+            player.sendMessage(DARK_RED + "No tienes las suficientes pixelcoins");
+            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
+            return;
+        }
 
         this.menuService.open(player, new ComprarBolsaConfirmacionMenu(
                 ticker, SupportedTipoActivo.ACCIONES, player.getName(), precio
@@ -78,7 +93,7 @@ public final class AccionesMenu extends Menu implements AfterShow {
 
     private boolean hasLoaded(ItemStack item){
         return item.getItemMeta().getLore().stream()
-                .noneMatch(lore -> lore.contains("cargando..."));
+                .noneMatch(lore -> lore.contains("Cargando..."));
     }
 
     private List<ItemStack> itemsAcciones() {
@@ -97,9 +112,9 @@ public final class AccionesMenu extends Menu implements AfterShow {
 
     private ItemStack buildItemAccion(String ticker, String nombre) {
         return ItemBuilder.of(Material.BOOK)
-                .title(BOLD + nombre)
+                .title(GOLD + "" + BOLD + nombre)
                 .lore(List.of(
-                        RED + "Ticker: " + ticker,
+                        GOLD + "Ticker: " + ticker,
                         RED + "Cargando..."))
                 .build();
     }
@@ -139,11 +154,9 @@ public final class AccionesMenu extends Menu implements AfterShow {
         List<ItemStack> itemsToEdit = getItemsAccionesToEdit();
         Map<String, ActivoInfo> allActivosInfo = this.activosInfoService.findAllToMap();
 
-        for (ItemStack itemToEdit : itemsToEdit) {
-            this.executor.execute(() -> {
-                addPriceToAccionItem(allActivosInfo, itemToEdit);
-            });
-        }
+        this.executor.execute(() -> {
+            itemsToEdit.forEach(itemToEdit -> addPriceToAccionItem(allActivosInfo, itemToEdit));
+        });
 
         this.hasLoaddedPrices = true;
     }
@@ -152,7 +165,7 @@ public final class AccionesMenu extends Menu implements AfterShow {
         try {
             String ticker = ItemUtils.getLore(itemToEdit, 0).split(" ")[1];
             double precio = allActivosInfo.get(ticker) == null ?
-                    SupportedTipoActivo.ACCIONES.getTipoActivoService().getPrecio(ticker) :
+                    SupportedTipoActivo.ACCIONES.getPrecio(ticker) :
                     allActivosInfo.get(ticker).getPrecio();
 
             ItemUtils.setLore(itemToEdit, 1, GOLD + "Precio: " + GREEN + FORMATEA.format(precio) + " PC");

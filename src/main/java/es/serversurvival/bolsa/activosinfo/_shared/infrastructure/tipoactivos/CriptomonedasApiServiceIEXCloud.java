@@ -10,7 +10,7 @@ import static es.serversurvival._shared.utils.Funciones.*;
 
 public final class CriptomonedasApiServiceIEXCloud extends CriptomonedasApiService {
     @Override
-    public Double getPrecio(String nombreActivo) throws Exception {
+    public synchronized Double getPrecio(String nombreActivo) throws Exception {
         JSONObject json = (JSONObject) peticionHttp("https://sandbox.iexapis.com/stable/crypto/" + nombreActivo + "/price?token=" + IEXCloud_API.TOKEN);
 
         return Double.parseDouble(String.valueOf(json.get("price")));

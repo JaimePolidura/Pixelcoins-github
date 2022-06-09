@@ -8,7 +8,7 @@ import static es.serversurvival._shared.utils.apiHttp.IEXCloud_API.*;
 
 public final class MateriasPrimasApiServiceIEXCloud extends MateriasPrimasApiService {
     @Override
-    public Double getPrecio(String nombreActivo) throws Exception {
+    public synchronized Double getPrecio(String nombreActivo) throws Exception {
         return Double.parseDouble(String.valueOf(peticionHttp("https://sandbox.iexapis.com/stable/data-points/market/" + nombreActivo + "?token=" + TOKEN)));
     }
 

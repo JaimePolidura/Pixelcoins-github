@@ -12,7 +12,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import static org.bukkit.ChatColor.*;
+
 public final class ElegirInversionMenu extends Menu {
+    public static final String TITULO = DARK_RED + "" + BOLD + "      ELEGIR INVERSION";
+
     private final MenuService menuService;
 
     public ElegirInversionMenu() {
@@ -27,29 +31,30 @@ public final class ElegirInversionMenu extends Menu {
     @Override
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
+                .title(TITULO)
                 .fixedItems()
                 .staticMenu()
-                .item(1, itemAcciones(), (p, e) -> this.menuService.open(p, new AccionesMenu()))
-                .item(2, itemCriptomonedas(), (p, e) -> this.menuService.open(p, new CriptomonedasMenu()))
-                .item(3, itemMateriasPrimas(), (p, e) -> this.menuService.open(p, new MateriasPrimasMenu()))
+                .item(1, itemAcciones(), (p, e) -> this.menuService.open(p, new AccionesMenu(p.getName())))
+                .item(2, itemCriptomonedas(), (p, e) -> this.menuService.open(p, new CriptomonedasMenu(p.getName())))
+                .item(3, itemMateriasPrimas(), (p, e) -> this.menuService.open(p, new MateriasPrimasMenu(p.getName())))
                 .build();
     }
 
     private ItemStack itemMateriasPrimas() {
         return ItemBuilder.of(Material.CHARCOAL)
-                .title(ChatColor.GOLD + "" + ChatColor.BOLD + "Materias primas")
+                .title(GOLD + "" + BOLD + "Materias primas")
                 .build();
     }
 
     private ItemStack itemCriptomonedas() {
         return ItemBuilder.of(Material.GOLD_INGOT)
-                .title(ChatColor.GOLD + "" + ChatColor.BOLD + "Criptomonedas")
+                .title(GOLD + "" + BOLD + "Criptomonedas")
                 .build();
     }
 
     private ItemStack itemAcciones() {
         return ItemBuilder.of(Material.PAPER)
-                .title(ChatColor.GOLD + "" + ChatColor.BOLD + "Acciones")
+                .title(GOLD + "" + BOLD + "Acciones")
                 .build();
     }
 }

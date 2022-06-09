@@ -40,7 +40,6 @@ public final class TodasAccionesVerValores {
             put("ORCL", "Oracle");
             put("PYPL", "PayPal");
             put("YUM", "YUM (Tacobell, KFC y PizzaHut)");
-            put("SNE", "Sony");
             put("LUV", "South West");
             put("SPOT", "Spotify");
             put("SBUX", "StartBucks");
@@ -50,7 +49,7 @@ public final class TodasAccionesVerValores {
             put("V", "Visa");
             put("BABA", "Alibaba");
             put("DAL", "Delta");
-            put("FB", "Facebook");
+            put("META", "Facebook");
             put("SAN", "Santander!!");
             put("NVDA", "Nvdia");
             put("HLT", "Hilton");
@@ -75,7 +74,6 @@ public final class TodasAccionesVerValores {
             put("HMC","Honda");
             put("GME","GameStop");
             put("RACE","Ferrari");
-            put("FCAU","Fiat");
             put("TEF","Telefonica");
             put("REPYY","Repsol");
             put("BKNG","Booking holdings");

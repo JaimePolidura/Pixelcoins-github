@@ -21,4 +21,8 @@ public enum SupportedTipoActivo {
         this.tipoActivoService = tipoActivoService;
         this.alias = alias;
     }
+
+    public synchronized double getPrecio(String nombreActivo) throws Exception {
+        return this.getTipoActivoService().getPrecio(nombreActivo);
+    }
 }

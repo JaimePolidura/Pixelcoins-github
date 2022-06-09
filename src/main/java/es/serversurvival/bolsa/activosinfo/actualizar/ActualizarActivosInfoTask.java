@@ -6,7 +6,7 @@ import es.jaimetruman.task.TaskRunner;
 import es.serversurvival._shared.DependecyContainer;
 import org.bukkit.Bukkit;
 
-@Task(3 * BukkitTimeUnit.MINUTE)
+@Task(value = 3 * BukkitTimeUnit.MINUTE, delay = BukkitTimeUnit.MINUTE)
 public class ActualizarActivosInfoTask implements TaskRunner {
     private final ActualizarActivosInfoUseCase actualizarActivosInfo;
 

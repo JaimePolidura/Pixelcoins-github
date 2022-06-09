@@ -75,10 +75,10 @@ public final class ComprarBolsaConfirmacionMenu extends NumberSelectorMenu {
     @Override
     public List<String> loreItemAceptar(double cantidad) {
         return List.of(
-                GOLD + "Comprar " + cantidad,
-                GOLD + "Precio/Unidad" + GREEN + FORMATEA.format(precioUnidad) + " PC",
-                GOLD + "Precio/Total " + GREEN + FORMATEA.format(precioUnidad * cantidad) + " PC",
-                GOLD + "Tus pixelcoins" + GREEN + FORMATEA.format(dineroJugador) + " PC"
+                GOLD + "Comprar: " + cantidad + " " + tipoActivo.getAlias(),
+                GOLD + "Precio/Unidad: " + GREEN + FORMATEA.format(precioUnidad) + " PC",
+                GOLD + "Precio/Total: " + GREEN + FORMATEA.format(precioUnidad * cantidad) + " PC",
+                GOLD + "Tus pixelcoins: " + GREEN + FORMATEA.format(dineroJugador) + " PC"
         );
     }
 }

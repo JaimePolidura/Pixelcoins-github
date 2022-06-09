@@ -11,12 +11,12 @@ import static es.serversurvival._shared.utils.apiHttp.IEXCloud_API.*;
 
 public class AccionesApiServiceIEXCloud extends AccionesApiService {
     @Override
-    public Double getPrecio(String nombreActivo) throws Exception {
+    public synchronized Double getPrecio(String nombreActivo) throws Exception {
         return Double.parseDouble(String.valueOf(peticionHttp("https://sandbox.iexapis.com/stable/stock/" + nombreActivo + "/price?token=" + TOKEN)));
     }
 
     @Override
-    public String getNombreActivoLargo(String nombreActivo) throws Exception{
+    public synchronized String getNombreActivoLargo(String nombreActivo) throws Exception{
         Object response = peticionHttp("https://sandbox.iexapis.com/stable/stock/" + nombreActivo + "/company?token=" + TOKEN);
         JSONObject json = (JSONObject) response;
         String nombreValor = String.valueOf(json.get("companyName"));
