@@ -6,7 +6,6 @@ import es.jaime.impl.EventBusSynch;
 import es.jaimetruman.Mapper;
 import es.jaimetruman._shared.utils.ClassMapperInstanceProvider;
 import es.jaimetruman.menus.MenuService;
-import es.jaimetruman.menus.modules.messaging.MessagingMenuService;
 import es.jaimetruman.menus.modules.sync.SyncMenuService;
 import es.jaimetruman.task.BukkitTimeUnit;
 import es.serversurvival._shared.DependecyContainer;
@@ -14,11 +13,12 @@ import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
 import es.serversurvival._shared.mysql.MySQLConfiguration;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
-import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfoCacheRepository;
+import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfoRepository;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.acciones.AccionesApiService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.criptomonedas.CriptomonedasApiService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.materiasprimas.MateriasPrimasApiService;
 import es.serversurvival.bolsa.activosinfo._shared.infrastructure.InMemoryActivoInfoCacheRepository;
+import es.serversurvival.bolsa.activosinfo._shared.infrastructure.MySQLActivoInfoRepository;
 import es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos.AccionesApiServiceIEXCloud;
 import es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos.CriptomonedasApiServiceIEXCloud;
 import es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos.MateriasPrimasApiServiceIEXCloud;
@@ -75,7 +75,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import static org.bukkit.ChatColor.*;
 
@@ -183,7 +182,7 @@ public final class Pixelcoin extends JavaPlugin {
             put(OrderesPremarketRepository.class, new MySQLOrdenesPremarketRepository(mysqlCOnfiguration));
             put(PosicionesAbiertasRepository.class, new MySQLPosicionesAbiertasRepository(mysqlCOnfiguration));
             put(PosicionesCerradasRepository.class, new MySQLPosicionesCerradasRepository(mysqlCOnfiguration));
-            put(ActivoInfoCacheRepository.class, new InMemoryActivoInfoCacheRepository());
+            put(ActivoInfoRepository.class, new MySQLActivoInfoRepository(mysqlCOnfiguration));
             put(OfertasAccionesServerRepository.class, new MySQLOfertasAccionesServerRepository(mysqlCOnfiguration));
             put(AccionistasServerRepository.class, new MySQLAccionistasServerRepository(mysqlCOnfiguration));
         }});

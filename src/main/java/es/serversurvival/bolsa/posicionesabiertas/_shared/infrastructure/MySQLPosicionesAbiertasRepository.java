@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public final class MySQLPosicionesAbiertasRepository extends DataBaseRepository<PosicionAbierta, UUID> implements PosicionesAbiertasRepository {
     private static final String TABLE_NAME = "posicionesabiertas";
-    private static final String ID_FIELD_NAME = "posicionAbiertId";
+    private static final String ID_FIELD_NAME = "posicionAbiertaId";
 
     public MySQLPosicionesAbiertasRepository(DatabaseConfiguration databaseConnection) {
         super(databaseConnection);

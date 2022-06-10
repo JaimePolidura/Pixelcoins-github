@@ -17,6 +17,8 @@ public class AccionesApiServiceIEXCloud extends AccionesApiService {
 
     @Override
     public synchronized String getNombreActivoLargo(String nombreActivo) throws Exception{
+        Thread.sleep(100);
+
         Object response = peticionHttp("https://sandbox.iexapis.com/stable/stock/" + nombreActivo + "/company?token=" + TOKEN);
         JSONObject json = (JSONObject) response;
         String nombreValor = String.valueOf(json.get("companyName"));

@@ -40,7 +40,6 @@ public final class AbrirOrdenUseCaseTest {
     @Test
     public void shouldCreateOrder(){
         UUID posicionAbiertaId = UUID.randomUUID();
-        when(this.posicionesAbiertasSerivce.getById(posicionAbiertaId)).thenReturn(createPosicionAbierta("jaime", "AMZN"));
         when(this.ordenesPremarketService.isOrdenRegisteredFromPosicionAbierta("jaime", posicionAbiertaId))
                 .thenReturn(false);
 
@@ -60,7 +59,6 @@ public final class AbrirOrdenUseCaseTest {
     @Test
     public void ordenAlreadyRegisteredForPosicionAbierta(){
         UUID posicionAbiertaId = UUID.randomUUID();
-        when(this.posicionesAbiertasSerivce.getById(posicionAbiertaId)).thenReturn(createPosicionAbierta("jaime", "AMZN"));
         when(this.ordenesPremarketService.isOrdenRegisteredFromPosicionAbierta("jaime", posicionAbiertaId))
                 .thenReturn(true);
 
@@ -74,7 +72,7 @@ public final class AbrirOrdenUseCaseTest {
         UUID posicionAbiertaId = UUID.randomUUID();
         when(this.posicionesAbiertasSerivce.getById(posicionAbiertaId)).thenReturn(createPosicionAbierta("otro", "AMZN"));
         assertThatCode(() -> this.useCase.abrirOrden(AbrirOrdenPremarketCommand.of("jaime", "AMZN",
-                1, LARGO_COMPRA, posicionAbiertaId)))
+                1, LARGO_VENTA, posicionAbiertaId)))
                 .isInstanceOf(NotTheOwner.class);
     }
 
@@ -83,7 +81,7 @@ public final class AbrirOrdenUseCaseTest {
         UUID posicionAbiertaId = UUID.randomUUID();
         when(this.posicionesAbiertasSerivce.getById(posicionAbiertaId)).thenThrow(ResourceNotFound.class);
         assertThatCode(() -> this.useCase.abrirOrden(AbrirOrdenPremarketCommand.of("jaime", "AMZN",
-                1, LARGO_COMPRA, posicionAbiertaId)))
+                1, LARGO_VENTA, posicionAbiertaId)))
                 .isInstanceOf(ResourceNotFound.class);
     }
 }

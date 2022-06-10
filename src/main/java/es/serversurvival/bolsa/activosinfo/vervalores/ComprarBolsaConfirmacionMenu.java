@@ -44,22 +44,26 @@ public final class ComprarBolsaConfirmacionMenu extends NumberSelectorMenu {
 
     @Override
     public void onAccept(Player player, InventoryClickEvent event) {
-        POOL.submit(() -> {
-            int cantidadAComprar = (int) super.getPropertyDouble("cantidad");
-            double pixelcoinsJugador = this.jugadoresService.getByNombre(jugadrNombre).getPixelcoins();
+        try{
+            POOL.submit(() -> {
+                int cantidadAComprar = (int) super.getPropertyDouble("cantidad");
+                double pixelcoinsJugador = this.jugadoresService.getByNombre(jugadrNombre).getPixelcoins();
 
-            if (pixelcoinsJugador < (cantidadAComprar * precioUnidad)) {
-                player.sendMessage(ChatColor.DARK_RED + "No tienes el suficiente dinero");
-                player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
-                return;
-            }
+                if (pixelcoinsJugador < (cantidadAComprar * precioUnidad)) {
+                    player.sendMessage(ChatColor.DARK_RED + "No tienes el suficiente dinero");
+                    player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
+                    return;
+                }
 
-            OrderExecutorProxy.execute(AbrirOrdenPremarketCommand.of(player.getName(), nombreActivo, cantidadAComprar, LARGO_COMPRA, null),
-                    () -> {
-                        comprarLargoUseCase.comprarLargo(player.getName(), tipoActivo, nombreActivo, cantidadAComprar);
-                    }
-            );
-        });
+                OrderExecutorProxy.execute(AbrirOrdenPremarketCommand.of(player.getName(), nombreActivo, cantidadAComprar, LARGO_COMPRA, null),
+                        () -> {
+                            comprarLargoUseCase.comprarLargo(player.getName(), tipoActivo, nombreActivo, cantidadAComprar);
+                        }
+                );
+            });
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

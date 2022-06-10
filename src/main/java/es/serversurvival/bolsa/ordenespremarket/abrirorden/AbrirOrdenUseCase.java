@@ -3,11 +3,8 @@ package es.serversurvival.bolsa.ordenespremarket.abrirorden;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.AlreadyExists;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrdenesPremarketService;
-import es.serversurvival.bolsa.ordenespremarket._shared.domain.OrdenPremarket;
-import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import lombok.AllArgsConstructor;
 
@@ -26,8 +23,10 @@ public final class AbrirOrdenUseCase {
     }
 
     public void abrirOrden(AbrirOrdenPremarketCommand command) {
-        this.ensureOwnsThatPosicion(command.getJugador(), command.getPosicionAbiertaId());
         this.ensureOrderNotAlreadyOpen(command.getJugador(), command.getPosicionAbiertaId());
+
+        if(command.getTipoAccion().closingOperation())
+            this.ensureOwnsThatPosicion(command.getJugador(), command.getPosicionAbiertaId());
 
         this.ordenesPremarketService.save(command.getJugador(), command.getTicker(), command.getCantidad(),
                 command.getTipoAccion(), command.getPosicionAbiertaId());

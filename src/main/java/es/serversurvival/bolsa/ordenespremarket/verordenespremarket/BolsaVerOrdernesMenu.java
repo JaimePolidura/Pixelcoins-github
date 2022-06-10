@@ -63,6 +63,7 @@ public final class BolsaVerOrdernesMenu extends Menu {
         UUID orderId = UUID.fromString(ItemUtils.getLore(event.getCurrentItem(), 6));
         this.cancelarOrdenUseCase.cancelar(player.getName(), orderId);
         player.closeInventory();
+        player.sendMessage(GOLD + "Has cancelado la orden");
     }
 
     private List<ItemStack> buildItemsOrders() {

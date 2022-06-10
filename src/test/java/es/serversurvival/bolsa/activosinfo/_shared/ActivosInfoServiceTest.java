@@ -1,15 +1,11 @@
 package es.serversurvival.bolsa.activosinfo._shared;
 
-import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.cache.UnlimitedCacheSize;
 import es.serversurvival.bolsa.activosinfo.DepencyContainerTipoActivoInfoMocks;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
-import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfoCacheRepository;
+import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfoRepository;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.acciones.AccionesApiService;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.criptomonedas.CriptomonedasApiService;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.materiasprimas.MateriasPrimasApiService;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +22,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public final class ActivosInfoServiceTest {
-    @Mock private ActivoInfoCacheRepository repositoryCache;
+    @Mock private ActivoInfoRepository repositoryDb;
     private ActivosInfoService service;
 
     static  {
@@ -36,33 +32,30 @@ public final class ActivosInfoServiceTest {
     @BeforeEach
     public void init(){
         MockitoAnnotations.initMocks(this);
-        this.service = new ActivosInfoService(this.repositoryCache);
+        UnlimitedCacheSize<String, ActivoInfo> cache = new UnlimitedCacheSize<>();
+        this.service = new ActivosInfoService(this.repositoryDb, cache);
+
+        cache.put("AMZN", createActivoInfoAcciones("AMZN"));
+        cache.put("GOOG", createActivoInfoAcciones("GOOG"));
     }
 
     @Test
     public void findByNombreActivo(){
-        when(this.repositoryCache.findByNombreActivo("activo")).thenReturn(Optional.empty());
         var exists1 = this.service.existsByNombreActivo("activo");
         assertThat(exists1).isFalse();
 
-
-        when(this.repositoryCache.findByNombreActivo("activo2")).thenReturn(Optional.of(createActivoInfoAcciones("activo2")));
-        var exists2 = this.service.existsByNombreActivo("activo2");
+        var exists2 = this.service.existsByNombreActivo("AMZN");
         assertThat(exists2).isTrue();
     }
 
     @Test
     public void deleteByNombreActivo(){
         this.service.deleteByNombreActivo("activo");
-        verify(this.repositoryCache, times(1)).deleteByNombreActivo("activo");
+        verify(this.repositoryDb, times(1)).deleteByNombreActivo("activo");
     }
 
     @Test
     public void findAllToMap(){
-        when(this.repositoryCache.findAll()).thenReturn(List.of(
-                createActivoInfoAcciones("AMZN"),
-                createActivoInfoAcciones("GOOG")
-        ));
         assertThat(this.service.findAllToMap()).isNotNull().hasSize(2);
         assertThat(this.service.findAllToMap().get("AMZN")).isNotNull();
         assertThat(this.service.findAllToMap().get("GOOG")).isNotNull();
@@ -70,11 +63,6 @@ public final class ActivosInfoServiceTest {
 
     @Test
     public void findAll(){
-        when(this.repositoryCache.findAll()).thenReturn(List.of(
-                createActivoInfoAcciones("AMZN"),
-                createActivoInfoAcciones("GOOG")
-        ));
-
         assertThat(this.service.findAll()).hasSize(2);
     }
 
@@ -82,17 +70,13 @@ public final class ActivosInfoServiceTest {
     public void save(){
         ActivoInfo toSave = createActivoInfoAcciones("activo");
         this.service.save(createActivoInfoAcciones("activo"));
-        verify(this.repositoryCache, times(1)).save(toSave);
+        verify(this.repositoryDb, times(1)).save(toSave);
     }
 
     @Test
     public void getByNombreActivo(){
-        ActivoInfo toReturn = createActivoInfoAcciones("AMZN");
-        when(this.repositoryCache.findByNombreActivo("AMZN")).thenReturn(
-                Optional.of(toReturn)
-        );
         ActivoInfo activoInfo = this.service.getByNombreActivo("AMZN", SupportedTipoActivo.ACCIONES);
-        assertThat(activoInfo).isNotNull().isEqualTo(toReturn);
+        assertThat(activoInfo).isNotNull().matches(a -> a.getNombreActivo().equalsIgnoreCase("AMZN"));
 
         var activoInfoAPICall = this.service.getByNombreActivo("AMZN", SupportedTipoActivo.ACCIONES);
         assertThat(activoInfoAPICall.getNombreActivo()).isEqualTo("AMZN");

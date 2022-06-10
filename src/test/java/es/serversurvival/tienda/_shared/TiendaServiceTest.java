@@ -29,10 +29,6 @@ public final class TiendaServiceTest {
     public void setup(){
         MockitoAnnotations.initMocks(this);
         this.tiendaService = new TiendaService(this.tiendaRepository);
-
-        when(this.tiendaRepository.findAll()).thenReturn(List.of(
-                createTiendaObjeto("jaime"), createTiendaObjeto("jaime")
-        ));
     }
 
     @Test
@@ -55,6 +51,12 @@ public final class TiendaServiceTest {
 
     @Test
     public void findByJugador(){
+        when(this.tiendaRepository.findAll()).thenReturn(List.of(
+                createTiendaObjeto("jaime"),
+                createTiendaObjeto("jaime", 2)
+        ));
+        this.tiendaService.findAll();
+
         assertThat(this.tiendaService.findByJugador("jaime")).hasSize(2).allMatch(objeto -> objeto.getJugador().equalsIgnoreCase("jaime"));
         assertThat(this.tiendaService.findByJugador("nadie")).isEmpty();
         assertThat(this.tiendaService.findByJugador("jaime")).hasSize(2).allMatch(objeto -> objeto.getJugador().equalsIgnoreCase("jaime"));
@@ -62,12 +64,20 @@ public final class TiendaServiceTest {
 
     @Test
     public void findAll(){
+        when(this.tiendaRepository.findAll()).thenReturn(List.of(
+                createTiendaObjeto("jaime"), createTiendaObjeto("jaime")
+        ));
+
         assertThat(this.tiendaService.findAll()).hasSize(2).allMatch(t -> t.getJugador().equalsIgnoreCase("jaime"));
         assertThat(this.tiendaService.findAll()).hasSize(2).allMatch(t -> t.getJugador().equalsIgnoreCase("jaime"));
     }
 
     @Test
     public void deleteById(){
+        when(this.tiendaRepository.findAll()).thenReturn(List.of(
+                createTiendaObjeto("jaime"),
+                createTiendaObjeto("jaime", 2)
+        ));
         var idToRemove = this.tiendaService.findAll().get(0).getTiendaObjetoId();
         this.tiendaService.deleteById(idToRemove);
 

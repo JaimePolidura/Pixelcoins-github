@@ -22,8 +22,6 @@ public class JugadoresService {
     }
 
     public void save(Jugador jugador){
-        System.out.println(jugador);
-
         this.repositoryDb.save(jugador);
         this.cache.put(jugador.getNombre(), jugador);
     }
@@ -31,9 +29,6 @@ public class JugadoresService {
     public void save(UUID jugadorId, String nombre) {
         var jugador = new Jugador(jugadorId, nombre, 0, 0,
                 0, 0, 0, 0, this.generearNumeroCuenta());
-
-        System.out.println(jugador.getNombre());
-        System.out.println(jugador.getJugadorId());
 
         this.repositoryDb.save(jugador);
         this.cache.put(jugador.getNombre(), jugador);

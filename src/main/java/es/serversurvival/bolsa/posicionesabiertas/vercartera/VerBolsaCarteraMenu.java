@@ -13,6 +13,7 @@ import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
+import es.serversurvival.jugadores.perfil.PerfilMenu;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -109,14 +110,14 @@ public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
         lore.add("   ");
         lore.add(GOLD + "Empresa " + activoInfo.getNombreActivoLargo());
         lore.add(GOLD + "Ticker " + posicion.getNombreActivo());
-        lore.add(GOLD + "Peso " + FORMATEA.format(redondeoDecimales(valorPosicion / valorTotal, 0)));
+        lore.add(GOLD + "Peso " + FORMATEA.format(redondeoDecimales(valorPosicion / valorTotal, 0)) + "%");
         lore.add("   ");
-        lore.add("Cantidad: " + FORMATEA.format(posicion.getCantidad()) + " " + posicion.getTipoActivo().getAlias());
-        lore.add("Precio apertura: " + GREEN + FORMATEA.format(posicion.getPrecioApertura()) + " PC");
-        lore.add("Precio actual: " + GREEN + FORMATEA.format(activoInfo.getPrecio()) + " PC");
-        lore.add(rentabildad >= 0 ? GOLD +
+        lore.add(GOLD + "Cantidad: " + FORMATEA.format(posicion.getCantidad()) + " " + posicion.getTipoActivo().getAlias());
+        lore.add(GOLD + "Precio apertura: " + GREEN + FORMATEA.format(posicion.getPrecioApertura()) + " PC");
+        lore.add(GOLD + "Precio actual: " + GREEN + FORMATEA.format(activoInfo.getPrecio()) + " PC");
+        lore.add(GOLD + "" + (rentabildad >= 0 ? GOLD +
                 "Rentabilidad: " + GREEN + "+" + rentabildad + "%" :
-                GOLD + "Rentabilidad: " + RED + rentabildad + "%");
+                GOLD + "Rentabilidad: " + RED + rentabildad + "%"));
         lore.add(rentabildad >= 0 ?
                 GOLD + "Beneficios totales: " + GREEN + "+" + DATE_FORMATER_LEGACY.format(perdidasOBeneficios) + " PC" :
                 GOLD + "Perdidas totales: " + RED + DATE_FORMATER_LEGACY.format(perdidasOBeneficios) + " PC");
@@ -137,7 +138,7 @@ public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
     }
 
     private void goToProfileMenu(Player player, InventoryClickEvent event) {
-        this.menuService.open(player, null); //TODO
+        this.menuService.open(player, new PerfilMenu(player.getName()));
     }
 
     private ItemStack buildItemInfo() {
@@ -171,7 +172,7 @@ public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
         super.setItemLoreActualPage(8, List.of(
                 GOLD + "Valor total: " + GREEN + FORMATEA.format(redondeoDecimales(valorTotal, 2)) + "PC",
                 GOLD + "Resultado: " + GREEN + FORMATEA.format(redondeoDecimales(beneficiosOPerdidas, 2)) + "PC",
-                GOLD + "Rentabilidad: " + FORMATEA.format(redondeoDecimales(beneficiosOPerdidas/valorTotal, 0)) + "%"
+                GOLD + "Rentabilidad: " + (valorTotal == 0 ? 0 : FORMATEA.format(redondeoDecimales(beneficiosOPerdidas/valorTotal, 0))) + "%"
         ));
     }
 }

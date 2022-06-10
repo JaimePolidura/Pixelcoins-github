@@ -63,7 +63,7 @@ public final class MySQLOrdenesPremarketRepository extends DataBaseRepository<Or
                 rs.getString("nombreActivo"),
                 rs.getInt("cantidad"),
                 TipoAccion.valueOf(rs.getString("tipoAccion")),
-                UUID.fromString(rs.getString("posicionAbiertaId"))
-        );
+                rs.getString("posicionAbiertaId") == null ? null : UUID.fromString(rs.getString("posicionAbiertaId")
+        ));
     }
 }
