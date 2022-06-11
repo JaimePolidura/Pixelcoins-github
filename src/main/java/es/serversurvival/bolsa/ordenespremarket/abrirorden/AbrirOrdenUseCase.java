@@ -2,6 +2,7 @@ package es.serversurvival.bolsa.ordenespremarket.abrirorden;
 
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.AlreadyExists;
+import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrdenesPremarketService;
@@ -23,6 +24,7 @@ public final class AbrirOrdenUseCase {
     }
 
     public void abrirOrden(AbrirOrdenPremarketCommand command) {
+        this.ensureCantidadCorrect(command.getCantidad());
         this.ensureOrderNotAlreadyOpen(command.getJugador(), command.getPosicionAbiertaId());
 
         if(command.getTipoAccion().closingOperation())
@@ -33,6 +35,11 @@ public final class AbrirOrdenUseCase {
 
         this.eventBus.publish(new OrdenAbiertaEvento(command.getJugador(), command.getTicker(), command.getCantidad(),
                 command.getTipoAccion(), command.getPosicionAbiertaId()));
+    }
+
+    private void ensureCantidadCorrect(int cantidad) {
+        if(cantidad <= 0)
+            throw new IllegalQuantity("La cantidad ha de ser mayor que 0");
     }
 
     private void ensureOwnsThatPosicion(String playerName, UUID posicionAbiertaId){

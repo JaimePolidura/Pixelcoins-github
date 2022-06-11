@@ -12,13 +12,13 @@ import static es.serversurvival._shared.utils.apiHttp.IEXCloud_API.*;
 public class AccionesApiServiceIEXCloud extends AccionesApiService {
     @Override
     public synchronized Double getPrecio(String nombreActivo) throws Exception {
+        Thread.sleep(200);
+
         return Double.parseDouble(String.valueOf(peticionHttp("https://sandbox.iexapis.com/stable/stock/" + nombreActivo + "/price?token=" + TOKEN)));
     }
 
     @Override
     public synchronized String getNombreActivoLargo(String nombreActivo) throws Exception{
-        Thread.sleep(100);
-
         Object response = peticionHttp("https://sandbox.iexapis.com/stable/stock/" + nombreActivo + "/company?token=" + TOKEN);
         JSONObject json = (JSONObject) response;
         String nombreValor = String.valueOf(json.get("companyName"));
@@ -30,12 +30,12 @@ public class AccionesApiServiceIEXCloud extends AccionesApiService {
     }
 
     @Override
-    public Object getDividendosData(String nombreActivo) throws Exception {
+    public synchronized Object getDividendosData(String nombreActivo) throws Exception {
         return peticionHttp("https://sandbox.iexapis.com/stable/time-series/advanced_dividends/" + nombreActivo + "?range=next-week&token=" + TOKEN);
     }
 
     @Override
-    public Object getSplitData(String nombreActivo) throws Exception {
+    public synchronized Object getSplitData(String nombreActivo) throws Exception {
         return peticionHttp("https://sandbox.iexapis.com/stable/stock/" + nombreActivo + "/splits/1m?token=" + TOKEN);
     }
 }

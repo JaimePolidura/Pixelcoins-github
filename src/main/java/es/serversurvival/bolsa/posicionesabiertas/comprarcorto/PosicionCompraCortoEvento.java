@@ -1,12 +1,11 @@
 package es.serversurvival.bolsa.posicionesabiertas.comprarcorto;
 
 import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerradaEvento;
 import es.serversurvival.transacciones._shared.domain.Transaccion;
-import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 import java.util.Objects;
@@ -18,7 +17,7 @@ public final class PosicionCompraCortoEvento extends PosicionCerradaEvento {
     protected final double revalorizacionTotal;
 
     public PosicionCompraCortoEvento(String vendedor, String ticker, String nombreValor, double precioApertura, String fechaApertura,
-                                     double precioCierre, int cantidad, SupportedTipoActivo tipoActivo) {
+                                     double precioCierre, int cantidad, TipoActivo tipoActivo) {
 
         super(vendedor, ticker, nombreValor, precioApertura, fechaApertura, precioCierre, cantidad, tipoActivo);
 
@@ -39,7 +38,7 @@ public final class PosicionCompraCortoEvento extends PosicionCerradaEvento {
     }
 
     public static PosicionCompraCortoEvento of(String jugaodor, String nombreActivo, String nombreActivoLargo, double precioApertura,
-                                               String fechaApertura, double precioCierre, int cantidad, SupportedTipoActivo tipoActivo){
+                                               String fechaApertura, double precioCierre, int cantidad, TipoActivo tipoActivo){
         return new PosicionCompraCortoEvento(jugaodor, nombreActivo, nombreActivoLargo, precioApertura, fechaApertura, precioCierre, cantidad, tipoActivo);
     }
 

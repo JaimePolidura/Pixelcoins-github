@@ -1,6 +1,7 @@
 package es.serversurvival.bolsa.posicionesabiertas._shared.application;
 
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
@@ -42,16 +43,20 @@ public final class PosicionesUtils {
 
         Map<PosicionAbierta, Integer> posicionesAbiertasConPeso = new HashMap<>();
 
-        posicionAbiertasJugador.forEach( (posicion) -> {
-            posicionesAbiertasConPeso.put(
-                    posicion,
-                    (int) rentabilidad(
-                            totalInverito,
-                            posicion.getCantidad() * activosInfoService.getByNombreActivo(posicion.getNombreActivo(), posicion.getTipoActivo())
-                                    .getPrecio()
-                    )
-            );
-        });
+        for (PosicionAbierta posicion : posicionAbiertasJugador) {
+            var nombreActivo = posicion.getNombreActivo();
+            var tipoActivo = posicion.getTipoActivo();
+            int cantidad = posicion.getCantidad();
+            double precioApertura = posicion.getPrecioApertura();
+
+            double valorTotalPosicion = posicion.esLargo() ?
+                    cantidad * activosInfoService.getByNombreActivo(nombreActivo, tipoActivo).getPrecio() :
+                    (precioApertura - activosInfoService.getByNombreActivo(nombreActivo, tipoActivo).getPrecio()) * cantidad;
+
+            posicionesAbiertasConPeso.put(posicion, (int) rentabilidad(
+                    Math.abs(totalInverito), Math.abs(valorTotalPosicion)
+            ));
+        }
 
         return posicionesAbiertasConPeso;
     }

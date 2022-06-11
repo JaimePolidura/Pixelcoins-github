@@ -1,11 +1,11 @@
 package es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.materiasprimas;
 
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo.MATERIAS_PRIMAS;
+import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo.MATERIAS_PRIMAS;
 
 
 public enum SupportedMateriasPrimas {
@@ -15,9 +15,9 @@ public enum SupportedMateriasPrimas {
     GASDESW("Diesel", MATERIAS_PRIMAS);
 
     public final String nombreActivoLargo;
-    public final SupportedTipoActivo tipoActivo;
+    public final TipoActivo tipoActivo;
 
-    SupportedMateriasPrimas(String nombreActivoLargo, SupportedTipoActivo tipoActivo) {
+    SupportedMateriasPrimas(String nombreActivoLargo, TipoActivo tipoActivo) {
         this.nombreActivoLargo = nombreActivoLargo;
         this.tipoActivo = tipoActivo;
     }

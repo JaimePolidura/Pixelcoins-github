@@ -2,7 +2,7 @@ package es.serversurvival.bolsa.posicionesabiertas.dividendostask;
 
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos.AccionesApiServiceIEXCloud;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
@@ -71,7 +71,7 @@ public final class PagarDividendosUseCase {
     }
 
     private JSONObject getJSONDividendos (String ticker) throws Exception {
-        JSONArray jsonArray = (JSONArray) ((AccionesApiServiceIEXCloud) SupportedTipoActivo.ACCIONES.getTipoActivoService())
+        JSONArray jsonArray = (JSONArray) ((AccionesApiServiceIEXCloud) TipoActivo.ACCIONES.getTipoActivoService())
                 .getDividendosData(ticker);
 
         return (JSONObject) jsonArray.get(0);

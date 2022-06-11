@@ -12,7 +12,6 @@ import es.serversurvival.bolsa.posicionesabiertas.comprarcorto.ComprarCortoUseCa
 import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.ComprarLargoUseCase;
 import es.serversurvival.bolsa.posicionesabiertas.vendercorto.VenderCortoUseCase;
 import es.serversurvival.bolsa.posicionesabiertas.venderlargo.VenderLargoUseCase;
-import es.serversurvival.bolsa.posicionesabiertas.venderlargo.VenderLargoUseCaseTest;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static es.serversurvival.MockitoArgEqualsMatcher.*;
 import static es.serversurvival.bolsa.posicionesabiertas.PosicionesAbiertasTestMother.createPosicionAbierta;
-import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo.ACCIONES;
+import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo.ACCIONES;
 import static es.serversurvival.bolsa.ordenespremarket.OrdernesPremarketTestMother.createOrdenPremarket;
 import static es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion.*;
 import static es.serversurvival.jugadores.JugadoresTestMother.createJugador;

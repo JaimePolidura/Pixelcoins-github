@@ -1,12 +1,12 @@
 package es.serversurvival.bolsa.posicionesabiertas._shared.domain;
 
-import es.jaime.javaddd.domain.Aggregate;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.bukkit.Material;
 
 import java.util.UUID;
 
@@ -17,7 +17,7 @@ import java.util.UUID;
 public final class PosicionAbierta {
     @Getter private final UUID posicionAbiertaId;
     @Getter private final String jugador;
-    @Getter private final SupportedTipoActivo tipoActivo;
+    @Getter private final TipoActivo tipoActivo;
     @Getter private final String nombreActivo;
     @Getter private final int cantidad;
     @Getter private final double precioApertura;
@@ -48,6 +48,16 @@ public final class PosicionAbierta {
     }
 
     public boolean esTipoAccion () {
-        return tipoActivo == SupportedTipoActivo.ACCIONES;
+        return tipoActivo == TipoActivo.ACCIONES;
     }
+
+    public Material getMaterial(){
+        return this.esCorto() ? Material.REDSTONE_TORCH :
+                switch (this.tipoActivo){
+                    case MATERIAS_PRIMAS -> Material.COAL;
+                    case ACCIONES -> Material.NAME_TAG;
+                    case CRIPTOMONEDAS -> Material.GOLD_INGOT;
+        };
+    }
+
 }

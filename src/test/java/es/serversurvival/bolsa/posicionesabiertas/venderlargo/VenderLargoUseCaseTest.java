@@ -20,7 +20,7 @@ import java.util.UUID;
 
 import static es.serversurvival.MockitoArgEqualsMatcher.of;
 import static es.serversurvival.bolsa.activosinfo.ActivosInfoTestMother.createActivoInfoAcciones;
-import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo.*;
+import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo.*;
 import static es.serversurvival.bolsa.posicionesabiertas.PosicionesAbiertasTestMother.createPosicionAbierta;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.argThat;

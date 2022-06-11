@@ -100,8 +100,8 @@ public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
                 posicion.getCantidad() * (activoInfo.getPrecio() - posicion.getPrecioApertura()) :
                 posicion.getCantidad() * (posicion.getPrecioApertura() - activoInfo.getPrecio());
         double rentabildad = posicion.esLargo() ?
-                Math.abs(redondeoDecimales(diferenciaPorcntual(posicion.getPrecioApertura(), activoInfo.getPrecio()), 2)) :
-                Math.abs(redondeoDecimales(diferenciaPorcntual(activoInfo.getPrecio(), posicion.getPrecioApertura()), 2));
+                redondeoDecimales(diferenciaPorcntual(posicion.getPrecioApertura(), activoInfo.getPrecio()), 2) :
+                redondeoDecimales(diferenciaPorcntual(activoInfo.getPrecio(), posicion.getPrecioApertura()), 2);
         double valorPosicion = posicion.esLargo() ? posicion.getCantidad() * activoInfo.getPrecio() : perdidasOBeneficios;
 
         this.beneficiosOPerdidas += perdidasOBeneficios;
@@ -110,7 +110,8 @@ public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
         lore.add("   ");
         lore.add(GOLD + "Empresa " + activoInfo.getNombreActivoLargo());
         lore.add(GOLD + "Ticker " + posicion.getNombreActivo());
-        lore.add(GOLD + "Peso " + FORMATEA.format(redondeoDecimales(valorPosicion / valorTotal, 0)) + "%");
+        double peso = valorTotal == 0 ? 0 : redondeoDecimales(valorPosicion / valorTotal, 0);
+        lore.add(GOLD + "Peso " + FORMATEA.format(peso) + "%");
         lore.add("   ");
         lore.add(GOLD + "Cantidad: " + FORMATEA.format(posicion.getCantidad()) + " " + posicion.getTipoActivo().getAlias());
         lore.add(GOLD + "Precio apertura: " + GREEN + FORMATEA.format(posicion.getPrecioApertura()) + " PC");
@@ -119,15 +120,15 @@ public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
                 "Rentabilidad: " + GREEN + "+" + rentabildad + "%" :
                 GOLD + "Rentabilidad: " + RED + rentabildad + "%"));
         lore.add(rentabildad >= 0 ?
-                GOLD + "Beneficios totales: " + GREEN + "+" + DATE_FORMATER_LEGACY.format(perdidasOBeneficios) + " PC" :
-                GOLD + "Perdidas totales: " + RED + DATE_FORMATER_LEGACY.format(perdidasOBeneficios) + " PC");
+                GOLD + "Beneficios totales: " + GREEN + "+" + FORMATEA.format(perdidasOBeneficios) + " PC" :
+                GOLD + "Perdidas totales: " + RED + FORMATEA.format(perdidasOBeneficios) + " PC");
 
-        lore.add(GOLD + "Valor total: " + GREEN + DATE_FORMATER_LEGACY.format(activoInfo.getPrecio() * posicion.getCantidad()) + " PC");
+        lore.add(GOLD + "Valor total: " + GREEN + FORMATEA.format(activoInfo.getPrecio() * posicion.getCantidad()) + " PC");
         lore.add("   ");
         lore.add(GOLD + "Fecha de compra: " + posicion.getPrecioApertura());
         lore.add(String.valueOf(posicion.getPosicionAbiertaId()));
 
-        return ItemBuilder.of(posicion.esLargo() ? Material.NAME_TAG : Material.REDSTONE_TORCH)
+        return ItemBuilder.of(posicion.getMaterial())
                 .title(GOLD + "" + BOLD + UNDERLINE + "CLICK PARA VENDER")
                 .lore(lore)
                 .build();
@@ -171,7 +172,7 @@ public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
     public void afterShow() {
         super.setItemLoreActualPage(8, List.of(
                 GOLD + "Valor total: " + GREEN + FORMATEA.format(redondeoDecimales(valorTotal, 2)) + "PC",
-                GOLD + "Resultado: " + GREEN + FORMATEA.format(redondeoDecimales(beneficiosOPerdidas, 2)) + "PC",
+                GOLD + "Resultado: " + (beneficiosOPerdidas >= 0 ? GREEN : RED) + FORMATEA.format(redondeoDecimales(beneficiosOPerdidas, 2)) + "PC",
                 GOLD + "Rentabilidad: " + (valorTotal == 0 ? 0 : FORMATEA.format(redondeoDecimales(beneficiosOPerdidas/valorTotal, 0))) + "%"
         ));
     }

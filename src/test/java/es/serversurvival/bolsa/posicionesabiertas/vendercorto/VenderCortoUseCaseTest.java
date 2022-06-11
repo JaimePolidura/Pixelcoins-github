@@ -16,17 +16,13 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.beans.Transient;
-
 import static es.serversurvival.MockitoArgEqualsMatcher.of;
 import static es.serversurvival._shared.utils.Funciones.redondeoDecimales;
 import static es.serversurvival._shared.utils.Funciones.reducirPorcentaje;
 import static es.serversurvival.bolsa.activosinfo.ActivosInfoTestMother.createActivoInfoAcciones;
-import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo.ACCIONES;
-import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo.MATERIAS_PRIMAS;
+import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo.ACCIONES;
 import static es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce.PORCENTAJE_CORTO;
 import static es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion.CORTO;
-import static es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion.LARGO;
 import static es.serversurvival.jugadores.JugadoresTestMother.createJugador;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;

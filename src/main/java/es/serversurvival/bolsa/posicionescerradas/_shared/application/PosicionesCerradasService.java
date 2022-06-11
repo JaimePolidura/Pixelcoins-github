@@ -1,11 +1,8 @@
 package es.serversurvival.bolsa.posicionescerradas._shared.application;
 
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionesCerradasRepository;
-import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import lombok.AllArgsConstructor;
 
 import java.util.*;

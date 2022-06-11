@@ -4,7 +4,7 @@ import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
 import es.jaimetruman.select.Select;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionesAbiertasRepository;
@@ -66,7 +66,7 @@ public final class MySQLPosicionesAbiertasRepository extends DataBaseRepository<
         return new PosicionAbierta(
                 UUID.fromString(rs.getString("posicionAbiertaId")),
                 rs.getString("jugador"),
-                SupportedTipoActivo.valueOf(rs.getString("tipoActivo")),
+                TipoActivo.valueOf(rs.getString("tipoActivo")),
                 rs.getString("nombreActivo"),
                 rs.getInt("cantidad"),
                 rs.getDouble("precioApertura"),

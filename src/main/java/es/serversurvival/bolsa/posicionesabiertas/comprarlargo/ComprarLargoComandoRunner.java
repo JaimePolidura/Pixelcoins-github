@@ -6,7 +6,7 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrderExecutorProxy;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
@@ -54,7 +54,7 @@ public class ComprarLargoComandoRunner implements CommandRunnerArgs<ComprarLargo
 
         sender.sendMessage(RED + "Cargando...");
 
-        ActivoInfo activoInfo = activoInfoService.getByNombreActivo(ticker, SupportedTipoActivo.ACCIONES);
+        ActivoInfo activoInfo = activoInfoService.getByNombreActivo(ticker, TipoActivo.ACCIONES);
 
         if(activoInfo.getPrecio() == -1){
             sender.sendMessage(DARK_RED + "Ticker no encontrado, los tickers se ven en /bolsa valores o en inernet como en es.investing.com. Solo se puede invertir en acciones que cotizen en Estados Unidos");
@@ -69,15 +69,23 @@ public class ComprarLargoComandoRunner implements CommandRunnerArgs<ComprarLargo
             return;
         }
 
-        OrderExecutorProxy.execute(of(sender.getName(), ticker, cantidad, TipoAccion.LARGO_COMPRA, null), () -> {
-            comprarLargoUseCase.comprarLargo(sender.getName(), SupportedTipoActivo.ACCIONES, ticker.toUpperCase(), cantidad);
+        var executedInMarket = OrderExecutorProxy.execute(of(sender.getName(), ticker, cantidad, TipoAccion.LARGO_COMPRA, null), () -> {
+            comprarLargoUseCase.comprarLargo(sender.getName(), TipoActivo.ACCIONES, ticker.toUpperCase(), cantidad);
+        });
 
+        sendMessage(sender, cantidad, nombreValor, precio, executedInMarket);
+    }
+
+    private void sendMessage(CommandSender sender, int cantidad, String nombreValor, double precio, boolean executedInMarket) {
+        if(executedInMarket){
             Bukkit.broadcastMessage(GOLD + sender.getName() + " ha comprado " + cantidad + " acciones de "
                     + nombreValor + " a " + GREEN + FORMATEA.format(precio) + "PC");
 
             Funciones.enviarMensajeYSonido(Bukkit.getPlayer(sender.getName()), GOLD + "Has comprado " + FORMATEA.format(cantidad)
                     + " acciones a " + GREEN + FORMATEA.format(precio) + " PC" + GOLD + " que es un total de " + GREEN +
-                    FORMATEA.format(precio) + " PC " + GOLD + " comandos: " + AQUA + "/bolsa vender /bolsa cartera", ENTITY_PLAYER_LEVELUP);
-        });
+                    FORMATEA.format(precio * cantidad) + " PC " + GOLD + " comandos: " + AQUA + "/bolsa cartera", ENTITY_PLAYER_LEVELUP);
+        }else{
+            sender.sendMessage(GOLD + "La compra no se ha podida ejecutar por que el mercado esta cerrado, cuando abra se ejecutara");
+        }
     }
 }

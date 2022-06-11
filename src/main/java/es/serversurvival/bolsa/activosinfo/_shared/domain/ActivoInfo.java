@@ -1,7 +1,6 @@
 package es.serversurvival.bolsa.activosinfo._shared.domain;
 
-import es.jaime.javaddd.domain.Aggregate;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,7 +12,7 @@ import lombok.ToString;
 public final class ActivoInfo {
     @Getter private final String nombreActivo;
     @Getter private final double precio;
-    @Getter private final SupportedTipoActivo tipoActivo;
+    @Getter private final TipoActivo tipoActivo;
     @Getter private final String nombreActivoLargo;
 
     public ActivoInfo withPrecio(double precio){
@@ -25,14 +24,14 @@ public final class ActivoInfo {
     }
 
     public boolean esTipoAccion () {
-        return this.getTipoActivo() == SupportedTipoActivo.ACCIONES;
+        return this.getTipoActivo() == TipoActivo.ACCIONES;
     }
 
     public boolean esTipoCriptomoneda () {
-        return this.getTipoActivo() == SupportedTipoActivo.CRIPTOMONEDAS;
+        return this.getTipoActivo() == TipoActivo.CRIPTOMONEDAS;
     }
 
     public boolean esTipoMateriaPrima () {
-        return this.getTipoActivo() == SupportedTipoActivo.MATERIAS_PRIMAS;
+        return this.getTipoActivo() == TipoActivo.MATERIAS_PRIMAS;
     }
 }

@@ -8,7 +8,7 @@ import es.jaimetruman.menus.Page;
 import es.jaimetruman.menus.configuration.MenuConfiguration;
 import es.jaimetruman.menus.menustate.AfterShow;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.activosinfo.vervalores.ComprarBolsaConfirmacionMenu;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
@@ -22,9 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival.bolsa.activosinfo.vervalores.materiasprimas.TodasMateriasPrimasVerValores.*;
@@ -60,7 +58,9 @@ public final class MateriasPrimasMenu extends Menu implements AfterShow {
         if(!hasLoaded(event.getCurrentItem())) return;
 
         ItemStack itemClicked = event.getCurrentItem();
-        String precioString = ItemUtils.getLore(itemClicked, 1).split(" ")[1].replace(",", ".");
+        String precioString = ItemUtils.getLore(itemClicked, 1).split(" ")[1]
+                .replaceAll("\\.", "")
+                .replace(",", ".");;
         double precio = Double.parseDouble(precioString);
 
         if(precio > this.jugador.getPixelcoins()){
@@ -72,7 +72,7 @@ public final class MateriasPrimasMenu extends Menu implements AfterShow {
         String nombreActivo = ItemUtils.getLore(itemClicked, 0).split(" ")[1];
 
         this.menuService.open(player, new ComprarBolsaConfirmacionMenu(
-                nombreActivo, SupportedTipoActivo.MATERIAS_PRIMAS, player.getName(), precio
+                nombreActivo, TipoActivo.MATERIAS_PRIMAS, player.getName(), precio
         ));
     }
 
@@ -125,7 +125,7 @@ public final class MateriasPrimasMenu extends Menu implements AfterShow {
     private void addPriceToItem(ItemStack item) {
         try {
             String nombreActivo = ItemUtils.getLore(item, 0).split(" ")[1];
-            double precio = SupportedTipoActivo.MATERIAS_PRIMAS.getTipoActivoService().getPrecio(nombreActivo);
+            double precio = TipoActivo.MATERIAS_PRIMAS.getTipoActivoService().getPrecio(nombreActivo);
 
             ItemUtils.setLore(item, 1, GOLD + "Precio: " + GREEN + FORMATEA.format(precio) + " PC");
         } catch (Exception e) {

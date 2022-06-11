@@ -6,7 +6,7 @@ import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import java.util.UUID;
 
 import static es.serversurvival._shared.utils.Funciones.*;
-import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo.ACCIONES;
+import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo.ACCIONES;
 import static es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion.*;
 
 public final class PosicionesAbiertasTestMother {

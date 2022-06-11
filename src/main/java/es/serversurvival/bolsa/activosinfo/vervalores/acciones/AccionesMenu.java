@@ -11,7 +11,7 @@ import es.jaimetruman.menus.modules.pagination.PaginationConfiguration;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.activosinfo.vervalores.ComprarBolsaConfirmacionMenu;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
@@ -21,7 +21,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.junit.runners.model.TestTimedOutException;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -74,8 +73,9 @@ public final class AccionesMenu extends Menu implements AfterShow {
         if(!hasLoaded(event.getCurrentItem())) return;
 
         ItemStack itemClicked = event.getCurrentItem();
-        String ticker = ItemUtils.getLore(itemClicked, 0);
+        String ticker = ItemUtils.getLore(itemClicked, 0).split(" ")[1];
         String priceString = ItemUtils.getLore(itemClicked, 1).split(" ")[1]
+                .replaceAll("\\.", "")
                 .replace(",", ".");
 
         double precio = Double.parseDouble(priceString);
@@ -87,7 +87,7 @@ public final class AccionesMenu extends Menu implements AfterShow {
         }
 
         this.menuService.open(player, new ComprarBolsaConfirmacionMenu(
-                ticker, SupportedTipoActivo.ACCIONES, player.getName(), precio
+                ticker, TipoActivo.ACCIONES, player.getName(), precio
         ));
     }
 
@@ -165,7 +165,7 @@ public final class AccionesMenu extends Menu implements AfterShow {
         try {
             String ticker = ItemUtils.getLore(itemToEdit, 0).split(" ")[1];
             double precio = allActivosInfo.get(ticker) == null ?
-                    SupportedTipoActivo.ACCIONES.getPrecio(ticker) :
+                    TipoActivo.ACCIONES.getPrecio(ticker) :
                     allActivosInfo.get(ticker).getPrecio();
 
             ItemUtils.setLore(itemToEdit, 1, GOLD + "Precio: " + GREEN + FORMATEA.format(precio) + " PC");

@@ -1,7 +1,6 @@
 package es.serversurvival.bolsa.posicionescerradas._shared.domain;
 
-import es.jaime.javaddd.domain.Aggregate;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,7 +10,7 @@ import java.util.UUID;
 public final class PosicionCerrada {
     @Getter private final UUID posicionCerradaId;
     @Getter private final String jugador;
-    @Getter private final SupportedTipoActivo tipoActivo;
+    @Getter private final TipoActivo tipoActivo;
     @Getter private final String nombreActivo;
     @Getter private final int cantidad;
     @Getter private final double precioApertura;

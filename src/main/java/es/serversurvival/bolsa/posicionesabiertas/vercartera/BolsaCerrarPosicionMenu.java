@@ -11,6 +11,7 @@ import es.serversurvival.bolsa.posicionesabiertas._shared.application.Posiciones
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival.bolsa.posicionesabiertas.comprarcorto.ComprarCortoUseCase;
 import es.serversurvival.bolsa.posicionesabiertas.venderlargo.VenderLargoUseCase;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
@@ -42,7 +43,7 @@ public final class BolsaCerrarPosicionMenu extends NumberSelectorMenu {
     public void onAccept(Player player, InventoryClickEvent event) {
         int cantidad = (int) super.getPropertyDouble("cantidad");
 
-        OrderExecutorProxy.execute(of(
+        var executedInMarket = OrderExecutorProxy.execute(of(
                 player.getName(),
                 posicion.getNombreActivo(),
                 cantidad,
@@ -54,6 +55,23 @@ public final class BolsaCerrarPosicionMenu extends NumberSelectorMenu {
                         comprarCortoUseCase.comprarPosicionCorto(posicion.getPosicionAbiertaId(), cantidad, posicion.getJugador());
                 }
         );
+
+        double resultadoNeto = posicion.getCantidad() * (posicion.esLargo() ?
+                activoInfoAVender.getPrecio() - posicion.getPrecioApertura() :
+                posicion.getPrecioApertura() - activoInfoAVender.getPrecio());
+
+        if(executedInMarket){
+            String mensajeResultado  = resultadoNeto >= 0 ?
+                    "unos beneficios de " + GREEN + "+ " + FORMATEA.format(resultadoNeto) + "PC" :
+                    "unas perdidas de " + RED + FORMATEA.format(resultadoNeto) + "PC";
+
+            player.sendMessage(GOLD + "Has cerra de la posicion de " + cantidad + " acciones de " + activoInfoAVender.getNombreActivoLargo() + " por " + GREEN +
+                    FORMATEA.format(activoInfoAVender.getPrecio()) + "PC " + GOLD + "Con " + mensajeResultado);
+            player.playSound(player.getLocation(), resultadoNeto >= 0 ? Sound.ENTITY_PLAYER_LEVELUP : Sound.BLOCK_ANVIL_LAND, 10, 1);
+        }else{
+            player.sendMessage(GOLD + "No se ha podido cerrar la posicion por que el mercado esta cerrado. Cuando abra se ejecutara y recibiras tus pixelcoins");
+        }
+
     }
 
     @Override
@@ -77,10 +95,10 @@ public final class BolsaCerrarPosicionMenu extends NumberSelectorMenu {
 
         return List.of(
                 GOLD + "Cantidad: " + FORMATEA.format(cantidadInt),
-                GOLD + "Valor total: " + GREEN + FORMATEA.format(redondeoDecimales(calcularValorTotal(cantidadInt), 2)),
+                GOLD + "Valor total: " + GREEN + FORMATEA.format(redondeoDecimales(calcularValorTotal(cantidadInt), 2)) + " PC",
                 calcularResultado(cantidadInt) >= 0?
-                        GOLD + "Resuldao: " + GREEN + "+" + FORMATEA.format(redondeoDecimales(calcularValorTotal(cantidadInt), 2)) :
-                        GOLD + "Resuldao: " + RED + FORMATEA.format(redondeoDecimales(calcularValorTotal(cantidadInt), 2))
+                        GOLD + "Resultado: " + GREEN + "+" + FORMATEA.format(redondeoDecimales(calcularResultado(cantidadInt), 2)) + "PC" :
+                        GOLD + "Resultado: " + RED + FORMATEA.format(redondeoDecimales(calcularResultado(cantidadInt), 2)) + "PC"
         );
     }
 

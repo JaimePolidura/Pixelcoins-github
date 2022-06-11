@@ -6,7 +6,7 @@ import es.serversurvival._shared.cache.Cache;
 import es.serversurvival._shared.cache.UnlimitedCacheSize;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfoRepository;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class ActivosInfoService {
         this.respotiroyDb.save(activoApiCache);
     }
 
-    public ActivoInfo getByNombreActivo(String nombreActivo, SupportedTipoActivo supportedTipoActivo) {
+    public ActivoInfo getByNombreActivo(String nombreActivo, TipoActivo supportedTipoActivo) {
         return this.cache.find(nombreActivo)
                 .orElseGet(() -> this.getActivoInfoFromAPI(nombreActivo, supportedTipoActivo)
                         .map(saveToCacheAndDb())
@@ -39,13 +39,15 @@ public class ActivosInfoService {
                 );
     }
 
-    private Optional<ActivoInfo> getActivoInfoFromAPI(String nombreActivo, SupportedTipoActivo supportedTipoActivo) {
+    private Optional<ActivoInfo> getActivoInfoFromAPI(String nombreActivo, TipoActivo supportedTipoActivo) {
         try {
             String nombreActivoLargo = supportedTipoActivo.getTipoActivoService().getNombreActivoLargo(nombreActivo);
-            double preico = supportedTipoActivo.getTipoActivoService().getPrecio(nombreActivo);
+            double precio = supportedTipoActivo.getTipoActivoService().getPrecio(nombreActivo);
 
-            return Optional.ofNullable(new ActivoInfo(nombreActivo, preico, supportedTipoActivo, nombreActivoLargo));
+            return Optional.of(new ActivoInfo(nombreActivo, precio, supportedTipoActivo, nombreActivoLargo));
         } catch (Exception e) {
+            e.printStackTrace();
+
             return Optional.empty();
         }
     }
@@ -80,6 +82,12 @@ public class ActivosInfoService {
 
             return activoInfo;
         };
+    }
+
+    public void initializeCache(){
+        this.respotiroyDb.findAll().forEach(activoInfo -> {
+            this.cache.put(activoInfo.getNombreActivo(), activoInfo);
+        });
     }
 
 }

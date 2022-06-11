@@ -6,7 +6,7 @@ import es.jaime.repository.DataBaseRepository;
 import es.jaimetruman.delete.Delete;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfoRepository;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -54,7 +54,7 @@ public final class MySQLActivoInfoRepository extends DataBaseRepository<ActivoIn
         return new ActivoInfo(
                 rs.getString(ID_FIELD_NAME),
                 rs.getDouble("precio"),
-                SupportedTipoActivo.valueOf(rs.getString("tipoActivo")),
+                TipoActivo.valueOf(rs.getString("tipoActivo")),
                 rs.getString("nombreActivoLargo")
         );
     }

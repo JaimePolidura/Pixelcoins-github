@@ -8,7 +8,7 @@ import es.jaimetruman.menus.Page;
 import es.jaimetruman.menus.configuration.MenuConfiguration;
 import es.jaimetruman.menus.menustate.AfterShow;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.activosinfo.vervalores.ComprarBolsaConfirmacionMenu;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
@@ -22,7 +22,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
 import static es.serversurvival._shared.utils.Funciones.*;
@@ -56,22 +55,29 @@ public final class CriptomonedasMenu extends Menu implements AfterShow {
     }
 
     private void onCriptomonedaItemClick(Player player, InventoryClickEvent event) {
-        if(!hasLoaded(event.getCurrentItem())) return;
+        try{
+            if(!hasLoaded(event.getCurrentItem())) return;
 
-        ItemStack itemClicked = event.getCurrentItem();
-        String precioString = ItemUtils.getLore(itemClicked, 1).split(" ")[1].replace(",", ".");
-        double precio = Double.parseDouble(precioString);
-        if(precio > this.jugador.getPixelcoins()){
-            player.sendMessage(DARK_RED + "No tienes las suficientes pixelcoins");
-            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
-            return;
+            ItemStack itemClicked = event.getCurrentItem();
+            String precioString = ItemUtils.getLore(itemClicked, 1).split(" ")[1]
+                    .replaceAll("\\.", "")
+                    .replace(",", ".");
+            double precio = Double.parseDouble(precioString);
+
+            if(precio > this.jugador.getPixelcoins()){
+                player.sendMessage(DARK_RED + "No tienes las suficientes pixelcoins");
+                player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
+                return;
+            }
+
+            String nombreActivo = ItemUtils.getLore(itemClicked, 0).split(" ")[1];
+
+            this.menuService.open(player, new ComprarBolsaConfirmacionMenu(
+                    nombreActivo, TipoActivo.CRIPTOMONEDAS, player.getName(), precio
+            ));
+        }catch (Exception e) {
+            e.printStackTrace();
         }
-
-        String nombreActivo = ItemUtils.getLore(itemClicked, 0).split(" ")[1];
-
-        this.menuService.open(player, new ComprarBolsaConfirmacionMenu(
-                nombreActivo, SupportedTipoActivo.CRIPTOMONEDAS, player.getName(), precio
-        ));
     }
 
     private boolean hasLoaded(ItemStack itemStack){
@@ -123,7 +129,7 @@ public final class CriptomonedasMenu extends Menu implements AfterShow {
     private void addPriceToItem(ItemStack item) {
         try {
             String nombreActivo = ItemUtils.getLore(item, 0).split(" ")[1];
-            double precio = SupportedTipoActivo.CRIPTOMONEDAS.getTipoActivoService().getPrecio(nombreActivo);
+            double precio = TipoActivo.CRIPTOMONEDAS.getTipoActivoService().getPrecio(nombreActivo);
 
             ItemUtils.setLore(item, 1, GOLD + "Precio: " + GREEN + FORMATEA.format(precio) + " PC");
         } catch (Exception e) {

@@ -4,11 +4,11 @@ import es.jaime.EventListener;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrderExecutorProxy;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenPremarketCommand;
-import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenUseCase;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.OrdenAbiertaEvento;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbiertaEvento;
@@ -38,14 +38,14 @@ import static org.bukkit.Sound.ENTITY_PLAYER_LEVELUP;
                 "ticker de la accion, solo se pueden empresas americanas, <cantidad> cantidad de accinoes a vender"
 )
 public class VenderCortoComandoRunner implements CommandRunnerArgs<VenderCortoComando> {
-    private final AbrirOrdenUseCase abrirOrdenUseCase;
     private final JugadoresService jugadoresService;
     private final ActivosInfoService activoInfoService;
+    private final VenderCortoUseCase venderCortoUseCase;
 
     public VenderCortoComandoRunner(){
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.abrirOrdenUseCase = new AbrirOrdenUseCase();
         this.activoInfoService = DependecyContainer.get(ActivosInfoService.class);
+        this.venderCortoUseCase = new VenderCortoUseCase();
     }
 
     @Override
@@ -57,29 +57,46 @@ public class VenderCortoComandoRunner implements CommandRunnerArgs<VenderCortoCo
                 .startValidating(cantidad, NaturalNumber)
                 .validateAll();
 
-        if(result.isFailed()){
+        if(comando.getCantidad() <= 0){
             player.sendMessage(DARK_RED + result.getMessage());
             return;
         }
 
-        double precio = this.activoInfoService.getByNombreActivo(ticker, SupportedTipoActivo.ACCIONES).getPrecio();
+        player.sendMessage(RED + "Cargando...");
 
-        if (precio == -1) {
-            Jugador jugador = this.jugadoresService.getByNombre(player.getName());
-            double dineroJugador = jugador.getPixelcoins();
-            double valorTotal = precio * cantidad;
-            double comision = Funciones.redondeoDecimales(Funciones.reducirPorcentaje(valorTotal, 100 - PORCENTAJE_CORTO), 2);
+        ActivoInfo activoInfoAVenderCorto = this.activoInfoService.getByNombreActivo(ticker, TipoActivo.ACCIONES);
+        String nombreActivoLargo = activoInfoAVenderCorto.getNombreActivoLargo();
+        double precio = activoInfoAVenderCorto.getPrecio();
 
-            if (comision > dineroJugador) {
-                player.sendMessage(DARK_RED + "No tienes el dinero suficiente para esa operacion");
-                return;
-            }
-
-            OrderExecutorProxy.execute(AbrirOrdenPremarketCommand.of(player.getName(), ticker, cantidad, TipoAccion.CORTO_VENTA, null), () -> {
-                abrirOrdenUseCase.abrirOrden(AbrirOrdenPremarketCommand.of(player.getName(), ticker, cantidad, TipoAccion.CORTO_VENTA, null));
-            });
-        } else {
+        if(precio == -1){
             player.sendMessage(DARK_RED + "El nombre que has puesto no existe. Para consultar los tickers: /bolsa valores o en internet");
+            return;
+        }
+
+        Jugador jugador = this.jugadoresService.getByNombre(player.getName());
+        double dineroJugador = jugador.getPixelcoins();
+        double valorTotal = precio * cantidad;
+        double comision = Funciones.redondeoDecimales(Funciones.reducirPorcentaje(valorTotal, 100 - PORCENTAJE_CORTO), 2);
+
+        if (comision > dineroJugador) {
+            player.sendMessage(DARK_RED + "No tienes el dinero suficiente para esa operacion");
+            return;
+        }
+
+        var executedInMarket = OrderExecutorProxy.execute(AbrirOrdenPremarketCommand.of(player.getName(), ticker, cantidad, TipoAccion.CORTO_VENTA, null), () -> {
+            this.venderCortoUseCase.venderEnCortoBolsa(player.getName(), ticker, cantidad);
+        });
+
+        if(executedInMarket){
+            Funciones.enviarMensajeYSonido((Player) player, GOLD + "Te has puesto corto en " +nombreActivoLargo  + " en " +
+                    nombreActivoLargo + " cada una a " + GREEN + FORMATEA.format(precio) + " PC " +
+                    GOLD + "Para recomprar las acciones: /bolsa comprarcorto <id>. /bolsa cartera" + GOLD +
+                    "Ademas se te ha cobrado un "+PORCENTAJE_CORTO+"% del valor total de la venta (" + GREEN  + FORMATEA.format(valorTotal)
+                    + " PC" + GOLD + ") por lo cual: " + RED + "-" + FORMATEA.format(comision) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
+
+            Bukkit.broadcastMessage(GOLD + player.getName() + " ha vendido en corto " + cantidad + " acciones en " + nombreActivoLargo);
+        }else{
+            player.sendMessage(GOLD + "La compra no se ha podida ejecutar por que el mercado esta cerrado, cuando abra se ejecutara");
         }
     }
 

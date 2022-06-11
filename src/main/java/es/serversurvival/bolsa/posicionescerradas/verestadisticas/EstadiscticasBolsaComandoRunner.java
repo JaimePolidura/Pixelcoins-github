@@ -3,6 +3,7 @@ package es.serversurvival.bolsa.posicionescerradas.verestadisticas;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
 import org.bukkit.ChatColor;
@@ -28,7 +29,10 @@ public class EstadiscticasBolsaComandoRunner implements CommandRunnerNonArgs {
         player.sendMessage(ChatColor.GOLD + "--------------------------------");
         player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "     ESTADISTICAS");
 
-        List<PosicionCerrada> topOperaicnesMasRentables = this.posicionesCerradasService.findByJugador(player.getName(), SORT_BY_RENTABILIDADES_DESC);
+        List<PosicionCerrada> topOperaicnesMasRentables = this.posicionesCerradasService.findByJugador(player.getName(), SORT_BY_RENTABILIDADES_DESC)
+                .stream()
+                .limit(5)
+                .toList();
         player.sendMessage(ChatColor.GOLD + "Mejores operaciones:");;
         for(int i = 0; i < topOperaicnesMasRentables.size() || i < LIMIT; i++){
             if(topOperaicnesMasRentables.get(i).calculateRentabildiad() >= 0 ){
@@ -36,16 +40,19 @@ public class EstadiscticasBolsaComandoRunner implements CommandRunnerNonArgs {
 
                 String nombre = operacionCerrada.getNombreActivo();
                 int cantidad = operacionCerrada.getCantidad();
-                double apertura = operacionCerrada.getPrecioApertura();
-                double cierre = operacionCerrada.getPrecioCierre();
-                double rentabilidad = operacionCerrada.calculateRentabildiad();
+                double apertura = Funciones.redondeoDecimales(operacionCerrada.getPrecioApertura(), 2);
+                double cierre = Funciones.redondeoDecimales(operacionCerrada.getPrecioCierre(), 2);
+                double rentabilidad = Funciones.redondeoDecimales(operacionCerrada.calculateRentabildiad(), 2);
 
                 player.sendMessage(ChatColor.GOLD + "" + (i+1) + "º " + nombre + ": " + ChatColor.GREEN + "+" + rentabilidad + "% -> +" +
                         FORMATEA.format((cantidad * cierre) - (cantidad * apertura)) + " PC");
             }
         }
 
-        List<PosicionCerrada> topOpereacionesMenosRentables = this.posicionesCerradasService.findByJugador(player.getName(), SORT_BY_RENTABILIDADES_ASC);
+        List<PosicionCerrada> topOpereacionesMenosRentables = this.posicionesCerradasService.findByJugador(player.getName(), SORT_BY_RENTABILIDADES_ASC)
+                .stream()
+                .limit(5)
+                .toList();
         player.sendMessage(ChatColor.GOLD + "Peores operaciones:");
         for(int i = 0; i < topOpereacionesMenosRentables.size() || i < LIMIT; i++){
             if(topOpereacionesMenosRentables.get(i).calculateRentabildiad() < 0){
@@ -53,9 +60,9 @@ public class EstadiscticasBolsaComandoRunner implements CommandRunnerNonArgs {
 
                 String nombre = operacionCerrada.getNombreActivo();
                 int cantidad = operacionCerrada.getCantidad();
-                double apertura = operacionCerrada.getPrecioApertura();
-                double cierre = operacionCerrada.getPrecioCierre();
-                double rentabilidad = operacionCerrada.calculateRentabildiad();
+                double apertura = Funciones.redondeoDecimales(operacionCerrada.getPrecioApertura(), 2);
+                double cierre = Funciones.redondeoDecimales(operacionCerrada.getPrecioCierre(), 2);
+                double rentabilidad = Funciones.redondeoDecimales(operacionCerrada.calculateRentabildiad(), 2);
 
                 player.sendMessage(ChatColor.GOLD + "" + (i + 1) + "º " + nombre  + ": " + ChatColor.RED + rentabilidad + "% -> " +
                         FORMATEA.format((cantidad * cierre) - (cantidad * apertura)) + " PC ");

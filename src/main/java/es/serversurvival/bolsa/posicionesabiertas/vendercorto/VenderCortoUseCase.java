@@ -2,22 +2,18 @@ package es.serversurvival.bolsa.posicionesabiertas.vendercorto;
 
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbiertaEvento;
-import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
-import es.serversurvival.empresas.empleados.contratar.JugadorContratado;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import lombok.AllArgsConstructor;
 
 import static es.serversurvival._shared.utils.Funciones.*;
-import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo.*;
+import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo.*;
 import static es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce.PORCENTAJE_CORTO;
 import static es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion.*;
 

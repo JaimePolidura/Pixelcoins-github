@@ -4,9 +4,10 @@ import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
-import org.bukkit.ChatColor;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import org.bukkit.command.CommandSender;
+
+import static org.bukkit.ChatColor.*;
 
 @Command(
         value = "bolsa precio",
@@ -25,13 +26,15 @@ public class PrecioBolsaComandoExecutor implements CommandRunnerArgs<PrecioBolsa
     public void execute(PrecioBolsaComando comando, CommandSender player) {
         String ticker = comando.getTicker();
 
-        var activoInfo = activoInfoService.getByNombreActivo(ticker, SupportedTipoActivo.ACCIONES);
+        player.sendMessage(RED + "Cargando...");
+
+        var activoInfo = activoInfoService.getByNombreActivo(ticker, TipoActivo.ACCIONES);
 
         if(activoInfo.getPrecio() == -1){
-            player.sendMessage(ChatColor.DARK_RED + "Ticker: " + ticker + " no encontrado. Para consultarlo /bolsa valores o en es.investing.com. " +
+            player.sendMessage(DARK_RED + "Ticker: " + ticker + " no encontrado. Para consultarlo /bolsa valores o en es.investing.com. " +
                     "Recuerda que solo se puede acciones que cotizen en EEUU");
         }else{
-            player.sendMessage(ChatColor.GOLD + "El precio de " + activoInfo.getNombreActivoLargo() + " es: " + ChatColor.GREEN +
+            player.sendMessage(GOLD + "El precio de " + activoInfo.getNombreActivoLargo() + " es: " + GREEN +
                     activoInfo.getPrecio() + " $");
         }
     }

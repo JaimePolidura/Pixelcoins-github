@@ -99,8 +99,8 @@ public final class Funciones {
         return Math.round((beneficios / ingresos) * 100);
     }
 
-    public static double diferenciaPorcntual(double base, double aComparar){
-        return (aComparar - base) / (base / 100);
+    public static double diferenciaPorcntual(double cInicial, double cFinal){
+        return (cFinal / cInicial) * 100 - 100;
     }
 
     public static double redondeoDecimales(double numero, int numeroDecimales) {

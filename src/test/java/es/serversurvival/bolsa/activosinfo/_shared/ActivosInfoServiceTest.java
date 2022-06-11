@@ -5,16 +5,13 @@ import es.serversurvival.bolsa.activosinfo.DepencyContainerTipoActivoInfoMocks;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfoRepository;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.List;
-import java.util.Optional;
 
 import static es.serversurvival.bolsa.activosinfo.ActivosInfoTestMother.createActivoInfoAcciones;
 import static org.assertj.core.api.Assertions.*;
@@ -75,12 +72,12 @@ public final class ActivosInfoServiceTest {
 
     @Test
     public void getByNombreActivo(){
-        ActivoInfo activoInfo = this.service.getByNombreActivo("AMZN", SupportedTipoActivo.ACCIONES);
+        ActivoInfo activoInfo = this.service.getByNombreActivo("AMZN", TipoActivo.ACCIONES);
         assertThat(activoInfo).isNotNull().matches(a -> a.getNombreActivo().equalsIgnoreCase("AMZN"));
 
-        var activoInfoAPICall = this.service.getByNombreActivo("AMZN", SupportedTipoActivo.ACCIONES);
+        var activoInfoAPICall = this.service.getByNombreActivo("AMZN", TipoActivo.ACCIONES);
         assertThat(activoInfoAPICall.getNombreActivo()).isEqualTo("AMZN");
-        assertThat(activoInfoAPICall.getTipoActivo() == SupportedTipoActivo.ACCIONES);
+        assertThat(activoInfoAPICall.getTipoActivo() == TipoActivo.ACCIONES);
         assertThat(activoInfoAPICall.getPrecio() > 0);
     }
 }

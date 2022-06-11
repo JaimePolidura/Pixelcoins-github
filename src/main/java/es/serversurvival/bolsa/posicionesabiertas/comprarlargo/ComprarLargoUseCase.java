@@ -1,13 +1,12 @@
 package es.serversurvival.bolsa.posicionesabiertas.comprarlargo;
 
 import es.jaime.EventBus;
-import es.jaime.javaddd.domain.exceptions.CannotBeNull;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbiertaEvento;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
@@ -30,8 +29,8 @@ public class ComprarLargoUseCase {
         this.eventBus = DependecyContainer.get(EventBus.class);
     }
 
-    public void comprarLargo(String jugadorNombre, SupportedTipoActivo tipoActivo, String nombreActivo, int cantidad) {
-        var activoToComprar = this.activoInfoService.getByNombreActivo(nombreActivo,tipoActivo);
+    public void comprarLargo(String jugadorNombre, TipoActivo tipoActivo, String nombreActivo, int cantidad) {
+        var activoToComprar = this.activoInfoService.getByNombreActivo(nombreActivo, tipoActivo);
         this.ensureActivoInfoNotNull(activoToComprar);
         var jugador = jugadoresService.getByNombre(jugadorNombre);
         double totalPrice = activoToComprar.getPrecio() * cantidad;

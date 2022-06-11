@@ -2,18 +2,12 @@ package es.serversurvival.bolsa.posicionesabiertas.comprarlargo;
 
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.serversurvival.MockitoArgEqualsMatcher;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
-import es.serversurvival.bolsa.activosinfo.ActivosInfoTestMother;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbiertaEvento;
-import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
-import es.serversurvival.jugadores.JugadoresTestMother;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static es.serversurvival.MockitoArgEqualsMatcher.of;
 import static es.serversurvival.bolsa.activosinfo.ActivosInfoTestMother.createActivoInfoAcciones;
-import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo.*;
+import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo.*;
 import static es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion.LARGO;
 import static es.serversurvival.jugadores.JugadoresTestMother.createJugador;
 import static org.assertj.core.api.Assertions.*;

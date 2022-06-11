@@ -5,13 +5,12 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.Cache;
 import es.serversurvival._shared.cache.LRUCache;
 import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
+import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionesAbiertasRepository;
 import lombok.AllArgsConstructor;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
@@ -29,7 +28,7 @@ public class PosicionesAbiertasSerivce {
         this.cache = new LRUCache<>(150);
     }
 
-    public UUID save(String jugador, SupportedTipoActivo tipoAcivo, String nombreActivo, int cantidad,
+    public UUID save(String jugador, TipoActivo tipoAcivo, String nombreActivo, int cantidad,
                      double precioApertura, TipoPosicion tipoPosicion) {
 
         UUID idPosicion = UUID.randomUUID();

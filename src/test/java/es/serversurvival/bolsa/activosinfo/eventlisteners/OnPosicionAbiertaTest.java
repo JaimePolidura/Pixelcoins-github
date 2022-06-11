@@ -4,9 +4,7 @@ import es.serversurvival.MockitoArgEqualsMatcher;
 import es.serversurvival.bolsa.activosinfo.DepencyContainerTipoActivoInfoMocks;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbiertaEvento;
-import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +14,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static es.serversurvival.bolsa.activosinfo.DepencyContainerTipoActivoInfoMocks.accionesApiService;
-import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.SupportedTipoActivo.*;
+import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo.*;
 import static es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion.CORTO;
 import static org.mockito.Mockito.*;
 
