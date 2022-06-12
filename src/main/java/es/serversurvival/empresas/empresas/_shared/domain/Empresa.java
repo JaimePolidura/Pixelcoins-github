@@ -61,7 +61,7 @@ public final class Empresa {
     }
 
     public Empresa incrementIngresosBy(double ingresosToIncrement){
-        return new Empresa(empresaId, nombre, owner, this.pixelcoins, this.ingresos - ingresosToIncrement,
+        return new Empresa(empresaId, nombre, owner, this.pixelcoins, this.ingresos + ingresosToIncrement,
                 gastos, icono, descripcion, cotizada, accionesTotales);
     }
 

@@ -13,6 +13,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public final class ContratarConfirmacionMenu extends ConfirmacionMenu {
@@ -46,6 +47,7 @@ public final class ContratarConfirmacionMenu extends ConfirmacionMenu {
         String descStrinAceptar = ChatColor.GOLD + "Solicitud de contrato de la empresa " + this.empresa + " para trabajar como " +
                 this.cargo + " , con un sueldo de " + ChatColor.GREEN + this.sueldo + " PC" + ChatColor.GOLD + "/" + tipoSueldo.nombre;
         List<String> lore = Funciones.dividirDesc(descStrinAceptar, 40);
+        lore = lore.stream().map(line -> ChatColor.GOLD + line).collect(Collectors.toList());
 
         return ItemBuilder.of(Material.GREEN_WOOL)
                 .title(ChatColor.GREEN + "" + ChatColor.BOLD + "ACEPTAR")

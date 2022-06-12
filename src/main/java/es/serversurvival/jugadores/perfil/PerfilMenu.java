@@ -5,6 +5,7 @@ import es.jaimetruman.menus.Menu;
 import es.jaimetruman.menus.MenuService;
 import es.jaimetruman.menus.configuration.MenuConfiguration;
 import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas.vercartera.VerBolsaCarteraMenu;
 import es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static es.serversurvival._shared.utils.CollectionUtils.getPoisitionOfKeyInMap;
 import static es.serversurvival._shared.utils.Funciones.*;
@@ -121,16 +123,16 @@ public final class PerfilMenu extends Menu {
     private ItemStack buildItemBolsa () {
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK VER TUS ACCIONES";
 
-        List<PosicionCerrada> posicionCerradas = posicionesCerradasService.findByJugador(jugador.getNombre());
+        List<PosicionCerrada> posicionCerradas = posicionesCerradasService.findByJugador(jugador.getNombre()).stream()
+                .limit(7).toList();
         List<String> lore = new ArrayList<>();
         lore.add("   ");
         lore.add(ChatColor.GOLD + "Tus posiciones cerradas:");
 
-        for(int i = 0; i < posicionCerradas.size() || (i < 7 && !posicionCerradas.isEmpty()); i++){
-            PosicionCerrada pos = posicionCerradas.get(i);
-
-            lore.add(ChatColor.GOLD + "" + pos.getNombreActivo() + " -> " + (pos.calculateRentabildiad() >= 0 ? GREEN : RED) + pos.calculateRentabildiad()
-                    + "% : " +  ( (int) ((pos.getCantidad() * pos.getPrecioApertura()) -  pos.getCantidad() * pos.getPrecioCierre())) + " PC");
+        for (PosicionCerrada pos : posicionCerradas) {
+            lore.add(ChatColor.GOLD + "" + pos.getNombreActivo() + " -> " + (pos.calculateRentabildiad() >= 0 ? GREEN : RED) +
+                    redondeoDecimales(pos.calculateRentabildiad(), 2) + "% : " + redondeoDecimales((int) ((pos.getCantidad() *
+                    pos.getPrecioApertura()) - pos.getCantidad() * pos.getPrecioCierre()), 2) + " PC");
         }
 
         return ItemBuilder.of(Material.BOOK).title(displayName).lore(lore).build();

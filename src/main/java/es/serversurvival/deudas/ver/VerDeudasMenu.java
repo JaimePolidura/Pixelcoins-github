@@ -11,6 +11,7 @@ import es.serversurvival.deudas._shared.application.DeudasService;
 import es.serversurvival.deudas._shared.domain.Deuda;
 import es.serversurvival.deudas.cancelar.CancelarDeudaUseCase;
 import es.serversurvival.deudas.pagarTodo.PagarDeudaCompletaUseCase;
+import es.serversurvival.jugadores.perfil.PerfilMenu;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -87,9 +88,9 @@ public final class VerDeudasMenu extends Menu {
         player.sendMessage(GOLD + "Has pagado cancelado la deuda");
         player.closeInventory();
     }
-
+    
     private void goBackToProfile(Player player, InventoryClickEvent event) {
-        //TODO
+        this.menuService.open(player, new PerfilMenu(player.getName()));
     }
 
     private List<ItemStack> buildItemsDeudas() {

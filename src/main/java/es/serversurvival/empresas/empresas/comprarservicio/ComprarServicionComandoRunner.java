@@ -27,7 +27,6 @@ public class ComprarServicionComandoRunner implements CommandRunnerArgs<ComprarS
         String empresaNombre = comprarServicionComando.getEmpresa();
         double precio = comprarServicionComando.getPrecio();
 
-        //TODO Mejorar para que al enviar el mensaje al owner no tengamos que devolver nada en el metodo
         Empresa empresa = useCase.comprar(player.getName(), empresaNombre, precio);
 
         player.sendMessage(GOLD + "Has pagado " + GREEN + precio + " PC " + GOLD + " a la empresa: " + empresaNombre + " por su servicio");

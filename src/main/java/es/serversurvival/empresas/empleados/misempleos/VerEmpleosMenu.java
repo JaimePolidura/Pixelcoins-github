@@ -12,6 +12,7 @@ import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empleados.irse.IrseEmpresaUseCase;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
+import es.serversurvival.jugadores.perfil.PerfilMenu;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -36,7 +37,7 @@ public final class VerEmpleosMenu extends Menu {
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.player = player;
         this.menuService = DependecyContainer.get(MenuService.class);
-        this.irseEmpresaUseCase = DependecyContainer.get(IrseEmpresaUseCase.class);
+        this.irseEmpresaUseCase = new IrseEmpresaUseCase();
     }
 
     @Override
@@ -67,7 +68,7 @@ public final class VerEmpleosMenu extends Menu {
     }
 
     private void goBackToProfileMenu(Player player, InventoryClickEvent event) {
-        //TODO
+        this.menuService.open(player, new PerfilMenu(player.getName()));
     }
 
     private void dejarEmpleo(Player player, InventoryClickEvent event) {
@@ -75,6 +76,8 @@ public final class VerEmpleosMenu extends Menu {
 
         this.irseEmpresaUseCase.irse(player.getName(), empresaNombre);
         this.menuService.close(player);
+
+        player.sendMessage(GOLD + "Te has ido del trabajo");
     }
 
     private List<ItemStack> buildItemsEmpleos() {
@@ -94,7 +97,7 @@ public final class VerEmpleosMenu extends Menu {
                         "   ",
                         GOLD + "Empresa: " + empleado.getEmpresa(),
                         GOLD + "Cargo: " + empleado.getCargo(),
-                        GOLD + "Sueldo: " + GREEN + FORMATEA.format(empleado.getSueldo()) + "/" + empleado.getTipoSueldo().nombre,
+                        GOLD + "Sueldo: " + GREEN + FORMATEA.format(empleado.getSueldo()) + "PC" + "/" + empleado.getTipoSueldo().nombre,
                         GOLD + "Ultima vez que te pagaron: " + empleado.getFechaUltimaPaga(),
                         "   ",
                         GOLD + "ID: " + empleado.getEmpleadoId()

@@ -3,12 +3,15 @@ package es.serversurvival.empresas.ofertasaccionesserver.verofertasaccioneserver
 import es.jaimetruman.ItemBuilder;
 import es.jaimetruman.ItemUtils;
 import es.jaimetruman.menus.Menu;
+import es.jaimetruman.menus.MenuService;
 import es.jaimetruman.menus.configuration.MenuConfiguration;
+import es.jaimetruman.menus.menubuilder.MenuBuilderService;
 import es.jaimetruman.menus.modules.pagination.PaginationConfiguration;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.empresas.ofertasaccionesserver.cancelarofertaccionserver.CancelarOfertaAccionServerUseCase;
+import es.serversurvival.jugadores.perfil.PerfilMenu;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -26,11 +29,13 @@ public final class VerOfertasAccionesServerMenu extends Menu {
     private static final String TITULO = DARK_RED + "" + BOLD + "    MERCADO DE ACCIONES";
 
     private final OfertasAccionesServerService ofertasAccionesServerService;
+    private final MenuService menuService;
     private final Player player;
 
     public VerOfertasAccionesServerMenu(Player player) {
         this.ofertasAccionesServerService = DependecyContainer.get(OfertasAccionesServerService.class);
         this.player = player;
+        this.menuService = DependecyContainer.get(MenuService.class);
     }
 
     @Override
@@ -79,7 +84,7 @@ public final class VerOfertasAccionesServerMenu extends Menu {
     }
 
     private void goBackToProfileMenu(Player player, InventoryClickEvent event) {
-        //TODO
+        this.menuService.open(player, new PerfilMenu(player.getName()));
     }
 
     private List<ItemStack> buildItemsOfertas() {

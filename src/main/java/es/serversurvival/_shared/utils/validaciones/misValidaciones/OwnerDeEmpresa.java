@@ -7,12 +7,10 @@ import main.validators.Validator;
 
 public final class OwnerDeEmpresa implements Validator {
     private final String messageOnFailed;
-    private EmpresasService empresasService;
     private String jugador;
 
     public OwnerDeEmpresa(String messageOnFailed) {
         this.messageOnFailed = messageOnFailed;
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
     }
 
     public OwnerDeEmpresa(String messageOnFailed, String jugador) {
@@ -30,10 +28,13 @@ public final class OwnerDeEmpresa implements Validator {
         try{
             String empresaNombre = String.valueOf(o);
 
-            return this.empresasService.getByNombre(empresaNombre).getOwner().equalsIgnoreCase(jugador) ?
-                    ValidationResult.success() :
-                    ValidationResult.failed(messageOnFailed);
+            return DependecyContainer.get(EmpresasService.class)
+                    .getByNombre(empresaNombre).getOwner().equalsIgnoreCase(jugador) ?
+                        ValidationResult.success() :
+                        ValidationResult.failed(messageOnFailed);
         }catch (Exception e) {
+            e.printStackTrace();
+
             return ValidationResult.failed(messageOnFailed);
         }
     }

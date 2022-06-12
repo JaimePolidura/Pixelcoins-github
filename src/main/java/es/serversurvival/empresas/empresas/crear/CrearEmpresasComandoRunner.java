@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 @Command(
         value = "empresas crear",
-        args = {"nombre", "descripccion..."},
+        args = {"nombre", "...descripccion"},
         explanation = "Crear empresa en la que podras contratar jugadores, facturar etc"
 )
 public class CrearEmpresasComandoRunner implements CommandRunnerArgs<CrearEmpresasComando> {
@@ -30,7 +30,6 @@ public class CrearEmpresasComandoRunner implements CommandRunnerArgs<CrearEmpres
         sender.sendMessage(ChatColor.GOLD + "Has creado una empresa! " + ChatColor.GOLD + "comandos utiles: " + ChatColor.AQUA + "/empresas depositar, /empresas contratar, /empresas logotipo, /empresas vertodas, /empresas miempresa /empresas editarnombre m?s: /ayuda empresario o /empresas ayuda");
         ((Player) sender).playSound(((Player) sender).getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
-        //TODO cambiar a que escuche un evento
         Bukkit.getServer().broadcastMessage(ChatColor.GOLD + sender.getName() + " ha creado una nueva empresa: " + ChatColor.DARK_AQUA + nombreEmpresa);
     }
 }

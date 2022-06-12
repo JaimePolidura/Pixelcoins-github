@@ -41,7 +41,7 @@ public final class VenderEmpresaConfirmacionMenu extends ConfirmacionMenu {
 
     @Override
     public String titulo() {
-        return DARK_RED + "" + BOLD + "solicitud compra empresa";
+        return DARK_RED + "" + BOLD + "Solicitud venta empresa";
     }
 
     @Override

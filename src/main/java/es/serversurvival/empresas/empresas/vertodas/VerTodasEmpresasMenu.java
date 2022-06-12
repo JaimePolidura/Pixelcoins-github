@@ -3,6 +3,7 @@ package es.serversurvival.empresas.empresas.vertodas;
 import es.jaimetruman.ItemBuilder;
 import es.jaimetruman.ItemUtils;
 import es.jaimetruman.menus.Menu;
+import es.jaimetruman.menus.MenuService;
 import es.jaimetruman.menus.configuration.MenuConfiguration;
 import es.jaimetruman.menus.modules.pagination.PaginationConfiguration;
 import es.serversurvival._shared.DependecyContainer;
@@ -11,7 +12,9 @@ import es.serversurvival.empresas.empleados._shared.application.EmpleadosService
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
+import es.serversurvival.empresas.empresas.miempresa.VerEmpresaMenu;
 import es.serversurvival.empresas.empresas.solicitarservicio.SolicitarServicioUseCase;
+import es.serversurvival.jugadores.perfil.PerfilMenu;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -32,12 +35,14 @@ public final class VerTodasEmpresasMenu extends Menu {
     private final EmpleadosService empleadosService;
     private final SolicitarServicioUseCase solicitarServicioUseCase;
     private final Player player;
+    private final MenuService menuService;
 
     public VerTodasEmpresasMenu(Player player) {
         this.player = player;
         this.empresasService = DependecyContainer.get(EmpresasService.class);
         this.empleadosService = DependecyContainer.get(EmpleadosService.class);
         this.solicitarServicioUseCase = new SolicitarServicioUseCase();
+        this.menuService = DependecyContainer.get(MenuService.class);
     }
 
     @Override
@@ -68,14 +73,15 @@ public final class VerTodasEmpresasMenu extends Menu {
     }
 
     private void goBackToProfileMenu(Player player, InventoryClickEvent event) {
-        //TODO
+        this.menuService.open(player, new PerfilMenu(player.getName()));
     }
 
     private void onItemEmpresaClicked(Player player, InventoryClickEvent event) {
         String empresaNombre = ItemUtils.getLore(event.getCurrentItem(), 0).split(" ")[1];
+        Empresa empresa = this.empresasService.getByNombre(empresaNombre);
 
-        if(this.empresasService.isOwner(player.getName(), empresaNombre)){
-            //TODO Ver empresa menu
+        if(empresa.getOwner().equalsIgnoreCase(player.getName())){
+            this.menuService.open(player, new VerEmpresaMenu(empresa));
         }else{
             this.solicitarServicioUseCase.solicitar(player.getName(), empresaNombre);
             enviarMensajeYSonido(player, ChatColor.GOLD + "Has solicitado el servicio", Sound.ENTITY_PLAYER_LEVELUP);
@@ -101,7 +107,7 @@ public final class VerTodasEmpresasMenu extends Menu {
                         GOLD + "" + BOLD + "" + UNDERLINE + "CLICK PARA VER TU EMPRESA" :
                         GOLD + "" + BOLD + "" + UNDERLINE + "CLICK PARA SOLICITAR UN SERVICIO")
                 .lore(List.of(
-                        GOLD + "Empresa: " + BOLD + empresa.getNombre(),
+                        GOLD + "Empresa: " + empresa.getNombre(),
                         GOLD + "Owner: " + GOLD + empresa.getOwner(),
                         empresa.isCotizada() ? GOLD + "Cotiza en bolsa" : GOLD + "No cotiza en bolsa",
                         "     ",

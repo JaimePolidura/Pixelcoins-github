@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 
 @Command(
         value = "empresas editardescripccion",
-        args = {"empresa", "descripcion..."},
+        args = {"empresa", "...descripcion"},
         explanation = "Editar la descripccion de tu empresa"
 )
 public class EditarDescComandoRunner implements CommandRunnerArgs<EditarDescComando> {
