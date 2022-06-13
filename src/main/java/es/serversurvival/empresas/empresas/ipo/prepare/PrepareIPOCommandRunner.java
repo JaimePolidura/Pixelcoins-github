@@ -1,7 +1,13 @@
 package es.serversurvival.empresas.empresas.ipo.prepare;
 
+import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
+import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
+import es.jaimetruman.menus.MenuService;
+import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
+import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.empresas.ipo.IPOCommand;
 import main.ValidationResult;
 import main.ValidatorService;
@@ -21,36 +27,40 @@ import static org.bukkit.ChatColor.*;
                 "Por cada venta de la empresa a jugadores tu empresa recaudara las pixelcoins. Para mas ayuda pregunta al admin"
 )
 public final class PrepareIPOCommandRunner implements CommandRunnerArgs<IPOCommand> {
-    private final String MESSAGE_ON_WRONG_ACCIONES_OWNER = "Tus acciones no pueden ser mayores a las totales";
+    private final EmpresasService empresasService;
+    private final MenuService menuService;
+
+    public PrepareIPOCommandRunner() {
+        this.empresasService = DependecyContainer.get(EmpresasService.class);
+        this.menuService = DependecyContainer.get(MenuService.class);
+    }
 
     @Override
     public void execute(IPOCommand command, CommandSender sender) {
         Player player = (Player) sender;
+        String empresaNombre = command.getEmpresa();
+        String jugadorNombre = sender.getName();
+        int accionesTotales = command.getAccionesTotales();
+        int accionesOwner = command.getAccionesOwner();
+        double precioPorAccion = command.getPrecioPorAccion();
+        Empresa empresa = this.empresasService.getByNombre(empresaNombre);
 
-        ValidationResult validation = ValidatorService.startValidating(command.getEmpresa(), OwnerDeEmpresa)
-                .and(command.getAccionesOwner(), NaturalNumber, MaxValue.of(command.getAccionesTotales() - 1, MESSAGE_ON_WRONG_ACCIONES_OWNER))
-                .and(command.getPrecioPorAccion(), NaturalNumber, MaxValue.of(1, "Precio maximo 1"))
-                .and(command.getAccionesTotales(), NaturalNumber, MaxValue.of(2, "Acciones totales maximo 2"))
-                .validateAll();
-
-        if(validation.isFailed()){
-            player.sendMessage(DARK_RED + validation.getMessage());
-            return;
-        }
+        if(!empresa.getOwner().equalsIgnoreCase(jugadorNombre))
+            throw new NotTheOwner("Empresa no encontrada o no eres el owner");
+        if(accionesTotales <= 0 || accionesOwner < 0 || precioPorAccion <= 0)
+            throw new IllegalQuantity("La cantidad de las acciones y el precio ha de ser un numero positivo");
+        if(accionesOwner >= accionesTotales)
+            throw new IllegalQuantity("Las acciones que van a ser tuyas tienen que ser menores que el total");
+        if(accionesTotales <= 2)
+            throw new IllegalQuantity("El minimo de acciones totales han de ser 2");
+        if(empresa.isCotizada())
+            throw new IllegalStateException("La empresa que quieres sacar a bolsa ya cotiza en bolsa");
 
         double marketCap = command.getAccionesTotales() * command.getPrecioPorAccion();
         double pixelcoinsOwner = command.getAccionesOwner() * command.getPrecioPorAccion();
-        double ownershipPercentaje = redondeoDecimales(command.getAccionesOwner() / command.getAccionesTotales(), 1);
-        double pixelcoinsEmpresa = marketCap - pixelcoinsOwner;
 
-        TextComponent message = new TextComponent(String.format(
-                GOLD + "Seguro que quieres sacar a bolsa la empresa %s. Tendra una capitalizacion de " + GREEN + "%s PC" +
-                        GOLD + ". Seras el owner de "+AQUA+"%s %"+GOLD+" con un valor total de "+GREEN+"%s PC",
-                command.getEmpresa(), marketCap, ownershipPercentaje, pixelcoinsEmpresa
+        this.menuService.open(player, new EmpresaIPOConfirmMenu(
+                empresa, accionesTotales, precioPorAccion, accionesOwner
         ));
-
-        player.spigot().sendMessage(message);
-        message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("empresas confirmipo %s %s %s %s",
-                command.getEmpresa(), command.getAccionesTotales(), command.getAccionesOwner(), command.getPrecioPorAccion())));
     }
 }

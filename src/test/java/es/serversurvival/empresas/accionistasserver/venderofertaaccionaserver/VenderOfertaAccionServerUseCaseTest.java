@@ -4,15 +4,11 @@ import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.serversurvival.MockitoArgEqualsMatcher;
-import es.serversurvival.empresas.accionistasserver.AccionistasServerTestMother;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
-import es.serversurvival.empresas.accionistasserver._shared.domain.TipoAccionista;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import es.serversurvival.empresas.ofertasaccionesserver.venderofertaaccionaserver.NuevaOfertaAccionServer;
 import es.serversurvival.empresas.ofertasaccionesserver.venderofertaaccionaserver.VenderOfertaAccionServerUseCase;
-import es.serversurvival.jugadores._shared.application.JugadoresService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,14 +44,14 @@ public final class VenderOfertaAccionServerUseCaseTest {
     @Test
     public void shouldVender(){
         AccionistaServer accionistaServer = createAccionnistaTipoJugaodor("jaime", "empresa", 1);
-        UUID accionEmpresaServer = accionistaServer.getAccionEmpresaServerId();
+        UUID accionEmpresaServer = accionistaServer.getAccionistaServerId();
         when(this.accionistasEmpresasServerService.getById(accionEmpresaServer)).thenReturn(accionistaServer);
 
         this.useCase.vender("jaime", accionEmpresaServer, 1, 1);
 
         verify(this.ofertasAccionesServerService, times(1)).save(
                 argThat(of("jaime")), argThat(of("empresa")), anyDouble(), anyInt(), argThat(of(JUGADOR)), anyDouble(),
-                argThat(of(accionistaServer.getAccionEmpresaServerId()))
+                argThat(of(accionistaServer.getAccionistaServerId()))
         );
 
         verify(this.eventBus, times(1)).publish(argThat(of(

@@ -110,7 +110,7 @@ public final class ComprarOfertaMercadoUseCaseTest {
         verify(this.accionistasServerService, times(1)).save(
                 argThat(of("comprador")), argThat(of(JUGADOR)), argThat(of("empresa")), anyInt(), anyDouble()
         );
-        verify(this.accionistasServerService, times(1)).deleteById(accionistaVendedor.getAccionEmpresaServerId());
+        verify(this.accionistasServerService, times(1)).deleteById(accionistaVendedor.getAccionistaServerId());
         verify(this.jugadoresService, times(1)).save(argThat(of(
                 comprador.decrementPixelcoinsBy(20 * 2).incrementGastosBy(20 * 2)
         )));

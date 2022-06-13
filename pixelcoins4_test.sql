@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `accionistasserver` (
-  `accionEmpresaServerId` varchar(36) NOT NULL,
+  `accionistaServerId` varchar(36) NOT NULL,
   `nombreAccionista` varchar(16) NOT NULL,
   `tipoAccionista` varchar(7) NOT NULL,
   `empresa` varchar(16) NOT NULL,

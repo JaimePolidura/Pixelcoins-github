@@ -54,7 +54,7 @@ public final class Empresa {
         return new Empresa(empresaId, nombre, owner, this.pixelcoins, this.ingresos,
                 gastos, icono, desc, cotizada, accionesTotales);
     }
-
+    
     public Empresa withNombre(String nombre){
         return new Empresa(empresaId, nombre, owner, this.pixelcoins, this.ingresos,
                 gastos, icono, descripcion, cotizada, accionesTotales);

@@ -32,7 +32,7 @@ public final class VenderAccionEmpresa extends NumberSelectorMenu {
     @Override
     public void onAccept(Player player, InventoryClickEvent event) {
         double precioVenta = super.getPropertyDouble("cantidad");
-        venderOfertaUseCase.vender(player.getName(),this.accionEmpresaAVender.getAccionEmpresaServerId(),
+        venderOfertaUseCase.vender(player.getName(),this.accionEmpresaAVender.getAccionistaServerId(),
                 precioVenta, this.accionEmpresaAVender.getCantidad());
 
         enviarMensajeYSonido(player, GOLD + "Al ser un accion de una empresa del servidor de minecraft. Se ha puesta la oferta de venta en el mercado de acciones. Para consultar el mercado: " + AQUA + "/empresas mercado",

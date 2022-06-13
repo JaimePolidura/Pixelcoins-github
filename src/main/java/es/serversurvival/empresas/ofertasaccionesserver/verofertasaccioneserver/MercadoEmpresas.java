@@ -19,7 +19,6 @@ public class MercadoEmpresas implements CommandRunnerNonArgs {
     }
 
     @Override
-
     public void execute(CommandSender sender) {
         this.menuService.open((Player) sender, new VerOfertasAccionesServerMenu((Player) sender));
     }

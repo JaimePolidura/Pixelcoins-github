@@ -38,7 +38,7 @@ public abstract class ConfirmacionMenu extends Menu {
     }
 
     public String titulo(){
-        return DARK_RED + "       CONFIRMAR";
+        return DARK_RED + "" + BOLD + "          CONFIRMAR";
     }
 
     public abstract void onAceptar(Player player, InventoryClickEvent event);

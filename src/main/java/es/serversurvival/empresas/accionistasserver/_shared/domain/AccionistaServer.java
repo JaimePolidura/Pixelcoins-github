@@ -1,6 +1,5 @@
 package es.serversurvival.empresas.accionistasserver._shared.domain;
 
-import es.jaime.javaddd.domain.Aggregate;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -10,7 +9,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public final class AccionistaServer {
-    @Getter private final UUID accionEmpresaServerId;
+    @Getter private final UUID accionistaServerId;
     @Getter private final String nombreAccionista;
     @Getter private final TipoAccionista tipoAccionista;
     @Getter private final String empresa;
@@ -19,12 +18,12 @@ public final class AccionistaServer {
     @Getter private final String fechaApertura;
 
     public AccionistaServer withNombreAccionsta(String nombreAccionista){
-        return new AccionistaServer(accionEmpresaServerId, nombreAccionista, tipoAccionista, empresa,
+        return new AccionistaServer(accionistaServerId, nombreAccionista, tipoAccionista, empresa,
                 cantidad, precioApertura, fechaApertura);
     }
 
     public AccionistaServer decreaseCantidad(int cantidad){
-        return new AccionistaServer(accionEmpresaServerId, nombreAccionista, tipoAccionista, empresa,
+        return new AccionistaServer(accionistaServerId, nombreAccionista, tipoAccionista, empresa,
                 this.cantidad - cantidad, precioApertura, fechaApertura);
     }
 

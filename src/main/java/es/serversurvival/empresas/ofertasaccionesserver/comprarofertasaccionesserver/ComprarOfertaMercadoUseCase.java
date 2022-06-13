@@ -67,7 +67,7 @@ public final class ComprarOfertaMercadoUseCase {
 
     private void decreaseAccionistaServerCantidadOrRemove(int cantidadAComprar, AccionistaServer accionsta){
         if(accionsta.getCantidad() - cantidadAComprar <= 0)
-            this.accionistasServerService.deleteById(accionsta.getAccionEmpresaServerId());
+            this.accionistasServerService.deleteById(accionsta.getAccionistaServerId());
         else
             this.accionistasServerService.save(accionsta.decreaseCantidad(cantidadAComprar));
     }
