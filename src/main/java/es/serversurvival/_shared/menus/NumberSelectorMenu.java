@@ -39,6 +39,7 @@ public abstract class NumberSelectorMenu extends Menu {
                 .confirmation(ConfirmationConfiguration.builder()
                         .cancel(4, buildItemCancel(), this::onCancel)
                         .accept(5, buildItemAccept(), this::onAccept)
+                        .closeOnAction(closeOnAction())
                         .build())
                 .numberSelector(NumberSelectorMenuConfiguration.builder()
                         .initialValue(initialValue())
@@ -54,6 +55,10 @@ public abstract class NumberSelectorMenu extends Menu {
                         .item(8, INCREASE, 10, buildItemNumberSelector(10))
                         .build())
                 .build();
+    }
+
+    public boolean closeOnAction(){
+        return true;
     }
 
     private ItemStack buildItemCancel() {
@@ -77,9 +82,13 @@ public abstract class NumberSelectorMenu extends Menu {
 
     public ItemStack buildItemAccept (){
         return ItemBuilder.of(Material.GREEN_WOOL)
-                .title(GREEN + "" + BOLD + "ACEPTAR")
+                .title(itemAcceptTitle())
                 .lore(loreItemAceptar(initialValue()))
                 .build();
+    }
+
+    public String itemAcceptTitle(){
+        return GREEN + "" + BOLD + "ACEPTAR";
     }
 
     public void onCancel(Player player, InventoryClickEvent event) {

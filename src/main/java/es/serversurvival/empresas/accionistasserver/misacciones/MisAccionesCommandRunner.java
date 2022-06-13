@@ -1,10 +1,11 @@
-package es.serversurvival.empresas.accionistasserver.ver;
+package es.serversurvival.empresas.accionistasserver.misacciones;
 
 import es.jaimetruman.commands.Command;
 import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
 import es.jaimetruman.menus.MenuService;
 import es.serversurvival._shared.DependecyContainer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 @Command(
         value = "empresas misacciones",
@@ -18,7 +19,7 @@ public final class MisAccionesCommandRunner implements CommandRunnerNonArgs {
     }
 
     @Override
-    public void execute(CommandSender commandSender) {
-
+    public void execute(CommandSender sender) {
+        this.menuService.open((Player) sender, new MisAccionesMenu(sender.getName()));
     }
 }

@@ -41,7 +41,7 @@ public final class MySQLAccionistasServerRepository extends DataBaseRepository<A
 
     @Override
     public List<AccionistaServer> findByNombreAccionista(String nombreAccionista) {
-        return buildListFromQuery(Select.from(TABLE_NAME).where("nombreAccionista").equal(ID_FIELD_NAME));
+        return buildListFromQuery(Select.from(TABLE_NAME).where("nombreAccionista").equal(nombreAccionista));
     }
 
     @Override

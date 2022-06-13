@@ -42,6 +42,10 @@ public class AccionistasServerService {
                 .orElseThrow(() -> new ResourceNotFound("Accion no encontrada"));
     }
 
+    public List<AccionistaServer> findByNombreAccionista(String nombreAccionnists){
+        return this.repositoryDb.findByNombreAccionista(nombreAccionnists);
+    }
+
     public List<AccionistaServer> findByEmpresa(String empresa) {
         return this.repositoryDb.findByEmpresa(empresa);
     }

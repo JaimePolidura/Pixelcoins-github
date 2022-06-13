@@ -12,6 +12,7 @@ import es.serversurvival.empresas.ofertasaccionesserver._shared.application.Ofer
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.empresas.ofertasaccionesserver.cancelarofertaccionserver.CancelarOfertaAccionServerUseCase;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -41,8 +42,8 @@ public final class VerOfertasAccionesServerMenu extends Menu {
     @Override
     public int[][] items() {
         return new int[][] {
-                {1, 0, 0, 0, 0, 0, 0, 0, 0},
-                {2, 0, 0, 0, 0, 0, 0, 0, 0},
+                {1, 2, 0, 0, 0, 0, 0, 0, 0},
+                {3, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -56,12 +57,19 @@ public final class VerOfertasAccionesServerMenu extends Menu {
                 .title(TITULO)
                 .fixedItems()
                 .item(1, buildItemInfo())
-                .items(2, buildItemsOfertas(), this::onOfertaClcked)
+                .item(2, buildItemMisAcciones())
+                .items(3, buildItemsOfertas(), this::onOfertaClcked)
                 .breakpoint(7, RED_BANNER, this::goBackToProfileMenu)
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, RED_WOOL)
                         .forward(9, GREEN_WOOL)
                         .build())
+                .build();
+    }
+
+    private ItemStack buildItemMisAcciones() {
+        return ItemBuilder.of(ENDER_CHEST)
+                .title(GOLD + "" + BOLD + "" + UNDERLINE + "VER MIS ACCIONES")
                 .build();
     }
 
@@ -95,9 +103,8 @@ public final class VerOfertasAccionesServerMenu extends Menu {
 
     private ItemStack buildItemOferta(OfertaAccionServer oferta) {
         boolean esOwerDeOferta = oferta.getNombreOfertante().equalsIgnoreCase(this.player.getName());
-        boolean tipoJugador = oferta.esTipoOfertanteJugador();
 
-        return ItemBuilder.of(esOwerDeOferta ? RED_BANNER : tipoJugador ? GREEN_BANNER : BLUE_BANNER)
+        return ItemBuilder.of(esOwerDeOferta ? RED_BANNER : BLUE_BANNER)
                 .title(esOwerDeOferta ? RED + "" + UNDERLINE + "" + BOLD + "CLICK PARA CANCELAR" :
                         GOLD + "" + UNDERLINE + "" + BOLD + "CLICK PARA COMPRAR")
                 .lore(List.of(
@@ -110,7 +117,7 @@ public final class VerOfertasAccionesServerMenu extends Menu {
                         "   ",
                         GOLD + "Fecha: " + oferta.getFecha(),
                         "  ",
-                        "" + oferta.getNombreOfertante()
+                        "" + oferta.getAccionistaEmpresaServerId()
                 ))
                 .build();
     }
