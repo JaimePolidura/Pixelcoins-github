@@ -50,6 +50,18 @@ public class AccionistasServerService {
         return this.repositoryDb.findByEmpresa(empresa);
     }
 
+    public List<AccionistaServer> findByEmpresaTipoJugador(String empresa){
+        return this.findByEmpresa(empresa).stream()
+                .filter(AccionistaServer::esJugador)
+                .toList();
+    }
+
+    public List<AccionistaServer> findByEmpresaTipoEmpresa(String empresa){
+        return this.findByEmpresa(empresa).stream()
+                .filter(AccionistaServer::esEmpresa)
+                .toList();
+    }
+
     public List<AccionistaServer> findByEmpresa(String empresa, Predicate<? super AccionistaServer> condition) {
         return this.findByEmpresa(empresa).stream()
                 .filter(condition)

@@ -56,32 +56,40 @@ public final class BorrarEmpresaUseCaseTest {
     @Test
     public void shouldBorrarCotizada(){
         final int accionesTotales = 10;
-        final int pixelcions = 5;
-        Empresa empresaABorrar = createEmpresa("empresa", "jaime", pixelcions)
+        final double pixelcions = 100;
+        final String empresaNombre = "empresa";
+        Empresa empresaABorrar = createEmpresa(empresaNombre, "jaime", pixelcions)
                 .setCotizadaToTrue()
                 .withAccionesTotales(accionesTotales);
-        when(this.empresasService.getByNombre("empresa")).thenReturn(empresaABorrar);
+        when(this.empresasService.getByNombre(empresaNombre)).thenReturn(empresaABorrar);
 
-        AccionistaServer accionionista = createAccionnistaTipoJugaodor("alksj", "empresa", 5);
-        AccionistaServer accionionistaEmpresa = createAccionistaTipoEmpresa("jaime", "empresa", 5);
-        List<AccionistaServer> accionistas = List.of(accionionista, accionionistaEmpresa);
-        when(this.accionistasEmpresasServerService.findByEmpresa("empresa")).thenReturn(accionistas);
+        AccionistaServer accionistaJugadorOwner = createAccionnistaTipoJugaodor("jaime", empresaNombre, 3);
+        AccionistaServer accionistaJugadorOtro = createAccionnistaTipoJugaodor("otro", empresaNombre, 2);
+        AccionistaServer accionionistaEmpresa = createAccionistaTipoEmpresa(empresaNombre, empresaNombre, 5);
 
-        Jugador jugadorAccionista = createJugador("alksj");
+        List<AccionistaServer> accionistas = List.of(accionistaJugadorOwner, accionionistaEmpresa, accionistaJugadorOtro);
+        when(this.accionistasEmpresasServerService.findByEmpresaTipoJugador(empresaNombre))
+                .thenReturn(List.of(accionistaJugadorOwner, accionistaJugadorOtro));
+        when(this.accionistasEmpresasServerService.findByEmpresaTipoEmpresa(empresaNombre))
+                .thenReturn(List.of(accionionistaEmpresa));
+
+        Jugador jugadorOtro = createJugador("otro");
         Jugador jugadorOwner = createJugador("jaime");
         when(this.jugadoresService.getByNombre("jaime")).thenReturn(jugadorOwner);
-        when(this.jugadoresService.getByNombre("alksj")).thenReturn(jugadorAccionista);
+        when(this.jugadoresService.getByNombre("otro")).thenReturn(jugadorOtro);
 
-        List<Empleado> empleadosEmpresa = List.of(createEmpleado("pedro", "empresa", 5));
-        when(this.empleadosService.findByEmpresa("empresa")).thenReturn(empleadosEmpresa);
+        List<Empleado> empleadosEmpresa = List.of(createEmpleado("pedro", empresaNombre, 5));
+        when(this.empleadosService.findByEmpresa(empresaNombre)).thenReturn(empleadosEmpresa);
 
-        this.useCase.borrar("jaime", "empresa");
+        this.useCase.borrar("jaime", empresaNombre);
 
+        double ownerShiptJugadorOtro = 2 / (double) (10 - 5);
+        double ownerShiptJugadorOwner = 3 / (double) (10 - 5);
         verify(this.jugadoresService, times(1)).save(argThat(of(
-                jugadorAccionista.incrementPixelcoinsBy(5 * (pixelcions/accionesTotales))
+                jugadorOwner.incrementPixelcoinsBy(pixelcions * ownerShiptJugadorOwner)
         )));
         verify(this.jugadoresService, times(1)).save(argThat(of(
-                jugadorOwner.incrementPixelcoinsBy(5 * (pixelcions/accionesTotales))
+                jugadorOtro.incrementPixelcoinsBy(pixelcions * ownerShiptJugadorOtro)
         )));
 
         verify(this.empresasService, times(1)).deleteByEmpresaId(any());

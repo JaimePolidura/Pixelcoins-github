@@ -52,14 +52,14 @@ public final class BorrarEmpresaUseCase {
     }
 
     private void repartirPixelcoinsEntreLosAccionistas(String empresaNombre, Empresa empresaABorrar) {
-        int accionesEnManosDeEmpresas = this.accionistasEmpresasServerService.findByEmpresa(empresaNombre, AccionistaServer::esEmpresa)
+        int accionesEnManosDeEmpresas = this.accionistasEmpresasServerService.findByEmpresaTipoEmpresa(empresaNombre)
                 .stream()
                 .mapToInt(AccionistaServer::getCantidad)
                 .sum();
         int accioonesTotalesSinContarEmpresa = empresaABorrar.getAccionesTotales() - accionesEnManosDeEmpresas;
 
-        this.accionistasEmpresasServerService.findByEmpresa(empresaNombre, AccionistaServer::esJugador).forEach(accionista -> {
-            double ownershipPercentaje = accionista.getCantidad() / accioonesTotalesSinContarEmpresa;
+        this.accionistasEmpresasServerService.findByEmpresaTipoJugador(empresaNombre).forEach(accionista -> {
+            double ownershipPercentaje = (double)accionista.getCantidad() / (double) accioonesTotalesSinContarEmpresa;
             var jugadorAPagar = jugadoresService.getByNombre(accionista.getNombreAccionista());
 
             this.jugadoresService.save(jugadorAPagar.incrementPixelcoinsBy(ownershipPercentaje * empresaABorrar.getPixelcoins()));
