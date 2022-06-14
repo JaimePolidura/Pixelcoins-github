@@ -92,6 +92,6 @@ public final class ComprarOfertaMercadoUseCase {
 
     private void ensusureCorrectQuantityCantidad(int cantidad, OfertaAccionServer ofertaAComprar){
         if(cantidad <= 0 || cantidad > ofertaAComprar.getCantidad())
-            throw new IllegalQuantity("La cantidad debe comprender entre 1 y las acciones de la oferta");
+            throw new IllegalQuantity("La cantidad debe comprender entre 1 y las cantidad de la oferta");
     }
 }

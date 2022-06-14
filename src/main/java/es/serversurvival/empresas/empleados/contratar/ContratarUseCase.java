@@ -66,7 +66,7 @@ public final class ContratarUseCase {
                 .anyMatch(empleoDeEmpresa -> empleoDeEmpresa.getNombre().equalsIgnoreCase(jugadorAContratar));
 
         if(alreadyWorks)
-            throw new AlreadyExists("El jugador ya trabaja en tu empresa");
+            throw new AlreadyExists("El nombreAccionista ya trabaja en tu empresa");
     }
 
     private Empresa ensureEmpresaExists(String empresaNombre) {

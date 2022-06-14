@@ -45,7 +45,7 @@ public final class VenderOfertaAccionServerUseCase {
 
     private void ensureCantidadNotBiggerThanAccionEmpresaServer(int cantidad, AccionistaServer accionEmpresaServer){
         if(accionEmpresaServer.getCantidad() < cantidad){
-            throw new IllegalQuantity("La cantidad de acciones a vender deben de ser menores que las que tengas");
+            throw new IllegalQuantity("La cantidad de cantidad a vender deben de ser menores que las que tengas");
         }
     }
 

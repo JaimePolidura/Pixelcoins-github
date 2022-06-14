@@ -11,8 +11,8 @@ import static es.serversurvival._shared.utils.Funciones.*;
 
 @Command(
         value = "empresas despedir",
-        args = {"empresa", "jugador", "razon"},
-        explanation = "Despedir a un jugador de tu empresa"
+        args = {"empresa", "nombreAccionista", "razon"},
+        explanation = "Despedir a un nombreAccionista de tu empresa"
 )
 public class DespedirEmpleadoComandoRunner implements CommandRunnerArgs<DespedirEmpleadoComando> {
     private final DespedirEmpleadoUseCase useCase;

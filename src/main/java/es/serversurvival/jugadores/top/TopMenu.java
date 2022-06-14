@@ -75,7 +75,7 @@ public final class TopMenu extends Menu {
         }
         lore.add(" ");
         lore.add(GOLD + "Este muestra el porcentaje de tu patrimonio");
-        lore.add(GOLD + "(acciones,ahorrado,deudas etc) respecto los");
+        lore.add(GOLD + "(cantidad,ahorrado,deudas etc) respecto los");
         lore.add(GOLD + "beneficios que has tenido al comerciar");
         lore.add(GOLD + "En otras palabras de cada 100 Pixelcoins que tienes");
         lore.add(GOLD + "Cuantas las has conseguido comerciando");

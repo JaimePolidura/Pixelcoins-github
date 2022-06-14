@@ -7,8 +7,8 @@ commands:
     description: Comando para ver tu dinero
     usage: /<command>
   pagar:
-    description: pagar dinero a otro jugador
-    usage: /<command> <nombre jugador> <cantidad>
+    description: pagar dinero a otro nombreAccionista
+    usage: /<command> <nombre nombreAccionista> <cantidad>
   normas:
     description: Ver las normas del servidor
     usage: /<command>
@@ -52,8 +52,8 @@ commands:
     description: ver tu perfil
     usage: /<command>
   venderjugador:
-    description: vender un objeto a un jugador
-    usage: /<command> <jugador> <precio>
+    description: vender un objeto a un nombreAccionista
+    usage: /<command> <nombreAccionista> <precio>
   re:
-    description: Enviar un mensaje a un jugador que esta fuera del servidor (web)
+    description: Enviar un mensaje a un nombreAccionista que esta fuera del servidor (web)
     usage: /<command> <mensaje>

@@ -46,7 +46,7 @@ public class BolsaCarteraScoreboard implements SingleScoreboard {
         addLineToScoreboard(objective, ChatColor.GOLD + "       ", -10);
         addLineToScoreboard(objective, ChatColor.GOLD + "--------------------------", -20);
         addLineToScoreboard(objective, ChatColor.GOLD + "Para invertir /bosla valores", -30);
-        addLineToScoreboard(objective, ChatColor.GOLD + "Tus acciones /bolsa cartera", -40);
+        addLineToScoreboard(objective, ChatColor.GOLD + "Tus cantidad /bolsa cartera", -40);
 
         return scoreboard;
     }

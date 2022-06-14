@@ -4,6 +4,7 @@ import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
+import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
@@ -36,13 +37,7 @@ public final class BorrarEmpresaUseCase {
         this.ensureOwner(empresaABorrar, owner);
 
         if(empresaABorrar.isCotizada()){
-            this.accionistasEmpresasServerService.findByEmpresa(empresaNombre).forEach(accionista -> {
-                double ownershipPercentaje = accionista.getCantidad() / empresaABorrar.getAccionesTotales();
-                String jugadorNombre = accionista.esJugador() ? accionista.getNombreAccionista() : empresaABorrar.getOwner();
-                var jugadorAPagar = jugadoresService.getByNombre(jugadorNombre);
-
-                this.jugadoresService.save(jugadorAPagar.incrementPixelcoinsBy(ownershipPercentaje * empresaABorrar.getPixelcoins()));
-            });
+            repartirPixelcoinsEntreLosAccionistas(empresaNombre, empresaABorrar);
         }else{
             this.jugadoresService.save(jugadorOwner.incrementPixelcoinsBy(empresaABorrar.getPixelcoins()));
         }
@@ -54,6 +49,21 @@ public final class BorrarEmpresaUseCase {
 
         this.eventBus.publish(new EmpresaBorrada(owner, empresaNombre, empresaABorrar.getPixelcoins(),
                 empleados.stream().map(Empleado::getNombre).toList()));
+    }
+
+    private void repartirPixelcoinsEntreLosAccionistas(String empresaNombre, Empresa empresaABorrar) {
+        int accionesEnManosDeEmpresas = this.accionistasEmpresasServerService.findByEmpresa(empresaNombre, AccionistaServer::esEmpresa)
+                .stream()
+                .mapToInt(AccionistaServer::getCantidad)
+                .sum();
+        int accioonesTotalesSinContarEmpresa = empresaABorrar.getAccionesTotales() - accionesEnManosDeEmpresas;
+
+        this.accionistasEmpresasServerService.findByEmpresa(empresaNombre, AccionistaServer::esJugador).forEach(accionista -> {
+            double ownershipPercentaje = accionista.getCantidad() / accioonesTotalesSinContarEmpresa;
+            var jugadorAPagar = jugadoresService.getByNombre(accionista.getNombreAccionista());
+
+            this.jugadoresService.save(jugadorAPagar.incrementPixelcoinsBy(ownershipPercentaje * empresaABorrar.getPixelcoins()));
+        });
     }
 
     private void ensureOwner(Empresa empresa, String ownerSupuesto){

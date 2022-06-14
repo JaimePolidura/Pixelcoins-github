@@ -16,7 +16,7 @@ public final class OnEmpresaBorrada {
     @EventListener(pritority = Priority.LOWEST)
     public void on(EmpresaBorrada event){
         this.ofertasAccionesServerService.findByEmpresa(event.getEmpresa()).forEach(oferta -> {
-            this.ofertasAccionesServerService.deleteById(oferta.getAccionistaEmpresaServerId());
+            this.ofertasAccionesServerService.deleteById(oferta.getOfertaAccionServerId());
         });
     }
 

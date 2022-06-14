@@ -18,7 +18,7 @@ public final class PagarDividendosConfirmacionMenu extends NumberSelectorMenu {
     public PagarDividendosConfirmacionMenu(Empresa empresa) {
         this.empresa = empresa;
     }
-
+    
     @Override
     public void onAccept(Player player, InventoryClickEvent event) {
         double dividendoPorAccion = super.getPropertyDouble("cantidad");
@@ -44,7 +44,7 @@ public final class PagarDividendosConfirmacionMenu extends NumberSelectorMenu {
     @Override
     public List<String> loreItemAceptar(double cantidad) {
         return List.of(
-                GOLD + "Precio/Accion: " + GREEN + Funciones.FORMATEA.format(cantidad),
+                GOLD + "Dividendo/Accion: " + GREEN + Funciones.FORMATEA.format(cantidad),
                 GOLD + "Total a pagar: " + GREEN + Funciones.FORMATEA.format(cantidad*this.empresa.getAccionesTotales()),
                 GOLD + "Pixelcoins empresa: " + GREEN + Funciones.FORMATEA.format(this.empresa.getPixelcoins())
         );

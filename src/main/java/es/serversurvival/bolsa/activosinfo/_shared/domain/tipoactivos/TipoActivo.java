@@ -9,7 +9,7 @@ import lombok.Getter;
 public enum TipoActivo {
     CRIPTOMONEDAS(DependecyContainer.get(CriptomonedasApiService.class), "monedas"),
     MATERIAS_PRIMAS(DependecyContainer.get(MateriasPrimasApiService.class), "unidades"),
-    ACCIONES(DependecyContainer.get(AccionesApiService.class), "acciones");
+    ACCIONES(DependecyContainer.get(AccionesApiService.class), "cantidad");
 
     @Getter private final TipoActivoService tipoActivoService;
     @Getter private final String alias;

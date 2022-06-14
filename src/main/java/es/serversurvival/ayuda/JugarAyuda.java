@@ -12,7 +12,7 @@ public class JugarAyuda implements CommandRunnerNonArgs {
         sneder.sendMessage("          ");
         sneder.sendMessage(ChatColor.YELLOW + " Para jugar:");
         sneder.sendMessage("          ");
-        sneder.sendMessage(ChatColor.GOLD + "Para construir una casa la puedes construir donde quieras pero sin que este muy cerca de otra casa de otro jugador (/ayuda normas) y que no este en el spawn");
+        sneder.sendMessage(ChatColor.GOLD + "Para construir una casa la puedes construir donde quieras pero sin que este muy cerca de otra casa de otro nombreAccionista (/ayuda normas) y que no este en el spawn");
         sneder.sendMessage("          ");
         sneder.sendMessage(ChatColor.GOLD + "Para proteger tus cofres/puertas/shulker box etc : " + ChatColor.WHITE + "/cprivate " + ChatColor.GOLD + "y click derecho en ellos");
         sneder.sendMessage(ChatColor.GOLD + "Para quitarles la proteccion: " + ChatColor.WHITE + "/remove " + ChatColor.GOLD + "y click derecho en ellos");

@@ -32,7 +32,7 @@ public class PrecioBolsaComandoExecutor implements CommandRunnerArgs<PrecioBolsa
 
         if(activoInfo.getPrecio() == -1){
             player.sendMessage(DARK_RED + "Ticker: " + ticker + " no encontrado. Para consultarlo /bolsa valores o en es.investing.com. " +
-                    "Recuerda que solo se puede acciones que cotizen en EEUU");
+                    "Recuerda que solo se puede cantidad que cotizen en EEUU");
         }else{
             player.sendMessage(GOLD + "El precio de " + activoInfo.getNombreActivoLargo() + " es: " + GREEN +
                     activoInfo.getPrecio() + " $");

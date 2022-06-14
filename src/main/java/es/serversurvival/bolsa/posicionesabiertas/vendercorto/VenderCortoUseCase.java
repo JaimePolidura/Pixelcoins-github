@@ -54,6 +54,6 @@ public class VenderCortoUseCase {
 
     private void ensureActivoInfoNotNull(ActivoInfo activoInfo) {
         if(activoInfo == null)
-            throw new ResourceNotFound("Accion no encontrada, recuerdo que solo se pueden acciones que cotizen en la bolsa americana");
+            throw new ResourceNotFound("Accion no encontrada, recuerdo que solo se pueden cantidad que cotizen en la bolsa americana");
     }
 }

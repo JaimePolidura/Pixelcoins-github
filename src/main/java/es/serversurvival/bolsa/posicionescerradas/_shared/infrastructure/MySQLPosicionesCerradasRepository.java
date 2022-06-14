@@ -29,7 +29,7 @@ public final class MySQLPosicionesCerradasRepository extends DataBaseRepository<
 
     @Override
     public List<PosicionCerrada> findByJugador(String jugador) {
-        return buildListFromQuery(Select.from(TABLE_NAME).where("jugador").equal(jugador));
+        return buildListFromQuery(Select.from(TABLE_NAME).where("nombreAccionista").equal(jugador));
     }
 
     @Override
@@ -49,7 +49,7 @@ public final class MySQLPosicionesCerradasRepository extends DataBaseRepository<
     public PosicionCerrada buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new PosicionCerrada(
                 UUID.fromString(rs.getString(ID_FIELD_NAME)),
-                rs.getString("jugador"),
+                rs.getString("nombreAccionista"),
                 TipoActivo.valueOf(rs.getString("tipoActivo")),
                 rs.getString("nombreActivo"),
                 rs.getInt("cantidad"),

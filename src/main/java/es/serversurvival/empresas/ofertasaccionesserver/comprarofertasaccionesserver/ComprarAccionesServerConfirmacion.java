@@ -1,10 +1,14 @@
 package es.serversurvival.empresas.ofertasaccionesserver.comprarofertasaccionesserver;
 
+import es.jaimetruman.menus.MenuService;
+import es.jaimetruman.menus.modules.sync.SyncMenuService;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.menus.NumberSelectorMenu;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
+import es.serversurvival.empresas.ofertasaccionesserver.verofertasaccioneserver.VerOfertasAccionesServerMenu;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
+import es.serversurvival.tienda.vertienda.menu.TiendaMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -20,11 +24,15 @@ public final class ComprarAccionesServerConfirmacion extends NumberSelectorMenu 
     private final OfertaAccionServer oferta;
     private final Jugador compradorJugador;
     private final JugadoresService jugadoresService;
+    private final MenuService menuService;
+    private final SyncMenuService syncMenuService;
 
     public ComprarAccionesServerConfirmacion(OfertaAccionServer oferta, Player player) {
         this.oferta = oferta;
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
         this.compradorJugador = this.jugadoresService.getByNombre(player.getName());
+        this.menuService = DependecyContainer.get(MenuService.class);
+        this.syncMenuService = DependecyContainer.get(SyncMenuService.class);
     }
 
     @Override
@@ -34,19 +42,22 @@ public final class ComprarAccionesServerConfirmacion extends NumberSelectorMenu 
         new ComprarOfertaMercadoUseCase().comprarOfertaMercadoAccionServer(player.getName(),
                 oferta.getOfertaAccionServerId(), cantidadToComprar);
 
-        enviarMensajeYSonido(player, GOLD + "Has comprado " + FORMATEA.format(cantidadToComprar) + " acciones a " + GREEN +
+        var newPages = this.menuService.buildPages(new VerOfertasAccionesServerMenu(player));
+        this.syncMenuService.sync(VerOfertasAccionesServerMenu.class, newPages);
+
+        enviarMensajeYSonido(player, GOLD + "Has comprado " + FORMATEA.format(cantidadToComprar) + " cantidad a " + GREEN +
                 FORMATEA.format(oferta.getPrecio()) + " PC" + GOLD + " que es un total de " + GREEN + FORMATEA.format(
                 cantidadToComprar * oferta.getPrecio()) + " PC " + GOLD + " comandos: " + AQUA +
                 "/bolsa vender /bolsa cartera", Sound.ENTITY_PLAYER_LEVELUP);
 
-        Bukkit.broadcastMessage(GOLD + player.getName() + " ha comprado " + cantidadToComprar + " acciones de la empresa del server: "
+        Bukkit.broadcastMessage(GOLD + player.getName() + " ha comprado " + cantidadToComprar + " cantidad de la empresa del server: "
                 + oferta.getEmpresa() + " a " + GREEN + FORMATEA.format(oferta.getPrecio()) + "PC");
     }
 
     @Override
     public List<String> loreItemAceptar(double cantidad) {
         return List.of(
-                GOLD + "Comprar: " + cantidad + " acciones de " + this.oferta.getEmpresa(),
+                GOLD + "Comprar: " + cantidad + " cantidad de " + this.oferta.getEmpresa(),
                 GOLD + "Precio/Accion: " + GREEN + FORMATEA.format(oferta.getPrecio()) + " PC",
                 GOLD + "Total: " + GREEN + FORMATEA.format(oferta.getPrecio() * cantidad) + " PC",
                 GOLD + "Tus pixelcoins: " + GREEN + FORMATEA.format(this.compradorJugador.getPixelcoins()) + " PC"

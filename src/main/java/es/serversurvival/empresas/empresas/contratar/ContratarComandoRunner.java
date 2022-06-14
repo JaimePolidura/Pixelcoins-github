@@ -20,8 +20,8 @@ import static org.bukkit.ChatColor.*;
 
 @Command(
         value = "empresas contratar",
-        args = {"jugador", "empresa", "sueldo", "tipoSueldo", "[cargo]¡trabajador!"},
-        explanation = "Contratar a un jugador en tu empresa con un sueldo, <tipoSueldo> frequencia de pago: d (cada dia), s (cada semana), " +
+        args = {"nombreAccionista", "empresa", "sueldo", "tipoSueldo", "[cargo]¡trabajador!"},
+        explanation = "Contratar a un nombreAccionista en tu empresa con un sueldo, <tipoSueldo> frequencia de pago: d (cada dia), s (cada semana), " +
                 "2s (cada 2 semanas), m (cada mes)"
 )
 public class ContratarComandoRunner implements CommandRunnerArgs<ContratarComando> {

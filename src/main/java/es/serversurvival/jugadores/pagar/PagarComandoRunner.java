@@ -17,7 +17,7 @@ import static org.bukkit.ChatColor.GOLD;
 @Command(
         value = "pagar",
         args = {"destino", "pixelcoins"},
-        explanation = "Pagar a un jugador online con tus pixelcoins"
+        explanation = "Pagar a un nombreAccionista online con tus pixelcoins"
 )
 public class PagarComandoRunner implements CommandRunnerArgs<PagarComando> {
     private final PagarUseCase pagarUseCase;

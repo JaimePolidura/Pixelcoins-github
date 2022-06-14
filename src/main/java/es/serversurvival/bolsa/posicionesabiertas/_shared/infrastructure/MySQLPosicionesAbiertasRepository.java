@@ -35,7 +35,7 @@ public final class MySQLPosicionesAbiertasRepository extends DataBaseRepository<
 
     @Override
     public List<PosicionAbierta> findByJugador(String jugador) {
-        return buildListFromQuery(Select.from(TABLE_NAME).where("jugador").equal(jugador));
+        return buildListFromQuery(Select.from(TABLE_NAME).where("nombreAccionista").equal(jugador));
     }
 
     @Override
@@ -65,7 +65,7 @@ public final class MySQLPosicionesAbiertasRepository extends DataBaseRepository<
     public PosicionAbierta buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new PosicionAbierta(
                 UUID.fromString(rs.getString("posicionAbiertaId")),
-                rs.getString("jugador"),
+                rs.getString("nombreAccionista"),
                 TipoActivo.valueOf(rs.getString("tipoActivo")),
                 rs.getString("nombreActivo"),
                 rs.getInt("cantidad"),

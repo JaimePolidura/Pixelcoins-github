@@ -19,8 +19,8 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 
 @Command(
         value = "bolsa vercartera",
-        args = {"jugador"},
-        explanation = "Ver la cartera de la bolsa de otro jugador"
+        args = {"nombreAccionista"},
+        explanation = "Ver la cartera de la bolsa de otro nombreAccionista"
 )
 public class VerCarteraJugadorComandoRunner implements CommandRunnerArgs<VerCarteraJugadorComando> {
     private final ActivosInfoService activoInfoService;

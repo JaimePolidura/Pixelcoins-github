@@ -71,7 +71,7 @@ public final class ComprarBolsaConfirmacionMenu extends NumberSelectorMenu {
                     + nombreActivo + " a " + GREEN + FORMATEA.format(precioUnidad) + "PC");
 
             Funciones.enviarMensajeYSonido(player, GOLD + "Has comprado " + FORMATEA.format(cantidadAComprar)
-                    + " acciones a " + GREEN + FORMATEA.format(precioUnidad) + " PC" + GOLD + " que es un total de " + GREEN +
+                    + " cantidad a " + GREEN + FORMATEA.format(precioUnidad) + " PC" + GOLD + " que es un total de " + GREEN +
                     FORMATEA.format(precioUnidad * cantidadAComprar) + " PC " + GOLD + " comandos: " + AQUA + "/bolsa cartera", ENTITY_PLAYER_LEVELUP);
         }else{
             player.sendMessage(GOLD + "La compra no se ha podida ejecutar por que el mercado esta cerrado, cuando abra se ejecutara");

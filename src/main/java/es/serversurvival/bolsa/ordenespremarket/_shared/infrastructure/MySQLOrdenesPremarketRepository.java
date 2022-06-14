@@ -39,7 +39,7 @@ public final class MySQLOrdenesPremarketRepository extends DataBaseRepository<Or
 
     @Override
     public List<OrdenPremarket> findByJugador(String jugador) {
-        return buildListFromQuery(Select.from(TABLE_NAME).where("jugador").equal(jugador));
+        return buildListFromQuery(Select.from(TABLE_NAME).where("nombreAccionista").equal(jugador));
     }
 
     @Override
@@ -59,7 +59,7 @@ public final class MySQLOrdenesPremarketRepository extends DataBaseRepository<Or
     public OrdenPremarket buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new OrdenPremarket(
                 UUID.fromString(rs.getString("orderPremarketId")),
-                rs.getString("jugador"),
+                rs.getString("nombreAccionista"),
                 rs.getString("nombreActivo"),
                 rs.getInt("cantidad"),
                 TipoAccion.valueOf(rs.getString("tipoAccion")),

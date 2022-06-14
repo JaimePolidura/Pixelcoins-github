@@ -58,7 +58,7 @@ public final class VenderAccionEmpresaCantidadSelectorMenu extends NumberSelecto
     @Override
     public List<String> loreItemAceptar(double cantidad) {
         return List.of(
-                GOLD + "Vender " + cantidad + " acciones de " + empresaNombreVender
+                GOLD + "Vender " + cantidad + " cantidad de " + empresaNombreVender
         );
     }
 

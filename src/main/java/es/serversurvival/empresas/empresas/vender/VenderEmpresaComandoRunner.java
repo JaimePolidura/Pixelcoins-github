@@ -19,8 +19,8 @@ import static org.bukkit.ChatColor.*;
 
 @Command(
         value = "empresas vender",
-        args = {"empresa", "jugador", "precio"},
-        explanation = "Vender tu empresa a otro jugador por pixelcoins"
+        args = {"empresa", "nombreAccionista", "precio"},
+        explanation = "Vender tu empresa a otro nombreAccionista por pixelcoins"
 )
 public class VenderEmpresaComandoRunner implements CommandRunnerArgs<VenderEmpresaComando> {
     private final MenuService menuService;

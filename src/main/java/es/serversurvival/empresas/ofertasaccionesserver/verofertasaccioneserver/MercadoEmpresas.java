@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 @Command(
         value = "empresas mercado",
-        explanation = "Ver todas las ofertas de venta de acciones de empresas del servidor"
+        explanation = "Ver todas las ofertas de venta de cantidad de empresas del servidor"
 )
 public class MercadoEmpresas implements CommandRunnerNonArgs {
     private final MenuService menuService;

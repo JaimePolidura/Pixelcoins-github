@@ -125,11 +125,11 @@ public final class VerDeudasMenu extends Menu {
                 .title(ChatColor.GOLD + "" + ChatColor.BOLD + "INFO")
                 .lore(List.of(
                         "Para condecer prestamos has de hacer",
-                        "/deudas prestar <jugador> <dinero> <dias> [interes]",
-                        "<jugador> -> al jugador que vas a endeudar",
+                        "/deudas prestar <nombreAccionista> <dinero> <dias> [interes]",
+                        "<nombreAccionista> -> al nombreAccionista que vas a endeudar",
                         "<dinero> -> total de pixelcoins  a prestar",
                         "<dias> -> dias en el que vencera el prestamo",
-                        "   cuando acabe de pagar la deuda el jugador",
+                        "   cuando acabe de pagar la deuda el nombreAccionista",
                         "[interes] -> porcentaje añadido a la cantidad",
                         "de pixelcoins prestadas que te tendra que devolver",
                         "en un plazo de tiempo puesto en <dias>.",

@@ -16,8 +16,8 @@ import static org.bukkit.ChatColor.*;
 
 @Command(
         value = "deudas prestar",
-        args = {"jugador", "pixelcoins", "dias", "[interes]¡1!"},
-        explanation = "Prestar dinero a un jugador durante dias. La deuda se pagara cada dia"
+        args = {"nombreAccionista", "pixelcoins", "dias", "[interes]¡1!"},
+        explanation = "Prestar dinero a un nombreAccionista durante dias. La deuda se pagara cada dia"
 )
 public class PrestarComandoRunner implements CommandRunnerArgs<PrestarComando> {
     private final MenuService menuService;

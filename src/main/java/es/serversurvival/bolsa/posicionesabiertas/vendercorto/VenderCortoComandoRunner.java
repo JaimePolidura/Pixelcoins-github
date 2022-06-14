@@ -90,11 +90,11 @@ public class VenderCortoComandoRunner implements CommandRunnerArgs<VenderCortoCo
         if(executedInMarket){
             Funciones.enviarMensajeYSonido((Player) player, GOLD + "Te has puesto corto en " +nombreActivoLargo  + " en " +
                     nombreActivoLargo + " cada una a " + GREEN + FORMATEA.format(precio) + " PC " +
-                    GOLD + "Para recomprar las acciones: /bolsa comprarcorto <id>. /bolsa cartera" + GOLD +
+                    GOLD + "Para recomprar las cantidad: /bolsa comprarcorto <id>. /bolsa cartera" + GOLD +
                     "Ademas se te ha cobrado un "+PORCENTAJE_CORTO+"% del valor total de la venta (" + GREEN  + FORMATEA.format(valorTotal)
                     + " PC" + GOLD + ") por lo cual: " + RED + "-" + FORMATEA.format(comision) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
 
-            Bukkit.broadcastMessage(GOLD + player.getName() + " ha vendido en corto " + cantidad + " acciones en " + nombreActivoLargo);
+            Bukkit.broadcastMessage(GOLD + player.getName() + " ha vendido en corto " + cantidad + " cantidad en " + nombreActivoLargo);
         }else{
             player.sendMessage(GOLD + "La compra no se ha podida ejecutar por que el mercado esta cerrado, cuando abra se ejecutara");
         }
@@ -108,7 +108,7 @@ public class VenderCortoComandoRunner implements CommandRunnerArgs<VenderCortoCo
 
         Funciones.enviarMensajeYSonido( player, GOLD + "Te has puesto corto en " + evento.getNombreActivoLargo() + " en " +
                 evento.getNombreActivoLargo() + " cada una a " + GREEN + FORMATEA.format(evento.getPrecioUnidad()) + " PC " +
-                GOLD + "Para recomprar las acciones: /bolsa comprarcorto <id>. /bolsa cartera" + GOLD +
+                GOLD + "Para recomprar las cantidad: /bolsa comprarcorto <id>. /bolsa cartera" + GOLD +
                 "Ademas se te ha cobrado un 5% del valor total de la venta (" + GREEN  + FORMATEA.format(evento.getPrecioTotal())
                 + " PC" + GOLD + ") por lo cual: " + RED + "-" + FORMATEA.format(evento.getPrecioTotal()) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
 

@@ -9,13 +9,12 @@ import es.jaimetruman.menus.menustate.AfterShow;
 import es.jaimetruman.menus.modules.pagination.PaginationConfiguration;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
-import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empleados.despedir.DespedirEmpleadoUseCase;
-import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.empresas.borrar.BorrarEmpresaConfirmacionMenu;
+import es.serversurvival.empresas.empresas.pagardividendos.PagarDividendosConfirmacionMenu;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,8 +26,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
@@ -84,7 +84,7 @@ public final class VerEmpresaMenu extends Menu implements AfterShow {
     }
 
     private void pagarDividendos(Player player, InventoryClickEvent event) {
-        //TODO
+        this.menuService.open(player, new PagarDividendosConfirmacionMenu(this.empresa));
     }
 
     private void abrirBorrarEmpresaConfirmacion(Player player, InventoryClickEvent event) {
@@ -142,14 +142,27 @@ public final class VerEmpresaMenu extends Menu implements AfterShow {
     }
 
     private ItemStack buildItemAccionistas() {
+        List<String> loreAccionistas = accionistasServerService.findByEmpresa(empresa.getNombre()).stream()
+                .map(posicion -> new Accionista(posicion.getNombreAccionista(), posicion.getCantidad()))
+                .collect(Collectors.toMap(Accionista::nombreAccionista, Accionista::cantidad, Integer::sum))
+                .entrySet().stream()
+                .map(accionista -> new Accionista(accionista.getKey(), accionista.getValue()))
+                .map(this::getLoreAccionista)
+                .toList();
+
         return ItemBuilder.of(Material.NETHERITE_SCRAP)
                 .title(GOLD + "" + BOLD + "ACCIONISTAS")
-                .lore(accionistasServerService.findByEmpresa(empresa.getNombre()).stream()
-                        .sorted(Comparator.comparingInt(AccionistaServer::getCantidad))
-                        .map(accionista -> GOLD + "EMPRESA : " + GREEN + FORMATEA.format(accionista.getCantidad()
-                                / this.empresa.getAccionesTotales()) + "%")
-                        .toList())
+                .lore(loreAccionistas)
                 .build();
+    }
+
+    private record Accionista(String nombreAccionista, int cantidad){}
+
+    private String getLoreAccionista(Accionista accionista) {
+        double ownership = (double)accionista.cantidad() / (double)empresa.getAccionesTotales();
+        double percentajeOwnership = redondeoDecimales(ownership * 100, 1);
+
+        return GOLD + accionista.nombreAccionista() + ": " + GREEN + FORMATEA.format(percentajeOwnership) + "%";
     }
 
     private ItemStack buildItemEmpresaStats() {
@@ -191,7 +204,7 @@ public final class VerEmpresaMenu extends Menu implements AfterShow {
                         "Puedes contratar empleados, ",
                         "despedirlos etc. Comandos:",
                         "                              ",
-                        "/empresas contratar <jugador>",
+                        "/empresas contratar <nombreAccionista>",
                         " <empresa> <sueldo> <tipo sueldo>",
                         "El tipo sueldo es la frequencia con",
                         "la que el sueldo se va a pagar: ",

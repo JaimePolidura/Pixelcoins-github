@@ -7,11 +7,16 @@ import es.jaimetruman.menus.MenuService;
 import es.jaimetruman.menus.configuration.MenuConfiguration;
 import es.jaimetruman.menus.menubuilder.MenuBuilderService;
 import es.jaimetruman.menus.modules.pagination.PaginationConfiguration;
+import es.jaimetruman.menus.modules.sync.SyncMenuConfiguration;
+import es.jaimetruman.menus.modules.sync.SyncMenuService;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.empresas.ofertasaccionesserver.cancelarofertaccionserver.CancelarOfertaAccionServerUseCase;
+import es.serversurvival.empresas.ofertasaccionesserver.comprarofertasaccionesserver.ComprarAccionesServerConfirmacion;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
+import es.serversurvival.tienda.vertienda.menu.TiendaMenu;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -32,11 +37,13 @@ public final class VerOfertasAccionesServerMenu extends Menu {
     private final OfertasAccionesServerService ofertasAccionesServerService;
     private final MenuService menuService;
     private final Player player;
+    private final SyncMenuService syncMenuService;
 
     public VerOfertasAccionesServerMenu(Player player) {
         this.ofertasAccionesServerService = DependecyContainer.get(OfertasAccionesServerService.class);
         this.player = player;
         this.menuService = DependecyContainer.get(MenuService.class);
+        this.syncMenuService = DependecyContainer.get(SyncMenuService.class);
     }
 
     @Override
@@ -60,11 +67,27 @@ public final class VerOfertasAccionesServerMenu extends Menu {
                 .item(2, buildItemMisAcciones())
                 .items(3, buildItemsOfertas(), this::onOfertaClcked)
                 .breakpoint(7, RED_BANNER, this::goBackToProfileMenu)
+                .sync(SyncMenuConfiguration.builder()
+                        .mapper(this::onUpdate)
+                        .build())
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, RED_WOOL)
                         .forward(9, GREEN_WOOL)
                         .build())
                 .build();
+    }
+
+    private ItemStack onUpdate(ItemStack itemFromUpdate, Integer itemNum) {
+        if(itemNum != 3) return itemFromUpdate;
+
+        UUID idOferta = UUID.fromString(ItemUtils.getLore(itemFromUpdate, 9));
+        OfertaAccionServer ofertaToUpdate = this.ofertasAccionesServerService.getById(idOferta);
+        boolean ownsOferta = ofertaToUpdate.esTipoOfertanteJugador() && ofertaToUpdate.getNombreOfertante().equalsIgnoreCase(player.getName());
+
+        if(ownsOferta)
+            return itemFromUpdate;
+
+        return buildItemOferta(ofertaToUpdate);
     }
 
     private ItemStack buildItemMisAcciones() {
@@ -74,21 +97,22 @@ public final class VerOfertasAccionesServerMenu extends Menu {
     }
 
     private void onOfertaClcked(Player player, InventoryClickEvent event) {
-        boolean esOwnerDeOferta = event.getCurrentItem().getType() == BLUE_BANNER;
+        boolean esOwnerDeOferta = event.getCurrentItem().getType() == RED_BANNER;
         UUID ofertaId = UUID.fromString(ItemUtils.getLore(event.getCurrentItem(), 9));
 
         if(esOwnerDeOferta){
             cancelarOferta(player, ofertaId);
         }else{
-            //TODO Enviar comprarofertaconfirmatcion
+            this.menuService.open(player, new ComprarAccionesServerConfirmacion(ofertasAccionesServerService.getById(ofertaId), player));
         }
     }
 
     private void cancelarOferta(Player player, UUID ofertaId) {
         (new CancelarOfertaAccionServerUseCase()).cancelar(player.getName(), ofertaId);
-        enviarMensajeYSonido(player, GOLD + "Has cancelado tu oferta en el mercado. Ahora vuelves a tener esas acciones en tu cartera: " + AQUA + "/bolsa cartera",
+        enviarMensajeYSonido(player, GOLD + "Has cancelado tu oferta en el mercado. Para ver tu cartera " + AQUA + "/empresas misacciones",
                 Sound.ENTITY_PLAYER_LEVELUP);
-        player.closeInventory();
+
+        this.reloadMenu();
     }
 
     private void goBackToProfileMenu(Player player, InventoryClickEvent event) {
@@ -117,7 +141,7 @@ public final class VerOfertasAccionesServerMenu extends Menu {
                         "   ",
                         GOLD + "Fecha: " + oferta.getFecha(),
                         "  ",
-                        "" + oferta.getAccionistaEmpresaServerId()
+                        "" + oferta.getOfertaAccionServerId()
                 ))
                 .build();
     }
@@ -129,8 +153,15 @@ public final class VerOfertasAccionesServerMenu extends Menu {
                         "Las empresas del servidor pueden salir",
                         "a bosla. /empresas sacarbolsa",
                         "Aqui es donde se pueden comprar y",
-                        "vender las acciones de las empresas"
+                        "vender las cantidad de las empresas"
                 ))
                 .build();
+    }
+
+    private void reloadMenu() {
+        VerOfertasAccionesServerMenu newMenu = new VerOfertasAccionesServerMenu(player);
+        this.menuService.open(player, newMenu);
+
+        this.syncMenuService.sync(newMenu);
     }
 }

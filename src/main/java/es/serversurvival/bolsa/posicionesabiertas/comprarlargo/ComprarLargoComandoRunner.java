@@ -25,7 +25,7 @@ import static org.bukkit.Sound.*;
         value = "bolsa invertir",
         isAsync = true,
         args = {"ticker", "cantidad"},
-        explanation = "Para comprar una accion. <ticker> ticker de la accion (solo se pueden acciones americanas) <cantidad> cantidad de acciones a comprar"
+        explanation = "Para comprar una accion. <ticker> ticker de la accion (solo se pueden cantidad americanas) <cantidad> cantidad de cantidad a comprar"
 )
 public class ComprarLargoComandoRunner implements CommandRunnerArgs<ComprarLargoComando> {
     private final JugadoresService jugadoresService;
@@ -57,7 +57,7 @@ public class ComprarLargoComandoRunner implements CommandRunnerArgs<ComprarLargo
         ActivoInfo activoInfo = activoInfoService.getByNombreActivo(ticker, TipoActivo.ACCIONES);
 
         if(activoInfo.getPrecio() == -1){
-            sender.sendMessage(DARK_RED + "Ticker no encontrado, los tickers se ven en /bolsa valores o en inernet como en es.investing.com. Solo se puede invertir en acciones que cotizen en Estados Unidos");
+            sender.sendMessage(DARK_RED + "Ticker no encontrado, los tickers se ven en /bolsa valores o en inernet como en es.investing.com. Solo se puede invertir en cantidad que cotizen en Estados Unidos");
             return;
         }
 
@@ -78,11 +78,11 @@ public class ComprarLargoComandoRunner implements CommandRunnerArgs<ComprarLargo
 
     private void sendMessage(CommandSender sender, int cantidad, String nombreValor, double precio, boolean executedInMarket) {
         if(executedInMarket){
-            Bukkit.broadcastMessage(GOLD + sender.getName() + " ha comprado " + cantidad + " acciones de "
+            Bukkit.broadcastMessage(GOLD + sender.getName() + " ha comprado " + cantidad + " cantidad de "
                     + nombreValor + " a " + GREEN + FORMATEA.format(precio) + "PC");
 
             Funciones.enviarMensajeYSonido(Bukkit.getPlayer(sender.getName()), GOLD + "Has comprado " + FORMATEA.format(cantidad)
-                    + " acciones a " + GREEN + FORMATEA.format(precio) + " PC" + GOLD + " que es un total de " + GREEN +
+                    + " cantidad a " + GREEN + FORMATEA.format(precio) + " PC" + GOLD + " que es un total de " + GREEN +
                     FORMATEA.format(precio * cantidad) + " PC " + GOLD + " comandos: " + AQUA + "/bolsa cartera", ENTITY_PLAYER_LEVELUP);
         }else{
             sender.sendMessage(GOLD + "La compra no se ha podida ejecutar por que el mercado esta cerrado, cuando abra se ejecutara");

@@ -185,7 +185,7 @@ public final class PerfilMenu extends Menu {
         lore.add("   ");
         lore.add(GOLD + "Liquidez (ahorrado): " + GREEN + FORMATEA.format(totalAhorrado) + " PC");
         lore.add(GOLD + "Total en empresas: " + GREEN + FORMATEA.format(totalEmpresas) + " PC");
-        lore.add(GOLD + "Total en acciones: " + GREEN + FORMATEA.format(totalEnAcciones) + " PC");
+        lore.add(GOLD + "Total en cantidad: " + GREEN + FORMATEA.format(totalEnAcciones) + " PC");
         lore.add(GOLD + "Total que te deben: " + GREEN + FORMATEA.format(totalDeben) + " PC");
         lore.add(GOLD + "Total que debes: " + RED + "-" + FORMATEA.format(totalDebe) + " PC");
         lore.add(GOLD + "" + BOLD + "Reultado: " + (beneficios >= 0 ? GREEN + FORMATEA.format(resultado) : RED + "-" + FORMATEA.format(resultado)) + " PC");
@@ -225,7 +225,7 @@ public final class PerfilMenu extends Menu {
         }
         lore.add("  ");
         lore.add(DARK_AQUA + "Con la web podras acceder a todas tus estadisticas");
-        lore.add(DARK_AQUA + "y comprar acciones, realizar transacciones etc.");
+        lore.add(DARK_AQUA + "y comprar cantidad, realizar transacciones etc.");
 
         return ItemBuilder.of(Material.PAPER).title(displayName).lore(lore).build();
     }

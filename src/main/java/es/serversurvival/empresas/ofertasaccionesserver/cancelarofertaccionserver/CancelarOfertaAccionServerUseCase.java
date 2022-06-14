@@ -17,6 +17,8 @@ public final class CancelarOfertaAccionServerUseCase {
     }
 
     public void cancelar(String player, UUID id) {
+        System.out.println(id);
+
         var oferta = ofertasAccionesServerService.getById(id);
         this.ensureOwnsOferta(player, oferta);
 

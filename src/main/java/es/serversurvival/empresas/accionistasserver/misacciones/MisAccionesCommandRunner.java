@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 @Command(
         value = "empresas misacciones",
-        explanation = "Ver las acciones que tengas de las empresas del servidor"
+        explanation = "Ver las cantidad que tengas de las empresas del servidor"
 )
 public final class MisAccionesCommandRunner implements CommandRunnerNonArgs {
     private final MenuService menuService;

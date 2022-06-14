@@ -37,7 +37,7 @@ public final class MySQLTiendaRepository extends DataBaseRepository<TiendaObjeto
 
     @Override
     public List<TiendaObjeto> findByJugador(String jugador) {
-        return buildListFromQuery(Select.from(DB_NAME).where("jugador").equal(jugador));
+        return buildListFromQuery(Select.from(DB_NAME).where("nombreAccionista").equal(jugador));
     }
 
     @Override
@@ -63,7 +63,7 @@ public final class MySQLTiendaRepository extends DataBaseRepository<TiendaObjeto
     public TiendaObjeto buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new TiendaObjeto(
                 UUID.fromString(rs.getString(ID_FIELD_NAME)),
-                rs.getString("jugador"),
+                rs.getString("nombreAccionista"),
                 rs.getString("objeto"),
                 rs.getInt("cantidad"),
                 rs.getDouble("precio"),

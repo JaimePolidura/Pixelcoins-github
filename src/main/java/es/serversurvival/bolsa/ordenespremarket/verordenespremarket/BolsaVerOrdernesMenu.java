@@ -91,7 +91,7 @@ public final class BolsaVerOrdernesMenu extends Menu {
         return ItemBuilder.of(Material.PAPER)
                 .title(GOLD + "" + BOLD + "INFO")
                 .lore(List.of(
-                        "El mercado de acciones no siempre esta abierto",
+                        "El mercado de cantidad no siempre esta abierto",
                         "Su horario son los dias entre semana 15:30 - 22:30",
                         "Cuando compras una accion fuera de ese horario, se",
                         "añade una orden de compra/venta. Cuando el mercado",

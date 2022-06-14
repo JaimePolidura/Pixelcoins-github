@@ -133,13 +133,13 @@ public final class AccionesMenu extends Menu implements AfterShow {
 
     private ItemStack itemInfo () {
         List<String> infolore = new ArrayList<>();
-        infolore.add("Para invertir en estas acciones: /bolsa invertir <ticker> <nº acciones>");
+        infolore.add("Para invertir en estas cantidad: /bolsa invertir <ticker> <nº cantidad>");
         infolore.add("                  ");
-        infolore.add("Estas acciones son ejemplos con las que se puede comprar, ");
+        infolore.add("Estas cantidad son ejemplos con las que se puede comprar, ");
         infolore.add("si quieres comprar otra accion que no este en la lista adelante");
         infolore.add(" solo que necesitas encontrar el ticker en internet, ");
         infolore.add("se puede encontrar en cualquier pagina como por ejemplo");
-        infolore.add("es.investing.com. Hay que aclarar que hay acciones que se puede ");
+        infolore.add("es.investing.com. Hay que aclarar que hay cantidad que se puede ");
         infolore.add("y otras no la mayoria que se pueden son americanas.");
 
         String displayname = AQUA + "" + BOLD + "INFO";

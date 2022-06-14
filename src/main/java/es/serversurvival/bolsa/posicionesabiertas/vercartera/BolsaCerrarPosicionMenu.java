@@ -65,7 +65,7 @@ public final class BolsaCerrarPosicionMenu extends NumberSelectorMenu {
                     "unos beneficios de " + GREEN + "+ " + FORMATEA.format(resultadoNeto) + "PC" :
                     "unas perdidas de " + RED + FORMATEA.format(resultadoNeto) + "PC";
 
-            player.sendMessage(GOLD + "Has cerra de la posicion de " + cantidad + " acciones de " + activoInfoAVender.getNombreActivoLargo() + " por " + GREEN +
+            player.sendMessage(GOLD + "Has cerra de la posicion de " + cantidad + " cantidad de " + activoInfoAVender.getNombreActivoLargo() + " por " + GREEN +
                     FORMATEA.format(activoInfoAVender.getPrecio()) + "PC " + GOLD + "Con " + mensajeResultado);
             player.playSound(player.getLocation(), resultadoNeto >= 0 ? Sound.ENTITY_PLAYER_LEVELUP : Sound.BLOCK_ANVIL_LAND, 10, 1);
         }else{

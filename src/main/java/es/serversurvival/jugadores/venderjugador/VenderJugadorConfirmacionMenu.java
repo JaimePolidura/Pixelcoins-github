@@ -30,7 +30,7 @@ public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu {
         var itemToVenderIsIntVendedorInventory = this.isItemInInventory(jugadorVendedor, itemAVender, slotItemVender);
         if(!itemToVenderIsIntVendedorInventory){
             this.jugadorVendedor.sendMessage(DARK_RED + "casi maquina");
-            this.jugadorComprador.sendMessage(DARK_RED + "No se ha podido completar el pago, por que el jugador ha movido el objeto a venderte");
+            this.jugadorComprador.sendMessage(DARK_RED + "No se ha podido completar el pago, por que el nombreAccionista ha movido el objeto a venderte");
             return;
         }
 

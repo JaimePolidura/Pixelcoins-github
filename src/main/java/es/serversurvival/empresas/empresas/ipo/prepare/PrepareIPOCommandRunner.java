@@ -23,7 +23,7 @@ import static org.bukkit.ChatColor.*;
 @Command(
         value = "empresas ipo",
         args = {"empresa", "accionesTotales", "accionesOwner", "precioPorAccion"},
-        explanation = "Puedes sacar tus empresas a la 'bolsa' donde el resto de jugadores podran comprar las acciones. " +
+        explanation = "Puedes sacar tus empresas a la 'bolsa' donde el resto de jugadores podran comprar las cantidad. " +
                 "Por cada venta de la empresa a jugadores tu empresa recaudara las pixelcoins. Para mas ayuda pregunta al admin"
 )
 public final class PrepareIPOCommandRunner implements CommandRunnerArgs<IPOCommand> {
@@ -48,11 +48,11 @@ public final class PrepareIPOCommandRunner implements CommandRunnerArgs<IPOComma
         if(!empresa.getOwner().equalsIgnoreCase(jugadorNombre))
             throw new NotTheOwner("Empresa no encontrada o no eres el owner");
         if(accionesTotales <= 0 || accionesOwner < 0 || precioPorAccion <= 0)
-            throw new IllegalQuantity("La cantidad de las acciones y el precio ha de ser un numero positivo");
+            throw new IllegalQuantity("La cantidad de las cantidad y el precio ha de ser un numero positivo");
         if(accionesOwner >= accionesTotales)
-            throw new IllegalQuantity("Las acciones que van a ser tuyas tienen que ser menores que el total");
+            throw new IllegalQuantity("Las cantidad que van a ser tuyas tienen que ser menores que el total");
         if(accionesTotales <= 2)
-            throw new IllegalQuantity("El minimo de acciones totales han de ser 2");
+            throw new IllegalQuantity("El minimo de cantidad totales han de ser 2");
         if(empresa.isCotizada())
             throw new IllegalStateException("La empresa que quieres sacar a bolsa ya cotiza en bolsa");
 

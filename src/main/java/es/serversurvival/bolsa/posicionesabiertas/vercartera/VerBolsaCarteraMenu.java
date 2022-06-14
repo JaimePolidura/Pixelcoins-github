@@ -156,7 +156,7 @@ public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
                         "  <ticker> es la letra identificatoria",
                         "    del valor: ejemplo Amazon: AMZN",
                         "    (la empresa debe cotizar en USA)",
-                        "   <nacciones> numero de acciones a comprar",
+                        "   <nacciones> numero de cantidad a comprar",
                         "   ",
                         "Para consultar tus valores en carteras ",
                         "y venderlas tienes tres vias: el menu actual,",
