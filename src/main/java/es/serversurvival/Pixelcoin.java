@@ -40,9 +40,6 @@ import es.serversurvival.empresas.ofertasaccionesserver._shared.infrastructure.M
 import es.serversurvival.mensajes._shared.infrastructure.MySQLMensajesRepository;
 import es.serversurvival.tienda._shared.infrastructure.MySQLTiendaRepository;
 import es.serversurvival.transacciones._shared.infrastructure.MySQLTransaccionesRepository;
-import es.serversurvival.web.conversacionesweb._shared.application.ConversacionesWebService;
-import es.serversurvival.web.conversacionesweb._shared.domain.ConversacionesWebRepostiory;
-import es.serversurvival.web.conversacionesweb._shared.infrastructure.InMemoryConversacionesRepository;
 import es.serversurvival.web.cuentasweb._shared.application.CuentasWebService;
 import es.serversurvival.web.cuentasweb._shared.domain.CuentasWebRepository;
 import es.serversurvival.web.cuentasweb._shared.infrastructure.MySQLCuentasWebRepository;
@@ -66,7 +63,6 @@ import es.serversurvival.transacciones._shared.domain.TransaccionesRepository;
 import es.serversurvival.web.verificacioncuentas._shared.application.VerificacionCuentaService;
 import es.serversurvival.web.verificacioncuentas._shared.domain.VerificacionCuentaRepository;
 import es.serversurvival.web.verificacioncuentas._shared.infrastructure.InMemoryVerificacionCuentaRepository;
-import es.serversurvival.web.webconnection.RabbitMQConsumerTask;
 import es.serversurvival._shared.scoreboards.ScoreBoardManager;
 import es.serversurvival._shared.scoreboards.ScoreboardUpdateTask;
 
@@ -130,16 +126,11 @@ public final class Pixelcoin extends JavaPlugin {
 
         this.loadAllDependenciesContainer();
         this.setUpCommandsMobListenersTask();
-//        this.setUpScoreboardUpdater();
+        this.setUpScoreboardUpdater();
 
         getServer().getConsoleSender().sendMessage(GREEN + "------------------------------");
 
         this.eventBus.publish(new PluginIniciado());
-    }
-
-    private void setUpRabbitMQConsumer () {
-        RabbitMQConsumerTask rabbitMQConsumerTask = new RabbitMQConsumerTask();
-        rabbitMQConsumerTask.runTaskAsynchronously(this);
     }
 
     private void setUpScoreboardUpdater () {
@@ -176,7 +167,6 @@ public final class Pixelcoin extends JavaPlugin {
             put(EmpresasRepostiory.class, new MySQLEmpresasRepository(mysqlCOnfiguration));
             put(EmpleadosRepository.class, new MySQLEmpleadosRepository(mysqlCOnfiguration));
             put(CuentasWebRepository.class, new MySQLCuentasWebRepository(mysqlCOnfiguration));
-            put(ConversacionesWebRepostiory.class, new InMemoryConversacionesRepository());
             put(VerificacionCuentaRepository.class, new InMemoryVerificacionCuentaRepository());
             put(OrderesPremarketRepository.class, new MySQLOrdenesPremarketRepository(mysqlCOnfiguration));
             put(PosicionesAbiertasRepository.class, new MySQLPosicionesAbiertasRepository(mysqlCOnfiguration));
@@ -195,7 +185,6 @@ public final class Pixelcoin extends JavaPlugin {
             put(EmpresasService.class, new EmpresasService());
             put(EmpleadosService.class, new EmpleadosService());
             put(CuentasWebService.class, new CuentasWebService());
-            put(ConversacionesWebService.class, new ConversacionesWebService());
             put(VerificacionCuentaService.class, new VerificacionCuentaService());
             put(OrdenesPremarketService.class, new OrdenesPremarketService());
             put(PosicionesAbiertasSerivce.class, new PosicionesAbiertasSerivce());
