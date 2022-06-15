@@ -17,7 +17,6 @@ import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfoRepository;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.acciones.AccionesApiService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.criptomonedas.CriptomonedasApiService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.materiasprimas.MateriasPrimasApiService;
-import es.serversurvival.bolsa.activosinfo._shared.infrastructure.InMemoryActivoInfoCacheRepository;
 import es.serversurvival.bolsa.activosinfo._shared.infrastructure.MySQLActivoInfoRepository;
 import es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos.AccionesApiServiceIEXCloud;
 import es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos.CriptomonedasApiServiceIEXCloud;
