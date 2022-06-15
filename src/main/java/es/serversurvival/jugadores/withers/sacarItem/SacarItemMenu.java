@@ -20,7 +20,7 @@ import java.util.List;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival.jugadores.withers.CambioPixelcoins.*;
-import static org.bukkit.ChatColor.DARK_RED;
+import static org.bukkit.ChatColor.*;
 
 public final class SacarItemMenu extends Menu {
     public static final String TITULO = ChatColor.DARK_RED + "" + org.bukkit.ChatColor.BOLD + "   ELIGE ITEM PARA SACAR";
@@ -80,11 +80,9 @@ public final class SacarItemMenu extends Menu {
 
         this.jugador = jugador.decrementPixelcoinsBy(cambioPixelcoins);
 
-        super.setItemActualPage(9, buildItem("DIAMANTE", DIAMANTE, Material.DIAMOND), 2);
-        super.setItemActualPage(11, buildItem("BLOQUE DE DIAMANTE", DIAMANTE * 9, Material.DIAMOND_BLOCK), 3);
-        super.setItemActualPage(13, buildItem("LAPISLAZULI", LAPISLAZULI, Material.LAPIS_LAZULI), 4);
-        super.setItemActualPage(15, buildItem("BLOQUE DE LAPISLAZULI", LAPISLAZULI * 9, Material.LAPIS_BLOCK), 5);
-        super.setItemActualPage(17, buildItem("CUARZO", CUARZO, Material.QUARTZ_BLOCK), 6);
+        Funciones.enviarMensajeYSonido(player, GOLD + "Has convertido las pixelcoins: " + RED + "-" + FORMATEA.format(cambioPixelcoins) + " PC " + GOLD +
+                "Quedan " + GREEN + FORMATEA.format(jugador.getPixelcoins() - cambioPixelcoins) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
+
     }
 
     private ItemStack buildItemInfo() {
@@ -103,7 +101,7 @@ public final class SacarItemMenu extends Menu {
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.AQUA + "1 "+itemACambiar+" -> " + ChatColor.GREEN + cambio);
         lore.add("    ");
-        lore.add(ChatColor.GOLD +"Tus pixelcoins disponibles: " + ChatColor.GREEN + FORMATEA.format(jugador.getNombre()));
+        lore.add(ChatColor.GOLD +"Tus pixelcoins disponibles: " + ChatColor.GREEN + FORMATEA.format(jugador.getPixelcoins()));
 
         return ItemBuilder.of(itemMaterial).title(displayName).lore(lore).build();
     }

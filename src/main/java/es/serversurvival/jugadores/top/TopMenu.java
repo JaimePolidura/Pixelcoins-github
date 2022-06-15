@@ -2,13 +2,18 @@ package es.serversurvival.jugadores.top;
 
 import es.jaimetruman.ItemBuilder;
 import es.jaimetruman.menus.Menu;
+import es.jaimetruman.menus.MenuService;
 import es.jaimetruman.menus.configuration.MenuConfiguration;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
+import es.serversurvival.jugadores.perfil.PerfilMenu;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -26,10 +31,12 @@ public final class TopMenu extends Menu {
     private final List<InfoJugador> infoJugadores = new ArrayList<>();
     private final PosicionesCerradasService posicionesCerradasService;
     private final JugadoresService jugadoresService;
+    private final MenuService menuService;
 
     public TopMenu(){
         this.posicionesCerradasService = DependecyContainer.get(PosicionesCerradasService.class);
         this.jugadoresService = DependecyContainer.get(JugadoresService.class);
+        this.menuService = DependecyContainer.get(MenuService.class);
 
         this.initInfoJugadores();
     }
@@ -42,7 +49,7 @@ public final class TopMenu extends Menu {
                 {0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 4, 0, 0, 5, 0, 0, 6, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 7, 0, 0, 0, 0, 0, 8, 0}
+                {0, 7, 0, 0, 0, 0, 0, 8, 9}
         };
     }
 
@@ -59,6 +66,13 @@ public final class TopMenu extends Menu {
                 .item(6, buildTopMenosFiablesJugadoresItem())
                 .item(7, buildItemPeoresOperacioensBolsa())
                 .item(8, buildMejoresComerciantes())
+                .item(9, buildItemGoBackToProfile(), (p,e) -> this.menuService.open(p, new PerfilMenu(p.getName())))
+                .build();
+    }
+
+    private ItemStack buildItemGoBackToProfile() {
+        return ItemBuilder.of(Material.RED_BANNER)
+                .title(RED + "<-")
                 .build();
     }
 

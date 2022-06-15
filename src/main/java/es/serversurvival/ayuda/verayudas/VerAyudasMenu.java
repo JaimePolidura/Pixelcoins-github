@@ -37,6 +37,7 @@ public final class VerAyudasMenu extends Menu {
 
     private void onItemAyudaClicked(Player player, String command){
         player.performCommand(command);
+        player.closeInventory();
     }
 
     private ItemStack buildItemAyuda (String tiposAyuda) {

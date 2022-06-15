@@ -9,7 +9,7 @@ import java.util.List;
 public final class VerMensajesUseCase {
     private final MensajesService mensajesService;
 
-    private VerMensajesUseCase () {
+    public VerMensajesUseCase () {
         this.mensajesService = DependecyContainer.get(MensajesService.class);
     }
 

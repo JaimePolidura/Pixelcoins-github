@@ -131,7 +131,7 @@ public final class Pixelcoin extends JavaPlugin {
 
         this.loadAllDependenciesContainer();
         this.setUpCommandsMobListenersTask();
-        this.setUpScoreboardUpdater();
+//        this.setUpScoreboardUpdater();
 
         getServer().getConsoleSender().sendMessage(GREEN + "------------------------------");
 

@@ -13,17 +13,17 @@ import java.util.List;
 
 @Command(value = "mensajes", explanation = "Ver todos los mensajes no leidos que tengas")
 public class MensajesComandoRunner implements CommandRunnerNonArgs {
-    private final MensajesService mensajesService;
+    private final VerMensajesUseCase verMensajesUseCase;
 
     public MensajesComandoRunner(){
-        this.mensajesService = DependecyContainer.get(MensajesService.class);
+        this.verMensajesUseCase = new VerMensajesUseCase();
     }
 
     @Override
     public void execute(CommandSender sender) {
         Player player = (Player) sender;
 
-        List<Mensaje> mensajes = this.mensajesService.findMensajesByDestinatario(sender.getName());
+        List<Mensaje> mensajes = this.verMensajesUseCase.getMensajes(sender.getName());
         
         if (mensajes == null || mensajes.size() == 0) {
             player.sendMessage(ChatColor.DARK_RED + "No tienes ningun mensaje pendiente");

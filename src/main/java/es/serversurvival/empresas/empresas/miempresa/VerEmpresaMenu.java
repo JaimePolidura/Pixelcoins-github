@@ -147,6 +147,7 @@ public final class VerEmpresaMenu extends Menu implements AfterShow {
                 .collect(Collectors.toMap(Accionista::nombreAccionista, Accionista::cantidad, Integer::sum))
                 .entrySet().stream()
                 .map(accionista -> new Accionista(accionista.getKey(), accionista.getValue()))
+                .sorted()
                 .map(this::getLoreAccionista)
                 .toList();
 
@@ -156,7 +157,12 @@ public final class VerEmpresaMenu extends Menu implements AfterShow {
                 .build();
     }
 
-    private record Accionista(String nombreAccionista, int cantidad){}
+    private record Accionista(String nombreAccionista, int cantidad) implements  Comparable<Accionista>{
+        @Override
+        public int compareTo(Accionista o) {
+            return o.cantidad - cantidad;
+        }
+    }
 
     private String getLoreAccionista(Accionista accionista) {
         double ownership = (double)accionista.cantidad() / (double)empresa.getAccionesTotales();
