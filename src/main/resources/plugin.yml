@@ -3,6 +3,9 @@ main: es.serversurvival.Pixelcoin
 version: 7.0
 api-version: "1.16"
 commands:
+  cambio:
+    description: Cambio pixelcoins/items
+    usage: /<command>
   dinero:
     description: Comando para ver tu dinero
     usage: /<command>

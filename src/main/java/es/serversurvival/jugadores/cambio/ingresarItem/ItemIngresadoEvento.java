@@ -1,4 +1,4 @@
-package es.serversurvival.jugadores.withers.sacarItem;
+package es.serversurvival.jugadores.cambio.ingresarItem;
 
 import es.serversurvival.transacciones._shared.domain.TipoTransaccion;
 import es.serversurvival.transacciones._shared.domain.EventoTipoTransaccion;
@@ -11,13 +11,13 @@ import lombok.Getter;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class ItemSacadoEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
+public final class ItemIngresadoEvento extends PixelcoinsEvento implements EventoTipoTransaccion {
     @Getter private final Jugador jugador;
-    @Getter private final String itemNombre;
-    @Getter private final int pixelcoins;
+    @Getter private final double pixelcoins;
+    @Getter private final String nombreitem;
 
     @Override
     public Transaccion buildTransaccion() {
-        return new Transaccion(UUID.randomUUID(), formatFecha(), jugador.getNombre(), "", pixelcoins, itemNombre, TipoTransaccion.WITHERS_SACAR);
+        return new Transaccion(UUID.randomUUID(), formatFecha(), "", jugador.getNombre(), (int) pixelcoins, nombreitem, TipoTransaccion.WITHERS_INGRESAR);
     }
 }

@@ -1,7 +1,8 @@
-package es.serversurvival.jugadores.withers.sacarMaxItem;
+package es.serversurvival.jugadores.cambio;
 
 import es.serversurvival.jugadores._shared.domain.Jugador;
-import es.serversurvival.jugadores.withers.sacarItem.SacarItemUseCase;
+import es.serversurvival.jugadores.cambio.sacarItem.SacarItemUseCase;
+import es.serversurvival.jugadores.cambio.sacarMaxItem.SacarMaxItemUseCase;
 
 public enum CambioPixelcoins {
     DIAMOND(CambioPixelcoins.DIAMANTE, SacarMaxItemUseCase.INSTANCE::sacarMaxItemDiamond),
@@ -13,8 +14,6 @@ public enum CambioPixelcoins {
     public static final int DIAMANTE = 290;
     public static final int CUARZO = 12;
     public static final int LAPISLAZULI = 5;
-
-    private static final SacarItemUseCase sacarItemUseCase = new SacarItemUseCase();
 
     public final int cambio;
     private final FunctionStrategy functionStrategy;
@@ -29,7 +28,7 @@ public enum CambioPixelcoins {
     }
 
     public static void sacarItem (Jugador jugador, String item) {
-        sacarItemUseCase.sacarItem(jugador, item, CambioPixelcoins.getCambioTotal(item, 1));
+        SacarItemUseCase.INSTANCE.sacarItem(jugador, item, CambioPixelcoins.getCambioTotal(item, 1));
     }
 
     public static boolean suficientesPixelcoins (String material, int cantidad, double pixelcoinsJugador) {
@@ -39,7 +38,7 @@ public enum CambioPixelcoins {
     public static void sacarMaxItem (String tipo, Jugador jugador, String playerName) {
         CambioPixelcoins.valueOf(tipo).functionStrategy.sacar(jugador, playerName);
     }
-
+    
     @FunctionalInterface
     private interface FunctionStrategy {
         void sacar (Jugador jugador, String playerName);

@@ -1,4 +1,4 @@
-package es.serversurvival.jugadores.withers.sacarItem;
+package es.serversurvival.jugadores.cambio.sacarItem;
 
 import es.jaimetruman.ItemBuilder;
 import es.jaimetruman.menus.Menu;
@@ -7,7 +7,7 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
-import es.serversurvival.jugadores.withers.CambioPixelcoins;
+import es.serversurvival.jugadores.cambio.CambioPixelcoins;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
-import static es.serversurvival.jugadores.withers.CambioPixelcoins.*;
+import static es.serversurvival.jugadores.cambio.CambioPixelcoins.*;
 import static org.bukkit.ChatColor.*;
 
 public final class SacarItemMenu extends Menu {

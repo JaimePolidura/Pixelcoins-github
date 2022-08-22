@@ -39,7 +39,7 @@ public final class MySQLCuentasWebRepository extends DataBaseRepository<CuentaWe
     protected EntityMapper<CuentaWeb> entityMapper() {
         return EntityMapper.table(TABLE_NAME)
                 .idField(ID_FIELD_NAME)
-                .classToMap(CuentaWeb.class)
+                .classesToMap(CuentaWeb.class)
                 .build();
     }
 

@@ -55,7 +55,7 @@ public final class MySQLEmpleadosRepository extends DataBaseRepository<Empleado,
     @Override
     protected EntityMapper<Empleado> entityMapper() {
         return EntityMapper.table(TABLE_NAME)
-                .classToMap(Empleado.class)
+                .classesToMap(Empleado.class)
                 .idField(ID_FIELD_NAME)
                 .build();
     }

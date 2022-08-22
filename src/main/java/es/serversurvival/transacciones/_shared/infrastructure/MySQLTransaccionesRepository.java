@@ -37,7 +37,7 @@ public final class MySQLTransaccionesRepository extends DataBaseRepository<Trans
     @Override
     protected EntityMapper<Transaccion> entityMapper() {
         return EntityMapper.table(TABLE_NAME)
-                .classToMap(Transaccion.class)
+                .classesToMap(Transaccion.class)
                 .idField(ID_TABLE_NAME)
                 .build();
     }

@@ -35,8 +35,6 @@ public class VerCarteraJugadorComandoRunner implements CommandRunnerArgs<VerCart
 
         double totalInvertido = PosicionesUtils.getAllPixeloinsEnValores(nombreJugadorAVer);
         Map<String, AccionPesoUsuario> posicionesConPeso = getPesoCarteraAcciones(nombreJugadorAVer, totalInvertido);
-        System.out.println(posicionesConPeso);
-
         player.sendMessage(ChatColor.GOLD + "" + "------------------------------");
         player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "   LAS CARTERA DE " + nombreJugadorAVer);
 

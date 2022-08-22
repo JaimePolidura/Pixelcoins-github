@@ -53,17 +53,17 @@ public final class MySQLTiendaRepository extends DataBaseRepository<TiendaObjeto
     @Override
     protected EntityMapper<TiendaObjeto> entityMapper() {
         return EntityMapper.table(DB_NAME)
-                .classToMap(TiendaObjeto.class)
+                .classesToMap(TiendaObjeto.class)
                 .idField(ID_FIELD_NAME)
                 .build();
     }
-
+    
     @Override
     @SneakyThrows
     public TiendaObjeto buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new TiendaObjeto(
                 UUID.fromString(rs.getString(ID_FIELD_NAME)),
-                rs.getString("nombreAccionista"),
+                rs.getString("jugador"),
                 rs.getString("objeto"),
                 rs.getInt("cantidad"),
                 rs.getDouble("precio"),

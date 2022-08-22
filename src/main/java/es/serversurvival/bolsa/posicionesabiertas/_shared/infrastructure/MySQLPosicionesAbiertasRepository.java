@@ -56,7 +56,7 @@ public final class MySQLPosicionesAbiertasRepository extends DataBaseRepository<
     @Override
     protected EntityMapper<PosicionAbierta> entityMapper() {
         return EntityMapper.table(TABLE_NAME)
-                .classToMap(PosicionAbierta.class)
+                .classesToMap(PosicionAbierta.class)
                 .idField(ID_FIELD_NAME)
                 .build();
     }

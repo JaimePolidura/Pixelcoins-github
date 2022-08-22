@@ -1,4 +1,4 @@
-package es.serversurvival.jugadores.withers.sacarMaxItem;
+package es.serversurvival.jugadores.cambio.sacarMaxItem;
 
 import es.serversurvival.transacciones._shared.domain.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;

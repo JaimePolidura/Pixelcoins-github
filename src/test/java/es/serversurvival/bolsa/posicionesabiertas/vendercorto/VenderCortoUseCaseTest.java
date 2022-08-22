@@ -67,7 +67,6 @@ public final class VenderCortoUseCaseTest {
         assertThat(cantidadArgCaptor.getValue()).isEqualTo(2);
         assertThat(precioUnidadArgCaptor.getValue()).isEqualTo(100);
         double comisionTotal = redondeoDecimales(reducirPorcentaje(2 * 100, 100 - PORCENTAJE_CORTO), 2);
-        System.out.println(comisionTotal);
         verify(this.jugadoresService, times(1)).save(argThat(of(
                 jugadorComprador.decrementPixelcoinsBy(comisionTotal).incrementGastosBy(comisionTotal)
         )));

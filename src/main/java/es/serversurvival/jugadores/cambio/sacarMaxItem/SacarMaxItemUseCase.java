@@ -1,11 +1,10 @@
-package es.serversurvival.jugadores.withers.sacarMaxItem;
+package es.serversurvival.jugadores.cambio.sacarMaxItem;
 
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.utils.CollectionUtils;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
-import es.serversurvival.jugadores.withers.CambioPixelcoins;
+import es.serversurvival.jugadores.cambio.CambioPixelcoins;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

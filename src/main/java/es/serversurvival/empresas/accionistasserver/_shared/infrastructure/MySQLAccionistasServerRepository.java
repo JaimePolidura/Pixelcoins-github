@@ -53,7 +53,7 @@ public final class MySQLAccionistasServerRepository extends DataBaseRepository<A
     protected EntityMapper<AccionistaServer> entityMapper() {
         return EntityMapper.table(TABLE_NAME)
                 .idField(ID_FIELD_NAME)
-                .classToMap(AccionistaServer.class)
+                .classesToMap(AccionistaServer.class)
                 .build();
     }
 

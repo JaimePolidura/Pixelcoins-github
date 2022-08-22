@@ -45,7 +45,7 @@ public final class MySQLActivoInfoRepository extends DataBaseRepository<ActivoIn
     protected EntityMapper<ActivoInfo> entityMapper() {
         return EntityMapper.table(TABLE_NAME)
                 .idField(ID_FIELD_NAME)
-                .classToMap(ActivoInfo.class)
+                .classesToMap(ActivoInfo.class)
                 .build();
     }
 

@@ -41,7 +41,7 @@ public final class MySQLPosicionesCerradasRepository extends DataBaseRepository<
     protected EntityMapper<PosicionCerrada> entityMapper() {
         return EntityMapper.table(TABLE_NAME)
                 .idField(ID_FIELD_NAME)
-                .classToMap(PosicionCerrada.class)
+                .classesToMap(PosicionCerrada.class)
                 .build();
     }
 

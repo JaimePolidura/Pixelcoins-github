@@ -55,7 +55,7 @@ public final class MySQLEmpresasRepository extends DataBaseRepository<Empresa, U
     protected EntityMapper<Empresa> entityMapper() {
         return EntityMapper.table(TABLE_NAME)
                 .idField(ID_TABLE_NAME)
-                .classToMap(Empresa.class)
+                .classesToMap(Empresa.class)
                 .build();
     }
 

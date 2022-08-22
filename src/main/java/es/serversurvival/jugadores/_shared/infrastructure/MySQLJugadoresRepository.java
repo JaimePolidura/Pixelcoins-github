@@ -23,17 +23,6 @@ public final class MySQLJugadoresRepository extends DataBaseRepository<Jugador, 
         super(databaseConnection);
     }
 
-    public static void main(String[] args) {
-        Jugador jugador = new Jugador(UUID.randomUUID(), "jaime", 0, 0, 0,
-                0, 0, 0, 0);
-
-        var mapper = new ObjectMapper();
-
-        var map =  mapper.convertValue(jugador, Map.class);
-
-        System.out.println(map);
-    }
-
     @Override
     public void save(Jugador jugador) {
         super.save(jugador);
@@ -57,7 +46,7 @@ public final class MySQLJugadoresRepository extends DataBaseRepository<Jugador, 
     @Override
     protected EntityMapper<Jugador> entityMapper() {
         return EntityMapper.table(TABLE_NAME)
-                .classToMap(Jugador.class)
+                .classesToMap(Jugador.class)
                 .idField(ID_FIELD_NAME)
                 .build();
     }

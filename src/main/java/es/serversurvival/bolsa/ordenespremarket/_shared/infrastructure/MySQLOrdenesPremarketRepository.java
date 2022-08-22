@@ -50,7 +50,7 @@ public final class MySQLOrdenesPremarketRepository extends DataBaseRepository<Or
     @Override
     protected EntityMapper<OrdenPremarket> entityMapper() {
         return EntityMapper.table(TABLE_NAME)
-                .classToMap(OrdenPremarket.class)
+                .classesToMap(OrdenPremarket.class)
                 .idField(ID_FIELD_NAME)
                 .build();
     }

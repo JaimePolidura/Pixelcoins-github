@@ -1,4 +1,4 @@
-package es.serversurvival.jugadores.withers.sacarItem;
+package es.serversurvival.jugadores.cambio.sacarItem;
 
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;

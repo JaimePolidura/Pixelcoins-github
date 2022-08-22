@@ -39,7 +39,8 @@ public final class MySQLMensajesRepository extends DataBaseRepository<Mensaje, U
     @Override
     protected EntityMapper<Mensaje> entityMapper() {
         return EntityMapper.table(TABLE_NAME)
-                .idField(ID_FIELD_NAME).classToMap(Mensaje.class)
+                .idField(ID_FIELD_NAME)
+                .classesToMap(Mensaje.class)
                 .build();
     }
 

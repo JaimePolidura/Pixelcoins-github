@@ -5,7 +5,7 @@ import es.jaime.configuration.DatabaseConfiguration;
 import static java.lang.String.*;
 
 public final class MySQLConfiguration extends DatabaseConfiguration {
-    private static final String DB_NAME = "pixelcoins4_test";
+    private static final String DB_NAME = "pixelcoins4";
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "";
     private static final String DB_HOST = "localhost";

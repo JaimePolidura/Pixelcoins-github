@@ -1,26 +1,33 @@
-package es.serversurvival.jugadores.withers.ingresarItem.diamante;
+package es.serversurvival.jugadores.cambio.ingresarItem.diamante;
 
-import es.jaimetruman.mobs.Mob;
-import es.jaimetruman.mobs.OnPlayerInteractMob;
-import es.serversurvival.jugadores.withers.ingresarItem.IngresarItemUseCase;
+
+import es.jaimetruman.commands.Command;
+import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
+import es.jaimetruman.menus.MenuService;
+import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.jugadores.cambio.ingresarItem.IngresarItemUseCase;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
-@Mob(x = 245, y = 64, z = -216)
-public class IngresarDiamantesPixelcoinsMob implements OnPlayerInteractMob {
+@Command(
+        value = "cambio diamante",
+        explanation = "Cambiar un objeto por pixelcoins"
+)
+public final class IngresarDiamanteCommandRunner implements CommandRunnerNonArgs {
     private final IngresarItemUseCase ingresarItemUseCase;
 
-    public IngresarDiamantesPixelcoinsMob() {
+    public IngresarDiamanteCommandRunner() {
         this.ingresarItemUseCase = new IngresarItemUseCase();
     }
 
     @Override
-    public void execute(PlayerInteractEntityEvent event) {
-        Player player = event.getPlayer();
+    public void execute(CommandSender sender) {
+        Player player = Bukkit.getPlayer(sender.getName());
         ItemStack itemEnMano = player.getInventory().getItemInMainHand();
 
         if(itemEnMano == null || Funciones.noCuincideNombre(itemEnMano.getType().toString(), "DIAMOND", "DIAMOND_BLOCK")){

@@ -32,8 +32,6 @@ public final class PagarUseCase {
     }
 
     private void ensureNotSamePlayer(String pagador, String pagado){
-        System.out.println("Hola?");
-
         if(pagador.equalsIgnoreCase(pagado))
             throw new CannotBeYourself("No te pudes pagar a ti mismo");
     }

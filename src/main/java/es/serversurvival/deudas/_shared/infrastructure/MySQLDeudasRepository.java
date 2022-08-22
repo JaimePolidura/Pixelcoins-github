@@ -55,7 +55,7 @@ public final class MySQLDeudasRepository extends DataBaseRepository<Deuda, UUID>
     protected EntityMapper<Deuda> entityMapper() {
         return EntityMapper.table(TABLE_NAME)
                 .idField(ID_FIELD_NAME)
-                .classToMap(Deuda.class)
+                .classesToMap(Deuda.class)
                 .build();
     }
 

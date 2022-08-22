@@ -55,7 +55,7 @@ public final class MySQLOfertasAccionesServerRepository extends DataBaseReposito
     @Override
     protected EntityMapper<OfertaAccionServer> entityMapper() {
         return EntityMapper.table(TABLE_NAME)
-                .classToMap(OfertaAccionServer.class)
+                .classesToMap(OfertaAccionServer.class)
                 .idField(ID_FIELD_NAME)
                 .build();
     }
