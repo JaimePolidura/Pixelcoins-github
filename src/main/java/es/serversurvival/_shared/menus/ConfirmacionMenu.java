@@ -1,6 +1,6 @@
 package es.serversurvival._shared.menus;
 
-import es.jaimetruman.ItemBuilder;
+import es.jaimetruman._shared.utils.ItemBuilder;
 import es.jaimetruman.menus.Menu;
 import es.jaimetruman.menus.configuration.MenuConfiguration;
 import es.jaimetruman.menus.modules.confirmation.ConfirmationConfiguration;

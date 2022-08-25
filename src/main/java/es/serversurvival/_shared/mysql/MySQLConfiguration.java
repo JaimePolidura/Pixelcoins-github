@@ -1,9 +1,11 @@
 package es.serversurvival._shared.mysql;
 
 import es.jaime.configuration.DatabaseConfiguration;
+import es.jaimetruman.annotations.Configuration;
 
 import static java.lang.String.*;
 
+@Configuration
 public final class MySQLConfiguration extends DatabaseConfiguration {
     private static final String DB_NAME = "pixelcoins4";
     private static final String DB_USER = "root";

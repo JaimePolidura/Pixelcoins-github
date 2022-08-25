@@ -3,10 +3,15 @@ package es.serversurvival;
 import es.jaime.Event;
 import es.jaime.EventBus;
 import es.jaime.impl.EventBusSynch;
+import es.jaimetruman.DependencyInjectorBootstrapper;
+import es.jaimetruman.DependencyInjectorConfiguration;
 import es.jaimetruman.Mapper;
 import es.jaimetruman._shared.utils.ClassMapperInstanceProvider;
+import es.jaimetruman._shared.utils.InstanceProvider;
 import es.jaimetruman.menus.MenuService;
 import es.jaimetruman.menus.modules.sync.SyncMenuService;
+import es.jaimetruman.repository.DependenciesRepository;
+import es.jaimetruman.repository.InMemoryDependenciesRepository;
 import es.jaimetruman.task.BukkitTimeUnit;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
@@ -66,6 +71,8 @@ import es.serversurvival.web.verificacioncuentas._shared.infrastructure.InMemory
 import es.serversurvival._shared.scoreboards.ScoreBoardManager;
 import es.serversurvival._shared.scoreboards.ScoreboardUpdateTask;
 
+import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -73,25 +80,10 @@ import java.util.concurrent.ExecutorService;
 
 import static org.bukkit.ChatColor.*;
 
-/**
- * Updated:
- *
- 1 Jugadores
- 2 Mensajes
- 3 Transacciones
- 4 Deudas
- 5 Tienda
- 6 Empresas
- 7 Empleados
- 8 CuentasWeb
- 9 Verificacion cuentas
- 10 OrdenesPremarket
- 11 PosicionesAbiertas
- 12 Llamadas api
- 13 Ofertas empresas server
- 14 Acciones empresas server
- */
 public final class Pixelcoin extends JavaPlugin {
+    private static final String ON_WRONG_COMMAND = DARK_RED + "Comando no encontrado /ayuda";
+    private static final String ON_WRONG_PERMISSION = DARK_RED + "Tienes que ser administrador para ejecutar ese comando";
+
     private static Pixelcoin plugin;
     private ScoreBoardManager scoreBoardManager;
     private EventBus eventBus;
@@ -113,6 +105,7 @@ public final class Pixelcoin extends JavaPlugin {
         return plugin.updater;
     }
 
+    @SneakyThrows
     @Override
     public void onEnable() {
         plugin = this;
@@ -121,8 +114,18 @@ public final class Pixelcoin extends JavaPlugin {
 
         getLogger().info("------------Plugin activado -------------");
         getServer().getConsoleSender().sendMessage(GREEN + "------------------------------");
+        DependenciesRepository dependenciesRepository = new InMemoryDependenciesRepository();
 
         this.eventBus = new EventBusSynch("es.serversurvival");
+
+        DependencyInjectorBootstrapper.init(DependencyInjectorConfiguration.builder()
+                .packageToScan("es.serversurvival")
+                .dependenciesRepository(dependenciesRepository)
+                .build());
+        Mapper.build(this)
+                .all(ON_WRONG_COMMAND, ON_WRONG_PERMISSION)
+                .instanceProvider(InstanceProviderDependencyInjector.fromRepository(dependenciesRepository))
+                .startScanning();
 
         this.loadAllDependenciesContainer();
         this.setUpCommandsMobListenersTask();
@@ -139,12 +142,6 @@ public final class Pixelcoin extends JavaPlugin {
     }
 
     private void setUpCommandsMobListenersTask() {
-        String onWrongCommand = DARK_RED + "Comando no encontrado /ayuda";
-        String onWrongPermissions = DARK_RED + "Tienes que ser administrador para ejecutar ese comando";
-
-        Mapper.build(this)
-                .all(onWrongCommand, onWrongPermissions)
-                .startScanning();
     }
 
     private void loadAllDependenciesContainer() {
@@ -196,5 +193,19 @@ public final class Pixelcoin extends JavaPlugin {
             put(MateriasPrimasApiService.class, new MateriasPrimasApiServiceIEXCloud());
             put(CriptomonedasApiService.class, new CriptomonedasApiServiceIEXCloud());
         }});
+    }
+
+    @AllArgsConstructor
+    private static class InstanceProviderDependencyInjector implements InstanceProvider {
+        private final DependenciesRepository dependenciesRepository;
+
+        public static InstanceProviderDependencyInjector fromRepository(DependenciesRepository dependenciesRepository) {
+            return new InstanceProviderDependencyInjector(dependenciesRepository);
+        }
+
+        @Override
+        public <I, O extends I> O get(Class<I> aClass) {
+            return (O) this.dependenciesRepository.get(aClass);
+        }
     }
 }
