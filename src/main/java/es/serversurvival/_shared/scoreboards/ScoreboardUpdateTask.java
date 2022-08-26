@@ -1,6 +1,6 @@
 package es.serversurvival._shared.scoreboards;
 
-
+import es.jaimetruman.annotations.Component;
 import es.serversurvival.bolsa.posicionesabiertas.vercartera.BolsaCarteraScoreboard;
 import es.serversurvival.deudas.ver.DeudasDisplayScoreboard;
 import es.serversurvival.jugadores.perfil.StatsDisplayScoreboard;
@@ -12,6 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public final class ScoreboardUpdateTask extends BukkitRunnable {
     private final List<ServerScoreboard> scoreboards;
     private final ScoreBoardManager scoreBoardManager;

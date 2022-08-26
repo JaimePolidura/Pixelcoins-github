@@ -1,6 +1,7 @@
 package es.serversurvival.bolsa.ordenespremarket.ejecutarordenes;
 
 import es.jaime.EventBus;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
@@ -26,6 +27,7 @@ import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.Tip
 import static es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce.PORCENTAJE_CORTO;
 
 @AllArgsConstructor
+@UseCase
 public final class EjecutarOrdenesPreMarketUseCase {
     private final AtomicBoolean isLoading;
 

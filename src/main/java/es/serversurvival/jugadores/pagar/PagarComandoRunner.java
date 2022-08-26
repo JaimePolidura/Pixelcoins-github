@@ -1,12 +1,11 @@
 package es.serversurvival.jugadores.pagar;
 
+import es.bukkitclassmapper.commands.Command;
+import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.jaime.EventBus;
-import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
-import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

@@ -1,10 +1,9 @@
 package es.serversurvival.empresas.empresas.vertodas;
 
-import es.jaimetruman.menus.MenuService;
-import es.jaimetruman.mobs.Mob;
-import es.jaimetruman.mobs.OnPlayerInteractMob;
+import es.bukkitclassmapper.menus.MenuService;
+import es.bukkitclassmapper.mobs.Mob;
+import es.bukkitclassmapper.mobs.OnPlayerInteractMob;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.empresas.empleados.misempleos.VerEmpleosMenu;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 @Mob(x = 261, y = 65, z = -199)

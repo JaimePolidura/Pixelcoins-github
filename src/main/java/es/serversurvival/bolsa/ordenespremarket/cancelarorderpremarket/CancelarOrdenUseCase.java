@@ -1,6 +1,7 @@
 package es.serversurvival.bolsa.ordenespremarket.cancelarorderpremarket;
 
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrdenesPremarketService;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.OrdenPremarket;
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 import java.util.UUID;
 
 @AllArgsConstructor
+@UseCase
 public final class CancelarOrdenUseCase {
     private final OrdenesPremarketService ordenesPremarketService;
 

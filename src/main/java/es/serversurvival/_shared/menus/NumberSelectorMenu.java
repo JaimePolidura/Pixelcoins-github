@@ -1,10 +1,10 @@
 package es.serversurvival._shared.menus;
 
-import es.jaimetruman.ItemBuilder;
-import es.jaimetruman.menus.Menu;
-import es.jaimetruman.menus.configuration.MenuConfiguration;
-import es.jaimetruman.menus.modules.confirmation.ConfirmationConfiguration;
-import es.jaimetruman.menus.modules.numberselector.NumberSelectorMenuConfiguration;
+import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitclassmapper.menus.Menu;
+import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
+import es.bukkitclassmapper.menus.modules.confirmation.ConfirmationConfiguration;
+import es.bukkitclassmapper.menus.modules.numberselector.NumberSelectorMenuConfiguration;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -12,8 +12,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-import static es.jaimetruman.menus.modules.numberselector.NumberSelectActionType.DECREASE;
-import static es.jaimetruman.menus.modules.numberselector.NumberSelectActionType.INCREASE;
+import static es.bukkitclassmapper.menus.modules.numberselector.NumberSelectActionType.DECREASE;
+import static es.bukkitclassmapper.menus.modules.numberselector.NumberSelectActionType.INCREASE;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.GREEN;
 

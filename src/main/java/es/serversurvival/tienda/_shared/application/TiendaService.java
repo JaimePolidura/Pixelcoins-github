@@ -1,6 +1,7 @@
 package es.serversurvival.tienda._shared.application;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.jaimetruman.annotations.Service;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.LRUCache;
 import es.serversurvival._shared.cache.LimitedCache;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
 
+@Service
 public class TiendaService {
     private final TiendaRepository repositoryDb;
     private final LimitedCache<UUID, TiendaObjeto> cache;

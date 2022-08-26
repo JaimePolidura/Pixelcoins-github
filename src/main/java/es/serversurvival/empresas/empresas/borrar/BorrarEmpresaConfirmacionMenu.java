@@ -1,14 +1,13 @@
 package es.serversurvival.empresas.empresas.borrar;
 
-import es.jaimetruman.ItemBuilder;
-import es.jaimetruman.menus.Menu;
-import es.jaimetruman.menus.configuration.MenuConfiguration;
-import es.jaimetruman.menus.modules.confirmation.ConfirmationConfiguration;
+import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitclassmapper.menus.Menu;
+import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
+import es.bukkitclassmapper.menus.modules.confirmation.ConfirmationConfiguration;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;

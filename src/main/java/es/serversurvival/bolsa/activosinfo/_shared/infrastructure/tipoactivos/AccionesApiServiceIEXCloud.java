@@ -1,5 +1,6 @@
 package es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos;
 
+import es.jaimetruman.annotations.Service;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.acciones.AccionesApiService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.acciones.Dividendos;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.acciones.Split;
@@ -9,6 +10,7 @@ import org.json.simple.JSONObject;
 import static es.serversurvival._shared.utils.Funciones.*;
 import static es.serversurvival._shared.utils.apiHttp.IEXCloud_API.*;
 
+@Service
 public class AccionesApiServiceIEXCloud extends AccionesApiService {
     @Override
     public synchronized Double getPrecio(String nombreActivo) throws Exception {

@@ -1,13 +1,13 @@
 package es.serversurvival.tienda.vertienda.menu;
 
-import es.jaimetruman.ItemBuilder;
-import es.jaimetruman.ItemUtils;
-import es.jaimetruman.menus.Menu;
-import es.jaimetruman.menus.MenuService;
-import es.jaimetruman.menus.configuration.MenuConfiguration;
-import es.jaimetruman.menus.modules.pagination.PaginationConfiguration;
-import es.jaimetruman.menus.modules.sync.SyncMenuConfiguration;
-import es.jaimetruman.menus.modules.sync.SyncMenuService;
+import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitclassmapper._shared.utils.ItemUtils;
+import es.bukkitclassmapper.menus.Menu;
+import es.bukkitclassmapper.menus.MenuService;
+import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
+import es.bukkitclassmapper.menus.modules.pagination.PaginationConfiguration;
+import es.bukkitclassmapper.menus.modules.sync.SyncMenuConfiguration;
+import es.bukkitclassmapper.menus.modules.sync.SyncMenuService;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.utils.ItemsUtils;

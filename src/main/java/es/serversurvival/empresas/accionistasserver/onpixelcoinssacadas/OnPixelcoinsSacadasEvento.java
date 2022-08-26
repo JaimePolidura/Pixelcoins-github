@@ -1,6 +1,7 @@
 package es.serversurvival.empresas.accionistasserver.onpixelcoinssacadas;
 
 import es.jaime.EventListener;
+import es.jaimetruman.annotations.Component;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
@@ -13,6 +14,7 @@ import java.util.Set;
 import static java.lang.String.format;
 import static org.bukkit.ChatColor.*;
 
+@Component
 public final class OnPixelcoinsSacadasEvento {
     private final AccionistasServerService accionistasServerService;
 

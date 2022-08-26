@@ -1,6 +1,7 @@
 package es.serversurvival.deudas._shared.application;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.jaimetruman.annotations.Service;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.CollectionUtils;
 import es.serversurvival._shared.utils.Funciones;
@@ -13,6 +14,7 @@ import java.util.*;
 import static es.serversurvival._shared.utils.CollectionUtils.*;
 
 @AllArgsConstructor
+@Service
 public class DeudasService {
     private final DeudasRepository deudasRepository;
 

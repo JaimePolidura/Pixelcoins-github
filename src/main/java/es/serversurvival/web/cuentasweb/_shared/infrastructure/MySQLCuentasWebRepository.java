@@ -3,6 +3,7 @@ package es.serversurvival.web.cuentasweb._shared.infrastructure;
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
+import es.jaimetruman.annotations.Repository;
 import es.jaimetruman.select.Select;
 import es.serversurvival.web.cuentasweb._shared.domain.CuentaWeb;
 import es.serversurvival.web.cuentasweb._shared.domain.CuentasWebRepository;
@@ -12,6 +13,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public final class MySQLCuentasWebRepository extends DataBaseRepository<CuentaWeb, UUID> implements CuentasWebRepository {
     private static final String TABLE_NAME = "cuentasWeb";
     private static final String ID_FIELD_NAME = "cuentaWebId";

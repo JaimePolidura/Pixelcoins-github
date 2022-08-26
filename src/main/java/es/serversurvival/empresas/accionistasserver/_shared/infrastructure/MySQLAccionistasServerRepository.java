@@ -3,6 +3,7 @@ package es.serversurvival.empresas.accionistasserver._shared.infrastructure;
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
+import es.jaimetruman.annotations.Repository;
 import es.jaimetruman.select.Select;
 import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
 import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistasServerRepository;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public final class MySQLAccionistasServerRepository extends DataBaseRepository<AccionistaServer, UUID>
         implements AccionistasServerRepository {
 

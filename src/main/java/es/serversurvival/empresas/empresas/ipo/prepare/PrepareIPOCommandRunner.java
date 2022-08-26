@@ -1,24 +1,16 @@
 package es.serversurvival.empresas.empresas.ipo.prepare;
 
+import es.bukkitclassmapper.commands.Command;
+import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
+import es.bukkitclassmapper.menus.MenuService;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.jaimetruman.menus.MenuService;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.empresas.ipo.IPOCommand;
-import main.ValidationResult;
-import main.ValidatorService;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import static es.serversurvival._shared.utils.Funciones.redondeoDecimales;
-import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
-import static org.bukkit.ChatColor.*;
 
 @Command(
         value = "empresas ipo",

@@ -2,6 +2,7 @@ package es.serversurvival.bolsa.activosinfo.eventlisteners;
 
 import es.jaime.EventListener;
 import es.jaime.Priority;
+import es.jaimetruman.annotations.Component;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.ordenespremarket.ejecutarordenes.OrdenNoEjecutadoEvento;
@@ -9,6 +10,7 @@ import es.serversurvival.bolsa.posicionesabiertas._shared.application.Posiciones
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
+@Component
 public final class OnPremarketOrdenNoEjecutada {
     private final ActivosInfoService activoInfoService;
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;

@@ -1,18 +1,21 @@
 package es.serversurvival;
 
+import es.bukkitclassmapper.Mapper;
+import es.bukkitclassmapper._shared.utils.ClassMapperInstanceProvider;
+import es.bukkitclassmapper._shared.utils.InstanceProvider;
+import es.bukkitclassmapper.commands.Command;
+import es.bukkitclassmapper.menus.MenuService;
+import es.bukkitclassmapper.menus.modules.sync.SyncMenuService;
+import es.bukkitclassmapper.mobs.Mob;
+import es.bukkitclassmapper.task.BukkitTimeUnit;
+import es.bukkitclassmapper.task.Task;
 import es.jaime.Event;
 import es.jaime.EventBus;
 import es.jaime.impl.EventBusSynch;
 import es.jaimetruman.DependencyInjectorBootstrapper;
 import es.jaimetruman.DependencyInjectorConfiguration;
-import es.jaimetruman.Mapper;
-import es.jaimetruman._shared.utils.ClassMapperInstanceProvider;
-import es.jaimetruman._shared.utils.InstanceProvider;
-import es.jaimetruman.menus.MenuService;
-import es.jaimetruman.menus.modules.sync.SyncMenuService;
 import es.jaimetruman.repository.DependenciesRepository;
 import es.jaimetruman.repository.InMemoryDependenciesRepository;
-import es.jaimetruman.task.BukkitTimeUnit;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
 import es.serversurvival._shared.mysql.MySQLConfiguration;
@@ -121,6 +124,7 @@ public final class Pixelcoin extends JavaPlugin {
         DependencyInjectorBootstrapper.init(DependencyInjectorConfiguration.builder()
                 .packageToScan("es.serversurvival")
                 .dependenciesRepository(dependenciesRepository)
+                .customAnnotations(Command.class, Task.class, Mob.class)
                 .build());
         Mapper.build(this)
                 .all(ON_WRONG_COMMAND, ON_WRONG_PERMISSION)

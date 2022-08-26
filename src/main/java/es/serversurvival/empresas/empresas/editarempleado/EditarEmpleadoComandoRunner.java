@@ -1,7 +1,7 @@
 package es.serversurvival.empresas.empresas.editarempleado;
 
-import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
+import es.bukkitclassmapper.commands.Command;
+import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -12,7 +12,7 @@ import static org.bukkit.ChatColor.*;
         args = {"empresa"},
         explanation = "Editar a un empleado"
 )
-public class EditarEmpleadoComandoExecutor implements CommandRunnerArgs<EditarEmpleadoComando> {
+public class EditarEmpleadoComandoRunner implements CommandRunnerArgs<EditarEmpleadoComando> {
     @Override
     public void execute(EditarEmpleadoComando comando, CommandSender sender) {
         if(comando.getEmpresa().equalsIgnoreCase(""))

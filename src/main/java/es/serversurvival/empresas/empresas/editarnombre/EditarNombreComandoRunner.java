@@ -1,7 +1,7 @@
 package es.serversurvival.empresas.empresas.editarnombre;
 
-import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
+import es.bukkitclassmapper.commands.Command;
+import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;

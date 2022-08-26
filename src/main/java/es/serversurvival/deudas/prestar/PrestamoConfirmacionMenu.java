@@ -1,6 +1,7 @@
 package es.serversurvival.deudas.prestar;
 
-import es.jaimetruman.ItemBuilder;
+import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.jaimetruman.annotations.Component;
 import es.serversurvival._shared.menus.ConfirmacionMenu;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
@@ -17,6 +18,7 @@ import static es.serversurvival._shared.utils.Funciones.*;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
+@Component
 public final class PrestamoConfirmacionMenu extends ConfirmacionMenu {
     private final String destinatarioJugadorNombre;
     private final String enviadorJugadorNombre;

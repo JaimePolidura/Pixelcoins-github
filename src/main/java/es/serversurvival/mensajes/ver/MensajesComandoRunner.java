@@ -1,9 +1,7 @@
 package es.serversurvival.mensajes.ver;
 
-import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
-import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.mensajes._shared.application.MensajesService;
+import es.bukkitclassmapper.commands.Command;
+import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
 import es.serversurvival.mensajes._shared.domain.Mensaje;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

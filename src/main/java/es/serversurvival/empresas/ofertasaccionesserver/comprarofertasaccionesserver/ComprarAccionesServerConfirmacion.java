@@ -1,14 +1,13 @@
 package es.serversurvival.empresas.ofertasaccionesserver.comprarofertasaccionesserver;
 
-import es.jaimetruman.menus.MenuService;
-import es.jaimetruman.menus.modules.sync.SyncMenuService;
+import es.bukkitclassmapper.menus.MenuService;
+import es.bukkitclassmapper.menus.modules.sync.SyncMenuService;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.menus.NumberSelectorMenu;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.empresas.ofertasaccionesserver.verofertasaccioneserver.VerOfertasAccionesServerMenu;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
-import es.serversurvival.tienda.vertienda.menu.TiendaMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

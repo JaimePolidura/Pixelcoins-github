@@ -3,6 +3,7 @@ package es.serversurvival.empresas.empleados._shared.infrastructure;
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
+import es.jaimetruman.annotations.Repository;
 import es.jaimetruman.select.Select;
 import es.serversurvival.empresas.empleados._shared.domain.EmpleadosRepository;
 import es.serversurvival.empresas.empleados._shared.domain.TipoSueldo;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public final class MySQLEmpleadosRepository extends DataBaseRepository<Empleado, UUID> implements EmpleadosRepository {
     private final String TABLE_NAME = "empleados";
     private final String ID_FIELD_NAME = "empleadoId";

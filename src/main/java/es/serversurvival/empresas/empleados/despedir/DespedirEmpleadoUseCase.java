@@ -4,6 +4,7 @@ import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalLength;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
@@ -16,6 +17,7 @@ import static es.serversurvival._shared.utils.Funciones.enviarMensaje;
 import static es.serversurvival.empresas.empleados._shared.application.EmpleadosService.*;
 
 @AllArgsConstructor
+@UseCase
 public final class DespedirEmpleadoUseCase {
     private final EmpresasService empresasService;
     private final EmpleadosService empleadosService;

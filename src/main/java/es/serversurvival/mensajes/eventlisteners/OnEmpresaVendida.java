@@ -1,6 +1,7 @@
 package es.serversurvival.mensajes.eventlisteners;
 
 import es.jaime.EventListener;
+import es.jaimetruman.annotations.Component;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
@@ -9,6 +10,7 @@ import es.serversurvival.mensajes._shared.application.MensajesService;
 
 import java.util.List;
 
+@Component
 public final class OnEmpresaVendida {
     private final MensajesService mensajesService;
     private final EmpleadosService empleadosService;

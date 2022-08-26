@@ -1,5 +1,6 @@
 package es.serversurvival._shared.npc;
 
+import es.jaimetruman.annotations.Service;
 import net.jitse.npclib.api.NPC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

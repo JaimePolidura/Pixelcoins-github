@@ -1,5 +1,6 @@
 package es.serversurvival.web.verificacioncuentas._shared.infrastructure;
 
+import es.jaimetruman.annotations.Repository;
 import es.serversurvival.web.verificacioncuentas._shared.domain.VerificacionCuenta;
 import es.serversurvival.web.verificacioncuentas._shared.domain.VerificacionCuentaRepository;
 
@@ -7,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Repository
 public final class InMemoryVerificacionCuentaRepository implements VerificacionCuentaRepository {
     private final Map<String, VerificacionCuenta> numeros;
 

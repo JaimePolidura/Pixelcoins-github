@@ -1,5 +1,6 @@
 package es.serversurvival.bolsa.posicionesabiertas.splitaccionestask;
 
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
@@ -18,6 +19,7 @@ import java.util.Map;
 
 import static es.serversurvival._shared.utils.Funciones.diferenciaDias;
 
+@UseCase
 public final class SplitAccionesUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final ActivosInfoService activoInfoService;

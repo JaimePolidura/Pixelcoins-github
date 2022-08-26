@@ -1,9 +1,9 @@
 package es.serversurvival._shared.menus;
 
-import es.jaimetruman._shared.utils.ItemBuilder;
-import es.jaimetruman.menus.Menu;
-import es.jaimetruman.menus.configuration.MenuConfiguration;
-import es.jaimetruman.menus.modules.confirmation.ConfirmationConfiguration;
+import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitclassmapper.menus.Menu;
+import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
+import es.bukkitclassmapper.menus.modules.confirmation.ConfirmationConfiguration;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;

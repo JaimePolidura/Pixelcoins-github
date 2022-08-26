@@ -3,6 +3,7 @@ package es.serversurvival.empresas.ofertasaccionesserver.comprarofertasaccioness
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
@@ -18,6 +19,7 @@ import lombok.AllArgsConstructor;
 import java.util.UUID;
 
 @AllArgsConstructor
+@UseCase
 public final class ComprarOfertaMercadoUseCase {
     public final static ComprarOfertaMercadoUseCase INSTANCE = new ComprarOfertaMercadoUseCase();
 

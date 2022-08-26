@@ -1,5 +1,6 @@
 package es.serversurvival.jugadores.setupjugadorunido;
 
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
@@ -8,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Optional;
 
+@UseCase
 public final class SetUpJugadorUseCase {
     private final JugadoresService jugadoresService;
 

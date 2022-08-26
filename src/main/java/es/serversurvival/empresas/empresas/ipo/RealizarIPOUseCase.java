@@ -4,6 +4,7 @@ import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
@@ -16,6 +17,7 @@ import java.util.UUID;
 import static es.serversurvival.empresas.accionistasserver._shared.domain.TipoAccionista.*;
 
 @AllArgsConstructor
+@UseCase
 public final class RealizarIPOUseCase {
     private final EmpresasService empresasService;
     private final OfertasAccionesServerService ofertasAccionesServerService;

@@ -1,5 +1,6 @@
 package es.serversurvival.mensajes.onplayerjoin;
 
+import es.jaimetruman.annotations.Component;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.mensajes._shared.application.MensajesService;
 import org.bukkit.ChatColor;
@@ -8,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+@Component
 public final class PlayerJoin implements Listener {
     private final MensajesService mensajesService;
 

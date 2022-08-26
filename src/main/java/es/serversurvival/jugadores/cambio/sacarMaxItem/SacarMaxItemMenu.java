@@ -1,8 +1,8 @@
 package es.serversurvival.jugadores.cambio.sacarMaxItem;
 
-import es.jaimetruman.ItemBuilder;
-import es.jaimetruman.menus.Menu;
-import es.jaimetruman.menus.configuration.MenuConfiguration;
+import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitclassmapper.menus.Menu;
+import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.jugadores._shared.application.JugadoresService;

@@ -3,6 +3,7 @@ package es.serversurvival.transacciones._shared.infrastructure;
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
+import es.jaimetruman.annotations.Repository;
 import es.jaimetruman.select.Select;
 import es.serversurvival.transacciones._shared.domain.Transaccion;
 import es.serversurvival.transacciones._shared.domain.TransaccionesRepository;
@@ -14,6 +15,7 @@ import java.util.UUID;
 
 import static es.serversurvival.transacciones._shared.domain.TipoTransaccion.valueOf;
 
+@Repository
 public final class MySQLTransaccionesRepository extends DataBaseRepository<Transaccion, UUID> implements TransaccionesRepository {
     private static final String TABLE_NAME = "transacciones";
     private static final String ID_TABLE_NAME = "transaccionId";

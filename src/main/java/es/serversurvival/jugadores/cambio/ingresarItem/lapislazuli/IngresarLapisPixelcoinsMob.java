@@ -1,7 +1,7 @@
 package es.serversurvival.jugadores.cambio.ingresarItem.lapislazuli;
 
-import es.jaimetruman.mobs.Mob;
-import es.jaimetruman.mobs.OnPlayerInteractMob;
+import es.bukkitclassmapper.mobs.Mob;
+import es.bukkitclassmapper.mobs.OnPlayerInteractMob;
 import es.serversurvival.jugadores.cambio.ingresarItem.IngresarItemUseCase;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.ChatColor;

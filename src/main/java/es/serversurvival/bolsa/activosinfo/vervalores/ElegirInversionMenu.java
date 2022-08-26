@@ -1,14 +1,13 @@
 package es.serversurvival.bolsa.activosinfo.vervalores;
 
-import es.jaimetruman.ItemBuilder;
-import es.jaimetruman.menus.Menu;
-import es.jaimetruman.menus.MenuService;
-import es.jaimetruman.menus.configuration.MenuConfiguration;
+import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitclassmapper.menus.Menu;
+import es.bukkitclassmapper.menus.MenuService;
+import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo.vervalores.acciones.AccionesMenu;
 import es.serversurvival.bolsa.activosinfo.vervalores.criptomonedas.CriptomonedasMenu;
 import es.serversurvival.bolsa.activosinfo.vervalores.materiasprimas.MateriasPrimasMenu;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

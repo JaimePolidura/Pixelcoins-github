@@ -3,6 +3,7 @@ package es.serversurvival.empresas.empresas.depositar;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
@@ -13,6 +14,7 @@ import es.serversurvival.jugadores._shared.domain.Jugador;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
+@UseCase
 public final class DepositarPixelcoinsUseCase {
     private final JugadoresService jugadoresService;
     private final EmpresasService empresasService;

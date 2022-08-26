@@ -1,14 +1,11 @@
 package es.serversurvival.jugadores.venderjugador;
 
+import es.bukkitclassmapper.commands.Command;
+import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
+import es.bukkitclassmapper.menus.MenuService;
 import es.jaime.javaddd.domain.exceptions.*;
-import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.jaimetruman.menus.MenuService;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
-import main.ValidationResult;
-import main.ValidatorService;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
+import es.jaimetruman.annotations.Repository;
 import es.jaimetruman.select.Select;
 import es.serversurvival.jugadores._shared.domain.JugadoresRepository;
 import es.serversurvival.jugadores._shared.domain.Jugador;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public final class MySQLJugadoresRepository extends DataBaseRepository<Jugador, UUID> implements JugadoresRepository {
     private static final String TABLE_NAME = "jugadores";
     private static final String ID_FIELD_NAME = "jugadorId";

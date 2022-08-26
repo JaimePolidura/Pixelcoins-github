@@ -1,6 +1,7 @@
 package es.serversurvival.mensajes.eventlisteners;
 
 import es.jaime.EventListener;
+import es.jaimetruman.annotations.Component;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.posicionesabiertas.dividendostask.DividendoPagadoEvento;
 import es.serversurvival._shared.utils.Funciones;
@@ -8,6 +9,7 @@ import es.serversurvival.mensajes._shared.application.MensajesService;
 
 import java.text.DecimalFormat;
 
+@Component
 public final class OnDividendoPagado {
     private final DecimalFormat formatea = Funciones.FORMATEA;
     private final MensajesService mensajesService;

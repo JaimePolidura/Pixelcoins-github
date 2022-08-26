@@ -1,6 +1,7 @@
 package es.serversurvival.empresas.empresas.pagarsueldostask;
 
 import es.jaime.EventBus;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
@@ -19,6 +20,7 @@ import java.util.List;
 import static es.serversurvival._shared.utils.Funciones.*;
 
 @AllArgsConstructor
+@UseCase
 public final class PagarSueldosUseCase {
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;

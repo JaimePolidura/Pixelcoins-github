@@ -1,8 +1,7 @@
 package es.serversurvival.jugadores.cambio.ingresarItem.cuarzo;
 
-
-import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
+import es.bukkitclassmapper.commands.Command;
+import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.jugadores.cambio.ingresarItem.IngresarItemUseCase;
 import org.bukkit.Bukkit;

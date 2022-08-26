@@ -4,6 +4,7 @@ import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.AlreadyExists;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrdenesPremarketService;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
@@ -12,6 +13,7 @@ import lombok.AllArgsConstructor;
 import java.util.UUID;
 
 @AllArgsConstructor
+@UseCase
 public final class AbrirOrdenUseCase {
     private final OrdenesPremarketService ordenesPremarketService;
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;

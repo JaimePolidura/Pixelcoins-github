@@ -1,5 +1,6 @@
 package es.serversurvival.jugadores.cambio.ingresarItem;
 
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
@@ -8,6 +9,7 @@ import es.serversurvival.jugadores.cambio.CambioPixelcoins;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+@UseCase
 public final class IngresarItemUseCase {
     private final JugadoresService jugadoresService;
 

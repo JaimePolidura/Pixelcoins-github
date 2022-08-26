@@ -1,7 +1,7 @@
 package es.serversurvival.ayuda;
 
-import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
+import es.bukkitclassmapper.commands.Command;
+import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 

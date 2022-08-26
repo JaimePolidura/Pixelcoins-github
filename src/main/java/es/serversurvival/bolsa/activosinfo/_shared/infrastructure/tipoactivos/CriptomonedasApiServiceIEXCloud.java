@@ -1,5 +1,6 @@
 package es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos;
 
+import es.jaimetruman.annotations.Service;
 import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.criptomonedas.CriptomonedasApiService;
@@ -8,6 +9,7 @@ import org.json.simple.JSONObject;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 
+@Service
 public final class CriptomonedasApiServiceIEXCloud extends CriptomonedasApiService {
     @Override
     public synchronized Double getPrecio(String nombreActivo) throws Exception {

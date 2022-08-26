@@ -1,6 +1,7 @@
 package es.serversurvival.empresas.ofertasaccionesserver._shared.application;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.jaimetruman.annotations.Service;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertasAccionesServerRepository;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 import static es.serversurvival._shared.utils.Funciones.DATE_FORMATER_LEGACY;
 
 @AllArgsConstructor
+@Service
 public class OfertasAccionesServerService {
     private final OfertasAccionesServerRepository repositoryDb;
 

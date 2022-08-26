@@ -2,10 +2,12 @@ package es.serversurvival.empresas.ofertasaccionesserver.onempresaborrada;
 
 import es.jaime.EventListener;
 import es.jaime.Priority;
+import es.jaimetruman.annotations.Component;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empresas.borrar.EmpresaBorrada;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 
+@Component
 public final class OnEmpresaBorrada {
     private final OfertasAccionesServerService ofertasAccionesServerService;
 

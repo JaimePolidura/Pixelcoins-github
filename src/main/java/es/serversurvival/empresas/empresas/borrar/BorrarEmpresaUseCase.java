@@ -2,6 +2,7 @@ package es.serversurvival.empresas.empresas.borrar;
 
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
@@ -13,6 +14,7 @@ import es.serversurvival.jugadores._shared.application.JugadoresService;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
+@UseCase
 public final class BorrarEmpresaUseCase {
     public static final BorrarEmpresaUseCase INSTANCE = new BorrarEmpresaUseCase();
 

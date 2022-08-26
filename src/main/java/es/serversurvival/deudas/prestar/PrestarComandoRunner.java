@@ -1,17 +1,14 @@
 package es.serversurvival.deudas.prestar;
 
+import es.bukkitclassmapper.commands.Command;
+import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
+import es.bukkitclassmapper.menus.MenuService;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
-import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.jaimetruman.menus.MenuService;
 import es.serversurvival._shared.DependecyContainer;
-import main.ValidationResult;
-import main.ValidatorService;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
 import static org.bukkit.ChatColor.*;
 
 @Command(

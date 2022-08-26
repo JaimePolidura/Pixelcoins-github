@@ -1,20 +1,14 @@
 package es.serversurvival.empresas.empresas.miempresa;
 
+import es.bukkitclassmapper.commands.Command;
+import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
+import es.bukkitclassmapper.menus.MenuService;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
-import es.jaimetruman.menus.MenuService;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
-import main.ValidationResult;
-import main.ValidatorService;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
-import static org.bukkit.ChatColor.DARK_RED;
 
 @Command(
         value = "empresas miempresa",

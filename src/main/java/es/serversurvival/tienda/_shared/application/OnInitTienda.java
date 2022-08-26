@@ -2,9 +2,13 @@ package es.serversurvival.tienda._shared.application;
 
 import es.jaime.EventListener;
 import es.jaime.Priority;
+import es.jaimetruman.annotations.Component;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
 
+import es.serversurvival.mensajes._shared.application.MensajesService;
+
+@Component
 public final class OnInitTienda {
     private final TiendaService tiendaService;
 

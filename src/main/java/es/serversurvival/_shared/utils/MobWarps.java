@@ -1,7 +1,7 @@
 package es.serversurvival._shared.utils;
 
-import es.jaimetruman.mobs.Mob;
-import es.jaimetruman.mobs.OnPlayerInteractMob;
+import es.bukkitclassmapper.mobs.Mob;
+import es.bukkitclassmapper.mobs.OnPlayerInteractMob;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 @Mob(x = 252, y = 65, z = -193)

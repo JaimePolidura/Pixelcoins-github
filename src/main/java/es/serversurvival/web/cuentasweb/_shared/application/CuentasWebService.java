@@ -1,6 +1,7 @@
 package es.serversurvival.web.cuentasweb._shared.application;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.jaimetruman.annotations.Service;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.web.cuentasweb._shared.domain.CuentaWeb;
 import es.serversurvival.web.cuentasweb._shared.domain.CuentasWebRepository;
@@ -8,6 +9,7 @@ import es.serversurvival.web.cuentasweb._shared.domain.CuentasWebRepository;
 import java.util.Optional;
 import java.util.UUID;
 
+@Service
 public final class CuentasWebService {
     private final CuentasWebRepository repositoryDb;
 

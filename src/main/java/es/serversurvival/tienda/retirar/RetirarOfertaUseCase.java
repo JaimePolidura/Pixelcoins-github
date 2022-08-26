@@ -1,6 +1,7 @@
 package es.serversurvival.tienda.retirar;
 
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.ItemsUtils;
 import es.serversurvival.tienda._shared.application.TiendaService;
@@ -9,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
+@UseCase
 public final class RetirarOfertaUseCase {
     private final TiendaService tiendaService;
 

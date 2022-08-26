@@ -1,10 +1,10 @@
 package es.serversurvival.bolsa.ordenespremarket.verordenespremarket;
 
-import es.jaimetruman.ItemBuilder;
-import es.jaimetruman.ItemUtils;
-import es.jaimetruman.menus.Menu;
-import es.jaimetruman.menus.configuration.MenuConfiguration;
-import es.jaimetruman.menus.modules.pagination.PaginationConfiguration;
+import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitclassmapper._shared.utils.ItemUtils;
+import es.bukkitclassmapper.menus.Menu;
+import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
+import es.bukkitclassmapper.menus.modules.pagination.PaginationConfiguration;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrdenesPremarketService;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.OrdenPremarket;

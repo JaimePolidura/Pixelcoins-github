@@ -1,11 +1,13 @@
 package es.serversurvival.mensajes.ver;
 
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.mensajes._shared.application.MensajesService;
 import es.serversurvival.mensajes._shared.domain.Mensaje;
 
 import java.util.List;
 
+@UseCase
 public final class VerMensajesUseCase {
     private final MensajesService mensajesService;
 

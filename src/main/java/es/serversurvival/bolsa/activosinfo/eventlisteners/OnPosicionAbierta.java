@@ -2,6 +2,8 @@ package es.serversurvival.bolsa.activosinfo.eventlisteners;
 
 import es.jaime.EventListener;
 import es.jaime.Priority;
+import es.jaimetruman.annotations.Component;
+import es.jaimetruman.annotations.Service;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbiertaEvento;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
@@ -10,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 
 @AllArgsConstructor
+@Component
 public final class OnPosicionAbierta {
     private final ActivosInfoService activoInfoService;
 

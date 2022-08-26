@@ -1,6 +1,6 @@
 package es.serversurvival.jugadores.venderjugador;
 
-import es.jaimetruman.ItemBuilder;
+import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.menus.ConfirmacionMenu;
 import es.serversurvival.jugadores.pagar.PagarUseCase;

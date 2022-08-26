@@ -1,10 +1,12 @@
 package es.serversurvival.bolsa.ordenespremarket.onjugadorcambiadonombre;
 
 import es.jaime.EventListener;
+import es.jaimetruman.annotations.Component;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrdenesPremarketService;
 import es.serversurvival.jugadores.setupjugadorunido.JugadorCambiadoDeNombreEvento;
 
+@Component
 public final class OnJugadorCambiadoNombre {
     private final OrdenesPremarketService ordenesPremarketService;
 

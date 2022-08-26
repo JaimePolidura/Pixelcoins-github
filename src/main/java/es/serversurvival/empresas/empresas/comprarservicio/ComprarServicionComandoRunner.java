@@ -1,7 +1,7 @@
 package es.serversurvival.empresas.empresas.comprarservicio;
 
-import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
+import es.bukkitclassmapper.commands.Command;
+import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.command.CommandSender;

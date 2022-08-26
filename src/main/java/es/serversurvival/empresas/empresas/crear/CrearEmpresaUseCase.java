@@ -4,6 +4,7 @@ import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.AlreadyExists;
 import es.jaime.javaddd.domain.exceptions.IllegalLength;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
@@ -12,6 +13,7 @@ import io.vavr.control.Try;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
+@UseCase
 public final class CrearEmpresaUseCase {
     private final EmpresasService empresasService;
     private final EventBus eventBus;

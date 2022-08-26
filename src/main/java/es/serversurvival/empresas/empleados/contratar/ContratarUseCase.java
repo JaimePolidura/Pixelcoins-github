@@ -2,6 +2,7 @@ package es.serversurvival.empresas.empleados.contratar;
 
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.*;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
@@ -13,6 +14,7 @@ import lombok.AllArgsConstructor;
 import static es.serversurvival.empresas.empleados._shared.application.EmpleadosService.*;
 
 @AllArgsConstructor
+@UseCase
 public final class ContratarUseCase {
     public static final ContratarUseCase INSTANCE = new ContratarUseCase();
 

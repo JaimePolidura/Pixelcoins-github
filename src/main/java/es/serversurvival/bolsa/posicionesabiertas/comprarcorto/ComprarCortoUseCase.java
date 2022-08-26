@@ -3,6 +3,7 @@ package es.serversurvival.bolsa.posicionesabiertas.comprarcorto;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
@@ -17,6 +18,7 @@ import java.util.UUID;
 import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo.ACCIONES;
 
 @AllArgsConstructor
+@UseCase
 public class ComprarCortoUseCase {
     private final JugadoresService jugadoresService;
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;

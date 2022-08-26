@@ -1,6 +1,7 @@
 package es.serversurvival.tienda.onjugadorcambiadonombre;
 
 import es.jaime.EventListener;
+import es.jaimetruman.annotations.Component;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.jugadores.setupjugadorunido.JugadorCambiadoDeNombreEvento;
 import es.serversurvival.tienda._shared.application.TiendaService;
@@ -8,6 +9,7 @@ import es.serversurvival.tienda._shared.domain.TiendaObjeto;
 
 import java.util.List;
 
+@Component
 public final class OnJugadorCambiadoNombre {
     private final TiendaService tiendaService;
 

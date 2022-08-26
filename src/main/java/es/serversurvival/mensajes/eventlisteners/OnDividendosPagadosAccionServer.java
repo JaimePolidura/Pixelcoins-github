@@ -1,6 +1,7 @@
 package es.serversurvival.mensajes.eventlisteners;
 
 import es.jaime.EventListener;
+import es.jaimetruman.annotations.Component;
 import es.serversurvival.empresas.empresas.pagardividendos.eventos.EmpresaServerDividendoPagadoJugador;
 import es.serversurvival._shared.utils.Funciones;
 
@@ -10,6 +11,7 @@ import static es.serversurvival._shared.utils.Funciones.enviarMensaje;
 import static org.bukkit.ChatColor.GOLD;
 import static org.bukkit.ChatColor.GREEN;
 
+@Component
 public final class OnDividendosPagadosAccionServer {
     private final DecimalFormat formatea = Funciones.FORMATEA;
 

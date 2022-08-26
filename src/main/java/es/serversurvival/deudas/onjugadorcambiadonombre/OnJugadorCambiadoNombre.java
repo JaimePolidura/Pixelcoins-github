@@ -1,10 +1,12 @@
 package es.serversurvival.deudas.onjugadorcambiadonombre;
 
 import es.jaime.EventListener;
+import es.jaimetruman.annotations.Component;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.deudas._shared.application.DeudasService;
 import es.serversurvival.jugadores.setupjugadorunido.JugadorCambiadoDeNombreEvento;
 
+@Component
 public final class OnJugadorCambiadoNombre {
     private final DeudasService deudasService;
 

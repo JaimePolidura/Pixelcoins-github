@@ -2,11 +2,11 @@ package es.serversurvival.deudas.pagarTodo;
 
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.deudas._shared.application.DeudasService;
 import es.serversurvival.deudas._shared.domain.Deuda;
-import es.serversurvival.Pixelcoin;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import lombok.AllArgsConstructor;
@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import java.util.UUID;
 
 @AllArgsConstructor
+@UseCase
 public final class PagarDeudaCompletaUseCase {
     private final DeudasService deudasService;
     private final JugadoresService jugadoresService;
@@ -25,7 +26,7 @@ public final class PagarDeudaCompletaUseCase {
         this.eventBus = DependecyContainer.get(EventBus.class);
     }
 
-    public Deuda pagarDeuda(UUID deudaId, String deudorName) {
+    public void pagarDeuda(UUID deudaId, String deudorName) {
         var deudaAPagar = this.ensureDeudaExists(deudaId);
         this.ensureIsDeudor(deudaAPagar, deudorName);
         var deudorJugador = this.ensureDeudorHasEnoughPixelcoins(deudaAPagar);
@@ -38,7 +39,6 @@ public final class PagarDeudaCompletaUseCase {
 
         this.eventBus.publish(new DeudaPagadaCompletaEvento(acredorNombre, deudaAPagar.getDeudor(), deudaAPagar.getPixelcoinsRestantes()));
 
-        return deudaAPagar;
     }
 
     private Jugador ensureDeudorHasEnoughPixelcoins(Deuda deuda){

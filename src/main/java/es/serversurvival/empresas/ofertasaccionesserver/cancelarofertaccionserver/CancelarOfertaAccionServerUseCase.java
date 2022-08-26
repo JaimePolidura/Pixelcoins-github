@@ -1,6 +1,8 @@
 package es.serversurvival.empresas.ofertasaccionesserver.cancelarofertaccionserver;
 
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
+import es.jaimetruman.annotations.Repository;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
@@ -9,6 +11,7 @@ import lombok.AllArgsConstructor;
 import java.util.UUID;
 
 @AllArgsConstructor
+@UseCase
 public final class CancelarOfertaAccionServerUseCase {
     private final OfertasAccionesServerService ofertasAccionesServerService;
 

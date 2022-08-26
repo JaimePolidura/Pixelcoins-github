@@ -3,6 +3,7 @@ package es.serversurvival.bolsa.posicionesabiertas._shared.infrastructure;
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
+import es.jaimetruman.annotations.Repository;
 import es.jaimetruman.select.Select;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public final class MySQLPosicionesAbiertasRepository extends DataBaseRepository<PosicionAbierta, UUID> implements PosicionesAbiertasRepository {
     private static final String TABLE_NAME = "posicionesabiertas";
     private static final String ID_FIELD_NAME = "posicionAbiertaId";

@@ -1,6 +1,7 @@
 package es.serversurvival.empresas.empresas._shared.application;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.jaimetruman.annotations.Service;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.Cache;
 import es.serversurvival._shared.cache.LRUCache;
@@ -16,6 +17,7 @@ import java.util.function.Function;
 
 import static es.serversurvival._shared.utils.CollectionUtils.*;
 
+@Service
 public class EmpresasService {
     public static final int MAX_EMPRESAS_PER_JUGADOR = 5;
     public static final int MAX_NOMBRE_LONGITUD = 16;

@@ -1,13 +1,13 @@
 package es.serversurvival.bolsa.activosinfo.vervalores.acciones;
 
-import es.jaimetruman.ItemBuilder;
-import es.jaimetruman.ItemUtils;
-import es.jaimetruman.menus.Menu;
-import es.jaimetruman.menus.MenuService;
-import es.jaimetruman.menus.Page;
-import es.jaimetruman.menus.configuration.MenuConfiguration;
-import es.jaimetruman.menus.menustate.AfterShow;
-import es.jaimetruman.menus.modules.pagination.PaginationConfiguration;
+import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitclassmapper._shared.utils.ItemUtils;
+import es.bukkitclassmapper.menus.Menu;
+import es.bukkitclassmapper.menus.MenuService;
+import es.bukkitclassmapper.menus.Page;
+import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
+import es.bukkitclassmapper.menus.menustate.AfterShow;
+import es.bukkitclassmapper.menus.modules.pagination.PaginationConfiguration;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
@@ -23,6 +23,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 import static es.serversurvival._shared.utils.Funciones.*;

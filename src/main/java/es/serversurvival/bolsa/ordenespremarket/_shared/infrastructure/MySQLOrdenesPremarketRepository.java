@@ -3,6 +3,7 @@ package es.serversurvival.bolsa.ordenespremarket._shared.infrastructure;
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
+import es.jaimetruman.annotations.Repository;
 import es.jaimetruman.select.Select;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.OrdenPremarket;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.OrderesPremarketRepository;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public final class MySQLOrdenesPremarketRepository extends DataBaseRepository<OrdenPremarket, UUID> implements OrderesPremarketRepository {
     private static final String TABLE_NAME = "ordenespremarket";
     private static final String ID_FIELD_NAME = "orderPremarketId";

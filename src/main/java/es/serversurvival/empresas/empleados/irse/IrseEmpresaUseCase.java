@@ -2,6 +2,7 @@ package es.serversurvival.empresas.empleados.irse;
 
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
@@ -11,6 +12,7 @@ import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
+@UseCase
 public final class IrseEmpresaUseCase {
     private final EmpresasService empresasService;
     private final EmpleadosService empleadosService;

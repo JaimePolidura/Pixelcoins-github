@@ -1,6 +1,7 @@
 package es.serversurvival.jugadores.cambio.ingresarItem;
 
 import es.jaime.EventListener;
+import es.jaimetruman.annotations.Component;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -11,6 +12,7 @@ import java.text.DecimalFormat;
 import static org.bukkit.ChatColor.GOLD;
 import static org.bukkit.ChatColor.GREEN;
 
+@Component
 public final class OnItemIngresado {
     private final DecimalFormat formatea = Funciones.FORMATEA;
 

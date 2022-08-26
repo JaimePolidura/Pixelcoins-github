@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa.posicionesabiertas.comprarlargo;
 
-import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
+import es.bukkitclassmapper.commands.Command;
+import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrderExecutorProxy;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;

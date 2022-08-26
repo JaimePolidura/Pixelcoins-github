@@ -3,6 +3,7 @@ package es.serversurvival.empresas.ofertasaccionesserver.venderofertaaccionaserv
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
@@ -15,8 +16,8 @@ import java.util.UUID;
 
 import static es.serversurvival.empresas.accionistasserver._shared.domain.TipoAccionista.*;
 
-
 @AllArgsConstructor
+@UseCase
 public final class VenderOfertaAccionServerUseCase {
     private final AccionistasServerService accionistasEmpresasServerService;
     private final OfertasAccionesServerService ofertasAccionesServerService;

@@ -1,6 +1,7 @@
 package es.serversurvival.jugadores._shared.application;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.jaimetruman.annotations.Service;
 import es.serversurvival._shared.cache.UnlimitedCacheSize;
 import es.serversurvival.jugadores._shared.domain.JugadoresRepository;
 import es.serversurvival.jugadores._shared.domain.Jugador;
@@ -10,6 +11,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+@Service
 public class JugadoresService {
     private JugadoresRepository repositoryDb;
     private UnlimitedCacheSize<String, Jugador> cache;

@@ -3,6 +3,7 @@ package es.serversurvival.bolsa.posicionescerradas._shared.infrastructure;
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
+import es.jaimetruman.annotations.Repository;
 import es.jaimetruman.select.Select;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
@@ -14,6 +15,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
+@Repository
 public final class MySQLPosicionesCerradasRepository extends DataBaseRepository<PosicionCerrada, UUID> implements PosicionesCerradasRepository {
     private static final String TABLE_NAME = "posicionesCerradas";
     private static final String ID_FIELD_NAME = "posicionCerradaId";

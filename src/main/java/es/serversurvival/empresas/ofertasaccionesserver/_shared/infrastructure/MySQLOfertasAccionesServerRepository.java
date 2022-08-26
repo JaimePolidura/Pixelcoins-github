@@ -3,6 +3,7 @@ package es.serversurvival.empresas.ofertasaccionesserver._shared.infrastructure;
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
+import es.jaimetruman.annotations.Repository;
 import es.jaimetruman.select.Select;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertasAccionesServerRepository;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public final class MySQLOfertasAccionesServerRepository extends DataBaseRepository<OfertaAccionServer, UUID> implements OfertasAccionesServerRepository {
     private static final String TABLE_NAME = "ofertasAccionesServer";
     private static final String ID_FIELD_NAME = "ofertaAccionServerId";

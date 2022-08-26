@@ -1,10 +1,12 @@
 package es.serversurvival.web.cuentasweb.onjugadorcambiadonombre;
 
 import es.jaime.EventListener;
+import es.jaimetruman.annotations.Component;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.web.cuentasweb._shared.application.CuentasWebService;
 import es.serversurvival.jugadores.setupjugadorunido.JugadorCambiadoDeNombreEvento;
 
+@Component
 public final class OnJugadorCambiadoNombre {
     private final CuentasWebService cuentasWebService;
 

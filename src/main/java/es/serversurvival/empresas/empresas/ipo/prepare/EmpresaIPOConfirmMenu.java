@@ -1,6 +1,6 @@
 package es.serversurvival.empresas.empresas.ipo.prepare;
 
-import es.jaimetruman.ItemBuilder;
+import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival._shared.menus.ConfirmacionMenu;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.empresas.ipo.IPOCommand;

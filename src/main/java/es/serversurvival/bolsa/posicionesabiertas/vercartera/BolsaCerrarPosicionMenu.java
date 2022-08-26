@@ -1,6 +1,6 @@
 package es.serversurvival.bolsa.posicionesabiertas.vercartera;
 
-import es.jaimetruman.menus.MenuService;
+import es.bukkitclassmapper.menus.MenuService;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.menus.NumberSelectorMenu;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;

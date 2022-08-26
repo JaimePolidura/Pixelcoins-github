@@ -1,9 +1,10 @@
 package es.serversurvival.tienda.vender;
 
+import es.bukkitclassmapper.menus.MenuService;
+import es.bukkitclassmapper.menus.modules.sync.SyncMenuService;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalType;
-import es.jaimetruman.menus.MenuService;
-import es.jaimetruman.menus.modules.sync.SyncMenuService;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.tienda._shared.application.TiendaService;
@@ -19,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-
+@UseCase
 public final class VenderTiendaUseCase {
     private static final List<String> bannedItems = Arrays.asList("POTION", "BANNER", "SPLASH_POTION", "LINGERING_POTION", "AIR");
     private static final int MAX_ITEMS_PER_PLAYER = 5;

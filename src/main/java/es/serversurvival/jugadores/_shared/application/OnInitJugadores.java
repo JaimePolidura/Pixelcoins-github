@@ -2,9 +2,11 @@ package es.serversurvival.jugadores._shared.application;
 
 import es.jaime.EventListener;
 import es.jaime.Priority;
+import es.jaimetruman.annotations.Component;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
 
+@Component
 public final class OnInitJugadores {
     private final JugadoresService jugadoresService;
 

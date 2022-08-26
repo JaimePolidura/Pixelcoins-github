@@ -1,11 +1,10 @@
 package es.serversurvival.jugadores.perfil;
 
-import es.jaimetruman.ItemBuilder;
-import es.jaimetruman.menus.Menu;
-import es.jaimetruman.menus.MenuService;
-import es.jaimetruman.menus.configuration.MenuConfiguration;
+import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitclassmapper.menus.Menu;
+import es.bukkitclassmapper.menus.MenuService;
+import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
 import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas.vercartera.VerBolsaCarteraMenu;
 import es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService;
@@ -34,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static es.serversurvival._shared.utils.CollectionUtils.getPoisitionOfKeyInMap;
 import static es.serversurvival._shared.utils.Funciones.*;

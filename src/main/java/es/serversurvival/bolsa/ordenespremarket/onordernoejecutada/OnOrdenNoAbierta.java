@@ -1,6 +1,7 @@
 package es.serversurvival.bolsa.ordenespremarket.onordernoejecutada;
 
 import es.jaime.EventListener;
+import es.jaimetruman.annotations.Component;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.OrdenNoAbiertaEvento;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.Bukkit;
@@ -9,6 +10,7 @@ import org.bukkit.entity.Player;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.Sound.*;
 
+@Component
 public final class OnOrdenNoAbierta {
     @EventListener
     public void on(OrdenNoAbiertaEvento evento) {

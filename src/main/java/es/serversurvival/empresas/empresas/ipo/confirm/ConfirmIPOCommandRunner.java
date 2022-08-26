@@ -1,8 +1,7 @@
 package es.serversurvival.empresas.empresas.ipo.confirm;
 
-
-import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
+import es.bukkitclassmapper.commands.Command;
+import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival.empresas.empresas.ipo.IPOCommand;
 import es.serversurvival.empresas.empresas.ipo.RealizarIPOUseCase;
 import org.bukkit.command.CommandSender;

@@ -1,10 +1,12 @@
 package es.serversurvival.empresas.empleados.onjugadorcambionnombre;
 
 import es.jaime.EventListener;
+import es.jaimetruman.annotations.Component;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.jugadores.setupjugadorunido.JugadorCambiadoDeNombreEvento;
 
+@Component
 public final class OnJugadorCambiadoNombre {
     private final EmpleadosService empleadosService;
 

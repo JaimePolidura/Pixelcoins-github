@@ -3,6 +3,7 @@ package es.serversurvival.deudas.prestar;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
@@ -15,6 +16,7 @@ import lombok.AllArgsConstructor;
 import static es.serversurvival._shared.utils.Funciones.*;
 
 @AllArgsConstructor
+@UseCase
 public final class PrestarUseCase {
     public static final PrestarUseCase INSTANCE = new PrestarUseCase();
 

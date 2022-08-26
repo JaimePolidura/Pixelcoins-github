@@ -1,7 +1,7 @@
 package es.serversurvival.empresas.empresas.logitipo;
 
-import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
+import es.bukkitclassmapper.commands.Command;
+import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -14,10 +14,10 @@ import org.bukkit.entity.Player;
         args = {"empresa"},
         explanation = "Cambiar el logotipo de tu empresa. Para esto selecciona un item en la mano y ejecuta el comando"
 )
-public class LogotipoComandoExecutor implements CommandRunnerArgs<LogotipoComando> {
+public class LogotipoComandoRunner implements CommandRunnerArgs<LogotipoComando> {
     private final EditarLogitpoUseCase useCase;
 
-    public LogotipoComandoExecutor() {
+    public LogotipoComandoRunner() {
         this.useCase = new EditarLogitpoUseCase();
     }
 

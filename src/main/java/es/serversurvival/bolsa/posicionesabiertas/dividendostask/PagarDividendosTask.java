@@ -1,8 +1,8 @@
 package es.serversurvival.bolsa.posicionesabiertas.dividendostask;
 
-import es.jaimetruman.task.BukkitTimeUnit;
-import es.jaimetruman.task.Task;
-import es.jaimetruman.task.TaskRunner;
+import es.bukkitclassmapper.task.BukkitTimeUnit;
+import es.bukkitclassmapper.task.Task;
+import es.bukkitclassmapper.task.TaskRunner;
 
 @Task(value = BukkitTimeUnit.MINUTE, delay = 2 * BukkitTimeUnit.DAY)
 public class PagarDividendosTask implements TaskRunner {

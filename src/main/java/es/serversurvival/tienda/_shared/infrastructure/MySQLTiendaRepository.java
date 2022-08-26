@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
+import es.jaimetruman.annotations.Repository;
 import es.jaimetruman.select.Select;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.tienda._shared.domain.EncantamientoObjecto;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public final class MySQLTiendaRepository extends DataBaseRepository<TiendaObjeto, UUID> implements TiendaRepository {
     private static final String DB_NAME = "tienda";
     private static final String ID_FIELD_NAME = "tiendaObjetoId";

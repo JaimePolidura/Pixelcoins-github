@@ -1,5 +1,6 @@
 package es.serversurvival.bolsa.activosinfo.actualizar;
 
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @AllArgsConstructor
+@UseCase
 public final class ActualizarActivosInfoUseCase {
     private final ActivosInfoService activoInfoService;
     private final AtomicBoolean isLoading;
@@ -18,7 +20,7 @@ public final class ActualizarActivosInfoUseCase {
         this.isLoading = new AtomicBoolean(false);
     }
 
-    public synchronized void actualizrar(){
+    public synchronized void actualizar(){
         List<ActivoInfo> allActivosInfo = activoInfoService.findAll();
         this.isLoading.set(true);
 

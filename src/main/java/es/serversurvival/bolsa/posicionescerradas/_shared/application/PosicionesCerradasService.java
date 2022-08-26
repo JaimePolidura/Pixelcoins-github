@@ -1,5 +1,6 @@
 package es.serversurvival.bolsa.posicionescerradas._shared.application;
 
+import es.jaimetruman.annotations.Service;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionesCerradasRepository;
@@ -9,6 +10,7 @@ import java.util.*;
 import java.util.function.Predicate;
 
 @AllArgsConstructor
+@Service
 public final class PosicionesCerradasService {
     public static final Comparator<PosicionCerrada> SORT_BY_RENTABILIDADES_ASC = (p1, p2) -> (int) (p1.calculateRentabildiad() - p2.calculateRentabildiad());
     public static final Comparator<PosicionCerrada> SORT_BY_RENTABILIDADES_DESC = (p1, p2) -> (int) (p1.calculateRentabildiad() - p2.calculateRentabildiad());

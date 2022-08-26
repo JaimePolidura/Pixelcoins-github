@@ -2,7 +2,7 @@ package es.serversurvival.deudas.cancelar;
 
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.serversurvival.Pixelcoin;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.deudas._shared.application.DeudasService;
 import es.serversurvival.deudas._shared.domain.Deuda;
@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import java.util.UUID;
 
 @AllArgsConstructor
+@UseCase
 public final class CancelarDeudaUseCase {
     private final DeudasService deudasService;
     private final EventBus eventBus;
@@ -20,7 +21,7 @@ public final class CancelarDeudaUseCase {
         this.eventBus = DependecyContainer.get(EventBus.class);
     }
 
-    public Deuda cancelarDeuda(String playerName, UUID deudaId) {
+    public void cancelarDeuda(String playerName, UUID deudaId) {
         var deudaACancelar = this.deudasService.getById(deudaId);
         this.ensureIsAcredor(deudaACancelar, playerName);
 
@@ -28,7 +29,6 @@ public final class CancelarDeudaUseCase {
 
         this.eventBus.publish(new DeudaCanceladaEvento(playerName, deudaACancelar.getDeudor(), deudaACancelar.getPixelcoinsRestantes()));
 
-        return deudaACancelar;
     }
 
 

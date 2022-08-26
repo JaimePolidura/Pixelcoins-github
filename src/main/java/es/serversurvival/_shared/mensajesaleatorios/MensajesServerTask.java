@@ -1,8 +1,9 @@
 package es.serversurvival._shared.mensajesaleatorios;
 
-import es.jaimetruman.task.BukkitTimeUnit;
-import es.jaimetruman.task.Task;
-import es.jaimetruman.task.TaskRunner;
+import es.bukkitclassmapper.task.BukkitTimeUnit;
+import es.bukkitclassmapper.task.Task;
+import es.bukkitclassmapper.task.TaskRunner;
+import es.jaimetruman.annotations.Component;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

@@ -1,5 +1,6 @@
 package es.serversurvival.empresas.empresas.solicitarservicio;
 
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
@@ -12,6 +13,7 @@ import java.util.List;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 
+@UseCase
 public final class SolicitarServicioUseCase {
     private final EmpresasService empresasService;
     private final EmpleadosService empleadosService;

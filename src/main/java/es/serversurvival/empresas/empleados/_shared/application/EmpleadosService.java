@@ -2,6 +2,7 @@ package es.serversurvival.empresas.empleados._shared.application;
 
 import com.google.common.base.Function;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.jaimetruman.annotations.Service;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.Cache;
 import es.serversurvival._shared.cache.LRUCache;
@@ -18,6 +19,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
+@Service
 public class EmpleadosService {
     public static final int MAX_CARGO_LENGTH = 16;
     public static final int MIN_CARGO_LENGTH = 3;

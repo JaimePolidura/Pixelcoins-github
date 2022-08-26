@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa.posicionescerradas.verestadisticas;
 
-import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.commandrunners.CommandRunnerNonArgs;
+import es.bukkitclassmapper.commands.Command;
+import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService;

@@ -1,8 +1,8 @@
 package es.serversurvival.jugadores.perfil;
 
-import es.jaimetruman.menus.MenuService;
-import es.jaimetruman.mobs.Mob;
-import es.jaimetruman.mobs.OnPlayerInteractMob;
+import es.bukkitclassmapper.menus.MenuService;
+import es.bukkitclassmapper.mobs.Mob;
+import es.bukkitclassmapper.mobs.OnPlayerInteractMob;
 import es.serversurvival._shared.DependecyContainer;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 

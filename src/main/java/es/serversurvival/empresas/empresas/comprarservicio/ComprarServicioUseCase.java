@@ -3,6 +3,7 @@ package es.serversurvival.empresas.empresas.comprarservicio;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
@@ -12,6 +13,7 @@ import es.serversurvival.jugadores._shared.domain.Jugador;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
+@UseCase
 public final class ComprarServicioUseCase {
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;

@@ -1,6 +1,6 @@
 package es.serversurvival.empresas.empleados.contratar;
 
-import es.jaimetruman.ItemBuilder;
+import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival._shared.menus.ConfirmacionMenu;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.empresas.empleados._shared.domain.TipoSueldo;

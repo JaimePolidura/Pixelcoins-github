@@ -3,6 +3,7 @@ package es.serversurvival.bolsa.activosinfo._shared.infrastructure;
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
+import es.jaimetruman.annotations.Repository;
 import es.jaimetruman.delete.Delete;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfoRepository;
@@ -13,6 +14,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public final class MySQLActivoInfoRepository extends DataBaseRepository<ActivoInfo, String> implements ActivoInfoRepository{
     public static final String TABLE_NAME = "activosInfo";
     public static final String ID_FIELD_NAME = "nombreActivo";

@@ -1,7 +1,7 @@
 package es.serversurvival.empresas.empresas.sacar;
 
-import es.jaimetruman.commands.Command;
-import es.jaimetruman.commands.commandrunners.CommandRunnerArgs;
+import es.bukkitclassmapper.commands.Command;
+import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;

@@ -3,6 +3,7 @@ package es.serversurvival.mensajes._shared.infrastructure;
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
+import es.jaimetruman.annotations.Repository;
 import es.jaimetruman.delete.Delete;
 import es.jaimetruman.select.Select;
 import es.serversurvival.mensajes._shared.domain.MensajesRepository;
@@ -13,6 +14,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
+@Repository
 public final class MySQLMensajesRepository extends DataBaseRepository<Mensaje, UUID> implements MensajesRepository {
     private static final String TABLE_NAME = "mensajes";
     private static final String ID_FIELD_NAME = "mensajeId";

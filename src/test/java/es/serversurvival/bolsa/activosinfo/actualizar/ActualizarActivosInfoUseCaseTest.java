@@ -1,8 +1,6 @@
 package es.serversurvival.bolsa.activosinfo.actualizar;
 
 import es.serversurvival.MockitoArgEqualsMatcher;
-import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival.bolsa.activosinfo.DepencyContainerTipoActivoInfoMocks;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import lombok.SneakyThrows;
@@ -60,7 +58,7 @@ public final class ActualizarActivosInfoUseCaseTest {
                 materiasPrimasTipoActivo
         ));
 
-        this.useCase.actualizrar();
+        this.useCase.actualizar();
 
         verify(this.activoInfoService, times(1)).save(argThat(MockitoArgEqualsMatcher.of(
                 accionTipoActivo.withNombreActivoLargo("AMAZON").withPrecio(2100)

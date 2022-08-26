@@ -1,5 +1,6 @@
 package es.serversurvival.bolsa.posicionesabiertas.dividendostask;
 
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 
+@UseCase
 public final class PagarDividendosUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final JugadoresService jugadoresService;

@@ -2,6 +2,7 @@ package es.serversurvival.bolsa.posicionesabiertas.comprarlargo;
 
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
@@ -16,6 +17,7 @@ import lombok.AllArgsConstructor;
 import static es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion.*;
 
 @AllArgsConstructor
+@UseCase
 public class ComprarLargoUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final JugadoresService jugadoresService;

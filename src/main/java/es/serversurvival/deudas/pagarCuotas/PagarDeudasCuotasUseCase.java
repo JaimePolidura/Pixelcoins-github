@@ -1,6 +1,7 @@
 package es.serversurvival.deudas.pagarCuotas;
 
 import es.jaime.EventBus;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.deudas._shared.application.DeudasService;
@@ -16,6 +17,7 @@ import java.util.UUID;
 import static es.serversurvival._shared.utils.Funciones.DATE_FORMATER_LEGACY;
 
 @AllArgsConstructor
+@UseCase
 public final class PagarDeudasCuotasUseCase {
     private final DeudasService deudasService;
     private final JugadoresService jugadoresService;

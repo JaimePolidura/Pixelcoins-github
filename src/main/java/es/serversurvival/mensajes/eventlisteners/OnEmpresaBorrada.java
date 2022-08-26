@@ -1,12 +1,14 @@
 package es.serversurvival.mensajes.eventlisteners;
 
 import es.jaime.EventListener;
+import es.jaimetruman.annotations.Component;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.empresas.empresas.borrar.EmpresaBorrada;
 import org.bukkit.ChatColor;
 
 import java.util.List;
 
+@Component
 public final class OnEmpresaBorrada {
     @EventListener
     public void onEmpresaBorrada (EmpresaBorrada evento) {

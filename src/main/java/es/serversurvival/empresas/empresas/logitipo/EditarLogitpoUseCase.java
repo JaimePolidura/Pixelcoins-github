@@ -2,6 +2,7 @@ package es.serversurvival.empresas.empresas.logitipo;
 
 import es.jaime.javaddd.domain.exceptions.IllegalType;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
+import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 
 @AllArgsConstructor
+@UseCase
 public final class EditarLogitpoUseCase {
     private final EmpresasService empresasService;
 

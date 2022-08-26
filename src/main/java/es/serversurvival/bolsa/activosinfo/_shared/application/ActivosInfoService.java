@@ -1,6 +1,7 @@
 package es.serversurvival.bolsa.activosinfo._shared.application;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.jaimetruman.annotations.Service;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.Cache;
 import es.serversurvival._shared.cache.UnlimitedCacheSize;
@@ -17,6 +18,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
+@Service
 public class ActivosInfoService {
     private final ActivoInfoRepository respotiroyDb;
     private final Cache<String, ActivoInfo> cache;
