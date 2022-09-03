@@ -1,7 +1,7 @@
 package es.serversurvival.transacciones.eventlisteners;
 
 import es.jaime.EventListener;
-import es.jaimetruman.annotations.Component;
+import es.dependencyinjector.annotations.Component;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.transacciones._shared.domain.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;

@@ -1,7 +1,7 @@
 package es.serversurvival.empresas.empresas.eventlisteners;
 
 import es.jaime.EventListener;
-import es.jaimetruman.annotations.Component;
+import es.dependencyinjector.annotations.Component;
 import es.serversurvival.empresas.empleados.irse.EmpleadoDejaEmpresaEvento;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;

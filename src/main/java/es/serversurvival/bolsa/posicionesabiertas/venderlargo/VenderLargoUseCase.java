@@ -1,18 +1,14 @@
 package es.serversurvival.bolsa.posicionesabiertas.venderlargo;
 
+import es.dependencyinjector.annotations.UseCase;
 import es.jaime.EventBus;
-import es.jaime.EventListener;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.jaimetruman.annotations.Component;
-import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
-import es.serversurvival.Pixelcoin;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
-import es.serversurvival.jugadores._shared.domain.Jugador;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;
@@ -24,13 +20,6 @@ public class VenderLargoUseCase {
     private final JugadoresService jugadoresService;
     private final ActivosInfoService activoInfoService;
     private final EventBus eventBus;
-
-    public VenderLargoUseCase() {
-        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.activoInfoService = DependecyContainer.get(ActivosInfoService.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-    }
     
     public void venderPosicion(UUID posicionAbiertaIdAVender, int cantidad, String nombreJugador) {
         var posicionAVender = this.posicionesAbiertasSerivce.getById(posicionAbiertaIdAVender);

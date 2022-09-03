@@ -1,9 +1,9 @@
 package es.serversurvival.bolsa.ordenespremarket._shared.infrastructure;
 
+import es.dependencyinjector.annotations.Repository;
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
-import es.jaimetruman.annotations.Repository;
 import es.jaimetruman.select.Select;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.OrdenPremarket;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.OrderesPremarketRepository;

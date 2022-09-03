@@ -1,8 +1,8 @@
 package es.serversurvival.deudas.pagarTodo;
 
+import es.dependencyinjector.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.deudas._shared.application.DeudasService;
@@ -19,12 +19,6 @@ public final class PagarDeudaCompletaUseCase {
     private final DeudasService deudasService;
     private final JugadoresService jugadoresService;
     private final EventBus eventBus;
-
-    public PagarDeudaCompletaUseCase() {
-        this.deudasService = DependecyContainer.get(DeudasService.class);
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-    }
 
     public void pagarDeuda(UUID deudaId, String deudorName) {
         var deudaAPagar = this.ensureDeudaExists(deudaId);

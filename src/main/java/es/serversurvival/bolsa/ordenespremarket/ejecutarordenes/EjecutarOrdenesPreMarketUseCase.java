@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa.ordenespremarket.ejecutarordenes;
 
+import es.dependencyinjector.annotations.UseCase;
 import es.jaime.EventBus;
-import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
@@ -17,6 +17,7 @@ import es.serversurvival.bolsa.posicionesabiertas.venderlargo.VenderLargoUseCase
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -26,36 +27,20 @@ import static es.serversurvival._shared.utils.Funciones.reducirPorcentaje;
 import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo.ACCIONES;
 import static es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce.PORCENTAJE_CORTO;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @UseCase
 public final class EjecutarOrdenesPreMarketUseCase {
-    private final AtomicBoolean isLoading;
+    private final AtomicBoolean isLoading = new AtomicBoolean(false);
 
     private final JugadoresService jugadoresService;
     private final OrdenesPremarketService ordenesPremarketService;
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final ActivosInfoService activoInfoService;
     private final EventBus eventBus;
-
     private final ComprarLargoUseCase comprarLargoUseCase;
     private final VenderLargoUseCase venderLargoUseCase;
     private final VenderCortoUseCase venderCortoUseCase;
     private final ComprarCortoUseCase comprarCortoUseCase;
-
-    public EjecutarOrdenesPreMarketUseCase() {
-        this.isLoading = new AtomicBoolean(false);
-
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.ordenesPremarketService = DependecyContainer.get(OrdenesPremarketService.class);
-        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
-        this.activoInfoService = DependecyContainer.get(ActivosInfoService.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-
-        this.comprarLargoUseCase = new ComprarLargoUseCase();
-        this.venderCortoUseCase = new VenderCortoUseCase();
-        this.comprarCortoUseCase = new ComprarCortoUseCase();
-        this.venderLargoUseCase = new VenderLargoUseCase();
-    }
 
     public void ejecutarOrdenes () {
         isLoading.set(true);

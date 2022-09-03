@@ -1,6 +1,6 @@
 package es.serversurvival.bolsa.posicionesabiertas.dividendostask;
 
-import es.jaimetruman.annotations.UseCase;
+import es.dependencyinjector.annotations.UseCase;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
@@ -8,6 +8,7 @@ import es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos.Ac
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
+import lombok.AllArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -18,14 +19,10 @@ import java.util.List;
 import static es.serversurvival._shared.utils.Funciones.*;
 
 @UseCase
+@AllArgsConstructor
 public final class PagarDividendosUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final JugadoresService jugadoresService;
-
-    public PagarDividendosUseCase() {
-        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-    }
 
     public void pagarDividendos() {
         Date hoy = new Date();

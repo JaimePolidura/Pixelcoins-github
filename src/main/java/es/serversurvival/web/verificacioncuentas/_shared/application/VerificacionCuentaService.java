@@ -1,7 +1,7 @@
 package es.serversurvival.web.verificacioncuentas._shared.application;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.jaimetruman.annotations.Service;
+import es.dependencyinjector.annotations.Service;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.web.verificacioncuentas._shared.domain.VerificacionCuenta;
 import es.serversurvival.web.verificacioncuentas._shared.domain.VerificacionCuentaRepository;

@@ -1,7 +1,7 @@
 package es.serversurvival.jugadores.cambio.ingresarItem;
 
 import es.jaime.EventListener;
-import es.jaimetruman.annotations.Component;
+import es.dependencyinjector.annotations.Component;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;

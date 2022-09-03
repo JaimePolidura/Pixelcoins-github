@@ -1,14 +1,12 @@
 package es.serversurvival.bolsa.activosinfo._shared.application;
 
+import es.dependencyinjector.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.jaimetruman.annotations.Service;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.Cache;
 import es.serversurvival._shared.cache.UnlimitedCacheSize;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfoRepository;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
-import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
@@ -17,15 +15,13 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
 @Service
 public class ActivosInfoService {
     private final ActivoInfoRepository respotiroyDb;
-    private final Cache<String, ActivoInfo> cache;
+    private final Cache<String, ActivoInfo> cache = new UnlimitedCacheSize<>();
 
-    public ActivosInfoService() {
-        this.cache = new UnlimitedCacheSize<>();
-        this.respotiroyDb = DependecyContainer.get(ActivoInfoRepository.class);
+    public ActivosInfoService(ActivoInfoRepository respotiroyDb) {
+        this.respotiroyDb = respotiroyDb;
     }
 
     public void save(ActivoInfo activoApiCache) {

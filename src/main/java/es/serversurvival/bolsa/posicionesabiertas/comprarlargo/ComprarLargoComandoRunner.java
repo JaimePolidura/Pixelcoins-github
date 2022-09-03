@@ -10,10 +10,12 @@ import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
+import lombok.AllArgsConstructor;
 import main.ValidationResult;
 import main.ValidatorService;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.checkerframework.common.util.report.qual.ReportCall;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
@@ -27,16 +29,11 @@ import static org.bukkit.Sound.*;
         args = {"ticker", "cantidad"},
         explanation = "Para comprar una accion. <ticker> ticker de la accion (solo se pueden cantidad americanas) <cantidad> cantidad de cantidad a comprar"
 )
+@AllArgsConstructor
 public class ComprarLargoComandoRunner implements CommandRunnerArgs<ComprarLargoComando> {
     private final JugadoresService jugadoresService;
     private final ComprarLargoUseCase comprarLargoUseCase;
     private final ActivosInfoService activoInfoService;
-
-    public ComprarLargoComandoRunner(){
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.activoInfoService = DependecyContainer.get(ActivosInfoService.class);
-        this.comprarLargoUseCase = new ComprarLargoUseCase();
-    }
 
     @Override
     public void execute(ComprarLargoComando comando, CommandSender sender) {

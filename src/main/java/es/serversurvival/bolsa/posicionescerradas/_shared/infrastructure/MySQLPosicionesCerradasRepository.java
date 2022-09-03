@@ -1,9 +1,9 @@
 package es.serversurvival.bolsa.posicionescerradas._shared.infrastructure;
 
+import es.dependencyinjector.annotations.Repository;
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
-import es.jaimetruman.annotations.Repository;
 import es.jaimetruman.select.Select;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;

@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa.ordenespremarket.cancelarorderpremarket;
 
+import es.dependencyinjector.annotations.UseCase;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrdenesPremarketService;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.OrdenPremarket;

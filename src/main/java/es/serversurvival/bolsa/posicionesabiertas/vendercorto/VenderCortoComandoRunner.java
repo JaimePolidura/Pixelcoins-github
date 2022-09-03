@@ -16,6 +16,7 @@ import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival._shared.utils.Funciones;
+import lombok.AllArgsConstructor;
 import main.ValidationResult;
 import main.ValidatorService;
 import org.bukkit.Bukkit;
@@ -37,16 +38,11 @@ import static org.bukkit.Sound.ENTITY_PLAYER_LEVELUP;
         explanation = "Abrir posicion en corto de una accion, se te cobrara una comision <ticker> " +
                 "ticker de la accion, solo se pueden empresas americanas, <cantidad> cantidad de accinoes a vender"
 )
+@AllArgsConstructor
 public class VenderCortoComandoRunner implements CommandRunnerArgs<VenderCortoComando> {
     private final JugadoresService jugadoresService;
     private final ActivosInfoService activoInfoService;
     private final VenderCortoUseCase venderCortoUseCase;
-
-    public VenderCortoComandoRunner(){
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.activoInfoService = DependecyContainer.get(ActivosInfoService.class);
-        this.venderCortoUseCase = new VenderCortoUseCase();
-    }
 
     @Override
     public void execute(VenderCortoComando comando, CommandSender player){

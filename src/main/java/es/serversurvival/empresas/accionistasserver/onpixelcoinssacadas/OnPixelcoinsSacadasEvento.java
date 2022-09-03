@@ -1,7 +1,7 @@
 package es.serversurvival.empresas.accionistasserver.onpixelcoinssacadas;
 
+import es.dependencyinjector.annotations.Component;
 import es.jaime.EventListener;
-import es.jaimetruman.annotations.Component;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;

@@ -3,7 +3,7 @@ package es.serversurvival.empresas.empresas.sacar;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.jaimetruman.annotations.UseCase;
+import es.dependencyinjector.annotations.UseCase;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;

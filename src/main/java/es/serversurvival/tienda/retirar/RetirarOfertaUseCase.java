@@ -1,7 +1,7 @@
 package es.serversurvival.tienda.retirar;
 
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.jaimetruman.annotations.UseCase;
+import es.dependencyinjector.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.ItemsUtils;
 import es.serversurvival.tienda._shared.application.TiendaService;

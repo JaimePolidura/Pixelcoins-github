@@ -1,10 +1,10 @@
 package es.serversurvival.bolsa.ordenespremarket.abrirorden;
 
+import es.dependencyinjector.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.AlreadyExists;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrdenesPremarketService;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
@@ -18,12 +18,6 @@ public final class AbrirOrdenUseCase {
     private final OrdenesPremarketService ordenesPremarketService;
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final EventBus eventBus;
-
-    public AbrirOrdenUseCase() {
-        this.ordenesPremarketService = DependecyContainer.get(OrdenesPremarketService.class);
-        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-    }
 
     public void abrirOrden(AbrirOrdenPremarketCommand command) {
         this.ensureCantidadCorrect(command.getCantidad());

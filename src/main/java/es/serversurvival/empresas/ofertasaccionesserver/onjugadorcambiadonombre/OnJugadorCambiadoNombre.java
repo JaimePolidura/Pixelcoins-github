@@ -1,7 +1,7 @@
 package es.serversurvival.empresas.ofertasaccionesserver.onjugadorcambiadonombre;
 
 import es.jaime.EventListener;
-import es.jaimetruman.annotations.Component;
+import es.dependencyinjector.annotations.Component;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import es.serversurvival.jugadores.setupjugadorunido.JugadorCambiadoDeNombreEvento;

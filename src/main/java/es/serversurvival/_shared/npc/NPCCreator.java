@@ -15,7 +15,6 @@ import org.json.simple.JSONObject;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
-
 public final class NPCCreator {
     private static final NPCLib libray = new NPCLib(Pixelcoin.getInstance());
     private static final DecimalFormat formatea = Funciones.FORMATEA;

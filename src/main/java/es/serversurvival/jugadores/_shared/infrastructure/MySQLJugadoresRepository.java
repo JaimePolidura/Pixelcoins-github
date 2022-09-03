@@ -1,10 +1,9 @@
 package es.serversurvival.jugadores._shared.infrastructure;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import es.dependencyinjector.annotations.Repository;
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
-import es.jaimetruman.annotations.Repository;
 import es.jaimetruman.select.Select;
 import es.serversurvival.jugadores._shared.domain.JugadoresRepository;
 import es.serversurvival.jugadores._shared.domain.Jugador;
@@ -12,7 +11,6 @@ import es.serversurvival.jugadores._shared.domain.Jugador;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 

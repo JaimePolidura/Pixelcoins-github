@@ -1,7 +1,7 @@
 package es.serversurvival.deudas.pagarCuotas;
 
+import es.dependencyinjector.annotations.UseCase;
 import es.jaime.EventBus;
-import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.deudas._shared.application.DeudasService;
@@ -22,12 +22,6 @@ public final class PagarDeudasCuotasUseCase {
     private final DeudasService deudasService;
     private final JugadoresService jugadoresService;
     private final EventBus eventBus;
-
-    public PagarDeudasCuotasUseCase () {
-        this.deudasService = DependecyContainer.get(DeudasService.class);
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-    }
 
     public void pagarDeudas () {
         for (Deuda deuda : this.deudasService.findAll()) {

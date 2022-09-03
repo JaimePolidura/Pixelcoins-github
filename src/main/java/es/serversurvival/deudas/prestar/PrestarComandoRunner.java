@@ -6,6 +6,7 @@ import es.bukkitclassmapper.menus.MenuService;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.serversurvival._shared.DependecyContainer;
+import lombok.AllArgsConstructor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -16,12 +17,9 @@ import static org.bukkit.ChatColor.*;
         args = {"nombreAccionista", "pixelcoins", "dias", "[interes]¡1!"},
         explanation = "Prestar dinero a un nombreAccionista durante dias. La deuda se pagara cada dia"
 )
+@AllArgsConstructor
 public class PrestarComandoRunner implements CommandRunnerArgs<PrestarComando> {
     private final MenuService menuService;
-
-    public PrestarComandoRunner() {
-        this.menuService = DependecyContainer.get(MenuService.class);
-    }
 
     @Override
     public void execute(PrestarComando comando, CommandSender enviador) {

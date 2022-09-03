@@ -1,6 +1,6 @@
 package es.serversurvival.mensajes.onplayerjoin;
 
-import es.jaimetruman.annotations.Component;
+import es.dependencyinjector.annotations.Component;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.mensajes._shared.application.MensajesService;
 import org.bukkit.ChatColor;

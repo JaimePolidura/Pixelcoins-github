@@ -1,13 +1,11 @@
 package es.serversurvival.deudas.prestar;
 
+import es.dependencyinjector.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
-import es.jaimetruman.annotations.UseCase;
-import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
-import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.deudas._shared.application.DeudasService;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
@@ -18,17 +16,9 @@ import static es.serversurvival._shared.utils.Funciones.*;
 @AllArgsConstructor
 @UseCase
 public final class PrestarUseCase {
-    public static final PrestarUseCase INSTANCE = new PrestarUseCase();
-
     private final JugadoresService jugadoresService;
     private final DeudasService deudasService;
     private final EventBus eventBus;
-
-    public PrestarUseCase () {
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.deudasService = DependecyContainer.get(DeudasService.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-    }
 
     public void prestar (String acredor, String deudor, double pixelcoins, int interes, int dias) {
         this.ensureNotTheSame(acredor, deudor);

@@ -1,18 +1,16 @@
 package es.serversurvival.bolsa.posicionesabiertas.onjugadorcambiadonombre;
 
+import es.dependencyinjector.annotations.Component;
 import es.jaime.EventListener;
-import es.jaimetruman.annotations.Component;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.jugadores.setupjugadorunido.JugadorCambiadoDeNombreEvento;
+import lombok.AllArgsConstructor;
 
 @Component
+@AllArgsConstructor
 public final class OnJugadorCambiadoNombre {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
-
-    public OnJugadorCambiadoNombre() {
-        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
-    }
 
     @EventListener
     public void on(JugadorCambiadoDeNombreEvento evento){

@@ -1,8 +1,8 @@
 package es.serversurvival.bolsa.posicionesabiertas.vendercorto;
 
+import es.dependencyinjector.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
@@ -25,13 +25,6 @@ public class VenderCortoUseCase {
     private final JugadoresService jugadoresService;
     private final ActivosInfoService activosInfoService;
     private final EventBus eventBus;
-
-    public VenderCortoUseCase () {
-        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
-        this.jugadoresService= DependecyContainer.get(JugadoresService.class);
-        this.activosInfoService = DependecyContainer.get(ActivosInfoService.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-    }
 
     public void venderEnCortoBolsa (String jugadorNombre, String nombreActivo, int cantidad) {
         var activoInfo = this.activosInfoService.getByNombreActivo(nombreActivo, ACCIONES);

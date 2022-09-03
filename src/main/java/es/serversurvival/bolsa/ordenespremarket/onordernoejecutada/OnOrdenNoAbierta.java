@@ -1,7 +1,7 @@
 package es.serversurvival.bolsa.ordenespremarket.onordernoejecutada;
 
+import es.dependencyinjector.annotations.Component;
 import es.jaime.EventListener;
-import es.jaimetruman.annotations.Component;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.OrdenNoAbiertaEvento;
 import es.serversurvival._shared.utils.Funciones;
 import org.bukkit.Bukkit;

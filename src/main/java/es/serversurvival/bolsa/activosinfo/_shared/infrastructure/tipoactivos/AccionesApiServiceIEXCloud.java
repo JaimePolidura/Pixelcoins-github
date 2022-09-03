@@ -1,10 +1,7 @@
 package es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos;
 
-import es.jaimetruman.annotations.Service;
+import es.dependencyinjector.annotations.Service;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.acciones.AccionesApiService;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.acciones.Dividendos;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.acciones.Split;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivoService;
 import org.json.simple.JSONObject;
 
 import static es.serversurvival._shared.utils.Funciones.*;

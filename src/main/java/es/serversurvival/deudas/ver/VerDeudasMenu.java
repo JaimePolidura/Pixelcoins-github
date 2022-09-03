@@ -19,6 +19,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;

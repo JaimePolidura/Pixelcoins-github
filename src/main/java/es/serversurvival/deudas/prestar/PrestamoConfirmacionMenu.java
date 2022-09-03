@@ -1,7 +1,7 @@
 package es.serversurvival.deudas.prestar;
 
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import es.jaimetruman.annotations.Component;
+import es.dependencyinjector.annotations.Component;
 import es.serversurvival._shared.menus.ConfirmacionMenu;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;

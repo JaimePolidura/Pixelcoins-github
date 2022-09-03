@@ -1,8 +1,8 @@
 package es.serversurvival.jugadores._shared.application;
 
+import es.dependencyinjector.annotations.Component;
 import es.jaime.EventListener;
 import es.jaime.Priority;
-import es.jaimetruman.annotations.Component;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
 

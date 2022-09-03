@@ -2,9 +2,9 @@ package es.serversurvival.tienda.vender;
 
 import es.bukkitclassmapper.menus.MenuService;
 import es.bukkitclassmapper.menus.modules.sync.SyncMenuService;
+import es.dependencyinjector.annotations.UseCase;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalType;
-import es.jaimetruman.annotations.UseCase;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.tienda._shared.application.TiendaService;

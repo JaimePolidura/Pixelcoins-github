@@ -1,7 +1,7 @@
 package es.serversurvival.tienda._shared.application;
 
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.jaimetruman.annotations.Service;
+import es.dependencyinjector.annotations.Service;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.LRUCache;
 import es.serversurvival._shared.cache.LimitedCache;

@@ -1,8 +1,7 @@
 package es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos;
 
-import es.jaimetruman.annotations.Service;
+import es.dependencyinjector.annotations.Service;
 import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
-import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.criptomonedas.CriptomonedasApiService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.criptomonedas.SupportedCriptomonedas;
 import org.json.simple.JSONObject;

@@ -1,6 +1,6 @@
 package es.serversurvival._shared.npc;
 
-import es.jaimetruman.annotations.Component;
+import es.dependencyinjector.annotations.Component;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;

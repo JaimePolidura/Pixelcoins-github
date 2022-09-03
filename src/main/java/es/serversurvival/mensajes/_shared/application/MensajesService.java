@@ -1,6 +1,6 @@
 package es.serversurvival.mensajes._shared.application;
 
-import es.jaimetruman.annotations.Service;
+import es.dependencyinjector.annotations.Service;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.mensajes._shared.domain.Mensaje;
 import es.serversurvival.mensajes._shared.domain.MensajesRepository;

@@ -6,6 +6,7 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
+import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -15,14 +16,11 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService.*;
 
 @Command(value = "bolsa estadisticas", explanation = "Ver tus estadisticas en la bolsa")
+@AllArgsConstructor
 public class EstadiscticasBolsaComandoRunner implements CommandRunnerNonArgs {
     private static final int LIMIT = 5;
 
     private final PosicionesCerradasService posicionesCerradasService;
-
-    public EstadiscticasBolsaComandoRunner() {
-        this.posicionesCerradasService = DependecyContainer.get(PosicionesCerradasService.class);
-    }
 
     @Override
     public void execute(CommandSender player) {

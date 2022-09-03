@@ -3,7 +3,7 @@ package es.serversurvival.mensajes._shared.infrastructure;
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
-import es.jaimetruman.annotations.Repository;
+import es.dependencyinjector.annotations.Repository;
 import es.jaimetruman.delete.Delete;
 import es.jaimetruman.select.Select;
 import es.serversurvival.mensajes._shared.domain.MensajesRepository;

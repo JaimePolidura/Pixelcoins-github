@@ -10,10 +10,6 @@ public final class OrderExecutorProxy {
     private static final OrderExecutorProxy INSTANCE = new OrderExecutorProxy();
     private final AbrirOrdenUseCase abrirOrdenUseCase;
 
-    public OrderExecutorProxy() {
-        this.abrirOrdenUseCase = new AbrirOrdenUseCase();
-    }
-
     public boolean run(AbrirOrdenPremarketCommand commandoOnMarketClose, Runnable onMarketOpen){
         if(Funciones.mercadoEstaAbierto())
             onMarketOpen.run();

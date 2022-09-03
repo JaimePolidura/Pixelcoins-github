@@ -2,7 +2,7 @@ package es.serversurvival.tienda.comprar;
 
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
-import es.jaimetruman.annotations.UseCase;
+import es.dependencyinjector.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival._shared.utils.ItemsUtils;

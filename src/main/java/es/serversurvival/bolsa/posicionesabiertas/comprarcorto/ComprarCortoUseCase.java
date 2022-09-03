@@ -1,9 +1,9 @@
 package es.serversurvival.bolsa.posicionesabiertas.comprarcorto;
 
+import es.dependencyinjector.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.jaimetruman.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
@@ -24,13 +24,6 @@ public class ComprarCortoUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final ActivosInfoService activoInfoService;
     private final EventBus eventBus;
-
-    public ComprarCortoUseCase() {
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
-        this.activoInfoService = DependecyContainer.get(ActivosInfoService.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-    }
 
     public void comprarPosicionCorto (UUID posicoinAbiertaIdComprarCorto, int cantidad, String jugadorNombre) {
         var poscionAComprarCorto = this.posicionesAbiertasSerivce.getById(posicoinAbiertaIdComprarCorto);

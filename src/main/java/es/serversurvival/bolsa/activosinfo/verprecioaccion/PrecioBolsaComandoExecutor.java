@@ -5,6 +5,7 @@ import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
+import lombok.AllArgsConstructor;
 import org.bukkit.command.CommandSender;
 
 import static org.bukkit.ChatColor.*;
@@ -15,12 +16,9 @@ import static org.bukkit.ChatColor.*;
         args = {"ticker"},
         explanation = "Ver el precio de una accion <ticker> ticker de la accion, solo se pueden empresas americanas"
 )
+@AllArgsConstructor
 public class PrecioBolsaComandoExecutor implements CommandRunnerArgs<PrecioBolsaComando> {
     private final ActivosInfoService activoInfoService;
-
-    public PrecioBolsaComandoExecutor() {
-        this.activoInfoService = DependecyContainer.get(ActivosInfoService.class);
-    }
 
     @Override
     public void execute(PrecioBolsaComando comando, CommandSender player) {

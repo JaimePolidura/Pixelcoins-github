@@ -1,9 +1,8 @@
 package es.serversurvival._shared.scoreboards;
 
+import es.dependencyinjector.annotations.Service;
 import es.jaime.EventListener;
 import es.jaime.Priority;
-import es.jaimetruman.annotations.Component;
-import es.jaimetruman.annotations.Service;
 import es.serversurvival.transacciones._shared.domain.EventoTipoTransaccion;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.transacciones._shared.domain.Transaccion;

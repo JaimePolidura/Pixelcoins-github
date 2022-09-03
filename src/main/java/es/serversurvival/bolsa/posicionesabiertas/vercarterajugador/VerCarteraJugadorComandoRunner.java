@@ -8,6 +8,7 @@ import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
+import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -22,12 +23,9 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
         args = {"nombreAccionista"},
         explanation = "Ver la cartera de la bolsa de otro nombreAccionista"
 )
+@AllArgsConstructor
 public class VerCarteraJugadorComandoRunner implements CommandRunnerArgs<VerCarteraJugadorComando> {
     private final ActivosInfoService activoInfoService;
-
-    public VerCarteraJugadorComandoRunner() {
-        this.activoInfoService = DependecyContainer.get(ActivosInfoService.class);
-    }
 
     @Override
     public void execute(VerCarteraJugadorComando comando, CommandSender player) {

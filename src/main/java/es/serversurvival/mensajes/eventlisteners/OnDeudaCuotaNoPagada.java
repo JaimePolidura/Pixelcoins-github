@@ -1,7 +1,7 @@
 package es.serversurvival.mensajes.eventlisteners;
 
 import es.jaime.EventListener;
-import es.jaimetruman.annotations.Component;
+import es.dependencyinjector.annotations.Component;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.deudas.pagarCuotas.DeudaCuotaNoPagadaEvento;
 import es.serversurvival.mensajes._shared.application.MensajesService;

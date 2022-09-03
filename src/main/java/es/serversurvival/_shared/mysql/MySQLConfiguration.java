@@ -1,7 +1,7 @@
 package es.serversurvival._shared.mysql;
 
+import es.dependencyinjector.annotations.Configuration;
 import es.jaime.configuration.DatabaseConfiguration;
-import es.jaimetruman.annotations.Configuration;
 
 import static java.lang.String.*;
 

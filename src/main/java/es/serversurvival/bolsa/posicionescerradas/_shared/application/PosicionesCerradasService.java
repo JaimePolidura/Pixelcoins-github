@@ -1,6 +1,6 @@
 package es.serversurvival.bolsa.posicionescerradas._shared.application;
 
-import es.jaimetruman.annotations.Service;
+import es.dependencyinjector.annotations.Service;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionesCerradasRepository;

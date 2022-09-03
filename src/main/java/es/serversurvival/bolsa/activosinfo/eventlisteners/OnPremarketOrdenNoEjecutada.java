@@ -1,8 +1,8 @@
 package es.serversurvival.bolsa.activosinfo.eventlisteners;
 
+import es.dependencyinjector.annotations.Component;
 import es.jaime.EventListener;
 import es.jaime.Priority;
-import es.jaimetruman.annotations.Component;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.ordenespremarket.ejecutarordenes.OrdenNoEjecutadoEvento;
@@ -14,11 +14,6 @@ import lombok.AllArgsConstructor;
 public final class OnPremarketOrdenNoEjecutada {
     private final ActivosInfoService activoInfoService;
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
-
-    public OnPremarketOrdenNoEjecutada() {
-        this.activoInfoService = DependecyContainer.get(ActivosInfoService.class);
-        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
-    }
 
     @EventListener(pritority = Priority.LOWEST)
     public void onOrdenNoEjecutada (OrdenNoEjecutadoEvento evento) {

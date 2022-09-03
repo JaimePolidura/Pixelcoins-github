@@ -1,6 +1,6 @@
 package es.serversurvival.bolsa.posicionesabiertas.splitaccionestask;
 
-import es.jaimetruman.annotations.UseCase;
+import es.dependencyinjector.annotations.UseCase;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
@@ -9,6 +9,7 @@ import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo
 import es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos.AccionesApiServiceIEXCloud;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.json.simple.JSONObject;
 
@@ -20,14 +21,10 @@ import java.util.Map;
 import static es.serversurvival._shared.utils.Funciones.diferenciaDias;
 
 @UseCase
+@AllArgsConstructor
 public final class SplitAccionesUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final ActivosInfoService activoInfoService;
-
-    public SplitAccionesUseCase() {
-        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
-        this.activoInfoService = DependecyContainer.get(ActivosInfoService.class);
-    }
 
     public void actualizarSplits () {
         Map<String, JSONObject> infoSplitsPorAccion = new HashMap<>();
