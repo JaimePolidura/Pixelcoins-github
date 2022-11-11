@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
@@ -68,6 +69,9 @@ public final class TiendaMenu extends Menu {
 
     @Override
     public MenuConfiguration configuration() {
+        AtomicBoolean atomicBoolean = new AtomicBoolean(true);
+        atomicBoolean.getAndSet();
+
         return MenuConfiguration.builder()
                 .title(TITULO)
                 .fixedItems()
