@@ -1,17 +1,18 @@
 package es.serversurvival.bolsa.activosinfo.vervalores.criptomonedas;
 
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.Page;
+import es.bukkitbettermenus.configuration.MenuConfiguration;
+import es.bukkitbettermenus.menustate.AfterShow;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
-import es.bukkitclassmapper.menus.Menu;
-import es.bukkitclassmapper.menus.MenuService;
-import es.bukkitclassmapper.menus.Page;
-import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
-import es.bukkitclassmapper.menus.menustate.AfterShow;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.activosinfo.vervalores.ComprarBolsaConfirmacionMenu;
+import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.ComprarLargoUseCase;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
+import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -28,16 +29,12 @@ import static es.serversurvival._shared.utils.Funciones.*;
 import static es.serversurvival.bolsa.activosinfo.vervalores.criptomonedas.TodasCriptomodeasVerValores.*;
 import static org.bukkit.ChatColor.*;
 
+@AllArgsConstructor
 public final class CriptomonedasMenu extends Menu implements AfterShow {
+    private final ComprarLargoUseCase comprarLargoUseCase;
+    private final JugadoresService jugadoresService;
     private final ExecutorService executor;
     private final MenuService menuService;
-    private final Jugador jugador;
-
-    public CriptomonedasMenu(String jugadorNombre) {
-        this.executor = DependecyContainer.get(ExecutorService.class);
-        this.menuService = DependecyContainer.get(MenuService.class);
-        this.jugador = DependecyContainer.get(JugadoresService.class).getByNombre(jugadorNombre);
-    }
 
     @Override
     public int[][] items() {
@@ -62,9 +59,11 @@ public final class CriptomonedasMenu extends Menu implements AfterShow {
             String precioString = ItemUtils.getLore(itemClicked, 1).split(" ")[1]
                     .replaceAll("\\.", "")
                     .replace(",", ".");
-            double precio = Double.parseDouble(precioString);
 
-            if(precio > this.jugador.getPixelcoins()){
+            double precio = Double.parseDouble(precioString);
+            Jugador jugador = this.jugadoresService.getByNombre(player.getName());
+
+            if(precio > jugador.getPixelcoins()){
                 player.sendMessage(DARK_RED + "No tienes las suficientes pixelcoins");
                 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
                 return;
@@ -73,7 +72,7 @@ public final class CriptomonedasMenu extends Menu implements AfterShow {
             String nombreActivo = ItemUtils.getLore(itemClicked, 0).split(" ")[1];
 
             this.menuService.open(player, new ComprarBolsaConfirmacionMenu(
-                    nombreActivo, TipoActivo.CRIPTOMONEDAS, player.getName(), precio
+                    nombreActivo, TipoActivo.CRIPTOMONEDAS, player.getName(), precio, comprarLargoUseCase, jugadoresService
             ));
         }catch (Exception e) {
             e.printStackTrace();
@@ -116,7 +115,7 @@ public final class CriptomonedasMenu extends Menu implements AfterShow {
     }
 
     @Override
-    public void afterShow() {
+    public void afterShow(Player player) {
         List<ItemStack> items = this.getItemsAccionesToEdit();
 
         for (ItemStack item : items) {
@@ -138,7 +137,9 @@ public final class CriptomonedasMenu extends Menu implements AfterShow {
     }
 
     private List<ItemStack> getItemsAccionesToEdit() {
-        return allPages().stream()
+        List<Page> pages = allPages();
+
+        return pages.stream()
                 .map(Page::getInventory)
                 .map(Inventory::getContents)
                 .flatMap(Arrays::stream)

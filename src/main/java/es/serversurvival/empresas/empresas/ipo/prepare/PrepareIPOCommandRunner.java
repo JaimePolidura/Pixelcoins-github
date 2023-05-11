@@ -1,14 +1,14 @@
 package es.serversurvival.empresas.empresas.ipo.prepare;
 
+import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
-import es.bukkitclassmapper.menus.MenuService;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.empresas.ipo.IPOCommand;
+import lombok.AllArgsConstructor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -18,14 +18,10 @@ import org.bukkit.entity.Player;
         explanation = "Puedes sacar tus empresas a la 'bolsa' donde el resto de jugadores podran comprar las cantidad. " +
                 "Por cada venta de la empresa a jugadores tu empresa recaudara las pixelcoins. Para mas ayuda pregunta al admin"
 )
+@AllArgsConstructor
 public final class PrepareIPOCommandRunner implements CommandRunnerArgs<IPOCommand> {
     private final EmpresasService empresasService;
     private final MenuService menuService;
-
-    public PrepareIPOCommandRunner() {
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
-        this.menuService = DependecyContainer.get(MenuService.class);
-    }
 
     @Override
     public void execute(IPOCommand command, CommandSender sender) {

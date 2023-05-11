@@ -1,19 +1,18 @@
 package es.serversurvival.bolsa.posicionesabiertas.vercartera;
 
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.configuration.MenuConfiguration;
+import es.bukkitbettermenus.menustate.AfterShow;
+import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
-import es.bukkitclassmapper.menus.Menu;
-import es.bukkitclassmapper.menus.MenuService;
-import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
-import es.bukkitclassmapper.menus.menustate.AfterShow;
-import es.bukkitclassmapper.menus.modules.pagination.PaginationConfiguration;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
-import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
+import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -22,32 +21,19 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
+@AllArgsConstructor
 public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
     private static final String TITULO = ChatColor.DARK_RED + "" + ChatColor.BOLD + " TU CARTERA DE ACCIONES";
 
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
-    private final Map<String, ActivoInfo> allActivosInfo;
-    private final String jugadorNombre;
+    private final ActivosInfoService activosInfoService;
     private final MenuService menuService;
-
-    private final double valorTotal;
-    private double beneficiosOPerdidas;
-
-    public VerBolsaCarteraMenu(String jugadorNombre){
-        this.posicionesAbiertasSerivce = DependecyContainer.get(PosicionesAbiertasSerivce.class);
-        this.menuService = DependecyContainer.get(MenuService.class);
-        this.allActivosInfo = DependecyContainer.get(ActivosInfoService.class).findAllToMap();
-        this.jugadorNombre = jugadorNombre;
-
-        this.valorTotal = PosicionesUtils.getAllPixeloinsEnValores(jugadorNombre);
-    }
 
     @Override
     public int[][] items() {
@@ -68,7 +54,7 @@ public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
                 .fixedItems()
                 .item(1, buildItemInfo())
                 .item(5, buildItemStats())
-                .items(2, buildItemsPosicionesAbiertas(), this::cerrarPosicion)
+                .items(2, this::buildItemsPosicionesAbiertas, this::cerrarPosicion)
                 .breakpoint(7, buildItemGoBackToProfileMenu(), this::goToProfileMenu)
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
@@ -88,14 +74,16 @@ public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
         this.menuService.open(player, new BolsaCerrarPosicionMenu(id));
     }
 
-    private List<ItemStack> buildItemsPosicionesAbiertas() {
-        return this.posicionesAbiertasSerivce.findByJugador(this.jugadorNombre).stream()
+    private List<ItemStack> buildItemsPosicionesAbiertas(Player player) {
+        return this.posicionesAbiertasSerivce.findByJugador(player.getName()).stream()
                 .map(this::buildItemFromPosicionAbierta)
                 .toList();
     }
 
     private ItemStack buildItemFromPosicionAbierta(PosicionAbierta posicion) {
-        var activoInfo = this.allActivosInfo.get(posicion.getNombreActivo());
+        double valorTotal = PosicionesUtils.getAllPixeloinsEnValores(posicion.getJugador());
+
+        var activoInfo = this.activosInfoService.getByNombreActivo(posicion.getNombreActivo(), posicion.getTipoActivo());
         double perdidasOBeneficios = posicion.esLargo() ?
                 posicion.getCantidad() * (activoInfo.getPrecio() - posicion.getPrecioApertura()) :
                 posicion.getCantidad() * (posicion.getPrecioApertura() - activoInfo.getPrecio());
@@ -104,7 +92,8 @@ public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
                 redondeoDecimales(diferenciaPorcntual(activoInfo.getPrecio(), posicion.getPrecioApertura()), 2);
         double valorPosicion = posicion.esLargo() ? posicion.getCantidad() * activoInfo.getPrecio() : perdidasOBeneficios;
 
-        this.beneficiosOPerdidas += perdidasOBeneficios;
+
+        this.setProperty("beneficiosOPerdidas", perdidasOBeneficios);
 
         List<String> lore = new ArrayList<>();
         lore.add("   ");
@@ -169,11 +158,14 @@ public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
     }
 
     @Override
-    public void afterShow() {
+    public void afterShow(Player player) {
+        double beneficiosOPerdidas = this.getPropertyDouble("beneficiosOPerdidas");
+        double valorTotal = this.getPropertyDouble("valorTotal");
+
         super.setItemLoreActualPage(8, List.of(
                 GOLD + "Valor total: " + GREEN + FORMATEA.format(redondeoDecimales(valorTotal, 2)) + "PC",
                 GOLD + "Resultado: " + (beneficiosOPerdidas >= 0 ? GREEN : RED) + FORMATEA.format(redondeoDecimales(beneficiosOPerdidas, 2)) + "PC",
-                GOLD + "Rentabilidad: " + (valorTotal == 0 ? 0 : FORMATEA.format(redondeoDecimales(beneficiosOPerdidas/valorTotal, 0))) + "%"
+                GOLD + "Rentabilidad: " + (valorTotal == 0 ? 0 : FORMATEA.format(redondeoDecimales(beneficiosOPerdidas /valorTotal, 0))) + "%"
         ));
     }
 }

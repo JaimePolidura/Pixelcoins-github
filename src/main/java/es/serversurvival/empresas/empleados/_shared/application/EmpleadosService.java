@@ -1,7 +1,7 @@
 package es.serversurvival.empresas.empleados._shared.application;
 
 import com.google.common.base.Function;
-import es.dependencyinjector.annotations.Service;
+import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.Cache;

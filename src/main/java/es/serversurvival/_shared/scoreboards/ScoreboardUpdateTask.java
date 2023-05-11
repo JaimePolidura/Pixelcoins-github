@@ -1,6 +1,6 @@
 package es.serversurvival._shared.scoreboards;
 
-import es.dependencyinjector.annotations.Component;
+import es.dependencyinjector.dependencies.annotations.Component;
 import es.serversurvival.bolsa.posicionesabiertas.vercartera.BolsaCarteraScoreboard;
 import es.serversurvival.deudas.ver.DeudasDisplayScoreboard;
 import es.serversurvival.jugadores.perfil.StatsDisplayScoreboard;

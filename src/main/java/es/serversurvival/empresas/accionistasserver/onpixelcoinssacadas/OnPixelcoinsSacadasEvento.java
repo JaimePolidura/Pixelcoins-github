@@ -1,12 +1,12 @@
 package es.serversurvival.empresas.accionistasserver.onpixelcoinssacadas;
 
-import es.dependencyinjector.annotations.Component;
+import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventListener;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
 import es.serversurvival.empresas.empresas.sacar.PixelcoinsSacadasEvento;
+import lombok.AllArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,13 +14,10 @@ import java.util.Set;
 import static java.lang.String.format;
 import static org.bukkit.ChatColor.*;
 
-@Component
+@EventHandler
+@AllArgsConstructor
 public final class OnPixelcoinsSacadasEvento {
     private final AccionistasServerService accionistasServerService;
-
-    public OnPixelcoinsSacadasEvento() {
-        this.accionistasServerService = DependecyContainer.get(AccionistasServerService.class);
-    }
 
     @EventListener
     public void on(PixelcoinsSacadasEvento evento){

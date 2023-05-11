@@ -1,9 +1,8 @@
 package es.serversurvival.bolsa.posicionesabiertas.vendercorto;
 
-import es.dependencyinjector.annotations.UseCase;
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
@@ -18,8 +17,8 @@ import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.Tip
 import static es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce.PORCENTAJE_CORTO;
 import static es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion.*;
 
-@AllArgsConstructor
 @UseCase
+@AllArgsConstructor
 public class VenderCortoUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final JugadoresService jugadoresService;

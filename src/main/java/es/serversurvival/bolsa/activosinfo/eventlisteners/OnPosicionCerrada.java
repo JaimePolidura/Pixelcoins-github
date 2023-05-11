@@ -1,9 +1,8 @@
 package es.serversurvival.bolsa.activosinfo.eventlisteners;
 
-import es.dependencyinjector.annotations.Component;
+import es.dependencyinjector.dependencies.annotations.Component;
 import es.jaime.EventListener;
 import es.jaime.Priority;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerradaEvento;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;

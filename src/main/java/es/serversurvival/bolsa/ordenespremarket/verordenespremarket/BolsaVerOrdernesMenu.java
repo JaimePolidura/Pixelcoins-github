@@ -1,14 +1,14 @@
 package es.serversurvival.bolsa.ordenespremarket.verordenespremarket;
 
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.configuration.MenuConfiguration;
+import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
-import es.bukkitclassmapper.menus.Menu;
-import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
-import es.bukkitclassmapper.menus.modules.pagination.PaginationConfiguration;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrdenesPremarketService;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.OrdenPremarket;
 import es.serversurvival.bolsa.ordenespremarket.cancelarorderpremarket.CancelarOrdenUseCase;
+import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -19,18 +19,12 @@ import java.util.UUID;
 
 import static org.bukkit.ChatColor.*;
 
+@AllArgsConstructor
 public final class BolsaVerOrdernesMenu extends Menu {
     private static final String TITLE = DARK_RED + "" + BOLD + "         TUS ORDENES";
 
     private final OrdenesPremarketService ordenesPremarketService;
     private final CancelarOrdenUseCase cancelarOrdenUseCase;
-    private final String jugadorNombre;
-
-    public BolsaVerOrdernesMenu(String jugadorNombre) {
-        this.ordenesPremarketService = DependecyContainer.get(OrdenesPremarketService.class);
-        this.cancelarOrdenUseCase = new CancelarOrdenUseCase();
-        this.jugadorNombre = jugadorNombre;
-    }
 
     @Override
     public int[][] items() {
@@ -50,7 +44,7 @@ public final class BolsaVerOrdernesMenu extends Menu {
                 .title(TITLE)
                 .fixedItems()
                 .item(1, buildItemInfo())
-                .items(2, buildItemsOrders(), this::cancelOrder)
+                .items(2, this::buildItemsOrders, this::cancelOrder)
                 .breakpoint(7)
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
@@ -66,8 +60,8 @@ public final class BolsaVerOrdernesMenu extends Menu {
         player.sendMessage(GOLD + "Has cancelado la orden");
     }
 
-    private List<ItemStack> buildItemsOrders() {
-        return this.ordenesPremarketService.findByJugador(jugadorNombre).stream()
+    private List<ItemStack> buildItemsOrders(Player player) {
+        return this.ordenesPremarketService.findByJugador(player.getName()).stream()
                 .map(this::buildItemOrdenPremarket)
                 .toList();
     }

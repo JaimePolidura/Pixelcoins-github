@@ -1,6 +1,6 @@
 package es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos;
 
-import es.dependencyinjector.annotations.Service;
+import es.dependencyinjector.dependencies.annotations.Service;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.acciones.AccionesApiService;
 import org.json.simple.JSONObject;
 

@@ -1,16 +1,16 @@
 package es.serversurvival._shared.cache;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
 public final class UnlimitedCacheSize<K, V> implements Cache<K, V>{
     private final Map<K, V> cacheItems;
 
     public UnlimitedCacheSize(){
-        this.cacheItems = new HashMap<>();
+        this.cacheItems = new ConcurrentHashMap<>();
     }
 
     @Override

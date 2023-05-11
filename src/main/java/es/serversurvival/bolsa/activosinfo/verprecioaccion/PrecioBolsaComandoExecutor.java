@@ -12,7 +12,6 @@ import static org.bukkit.ChatColor.*;
 
 @Command(
         value = "bolsa precio",
-        isAsync = true,
         args = {"ticker"},
         explanation = "Ver el precio de una accion <ticker> ticker de la accion, solo se pueden empresas americanas"
 )

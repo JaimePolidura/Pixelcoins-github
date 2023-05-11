@@ -1,26 +1,32 @@
 package es.serversurvival.bolsa.activosinfo.vervalores;
 
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import es.bukkitclassmapper.menus.Menu;
-import es.bukkitclassmapper.menus.MenuService;
-import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
-import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo.vervalores.acciones.AccionesMenu;
 import es.serversurvival.bolsa.activosinfo.vervalores.criptomonedas.CriptomonedasMenu;
 import es.serversurvival.bolsa.activosinfo.vervalores.materiasprimas.MateriasPrimasMenu;
+import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.ComprarLargoUseCase;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.concurrent.ExecutorService;
+
 import static org.bukkit.ChatColor.*;
 
+@AllArgsConstructor
 public final class ElegirInversionMenu extends Menu {
     public static final String TITULO = DARK_RED + "" + BOLD + "      ELEGIR INVERSION";
 
+    private final ComprarLargoUseCase comprarLargoUseCase;
+    private final ActivosInfoService activosInfoService;
+    private final JugadoresService jugadoresService;
+    private final ExecutorService executor;
     private final MenuService menuService;
-
-    public ElegirInversionMenu() {
-        this.menuService = DependecyContainer.get(MenuService.class);
-    }
 
     @Override
     public int[][] items() {
@@ -33,9 +39,9 @@ public final class ElegirInversionMenu extends Menu {
                 .title(TITULO)
                 .fixedItems()
                 .staticMenu()
-                .item(1, itemAcciones(), (p, e) -> this.menuService.open(p, new AccionesMenu(p.getName())))
-                .item(2, itemCriptomonedas(), (p, e) -> this.menuService.open(p, new CriptomonedasMenu(p.getName())))
-                .item(3, itemMateriasPrimas(), (p, e) -> this.menuService.open(p, new MateriasPrimasMenu(p.getName())))
+                .item(1, itemAcciones(), (p, e) -> this.menuService.open(p, new AccionesMenu(comprarLargoUseCase, activosInfoService,  jugadoresService, executor, menuService)))
+                .item(2, itemCriptomonedas(), (p, e) -> this.menuService.open(p, new CriptomonedasMenu(comprarLargoUseCase, jugadoresService, executor, menuService)))
+                .item(3, itemMateriasPrimas(), (p, e) -> this.menuService.open(p, new MateriasPrimasMenu(comprarLargoUseCase, jugadoresService, executor, menuService)))
                 .build();
     }
 

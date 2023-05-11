@@ -6,6 +6,7 @@ import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 
@@ -13,17 +14,11 @@ import static es.bukkitclassmapper.task.BukkitTimeUnit.DAY;
 import static es.bukkitclassmapper.task.BukkitTimeUnit.SECOND;
 
 @Task(value = DAY, delay = 20 * SECOND)
+@AllArgsConstructor
 public final class PagarSueldosTask implements TaskRunner {
     private final EmpresasService empresasService;
     private final EmpleadosService empleadosService;
     private final PagarSueldosUseCase useCase;
-
-    public PagarSueldosTask() {
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
-        this.empleadosService = DependecyContainer.get(EmpleadosService.class);
-
-        this.useCase = new PagarSueldosUseCase();
-    }
 
     @Override
     public void run() {

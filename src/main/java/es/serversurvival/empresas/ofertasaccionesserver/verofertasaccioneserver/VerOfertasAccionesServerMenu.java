@@ -1,19 +1,20 @@
 package es.serversurvival.empresas.ofertasaccionesserver.verofertasaccioneserver;
 
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.configuration.MenuConfiguration;
+import es.bukkitbettermenus.menustate.AfterShow;
+import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
+import es.bukkitbettermenus.modules.sync.SyncMenuConfiguration;
+import es.bukkitbettermenus.modules.sync.SyncMenuService;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
-import es.bukkitclassmapper.menus.Menu;
-import es.bukkitclassmapper.menus.MenuService;
-import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
-import es.bukkitclassmapper.menus.modules.pagination.PaginationConfiguration;
-import es.bukkitclassmapper.menus.modules.sync.SyncMenuConfiguration;
-import es.bukkitclassmapper.menus.modules.sync.SyncMenuService;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.empresas.ofertasaccionesserver.cancelarofertaccionserver.CancelarOfertaAccionServerUseCase;
 import es.serversurvival.empresas.ofertasaccionesserver.comprarofertasaccionesserver.ComprarAccionesServerConfirmacion;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -27,20 +28,13 @@ import static es.serversurvival._shared.utils.Funciones.enviarMensajeYSonido;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.Material.*;
 
-public final class VerOfertasAccionesServerMenu extends Menu {
-    private static final String TITULO = DARK_RED + "" + BOLD + "    MERCADO DE ACCIONES";
-
+@RequiredArgsConstructor
+public final class VerOfertasAccionesServerMenu extends Menu implements AfterShow {
     private final OfertasAccionesServerService ofertasAccionesServerService;
-    private final MenuService menuService;
-    private final Player player;
     private final SyncMenuService syncMenuService;
+    private final MenuService menuService;
 
-    public VerOfertasAccionesServerMenu(Player player) {
-        this.ofertasAccionesServerService = DependecyContainer.get(OfertasAccionesServerService.class);
-        this.player = player;
-        this.menuService = DependecyContainer.get(MenuService.class);
-        this.syncMenuService = DependecyContainer.get(SyncMenuService.class);
-    }
+    private Player player;
 
     @Override
     public int[][] items() {
@@ -57,7 +51,7 @@ public final class VerOfertasAccionesServerMenu extends Menu {
     @Override
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
-                .title(TITULO)
+                .title(DARK_RED + "" + BOLD + "    MERCADO DE ACCIONES")
                 .fixedItems()
                 .item(1, buildItemInfo())
                 .item(2, buildItemMisAcciones())
@@ -117,12 +111,12 @@ public final class VerOfertasAccionesServerMenu extends Menu {
 
     private List<ItemStack> buildItemsOfertas() {
         return this.ofertasAccionesServerService.findAll().stream()
-                .map(this::buildItemOferta)
+                .map(o -> buildItemOferta(o, player))
                 .toList();
     }
 
-    private ItemStack buildItemOferta(OfertaAccionServer oferta) {
-        boolean esOwerDeOferta = oferta.getNombreOfertante().equalsIgnoreCase(this.player.getName());
+    private ItemStack buildItemOferta(OfertaAccionServer oferta, Player player) {
+        boolean esOwerDeOferta = oferta.getNombreOfertante().equalsIgnoreCase(player.getName());
 
         return ItemBuilder.of(esOwerDeOferta ? RED_BANNER : BLUE_BANNER)
                 .title(esOwerDeOferta ? RED + "" + UNDERLINE + "" + BOLD + "CLICK PARA CANCELAR" :
@@ -159,5 +153,10 @@ public final class VerOfertasAccionesServerMenu extends Menu {
         this.menuService.open(player, newMenu);
 
         this.syncMenuService.sync(newMenu);
+    }
+
+    @Override
+    public void afterShow(Player player) {
+        this.player = player;
     }
 }

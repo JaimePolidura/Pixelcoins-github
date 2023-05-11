@@ -1,20 +1,20 @@
 package es.serversurvival._shared.providers;
 
-import es.bukkitclassmapper._shared.utils.ClassMapperInstanceProvider;
-import es.bukkitclassmapper.menus.MenuService;
-import es.bukkitclassmapper.menus.modules.sync.SyncMenuService;
-import es.dependencyinjector.annotations.Configuration;
-import es.dependencyinjector.annotations.Provider;
+import es.bukkitbettermenus.BetterMenusInstanceProvider;
+import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.modules.sync.SyncMenuService;
+import es.dependencyinjector.dependencies.annotations.Configuration;
+import es.dependencyinjector.providers.Provider;
 
 @Configuration
 public final class MenuInstancesProvider {
     @Provider
     public MenuService menuService() {
-        return ClassMapperInstanceProvider.MENU_SERVICE;
+        return BetterMenusInstanceProvider.MENU_SERVICE;
     }
 
     @Provider
     public SyncMenuService syncMenuService() {
-        return ClassMapperInstanceProvider.SYNC_MENU_SERVICE;
+        return BetterMenusInstanceProvider.SYNC_MENU_SERVICE;
     }
 }

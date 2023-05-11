@@ -1,6 +1,6 @@
 package es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos;
 
-import es.dependencyinjector.annotations.Service;
+import es.dependencyinjector.dependencies.annotations.Service;
 import es.serversurvival._shared.utils.apiHttp.IEXCloud_API;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.criptomonedas.CriptomonedasApiService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.criptomonedas.SupportedCriptomonedas;

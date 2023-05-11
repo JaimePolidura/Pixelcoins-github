@@ -1,6 +1,6 @@
 package es.serversurvival.bolsa.ordenespremarket._shared.application;
 
-import es.dependencyinjector.annotations.Service;
+import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.OrdenPremarket;
@@ -11,8 +11,8 @@ import lombok.AllArgsConstructor;
 import java.util.List;
 import java.util.UUID;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class OrdenesPremarketService {
     private final OrderesPremarketRepository repositoryDb;
 

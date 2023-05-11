@@ -1,11 +1,9 @@
 package es.serversurvival.jugadores.cambio.sacarItem;
 
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import es.bukkitclassmapper.menus.Menu;
-import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.jugadores.cambio.CambioPixelcoins;
 import org.bukkit.ChatColor;
@@ -22,17 +20,7 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival.jugadores.cambio.CambioPixelcoins.*;
 import static org.bukkit.ChatColor.*;
 
-public final class SacarItemMenu extends Menu {
-    public static final String TITULO = ChatColor.DARK_RED + "" + org.bukkit.ChatColor.BOLD + "   ELIGE ITEM PARA SACAR";
-
-    private Jugador jugador;
-    private final JugadoresService jugadoresService;
-
-    public SacarItemMenu(String jugadorNombre) {
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.jugador = this.jugadoresService.getByNombre(jugadorNombre);
-    }
-
+public final class SacarItemMenu extends Menu<Jugador> {
     @Override
     public int[][] items() {
         return new int[][] {
@@ -45,7 +33,7 @@ public final class SacarItemMenu extends Menu {
     @Override
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
-                .title(TITULO)
+                .title(ChatColor.DARK_RED + "" + org.bukkit.ChatColor.BOLD + "   ELIGE ITEM PARA SACAR")
                 .fixedItems()
                 .item(1, buildItemInfo())
                 .item(2, buildItem("DIAMANTE", DIAMANTE, Material.DIAMOND), this::onClick)
@@ -57,6 +45,7 @@ public final class SacarItemMenu extends Menu {
     }
 
     private void onClick(Player player, InventoryClickEvent event) {
+        Jugador jugador = getState();
         ItemStack itemClickeado = event.getCurrentItem();
         int espacios = Funciones.getEspaciosOcupados(player.getInventory());
 
@@ -78,7 +67,7 @@ public final class SacarItemMenu extends Menu {
         CambioPixelcoins.sacarItem(jugador, tipoItem);
         player.getInventory().addItem(new ItemStack(Material.getMaterial(tipoItem), 1));
 
-        this.jugador = jugador.decrementPixelcoinsBy(cambioPixelcoins);
+        setState(jugador.decrementPixelcoinsBy(cambioPixelcoins));
 
         Funciones.enviarMensajeYSonido(player, GOLD + "Has convertido las pixelcoins: " + RED + "-" + FORMATEA.format(cambioPixelcoins) + " PC " + GOLD +
                 "Quedan " + GREEN + FORMATEA.format(jugador.getPixelcoins() - cambioPixelcoins) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
@@ -101,7 +90,7 @@ public final class SacarItemMenu extends Menu {
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.AQUA + "1 "+itemACambiar+" -> " + ChatColor.GREEN + cambio);
         lore.add("    ");
-        lore.add(ChatColor.GOLD +"Tus pixelcoins disponibles: " + ChatColor.GREEN + FORMATEA.format(jugador.getPixelcoins()));
+        lore.add(ChatColor.GOLD +"Tus pixelcoins disponibles: " + ChatColor.GREEN + FORMATEA.format(getState().getPixelcoins()));
 
         return ItemBuilder.of(itemMaterial).title(displayName).lore(lore).build();
     }

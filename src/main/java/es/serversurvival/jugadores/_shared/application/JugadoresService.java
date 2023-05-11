@@ -1,6 +1,6 @@
 package es.serversurvival.jugadores._shared.application;
 
-import es.dependencyinjector.annotations.Service;
+import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.cache.UnlimitedCacheSize;
 import es.serversurvival.jugadores._shared.domain.JugadoresRepository;

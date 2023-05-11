@@ -1,29 +1,18 @@
 package es.serversurvival.empresas.accionistasserver.misacciones.vender;
 
-import es.bukkitclassmapper.menus.MenuService;
-import es.serversurvival._shared.DependecyContainer;
+import es.bukkitbettermenus.MenuService;
 import es.serversurvival._shared.menus.NumberSelectorMenu;
-import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
+import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.bukkit.ChatColor.*;
 
-public final class VenderAccionEmpresaCantidadSelectorMenu extends NumberSelectorMenu {
-    private final int maxCantidadThatCanBeSold;
-    private final UUID accionistaId;
-    private final String empresaNombreVender;
+@AllArgsConstructor
+public final class VenderAccionEmpresaCantidadSelectorMenu extends NumberSelectorMenu<VenderAccionesEmpresaCantidadSelectorMenuState> {
     private final MenuService menuService;
-
-    public VenderAccionEmpresaCantidadSelectorMenu(int maxCantidad, AccionistaServer accionistaServer) {
-        this.maxCantidadThatCanBeSold = maxCantidad;
-        this.accionistaId = accionistaServer.getAccionistaServerId();
-        this.empresaNombreVender = accionistaServer.getEmpresa();
-        this.menuService = DependecyContainer.get(MenuService.class);
-    }
 
     @Override
     public void onAccept(Player player, InventoryClickEvent event) {
@@ -42,12 +31,12 @@ public final class VenderAccionEmpresaCantidadSelectorMenu extends NumberSelecto
 
     @Override
     public double maxValue() {
-        return this.maxCantidadThatCanBeSold;
+        return this.getState().maxCantidadThatCanBeSold();
     }
 
     @Override
     public double initialValue() {
-        return this.maxCantidadThatCanBeSold;
+        return this.getState().maxCantidadThatCanBeSold();
     }
 
     @Override
@@ -58,7 +47,7 @@ public final class VenderAccionEmpresaCantidadSelectorMenu extends NumberSelecto
     @Override
     public List<String> loreItemAceptar(double cantidad) {
         return List.of(
-                GOLD + "Vender " + cantidad + " cantidad de " + empresaNombreVender
+                GOLD + "Vender " + cantidad + " cantidad de " + getState().empresaNombreVender()
         );
     }
 

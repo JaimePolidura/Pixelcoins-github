@@ -1,8 +1,7 @@
 package es.serversurvival.bolsa.ordenespremarket.ejecutarordenes;
 
-import es.dependencyinjector.annotations.UseCase;
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrdenesPremarketService;
@@ -16,7 +15,6 @@ import es.serversurvival.bolsa.posicionesabiertas.vendercorto.VenderCortoUseCase
 import es.serversurvival.bolsa.posicionesabiertas.venderlargo.VenderLargoUseCase;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -27,10 +25,10 @@ import static es.serversurvival._shared.utils.Funciones.reducirPorcentaje;
 import static es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo.ACCIONES;
 import static es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce.PORCENTAJE_CORTO;
 
-@RequiredArgsConstructor
 @UseCase
+@RequiredArgsConstructor
 public final class EjecutarOrdenesPreMarketUseCase {
-    private final AtomicBoolean isLoading = new AtomicBoolean(false);
+    private AtomicBoolean isLoading = new AtomicBoolean(false);
 
     private final JugadoresService jugadoresService;
     private final OrdenesPremarketService ordenesPremarketService;

@@ -3,7 +3,6 @@ package es.serversurvival.bolsa.posicionesabiertas.vendercorto;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.jaime.EventListener;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrderExecutorProxy;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
@@ -17,8 +16,6 @@ import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival._shared.utils.Funciones;
 import lombok.AllArgsConstructor;
-import main.ValidationResult;
-import main.ValidatorService;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -26,37 +23,27 @@ import org.bukkit.entity.Player;
 
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
-import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
 import static es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce.PORCENTAJE_CORTO;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.Sound.ENTITY_PLAYER_LEVELUP;
 
 @Command(
         value = "bolsa vendercorto",
-        isAsync = true,
         args = {"ticker", "cantidad"},
         explanation = "Abrir posicion en corto de una accion, se te cobrara una comision <ticker> " +
                 "ticker de la accion, solo se pueden empresas americanas, <cantidad> cantidad de accinoes a vender"
 )
 @AllArgsConstructor
 public class VenderCortoComandoRunner implements CommandRunnerArgs<VenderCortoComando> {
-    private final JugadoresService jugadoresService;
-    private final ActivosInfoService activoInfoService;
+    private final OrderExecutorProxy orderExecutorProxy;
     private final VenderCortoUseCase venderCortoUseCase;
+    private final ActivosInfoService activoInfoService;
+    private final JugadoresService jugadoresService;
 
     @Override
     public void execute(VenderCortoComando comando, CommandSender player){
         int cantidad = comando.getCantidad();
         String ticker = comando.getTicker();
-
-        ValidationResult result = ValidatorService
-                .startValidating(cantidad, NaturalNumber)
-                .validateAll();
-
-        if(comando.getCantidad() <= 0){
-            player.sendMessage(DARK_RED + result.getMessage());
-            return;
-        }
 
         player.sendMessage(RED + "Cargando...");
 
@@ -79,7 +66,7 @@ public class VenderCortoComandoRunner implements CommandRunnerArgs<VenderCortoCo
             return;
         }
 
-        var executedInMarket = OrderExecutorProxy.execute(AbrirOrdenPremarketCommand.of(player.getName(), ticker, cantidad, TipoAccion.CORTO_VENTA, null), () -> {
+        var executedInMarket = this.orderExecutorProxy.execute(AbrirOrdenPremarketCommand.of(player.getName(), ticker, cantidad, TipoAccion.CORTO_VENTA, null), () -> {
             this.venderCortoUseCase.venderEnCortoBolsa(player.getName(), ticker, cantidad);
         });
 

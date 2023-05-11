@@ -1,10 +1,9 @@
 package es.serversurvival.jugadores.perfil;
 
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import es.bukkitclassmapper.menus.Menu;
-import es.bukkitclassmapper.menus.MenuService;
-import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas.vercartera.VerBolsaCarteraMenu;
 import es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService;
@@ -23,6 +22,7 @@ import es.serversurvival.jugadores.top.TopMenu;
 import es.serversurvival.tienda.vertienda.menu.TiendaMenu;
 import es.serversurvival.web.cuentasweb._shared.application.CuentasWebService;
 import es.serversurvival.web.cuentasweb._shared.domain.CuentaWeb;
+import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -39,10 +39,8 @@ import static es.serversurvival._shared.utils.Funciones.*;
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
-public final class PerfilMenu extends Menu {
-    private static final String TITULO = DARK_RED + "" + BOLD + "           TU PERFIL";
-
-    private final Jugador jugador;
+@AllArgsConstructor
+public final class PerfilMenu extends Menu<Jugador> {
     private final CuentasWebService cuentasWebService;
     private final JugadoresService jugadoresService;
     private final DeudasService deudasService;
@@ -50,17 +48,6 @@ public final class PerfilMenu extends Menu {
     private final PosicionesCerradasService posicionesCerradasService;
     private final EmpleadosService empleadosService;
     private final MenuService menuService;
-
-    public PerfilMenu(String jugadorNombre) {
-        this.cuentasWebService = DependecyContainer.get(CuentasWebService.class);
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.jugador = this.jugadoresService.getByNombre(jugadorNombre);
-        this.deudasService = DependecyContainer.get(DeudasService.class);
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
-        this.posicionesCerradasService = DependecyContainer.get(PosicionesCerradasService.class);
-        this.empleadosService = DependecyContainer.get(EmpleadosService.class);
-        this.menuService = DependecyContainer.get(MenuService.class);
-    }
 
     @Override
     public int[][] items() {
@@ -78,7 +65,7 @@ public final class PerfilMenu extends Menu {
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
                 .fixedItems()
-                .title(TITULO)
+                .title(DARK_RED + "" + BOLD + "           TU PERFIL")
                 .item(1, Material.BLACK_STAINED_GLASS_PANE)
                 .item(2, buildItemWeb())
                 .item(3, buildItemStats(), (p, e) -> this.menuService.open(p, new TopMenu()))
@@ -95,7 +82,7 @@ public final class PerfilMenu extends Menu {
 
         List<String> lore = new ArrayList<>();
         lore.add("  ");
-        List<Empleado> empleos = empleadosService.findByJugador(jugador.getNombre());
+        List<Empleado> empleos = empleadosService.findByJugador(getState().getNombre());
         empleos.forEach( (emp) -> {
             lore.add(ChatColor.GOLD + "" + emp.getEmpresa() + " " + ChatColor.GREEN + FORMATEA.format(emp.getSueldo()) +
                     " PC " + ChatColor.GOLD + "/ " + emp.getTipoSueldo().nombre);
@@ -109,7 +96,7 @@ public final class PerfilMenu extends Menu {
 
         List<String> lore = new ArrayList<>();
         lore.add("  ");
-        List<Empresa> empresas = empresasService.getByOwner(jugador.getNombre());
+        List<Empresa> empresas = empresasService.getByOwner(getState().getNombre());
         empresas.forEach( (empresa) -> {
             lore.add(ChatColor.GOLD + "- " + empresa.getNombre() + " ( " + ChatColor.GREEN +
                     FORMATEA.format(empresa.getPixelcoins()) + " PC" +  ChatColor.GOLD + ")");
@@ -121,7 +108,7 @@ public final class PerfilMenu extends Menu {
     private ItemStack buildItemBolsa () {
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK VER TUS ACCIONES";
 
-        List<PosicionCerrada> posicionCerradas = posicionesCerradasService.findByJugador(jugador.getNombre()).stream()
+        List<PosicionCerrada> posicionCerradas = posicionesCerradasService.findByJugador(getState().getNombre()).stream()
                 .limit(7).toList();
         List<String> lore = new ArrayList<>();
         lore.add("   ");
@@ -139,8 +126,8 @@ public final class PerfilMenu extends Menu {
     private ItemStack buildItemDeudas () {
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TUS DEUDAS";
 
-        double totalQueLeDeben = deudasService.getAllPixelcoinsDeudasAcredor(jugador.getNombre());
-        double totalQueDebe = deudasService.getAllPixelcoinsDeudasDeudor(jugador.getNombre());
+        double totalQueLeDeben = deudasService.getAllPixelcoinsDeudasAcredor(getState().getNombre());
+        double totalQueDebe = deudasService.getAllPixelcoinsDeudasDeudor(getState().getNombre());
 
         List<String> lore = new ArrayList<>() {{
             add("    ");
@@ -159,23 +146,23 @@ public final class PerfilMenu extends Menu {
         ItemStack stats = new ItemStack(Material.PLAYER_HEAD);
 
         SkullMeta metaStats = (SkullMeta) stats.getItemMeta();
-        metaStats.setOwningPlayer(Bukkit.getPlayer(jugador.getNombre()));
+        metaStats.setOwningPlayer(Bukkit.getPlayer(getState().getNombre()));
         metaStats.setDisplayName(GOLD + "" + BOLD + "" + UNDERLINE + "CLICK PARA VER EL TOP JUGADORES");
 
-        if(jugador == null) return stats;
+        if(getState() == null) return stats;
 
-        double totalAhorrado = jugador.getPixelcoins();
-        double totalDebe = deudasService.getAllPixelcoinsDeudasDeudor(jugador.getNombre());
-        double totalDeben = deudasService.getAllPixelcoinsDeudasAcredor(jugador.getNombre());
-        double totalEnAcciones = PosicionesUtils.getAllPixeloinsEnValores(jugador.getNombre());
-        double totalEmpresas = empresasService.getAllPixelcoinsEnEmpresas(jugador.getNombre());
+        double totalAhorrado = getState().getPixelcoins();
+        double totalDebe = deudasService.getAllPixelcoinsDeudasDeudor(getState().getNombre());
+        double totalDeben = deudasService.getAllPixelcoinsDeudasAcredor(getState().getNombre());
+        double totalEnAcciones = PosicionesUtils.getAllPixeloinsEnValores(getState().getNombre());
+        double totalEmpresas = empresasService.getAllPixelcoinsEnEmpresas(getState().getNombre());
         double resultado = (totalAhorrado + totalDeben + totalEnAcciones + totalEmpresas) - totalDebe;
 
-        double beneficios = jugador.getIngresos() - jugador.getGastos();
-        double rentabilidad = jugador.getIngresos() == 0 ? -100 : rentabilidad(jugador.getIngresos(), beneficios);
+        double beneficios = getState().getIngresos() - getState().getGastos();
+        double rentabilidad = getState().getIngresos() == 0 ? -100 : rentabilidad(getState().getIngresos(), beneficios);
 
-        int posTopRicps = getPoisitionOfKeyInMap(crearMapaTopPatrimonioPlayers(false), k -> k.equalsIgnoreCase(jugador.getNombre()));
-        int posTopVendedores = jugadoresService.sortJugadoresBy(Comparator.comparingInt(Jugador::getNventas)).indexOf(jugador) + 1;
+        int posTopRicps = getPoisitionOfKeyInMap(crearMapaTopPatrimonioPlayers(false), k -> k.equalsIgnoreCase(getState().getNombre()));
+        int posTopVendedores = jugadoresService.sortJugadoresBy(Comparator.comparingInt(Jugador::getNventas)).indexOf(getState()) + 1;
 
         List<String> lore = new ArrayList<>();
         lore.add("  ");
@@ -189,16 +176,16 @@ public final class PerfilMenu extends Menu {
         lore.add(GOLD + "" + BOLD + "Reultado: " + (beneficios >= 0 ? GREEN + FORMATEA.format(resultado) : RED + "-" + FORMATEA.format(resultado)) + " PC");
         lore.add(GOLD + "Posicion top ricos: " + posTopRicps);
         lore.add("    ");
-        lore.add(GOLD + "Ingresos: " + GREEN + FORMATEA.format(jugador.getIngresos()) + " PC");
-        lore.add(GOLD + "Gastos: " + GREEN + FORMATEA.format(jugador.getGastos()) + " PC");
+        lore.add(GOLD + "Ingresos: " + GREEN + FORMATEA.format(getState().getIngresos()) + " PC");
+        lore.add(GOLD + "Gastos: " + GREEN + FORMATEA.format(getState().getGastos()) + " PC");
         lore.add(GOLD + "Beneficios: " + (beneficios >= 0 ? GREEN : RED) + FORMATEA.format(beneficios) +" PC");
         lore.add(GOLD + "Rentabilidad: " + (beneficios >= 0 ? GREEN + "+" : RED) + FORMATEA.format((int) rentabilidad) + " %");
         lore.add("   ");
-        lore.add(GOLD + "Nº de ventas en la tienda: " + jugador.getNombre());
+        lore.add(GOLD + "Nº de ventas en la tienda: " + getState().getNombre());
         lore.add(GOLD + "Posicion en top vendedores: " + posTopVendedores);
         lore.add("   ");
-        lore.add(GOLD + "Numero de veces pagada la deuda: " + jugador.getNpagosDeuda());
-        lore.add(GOLD + "Numero de veces de inpago de la deuda: " + RED +  jugador.getNinpagosDeuda());
+        lore.add(GOLD + "Numero de veces pagada la deuda: " + getState().getNpagosDeuda());
+        lore.add(GOLD + "Numero de veces de inpago de la deuda: " + RED +  getState().getNinpagosDeuda());
 
         metaStats.setLore(lore);
         stats.setItemMeta(metaStats);
@@ -211,9 +198,9 @@ public final class PerfilMenu extends Menu {
         List<String> lore = new ArrayList<>();
         lore.add("  ");
 
-        Optional<CuentaWeb> cuentaWebOptional = this.cuentasWebService.findByUsername(jugador.getNombre());
+        Optional<CuentaWeb> cuentaWebOptional = this.cuentasWebService.findByUsername(getState().getNombre());
         if(cuentaWebOptional.isEmpty()){
-            int numeroCuenta = jugadoresService.getByNombre(jugador.getNombre()).getNumeroVerificacionCuenta();
+            int numeroCuenta = jugadoresService.getByNombre(getState().getNombre()).getNumeroVerificacionCuenta();
             lore.add(DARK_AQUA + "No tienes cuenta, para registrarse:");
             lore.add(DARK_AQUA + "" + UNDERLINE + "http://serversurvival.ddns.net/registrarse");
             lore.add(DARK_AQUA + "Tu numero de cuenta: " + BOLD + numeroCuenta);

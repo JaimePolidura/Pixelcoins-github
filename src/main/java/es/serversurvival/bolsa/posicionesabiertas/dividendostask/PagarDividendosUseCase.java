@@ -1,8 +1,7 @@
 package es.serversurvival.bolsa.posicionesabiertas.dividendostask;
 
-import es.dependencyinjector.annotations.UseCase;
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.serversurvival.Pixelcoin;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos.AccionesApiServiceIEXCloud;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;

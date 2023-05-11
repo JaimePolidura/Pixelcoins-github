@@ -1,6 +1,6 @@
 package es.serversurvival._shared.mysql;
 
-import es.dependencyinjector.annotations.Configuration;
+import es.dependencyinjector.dependencies.annotations.Configuration;
 import es.jaime.configuration.DatabaseConfiguration;
 
 import static java.lang.String.*;
@@ -14,7 +14,7 @@ public final class MySQLConfiguration extends DatabaseConfiguration {
     private static final int DB_PORT = 3306;
 
     @Override
-    protected String url() {
+    public String url() {
         return format("jdbc:mysql://%s:%s/%s?user=%s&password=%s&useSSL=false&allowPublicKeyRetrieval=true",
                 DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD);
     }

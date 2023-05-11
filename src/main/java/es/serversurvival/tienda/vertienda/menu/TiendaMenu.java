@@ -1,14 +1,14 @@
 package es.serversurvival.tienda.vertienda.menu;
 
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.configuration.MenuConfiguration;
+import es.bukkitbettermenus.menustate.AfterShow;
+import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
+import es.bukkitbettermenus.modules.sync.SyncMenuConfiguration;
+import es.bukkitbettermenus.modules.sync.SyncMenuService;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
-import es.bukkitclassmapper.menus.Menu;
-import es.bukkitclassmapper.menus.MenuService;
-import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
-import es.bukkitclassmapper.menus.modules.pagination.PaginationConfiguration;
-import es.bukkitclassmapper.menus.modules.sync.SyncMenuConfiguration;
-import es.bukkitclassmapper.menus.modules.sync.SyncMenuService;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.utils.ItemsUtils;
 import es.serversurvival._shared.utils.MinecraftUtils;
@@ -19,6 +19,7 @@ import es.serversurvival.tienda._shared.application.TiendaService;
 import es.serversurvival.tienda._shared.domain.TiendaObjeto;
 import es.serversurvival.tienda.comprar.ComprarTiendaObjetoUseCase;
 import es.serversurvival.tienda.retirar.RetirarOfertaUseCase;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -31,29 +32,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
-public final class TiendaMenu extends Menu {
+@RequiredArgsConstructor
+public final class TiendaMenu extends Menu implements AfterShow {
     public final static String OWNER_TIENDAOBJETO_ITEM_NAME = RED + "" + BOLD + "CLICK PARA RETIRAR";
     public final static String NO_OWNER_TIENDAOBJETO_ITEM_NAME = AQUA + "" + BOLD + "CLICK PARA COMPRAR";
     public final static String TITULO = ChatColor.DARK_RED + "" + ChatColor.BOLD + "            Tienda";
 
-    private final String jugador;
     private final MenuService menuService;
     private final TiendaService tiendaService;
     private final JugadoresService jugadoresService;
     private final SyncMenuService syncMenuService;
 
-    public TiendaMenu(String jugador) {
-        this.jugador = jugador;
-        this.menuService = DependecyContainer.get(MenuService.class);
-        this.tiendaService = DependecyContainer.get(TiendaService.class);
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.syncMenuService = DependecyContainer.get(SyncMenuService.class);
-    }
+    private String jugadorNombre;
 
     @Override
     public int[][] items() {
@@ -69,9 +63,6 @@ public final class TiendaMenu extends Menu {
 
     @Override
     public MenuConfiguration configuration() {
-        AtomicBoolean atomicBoolean = new AtomicBoolean(true);
-        atomicBoolean.getAndSet();
-
         return MenuConfiguration.builder()
                 .title(TITULO)
                 .fixedItems()
@@ -167,7 +158,7 @@ public final class TiendaMenu extends Menu {
         lore.add("   ");
         lore.add("" + itemTienda.getTiendaObjetoId());
 
-        String displayName = itemTienda.getJugador().equalsIgnoreCase(jugador) ?
+        String displayName = itemTienda.getJugador().equalsIgnoreCase(jugadorNombre) ?
                 OWNER_TIENDAOBJETO_ITEM_NAME :
                 NO_OWNER_TIENDAOBJETO_ITEM_NAME;
 
@@ -192,15 +183,20 @@ public final class TiendaMenu extends Menu {
     }
 
     private ItemStack modifyItemTienda(ItemStack item) {
-        boolean ownsItemTienda = ItemUtils.getLore(item, 1).split(" ")[1].equalsIgnoreCase(this.jugador);
+        boolean ownsItemTienda = ItemUtils.getLore(item, 1).split(" ")[1].equalsIgnoreCase(this.jugadorNombre);
 
         return ItemUtils.setDisplayname(item, ownsItemTienda ? OWNER_TIENDAOBJETO_ITEM_NAME : NO_OWNER_TIENDAOBJETO_ITEM_NAME);
     }
 
     private void reloadMenu() {
-        TiendaMenu newMenu = new TiendaMenu(jugador);
-        this.menuService.open(Bukkit.getPlayer(jugador), newMenu);
+        TiendaMenu newMenu = new TiendaMenu(jugadorNombre);
+        this.menuService.open(Bukkit.getPlayer(jugadorNombre), newMenu);
 
         this.syncMenuService.sync(newMenu);
+    }
+
+    @Override
+    public void afterShow(Player player) {
+        this.jugadorNombre = player.getName();
     }
 }

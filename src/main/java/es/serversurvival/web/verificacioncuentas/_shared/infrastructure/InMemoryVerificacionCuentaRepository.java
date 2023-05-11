@@ -1,6 +1,6 @@
 package es.serversurvival.web.verificacioncuentas._shared.infrastructure;
 
-import es.dependencyinjector.annotations.Repository;
+import es.dependencyinjector.dependencies.annotations.Repository;
 import es.serversurvival.web.verificacioncuentas._shared.domain.VerificacionCuenta;
 import es.serversurvival.web.verificacioncuentas._shared.domain.VerificacionCuentaRepository;
 

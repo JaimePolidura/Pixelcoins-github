@@ -1,16 +1,19 @@
 package es.serversurvival.jugadores.top;
 
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.configuration.MenuConfiguration;
+import es.bukkitbettermenus.menustate.BeforeShow;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import es.bukkitclassmapper.menus.Menu;
-import es.bukkitclassmapper.menus.MenuService;
-import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -22,21 +25,13 @@ import static es.serversurvival.bolsa.posicionescerradas._shared.application.Pos
 import static es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion.*;
 import static org.bukkit.ChatColor.*;
 
-public final class TopMenu extends Menu {
-    public static final String TITULO = DARK_RED + "" + BOLD + "              TOP";
-
-    private final List<InfoJugador> infoJugadores = new ArrayList<>();
+@RequiredArgsConstructor
+public final class TopMenu extends Menu implements BeforeShow {
     private final PosicionesCerradasService posicionesCerradasService;
     private final JugadoresService jugadoresService;
     private final MenuService menuService;
 
-    public TopMenu(){
-        this.posicionesCerradasService = DependecyContainer.get(PosicionesCerradasService.class);
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.menuService = DependecyContainer.get(MenuService.class);
-
-        this.initInfoJugadores();
-    }
+    private List<InfoJugador> infoJugadores = new ArrayList<>();
 
     @Override
     public int[][] items() {
@@ -53,7 +48,7 @@ public final class TopMenu extends Menu {
     @Override
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
-                .title(TITULO)
+                .title( DARK_RED + "" + BOLD + "              TOP")
                 .fixedItems()
                 .item(1, buildTopRicosJugadoresItem())
                 .item(2, buildTopPobresJugadoresItem())
@@ -65,6 +60,11 @@ public final class TopMenu extends Menu {
                 .item(8, buildMejoresComerciantes())
                 .item(9, buildItemGoBackToProfile(), (p,e) -> this.menuService.open(p, new PerfilMenu(p.getName())))
                 .build();
+    }
+
+    @Override
+    public void beforeShow(Player player) {
+        this.initInfoJugadores();
     }
 
     private ItemStack buildItemGoBackToProfile() {

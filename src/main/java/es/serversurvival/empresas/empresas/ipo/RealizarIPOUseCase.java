@@ -1,11 +1,10 @@
 package es.serversurvival.empresas.empresas.ipo;
 
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.dependencyinjector.annotations.UseCase;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
@@ -16,20 +15,13 @@ import java.util.UUID;
 
 import static es.serversurvival.empresas.accionistasserver._shared.domain.TipoAccionista.*;
 
-@AllArgsConstructor
 @UseCase
+@AllArgsConstructor
 public final class RealizarIPOUseCase {
     private final EmpresasService empresasService;
     private final OfertasAccionesServerService ofertasAccionesServerService;
     private final AccionistasServerService accionistasEmpresasServerService;
     private final EventBus eventBus;
-
-    public RealizarIPOUseCase() {
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
-        this.ofertasAccionesServerService = DependecyContainer.get(OfertasAccionesServerService.class);
-        this.accionistasEmpresasServerService = DependecyContainer.get(AccionistasServerService.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-    }
 
     public void makeIPO(String playerName, IPOCommand command){
         this.ensureNaturalNumber(command.getAccionesOwner());

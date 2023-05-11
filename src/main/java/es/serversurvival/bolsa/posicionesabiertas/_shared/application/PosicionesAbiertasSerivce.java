@@ -1,6 +1,6 @@
 package es.serversurvival.bolsa.posicionesabiertas._shared.application;
 
-import es.dependencyinjector.annotations.Service;
+import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.Cache;
@@ -17,8 +17,8 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class PosicionesAbiertasSerivce {
     public static final double PORCENTAJE_CORTO = 5;
 

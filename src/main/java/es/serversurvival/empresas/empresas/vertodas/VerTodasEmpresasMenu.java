@@ -1,12 +1,11 @@
 package es.serversurvival.empresas.empresas.vertodas;
 
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.configuration.MenuConfiguration;
+import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
-import es.bukkitclassmapper.menus.Menu;
-import es.bukkitclassmapper.menus.MenuService;
-import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
-import es.bukkitclassmapper.menus.modules.pagination.PaginationConfiguration;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
@@ -15,6 +14,7 @@ import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.empresas.miempresa.VerEmpresaMenu;
 import es.serversurvival.empresas.empresas.solicitarservicio.SolicitarServicioUseCase;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
+import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -28,22 +28,12 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival._shared.utils.Funciones.enviarMensajeYSonido;
 import static org.bukkit.ChatColor.*;
 
+@AllArgsConstructor
 public final class VerTodasEmpresasMenu extends Menu {
-    private static final String TITULO = ChatColor.DARK_RED + "" + ChatColor.BOLD + "        EMPRESAS";
-
-    private final EmpresasService empresasService;
-    private final EmpleadosService empleadosService;
     private final SolicitarServicioUseCase solicitarServicioUseCase;
-    private final Player player;
+    private final EmpleadosService empleadosService;
+    private final EmpresasService empresasService;
     private final MenuService menuService;
-
-    public VerTodasEmpresasMenu(Player player) {
-        this.player = player;
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
-        this.empleadosService = DependecyContainer.get(EmpleadosService.class);
-        this.solicitarServicioUseCase = new SolicitarServicioUseCase();
-        this.menuService = DependecyContainer.get(MenuService.class);
-    }
 
     @Override
     public int[][] items() {
@@ -61,9 +51,9 @@ public final class VerTodasEmpresasMenu extends Menu {
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
                 .fixedItems()
-                .title(TITULO)
+                .title(ChatColor.DARK_RED + "" + ChatColor.BOLD + "        EMPRESAS")
                 .item(1, buildItemInfo())
-                .items(2, buildItemsEmpresas(), this::onItemEmpresaClicked)
+                .items(2, this::buildItemsEmpresas, this::onItemEmpresaClicked)
                 .breakpoint(7, Material.GREEN_BANNER, this::goBackToProfileMenu)
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
@@ -89,14 +79,14 @@ public final class VerTodasEmpresasMenu extends Menu {
         }
     }
 
-    private List<ItemStack> buildItemsEmpresas() {
+    private List<ItemStack> buildItemsEmpresas(Player player) {
         return this.empresasService.findAll().stream()
-                .map(this::buildItemEmpresa)
+                .map(empresa -> buildItemEmpresa(empresa, player))
                 .toList();
     }
 
-    private ItemStack buildItemEmpresa(Empresa empresa) {
-        boolean jugadorMenuOwnerEmpresa = empresa.getOwner().equalsIgnoreCase(this.player.getName());
+    private ItemStack buildItemEmpresa(Empresa empresa, Player player) {
+        boolean jugadorMenuOwnerEmpresa = empresa.getOwner().equalsIgnoreCase(player.getName());
         double margen = Funciones.rentabilidad(empresa.getIngresos(), empresa.getIngresos() - empresa.getGastos());
         List<String> empleadosNombres = this.empleadosService.findByEmpresa(empresa.getNombre()).stream()
                 .map(Empleado::getNombre)

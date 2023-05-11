@@ -1,7 +1,6 @@
 package es.serversurvival.bolsa.posicionesabiertas.splitaccionestask;
 
-import es.dependencyinjector.annotations.UseCase;
-import es.serversurvival._shared.DependecyContainer;
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;

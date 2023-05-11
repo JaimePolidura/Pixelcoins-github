@@ -1,6 +1,6 @@
 package es.serversurvival._shared.scoreboards;
 
-import es.dependencyinjector.annotations.Service;
+import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.EventListener;
 import es.jaime.Priority;
 import es.serversurvival.transacciones._shared.domain.EventoTipoTransaccion;

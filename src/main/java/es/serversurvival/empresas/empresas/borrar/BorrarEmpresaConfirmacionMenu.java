@@ -1,10 +1,11 @@
 package es.serversurvival.empresas.empresas.borrar;
 
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.configuration.MenuConfiguration;
+import es.bukkitbettermenus.modules.confirmation.ConfirmationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import es.bukkitclassmapper.menus.Menu;
-import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
-import es.bukkitclassmapper.menus.modules.confirmation.ConfirmationConfiguration;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
+import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -14,16 +15,9 @@ import org.bukkit.inventory.ItemStack;
 
 import static org.bukkit.ChatColor.*;
 
-public final class BorrarEmpresaConfirmacionMenu extends Menu {
-    public static final String TITULO = DARK_RED + "" + BOLD + "     Confirmar borrar";
-
-    private final String jugadorNombre;
-    private final Empresa empresa;
-
-    public BorrarEmpresaConfirmacionMenu(String jugadorNombre, Empresa empresa) {
-        this.jugadorNombre = jugadorNombre;
-        this.empresa = empresa;
-    }
+@AllArgsConstructor
+public final class BorrarEmpresaConfirmacionMenu extends Menu<BorrarEmpresaConfirmacionMenuState> {
+    private final BorrarEmpresaUseCase borrarEmpresaUseCase;
 
     @Override
     public int[][] items() {
@@ -33,7 +27,7 @@ public final class BorrarEmpresaConfirmacionMenu extends Menu {
     @Override
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
-                .title(TITULO)
+                .title(DARK_RED + "" + BOLD + "     Confirmar borrar")
                 .fixedItems()
                 .confirmation(ConfirmationConfiguration.builder()
                         .cancel(1, buildItemCancel(), this::onCancel)
@@ -43,7 +37,7 @@ public final class BorrarEmpresaConfirmacionMenu extends Menu {
     }
 
     private void onAccept(Player player, InventoryClickEvent event) {
-        BorrarEmpresaUseCase.INSTANCE.borrar(player.getName(), empresa.getNombre());
+        this.borrarEmpresaUseCase.borrar(player.getName(), getState().nombreEmpresa());
 
         player.sendMessage(ChatColor.GOLD + "Has borrado tu empresa, has recibido todas las pixelcoins de ello");
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
@@ -60,4 +54,5 @@ public final class BorrarEmpresaConfirmacionMenu extends Menu {
     private ItemStack buildItemCancel() {
         return ItemBuilder.of(Material.RED_WOOL).title(RED + "" + BOLD + "CANCELAR").build();
     }
+
 }

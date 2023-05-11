@@ -17,41 +17,37 @@ import java.util.List;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
-public final class VenderEmpresaConfirmacionMenu extends ConfirmacionMenu {
-    private final VenderEmpresaUseCase useCase;
-    private final String enviador;
-    private final String destinatario;
-    private final String empresa;
-    private final double precio;
+public final class VenderEmpresaConfirmacionMenu extends ConfirmacionMenu<VenderEmpresaConfirmacionMenuState> {
+    private final VenderEmpresaUseCase venderEmpresaUseCase;
 
     @Override
-    public void onAceptar(Player player, InventoryClickEvent event) {
-        useCase.vender(enviador, destinatario, precio, empresa);
+    public void onAceptar(Player player, InventoryClickEvent event, VenderEmpresaConfirmacionMenuState state) {
+        this.venderEmpresaUseCase.vender(getState().enviador(), getState().destinatario(), getState().precio(), getState().empresa());
 
-        player.sendMessage(ChatColor.GOLD + "Ahora eres dueño de " + ChatColor.DARK_AQUA + empresa + ChatColor.GOLD + " ," +
-                "la has comprado por " + ChatColor.GREEN + precio + " PC");
+        player.sendMessage(ChatColor.GOLD + "Ahora eres dueño de " + ChatColor.DARK_AQUA + getState().empresa() + ChatColor.GOLD + " ," +
+                "la has comprado por " + ChatColor.GREEN + getState().precio() + " PC");
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
-        Player vendedor = Bukkit.getPlayer(enviador);
+        Player vendedor = Bukkit.getPlayer(getState().enviador());
 
-        vendedor.sendMessage(ChatColor.GOLD + player.getName() + " te ha comprado " + ChatColor.DARK_AQUA + empresa + ChatColor.GOLD + " por " +
-                ChatColor.GREEN + precio + " PC " + ChatColor.GOLD + ", ahora ya no eres dueño");
+        vendedor.sendMessage(ChatColor.GOLD + player.getName() + " te ha comprado " + ChatColor.DARK_AQUA + getState().empresa() + ChatColor.GOLD + " por " +
+                ChatColor.GREEN + getState().precio() + " PC " + ChatColor.GOLD + ", ahora ya no eres dueño");
         vendedor.playSound(vendedor.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
     }
 
     @Override
-    public String titulo() {
-        return DARK_RED + "" + BOLD + "Solicitud venta empresa";
-    }
-
-    @Override
     public ItemStack aceptarItem() {
-        String desc = GOLD + "Solicitud para comprar a " + enviador + " su empresa " + empresa + " a " + GREEN + "" + precio + " PC";
+        String desc = GOLD + "Solicitud para comprar a " + getState().enviador() + " su empresa " + getState().empresa() + " a " + GREEN + "" + getState().precio() + " PC";
         List<String> loreAceptar = Funciones.dividirDesc(desc, 40);
 
         return ItemBuilder.of(Material.GREEN_WOOL)
                 .title(GREEN + "" + BOLD + "ACEPTAR")
                 .lore(loreAceptar)
                 .build();
+    }
+
+    @Override
+    public String titulo() {
+        return DARK_RED + "" + BOLD + "Solicitud venta empresa";
     }
 }

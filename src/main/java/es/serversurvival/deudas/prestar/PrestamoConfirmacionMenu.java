@@ -1,7 +1,6 @@
 package es.serversurvival.deudas.prestar;
 
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import es.dependencyinjector.annotations.Component;
 import es.serversurvival._shared.menus.ConfirmacionMenu;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
@@ -18,23 +17,19 @@ import static es.serversurvival._shared.utils.Funciones.*;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
-@Component
-public final class PrestamoConfirmacionMenu extends ConfirmacionMenu {
-    private final String destinatarioJugadorNombre;
-    private final String enviadorJugadorNombre;
-    private final double pixelcoins;
-    private final int dias;
-    private final int interes;
+public final class PrestamoConfirmacionMenu extends ConfirmacionMenu<PrestamoConfirmacionMenuState> {
+    private final PrestarUseCase prestarUseCase;
 
     @Override
-    public void onAceptar(Player player, InventoryClickEvent event) {
-        Player enviadorPlayer = Bukkit.getPlayer(enviadorJugadorNombre);
-        Player destinatarioPlayer = Bukkit.getPlayer(destinatarioJugadorNombre);
+    public void onAceptar(Player player, InventoryClickEvent event, PrestamoConfirmacionMenuState confirmacion) {
+        Player enviadorPlayer = Bukkit.getPlayer(confirmacion.enviadorJugadorNombre());
+        Player destinatarioPlayer = Bukkit.getPlayer(confirmacion.destinatarioJugadorNombre());
 
-        PrestarUseCase.INSTANCE.prestar(enviadorJugadorNombre, destinatarioJugadorNombre, pixelcoins, interes, dias);
+        this.prestarUseCase.prestar(confirmacion.enviadorJugadorNombre(), confirmacion.destinatarioJugadorNombre(),
+                confirmacion.pixelcoins(), confirmacion.interes(), confirmacion.dias());
 
-        destinatarioPlayer.sendMessage(GOLD + "Has aceptado la solicitud de: " + GREEN + FORMATEA.format(pixelcoins) + " PC " +
-                GOLD + "con un interes del: " + GREEN + interes + GOLD + " a " + GREEN + dias + GOLD + " dias");
+        destinatarioPlayer.sendMessage(GOLD + "Has aceptado la solicitud de: " + GREEN + FORMATEA.format(confirmacion.pixelcoins()) + " PC " +
+                GOLD + "con un interes del: " + GREEN + confirmacion.interes() + GOLD + " a " + GREEN + confirmacion.dias() + GOLD + " dias");
         if (enviadorPlayer != null) {
             enviadorPlayer.sendMessage(GOLD + enviadorPlayer.getName() + " Te ha aceptado la solicitud de deuda");
             enviadorPlayer.playSound(enviadorPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
@@ -43,9 +38,9 @@ public final class PrestamoConfirmacionMenu extends ConfirmacionMenu {
 
     @Override
     public ItemStack aceptarItem() {
-        String descAceptarString = GOLD + "Prestamo de " + enviadorJugadorNombre + " de " + GREEN + FORMATEA.format(pixelcoins) +
-                GOLD + " a " + dias + " dias  con un interes del " + interes + "% (" + GREEN +
-                FORMATEA.format(aumentarPorcentaje(pixelcoins, interes)) + " PC" + GOLD + ")";
+        String descAceptarString = GOLD + "Prestamo de " + getState().enviadorJugadorNombre() + " de " + GREEN + FORMATEA.format(getState().pixelcoins()) +
+                GOLD + " a " + getState().dias() + " dias  con un interes del " + getState().interes() + "% (" + GREEN +
+                FORMATEA.format(aumentarPorcentaje(getState().pixelcoins(), getState().interes())) + " PC" + GOLD + ")";
         List<String> loreAceptar = dividirDesc(descAceptarString, 40).stream()
                 .map(line -> GOLD + line)
                 .collect(Collectors.toList());

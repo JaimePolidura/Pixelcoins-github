@@ -8,6 +8,10 @@ import lombok.ToString;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Predicate;
 
 public class LRUCache<K, V> implements LimitedCache<K, V> {
@@ -15,30 +19,40 @@ public class LRUCache<K, V> implements LimitedCache<K, V> {
     //first index: most recently used
     private final LinkedList<CacheItem<K, V>> items;
     private final int maxCapacity;
+    private final Lock lock;
 
     public LRUCache(int maxCapacity){
+        this.lock = new ReentrantLock();
         this.items = new LinkedList<>();
         this.maxCapacity = maxCapacity;
     }
 
     @Override
     public void put(K key, V value) {
+        this.lock.lock();
+
         removeIfExists(key, value);
         addFirst(key, value);
 
         if(hasCacheExceedCapacity()) {
             removeLast();
         }
+
+        this.lock.unlock();
     }
 
     @Override
     public void remove(K key) {
+        this.lock.lock();
         this.items.removeIf(cacheItem -> cacheItem.getKey().equals(key));
+        this.lock.unlock();
     }
 
     @Override
     public void remove(Predicate<V> condition) {
+        this.lock.lock();
         this.items.removeIf(cacheItem -> condition.test(cacheItem.getValue()));
+        this.lock.unlock();
     }
 
     @Override
@@ -54,6 +68,8 @@ public class LRUCache<K, V> implements LimitedCache<K, V> {
 
             index++;
         }
+
+        this.lock.unlock();
 
         return Optional.empty();
     }
@@ -122,8 +138,10 @@ public class LRUCache<K, V> implements LimitedCache<K, V> {
     }
 
     private void moveItemToFirstPosition(int index, CacheItem<K, V> item){
+        this.lock.lock();
         this.items.remove(index);
         this.items.addFirst(item);
+        this.lock.unlock();
     }
 
     private void addFirst(K key, V value){

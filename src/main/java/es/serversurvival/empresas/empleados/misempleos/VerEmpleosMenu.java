@@ -1,18 +1,18 @@
 package es.serversurvival.empresas.empleados.misempleos;
 
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.configuration.MenuConfiguration;
+import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
-import es.bukkitclassmapper.menus.Menu;
-import es.bukkitclassmapper.menus.MenuService;
-import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
-import es.bukkitclassmapper.menus.modules.pagination.PaginationConfiguration;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empleados.irse.IrseEmpresaUseCase;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
+import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -23,22 +23,14 @@ import java.util.List;
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
+@AllArgsConstructor
 public final class VerEmpleosMenu extends Menu {
     private static final String TITULO = DARK_RED + "" + BOLD + "        TUS EMPLEOS";
 
+    private final IrseEmpresaUseCase irseEmpresaUseCase;
     private final EmpleadosService empleadosService;
     private final EmpresasService empresasService;
-    private final IrseEmpresaUseCase irseEmpresaUseCase;
-    private final Player player;
     private final MenuService menuService;
-
-    public VerEmpleosMenu(Player player) {
-        this.empleadosService = DependecyContainer.get(EmpleadosService.class);
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
-        this.player = player;
-        this.menuService = DependecyContainer.get(MenuService.class);
-        this.irseEmpresaUseCase = new IrseEmpresaUseCase();
-    }
 
     @Override
     public int[][] items() {
@@ -58,7 +50,7 @@ public final class VerEmpleosMenu extends Menu {
                 .fixedItems()
                 .title(TITULO)
                 .item(1, buildItemInfo())
-                .items(2, buildItemsEmpleos(), this::dejarEmpleo)
+                .items(2, this::buildItemsEmpleos, this::dejarEmpleo)
                 .breakpoint(7, Material.RED_BANNER, this::goBackToProfileMenu)
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
@@ -80,8 +72,8 @@ public final class VerEmpleosMenu extends Menu {
         player.sendMessage(GOLD + "Te has ido del trabajo");
     }
 
-    private List<ItemStack> buildItemsEmpleos() {
-        return this.empleadosService.findByJugador(this.player.getName()).stream()
+    private List<ItemStack> buildItemsEmpleos(Player player) {
+        return this.empleadosService.findByJugador(player.getName()).stream()
                 .map(this::buildItemEmpleo)
                 .toList();
     }

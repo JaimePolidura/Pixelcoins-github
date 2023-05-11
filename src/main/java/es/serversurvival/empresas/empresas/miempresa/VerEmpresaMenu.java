@@ -1,13 +1,12 @@
 package es.serversurvival.empresas.empresas.miempresa;
 
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.configuration.MenuConfiguration;
+import es.bukkitbettermenus.menustate.AfterShow;
+import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
-import es.bukkitclassmapper.menus.Menu;
-import es.bukkitclassmapper.menus.MenuService;
-import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
-import es.bukkitclassmapper.menus.menustate.AfterShow;
-import es.bukkitclassmapper.menus.modules.pagination.PaginationConfiguration;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
@@ -16,6 +15,7 @@ import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.empresas.borrar.BorrarEmpresaConfirmacionMenu;
 import es.serversurvival.empresas.empresas.pagardividendos.PagarDividendosConfirmacionMenu;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
+import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -27,7 +27,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static es.serversurvival._shared.utils.Funciones.*;
@@ -37,20 +36,13 @@ import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.BOLD;
 import static org.bukkit.ChatColor.DARK_RED;
 
-public final class VerEmpresaMenu extends Menu implements AfterShow {
+@AllArgsConstructor
+public final class VerEmpresaMenu extends Menu<Empresa> implements AfterShow {
     public static final String TITULO = DARK_RED + "" + BOLD + "        Tu empresa %s";
 
-    private final Empresa empresa;
-    private final EmpleadosService empleadosService;
     private final AccionistasServerService accionistasServerService;
+    private final EmpleadosService empleadosService;
     private final MenuService menuService;
-
-    public VerEmpresaMenu(Empresa empresa) {
-        this.empleadosService = DependecyContainer.get(EmpleadosService.class);
-        this.empresa = empresa;
-        this.menuService = DependecyContainer.get(MenuService.class);
-        this.accionistasServerService = DependecyContainer.get(AccionistasServerService.class);
-    }
 
     @Override
     public int[][] items() {
@@ -68,7 +60,7 @@ public final class VerEmpresaMenu extends Menu implements AfterShow {
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
                 .fixedItems()
-                .title(format(TITULO, this.empresa.getNombre()))
+                .title(format(TITULO, this.getState().getNombre()))
                 .item(1, buildItemInfo())
                 .item(2, buildItemEmpresaStats())
                 .item(3, buildItemAccionistas())
@@ -84,19 +76,19 @@ public final class VerEmpresaMenu extends Menu implements AfterShow {
     }
 
     private void pagarDividendos(Player player, InventoryClickEvent event) {
-        this.menuService.open(player, new PagarDividendosConfirmacionMenu(this.empresa));
+        this.menuService.open(player, new PagarDividendosConfirmacionMenu(this.getState()));
     }
 
     private void abrirBorrarEmpresaConfirmacion(Player player, InventoryClickEvent event) {
-        this.menuService.open(player, new BorrarEmpresaConfirmacionMenu(player.getName(), this.empresa));
+        this.menuService.open(player, new BorrarEmpresaConfirmacionMenu(player.getName(), this.getState()));
     }
 
     private void despedirEmpleado(Player player, InventoryClickEvent event) {
         String empleadoNombre = ItemUtils.getLore(event.getCurrentItem(), 1).split(" ")[1];
 
-        (new DespedirEmpleadoUseCase()).despedir(player.getName(), empleadoNombre, empresa.getNombre(), "Despedido");
+        (new DespedirEmpleadoUseCase()).despedir(player.getName(), empleadoNombre, getState().getNombre(), "Despedido");
         player.sendMessage(ChatColor.GOLD + "Has despedido a: " + empleadoNombre);
-        String mensajeOnline = ChatColor.RED + "Has sido despedido de " + empresa.getNombre() + " razon: " + "Despedido";
+        String mensajeOnline = ChatColor.RED + "Has sido despedido de " + getState().getNombre() + " razon: " + "Despedido";
         enviarMensaje(empleadoNombre, mensajeOnline, mensajeOnline, Sound.BLOCK_ANVIL_LAND, 10, 1);
 
         super.deleteItem(event.getSlot(), super.getActualPageNumber());
@@ -107,7 +99,7 @@ public final class VerEmpresaMenu extends Menu implements AfterShow {
     }
 
     private List<ItemStack> buildItemEmpleados() {
-        return this.empleadosService.findByEmpresa(this.empresa.getNombre()).stream()
+        return this.empleadosService.findByEmpresa(this.getState().getNombre()).stream()
                 .map(this::buildEmpleadoItem)
                 .toList();
     }
@@ -122,9 +114,9 @@ public final class VerEmpresaMenu extends Menu implements AfterShow {
                         GOLD + "Sueldo: " + GREEN + FORMATEA.format(empleado.getSueldo()) + " PC/" + empleado.getTipoSueldo().nombre,
                         GOLD + "ID: " + empleado.getEmpleadoId(),
                         "   ",
-                        "/empresas editarempleado " + empresa.getNombre() + " " + empleado.getNombre(),
+                        "/empresas editarempleado " + getState().getNombre() + " " + empleado.getNombre(),
                         "  sueldo <sueldo>",
-                        "/empresas editarempleado " + empresa.getNombre() + " " + empleado.getNombre(),
+                        "/empresas editarempleado " + getState().getNombre() + " " + empleado.getNombre(),
                         "  tiposueldo <tipo (ver en info)>"
                 ))
                 .build();
@@ -142,7 +134,7 @@ public final class VerEmpresaMenu extends Menu implements AfterShow {
     }
 
     private ItemStack buildItemAccionistas() {
-        List<String> loreAccionistas = accionistasServerService.findByEmpresa(empresa.getNombre()).stream()
+        List<String> loreAccionistas = accionistasServerService.findByEmpresa(getState().getNombre()).stream()
                 .map(posicion -> new Accionista(posicion.getNombreAccionista(), posicion.getCantidad()))
                 .collect(Collectors.toMap(Accionista::nombreAccionista, Accionista::cantidad, Integer::sum))
                 .entrySet().stream()
@@ -165,7 +157,7 @@ public final class VerEmpresaMenu extends Menu implements AfterShow {
     }
 
     private String getLoreAccionista(Accionista accionista) {
-        double ownership = (double)accionista.cantidad() / (double)empresa.getAccionesTotales();
+        double ownership = (double)accionista.cantidad() / (double)getState().getAccionesTotales();
         double percentajeOwnership = redondeoDecimales(ownership * 100, 1);
 
         return GOLD + accionista.nombreAccionista() + ": " + GREEN + FORMATEA.format(percentajeOwnership) + "%";
@@ -174,31 +166,31 @@ public final class VerEmpresaMenu extends Menu implements AfterShow {
     private ItemStack buildItemEmpresaStats() {
         List<String> lore = new ArrayList<>();
         lore.add(GOLD + "Descripccion:");
-        lore.add(1, GOLD + "" + empresa.getDescripcion());
+        lore.add(1, GOLD + "" + getState().getDescripcion());
         lore.add("  ");
-        lore.add(GOLD + "Pixelcoins: " + GREEN + FORMATEA.format(empresa.getPixelcoins()) + " PC");
-        lore.add(GOLD + "Ingresos: " + GREEN + FORMATEA.format(empresa.getIngresos()) + " PC");
-        lore.add(GOLD + "Gastos: " + GREEN + FORMATEA.format(empresa.getGastos()) + " PC");
-        double beneficiosPerdidas = empresa.getIngresos() - empresa.getGastos();
+        lore.add(GOLD + "Pixelcoins: " + GREEN + FORMATEA.format(getState().getPixelcoins()) + " PC");
+        lore.add(GOLD + "Ingresos: " + GREEN + FORMATEA.format(getState().getIngresos()) + " PC");
+        lore.add(GOLD + "Gastos: " + GREEN + FORMATEA.format(getState().getGastos()) + " PC");
+        double beneficiosPerdidas = getState().getIngresos() - getState().getGastos();
         if(beneficiosPerdidas >= 0){
             lore.add(GOLD + "Beneficios: "  +  GREEN + "+" +  FORMATEA.format(beneficiosPerdidas) + " PC");
-            lore.add(GOLD + "Rentabilidad: " + GREEN + "+" + redondeoDecimales(rentabilidad(empresa.getIngresos(), beneficiosPerdidas),1) + "%");
+            lore.add(GOLD + "Rentabilidad: " + GREEN + "+" + redondeoDecimales(rentabilidad(getState().getIngresos(), beneficiosPerdidas),1) + "%");
         }else{
             lore.add(GOLD + "Perdidas: " + RED + FORMATEA.format(beneficiosPerdidas) + " PC");
-            lore.add(GOLD + "Rentabilidad: " + RED + redondeoDecimales(rentabilidad(empresa.getIngresos(), beneficiosPerdidas),1) + "%");
+            lore.add(GOLD + "Rentabilidad: " + RED + redondeoDecimales(rentabilidad(getState().getIngresos(), beneficiosPerdidas),1) + "%");
         }
         lore.add("   ");
-        lore.add("/empresas depositar " + empresa.getNombre() + " <pixelcoins>");
-        lore.add("/empresas sacar " + empresa.getNombre() + " <pixelcoins>");
-        lore.add("/empresas logotipo " + empresa.getNombre() + "");
-        lore.add("/empresas editardescripccion " + empresa.getNombre());
+        lore.add("/empresas depositar " + getState().getNombre() + " <pixelcoins>");
+        lore.add("/empresas sacar " + getState().getNombre() + " <pixelcoins>");
+        lore.add("/empresas logotipo " + getState().getNombre() + "");
+        lore.add("/empresas editardescripccion " + getState().getNombre());
         lore.add("  <nueva desc>");
-        lore.add("/empresas editarnombre " + empresa.getNombre() + " <nombre>");
+        lore.add("/empresas editarnombre " + getState().getNombre() + " <nombre>");
         lore.add("Mas info en /ayuda empresario o:");
         lore.add("http://serversurvival.ddns.net/perfil");
 
         return ItemBuilder.of(Material.WRITABLE_BOOK)
-                .title(GOLD + "" + BOLD + "" + empresa.getNombre().toUpperCase())
+                .title(GOLD + "" + BOLD + "" + getState().getNombre().toUpperCase())
                 .lore(lore)
                 .build();
     }
@@ -226,8 +218,8 @@ public final class VerEmpresaMenu extends Menu implements AfterShow {
     }
 
     @Override
-    public void afterShow() {
-        if(empresa.isCotizada()){
+    public void afterShow(Player player) {
+        if(getState().isCotizada()){
             super.getActualPage().setItem(2, buildItemAccionistas(), 3);
             super.getActualPage().setItem(3, buildItemRepartirDividendo(), 4);
         }

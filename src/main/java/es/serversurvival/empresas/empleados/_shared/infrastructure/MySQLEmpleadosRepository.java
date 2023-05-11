@@ -1,6 +1,6 @@
 package es.serversurvival.empresas.empleados._shared.infrastructure;
 
-import es.dependencyinjector.annotations.Repository;
+import es.dependencyinjector.dependencies.annotations.Repository;
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;

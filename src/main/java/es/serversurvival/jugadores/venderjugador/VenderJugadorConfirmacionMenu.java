@@ -18,19 +18,19 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
-public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu {
-    private final Player jugadorComprador;
-    private final Player jugadorVendedor;
-    private final ItemStack itemAVender;
-    private final int slotItemVender;
-    private final double precio;
-
+public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu<VenderJugadorConfirmacionMenuState> {
     @Override
-    public void onAceptar(Player player, InventoryClickEvent event) {
+    public void onAceptar(Player player, InventoryClickEvent event, VenderJugadorConfirmacionMenuState state) {
+        var jugadorVendedor = state.jugadorVendedor();
+        var jugadorComprador = state.jugadorComprador();
+        var itemAVender = state.itemAVender();
+        var precio = state.precio();
+        var slotItemVender = state.slotItemVender();
+
         var itemToVenderIsIntVendedorInventory = this.isItemInInventory(jugadorVendedor, itemAVender, slotItemVender);
         if(!itemToVenderIsIntVendedorInventory){
-            this.jugadorVendedor.sendMessage(DARK_RED + "casi maquina");
-            this.jugadorComprador.sendMessage(DARK_RED + "No se ha podido completar el pago, por que el nombreAccionista ha movido el objeto a venderte");
+            jugadorVendedor.sendMessage(DARK_RED + "casi maquina");
+            jugadorComprador.sendMessage(DARK_RED + "No se ha podido completar el pago, por que el nombreAccionista ha movido el objeto a venderte");
             return;
         }
 
@@ -57,6 +57,7 @@ public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu {
         return itemAVenderEnInventario != null && itemAVenderEnInventario.equals(itemAVender);
     }
 
+
     @Override
     public String titulo() {
         return DARK_RED + "" + BOLD + "   OFERTA DE COMPRA";
@@ -67,8 +68,8 @@ public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu {
         return ItemBuilder.of(Material.GREEN_WOOL)
                 .title(ChatColor.GREEN + "" + ChatColor.BOLD + "COMPRAR")
                 .lore(List.of(
-                        GOLD + "Aceptar la oferta de " + jugadorVendedor.getName(),
-                        GOLD + "Precio: " + GREEN + FORMATEA.format(precio) + "PC"
+                        GOLD + "Aceptar la oferta de " + this.getState().jugadorVendedor().getName(),
+                        GOLD + "Precio: " + GREEN + FORMATEA.format(this.getState().precio()) + "PC"
                 ))
                 .build();
     }

@@ -1,6 +1,6 @@
 package es.serversurvival.empresas.ofertasaccionesserver._shared.application;
 
-import es.dependencyinjector.annotations.Service;
+import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;

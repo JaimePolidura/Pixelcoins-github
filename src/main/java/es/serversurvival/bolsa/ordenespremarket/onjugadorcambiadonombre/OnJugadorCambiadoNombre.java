@@ -1,8 +1,7 @@
 package es.serversurvival.bolsa.ordenespremarket.onjugadorcambiadonombre;
 
-import es.dependencyinjector.annotations.Component;
+import es.dependencyinjector.dependencies.annotations.Component;
 import es.jaime.EventListener;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrdenesPremarketService;
 import es.serversurvival.jugadores.setupjugadorunido.JugadorCambiadoDeNombreEvento;
 import lombok.AllArgsConstructor;

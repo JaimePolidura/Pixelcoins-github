@@ -2,7 +2,6 @@ package es.serversurvival.bolsa.posicionesabiertas.comprarlargo;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrderExecutorProxy;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
@@ -11,43 +10,30 @@ import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import lombok.AllArgsConstructor;
-import main.ValidationResult;
-import main.ValidatorService;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.checkerframework.common.util.report.qual.ReportCall;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
-import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
 import static es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenPremarketCommand.*;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.Sound.*;
 
 @Command(
         value = "bolsa invertir",
-        isAsync = true,
         args = {"ticker", "cantidad"},
         explanation = "Para comprar una accion. <ticker> ticker de la accion (solo se pueden cantidad americanas) <cantidad> cantidad de cantidad a comprar"
 )
 @AllArgsConstructor
 public class ComprarLargoComandoRunner implements CommandRunnerArgs<ComprarLargoComando> {
-    private final JugadoresService jugadoresService;
     private final ComprarLargoUseCase comprarLargoUseCase;
+    private final OrderExecutorProxy orderExecutorProxy;
     private final ActivosInfoService activoInfoService;
+    private final JugadoresService jugadoresService;
 
     @Override
     public void execute(ComprarLargoComando comando, CommandSender sender) {
         String ticker = comando.getTicker();
         int cantidad = comando.getCantidad();
-
-        ValidationResult result = ValidatorService
-                .startValidating(cantidad, NaturalNumber)
-                .validateAll();
-
-        if(result.isFailed()){
-            sender.sendMessage(DARK_RED + result.getMessage());
-            return;
-        }
 
         sender.sendMessage(RED + "Cargando...");
 
@@ -66,7 +52,7 @@ public class ComprarLargoComandoRunner implements CommandRunnerArgs<ComprarLargo
             return;
         }
 
-        var executedInMarket = OrderExecutorProxy.execute(of(sender.getName(), ticker, cantidad, TipoAccion.LARGO_COMPRA, null), () -> {
+        var executedInMarket = this.orderExecutorProxy.execute(of(sender.getName(), ticker, cantidad, TipoAccion.LARGO_COMPRA, null), () -> {
             comprarLargoUseCase.comprarLargo(sender.getName(), TipoActivo.ACCIONES, ticker.toUpperCase(), cantidad);
         });
 

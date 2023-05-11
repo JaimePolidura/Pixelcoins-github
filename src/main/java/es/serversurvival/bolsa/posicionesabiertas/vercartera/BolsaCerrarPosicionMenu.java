@@ -1,72 +1,61 @@
 package es.serversurvival.bolsa.posicionesabiertas.vercartera;
 
-import es.bukkitclassmapper.menus.MenuService;
-import es.serversurvival._shared.DependecyContainer;
+import es.bukkitbettermenus.MenuService;
 import es.serversurvival._shared.menus.NumberSelectorMenu;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.ordenespremarket._shared.application.OrderExecutorProxy;
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
-import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival.bolsa.posicionesabiertas.comprarcorto.ComprarCortoUseCase;
 import es.serversurvival.bolsa.posicionesabiertas.venderlargo.VenderLargoUseCase;
+import lombok.AllArgsConstructor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.List;
-import java.util.UUID;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival._shared.utils.Funciones.redondeoDecimales;
 import static es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenPremarketCommand.of;
 import static org.bukkit.ChatColor.*;
 
-public final class BolsaCerrarPosicionMenu extends NumberSelectorMenu {
-    private final PosicionAbierta posicion;
-    private final ActivoInfo activoInfoAVender;
-    private final MenuService menuService;
-    private final VenderLargoUseCase venderLargoUseCase;
+@AllArgsConstructor
+public final class BolsaCerrarPosicionMenu extends NumberSelectorMenu<BolsaCerrarPosicionMenuState> {
     private final ComprarCortoUseCase comprarCortoUseCase;
-
-    public BolsaCerrarPosicionMenu(UUID posicionAbiertaId) {
-        this.venderLargoUseCase = new VenderLargoUseCase();
-        this.comprarCortoUseCase = new ComprarCortoUseCase();
-        this.menuService = DependecyContainer.get(MenuService.class);
-        this.posicion = DependecyContainer.get(PosicionesAbiertasSerivce.class).getById(posicionAbiertaId);
-        this.activoInfoAVender = DependecyContainer.get(ActivosInfoService.class).getByNombreActivo(posicion.getNombreActivo(),
-                posicion.getTipoActivo());
-    }
+    private final OrderExecutorProxy orderExecutorProxy;
+    private final VenderLargoUseCase venderLargoUseCase;
+    private final MenuService menuService;
 
     @Override
     public void onAccept(Player player, InventoryClickEvent event) {
         int cantidad = (int) super.getPropertyDouble("cantidad");
 
-        var executedInMarket = OrderExecutorProxy.execute(of(
+        var executedInMarket = this.orderExecutorProxy.execute(of(
                 player.getName(),
-                posicion.getNombreActivo(),
+                getState().posicion().getNombreActivo(),
                 cantidad,
-                posicion.esLargo() ? TipoAccion.LARGO_VENTA : TipoAccion.CORTO_COMPRA,
-                posicion.getPosicionAbiertaId()), () -> {
-                    if(posicion.esLargo())
-                        venderLargoUseCase.venderPosicion(posicion.getPosicionAbiertaId(), cantidad, player.getName());
+                getState().posicion().esLargo() ? TipoAccion.LARGO_VENTA : TipoAccion.CORTO_COMPRA,
+                getState().posicion().getPosicionAbiertaId()), () -> {
+                    if(getState().posicion().esLargo())
+                        venderLargoUseCase.venderPosicion(getState().posicion().getPosicionAbiertaId(), cantidad, player.getName());
                     else
-                        comprarCortoUseCase.comprarPosicionCorto(posicion.getPosicionAbiertaId(), cantidad, posicion.getJugador());
+                        comprarCortoUseCase.comprarPosicionCorto(getState().posicion().getPosicionAbiertaId(), cantidad, getState().posicion().getJugador());
                 }
         );
 
-        double resultadoNeto = posicion.getCantidad() * (posicion.esLargo() ?
-                activoInfoAVender.getPrecio() - posicion.getPrecioApertura() :
-                posicion.getPrecioApertura() - activoInfoAVender.getPrecio());
+        double resultadoNeto = getState().posicion().getCantidad() * (getState().posicion().esLargo() ?
+                getState().activoInfo().getPrecio() - getState().posicion().getPrecioApertura() :
+                getState().posicion().getPrecioApertura() - getState().activoInfo().getPrecio());
 
         if(executedInMarket){
             String mensajeResultado  = resultadoNeto >= 0 ?
                     "unos beneficios de " + GREEN + "+ " + FORMATEA.format(resultadoNeto) + "PC" :
                     "unas perdidas de " + RED + FORMATEA.format(resultadoNeto) + "PC";
 
-            player.sendMessage(GOLD + "Has cerra de la posicion de " + cantidad + " cantidad de " + activoInfoAVender.getNombreActivoLargo() + " por " + GREEN +
-                    FORMATEA.format(activoInfoAVender.getPrecio()) + "PC " + GOLD + "Con " + mensajeResultado);
+            player.sendMessage(GOLD + "Has cerra de la posicion de " + cantidad + " cantidad de " + getState().activoInfo().getNombreActivoLargo() + " por " + GREEN +
+                    FORMATEA.format(getState().activoInfo().getPrecio()) + "PC " + GOLD + "Con " + mensajeResultado);
             player.playSound(player.getLocation(), resultadoNeto >= 0 ? Sound.ENTITY_PLAYER_LEVELUP : Sound.BLOCK_ANVIL_LAND, 10, 1);
         }else{
             player.sendMessage(GOLD + "No se ha podido cerrar la posicion por que el mercado esta cerrado. Cuando abra se ejecutara y recibiras tus pixelcoins");
@@ -81,12 +70,12 @@ public final class BolsaCerrarPosicionMenu extends NumberSelectorMenu {
 
     @Override
     public double maxValue() {
-        return posicion.getCantidad();
+        return getState().posicion().getCantidad();
     }
 
     @Override
     public double initialValue() {
-        return posicion.getCantidad();
+        return getState().posicion().getCantidad();
     }
 
     @Override
@@ -103,14 +92,14 @@ public final class BolsaCerrarPosicionMenu extends NumberSelectorMenu {
     }
 
     private double calcularValorTotal(int cantidadACerrar){
-        return posicion.esCorto() ?
-                (posicion.getPrecioApertura() - activoInfoAVender.getPrecio()) * cantidadACerrar :
-                cantidadACerrar * activoInfoAVender.getPrecio();
+        return getState().posicion().esCorto() ?
+                (getState().posicion().getPrecioApertura() - getState().activoInfo().getPrecio()) * cantidadACerrar :
+                cantidadACerrar * getState().activoInfo().getPrecio();
     }
 
     private double calcularResultado(int cantidadACerrar){
-        return posicion.esCorto() ?
-                (posicion.getPrecioApertura() - activoInfoAVender.getPrecio()) * cantidadACerrar :
-                (activoInfoAVender.getPrecio() - posicion.getPrecioApertura()) * cantidadACerrar;
+        return getState().posicion().esCorto() ?
+                (getState().posicion().getPrecioApertura() - getState().activoInfo().getPrecio()) * cantidadACerrar :
+                (getState().activoInfo().getPrecio() - getState().posicion().getPrecioApertura()) * cantidadACerrar;
     }
 }

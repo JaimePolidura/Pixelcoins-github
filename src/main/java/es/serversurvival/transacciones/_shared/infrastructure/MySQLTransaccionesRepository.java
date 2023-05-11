@@ -1,9 +1,9 @@
 package es.serversurvival.transacciones._shared.infrastructure;
 
+import es.dependencyinjector.dependencies.annotations.Repository;
 import es.jaime.configuration.DatabaseConfiguration;
 import es.jaime.mapper.EntityMapper;
 import es.jaime.repository.DataBaseRepository;
-import es.dependencyinjector.annotations.Repository;
 import es.jaimetruman.select.Select;
 import es.serversurvival.transacciones._shared.domain.Transaccion;
 import es.serversurvival.transacciones._shared.domain.TransaccionesRepository;

@@ -1,10 +1,9 @@
 package es.serversurvival.bolsa.posicionesabiertas.venderlargo;
 
-import es.dependencyinjector.annotations.UseCase;
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
@@ -13,8 +12,8 @@ import lombok.AllArgsConstructor;
 
 import java.util.UUID;
 
-@AllArgsConstructor
 @UseCase
+@AllArgsConstructor
 public class VenderLargoUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final JugadoresService jugadoresService;

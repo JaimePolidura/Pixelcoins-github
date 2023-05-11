@@ -1,13 +1,13 @@
 package es.serversurvival.jugadores.cambio.sacarMaxItem;
 
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import es.bukkitclassmapper.menus.Menu;
-import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.jugadores.cambio.CambioPixelcoins;
+import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -22,16 +22,10 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival.jugadores.cambio.CambioPixelcoins.*;
 import static org.bukkit.ChatColor.DARK_RED;
 
+@AllArgsConstructor
 public final class SacarMaxItemMenu extends Menu {
-    public static final String TITULO = ChatColor.DARK_RED + "" + ChatColor.BOLD + "ELLIGE ITEM PARA SACR MAX";
-
-    private final Jugador jugador;
     private final JugadoresService jugadoresService;
-
-    public SacarMaxItemMenu(String jugadorNombre) {
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.jugador = this.jugadoresService.getByNombre(jugadorNombre);
-    }
+    private final Jugador jugador;
 
     @Override
     public int[][] items() {
@@ -46,11 +40,11 @@ public final class SacarMaxItemMenu extends Menu {
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
                 .fixedItems()
-                .title(TITULO)
+                .title(ChatColor.DARK_RED + "" + ChatColor.BOLD + "ELLIGE ITEM PARA SACR MAX")
                 .item(4, buildItemInfo())
-                .item(2, buildItem(jugador.getPixelcoins(), "DIAMANTES", Material.DIAMOND_BLOCK, DIAMANTE), this::onClick)
-                .item(3, buildItem(jugador.getPixelcoins(), "LAPISLAZULI", Material.LAPIS_BLOCK, LAPISLAZULI), this::onClick)
-                .item(4, buildItem(jugador.getPixelcoins(), "CUARZO", Material.QUARTZ_BLOCK, CUARZO), this::onClick)
+                .item(2, buildItem(this.jugador.getPixelcoins(), "DIAMANTES", Material.DIAMOND_BLOCK, DIAMANTE), this::onClick)
+                .item(3, buildItem(this.jugador.getPixelcoins(), "LAPISLAZULI", Material.LAPIS_BLOCK, LAPISLAZULI), this::onClick)
+                .item(4, buildItem(this.jugador.getPixelcoins(), "CUARZO", Material.QUARTZ_BLOCK, CUARZO), this::onClick)
                 .build();
     }
 

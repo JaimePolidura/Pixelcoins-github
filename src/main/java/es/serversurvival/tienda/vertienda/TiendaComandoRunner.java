@@ -1,10 +1,10 @@
 package es.serversurvival.tienda.vertienda;
 
+import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
-import es.bukkitclassmapper.menus.MenuService;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.tienda.vertienda.menu.TiendaMenu;
+import lombok.AllArgsConstructor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -12,12 +12,9 @@ import org.bukkit.entity.Player;
         value = "tienda ver",
         explanation = "Ver la tienda de objetos"
 )
+@AllArgsConstructor
 public class TiendaComandoRunner implements CommandRunnerNonArgs {
     private final MenuService menuService;
-
-    public TiendaComandoRunner() {
-        this.menuService = DependecyContainer.get(MenuService.class);
-    }
 
     @Override
     public void execute(CommandSender p) {

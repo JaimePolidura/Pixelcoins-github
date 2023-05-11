@@ -1,7 +1,7 @@
 package es.serversurvival.web.cuentasweb._shared.application;
 
+import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.dependencyinjector.annotations.Service;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.web.cuentasweb._shared.domain.CuentaWeb;
 import es.serversurvival.web.cuentasweb._shared.domain.CuentasWebRepository;

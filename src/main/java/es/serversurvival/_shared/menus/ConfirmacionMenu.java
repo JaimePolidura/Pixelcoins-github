@@ -1,9 +1,9 @@
 package es.serversurvival._shared.menus;
 
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.configuration.MenuConfiguration;
+import es.bukkitbettermenus.modules.confirmation.ConfirmationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import es.bukkitclassmapper.menus.Menu;
-import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
-import es.bukkitclassmapper.menus.modules.confirmation.ConfirmationConfiguration;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 import static org.bukkit.ChatColor.*;
 
-public abstract class ConfirmacionMenu extends Menu {
+public abstract class ConfirmacionMenu<T> extends Menu<T> {
     @Override
     public int[][] items() {
         return new int[][]{{1, 0, 0, 0, 2}};
@@ -24,7 +24,7 @@ public abstract class ConfirmacionMenu extends Menu {
                 .fixedItems()
                 .confirmation(ConfirmationConfiguration.builder()
                         .cancel(1, cancelarItem(), this::onCancelar)
-                        .accept(2, aceptarItem(), this::onAceptar)
+                        .accept(2, aceptarItem(), (player, event) -> onAceptar(player, event, getState()))
                         .build())
                 .build();
     }
@@ -41,6 +41,6 @@ public abstract class ConfirmacionMenu extends Menu {
         return DARK_RED + "" + BOLD + "          CONFIRMAR";
     }
 
-    public abstract void onAceptar(Player player, InventoryClickEvent event);
+    public abstract void onAceptar(Player player, InventoryClickEvent event, T state);
     public abstract ItemStack aceptarItem();
 }

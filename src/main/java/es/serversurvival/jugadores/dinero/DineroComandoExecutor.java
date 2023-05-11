@@ -5,6 +5,7 @@ import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
+import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,12 +16,9 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
         value = "dinero",
         explanation = "Ver tus pixelcoins que tengas en efectivo"
 )
+@AllArgsConstructor
 public class DineroComandoExecutor implements CommandRunnerNonArgs {
     private final JugadoresService jugadoresService;
-
-    public DineroComandoExecutor() {
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-    }
 
     @Override
     public void execute(CommandSender commandSender) {

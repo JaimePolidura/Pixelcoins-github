@@ -3,6 +3,7 @@ package es.serversurvival.empresas.empresas.pagardividendos;
 import es.serversurvival._shared.menus.NumberSelectorMenu;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
+import lombok.AllArgsConstructor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -12,17 +13,14 @@ import java.util.List;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.BOLD;
 
-public final class PagarDividendosConfirmacionMenu extends NumberSelectorMenu {
-    private final Empresa empresa;
+@AllArgsConstructor
+public final class PagarDividendosConfirmacionMenu extends NumberSelectorMenu<Empresa> {
+    private final PagarDividendosEmpresaServerUseCase pagarDividendosEmpresaServerUseCase;
 
-    public PagarDividendosConfirmacionMenu(Empresa empresa) {
-        this.empresa = empresa;
-    }
-    
     @Override
     public void onAccept(Player player, InventoryClickEvent event) {
         double dividendoPorAccion = super.getPropertyDouble("cantidad");
-        (new PagarDividendosEmpresaServerUseCase()).pagar(player.getName(), this.empresa.getNombre(), dividendoPorAccion);
+        this.pagarDividendosEmpresaServerUseCase.pagar(player.getName(), this.getState().getNombre(), dividendoPorAccion);
         Funciones.enviarMensajeYSonido(player, GOLD + "Se han pagado todos los dividendos", Sound.ENTITY_PLAYER_LEVELUP);
     }
 
@@ -33,7 +31,7 @@ public final class PagarDividendosConfirmacionMenu extends NumberSelectorMenu {
 
     @Override
     public double maxValue() {
-        return this.empresa.getPixelcoins() / this.empresa.getAccionesTotales();
+        return this.getState().getPixelcoins() / this.getState().getAccionesTotales();
     }
 
     @Override
@@ -45,8 +43,8 @@ public final class PagarDividendosConfirmacionMenu extends NumberSelectorMenu {
     public List<String> loreItemAceptar(double cantidad) {
         return List.of(
                 GOLD + "Dividendo/Accion: " + GREEN + Funciones.FORMATEA.format(cantidad),
-                GOLD + "Total a pagar: " + GREEN + Funciones.FORMATEA.format(cantidad*this.empresa.getAccionesTotales()),
-                GOLD + "Pixelcoins empresa: " + GREEN + Funciones.FORMATEA.format(this.empresa.getPixelcoins())
+                GOLD + "Total a pagar: " + GREEN + Funciones.FORMATEA.format(cantidad*this.getState().getAccionesTotales()),
+                GOLD + "Pixelcoins empresa: " + GREEN + Funciones.FORMATEA.format(this.getState().getPixelcoins())
         );
     }
 }

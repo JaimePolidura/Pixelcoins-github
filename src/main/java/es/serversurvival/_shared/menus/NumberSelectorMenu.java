@@ -1,10 +1,10 @@
 package es.serversurvival._shared.menus;
 
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.configuration.MenuConfiguration;
+import es.bukkitbettermenus.modules.confirmation.ConfirmationConfiguration;
+import es.bukkitbettermenus.modules.numberselector.NumberSelectorMenuConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import es.bukkitclassmapper.menus.Menu;
-import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
-import es.bukkitclassmapper.menus.modules.confirmation.ConfirmationConfiguration;
-import es.bukkitclassmapper.menus.modules.numberselector.NumberSelectorMenuConfiguration;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -12,12 +12,12 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-import static es.bukkitclassmapper.menus.modules.numberselector.NumberSelectActionType.DECREASE;
-import static es.bukkitclassmapper.menus.modules.numberselector.NumberSelectActionType.INCREASE;
+import static es.bukkitbettermenus.modules.numberselector.NumberSelectActionType.DECREASE;
+import static es.bukkitbettermenus.modules.numberselector.NumberSelectActionType.INCREASE;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.GREEN;
 
-public abstract class NumberSelectorMenu extends Menu {
+public abstract class NumberSelectorMenu<T> extends Menu<T> {
     @Override
     public int[][] items() {
         return new int[][] {
@@ -57,6 +57,11 @@ public abstract class NumberSelectorMenu extends Menu {
                 .build();
     }
 
+    public abstract double maxValue();
+    public abstract double initialValue();
+    public abstract List<String> loreItemAceptar(double cantidad);
+    public abstract void onAccept(Player player, InventoryClickEvent event);
+
     public boolean closeOnAction(){
         return true;
     }
@@ -70,11 +75,6 @@ public abstract class NumberSelectorMenu extends Menu {
     public int minValue() {
         return 1;
     }
-
-    public abstract double maxValue();
-    public abstract double initialValue();
-    public abstract List<String> loreItemAceptar(double cantidad);
-    public abstract void onAccept(Player player, InventoryClickEvent event);
 
     public final void onCantidadChanged(double cantidad){
         super.setItemLoreActualPage(14, loreItemAceptar(cantidad));

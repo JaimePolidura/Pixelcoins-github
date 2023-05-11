@@ -1,11 +1,11 @@
 package es.serversurvival.empresas.accionistasserver.misacciones;
 
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.configuration.MenuConfiguration;
+import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
-import es.bukkitclassmapper.menus.Menu;
-import es.bukkitclassmapper.menus.MenuService;
-import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
-import es.bukkitclassmapper.menus.modules.pagination.PaginationConfiguration;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
@@ -13,6 +13,7 @@ import es.serversurvival.empresas.accionistasserver.misacciones.vender.VenderAcc
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.empresas.ofertasaccionesserver.verofertasaccioneserver.VerOfertasAccionesServerMenu;
+import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -20,27 +21,17 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 import static org.bukkit.ChatColor.*;
 
+@AllArgsConstructor
 public final class MisAccionesMenu extends Menu {
-    private final AccionistasServerService accionistasServerService;
     private final OfertasAccionesServerService ofertasAccionesServerService;
-    private final String jugadorNombre;
-    private final List<OfertaAccionServer> ofertaAccionServersJugador;
+    private final AccionistasServerService accionistasServerService;
     private final MenuService menuService;
-
-    public MisAccionesMenu(String jugadorNombre) {
-        this.accionistasServerService = DependecyContainer.get(AccionistasServerService.class);
-        this.ofertasAccionesServerService = DependecyContainer.get(OfertasAccionesServerService.class);
-        this.jugadorNombre = jugadorNombre;
-        this.ofertaAccionServersJugador = ofertasAccionesServerService.findByOfertanteNombre(jugadorNombre);
-        this.menuService = DependecyContainer.get(MenuService.class);
-    }
 
     @Override
     public int[][] items() {
@@ -61,7 +52,7 @@ public final class MisAccionesMenu extends Menu {
                 .fixedItems()
                 .item(1, buildItemInfo())
                 .item(2, buildItemMercado(), this::goToMercadoAccionesServerMenu)
-                .items(3, buildItemAcciones(), this::venderAccion)
+                .items(3, this::buildItemAcciones, this::venderAccion)
                 .breakpoint(7, Material.RED_BANNER)
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
@@ -72,7 +63,8 @@ public final class MisAccionesMenu extends Menu {
 
     private void venderAccion(Player player, InventoryClickEvent event) {
         UUID idAccion = UUID.fromString(ItemUtils.getLore(event.getCurrentItem(), 5));
-        List<OfertaAccionServer> ofertasAccionesInMercado = this.ofertaAccionServersJugador.stream()
+        List<OfertaAccionServer> ofertasAccionesInMercado = this.ofertasAccionesServerService.findByOfertanteNombre(player.getName())
+                .stream()
                 .filter(oferta -> oferta.getAccionistaEmpresaServerId().equals(idAccion))
                 .toList();
         int allAccionesInMercado = ofertasAccionesInMercado.stream()
@@ -121,8 +113,8 @@ public final class MisAccionesMenu extends Menu {
                 .build();
     }
 
-    private List<ItemStack> buildItemAcciones() {
-        return this.accionistasServerService.findByNombreAccionista(jugadorNombre).stream()
+    private List<ItemStack> buildItemAcciones(Player player) {
+        return this.accionistasServerService.findByNombreAccionista(player.getName()).stream()
                 .map(this::buildItemAccionista)
                 .collect(Collectors.toList());
     }

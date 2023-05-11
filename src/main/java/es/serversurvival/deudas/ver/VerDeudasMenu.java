@@ -1,17 +1,17 @@
 package es.serversurvival.deudas.ver;
 
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.configuration.MenuConfiguration;
+import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
-import es.bukkitclassmapper.menus.Menu;
-import es.bukkitclassmapper.menus.MenuService;
-import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
-import es.bukkitclassmapper.menus.modules.pagination.PaginationConfiguration;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.deudas._shared.application.DeudasService;
 import es.serversurvival.deudas._shared.domain.Deuda;
 import es.serversurvival.deudas.cancelar.CancelarDeudaUseCase;
 import es.serversurvival.deudas.pagarTodo.PagarDeudaCompletaUseCase;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
+import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,28 +19,19 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
+@AllArgsConstructor
 public final class VerDeudasMenu extends Menu {
     private static final String TITULO = DARK_RED + "" + BOLD + "        TUS DEUDAS";
 
-    private final String jugador;
-    private final MenuService menuService;
-    private final DeudasService deudasService;
-    private final CancelarDeudaUseCase cancelarDeudaUseCase;
     private final PagarDeudaCompletaUseCase pagarDeudaUseCase;
-
-    public VerDeudasMenu(String jugador) {
-        this.menuService = DependecyContainer.get(MenuService.class);
-        this.jugador = jugador;
-        this.deudasService = DependecyContainer.get(DeudasService.class);
-        this.cancelarDeudaUseCase = new CancelarDeudaUseCase();
-        this.pagarDeudaUseCase = new PagarDeudaCompletaUseCase();
-    }
+    private final CancelarDeudaUseCase cancelarDeudaUseCase;
+    private final DeudasService deudasService;
+    private final MenuService menuService;
 
     @Override
     public int[][] items() {
@@ -57,7 +48,7 @@ public final class VerDeudasMenu extends Menu {
                 .fixedItems()
                 .title(TITULO)
                 .item(1, buildItemInfo())
-                .items(2, buildItemsDeudas(), this::onDeudaClicked)
+                .items(2, this::buildItemsDeudas, this::onDeudaClicked)
                 .breakpoint(7, buildItemGoBackToProfile(), this::goBackToProfile)
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
@@ -94,14 +85,14 @@ public final class VerDeudasMenu extends Menu {
         this.menuService.open(player, new PerfilMenu(player.getName()));
     }
 
-    private List<ItemStack> buildItemsDeudas() {
-        return this.deudasService.findByJugador(jugador).stream()
-                .map(this::buildItemDeuda)
+    private List<ItemStack> buildItemsDeudas(Player player) {
+        return this.deudasService.findByJugador(player.getName()).stream()
+                .map(deuda -> this.buildItemDeuda(deuda, player))
                 .toList();
     }
 
-    private ItemStack buildItemDeuda(Deuda deuda) {
-        boolean esAcredor = deuda.getAcredor().equalsIgnoreCase(this.jugador);
+    private ItemStack buildItemDeuda(Deuda deuda, Player player) {
+        boolean esAcredor = deuda.getAcredor().equalsIgnoreCase(player.getName());
 
         return ItemBuilder.of(esAcredor ? Material.GREEN_BANNER : Material.RED_BANNER)
                 .title(GOLD + "" + BOLD + "CLICK PARA " + (esAcredor ? "CANCELAR" : "PAGAR"))

@@ -1,20 +1,21 @@
 package es.serversurvival.bolsa.activosinfo.vervalores.acciones;
 
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.Page;
+import es.bukkitbettermenus.configuration.MenuConfiguration;
+import es.bukkitbettermenus.menustate.AfterShow;
+import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
-import es.bukkitclassmapper.menus.Menu;
-import es.bukkitclassmapper.menus.MenuService;
-import es.bukkitclassmapper.menus.Page;
-import es.bukkitclassmapper.menus.configuration.MenuConfiguration;
-import es.bukkitclassmapper.menus.menustate.AfterShow;
-import es.bukkitclassmapper.menus.modules.pagination.PaginationConfiguration;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.activosinfo.vervalores.ComprarBolsaConfirmacionMenu;
+import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.ComprarLargoUseCase;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -29,19 +30,13 @@ import java.util.concurrent.ExecutorService;
 import static es.serversurvival._shared.utils.Funciones.*;
 import static org.bukkit.ChatColor.*;
 
+@RequiredArgsConstructor
 public final class AccionesMenu extends Menu implements AfterShow {
+    private final ComprarLargoUseCase comprarLargoUseCase;
     private final ActivosInfoService activosInfoService;
-    private final MenuService menuService;
+    private final JugadoresService jugadoresService;
     private final ExecutorService executor;
-    private boolean hasLoaddedPrices;
-    private final Jugador jugador;
-
-    public AccionesMenu(String jugadorNombre) {
-        this.activosInfoService = DependecyContainer.get(ActivosInfoService.class);
-        this.executor = DependecyContainer.get(ExecutorService.class);
-        this.menuService = DependecyContainer.get(MenuService.class);
-        this.jugador = DependecyContainer.get(JugadoresService.class).getByNombre(jugadorNombre);
-    }
+    private final MenuService menuService;
 
     @Override
     public int[][] items() {
@@ -81,14 +76,16 @@ public final class AccionesMenu extends Menu implements AfterShow {
 
         double precio = Double.parseDouble(priceString);
 
-        if(precio > this.jugador.getPixelcoins()){
+        Jugador jugador = this.jugadoresService.getByNombre(player.getName());
+
+        if(precio > jugador.getPixelcoins()){
             player.sendMessage(DARK_RED + "No tienes las suficientes pixelcoins");
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
             return;
         }
 
         this.menuService.open(player, new ComprarBolsaConfirmacionMenu(
-                ticker, TipoActivo.ACCIONES, player.getName(), precio
+                ticker, TipoActivo.ACCIONES, player.getName(), precio, comprarLargoUseCase, jugadoresService
         ));
     }
 
@@ -149,17 +146,13 @@ public final class AccionesMenu extends Menu implements AfterShow {
     }
 
     @Override
-    public void afterShow() {
-        if(this.hasLoaddedPrices) return;
-
+    public void afterShow(Player player) {
         List<ItemStack> itemsToEdit = getItemsAccionesToEdit();
         Map<String, ActivoInfo> allActivosInfo = this.activosInfoService.findAllToMap();
 
         this.executor.execute(() -> {
             itemsToEdit.forEach(itemToEdit -> addPriceToAccionItem(allActivosInfo, itemToEdit));
         });
-
-        this.hasLoaddedPrices = true;
     }
 
     private void addPriceToAccionItem(Map<String, ActivoInfo> allActivosInfo, ItemStack itemToEdit) {
@@ -176,7 +169,9 @@ public final class AccionesMenu extends Menu implements AfterShow {
     }
 
     private List<ItemStack> getItemsAccionesToEdit() {
-        return allPages().stream()
+        List<Page> allPages = allPages();
+
+        return allPages.stream()
                 .map(Page::getInventory)
                 .map(Inventory::getContents)
                 .flatMap(Arrays::stream)

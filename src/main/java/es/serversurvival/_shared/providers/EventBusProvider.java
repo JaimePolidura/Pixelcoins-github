@@ -1,7 +1,7 @@
 package es.serversurvival._shared.providers;
 
-import es.dependencyinjector.annotations.Configuration;
-import es.dependencyinjector.annotations.Provider;
+import es.dependencyinjector.dependencies.annotations.Configuration;
+import es.dependencyinjector.providers.Provider;
 import es.jaime.EventBus;
 import es.jaime.impl.EventBusSynch;
 

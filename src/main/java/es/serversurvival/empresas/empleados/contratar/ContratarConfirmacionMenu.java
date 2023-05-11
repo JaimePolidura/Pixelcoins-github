@@ -16,25 +16,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-public final class ContratarConfirmacionMenu extends ConfirmacionMenu {
-    private final String enviadorJugadorNombre;
-    private final String destinatarioJugadorNombre;
-    private final String empresa;
-    private final String cargo;
-    private final double sueldo;
-    private final TipoSueldo tipoSueldo;
+public final class ContratarConfirmacionMenu extends ConfirmacionMenu<ContratarConfirmacionMenuState> {
+    private final ContratarUseCase contratarUseCase;
 
     @Override
-    public void onAceptar(Player player, InventoryClickEvent event) {
-        Player enviadorPlayer = Bukkit.getPlayer(enviadorJugadorNombre);
-        Player destinatarioPlayer = Bukkit.getPlayer(destinatarioJugadorNombre);
+    public void onAceptar(Player player, InventoryClickEvent event, ContratarConfirmacionMenuState contratacionInfo) {
+        Player enviadorPlayer = Bukkit.getPlayer(contratacionInfo.enviadorJugadorNombre());
+        Player destinatarioPlayer = Bukkit.getPlayer(contratacionInfo.destinatarioJugadorNombre());
 
-        ContratarUseCase.INSTANCE.contratar(enviadorPlayer.getName(), destinatarioJugadorNombre, empresa, sueldo, tipoSueldo, cargo);
+        this.contratarUseCase.contratar(enviadorPlayer.getName(), contratacionInfo.destinatarioJugadorNombre(), contratacionInfo.empresa(),
+                contratacionInfo.sueldo(), contratacionInfo.tipoSueldo(), contratacionInfo.cargo());
 
-        destinatarioPlayer.sendMessage(ChatColor.GOLD + "Ahora trabajas para " + enviadorJugadorNombre + ChatColor.AQUA + " /empleos irse /empleos misempleos");
-        if (enviadorPlayer != null)
-            enviadorPlayer.sendMessage(ChatColor.GOLD + "Has contratado a " + destinatarioJugadorNombre + ChatColor.AQUA + " /empresas despedir /empresas editarempleado");
-
+        destinatarioPlayer.sendMessage(ChatColor.GOLD + "Ahora trabajas para " + contratacionInfo.enviadorJugadorNombre() + ChatColor.AQUA + " /empleos irse /empleos misempleos");
+        enviadorPlayer.sendMessage(ChatColor.GOLD + "Has contratado a " + contratacionInfo.destinatarioJugadorNombre() + ChatColor.AQUA + " /empresas despedir /empresas editarempleado");
     }
 
     @Override
@@ -44,8 +38,8 @@ public final class ContratarConfirmacionMenu extends ConfirmacionMenu {
 
     @Override
     public ItemStack aceptarItem() {
-        String descStrinAceptar = ChatColor.GOLD + "Solicitud de contrato de la empresa " + this.empresa + " para trabajar como " +
-                this.cargo + " , con un sueldo de " + ChatColor.GREEN + this.sueldo + " PC" + ChatColor.GOLD + "/" + tipoSueldo.nombre;
+        String descStrinAceptar = ChatColor.GOLD + "Solicitud de contrato de la empresa " + getState().empresa() + " para trabajar como " +
+                getState().cargo() + " , con un sueldo de " + ChatColor.GREEN + getState().sueldo() + " PC" + ChatColor.GOLD + "/" + getState().tipoSueldo();
         List<String> lore = Funciones.dividirDesc(descStrinAceptar, 40);
         lore = lore.stream().map(line -> ChatColor.GOLD + line).collect(Collectors.toList());
 

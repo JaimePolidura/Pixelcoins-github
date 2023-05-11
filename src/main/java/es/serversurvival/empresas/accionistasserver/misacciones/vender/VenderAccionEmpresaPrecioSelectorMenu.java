@@ -1,44 +1,32 @@
 package es.serversurvival.empresas.accionistasserver.misacciones.vender;
 
-import es.bukkitclassmapper.menus.MenuService;
-import es.bukkitclassmapper.menus.modules.sync.SyncMenuService;
-import es.serversurvival._shared.DependecyContainer;
+import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.modules.sync.SyncMenuService;
 import es.serversurvival._shared.menus.NumberSelectorMenu;
-import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
-import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
 import es.serversurvival.empresas.ofertasaccionesserver.venderofertaaccionaserver.VenderOfertaAccionServerUseCase;
 import es.serversurvival.empresas.ofertasaccionesserver.verofertasaccioneserver.VerOfertasAccionesServerMenu;
+import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.List;
-import java.util.UUID;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 import static org.bukkit.ChatColor.*;
 
-public final class VenderAccionEmpresaPrecioSelectorMenu extends NumberSelectorMenu {
-    private final int cantidadAVender;
-    private final AccionistaServer accionAVender;
+@AllArgsConstructor
+public final class VenderAccionEmpresaPrecioSelectorMenu extends NumberSelectorMenu<VenderAccionEmpresaPrecioSelectorMenuState> {
     private final VenderOfertaAccionServerUseCase venderOfertaUseCase;
-    private final MenuService menuService;
     private final SyncMenuService syncMenuService;
-
-    public VenderAccionEmpresaPrecioSelectorMenu(int cantidadAVender, UUID accionAVenderId) {
-        this.cantidadAVender = cantidadAVender;
-        this.accionAVender = DependecyContainer.get(AccionistasServerService.class).getById(accionAVenderId);
-        this.venderOfertaUseCase = new VenderOfertaAccionServerUseCase();
-        this.menuService = DependecyContainer.get(MenuService.class);
-        this.syncMenuService = DependecyContainer.get(SyncMenuService.class);
-    }
+    private final MenuService menuService;
 
     @Override
     public void onAccept(Player player, InventoryClickEvent event) {
         double precioVenta = super.getPropertyDouble("cantidad");
-        venderOfertaUseCase.vender(player.getName(), this.accionAVender.getAccionistaServerId(),
-                precioVenta, this.cantidadAVender);
+        venderOfertaUseCase.vender(player.getName(), this.getState().accionAVender().getAccionistaServerId(),
+                precioVenta, this.getState().cantidadAVender());
 
         var newPages = this.menuService.buildPages(new VerOfertasAccionesServerMenu(player));
         this.syncMenuService.sync(VerOfertasAccionesServerMenu.class, newPages);
@@ -48,7 +36,7 @@ public final class VenderAccionEmpresaPrecioSelectorMenu extends NumberSelectorM
                 Sound.ENTITY_PLAYER_LEVELUP);
 
         Bukkit.broadcastMessage(GOLD + player.getName() + " ha subido cantidad de la empresa del servidor: " +
-                accionAVender.getEmpresa() + AQUA + " /empresas mercado");
+                this.getState().accionAVender().getEmpresa() + AQUA + " /empresas mercado");
     }
 
     @Override
@@ -58,7 +46,7 @@ public final class VenderAccionEmpresaPrecioSelectorMenu extends NumberSelectorM
 
     @Override
     public double initialValue() {
-        return this.accionAVender.getPrecioApertura();
+        return this.getState().accionAVender().getPrecioApertura();
     }
 
     @Override
@@ -69,8 +57,8 @@ public final class VenderAccionEmpresaPrecioSelectorMenu extends NumberSelectorM
     @Override
     public List<String> loreItemAceptar(double precio) {
         return List.of(
-                GOLD + "Vender " + this.cantidadAVender + " cantidad de " + this.accionAVender.getEmpresa() + " a " + GREEN + FORMATEA.format(precio) + " PC",
-                GOLD + "Compraste estas cantidad a " + GREEN + FORMATEA.format(this.accionAVender.getPrecioApertura()) + " PC"
+                GOLD + "Vender " + this.getState().cantidadAVender() + " cantidad de " + this.getState().accionAVender().getEmpresa() + " a " + GREEN + FORMATEA.format(precio) + " PC",
+                GOLD + "Compraste estas cantidad a " + GREEN + FORMATEA.format(this.getState().accionAVender().getPrecioApertura()) + " PC"
         );
     }
 }

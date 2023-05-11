@@ -1,6 +1,6 @@
 package es.serversurvival.transacciones._shared.application;
 
-import es.dependencyinjector.annotations.Service;
+import es.dependencyinjector.dependencies.annotations.Service;
 import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.transacciones._shared.domain.Transaccion;
 import es.serversurvival.transacciones._shared.domain.TransaccionesRepository;

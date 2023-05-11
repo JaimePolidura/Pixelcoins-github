@@ -1,10 +1,8 @@
 package es.serversurvival.bolsa.activosinfo.actualizar;
 
-import es.dependencyinjector.annotations.UseCase;
-import es.serversurvival._shared.DependecyContainer;
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
