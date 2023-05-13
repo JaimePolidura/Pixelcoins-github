@@ -18,11 +18,10 @@ public final class VenderAccionEmpresaCantidadSelectorMenu extends NumberSelecto
     private final MenuService menuService;
 
     @Override
-    public void onAccept(Player player, InventoryClickEvent event) {
+    public void onAccept(Player player, double cantidadAccionesAVender, InventoryClickEvent event) {
         AccionistaServer accionAVender = accionistasServerService.getById(getState().accionistaId());
-        int cantidadAccionesAVender = (int) super.getPropertyDouble("cantidad");
 
-        this.menuService.open(player, VenderAccionEmpresaPrecioSelectorMenu.class, VenderAccionEmpresaPrecioSelectorMenuState.from(cantidadAccionesAVender, accionAVender));
+        this.menuService.open(player, VenderAccionEmpresaPrecioSelectorMenu.class, VenderAccionEmpresaPrecioSelectorMenuState.from((int) cantidadAccionesAVender, accionAVender));
     }
 
     //By this we can open another menu when item aceptar is clicked

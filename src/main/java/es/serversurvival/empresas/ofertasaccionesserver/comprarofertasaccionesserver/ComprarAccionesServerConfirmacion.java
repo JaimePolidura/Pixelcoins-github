@@ -31,21 +31,19 @@ public final class ComprarAccionesServerConfirmacion extends NumberSelectorMenu<
     private Jugador jugador;
 
     @Override
-    public void onAccept(Player player, InventoryClickEvent event) {
-        int cantidadToComprar = (int) super.getPropertyDouble("cantidad");
-
+    public void onAccept(Player player, double cantidad, InventoryClickEvent event) {
         comprarOfertaMercadoUseCase.comprarOfertaMercadoAccionServer(player.getName(),
-                getState().getOfertaAccionServerId(), cantidadToComprar);
+                getState().getOfertaAccionServerId(), (int) cantidad);
 
         var newPages = this.menuService.buildPages(player, VerOfertasAccionesServerMenu.class);
         syncMenuService.sync(VerOfertasAccionesServerMenu.class, newPages, this.getConfiguration().getSyncMenuConfiguration());
 
-        enviadorMensajes.enviarMensajeYSonido(player, GOLD + "Has comprado " + FORMATEA.format(cantidadToComprar) + " cantidad a " + GREEN +
+        enviadorMensajes.enviarMensajeYSonido(player, GOLD + "Has comprado " + FORMATEA.format(cantidad) + " cantidad a " + GREEN +
                 FORMATEA.format(getState().getPrecio()) + " PC" + GOLD + " que es un total de " + GREEN + FORMATEA.format(
-                cantidadToComprar * getState().getPrecio()) + " PC " + GOLD + " comandos: " + AQUA +
+                cantidad * getState().getPrecio()) + " PC " + GOLD + " comandos: " + AQUA +
                 "/bolsa vender /bolsa cartera", Sound.ENTITY_PLAYER_LEVELUP);
 
-        Bukkit.broadcastMessage(GOLD + player.getName() + " ha comprado " + cantidadToComprar + " cantidad de la empresa del server: "
+        Bukkit.broadcastMessage(GOLD + player.getName() + " ha comprado " + cantidad + " cantidad de la empresa del server: "
                 + getState().getEmpresa() + " a " + GREEN + FORMATEA.format(getState().getPrecio()) + "PC");
     }
 

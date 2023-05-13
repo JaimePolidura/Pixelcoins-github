@@ -15,10 +15,6 @@ import java.util.UUID;
 public class OrdenesPremarketService {
     private final OrderesPremarketRepository repositoryDb;
 
-    public OrdenesPremarketService() {
-        this.repositoryDb = DependecyContainer.get(OrderesPremarketRepository.class);
-    }
-
     public void save(String jugador, String nombreActivo, int cantidad, TipoAccion tipoAccion, UUID posicionAbiertaId){
         this.repositoryDb.save(new OrdenPremarket(UUID.randomUUID(), jugador, nombreActivo, cantidad,
                 tipoAccion, posicionAbiertaId));

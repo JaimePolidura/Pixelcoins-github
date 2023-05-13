@@ -3,6 +3,7 @@ package es.serversurvival.empresas.empresas.pagardividendos;
 import es.serversurvival._shared.menus.NumberSelectorMenu;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
+import es.serversurvival.mensajes._shared.application.EnviadorMensajes;
 import lombok.AllArgsConstructor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -16,12 +17,12 @@ import static org.bukkit.ChatColor.BOLD;
 @AllArgsConstructor
 public final class PagarDividendosConfirmacionMenu extends NumberSelectorMenu<Empresa> {
     private final PagarDividendosEmpresaServerUseCase pagarDividendosEmpresaServerUseCase;
+    private final EnviadorMensajes enviadorMensajes;
 
     @Override
-    public void onAccept(Player player, InventoryClickEvent event) {
-        double dividendoPorAccion = super.getPropertyDouble("cantidad");
+    public void onAccept(Player player, double dividendoPorAccion, InventoryClickEvent event) {
         this.pagarDividendosEmpresaServerUseCase.pagar(player.getName(), this.getState().getNombre(), dividendoPorAccion);
-        Funciones.enviarMensajeYSonido(player, GOLD + "Se han pagado todos los dividendos", Sound.ENTITY_PLAYER_LEVELUP);
+        enviadorMensajes.enviarMensajeYSonido(player, GOLD + "Se han pagado todos los dividendos", Sound.ENTITY_PLAYER_LEVELUP);
     }
 
     @Override

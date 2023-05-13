@@ -1,21 +1,26 @@
 package es.serversurvival.bolsa.ordenespremarket.onordernoejecutada;
 
-import es.dependencyinjector.dependencies.annotations.Component;
+import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventListener;
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.OrdenNoAbiertaEvento;
 import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.mensajes._shared.application.EnviadorMensajes;
+import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.Sound.*;
 
-@Component
+@EventHandler
+@AllArgsConstructor
 public final class OnOrdenNoAbierta {
+    private final EnviadorMensajes enviadorMensajes;
+
     @EventListener
     public void on(OrdenNoAbiertaEvento evento) {
         Player player = Bukkit.getPlayer(evento.getPlayerName());
 
-        Funciones.enviarMensajeYSonido(player, DARK_RED + "No puedes abrir dos ordenes de la misma posicionabierta", ENTITY_VILLAGER_NO);
+        enviadorMensajes.enviarMensajeYSonido(player, DARK_RED + "No puedes abrir dos ordenes de la misma posicionabierta", ENTITY_VILLAGER_NO);
     }
 }

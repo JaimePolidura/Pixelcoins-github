@@ -21,8 +21,6 @@ import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
 public final class BolsaVerOrdernesMenu extends Menu {
-    private static final String TITLE = DARK_RED + "" + BOLD + "         TUS ORDENES";
-
     private final OrdenesPremarketService ordenesPremarketService;
     private final CancelarOrdenUseCase cancelarOrdenUseCase;
 
@@ -41,7 +39,7 @@ public final class BolsaVerOrdernesMenu extends Menu {
     @Override
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
-                .title(TITLE)
+                .title(DARK_RED + "" + BOLD + "         TUS ORDENES")
                 .fixedItems()
                 .item(1, buildItemInfo())
                 .items(2, this::buildItemsOrders, this::cancelOrder)

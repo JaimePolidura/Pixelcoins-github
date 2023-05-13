@@ -15,6 +15,7 @@ import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.mensajes._shared.application.EnviadorMensajes;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -39,6 +40,7 @@ public class VenderCortoComandoRunner implements CommandRunnerArgs<VenderCortoCo
     private final VenderCortoUseCase venderCortoUseCase;
     private final ActivosInfoService activoInfoService;
     private final JugadoresService jugadoresService;
+    private final EnviadorMensajes enviadorMensajes;
 
     @Override
     public void execute(VenderCortoComando comando, CommandSender player){
@@ -71,7 +73,7 @@ public class VenderCortoComandoRunner implements CommandRunnerArgs<VenderCortoCo
         });
 
         if(executedInMarket){
-            Funciones.enviarMensajeYSonido((Player) player, GOLD + "Te has puesto corto en " +nombreActivoLargo  + " en " +
+            enviadorMensajes.enviarMensajeYSonido((Player) player, GOLD + "Te has puesto corto en " +nombreActivoLargo  + " en " +
                     nombreActivoLargo + " cada una a " + GREEN + FORMATEA.format(precio) + " PC " +
                     GOLD + "Para recomprar las cantidad: /bolsa comprarcorto <id>. /bolsa cartera" + GOLD +
                     "Ademas se te ha cobrado un "+PORCENTAJE_CORTO+"% del valor total de la venta (" + GREEN  + FORMATEA.format(valorTotal)
@@ -89,7 +91,7 @@ public class VenderCortoComandoRunner implements CommandRunnerArgs<VenderCortoCo
 
         Player player = Bukkit.getPlayer(evento.getComprador());
 
-        Funciones.enviarMensajeYSonido( player, GOLD + "Te has puesto corto en " + evento.getNombreActivoLargo() + " en " +
+        enviadorMensajes.enviarMensajeYSonido( player, GOLD + "Te has puesto corto en " + evento.getNombreActivoLargo() + " en " +
                 evento.getNombreActivoLargo() + " cada una a " + GREEN + FORMATEA.format(evento.getPrecioUnidad()) + " PC " +
                 GOLD + "Para recomprar las cantidad: /bolsa comprarcorto <id>. /bolsa cartera" + GOLD +
                 "Ademas se te ha cobrado un 5% del valor total de la venta (" + GREEN  + FORMATEA.format(evento.getPrecioTotal())
@@ -102,7 +104,7 @@ public class VenderCortoComandoRunner implements CommandRunnerArgs<VenderCortoCo
     public void on(OrdenAbiertaEvento evento) {
         Player player = Bukkit.getPlayer(evento.getPlayerName());
 
-        Funciones.enviarMensajeYSonido(player, GOLD + "Se ha abierto una orden. Cuando el mercado este abierto se ejecutara. " +
+        enviadorMensajes.enviarMensajeYSonido(player, GOLD + "Se ha abierto una orden. Cuando el mercado este abierto se ejecutara. " +
                 AQUA + "/bolsa ordenes", ENTITY_PLAYER_LEVELUP);
     }
 }

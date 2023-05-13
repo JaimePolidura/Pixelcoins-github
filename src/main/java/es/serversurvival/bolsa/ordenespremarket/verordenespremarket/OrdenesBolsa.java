@@ -17,6 +17,6 @@ public class OrdenesBolsa implements CommandRunnerNonArgs {
 
     @Override
     public void execute(CommandSender sender) {
-        this.menuService.open((Player) sender, new BolsaVerOrdernesMenu(sender.getName()));
+        this.menuService.open((Player) sender, BolsaVerOrdernesMenu.class);
     }
 }

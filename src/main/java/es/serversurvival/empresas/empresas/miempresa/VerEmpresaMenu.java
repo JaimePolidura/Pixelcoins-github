@@ -16,6 +16,7 @@ import es.serversurvival.empresas.empresas.borrar.BorrarEmpresaConfirmacionMenu;
 import es.serversurvival.empresas.empresas.borrar.BorrarEmpresaConfirmacionMenuState;
 import es.serversurvival.empresas.empresas.pagardividendos.PagarDividendosConfirmacionMenu;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
+import es.serversurvival.mensajes._shared.application.EnviadorMensajes;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -41,6 +42,7 @@ import static org.bukkit.ChatColor.DARK_RED;
 public final class VerEmpresaMenu extends Menu<Empresa> implements AfterShow {
     private final AccionistasServerService accionistasServerService;
     private final DespedirEmpleadoUseCase despedirEmpleadoUseCase;
+    private final EnviadorMensajes enviadorMensajes;
     private final EmpleadosService empleadosService;
     private final MenuService menuService;
 
@@ -89,7 +91,7 @@ public final class VerEmpresaMenu extends Menu<Empresa> implements AfterShow {
         this.despedirEmpleadoUseCase.despedir(player.getName(), empleadoNombre, getState().getNombre(), "Despedido");
         player.sendMessage(ChatColor.GOLD + "Has despedido a: " + empleadoNombre);
         String mensajeOnline = ChatColor.RED + "Has sido despedido de " + getState().getNombre() + " razon: " + "Despedido";
-        enviarMensaje(empleadoNombre, mensajeOnline, mensajeOnline, Sound.BLOCK_ANVIL_LAND, 10, 1);
+        enviadorMensajes.enviarMensaje(empleadoNombre, mensajeOnline, mensajeOnline, Sound.BLOCK_ANVIL_LAND, 10, 1);
 
         super.deleteItem(event.getSlot(), super.getActualPageNumber());
     }

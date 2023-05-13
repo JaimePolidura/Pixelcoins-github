@@ -38,7 +38,7 @@ public abstract class NumberSelectorMenu<T> extends Menu<T> {
                 .fixedItems()
                 .confirmation(ConfirmationConfiguration.builder()
                         .cancel(4, buildItemCancel(), this::onCancel)
-                        .accept(5, buildItemAccept(), this::onAccept)
+                        .accept(5, buildItemAccept(), (p, e) -> this.onAccept(p, getPropertyDouble("cantidad"), e))
                         .closeOnAction(closeOnAction())
                         .build())
                 .numberSelector(NumberSelectorMenuConfiguration.builder()
@@ -60,7 +60,7 @@ public abstract class NumberSelectorMenu<T> extends Menu<T> {
     public abstract double maxValue();
     public abstract double initialValue();
     public abstract List<String> loreItemAceptar(double cantidad);
-    public abstract void onAccept(Player player, InventoryClickEvent event);
+    public abstract void onAccept(Player player, double cantidad, InventoryClickEvent event);
 
     public boolean closeOnAction(){
         return true;

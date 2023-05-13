@@ -11,20 +11,12 @@ import lombok.AllArgsConstructor;
 
 import static es.serversurvival.empresas.empleados._shared.application.EmpleadosService.*;
 
-@AllArgsConstructor
 @UseCase
+@AllArgsConstructor
 public final class ContratarUseCase {
-    public static final ContratarUseCase INSTANCE = new ContratarUseCase();
-
     private final EmpleadosService empleadosService;
     private final EmpresasService empresasService;
     private final EventBus eventBus;
-
-    public ContratarUseCase() {
-        this.empleadosService = DependecyContainer.get(EmpleadosService.class);
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-    }
 
     public void contratar (String ownerEmpresa, String jugadorAContratar, String empresaNombre, double salario, TipoSueldo tipoSueldo, String cargo) {
         this.ensureNotHisSelf(ownerEmpresa, jugadorAContratar);

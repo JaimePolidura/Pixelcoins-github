@@ -9,7 +9,6 @@ import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionesAbiertasRepository;
-import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,15 +16,14 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 @Service
-@AllArgsConstructor
 public class PosicionesAbiertasSerivce {
     public static final double PORCENTAJE_CORTO = 5;
 
-    private final PosicionesAbiertasRepository repositoryDb;
+    private final PosicionesAbiertasRepository posicionesAbiertasRepository;
     private final Cache<UUID, PosicionAbierta> cache;
 
-    public PosicionesAbiertasSerivce(){
-        this.repositoryDb = DependecyContainer.get(PosicionesAbiertasRepository.class);
+    public PosicionesAbiertasSerivce(PosicionesAbiertasRepository posicionesAbiertasRepository){
+        this.posicionesAbiertasRepository = posicionesAbiertasRepository;
         this.cache = new LRUCache<>(150);
     }
 
@@ -41,41 +39,41 @@ public class PosicionesAbiertasSerivce {
     }
 
     public void save(PosicionAbierta posicionAbierta) {
-        this.repositoryDb.save(posicionAbierta);
+        this.posicionesAbiertasRepository.save(posicionAbierta);
         this.cache.put(posicionAbierta.getPosicionAbiertaId(), posicionAbierta);
     }
 
     public PosicionAbierta getById(UUID posicionAbiertaId) {
         return this.cache.find(posicionAbiertaId)
-                .orElseGet(() -> this.repositoryDb.findById(posicionAbiertaId)
+                .orElseGet(() -> this.posicionesAbiertasRepository.findById(posicionAbiertaId)
                 .map(saveToCache())
                 .orElseThrow(() -> new ResourceNotFound("Posicion abierta no encontrada")));
     }
 
     public List<PosicionAbierta> findByJugador(String jugador) {
-        return this.repositoryDb.findByJugador(jugador).stream()
+        return this.posicionesAbiertasRepository.findByJugador(jugador).stream()
                 .map(saveToCache())
                 .toList();
     }
 
     public List<PosicionAbierta> findByJugador(String jugador, Predicate<PosicionAbierta> condition){
-        return this.repositoryDb.findByJugador(jugador).stream()
+        return this.posicionesAbiertasRepository.findByJugador(jugador).stream()
                 .filter(condition)
                 .toList();
     }
 
     public List<PosicionAbierta> findAll() {
-        return this.repositoryDb.findAll();
+        return this.posicionesAbiertasRepository.findAll();
     }
 
     public List<PosicionAbierta> findAll(Predicate<PosicionAbierta> condition){
-        return this.repositoryDb.findAll().stream()
+        return this.posicionesAbiertasRepository.findAll().stream()
                 .filter(condition)
                 .toList();
     }
 
     public List<PosicionAbierta> findByNombreActivo(String nombreActivo) {
-        return this.repositoryDb.findByNombreActivo(nombreActivo);
+        return this.posicionesAbiertasRepository.findByNombreActivo(nombreActivo);
     }
 
     public boolean existsByNombreActivo(String nombreActivo){
@@ -83,7 +81,7 @@ public class PosicionesAbiertasSerivce {
     }
 
     public void deleteById(UUID posicionAbiertaId) {
-        this.repositoryDb.deleteById(posicionAbiertaId);
+        this.posicionesAbiertasRepository.deleteById(posicionAbiertaId);
         this.cache.remove(posicionAbiertaId);
     }
 

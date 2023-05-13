@@ -5,14 +5,12 @@ import es.jaime.EventListener;
 import es.jaime.Priority;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.empresas.borrar.EmpresaBorrada;
+import lombok.AllArgsConstructor;
 
 @EventHandler
+@AllArgsConstructor
 public final class OnEmpresaBorrada {
     private final AccionistasServerService accionistasServerService;
-
-    public OnEmpresaBorrada() {
-        this.accionistasServerService = DependecyContainer.get(AccionistasServerService.class);
-    }
 
     @EventListener(pritority = Priority.LOWEST)
     public void on(EmpresaBorrada empresaBorradaEvento){

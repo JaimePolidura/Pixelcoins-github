@@ -4,6 +4,7 @@ import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.mensajes._shared.application.EnviadorMensajes;
 import lombok.AllArgsConstructor;
 import org.bukkit.command.CommandSender;
 
@@ -18,6 +19,7 @@ import static org.bukkit.ChatColor.GOLD;
 )
 @AllArgsConstructor
 public class ComprarServicionComandoRunner implements CommandRunnerArgs<ComprarServicionComando> {
+    private final EnviadorMensajes enviadorMensajes;
     private final ComprarServicioUseCase useCase;
 
     @Override
@@ -32,6 +34,6 @@ public class ComprarServicionComandoRunner implements CommandRunnerArgs<ComprarS
         String mensajeOnline = GOLD + player.getName() + " ha comprado vuestro servicio de la empresa: " + empresaNombre +
                 " por " + GREEN + FORMATEA.format(precio) + " PC";
 
-        Funciones.enviarMensaje(empresa.getOwner(), mensajeOnline, mensajeOnline);
+        enviadorMensajes.enviarMensaje(empresa.getOwner(), mensajeOnline, mensajeOnline);
     }
 }

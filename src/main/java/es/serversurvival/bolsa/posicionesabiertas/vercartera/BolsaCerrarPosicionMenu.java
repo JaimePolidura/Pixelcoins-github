@@ -30,19 +30,17 @@ public final class BolsaCerrarPosicionMenu extends NumberSelectorMenu<BolsaCerra
     private final MenuService menuService;
 
     @Override
-    public void onAccept(Player player, InventoryClickEvent event) {
-        int cantidad = (int) super.getPropertyDouble("cantidad");
-
+    public void onAccept(Player player, double cantidad, InventoryClickEvent event) {
         var executedInMarket = this.orderExecutorProxy.execute(of(
                 player.getName(),
                 getState().posicion().getNombreActivo(),
-                cantidad,
+                (int) cantidad,
                 getState().posicion().esLargo() ? TipoAccion.LARGO_VENTA : TipoAccion.CORTO_COMPRA,
                 getState().posicion().getPosicionAbiertaId()), () -> {
                     if(getState().posicion().esLargo())
-                        venderLargoUseCase.venderPosicion(getState().posicion().getPosicionAbiertaId(), cantidad, player.getName());
+                        venderLargoUseCase.venderPosicion(getState().posicion().getPosicionAbiertaId(), (int) cantidad, player.getName());
                     else
-                        comprarCortoUseCase.comprarPosicionCorto(getState().posicion().getPosicionAbiertaId(), cantidad, getState().posicion().getJugador());
+                        comprarCortoUseCase.comprarPosicionCorto(getState().posicion().getPosicionAbiertaId(), (int) cantidad, getState().posicion().getJugador());
                 }
         );
 

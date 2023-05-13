@@ -6,6 +6,7 @@ import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
 import es.serversurvival.empresas.empresas.sacar.PixelcoinsSacadasEvento;
+import es.serversurvival.mensajes._shared.application.EnviadorMensajes;
 import lombok.AllArgsConstructor;
 
 import java.util.HashSet;
@@ -18,6 +19,7 @@ import static org.bukkit.ChatColor.*;
 @AllArgsConstructor
 public final class OnPixelcoinsSacadasEvento {
     private final AccionistasServerService accionistasServerService;
+    private final EnviadorMensajes enviadorMensajes;
 
     @EventListener
     public void on(PixelcoinsSacadasEvento evento){
@@ -30,7 +32,7 @@ public final class OnPixelcoinsSacadasEvento {
             String accionistaNombre = accionista.getNombreAccionista();
 
             if(!jugadoresMensajesYaEnviados.contains(accionistaNombre)){
-                Funciones.enviarMensaje(accionistaNombre, mensajeOnline, mensajeOffline);
+                enviadorMensajes.enviarMensaje(accionistaNombre, mensajeOnline, mensajeOffline);
 
                 jugadoresMensajesYaEnviados.add(accionistaNombre);
             }

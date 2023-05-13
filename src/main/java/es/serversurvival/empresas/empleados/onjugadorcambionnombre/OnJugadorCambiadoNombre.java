@@ -1,17 +1,15 @@
 package es.serversurvival.empresas.empleados.onjugadorcambionnombre;
 
-import es.dependencyinjector.dependencies.annotations.Component;
+import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventListener;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.jugadores.setupjugadorunido.JugadorCambiadoDeNombreEvento;
+import lombok.AllArgsConstructor;
 
-@Component
+@EventHandler
+@AllArgsConstructor
 public final class OnJugadorCambiadoNombre {
     private final EmpleadosService empleadosService;
-
-    public OnJugadorCambiadoNombre() {
-        this.empleadosService = DependecyContainer.get(EmpleadosService.class);
-    }
 
     @EventListener
     public void on (JugadorCambiadoDeNombreEvento evento) {

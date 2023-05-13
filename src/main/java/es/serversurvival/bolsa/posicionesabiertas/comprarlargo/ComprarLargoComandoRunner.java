@@ -9,6 +9,7 @@ import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo
 import es.serversurvival.bolsa.ordenespremarket._shared.domain.TipoAccion;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.mensajes._shared.application.EnviadorMensajes;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -29,6 +30,7 @@ public class ComprarLargoComandoRunner implements CommandRunnerArgs<ComprarLargo
     private final OrderExecutorProxy orderExecutorProxy;
     private final ActivosInfoService activoInfoService;
     private final JugadoresService jugadoresService;
+    private final EnviadorMensajes enviadorMensajes;
 
     @Override
     public void execute(ComprarLargoComando comando, CommandSender sender) {
@@ -64,7 +66,7 @@ public class ComprarLargoComandoRunner implements CommandRunnerArgs<ComprarLargo
             Bukkit.broadcastMessage(GOLD + sender.getName() + " ha comprado " + cantidad + " cantidad de "
                     + nombreValor + " a " + GREEN + FORMATEA.format(precio) + "PC");
 
-            Funciones.enviarMensajeYSonido(Bukkit.getPlayer(sender.getName()), GOLD + "Has comprado " + FORMATEA.format(cantidad)
+            enviadorMensajes.enviarMensajeYSonido(Bukkit.getPlayer(sender.getName()), GOLD + "Has comprado " + FORMATEA.format(cantidad)
                     + " cantidad a " + GREEN + FORMATEA.format(precio) + " PC" + GOLD + " que es un total de " + GREEN +
                     FORMATEA.format(precio * cantidad) + " PC " + GOLD + " comandos: " + AQUA + "/bolsa cartera", ENTITY_PLAYER_LEVELUP);
         }else{

@@ -6,6 +6,7 @@ import es.serversurvival.bolsa.ordenespremarket._shared.application.OrderExecuto
 import es.serversurvival.bolsa.ordenespremarket.abrirorden.AbrirOrdenPremarketCommand;
 import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.ComprarLargoUseCase;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.mensajes._shared.application.EnviadorMensajes;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,12 +26,13 @@ import static org.bukkit.Sound.ENTITY_PLAYER_LEVELUP;
 public final class ComprarBolsaConfirmacionMenu extends NumberSelectorMenu<ComprarBolsaConfirmacionMenuState> {
     private final ComprarLargoUseCase comprarLargoUseCase;
     private final OrderExecutorProxy orderExecutorProxy;
+    private final EnviadorMensajes enviadorMensajes;
     private final JugadoresService jugadoresService;
 
     @Override
-    public void onAccept(Player player, InventoryClickEvent event) {
+    public void onAccept(Player player, double cantidadAComprarDouble, InventoryClickEvent event) {
         POOL.submit(() -> {
-            int cantidadAComprar = (int) super.getPropertyDouble("cantidad");
+            int cantidadAComprar = (int) cantidadAComprarDouble;
             double pixelcoinsJugador = this.jugadoresService.getByNombre(player.getName()).getPixelcoins();
 
             if (pixelcoinsJugador < (cantidadAComprar * getState().precioUnidad())) {
@@ -53,7 +55,7 @@ public final class ComprarBolsaConfirmacionMenu extends NumberSelectorMenu<Compr
             Bukkit.broadcastMessage(GOLD + player.getName() + " ha comprado " + cantidadAComprar + " " + getState().tipoActivo().getAlias() + " de "
                     + getState().nombreActivo() + " a " + GREEN + FORMATEA.format(getState().precioUnidad()) + "PC");
 
-            Funciones.enviarMensajeYSonido(player, GOLD + "Has comprado " + FORMATEA.format(cantidadAComprar)
+            enviadorMensajes.enviarMensajeYSonido(player, GOLD + "Has comprado " + FORMATEA.format(cantidadAComprar)
                     + " cantidad a " + GREEN + FORMATEA.format(getState().precioUnidad()) + " PC" + GOLD + " que es un total de " + GREEN +
                     FORMATEA.format(getState().precioUnidad() * cantidadAComprar) + " PC " + GOLD + " comandos: " + AQUA + "/bolsa cartera", ENTITY_PLAYER_LEVELUP);
         }else{

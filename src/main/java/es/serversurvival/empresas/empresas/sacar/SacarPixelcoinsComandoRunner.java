@@ -3,6 +3,7 @@ package es.serversurvival.empresas.empresas.sacar;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.mensajes._shared.application.EnviadorMensajes;
 import lombok.AllArgsConstructor;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -18,6 +19,7 @@ import static org.bukkit.ChatColor.*;
 )
 @AllArgsConstructor
 public class SacarPixelcoinsComandoRunner implements CommandRunnerArgs<SacarPixelcoinsComando> {
+    private final EnviadorMensajes enviadorMensajes;
     private final SacarPixelcoinsUseCase useCase;
 
     @Override
@@ -27,7 +29,7 @@ public class SacarPixelcoinsComandoRunner implements CommandRunnerArgs<SacarPixe
 
         useCase.sacar(player.getName(), empresaNombre, pixelcoinsASacar);
 
-        Funciones.enviarMensajeYSonido((Player) player, GOLD + "Has sacado " + GREEN + FORMATEA.format(pixelcoinsASacar)
+        enviadorMensajes.enviarMensajeYSonido((Player) player, GOLD + "Has sacado " + GREEN + FORMATEA.format(pixelcoinsASacar)
                 + " PC" + GOLD + " de tu empresa: " + DARK_AQUA + empresaNombre, Sound.ENTITY_PLAYER_LEVELUP);
 
     }

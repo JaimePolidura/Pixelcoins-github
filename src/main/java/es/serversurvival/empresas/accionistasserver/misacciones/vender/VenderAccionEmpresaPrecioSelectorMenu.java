@@ -1,10 +1,12 @@
 package es.serversurvival.empresas.accionistasserver.misacciones.vender;
 
+import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.modules.sync.SyncMenuService;
 import es.serversurvival._shared.menus.NumberSelectorMenu;
 import es.serversurvival.empresas.ofertasaccionesserver.venderofertaaccionaserver.VenderOfertaAccionServerUseCase;
 import es.serversurvival.empresas.ofertasaccionesserver.verofertasaccioneserver.VerOfertasAccionesServerMenu;
+import es.serversurvival.mensajes._shared.application.EnviadorMensajes;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -19,20 +21,19 @@ import static org.bukkit.ChatColor.*;
 @AllArgsConstructor
 public final class VenderAccionEmpresaPrecioSelectorMenu extends NumberSelectorMenu<VenderAccionEmpresaPrecioSelectorMenuState> {
     private final VenderOfertaAccionServerUseCase venderOfertaUseCase;
+    private final EnviadorMensajes enviadorMensajes;
     private final SyncMenuService syncMenuService;
     private final MenuService menuService;
 
     @Override
-    public void onAccept(Player player, InventoryClickEvent event) {
-        double precioVenta = super.getPropertyDouble("cantidad");
+    public void onAccept(Player player, double precioVenta, InventoryClickEvent event) {
         venderOfertaUseCase.vender(player.getName(), this.getState().accionAVender().getAccionistaServerId(),
                 precioVenta, this.getState().cantidadAVender());
 
-        //TODO Change better menus library
-        var newPages = this.menuService.buildPages(new VerOfertasAccionesServerMenu(player));
-        this.syncMenuService.sync(VerOfertasAccionesServerMenu.class, newPages);
+        var menu = this.menuService.buildMenu(player, (Class<? extends Menu<?>>) VerOfertasAccionesServerMenu.class);
+        this.syncMenuService.sync(menu);
 
-        enviarMensajeYSonido(player, GOLD + "Al ser un accion de una empresa del servidor de minecraft. Se ha puesta " +
+        enviadorMensajes.enviarMensajeYSonido(player, GOLD + "Al ser un accion de una empresa del servidor de minecraft. Se ha puesta " +
                         "la oferta de venta en el mercado de cantidad. Para consultar el mercado: " + AQUA + "/empresas mercado",
                 Sound.ENTITY_PLAYER_LEVELUP);
 

@@ -13,10 +13,6 @@ import java.util.UUID;
 public final class CancelarOrdenUseCase {
     private final OrdenesPremarketService ordenesPremarketService;
 
-    public CancelarOrdenUseCase(){
-        this.ordenesPremarketService = DependecyContainer.get(OrdenesPremarketService .class);
-    }
-
     public void cancelar (String jugador, UUID id) {
         var ordenPremarket = this.ordenesPremarketService.getById(id);
         this.ensureOwnerOfPosicionAbierta(jugador, ordenPremarket);
