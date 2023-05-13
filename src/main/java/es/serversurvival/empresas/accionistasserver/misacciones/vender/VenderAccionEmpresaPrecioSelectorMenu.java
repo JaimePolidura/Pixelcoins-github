@@ -30,7 +30,7 @@ public final class VenderAccionEmpresaPrecioSelectorMenu extends NumberSelectorM
         venderOfertaUseCase.vender(player.getName(), this.getState().accionAVender().getAccionistaServerId(),
                 precioVenta, this.getState().cantidadAVender());
 
-        var menu = this.menuService.buildMenu(player, (Class<? extends Menu<?>>) VerOfertasAccionesServerMenu.class);
+        var menu = this.menuService.buildMenu(player, VerOfertasAccionesServerMenu.class);
         this.syncMenuService.sync(menu);
 
         enviadorMensajes.enviarMensajeYSonido(player, GOLD + "Al ser un accion de una empresa del servidor de minecraft. Se ha puesta " +

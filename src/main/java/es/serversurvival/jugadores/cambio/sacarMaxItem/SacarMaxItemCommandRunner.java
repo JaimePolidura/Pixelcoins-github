@@ -1,6 +1,5 @@
 package es.serversurvival.jugadores.cambio.sacarMaxItem;
 
-import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
@@ -20,6 +19,6 @@ public final class SacarMaxItemCommandRunner implements CommandRunnerNonArgs {
     public void execute(CommandSender commandSender) {
         Player player = (Player) commandSender;
 
-        this.menuService.open(player, (Class<? extends Menu<?>>) SacarMaxItemMenu.class);
+        this.menuService.open(player, SacarMaxItemMenu.class);
     }
 }

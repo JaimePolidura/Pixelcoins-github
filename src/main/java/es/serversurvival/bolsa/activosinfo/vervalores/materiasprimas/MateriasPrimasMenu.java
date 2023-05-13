@@ -7,8 +7,10 @@ import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.menustate.AfterShow;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoDataService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.activosinfo.vervalores.ComprarBolsaConfirmacionMenu;
+import es.serversurvival.bolsa.activosinfo.vervalores.ComprarBolsaConfirmacionMenuState;
 import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.ComprarLargoUseCase;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
@@ -31,7 +33,7 @@ import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
 public final class MateriasPrimasMenu extends Menu implements AfterShow {
-    private final ComprarLargoUseCase comprarLargoUseCase;
+    private final ActivoInfoDataService activoInfoDataService;
     private final JugadoresService jugadoresService;
     private final ExecutorService executor;
     private final MenuService menuService;
@@ -61,6 +63,7 @@ public final class MateriasPrimasMenu extends Menu implements AfterShow {
 
         double precio = Double.parseDouble(precioString);
         Jugador jugador = this.jugadoresService.getByNombre(player.getName());
+        String nombreActivo = ItemUtils.getLore(itemClicked, 0).split(" ")[1];
 
         if(precio > jugador.getPixelcoins()){
             player.sendMessage(DARK_RED + "No tienes las suficientes pixelcoins");
@@ -68,10 +71,8 @@ public final class MateriasPrimasMenu extends Menu implements AfterShow {
             return;
         }
 
-        String nombreActivo = ItemUtils.getLore(itemClicked, 0).split(" ")[1];
-
-        this.menuService.open(player, new ComprarBolsaConfirmacionMenu(
-                nombreActivo, TipoActivo.MATERIAS_PRIMAS, player.getName(), precio, comprarLargoUseCase, jugadoresService
+        this.menuService.open(player, ComprarBolsaConfirmacionMenu.class, new ComprarBolsaConfirmacionMenuState(
+                jugador, nombreActivo, precio, TipoActivo.MATERIAS_PRIMAS
         ));
     }
 
@@ -124,7 +125,7 @@ public final class MateriasPrimasMenu extends Menu implements AfterShow {
     private void addPriceToItem(ItemStack item) {
         try {
             String nombreActivo = ItemUtils.getLore(item, 0).split(" ")[1];
-            double precio = TipoActivo.MATERIAS_PRIMAS.getTipoActivoService().getPrecio(nombreActivo);
+            double precio = activoInfoDataService.getPrecio(TipoActivo.MATERIAS_PRIMAS, nombreActivo);
 
             ItemUtils.setLore(item, 1, GOLD + "Precio: " + GREEN + FORMATEA.format(precio) + " PC");
         } catch (Exception e) {
@@ -133,7 +134,7 @@ public final class MateriasPrimasMenu extends Menu implements AfterShow {
     }
 
     private List<ItemStack> getItemsAccionesToEdit() {
-        List<Page> pages = allPages();
+        List<Page> pages = getPages();
 
         return pages.stream()
                 .map(Page::getInventory)

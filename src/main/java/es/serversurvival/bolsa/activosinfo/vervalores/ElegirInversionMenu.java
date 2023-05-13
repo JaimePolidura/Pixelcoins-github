@@ -39,9 +39,9 @@ public final class ElegirInversionMenu extends Menu {
                 .title(TITULO)
                 .fixedItems()
                 .staticMenu()
-                .item(1, itemAcciones(), (p, e) -> this.menuService.open(p, new AccionesMenu(comprarLargoUseCase, activosInfoService,  jugadoresService, executor, menuService)))
-                .item(2, itemCriptomonedas(), (p, e) -> this.menuService.open(p, new CriptomonedasMenu(comprarLargoUseCase, jugadoresService, executor, menuService)))
-                .item(3, itemMateriasPrimas(), (p, e) -> this.menuService.open(p, new MateriasPrimasMenu(comprarLargoUseCase, jugadoresService, executor, menuService)))
+                .item(1, itemAcciones(), (p, e) -> this.menuService.open(p, AccionesMenu.class))
+                .item(2, itemCriptomonedas(), (p, e) -> this.menuService.open(p, CriptomonedasMenu.class))
+                .item(3, itemMateriasPrimas(), (p, e) -> this.menuService.open(p, MateriasPrimasMenu.class))
                 .build();
     }
 

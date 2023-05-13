@@ -24,12 +24,10 @@ public final class PosicionesUtils {
         var posLargas = posicionesAbiertasService.findByJugador(jugador, PosicionAbierta::esLargo);
         var posCortas = posicionesAbiertasService.findByJugador(jugador, PosicionAbierta::esCorto);
 
-        Map<String, ActivoInfo> mapActivos = activosInfoService.findAllToMap();
-
         double pixelcoinsEnLargos =
-                getSumaTotalListDouble(posLargas, pos -> mapActivos.get(pos.getNombreActivo()).getPrecio() * pos.getCantidad());
+                getSumaTotalListDouble(posLargas, pos -> activosInfoService.getByNombreActivo(pos.getNombreActivo(), pos.getTipoActivo()).getPrecio() * pos.getCantidad());
         double pixelcoinsEnCortos =
-                getSumaTotalListDouble(posCortas, pos -> (pos.getPrecioApertura() - mapActivos.get(pos.getNombreActivo()).getPrecio()) * pos.getCantidad());
+                getSumaTotalListDouble(posCortas, pos -> (pos.getPrecioApertura() - activosInfoService.getByNombreActivo(pos.getNombreActivo(), pos.getTipoActivo()).getPrecio() * pos.getCantidad()));
 
         return pixelcoinsEnLargos + pixelcoinsEnCortos;
     }

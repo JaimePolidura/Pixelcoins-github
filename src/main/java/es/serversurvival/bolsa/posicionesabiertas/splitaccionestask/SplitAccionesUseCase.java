@@ -2,6 +2,7 @@ package es.serversurvival.bolsa.posicionesabiertas.splitaccionestask;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoDataService;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
@@ -23,6 +24,7 @@ import static es.serversurvival._shared.utils.Funciones.diferenciaDias;
 @AllArgsConstructor
 public final class SplitAccionesUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
+    private final ActivoInfoDataService activoInfoDataService;
     private final ActivosInfoService activoInfoService;
 
     public void actualizarSplits () {
@@ -46,11 +48,10 @@ public final class SplitAccionesUseCase {
                 realizarSplit(posicionAbierta, infoSplit);
             }
         });
-
     }
 
     private JSONObject getSplitData(ActivoInfo activoInfo) throws Exception {
-        return (JSONObject) ((AccionesApiServiceIEXCloud) TipoActivo.ACCIONES.getTipoActivoService())
+        return (JSONObject) ((AccionesApiServiceIEXCloud) activoInfoDataService.getAccionesSplitData(activoInfo.getNombreActivo()))
                 .getSplitData(activoInfo.getNombreActivo());
     }
 

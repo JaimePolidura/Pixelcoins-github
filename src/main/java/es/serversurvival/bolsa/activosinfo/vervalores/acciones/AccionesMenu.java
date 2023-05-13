@@ -8,10 +8,12 @@ import es.bukkitbettermenus.menustate.AfterShow;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoDataService;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.activosinfo.vervalores.ComprarBolsaConfirmacionMenu;
+import es.serversurvival.bolsa.activosinfo.vervalores.ComprarBolsaConfirmacionMenuState;
 import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.ComprarLargoUseCase;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
@@ -32,8 +34,7 @@ import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
 public final class AccionesMenu extends Menu implements AfterShow {
-    private final ComprarLargoUseCase comprarLargoUseCase;
-    private final ActivosInfoService activosInfoService;
+    private final ActivoInfoDataService activoInfoDataService;
     private final JugadoresService jugadoresService;
     private final ExecutorService executor;
     private final MenuService menuService;
@@ -84,8 +85,8 @@ public final class AccionesMenu extends Menu implements AfterShow {
             return;
         }
 
-        this.menuService.open(player, new ComprarBolsaConfirmacionMenu(
-                ticker, TipoActivo.ACCIONES, player.getName(), precio, comprarLargoUseCase, jugadoresService
+        this.menuService.open(player, ComprarBolsaConfirmacionMenu.class, new ComprarBolsaConfirmacionMenuState(
+                jugador, ticker, precio, TipoActivo.ACCIONES
         ));
     }
 
@@ -148,19 +149,15 @@ public final class AccionesMenu extends Menu implements AfterShow {
     @Override
     public void afterShow(Player player) {
         List<ItemStack> itemsToEdit = getItemsAccionesToEdit();
-        Map<String, ActivoInfo> allActivosInfo = this.activosInfoService.findAllToMap();
-
         this.executor.execute(() -> {
-            itemsToEdit.forEach(itemToEdit -> addPriceToAccionItem(allActivosInfo, itemToEdit));
+            itemsToEdit.forEach(this::addPriceToAccionItem);
         });
     }
 
-    private void addPriceToAccionItem(Map<String, ActivoInfo> allActivosInfo, ItemStack itemToEdit) {
+    private void addPriceToAccionItem(ItemStack itemToEdit) {
         try {
             String ticker = ItemUtils.getLore(itemToEdit, 0).split(" ")[1];
-            double precio = allActivosInfo.get(ticker) == null ?
-                    TipoActivo.ACCIONES.getPrecio(ticker) :
-                    allActivosInfo.get(ticker).getPrecio();
+            double precio = activoInfoDataService.getPrecio(TipoActivo.ACCIONES, ticker);
 
             ItemUtils.setLore(itemToEdit, 1, GOLD + "Precio: " + GREEN + FORMATEA.format(precio) + " PC");
         } catch (Exception e) {
@@ -169,7 +166,7 @@ public final class AccionesMenu extends Menu implements AfterShow {
     }
 
     private List<ItemStack> getItemsAccionesToEdit() {
-        List<Page> allPages = allPages();
+        List<Page> allPages = getPages();
 
         return allPages.stream()
                 .map(Page::getInventory)

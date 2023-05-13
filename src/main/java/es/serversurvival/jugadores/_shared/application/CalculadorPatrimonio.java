@@ -28,7 +28,6 @@ public final class CalculadorPatrimonio {
 
     public Map<String, Double> calcularTopJugadores (boolean creciente) {
         List<Jugador> allJugadordes = jugadoresService.findAll();
-        Map<String, ActivoInfo> mapAllLlamadas = activosInfoService.findAllToMap();
         Map<String, List<Deuda>> mapDeudasAcredor = deudasService.getAllDeudasAcredorMap();
         Map<String, List<Deuda>> mapDeudasDeudor = deudasService.getAllDeudasDeudorMap();
         Map<String, List<Empresa>> mapEmpresasJugador = empresasService.getAllEmpresasJugadorMap();
@@ -38,7 +37,7 @@ public final class CalculadorPatrimonio {
         HashMap<String, Double> toReturn = new HashMap<>();
 
         allJugadordes.forEach((jugador) -> {
-            double activosTotales = patrimonioJugador(mapAllLlamadas, mapDeudasAcredor, mapDeudasDeudor, mapEmpresasJugador,
+            double activosTotales = patrimonioJugador(mapDeudasAcredor, mapDeudasDeudor, mapEmpresasJugador,
                     mapPosicionesLargo, mapPosicionesCorto, jugador);
 
             toReturn.put(jugador.getNombre(), activosTotales);
@@ -52,7 +51,6 @@ public final class CalculadorPatrimonio {
 
 
     public double calcular(String jugadorNombre) {
-        Map<String, ActivoInfo> mapAllLlamadas = activosInfoService.findAllToMap();
         Map<String, List<Deuda>> mapDeudasAcredor = deudasService.getAllDeudasAcredorMap();
         Map<String, List<Deuda>> mapDeudasDeudor = deudasService.getAllDeudasDeudorMap();
         Map<String, List<Empresa>> mapEmpresasJugador = empresasService.getAllEmpresasJugadorMap();
@@ -87,23 +85,23 @@ public final class CalculadorPatrimonio {
         ///Posiciones abiertas largas
         if(mapPosicionesLargo.get(jugadorNombre) != null){
             activos += mapPosicionesLargo.get(jugadorNombre).stream()
-                    .mapToDouble(pos -> (mapAllLlamadas.get(pos.getNombreActivo()).getPrecio() * pos.getCantidad()))
+                    .mapToDouble(pos -> (activosInfoService.getByNombreActivo(pos.getNombreActivo(), pos.getTipoActivo()).getPrecio() * pos.getCantidad()))
                     .sum();
         }
 
         //Posicioenes abiertas cortas
         if(mapPosicionesCorto.get(jugadorNombre) != null){
             activos += mapPosicionesCorto.get(jugadorNombre).stream()
-                    .mapToDouble(pos -> (pos.getPrecioApertura() - mapAllLlamadas.get(pos.getNombreActivo()).getPrecio()) * pos.getCantidad())
+                    .mapToDouble(pos -> (pos.getPrecioApertura() - activosInfoService.getByNombreActivo(pos.getNombreActivo(), pos.getTipoActivo()).getPrecio()) * pos.getCantidad())
                     .sum();
         }
 
         return activos;
     }
 
-    private double patrimonioJugador(Map<String, ActivoInfo> mapAllLlamadas, Map<String, List<Deuda>> mapDeudasAcredor,
-                                            Map<String, List<Deuda>> mapDeudasDeudor, Map<String, List<Empresa>> mapEmpresasJugador,
-                                            Map<String, List<PosicionAbierta>> mapPosicionesLargo, Map<String, List<PosicionAbierta>> mapPosicionesCorto, Jugador jugador) {
+    private double patrimonioJugador(Map<String, List<Deuda>> mapDeudasAcredor, Map<String, List<Deuda>> mapDeudasDeudor,
+                                     Map<String, List<Empresa>> mapEmpresasJugador, Map<String, List<PosicionAbierta>> mapPosicionesLargo,
+                                     Map<String, List<PosicionAbierta>> mapPosicionesCorto, Jugador jugador) {
         double activosTotales = 0;
 
         //Liquidez
@@ -133,14 +131,14 @@ public final class CalculadorPatrimonio {
         ///Posiciones abiertas largas
         if(mapPosicionesLargo.get(jugador.getNombre()) != null){
             activosTotales += mapPosicionesLargo.get(jugador.getNombre()).stream()
-                    .mapToDouble(pos -> (mapAllLlamadas.get(pos.getNombreActivo()).getPrecio() * pos.getCantidad()))
+                    .mapToDouble(pos -> (activosInfoService.getByNombreActivo(pos.getNombreActivo(), pos.getTipoActivo()).getPrecio() * pos.getCantidad()))
                     .sum();
         }
 
         //Posicioenes abiertas cortas
         if(mapPosicionesCorto.get(jugador.getNombre()) != null){
             activosTotales += mapPosicionesCorto.get(jugador.getNombre()).stream()
-                    .mapToDouble(pos -> (pos.getPrecioApertura() - mapAllLlamadas.get(pos.getNombreActivo()).getPrecio()) * pos.getCantidad())
+                    .mapToDouble(pos -> (pos.getPrecioApertura() - activosInfoService.getByNombreActivo(pos.getNombreActivo(), pos.getTipoActivo()).getPrecio()) * pos.getCantidad())
                     .sum();
         }
         return activosTotales;

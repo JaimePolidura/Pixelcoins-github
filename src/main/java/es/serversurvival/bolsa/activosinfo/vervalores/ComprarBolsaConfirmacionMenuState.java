@@ -7,6 +7,5 @@ public record ComprarBolsaConfirmacionMenuState(
         Jugador jugador,
         String nombreActivo,
         double precioUnidad,
-        TipoActivo tipoActivo,
-        double dineroJugador) {
+        TipoActivo tipoActivo) {
 }

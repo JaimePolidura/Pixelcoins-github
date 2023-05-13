@@ -91,7 +91,7 @@ public final class MisAccionesMenu extends Menu {
     }
 
     private void goToMercadoAccionesServerMenu(Player player, InventoryClickEvent event) {
-        this.menuService.open(player, (Class<? extends Menu<?>>) VerOfertasAccionesServerMenu.class);
+        this.menuService.open(player, VerOfertasAccionesServerMenu.class);
     }
 
     private ItemStack buildItemInfo() {

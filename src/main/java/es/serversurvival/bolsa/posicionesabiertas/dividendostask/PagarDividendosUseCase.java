@@ -2,6 +2,7 @@ package es.serversurvival.bolsa.posicionesabiertas.dividendostask;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.serversurvival.Pixelcoin;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoDataService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.activosinfo._shared.infrastructure.tipoactivos.AccionesApiServiceIEXCloud;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
@@ -21,6 +22,7 @@ import static es.serversurvival._shared.utils.Funciones.*;
 @AllArgsConstructor
 public final class PagarDividendosUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
+    private final ActivoInfoDataService activoInfoDataService;
     private final JugadoresService jugadoresService;
 
     public void pagarDividendos() {
@@ -69,7 +71,7 @@ public final class PagarDividendosUseCase {
     }
 
     private JSONObject getJSONDividendos (String ticker) throws Exception {
-        JSONArray jsonArray = (JSONArray) ((AccionesApiServiceIEXCloud) TipoActivo.ACCIONES.getTipoActivoService())
+        JSONArray jsonArray = (JSONArray) ((AccionesApiServiceIEXCloud) activoInfoDataService.getAccionesDividendosData(ticker))
                 .getDividendosData(ticker);
 
         return (JSONObject) jsonArray.get(0);

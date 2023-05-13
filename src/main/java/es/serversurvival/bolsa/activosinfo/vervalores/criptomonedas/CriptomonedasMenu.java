@@ -7,9 +7,10 @@ import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.menustate.AfterShow;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
+import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoDataService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.activosinfo.vervalores.ComprarBolsaConfirmacionMenu;
-import es.serversurvival.bolsa.posicionesabiertas.comprarlargo.ComprarLargoUseCase;
+import es.serversurvival.bolsa.activosinfo.vervalores.ComprarBolsaConfirmacionMenuState;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import lombok.AllArgsConstructor;
@@ -31,7 +32,7 @@ import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
 public final class CriptomonedasMenu extends Menu implements AfterShow {
-    private final ComprarLargoUseCase comprarLargoUseCase;
+    private final ActivoInfoDataService activoInfoDataService;
     private final JugadoresService jugadoresService;
     private final ExecutorService executor;
     private final MenuService menuService;
@@ -71,8 +72,8 @@ public final class CriptomonedasMenu extends Menu implements AfterShow {
 
             String nombreActivo = ItemUtils.getLore(itemClicked, 0).split(" ")[1];
 
-            this.menuService.open(player, new ComprarBolsaConfirmacionMenu(
-                    nombreActivo, TipoActivo.CRIPTOMONEDAS, player.getName(), precio, comprarLargoUseCase, jugadoresService
+            this.menuService.open(player, ComprarBolsaConfirmacionMenu.class, new ComprarBolsaConfirmacionMenuState(
+                    jugador, nombreActivo, precio, TipoActivo.CRIPTOMONEDAS
             ));
         }catch (Exception e) {
             e.printStackTrace();
@@ -128,7 +129,7 @@ public final class CriptomonedasMenu extends Menu implements AfterShow {
     private void addPriceToItem(ItemStack item) {
         try {
             String nombreActivo = ItemUtils.getLore(item, 0).split(" ")[1];
-            double precio = TipoActivo.CRIPTOMONEDAS.getTipoActivoService().getPrecio(nombreActivo);
+            double precio = activoInfoDataService.getPrecio(TipoActivo.CRIPTOMONEDAS, nombreActivo);
 
             ItemUtils.setLore(item, 1, GOLD + "Precio: " + GREEN + FORMATEA.format(precio) + " PC");
         } catch (Exception e) {
@@ -137,7 +138,7 @@ public final class CriptomonedasMenu extends Menu implements AfterShow {
     }
 
     private List<ItemStack> getItemsAccionesToEdit() {
-        List<Page> pages = allPages();
+        List<Page> pages = getPages();
 
         return pages.stream()
                 .map(Page::getInventory)

@@ -1,6 +1,5 @@
 package es.serversurvival.empresas.accionistasserver.misacciones;
 
-import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
@@ -18,6 +17,6 @@ public final class MisAccionesCommandRunner implements CommandRunnerNonArgs {
 
     @Override
     public void execute(CommandSender sender) {
-        this.menuService.open((Player) sender, (Class<? extends Menu<?>>) MisAccionesMenu.class);
+        this.menuService.open((Player) sender, MisAccionesMenu.class);
     }
 }

@@ -1,6 +1,5 @@
 package es.serversurvival.jugadores.cambio.sacarMaxItem;
 
-import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.mobs.Mob;
 import es.bukkitclassmapper.mobs.OnPlayerInteractMob;
@@ -14,6 +13,6 @@ public class PixelcoinsMaxItemsMob implements OnPlayerInteractMob {
 
     @Override
     public void execute(PlayerInteractEntityEvent event) {
-        this.menuService.open(event.getPlayer(), (Class<? extends Menu<?>>) SacarMaxItemMenu.class);
+        this.menuService.open(event.getPlayer(), SacarMaxItemMenu.class);
     }
 }

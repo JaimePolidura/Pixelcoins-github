@@ -23,6 +23,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
@@ -30,7 +31,7 @@ import static org.bukkit.ChatColor.*;
 import static org.bukkit.Material.*;
 
 @RequiredArgsConstructor
-public final class VerOfertasAccionesServerMenu extends Menu implements AfterShow {
+public final class VerOfertasAccionesServerMenu extends Menu<Object> implements AfterShow {
     private final CancelarOfertaAccionServerUseCase cancelarOfertaAccionServerUseCase;
     private final OfertasAccionesServerService ofertasAccionesServerService;
     private final EnviadorMensajes enviadorMensajes;

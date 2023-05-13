@@ -65,7 +65,7 @@ public final class ComprarBolsaConfirmacionMenu extends NumberSelectorMenu<Compr
 
     @Override
     public double maxValue() {
-        return getState().dineroJugador() / getState().precioUnidad();
+        return getState().jugador().getPixelcoins() / getState().precioUnidad();
     }
 
     @Override
@@ -79,7 +79,7 @@ public final class ComprarBolsaConfirmacionMenu extends NumberSelectorMenu<Compr
                 GOLD + "Comprar: " + cantidad + " " + getState().tipoActivo().getAlias(),
                 GOLD + "Precio/Unidad: " + GREEN + FORMATEA.format(getState().precioUnidad()) + " PC",
                 GOLD + "Precio/Total: " + GREEN + FORMATEA.format(getState().precioUnidad() * cantidad) + " PC",
-                GOLD + "Tus pixelcoins: " + GREEN + FORMATEA.format(getState().dineroJugador()) + " PC"
+                GOLD + "Tus pixelcoins: " + GREEN + FORMATEA.format(getState().jugador().getPixelcoins()) + " PC"
         );
     }
 }

@@ -9,19 +9,20 @@ import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfoRepository;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @Service
 public class ActivosInfoService {
+    private final ActivoInfoDataService activoInfoDataService;
     private final ActivoInfoRepository respotiroyDb;
-    private final Cache<String, ActivoInfo> cache = new UnlimitedCacheSize<>();
+    private final Cache<String, ActivoInfo> cache;
 
-    public ActivosInfoService(ActivoInfoRepository respotiroyDb) {
+    public ActivosInfoService(ActivoInfoDataService activoInfoDataService, ActivoInfoRepository respotiroyDb) {
+        this.activoInfoDataService = activoInfoDataService;
         this.respotiroyDb = respotiroyDb;
+        this.cache = new UnlimitedCacheSize<>();
     }
 
     public void save(ActivoInfo activoApiCache) {
@@ -39,8 +40,8 @@ public class ActivosInfoService {
 
     private Optional<ActivoInfo> getActivoInfoFromAPI(String nombreActivo, TipoActivo supportedTipoActivo) {
         try {
-            String nombreActivoLargo = supportedTipoActivo.getTipoActivoService().getNombreActivoLargo(nombreActivo);
-            double precio = supportedTipoActivo.getTipoActivoService().getPrecio(nombreActivo);
+            String nombreActivoLargo = activoInfoDataService.getNombreActivoLargo(supportedTipoActivo, nombreActivo);
+            double precio = activoInfoDataService.getPrecio(supportedTipoActivo, nombreActivo);
 
             return Optional.of(new ActivoInfo(nombreActivo, precio, supportedTipoActivo, nombreActivoLargo));
         } catch (Exception e) {
@@ -52,11 +53,6 @@ public class ActivosInfoService {
 
     public List<ActivoInfo> findAll() {
         return this.cache.all();
-    }
-
-    public Map<String, ActivoInfo> findAllToMap(){
-        return this.findAll().stream()
-                .collect(Collectors.toMap(ActivoInfo::getNombreActivo, activoInfo -> activoInfo));
     }
 
     public List<ActivoInfo> findAll(Predicate<? super ActivoInfo> condition){
@@ -87,5 +83,4 @@ public class ActivosInfoService {
             this.cache.put(activoInfo.getNombreActivo(), activoInfo);
         });
     }
-
 }

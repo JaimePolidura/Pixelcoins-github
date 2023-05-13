@@ -28,17 +28,17 @@ import static es.serversurvival.bolsa.posicionesabiertas._shared.application.Pos
 @UseCase
 @RequiredArgsConstructor
 public final class EjecutarOrdenesPreMarketUseCase {
-    private AtomicBoolean isLoading = new AtomicBoolean(false);
-
-    private final JugadoresService jugadoresService;
-    private final OrdenesPremarketService ordenesPremarketService;
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
-    private final ActivosInfoService activoInfoService;
-    private final EventBus eventBus;
+    private final OrdenesPremarketService ordenesPremarketService;
     private final ComprarLargoUseCase comprarLargoUseCase;
+    private final ComprarCortoUseCase comprarCortoUseCase;
+    private final ActivosInfoService activoInfoService;
     private final VenderLargoUseCase venderLargoUseCase;
     private final VenderCortoUseCase venderCortoUseCase;
-    private final ComprarCortoUseCase comprarCortoUseCase;
+    private final JugadoresService jugadoresService;
+    private final EventBus eventBus;
+
+    private AtomicBoolean isLoading = new AtomicBoolean(false);
 
     public void ejecutarOrdenes () {
         isLoading.set(true);
