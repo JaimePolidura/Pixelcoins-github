@@ -8,9 +8,11 @@ import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
+import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
 import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
@@ -21,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static es.serversurvival._shared.utils.Funciones.*;
@@ -28,11 +31,11 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
-public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
-    private static final String TITULO = ChatColor.DARK_RED + "" + ChatColor.BOLD + " TU CARTERA DE ACCIONES";
-
+public final class VerBolsaCarteraMenu extends Menu<Object> implements AfterShow {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final ActivosInfoService activosInfoService;
+    private final JugadoresService jugadoresService;
+    private final PosicionesUtils posicionesUtils;
     private final MenuService menuService;
 
     @Override
@@ -50,7 +53,7 @@ public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
     @Override
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
-                .title(TITULO)
+                .title(ChatColor.DARK_RED + "" + ChatColor.BOLD + " TU CARTERA DE ACCIONES")
                 .fixedItems()
                 .item(1, buildItemInfo())
                 .item(5, buildItemStats())
@@ -70,8 +73,10 @@ public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
 
     private void cerrarPosicion(Player player, InventoryClickEvent event) {
         UUID id = UUID.fromString(ItemUtils.getLore(event.getCurrentItem(), 13));
+        PosicionAbierta posicionAbierta = this.posicionesAbiertasSerivce.getById(id);
+        ActivoInfo activoInfo = this.activosInfoService.getByNombreActivo(posicionAbierta.getNombreActivo(), posicionAbierta.getTipoActivo());
 
-        this.menuService.open(player, new BolsaCerrarPosicionMenu(id));
+        this.menuService.open(player, BolsaCerrarPosicionMenu.class, BolsaCerrarPosicionMenuState.of(posicionAbierta, activoInfo));
     }
 
     private List<ItemStack> buildItemsPosicionesAbiertas(Player player) {
@@ -81,7 +86,7 @@ public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
     }
 
     private ItemStack buildItemFromPosicionAbierta(PosicionAbierta posicion) {
-        double valorTotal = PosicionesUtils.getAllPixeloinsEnValores(posicion.getJugador());
+        double valorTotal = this.posicionesUtils.getAllPixeloinsEnValores(posicion.getJugador());
 
         var activoInfo = this.activosInfoService.getByNombreActivo(posicion.getNombreActivo(), posicion.getTipoActivo());
         double perdidasOBeneficios = posicion.esLargo() ?
@@ -128,7 +133,7 @@ public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
     }
 
     private void goToProfileMenu(Player player, InventoryClickEvent event) {
-        this.menuService.open(player, new PerfilMenu(player.getName()));
+        this.menuService.open(player, PerfilMenu.class, this.jugadoresService.getByNombre(player.getName()));
     }
 
     private ItemStack buildItemInfo() {

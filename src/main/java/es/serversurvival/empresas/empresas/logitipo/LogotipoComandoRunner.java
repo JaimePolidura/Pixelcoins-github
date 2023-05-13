@@ -3,6 +3,7 @@ package es.serversurvival.empresas.empresas.logitipo;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.utils.Funciones;
+import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -14,12 +15,9 @@ import org.bukkit.entity.Player;
         args = {"empresa"},
         explanation = "Cambiar el logotipo de tu empresa. Para esto selecciona un item en la mano y ejecuta el comando"
 )
+@AllArgsConstructor
 public class LogotipoComandoRunner implements CommandRunnerArgs<LogotipoComando> {
     private final EditarLogitpoUseCase useCase;
-
-    public LogotipoComandoRunner() {
-        this.useCase = new EditarLogitpoUseCase();
-    }
 
     @Override
     public void execute(LogotipoComando comando, CommandSender sender) {

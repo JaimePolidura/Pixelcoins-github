@@ -1,11 +1,10 @@
 package es.serversurvival.empresas.empresas.pagardividendos;
 
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.dependencyinjector.annotations.UseCase;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
@@ -16,20 +15,13 @@ import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
 @UseCase
+@AllArgsConstructor
 public final class PagarDividendosEmpresaServerUseCase {
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;
     private final AccionistasServerService accionistasEmpresasServerService;
     private final EventBus eventBus;
-
-    public PagarDividendosEmpresaServerUseCase(){
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.accionistasEmpresasServerService = DependecyContainer.get(AccionistasServerService.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-    }
 
     public void pagar(String jugadorNombre, String nombreEmpresa, double dividendoPorAccion) {
         this.ensureDividendoCorrectFormat(dividendoPorAccion);

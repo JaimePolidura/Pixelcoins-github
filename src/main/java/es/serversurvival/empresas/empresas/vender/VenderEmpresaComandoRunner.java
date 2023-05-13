@@ -1,18 +1,15 @@
 package es.serversurvival.empresas.empresas.vender;
 
+import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
-import es.bukkitclassmapper.menus.MenuService;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
-import main.ValidationResult;
-import main.ValidatorService;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
-import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
 import static org.bukkit.ChatColor.*;
 
 @Command(
@@ -20,14 +17,10 @@ import static org.bukkit.ChatColor.*;
         args = {"empresa", "nombreAccionista", "precio"},
         explanation = "Vender tu empresa a otro nombreAccionista por pixelcoins"
 )
+@RequiredArgsConstructor
 public class VenderEmpresaComandoRunner implements CommandRunnerArgs<VenderEmpresaComando> {
     private final MenuService menuService;
     private final JugadoresService jugadoresService;
-
-    public VenderEmpresaComandoRunner() {
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.menuService = DependecyContainer.get(MenuService.class);
-    }
 
     @Override
     public void execute(VenderEmpresaComando comando, CommandSender player) {
@@ -40,19 +33,7 @@ public class VenderEmpresaComandoRunner implements CommandRunnerArgs<VenderEmpre
         if(this.jugadoresService.getByNombre(jugadorAVender).getPixelcoins() < precio)
             throw new NotEnoughPixelcoins("No tiene tantas pixelcoins como crees xdd");
 
-        ValidationResult result = ValidatorService
-                .startValidating(jugadorAVender, JugadorOnline, NotEqualsIgnoreCase.of(player.getName(), "No te lo puedes vender a ti mismo"))
-                .and(empresa, OwnerDeEmpresa.of(player.getName()))
-                .validateAll();
-
-        if(result.isFailed()){
-            player.sendMessage(DARK_RED + result.getMessage());
-            return;
-        }
-
-        this.menuService.open(Bukkit.getPlayer(jugadorAVender),
-                new VenderEmpresaConfirmacionMenu(new VenderEmpresaUseCase(), player.getName(), jugadorAVender, empresa, precio)
-        );
+        this.menuService.open(Bukkit.getPlayer(jugadorAVender), VenderEmpresaConfirmacionMenu.class, VenderEmpresaConfirmacionMenuState.fromCommand(player.getName(), comando));
 
         player.sendMessage(GOLD + "Has enviado la soilcitud");
     }

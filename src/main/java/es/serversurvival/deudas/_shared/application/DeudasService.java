@@ -2,7 +2,6 @@ package es.serversurvival.deudas._shared.application;
 
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.deudas._shared.domain.Deuda;
 import es.serversurvival.deudas._shared.domain.DeudasRepository;
@@ -16,10 +15,6 @@ import static es.serversurvival._shared.utils.CollectionUtils.*;
 @AllArgsConstructor
 public class DeudasService {
     private final DeudasRepository deudasRepository;
-
-    public DeudasService(){
-        this.deudasRepository = DependecyContainer.get(DeudasRepository.class);
-    }
 
     public UUID save(String deudor, String acredor, double pixelcoins, int tiempo, int interes) {
         String fechaHoy = Funciones.hoy();

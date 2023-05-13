@@ -6,10 +6,10 @@ import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
 import es.serversurvival.empresas.accionistasserver.misacciones.vender.VenderAccionEmpresaCantidadSelectorMenu;
+import es.serversurvival.empresas.accionistasserver.misacciones.vender.VenderAccionesEmpresaCantidadSelectorMenuState;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.empresas.ofertasaccionesserver.verofertasaccioneserver.VerOfertasAccionesServerMenu;
@@ -85,13 +85,13 @@ public final class MisAccionesMenu extends Menu {
                 accionistaServerToVender.getCantidad() :
                 accionistaServerToVender.getCantidad() - allAccionesInMercado;
 
-        this.menuService.open(player, new VenderAccionEmpresaCantidadSelectorMenu(
-                maxQuantityThatCanBeSold, accionistaServerToVender
+        this.menuService.open(player, VenderAccionEmpresaCantidadSelectorMenu.class, VenderAccionesEmpresaCantidadSelectorMenuState.of(
+                maxQuantityThatCanBeSold, idAccion, accionistaServerToVender.getEmpresa()
         ));
     }
 
     private void goToMercadoAccionesServerMenu(Player player, InventoryClickEvent event) {
-        this.menuService.open(player, new VerOfertasAccionesServerMenu(player));
+        this.menuService.open(player, (Class<? extends Menu<?>>) VerOfertasAccionesServerMenu.class);
     }
 
     private ItemStack buildItemInfo() {

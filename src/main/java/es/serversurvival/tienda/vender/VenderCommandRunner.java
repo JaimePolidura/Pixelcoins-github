@@ -3,6 +3,8 @@ package es.serversurvival.tienda.vender;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.mensajes._shared.application.EnviadorMensajes;
+import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -18,12 +20,10 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
         args = {"precio"},
         explanation = "Subir a la tienda el objeto que tengas en la mano, para retirarlo /tienda ver y dar click"
 )
+@AllArgsConstructor
 public class VenderCommandRunner implements CommandRunnerArgs<VenderCommando> {
     private final VenderTiendaUseCase venderTiendaUseCase;
-
-    public VenderCommandRunner(){
-        this.venderTiendaUseCase = new VenderTiendaUseCase();
-    }
+    private final EnviadorMensajes enviadorMensajes;
 
     @Override
     public void execute(VenderCommando comando, CommandSender sender) {
@@ -36,7 +36,7 @@ public class VenderCommandRunner implements CommandRunnerArgs<VenderCommando> {
 
         inventarioJugador.clear(player.getInventory().getHeldItemSlot());
 
-        Funciones.enviarMensajeYSonido(player, ChatColor.GOLD + "Se ha añadido a la tienda. Para retirarlos /tienda y clikc izquierdo en ellos", Sound.ENTITY_VILLAGER_YES);
+        enviadorMensajes.enviarMensajeYSonido(player, ChatColor.GOLD + "Se ha añadido a la tienda. Para retirarlos /tienda y clikc izquierdo en ellos", Sound.ENTITY_VILLAGER_YES);
         Bukkit.getServer().broadcastMessage(ChatColor.GOLD + player.getName() + " ha añadido un objeto a la tienda por: " +
                 ChatColor.GREEN + FORMATEA.format(comando.getPrecio()) + " PC " + ChatColor.AQUA + "/tienda");
     }

@@ -1,18 +1,15 @@
 package es.serversurvival.mensajes.eventlisteners;
 
+import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventListener;
-import es.dependencyinjector.annotations.Component;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empresas.pagarsueldostask.ErrorPagandoSueldo;
 import es.serversurvival.mensajes._shared.application.MensajesService;
+import lombok.AllArgsConstructor;
 
-@Component
+@EventHandler
+@AllArgsConstructor
 public final class OnErrorPagandoSueldo {
     private final MensajesService mensajesService;
-
-    public OnErrorPagandoSueldo(){
-        this.mensajesService = DependecyContainer.get(MensajesService.class);
-    }
 
     @EventListener
     public void on(ErrorPagandoSueldo e){

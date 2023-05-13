@@ -11,6 +11,7 @@ import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empleados.irse.IrseEmpresaUseCase;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
@@ -24,11 +25,10 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
-public final class VerEmpleosMenu extends Menu {
-    private static final String TITULO = DARK_RED + "" + BOLD + "        TUS EMPLEOS";
-
+public final class VerEmpleosMenu extends Menu<Object> {
     private final IrseEmpresaUseCase irseEmpresaUseCase;
     private final EmpleadosService empleadosService;
+    private final JugadoresService jugadoresService;
     private final EmpresasService empresasService;
     private final MenuService menuService;
 
@@ -48,7 +48,7 @@ public final class VerEmpleosMenu extends Menu {
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
                 .fixedItems()
-                .title(TITULO)
+                .title(DARK_RED + "" + BOLD + "        TUS EMPLEOS")
                 .item(1, buildItemInfo())
                 .items(2, this::buildItemsEmpleos, this::dejarEmpleo)
                 .breakpoint(7, Material.RED_BANNER, this::goBackToProfileMenu)
@@ -60,7 +60,7 @@ public final class VerEmpleosMenu extends Menu {
     }
 
     private void goBackToProfileMenu(Player player, InventoryClickEvent event) {
-        this.menuService.open(player, new PerfilMenu(player.getName()));
+        this.menuService.open(player, PerfilMenu.class, this.jugadoresService.getByNombre(player.getName()));
     }
 
     private void dejarEmpleo(Player player, InventoryClickEvent event) {

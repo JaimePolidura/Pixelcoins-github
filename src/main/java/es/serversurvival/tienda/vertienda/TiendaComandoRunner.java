@@ -3,7 +3,6 @@ package es.serversurvival.tienda.vertienda;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
-import es.serversurvival.tienda.vertienda.menu.TiendaMenu;
 import lombok.AllArgsConstructor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -17,7 +16,7 @@ public class TiendaComandoRunner implements CommandRunnerNonArgs {
     private final MenuService menuService;
 
     @Override
-    public void execute(CommandSender p) {
-        this.menuService.open((Player) p, new TiendaMenu(p.getName()));
+    public void execute(CommandSender sender) {
+        this.menuService.open((Player) sender, TiendaMenu.class);
     }
 }

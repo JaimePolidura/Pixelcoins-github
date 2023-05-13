@@ -1,11 +1,10 @@
 package es.serversurvival.bolsa.posicionesabiertas.vercartera;
 
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
-import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import es.serversurvival._shared.scoreboards.SingleScoreboard;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -14,22 +13,17 @@ import java.util.*;
 
 import static es.serversurvival._shared.utils.MinecraftUtils.*;
 
+@RequiredArgsConstructor
 public class BolsaCarteraScoreboard implements SingleScoreboard {
-    private Map<String, ActivoInfo> llamadasApiMap;
     private final ActivosInfoService activoInfoService;
-
-    public BolsaCarteraScoreboard() {
-        this.activoInfoService = DependecyContainer.get(ActivosInfoService.class);
-    }
+    private final PosicionesUtils posicionesUtils;
 
     @Override
     public Scoreboard createScoreborad(String jugador) {
-        this.llamadasApiMap = this.activoInfoService.findAllToMap();
-
         Scoreboard scoreboard = createScoreboard("bolsa", ChatColor.GOLD + "" + ChatColor.BOLD + "TUS MEJORES ACCIONES");
         Objective objective = scoreboard.getObjective("bolsa");
 
-        Map<PosicionAbierta, Double> posicionAbiertas = PosicionesUtils.calcularTopPosicionesAbiertas(jugador);
+        Map<PosicionAbierta, Double> posicionAbiertas = this.posicionesUtils.calcularTopPosicionesAbiertas(jugador);
         int loops = 0;
         int pos = 0;
         for(Map.Entry<PosicionAbierta, Double> entry : posicionAbiertas.entrySet()){
@@ -52,7 +46,7 @@ public class BolsaCarteraScoreboard implements SingleScoreboard {
     }
 
     private String buildLinea (PosicionAbierta posicion, Double rentabilidad) {
-        String nombreEmpresa = llamadasApiMap.get(posicion.getNombreActivo()).getNombreActivoLargo();
+        String nombreEmpresa = this.activoInfoService.getByNombreActivo(posicion.getNombreActivo(), posicion.getTipoActivo()).getNombreActivoLargo();
         String linea;
 
         if(rentabilidad >= 0){

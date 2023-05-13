@@ -3,9 +3,10 @@ package es.serversurvival.jugadores.pagar;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.jaime.EventBus;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
+import es.serversurvival.mensajes._shared.application.EnviadorMensajes;
+import lombok.AllArgsConstructor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -18,15 +19,10 @@ import static org.bukkit.ChatColor.GOLD;
         args = {"destino", "pixelcoins"},
         explanation = "Pagar a un nombreAccionista online con tus pixelcoins"
 )
+@AllArgsConstructor
 public class PagarComandoRunner implements CommandRunnerArgs<PagarComando> {
+    private final EnviadorMensajes enviadorMensajes;
     private final PagarUseCase pagarUseCase;
-
-    public PagarComandoRunner() {
-        this.pagarUseCase = new PagarUseCase(
-                DependecyContainer.get(JugadoresService.class),
-                DependecyContainer.get(EventBus.class)
-        );
-    }
 
     @Override
     public void execute(PagarComando comando, CommandSender sender) {
@@ -44,6 +40,6 @@ public class PagarComandoRunner implements CommandRunnerArgs<PagarComando> {
         String mensajeOnline = GOLD + pagador.getName() + " te ha pagado " + GREEN + FORMATEA.format(pixelcoins) + "PC!";
         String mensajeOffline = pagador.getName() + " te ha pagado " + FORMATEA.format(pixelcoins) + "PC!";
 
-        Funciones.enviarMensaje(pagado, mensajeOnline, mensajeOffline);
+        enviadorMensajes.enviarMensaje(pagado, mensajeOnline, mensajeOffline);
     }
 }

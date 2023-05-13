@@ -2,7 +2,6 @@ package es.serversurvival.empresas.empleados.onjugadorcambionnombre;
 
 import es.dependencyinjector.dependencies.annotations.Component;
 import es.jaime.EventListener;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.jugadores.setupjugadorunido.JugadorCambiadoDeNombreEvento;
 

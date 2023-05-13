@@ -13,7 +13,9 @@ import es.serversurvival.empresas.ofertasaccionesserver._shared.application.Ofer
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.empresas.ofertasaccionesserver.cancelarofertaccionserver.CancelarOfertaAccionServerUseCase;
 import es.serversurvival.empresas.ofertasaccionesserver.comprarofertasaccionesserver.ComprarAccionesServerConfirmacion;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
+import es.serversurvival.mensajes._shared.application.EnviadorMensajes;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -24,13 +26,15 @@ import java.util.List;
 import java.util.UUID;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
-import static es.serversurvival._shared.utils.Funciones.enviarMensajeYSonido;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.Material.*;
 
 @RequiredArgsConstructor
 public final class VerOfertasAccionesServerMenu extends Menu implements AfterShow {
+    private final CancelarOfertaAccionServerUseCase cancelarOfertaAccionServerUseCase;
     private final OfertasAccionesServerService ofertasAccionesServerService;
+    private final EnviadorMensajes enviadorMensajes;
+    private final JugadoresService jugadoresService;
     private final SyncMenuService syncMenuService;
     private final MenuService menuService;
 
@@ -93,29 +97,29 @@ public final class VerOfertasAccionesServerMenu extends Menu implements AfterSho
         if(esOwnerDeOferta){
             cancelarOferta(player, ofertaId);
         }else{
-            this.menuService.open(player, new ComprarAccionesServerConfirmacion(ofertasAccionesServerService.getById(ofertaId), player));
+            this.menuService.open(player, ComprarAccionesServerConfirmacion.class, ofertasAccionesServerService.getById(ofertaId));
         }
     }
 
     private void cancelarOferta(Player player, UUID ofertaId) {
-        (new CancelarOfertaAccionServerUseCase()).cancelar(player.getName(), ofertaId);
-        enviarMensajeYSonido(player, GOLD + "Has cancelado tu oferta en el mercado. Para ver tu cartera " + AQUA + "/empresas misacciones",
+        this.cancelarOfertaAccionServerUseCase.cancelar(player.getName(), ofertaId);
+        this.enviadorMensajes.enviarMensajeYSonido(player, GOLD + "Has cancelado tu oferta en el mercado. Para ver tu cartera " + AQUA + "/empresas misacciones",
                 Sound.ENTITY_PLAYER_LEVELUP);
 
         this.reloadMenu();
     }
 
     private void goBackToProfileMenu(Player player, InventoryClickEvent event) {
-        this.menuService.open(player, new PerfilMenu(player.getName()));
+        this.menuService.open(player, PerfilMenu.class, this.jugadoresService.getByNombre(player.getName()));
     }
 
     private List<ItemStack> buildItemsOfertas() {
         return this.ofertasAccionesServerService.findAll().stream()
-                .map(o -> buildItemOferta(o, player))
+                .map(this::buildItemOferta)
                 .toList();
     }
 
-    private ItemStack buildItemOferta(OfertaAccionServer oferta, Player player) {
+    private ItemStack buildItemOferta(OfertaAccionServer oferta) {
         boolean esOwerDeOferta = oferta.getNombreOfertante().equalsIgnoreCase(player.getName());
 
         return ItemBuilder.of(esOwerDeOferta ? RED_BANNER : BLUE_BANNER)
@@ -147,11 +151,9 @@ public final class VerOfertasAccionesServerMenu extends Menu implements AfterSho
                 ))
                 .build();
     }
-
+    
     private void reloadMenu() {
-        VerOfertasAccionesServerMenu newMenu = new VerOfertasAccionesServerMenu(player);
-        this.menuService.open(player, newMenu);
-
+        var newMenu = this.menuService.open(player, VerOfertasAccionesServerMenu.class);
         this.syncMenuService.sync(newMenu);
     }
 

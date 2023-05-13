@@ -1,21 +1,20 @@
 package es.serversurvival.jugadores.perfil;
 
-import es.bukkitclassmapper.menus.MenuService;
+import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.mobs.Mob;
 import es.bukkitclassmapper.mobs.OnPlayerInteractMob;
-import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 @Mob(x = 252, y = 65, z = -207)
+@RequiredArgsConstructor
 public class MobPerfil implements OnPlayerInteractMob {
+    private final JugadoresService jugadoresService;
     private final MenuService menuService;
-
-    public MobPerfil() {
-        this.menuService = DependecyContainer.get(MenuService.class);
-    }
 
     @Override
     public void execute(PlayerInteractEntityEvent event) {
-        this.menuService.open(event.getPlayer(), new PerfilMenu(event.getPlayer().getName()));
+        this.menuService.open(event.getPlayer(), PerfilMenu.class, this.jugadoresService.getByNombre(event.getPlayer().getName()));
     }
 }

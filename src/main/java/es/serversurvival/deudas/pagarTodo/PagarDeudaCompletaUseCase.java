@@ -1,9 +1,8 @@
 package es.serversurvival.deudas.pagarTodo;
 
-import es.dependencyinjector.annotations.UseCase;
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.deudas._shared.application.DeudasService;
 import es.serversurvival.deudas._shared.domain.Deuda;
@@ -13,8 +12,8 @@ import lombok.AllArgsConstructor;
 
 import java.util.UUID;
 
-@AllArgsConstructor
 @UseCase
+@AllArgsConstructor
 public final class PagarDeudaCompletaUseCase {
     private final DeudasService deudasService;
     private final JugadoresService jugadoresService;
@@ -52,8 +51,4 @@ public final class PagarDeudaCompletaUseCase {
         if(!deuda.getDeudor().equalsIgnoreCase(deudorName))
             throw new NotTheOwner("No eres el deudor de la deuda");
     }
-
-    private void makeTransference(Deuda deudaAPagar, Jugador acredor, Jugador deudorJugador) {
-    }
-
 }

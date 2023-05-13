@@ -1,10 +1,10 @@
 package es.serversurvival.empresas.empresas.borrar;
 
+import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
-import es.bukkitclassmapper.menus.MenuService;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
+import lombok.AllArgsConstructor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -15,14 +15,10 @@ import static org.bukkit.ChatColor.*;
         args = {"nombre"},
         explanation = "Borrar una empresa de la que seas owner. El dinero de la empresa se te transferira"
 )
+@AllArgsConstructor
 public class BorrarEmpresaComandoRunner implements CommandRunnerArgs<BorrarEmpresaComando> {
     private final EmpresasService empresasService;
     private final MenuService menuService;
-
-    public BorrarEmpresaComandoRunner(){
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
-        this.menuService = DependecyContainer.get(MenuService.class);
-    }
 
     @Override
     public void execute(BorrarEmpresaComando comando, CommandSender player) {
@@ -33,7 +29,6 @@ public class BorrarEmpresaComandoRunner implements CommandRunnerArgs<BorrarEmpre
             return;
         }
 
-        var empresaABorrar = this.empresasService.getByNombre(comando.getNombre());
-        this.menuService.open((Player) player, new BorrarEmpresaConfirmacionMenu(player.getName(), empresaABorrar));
+        this.menuService.open((Player) player, BorrarEmpresaConfirmacionMenu.class, BorrarEmpresaConfirmacionMenuState.fromCommand(comando));
     }
 }

@@ -1,7 +1,6 @@
 package es.serversurvival.bolsa.posicionescerradas._shared.application;
 
 import es.dependencyinjector.dependencies.annotations.Service;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionesCerradasRepository;
 import lombok.AllArgsConstructor;
@@ -16,10 +15,6 @@ public final class PosicionesCerradasService {
     public static final Comparator<PosicionCerrada> SORT_BY_RENTABILIDADES_DESC = (p1, p2) -> (int) (p1.calculateRentabildiad() - p2.calculateRentabildiad());
 
     private final PosicionesCerradasRepository repositoryDb;
-
-    public PosicionesCerradasService(){
-        this.repositoryDb = DependecyContainer.get(PosicionesCerradasRepository.class);
-    }
 
     public void save(PosicionCerrada posicionCerrada) {
         this.repositoryDb.save(posicionCerrada);

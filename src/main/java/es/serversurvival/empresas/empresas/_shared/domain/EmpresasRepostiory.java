@@ -16,6 +16,4 @@ public interface EmpresasRepostiory {
     List<Empresa> findAll();
 
     void deleteById(UUID empresaId);
-
-
 }

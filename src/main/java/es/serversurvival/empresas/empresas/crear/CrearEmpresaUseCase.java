@@ -1,14 +1,11 @@
 package es.serversurvival.empresas.empresas.crear;
 
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.AlreadyExists;
 import es.jaime.javaddd.domain.exceptions.IllegalLength;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
-import es.dependencyinjector.annotations.UseCase;
-import es.serversurvival.Pixelcoin;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
-import es.serversurvival.jugadores._shared.domain.Jugador;
 import io.vavr.control.Try;
 import lombok.AllArgsConstructor;
 
@@ -17,11 +14,6 @@ import lombok.AllArgsConstructor;
 public final class CrearEmpresaUseCase {
     private final EmpresasService empresasService;
     private final EventBus eventBus;
-
-    public CrearEmpresaUseCase(){
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-    }
 
     public void crear (String jugador, String nombreEmpresa, String descripcion) {
         this.ensureNombreEmpresaCorrectFormat(nombreEmpresa);

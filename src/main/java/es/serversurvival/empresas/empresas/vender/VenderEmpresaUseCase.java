@@ -1,10 +1,9 @@
 package es.serversurvival.empresas.empresas.vender;
 
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.dependencyinjector.annotations.UseCase;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
@@ -13,20 +12,13 @@ import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
 @UseCase
+@AllArgsConstructor
 public final class VenderEmpresaUseCase {
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;
     private final EmpleadosService empleadosService;
     private final EventBus eventBus;
-
-    public VenderEmpresaUseCase() {
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.empleadosService = DependecyContainer.get(EmpleadosService.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-    }
 
     public void vender (String vendedor, String comprador, double precioEmpresa, String nombreEmpresa) {
         this.ensureCorrectFormatPixelcoins(precioEmpresa);

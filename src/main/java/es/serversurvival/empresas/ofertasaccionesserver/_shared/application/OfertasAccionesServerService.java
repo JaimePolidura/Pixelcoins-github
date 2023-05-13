@@ -2,7 +2,6 @@ package es.serversurvival.empresas.ofertasaccionesserver._shared.application;
 
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertasAccionesServerRepository;
 import es.serversurvival.empresas.accionistasserver._shared.domain.TipoAccionista;
@@ -16,14 +15,10 @@ import java.util.stream.Collectors;
 
 import static es.serversurvival._shared.utils.Funciones.DATE_FORMATER_LEGACY;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class OfertasAccionesServerService {
     private final OfertasAccionesServerRepository repositoryDb;
-
-    public OfertasAccionesServerService() {
-        this.repositoryDb = DependecyContainer.get(OfertasAccionesServerRepository.class);
-    }
 
     public void save(String nombreOfertante, String empresa, double precio, int cantidad, TipoAccionista tipoOfertante,
                      double precioApertura, UUID accionEmpresServerId){

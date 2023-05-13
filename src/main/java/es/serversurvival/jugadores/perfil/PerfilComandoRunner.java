@@ -1,23 +1,21 @@
 package es.serversurvival.jugadores.perfil;
 
+import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
-import es.bukkitclassmapper.menus.MenuService;
-import es.serversurvival._shared.DependecyContainer;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
+import lombok.AllArgsConstructor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @Command(value = "perfil", explanation = "Ver tus estadisticas")
+@AllArgsConstructor
 public class PerfilComandoRunner implements CommandRunnerNonArgs {
+    private final JugadoresService jugadoresService;
     private final MenuService menuService;
-
-    public PerfilComandoRunner() {
-        this.menuService = DependecyContainer.get(MenuService.class);
-    }
 
     @Override
     public void execute(CommandSender sender) {
-        PerfilMenu menu = new PerfilMenu(sender.getName());
-        this.menuService.open((Player) sender, menu);
+        this.menuService.open((Player) sender, PerfilMenu.class, this.jugadoresService.getByNombre(sender.getName()));
     }
 }

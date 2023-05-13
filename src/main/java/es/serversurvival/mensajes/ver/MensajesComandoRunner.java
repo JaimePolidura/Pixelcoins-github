@@ -3,6 +3,7 @@ package es.serversurvival.mensajes.ver;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
 import es.serversurvival.mensajes._shared.domain.Mensaje;
+import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -10,12 +11,9 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 @Command(value = "mensajes", explanation = "Ver todos los mensajes no leidos que tengas")
+@AllArgsConstructor
 public class MensajesComandoRunner implements CommandRunnerNonArgs {
     private final VerMensajesUseCase verMensajesUseCase;
-
-    public MensajesComandoRunner(){
-        this.verMensajesUseCase = new VerMensajesUseCase();
-    }
 
     @Override
     public void execute(CommandSender sender) {

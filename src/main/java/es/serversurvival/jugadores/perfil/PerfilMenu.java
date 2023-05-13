@@ -16,12 +16,11 @@ import es.serversurvival.empresas.empleados.misempleos.VerEmpleosMenu;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.empresas.vertodas.VerTodasEmpresasMenu;
+import es.serversurvival.jugadores._shared.application.CalculadorPatrimonio;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.jugadores.top.TopMenu;
-import es.serversurvival.tienda.vertienda.menu.TiendaMenu;
-import es.serversurvival.web.cuentasweb._shared.application.CuentasWebService;
-import es.serversurvival.web.cuentasweb._shared.domain.CuentaWeb;
+import es.serversurvival.tienda.vertienda.TiendaMenu;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,7 +31,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 import static es.serversurvival._shared.utils.CollectionUtils.getPoisitionOfKeyInMap;
 import static es.serversurvival._shared.utils.Funciones.*;
@@ -41,19 +39,20 @@ import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
 public final class PerfilMenu extends Menu<Jugador> {
-    private final CuentasWebService cuentasWebService;
-    private final JugadoresService jugadoresService;
-    private final DeudasService deudasService;
-    private final EmpresasService empresasService;
     private final PosicionesCerradasService posicionesCerradasService;
+    private final CalculadorPatrimonio calculadorPatrimonio;
     private final EmpleadosService empleadosService;
+    private final JugadoresService jugadoresService;
+    private final PosicionesUtils posicionesUtils;
+    private final EmpresasService empresasService;
+    private final DeudasService deudasService;
     private final MenuService menuService;
 
     @Override
     public int[][] items() {
         return new int[][] {
                 {1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 2, 0, 0, 3, 0, 0, 4, 1},
+                {1, 3, 0, 0, 0, 0, 0, 4, 1},
                 {1, 0, 0, 0, 0, 0, 0, 0, 1},
                 {1, 0, 5, 0, 6, 0, 7, 0, 1},
                 {1, 0, 0, 0, 8, 0, 0, 0, 1},
@@ -67,13 +66,12 @@ public final class PerfilMenu extends Menu<Jugador> {
                 .fixedItems()
                 .title(DARK_RED + "" + BOLD + "           TU PERFIL")
                 .item(1, Material.BLACK_STAINED_GLASS_PANE)
-                .item(2, buildItemWeb())
-                .item(3, buildItemStats(), (p, e) -> this.menuService.open(p, new TopMenu()))
-                .item(4, buildItemTienda(), (p, e) -> this.menuService.open(p, new TiendaMenu(p.getName())))
-                .item(5, buildItemDeudas(), (p, e) -> this.menuService.open(p, new VerDeudasMenu(p.getName())))
-                .item(6, buildItemBolsa(), (p, e) -> this.menuService.open(p, new VerBolsaCarteraMenu(p.getName())))
-                .item(7, buildItemEmpresa(), (p, e) -> this.menuService.open(p, new VerTodasEmpresasMenu(p)))
-                .item(8, buildItemEmpleos(), (p, e) -> this.menuService.open(p, new VerEmpleosMenu(p)))
+                .item(3, buildItemStats(), (p, e) -> this.menuService.open(p, TopMenu.class))
+                .item(4, buildItemTienda(), (p, e) -> this.menuService.open(p, TiendaMenu.class))
+                .item(5, buildItemDeudas(), (p, e) -> this.menuService.open(p, VerDeudasMenu.class))
+                .item(6, buildItemBolsa(), (p, e) -> this.menuService.open(p, VerBolsaCarteraMenu.class))
+                .item(7, buildItemEmpresa(), (p, e) -> this.menuService.open(p, VerTodasEmpresasMenu.class))
+                .item(8, buildItemEmpleos(), (p, e) -> this.menuService.open(p, VerEmpleosMenu.class))
                 .build();
     }
 
@@ -154,14 +152,14 @@ public final class PerfilMenu extends Menu<Jugador> {
         double totalAhorrado = getState().getPixelcoins();
         double totalDebe = deudasService.getAllPixelcoinsDeudasDeudor(getState().getNombre());
         double totalDeben = deudasService.getAllPixelcoinsDeudasAcredor(getState().getNombre());
-        double totalEnAcciones = PosicionesUtils.getAllPixeloinsEnValores(getState().getNombre());
+        double totalEnAcciones = posicionesUtils.getAllPixeloinsEnValores(getState().getNombre());
         double totalEmpresas = empresasService.getAllPixelcoinsEnEmpresas(getState().getNombre());
         double resultado = (totalAhorrado + totalDeben + totalEnAcciones + totalEmpresas) - totalDebe;
 
         double beneficios = getState().getIngresos() - getState().getGastos();
         double rentabilidad = getState().getIngresos() == 0 ? -100 : rentabilidad(getState().getIngresos(), beneficios);
 
-        int posTopRicps = getPoisitionOfKeyInMap(crearMapaTopPatrimonioPlayers(false), k -> k.equalsIgnoreCase(getState().getNombre()));
+        int posTopRicps = getPoisitionOfKeyInMap(calculadorPatrimonio.calcularTopJugadores(false), k -> k.equalsIgnoreCase(getState().getNombre()));
         int posTopVendedores = jugadoresService.sortJugadoresBy(Comparator.comparingInt(Jugador::getNventas)).indexOf(getState()) + 1;
 
         List<String> lore = new ArrayList<>();
@@ -191,27 +189,5 @@ public final class PerfilMenu extends Menu<Jugador> {
         stats.setItemMeta(metaStats);
 
         return stats;
-    }
-
-    private ItemStack buildItemWeb() {
-        String displayName = AQUA + "" + BOLD + "      WEB http://serversurvival.ddns.net";
-        List<String> lore = new ArrayList<>();
-        lore.add("  ");
-
-        Optional<CuentaWeb> cuentaWebOptional = this.cuentasWebService.findByUsername(getState().getNombre());
-        if(cuentaWebOptional.isEmpty()){
-            int numeroCuenta = jugadoresService.getByNombre(getState().getNombre()).getNumeroVerificacionCuenta();
-            lore.add(DARK_AQUA + "No tienes cuenta, para registrarse:");
-            lore.add(DARK_AQUA + "" + UNDERLINE + "http://serversurvival.ddns.net/registrarse");
-            lore.add(DARK_AQUA + "Tu numero de cuenta: " + BOLD + numeroCuenta);
-        }else{
-            lore.add(DARK_AQUA + "Ya tienes cuenta");
-            lore.add(DARK_AQUA + "" + UNDERLINE + "http//serversurvival.ddns.net/iniciarsesion");
-        }
-        lore.add("  ");
-        lore.add(DARK_AQUA + "Con la web podras acceder a todas tus estadisticas");
-        lore.add(DARK_AQUA + "y comprar cantidad, realizar transacciones etc.");
-
-        return ItemBuilder.of(Material.PAPER).title(displayName).lore(lore).build();
     }
 }

@@ -1,23 +1,17 @@
 package es.serversurvival.empresas.ofertasaccionesserver.cancelarofertaccionserver;
 
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.dependencyinjector.annotations.Repository;
-import es.dependencyinjector.annotations.UseCase;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;
 
-@AllArgsConstructor
 @UseCase
+@AllArgsConstructor
 public final class CancelarOfertaAccionServerUseCase {
     private final OfertasAccionesServerService ofertasAccionesServerService;
-
-    public CancelarOfertaAccionServerUseCase() {
-        this.ofertasAccionesServerService = DependecyContainer.get(OfertasAccionesServerService.class);
-    }
 
     public void cancelar(String player, UUID id) {
         var oferta = ofertasAccionesServerService.getById(id);
@@ -30,6 +24,4 @@ public final class CancelarOfertaAccionServerUseCase {
         if(!oferta.getNombreOfertante().equalsIgnoreCase(playerName))
             throw new NotTheOwner("La oferta no te pertenece");
     }
-
-
 }

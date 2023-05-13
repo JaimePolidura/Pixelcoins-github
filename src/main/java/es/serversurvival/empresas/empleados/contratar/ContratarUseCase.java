@@ -1,9 +1,8 @@
 package es.serversurvival.empresas.empleados.contratar;
 
-import es.dependencyinjector.annotations.UseCase;
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.*;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.TipoSueldo;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;

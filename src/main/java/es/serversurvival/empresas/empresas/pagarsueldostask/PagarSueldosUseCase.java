@@ -1,10 +1,7 @@
 package es.serversurvival.empresas.empresas.pagarsueldostask;
 
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
-import es.dependencyinjector.annotations.UseCase;
-import es.serversurvival.Pixelcoin;
-import es.serversurvival._shared.DependecyContainer;
-import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empleados._shared.domain.TipoSueldo;
@@ -19,20 +16,13 @@ import java.util.List;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 
-@AllArgsConstructor
 @UseCase
+@AllArgsConstructor
 public final class PagarSueldosUseCase {
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;
     private final EmpleadosService empleadosService;
     private final EventBus eventBus;
-
-    public PagarSueldosUseCase() {
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.empleadosService = DependecyContainer.get(EmpleadosService.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-    }
 
     public void pagarSueldos (Empresa empresa, List<Empleado> empleados) {
         Date hoy = formatFehcaDeHoyException();

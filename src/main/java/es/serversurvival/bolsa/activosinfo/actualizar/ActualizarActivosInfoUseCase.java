@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @RequiredArgsConstructor
 public final class ActualizarActivosInfoUseCase {
     private final ActivosInfoService activoInfoService;
-    private AtomicBoolean isLoading = new AtomicBoolean(false);;
+    private AtomicBoolean isLoading = new AtomicBoolean(false);
 
     public synchronized void actualizar(){
         List<ActivoInfo> allActivosInfo = activoInfoService.findAll();

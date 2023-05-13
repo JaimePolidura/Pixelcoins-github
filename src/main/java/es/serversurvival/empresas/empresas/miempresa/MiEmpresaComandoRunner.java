@@ -4,7 +4,6 @@ import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import lombok.AllArgsConstructor;
@@ -28,6 +27,6 @@ public class MiEmpresaComandoRunner implements CommandRunnerArgs<MiEmpresaComand
         if(!empresa.getOwner().equalsIgnoreCase(sender.getName()))
             throw new NotTheOwner("No eres el owner de la empresa");
 
-        this.menuService.open((Player) sender, new VerEmpresaMenu(empresa));
+        this.menuService.open((Player) sender, VerEmpresaMenu.class, empresa);
     }
 }

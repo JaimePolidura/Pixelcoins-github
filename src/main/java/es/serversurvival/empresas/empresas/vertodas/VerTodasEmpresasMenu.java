@@ -13,7 +13,9 @@ import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.empresas.miempresa.VerEmpresaMenu;
 import es.serversurvival.empresas.empresas.solicitarservicio.SolicitarServicioUseCase;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
+import es.serversurvival.mensajes._shared.application.EnviadorMensajes;
 import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -25,13 +27,14 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
-import static es.serversurvival._shared.utils.Funciones.enviarMensajeYSonido;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
-public final class VerTodasEmpresasMenu extends Menu {
+public final class VerTodasEmpresasMenu extends Menu<Object> {
     private final SolicitarServicioUseCase solicitarServicioUseCase;
+    private final EnviadorMensajes enviadorMensajes;
     private final EmpleadosService empleadosService;
+    private final JugadoresService jugadoresService;
     private final EmpresasService empresasService;
     private final MenuService menuService;
 
@@ -63,7 +66,7 @@ public final class VerTodasEmpresasMenu extends Menu {
     }
 
     private void goBackToProfileMenu(Player player, InventoryClickEvent event) {
-        this.menuService.open(player, new PerfilMenu(player.getName()));
+        this.menuService.open(player, PerfilMenu.class, this.jugadoresService.getByNombre(player.getName()));
     }
 
     private void onItemEmpresaClicked(Player player, InventoryClickEvent event) {
@@ -71,10 +74,10 @@ public final class VerTodasEmpresasMenu extends Menu {
         Empresa empresa = this.empresasService.getByNombre(empresaNombre);
 
         if(empresa.getOwner().equalsIgnoreCase(player.getName())){
-            this.menuService.open(player, new VerEmpresaMenu(empresa));
+            this.menuService.open(player, VerEmpresaMenu.class, empresa);
         }else{
             this.solicitarServicioUseCase.solicitar(player.getName(), empresaNombre);
-            enviarMensajeYSonido(player, ChatColor.GOLD + "Has solicitado el servicio", Sound.ENTITY_PLAYER_LEVELUP);
+            enviadorMensajes.enviarMensajeYSonido(player, ChatColor.GOLD + "Has solicitado el servicio", Sound.ENTITY_PLAYER_LEVELUP);
             player.closeInventory();
         }
     }

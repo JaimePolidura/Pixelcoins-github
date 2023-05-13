@@ -19,6 +19,5 @@ public class EditarEmpleadoComandoRunner implements CommandRunnerArgs<EditarEmpl
             sender.sendMessage(ChatColor.GOLD + "Para editar empleados: http://serversurvival.ddns.net/profile/empresas/info/" + comando.getEmpresa() +AQUA+" /cuenta" +GOLD+ "para registrarse");
         else
             sender.sendMessage(ChatColor.GOLD + "Para editar empleados: http://serversurvival.ddns.net/profile/empresas "+AQUA+" /cuenta" +GOLD+ "para registrarse");
-
     }
 }

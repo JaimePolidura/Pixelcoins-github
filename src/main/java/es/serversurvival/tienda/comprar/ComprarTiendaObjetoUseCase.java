@@ -1,34 +1,25 @@
 package es.serversurvival.tienda.comprar;
 
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
-import es.dependencyinjector.annotations.UseCase;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival._shared.utils.ItemsUtils;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.tienda._shared.application.TiendaService;
 import es.serversurvival.tienda._shared.domain.TiendaObjeto;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
-@RequiredArgsConstructor
 @UseCase
+@AllArgsConstructor
 public final class ComprarTiendaObjetoUseCase {
-    public static final ComprarTiendaObjetoUseCase INSTANCE = new ComprarTiendaObjetoUseCase();
-
     private final TiendaService tiendaService;
     private final JugadoresService jugadoresService;
     private final EventBus eventBus;
-
-    public ComprarTiendaObjetoUseCase() {
-        this.tiendaService = DependecyContainer.get(TiendaService.class);
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-    }
 
     public ItemStack realizarVenta(String comprador, UUID tiendaObjetoId) {
         TiendaObjeto tiendaObjetoAComprar = this.ensureObjetoTiendaExists(tiendaObjetoId);

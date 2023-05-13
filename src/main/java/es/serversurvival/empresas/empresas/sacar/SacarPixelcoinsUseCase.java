@@ -1,11 +1,9 @@
 package es.serversurvival.empresas.empresas.sacar;
 
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.dependencyinjector.annotations.UseCase;
-import es.serversurvival.Pixelcoin;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
@@ -19,12 +17,6 @@ public final class SacarPixelcoinsUseCase {
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;
     private final EventBus eventBus;
-
-    public SacarPixelcoinsUseCase(){
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-    }
 
     public void sacar (String playerName, String empresaNombre, double pixelcoinsASacar) {
         this.ensureCorrectFormatPixelcoins(pixelcoinsASacar);

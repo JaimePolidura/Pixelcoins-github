@@ -1,5 +1,6 @@
 package es.serversurvival.bolsa.posicionesabiertas.vercartera;
 
+import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.serversurvival._shared.menus.NumberSelectorMenu;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
@@ -65,7 +66,7 @@ public final class BolsaCerrarPosicionMenu extends NumberSelectorMenu<BolsaCerra
 
     @Override
     public void onCancel(Player player, InventoryClickEvent event) {
-        this.menuService.open(player, new VerBolsaCarteraMenu(player.getName()));
+        this.menuService.open(player, (Class<? extends Menu<?>>) VerBolsaCarteraMenu.class);
     }
 
     @Override

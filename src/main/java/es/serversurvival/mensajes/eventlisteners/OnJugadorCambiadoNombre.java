@@ -1,19 +1,15 @@
 package es.serversurvival.mensajes.eventlisteners;
 
+import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventListener;
-import es.dependencyinjector.annotations.Component;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.jugadores.setupjugadorunido.JugadorCambiadoDeNombreEvento;
 import es.serversurvival.mensajes._shared.application.MensajesService;
+import lombok.AllArgsConstructor;
 
-@Component
+@EventHandler
+@AllArgsConstructor
 public final class OnJugadorCambiadoNombre {
     private final MensajesService mensajesService;
-
-    public OnJugadorCambiadoNombre(){
-        this.mensajesService = DependecyContainer.get(MensajesService.class);
-    }
-
     @EventListener
     public void on (JugadorCambiadoDeNombreEvento evento) {
         this.mensajesService.findMensajesByDestinatario(evento.getAntiguoNombre()).stream()

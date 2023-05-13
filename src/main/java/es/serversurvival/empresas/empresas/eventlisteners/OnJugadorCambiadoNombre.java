@@ -1,19 +1,15 @@
 package es.serversurvival.empresas.empresas.eventlisteners;
 
-import es.bukkitclassmapper.commands.Command;
+import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventListener;
-import es.dependencyinjector.annotations.Component;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.jugadores.setupjugadorunido.JugadorCambiadoDeNombreEvento;
+import lombok.AllArgsConstructor;
 
-@Component
+@EventHandler
+@AllArgsConstructor
 public final class OnJugadorCambiadoNombre {
     private final EmpresasService empresasService;
-
-    public OnJugadorCambiadoNombre() {
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
-    }
 
     @EventListener
     public void on (JugadorCambiadoDeNombreEvento evento) {

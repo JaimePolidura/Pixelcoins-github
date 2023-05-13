@@ -1,9 +1,8 @@
 package es.serversurvival.empresas.empresas.logitipo;
 
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.javaddd.domain.exceptions.IllegalType;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.dependencyinjector.annotations.UseCase;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import lombok.AllArgsConstructor;
@@ -13,10 +12,6 @@ import org.bukkit.Material;
 @UseCase
 public final class EditarLogitpoUseCase {
     private final EmpresasService empresasService;
-
-    public EditarLogitpoUseCase() {
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
-    }
 
     public void cambiar (String empresaNombre, Material logotipo, String playerName) {
         this.ensureCorrectFormatLogotipo(logotipo);

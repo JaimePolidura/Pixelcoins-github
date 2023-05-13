@@ -2,7 +2,6 @@ package es.serversurvival.bolsa.posicionesabiertas.vercarterajugador;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
@@ -26,12 +25,13 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 @AllArgsConstructor
 public class VerCarteraJugadorComandoRunner implements CommandRunnerArgs<VerCarteraJugadorComando> {
     private final ActivosInfoService activoInfoService;
+    private final PosicionesUtils posicionesUtils;
 
     @Override
     public void execute(VerCarteraJugadorComando comando, CommandSender player) {
         String nombreJugadorAVer = comando.getJugador();
 
-        double totalInvertido = PosicionesUtils.getAllPixeloinsEnValores(nombreJugadorAVer);
+        double totalInvertido = this.posicionesUtils.getAllPixeloinsEnValores(nombreJugadorAVer);
         Map<String, AccionPesoUsuario> posicionesConPeso = getPesoCarteraAcciones(nombreJugadorAVer, totalInvertido);
         player.sendMessage(ChatColor.GOLD + "" + "------------------------------");
         player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "   LAS CARTERA DE " + nombreJugadorAVer);
@@ -49,7 +49,7 @@ public class VerCarteraJugadorComandoRunner implements CommandRunnerArgs<VerCart
     }
 
     private Map<String, AccionPesoUsuario> getPesoCarteraAcciones (String jugador, double totalInvertido){
-        Map<PosicionAbierta, Integer> posicionAbiertasPesoSinOrdenar = PosicionesUtils.getPosicionesAbiertasConPesoJugador(jugador, Math.abs(totalInvertido));
+        Map<PosicionAbierta, Integer> posicionAbiertasPesoSinOrdenar = this.posicionesUtils.getPosicionesAbiertasConPesoJugador(jugador, Math.abs(totalInvertido));
         Map<String, AccionPesoUsuario> posicionesAbiertasOrednadas = new HashMap<>();
 
         for(Map.Entry<PosicionAbierta, Integer> entry : posicionAbiertasPesoSinOrdenar.entrySet()){

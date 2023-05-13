@@ -1,9 +1,8 @@
 package es.serversurvival.empresas.empresas.borrar;
 
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.dependencyinjector.annotations.UseCase;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
@@ -13,24 +12,14 @@ import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
 @UseCase
+@AllArgsConstructor
 public final class BorrarEmpresaUseCase {
-    public static final BorrarEmpresaUseCase INSTANCE = new BorrarEmpresaUseCase();
-
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;
     private final EmpleadosService empleadosService;
     private final AccionistasServerService accionistasEmpresasServerService;
     private final EventBus eventBus;
-
-    public BorrarEmpresaUseCase() {
-        this.accionistasEmpresasServerService = DependecyContainer.get(AccionistasServerService.class);
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.empleadosService = DependecyContainer.get(EmpleadosService.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-    }
 
     public void borrar (String owner, String empresaNombre) {
         var empresaABorrar = this.empresasService.getByNombre(empresaNombre);

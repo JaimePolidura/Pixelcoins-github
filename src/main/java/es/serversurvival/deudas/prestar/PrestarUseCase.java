@@ -1,10 +1,9 @@
 package es.serversurvival.deudas.prestar;
 
-import es.dependencyinjector.annotations.UseCase;
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.deudas._shared.application.DeudasService;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
@@ -13,8 +12,8 @@ import lombok.AllArgsConstructor;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 
-@AllArgsConstructor
 @UseCase
+@AllArgsConstructor
 public final class PrestarUseCase {
     private final JugadoresService jugadoresService;
     private final DeudasService deudasService;

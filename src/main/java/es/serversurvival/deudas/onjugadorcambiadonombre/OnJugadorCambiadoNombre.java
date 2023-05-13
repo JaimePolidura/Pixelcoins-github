@@ -1,14 +1,13 @@
 package es.serversurvival.deudas.onjugadorcambiadonombre;
 
-import es.dependencyinjector.annotations.Component;
+import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventListener;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.deudas._shared.application.DeudasService;
 import es.serversurvival.jugadores.setupjugadorunido.JugadorCambiadoDeNombreEvento;
 import lombok.AllArgsConstructor;
 
-@Component
 @AllArgsConstructor
+@EventHandler
 public final class OnJugadorCambiadoNombre {
     private final DeudasService deudasService;
 

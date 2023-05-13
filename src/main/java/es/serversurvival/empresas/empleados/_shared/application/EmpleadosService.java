@@ -1,9 +1,7 @@
 package es.serversurvival.empresas.empleados._shared.application;
 
-import com.google.common.base.Function;
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.cache.Cache;
 import es.serversurvival._shared.cache.LRUCache;
 import es.serversurvival._shared.utils.Funciones;
@@ -15,6 +13,7 @@ import lombok.AllArgsConstructor;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 
 @AllArgsConstructor
 @Service

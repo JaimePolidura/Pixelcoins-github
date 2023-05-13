@@ -1,18 +1,17 @@
 package es.serversurvival.empresas.empresas.contratar;
 
+import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
-import es.bukkitclassmapper.menus.MenuService;
+import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empleados._shared.domain.TipoSueldo;
 import es.serversurvival.empresas.empleados.contratar.ContratarConfirmacionMenu;
-import main.ValidationResult;
-import main.ValidatorService;
+import es.serversurvival.empresas.empleados.contratar.ContratarConfirmacionMenuState;
+import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
-import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
 import static org.bukkit.ChatColor.*;
 
 @Command(
@@ -21,12 +20,9 @@ import static org.bukkit.ChatColor.*;
         explanation = "Contratar a un nombreAccionista en tu empresa con un sueldo, <tipoSueldo> frequencia de pago: d (cada dia), s (cada semana), " +
                 "2s (cada 2 semanas), m (cada mes)"
 )
+@AllArgsConstructor
 public class ContratarComandoRunner implements CommandRunnerArgs<ContratarComando> {
     private final MenuService menuService;
-
-    public ContratarComandoRunner() {
-        this.menuService = DependecyContainer.get(MenuService.class);
-    }
 
     @Override
     public void execute(ContratarComando contratarComando, CommandSender player) {
@@ -34,29 +30,17 @@ public class ContratarComandoRunner implements CommandRunnerArgs<ContratarComand
         String empresa = contratarComando.getEmpresa();
         double sueldo = contratarComando.getSueldo();
         String tipoSueldoString = contratarComando.getTipoSueldo();
+        TipoSueldo tipoSueldo = TipoSueldo.ofCodigo(tipoSueldoString);
         String cargo = contratarComando.getCargo();
 
+        if(destinoJugadorNOmbre.equals(player.getName()))
+            throw new CannotBeYourself("Tu eres tonto o q te pasa");
         if(sueldo <= 0)
             throw new IllegalQuantity("El sueldo debe de ser un numero positivo y mayor que 0");
 
-        ValidationResult result = ValidatorService
-                .startValidating(destinoJugadorNOmbre, JugadorOnline, NotEqualsIgnoreCase.of(player.getName(),
-                        "No te puedes contratar a ti mismo"))
-                .and(TipoSueldo.codigoCorrecto(tipoSueldoString), True.of("El tipo de sueldo solo puede ser d: cdda dia, s: " +
-                        "cada semana, 2s: cada dos semanas, m: cada mes"))
-                .and(empresa, OwnerDeEmpresa.of(player.getName()))
-                .validateAll();
-
-        if(result.isFailed()){
-            player.sendMessage(DARK_RED + result.getMessage());
-            return;
-        }
-
-        TipoSueldo tipoSueldo = TipoSueldo.ofCodigo(tipoSueldoString);
-
-        this.menuService.open(Bukkit.getPlayer(destinoJugadorNOmbre),
-                new ContratarConfirmacionMenu(player.getName(), destinoJugadorNOmbre, empresa, cargo, sueldo, tipoSueldo)
-        );
+        this.menuService.open(Bukkit.getPlayer(destinoJugadorNOmbre), ContratarConfirmacionMenu.class, new ContratarConfirmacionMenuState(
+                player.getName(), destinoJugadorNOmbre, empresa, cargo, sueldo, tipoSueldo
+        ));
 
         player.sendMessage(GOLD + "Has enviado la solicitud");
     }

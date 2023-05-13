@@ -2,9 +2,9 @@ package es.serversurvival.jugadores.vercuenta;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
+import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -13,12 +13,9 @@ import org.bukkit.entity.Player;
         value = "cuentaweb",
         explanation = "Ver tu cuenta de la web"
 )
+@AllArgsConstructor
 public class VerCuentaComandoRunner implements CommandRunnerNonArgs {
     private final JugadoresService jugadoresService;
-
-    public VerCuentaComandoRunner(){
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-    }
 
     @Override
     public void execute(CommandSender sender) {

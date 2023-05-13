@@ -1,9 +1,8 @@
 package es.serversurvival.empresas.empresas.editardescripccion;
 
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.javaddd.domain.exceptions.IllegalLength;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.dependencyinjector.annotations.UseCase;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import lombok.AllArgsConstructor;
@@ -12,10 +11,6 @@ import lombok.AllArgsConstructor;
 @UseCase
 public final class EditarDescUseCase {
     private final EmpresasService empresasService;
-
-    public EditarDescUseCase() {
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
-    }
 
     public void edit (String nombreEmpresa, String newDescipcion, String playerName) {
         this.ensureCorrectFormatDesc(newDescipcion);

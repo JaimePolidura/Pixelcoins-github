@@ -1,6 +1,5 @@
 package es.serversurvival.empresas.empresas.crear;
 
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

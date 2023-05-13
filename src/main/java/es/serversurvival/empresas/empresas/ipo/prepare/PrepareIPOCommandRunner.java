@@ -12,6 +12,8 @@ import lombok.AllArgsConstructor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Optional;
+
 @Command(
         value = "empresas ipo",
         args = {"empresa", "accionesTotales", "accionesOwner", "precioPorAccion"},
@@ -44,10 +46,7 @@ public final class PrepareIPOCommandRunner implements CommandRunnerArgs<IPOComma
         if(empresa.isCotizada())
             throw new IllegalStateException("La empresa que quieres sacar a bolsa ya cotiza en bolsa");
 
-        double marketCap = command.getAccionesTotales() * command.getPrecioPorAccion();
-        double pixelcoinsOwner = command.getAccionesOwner() * command.getPrecioPorAccion();
-
-        this.menuService.open(player, new EmpresaIPOConfirmMenu(
+        this.menuService.open(player, EmpresaIPOConfirmMenu.class, new EmpresaIPOConfirmMenuState(
                 empresa, accionesTotales, precioPorAccion, accionesOwner
         ));
     }

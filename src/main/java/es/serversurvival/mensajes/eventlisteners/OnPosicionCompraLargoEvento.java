@@ -1,18 +1,15 @@
 package es.serversurvival.mensajes.eventlisteners;
 
+import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventListener;
-import es.dependencyinjector.annotations.Component;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbiertaEvento;
 import es.serversurvival.mensajes._shared.application.MensajesService;
+import lombok.AllArgsConstructor;
 
-@Component
+@EventHandler
+@AllArgsConstructor
 public final class OnPosicionCompraLargoEvento {
     private final MensajesService mensajesService;
-
-    public OnPosicionCompraLargoEvento(){
-        this.mensajesService = DependecyContainer.get(MensajesService.class);
-    }
 
     @EventListener
     public void on(PosicionAbiertaEvento evento){

@@ -19,6 +19,8 @@ import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
 public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu<VenderJugadorConfirmacionMenuState> {
+    private final PagarUseCase pagarUseCase;
+
     @Override
     public void onAceptar(Player player, InventoryClickEvent event, VenderJugadorConfirmacionMenuState state) {
         var jugadorVendedor = state.jugadorVendedor();
@@ -33,8 +35,6 @@ public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu<Vender
             jugadorComprador.sendMessage(DARK_RED + "No se ha podido completar el pago, por que el nombreAccionista ha movido el objeto a venderte");
             return;
         }
-
-        var pagarUseCase = new PagarUseCase();
 
         pagarUseCase.realizarPago(jugadorComprador.getName(), jugadorVendedor.getName(), precio);
 

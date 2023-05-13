@@ -2,7 +2,6 @@ package es.serversurvival.empresas.accionistasserver._shared.application;
 
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
 import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistasServerRepository;
 import es.serversurvival.empresas.accionistasserver._shared.domain.TipoAccionista;
@@ -15,14 +14,10 @@ import java.util.function.Predicate;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class AccionistasServerService {
     private final AccionistasServerRepository repositoryDb;
-
-    public AccionistasServerService() {
-        this.repositoryDb = DependecyContainer.get(AccionistasServerRepository.class);
-    }
 
     public UUID save(String accionistaName, TipoAccionista tipoAccionista, String empresaName, int cantidad, double precioApertura){
         String date = DATE_FORMATER_LEGACY.format(new Date());

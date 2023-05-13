@@ -15,7 +15,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
@@ -106,137 +105,6 @@ public final class Funciones {
     public static double redondeoDecimales(double numero, int numeroDecimales) {
         BigDecimal redondeado = new BigDecimal(numero).setScale(numeroDecimales, RoundingMode.HALF_EVEN);
         return redondeado.doubleValue();
-    }
-
-    public static Map<String, Double> crearMapaTopPatrimonioPlayers (boolean creciente) {
-        var deudasMyService = DependecyContainer.get(DeudasService.class);
-        var jugadoresService = DependecyContainer.get(JugadoresService.class);
-        var empresasService = DependecyContainer.get(EmpresasService.class);
-        var activoInfoService = DependecyContainer.get(ActivosInfoService.class);
-
-        List<Jugador> allJugadordes = jugadoresService.findAll();
-        Map<String, ActivoInfo> mapAllLlamadas = activoInfoService.findAllToMap();
-        Map<String, List<Deuda>> mapDeudasAcredor = deudasMyService.getAllDeudasAcredorMap();
-        Map<String, List<Deuda>> mapDeudasDeudor = deudasMyService.getAllDeudasDeudorMap();
-        Map<String, List<Empresa>> mapEmpresasJugador = empresasService.getAllEmpresasJugadorMap();
-        Map<String, List<PosicionAbierta>> mapPosicionesLargo = PosicionesUtils.getAllPosicionesAbiertasMap(PosicionAbierta::esLargo);
-        Map<String, List<PosicionAbierta>> mapPosicionesCorto = PosicionesUtils.getAllPosicionesAbiertasMap(PosicionAbierta::esCorto);
-
-        HashMap<String, Double> toReturn = new HashMap<>();
-
-        allJugadordes.forEach((jugador) -> {
-            double activosTotales = patrimonioJugador(mapAllLlamadas, mapDeudasAcredor, mapDeudasDeudor, mapEmpresasJugador,
-                    mapPosicionesLargo, mapPosicionesCorto, jugador);
-
-            toReturn.put(jugador.getNombre(), activosTotales);
-        });
-
-        if(creciente)
-            return CollectionUtils.sortMapByValueCrec(toReturn);
-        else
-            return CollectionUtils.sortMapByValueDecre(toReturn);
-    }
-
-    public static double patrimonioJugador(String jugadorNombre){
-        var deudasMyService = DependecyContainer.get(DeudasService.class);
-        var jugadoresService = DependecyContainer.get(JugadoresService.class);
-        var empresasService = DependecyContainer.get(EmpresasService.class);
-        var activoInfoService = DependecyContainer.get(ActivosInfoService.class);
-
-        Map<String, ActivoInfo> mapAllLlamadas = activoInfoService.findAllToMap();
-        Map<String, List<Deuda>> mapDeudasAcredor = deudasMyService.getAllDeudasAcredorMap();
-        Map<String, List<Deuda>> mapDeudasDeudor = deudasMyService.getAllDeudasDeudorMap();
-        Map<String, List<Empresa>> mapEmpresasJugador = empresasService.getAllEmpresasJugadorMap();
-        Map<String, List<PosicionAbierta>> mapPosicionesLargo = PosicionesUtils.getAllPosicionesAbiertasMap(PosicionAbierta::esLargo);
-        Map<String, List<PosicionAbierta>> mapPosicionesCorto = PosicionesUtils.getAllPosicionesAbiertasMap(PosicionAbierta::esCorto);
-
-        double activos = 0;
-
-        activos += jugadoresService.getByNombre(jugadorNombre).getPixelcoins();
-
-        // Deudas acredor
-        if(mapDeudasAcredor.get(jugadorNombre) != null){
-            activos += mapDeudasAcredor.get(jugadorNombre).stream()
-                    .mapToDouble(Deuda::getPixelcoinsRestantes)
-                    .sum();
-        }
-
-        //Deudas deudor
-        if(mapDeudasDeudor.get(jugadorNombre) != null){
-            activos -= mapDeudasDeudor.get(jugadorNombre).stream()
-                    .mapToDouble(Deuda::getPixelcoinsRestantes)
-                    .sum();
-        }
-
-        //Emrpesas
-        if(mapEmpresasJugador.get(jugadorNombre) != null){
-            activos += mapEmpresasJugador.get(jugadorNombre).stream()
-                    .mapToDouble(Empresa::getPixelcoins)
-                    .sum();
-        }
-
-        ///Posiciones abiertas largas
-        if(mapPosicionesLargo.get(jugadorNombre) != null){
-            activos += mapPosicionesLargo.get(jugadorNombre).stream()
-                    .mapToDouble(pos -> (mapAllLlamadas.get(pos.getNombreActivo()).getPrecio() * pos.getCantidad()))
-                    .sum();
-        }
-
-        //Posicioenes abiertas cortas
-        if(mapPosicionesCorto.get(jugadorNombre) != null){
-            activos += mapPosicionesCorto.get(jugadorNombre).stream()
-                    .mapToDouble(pos -> (pos.getPrecioApertura() - mapAllLlamadas.get(pos.getNombreActivo()).getPrecio()) * pos.getCantidad())
-                    .sum();
-        }
-
-        return activos;
-    }
-
-    private static double patrimonioJugador(Map<String, ActivoInfo> mapAllLlamadas, Map<String, List<Deuda>> mapDeudasAcredor, Map<String, List<Deuda>> mapDeudasDeudor, Map<String, List<Empresa>> mapEmpresasJugador, Map<String, List<PosicionAbierta>> mapPosicionesLargo, Map<String, List<PosicionAbierta>> mapPosicionesCorto, Jugador jugador) {
-        double activosTotales = 0;
-
-        //Liquidez
-        activosTotales = jugador.getPixelcoins();
-
-        // Deudas acredor
-        if(mapDeudasAcredor.get(jugador.getNombre()) != null){
-            activosTotales += mapDeudasAcredor.get(jugador.getNombre()).stream()
-                    .mapToDouble(Deuda::getPixelcoinsRestantes)
-                    .sum();
-        }
-
-        //Deudas deudor
-        if(mapDeudasDeudor.get(jugador.getNombre()) != null){
-            activosTotales -= mapDeudasDeudor.get(jugador.getNombre()).stream()
-                    .mapToDouble(Deuda::getPixelcoinsRestantes)
-                    .sum();
-        }
-
-        //Emrpesas
-        if(mapEmpresasJugador.get(jugador.getNombre()) != null){
-            activosTotales += mapEmpresasJugador.get(jugador.getNombre()).stream()
-                    .mapToDouble(Empresa::getPixelcoins)
-                    .sum();
-        }
-
-        ///Posiciones abiertas largas
-        if(mapPosicionesLargo.get(jugador.getNombre()) != null){
-            activosTotales += mapPosicionesLargo.get(jugador.getNombre()).stream()
-                    .mapToDouble(pos -> (mapAllLlamadas.get(pos.getNombreActivo()).getPrecio() * pos.getCantidad()))
-                    .sum();
-        }
-
-        //Posicioenes abiertas cortas
-        if(mapPosicionesCorto.get(jugador.getNombre()) != null){
-            activosTotales += mapPosicionesCorto.get(jugador.getNombre()).stream()
-                    .mapToDouble(pos -> (pos.getPrecioApertura() - mapAllLlamadas.get(pos.getNombreActivo()).getPrecio()) * pos.getCantidad())
-                    .sum();
-        }
-        return activosTotales;
-    }
-
-    public static double getPatrimonioJugador(String nombreJugador){
-        return crearMapaTopPatrimonioPlayers(false).get(nombreJugador);
     }
 
     public synchronized static Object peticionHttp(String link) throws Exception {
@@ -363,42 +231,10 @@ public final class Funciones {
         return buildStringFromArray(array, 0);
     }
 
-    public static void enviarMensajeYSonidoSiOnline(String jugador, String mensaje, Sound sound) {
-        Player player = Bukkit.getPlayer(jugador);
-        if(player != null){
-            player.sendMessage(mensaje);
-            player.playSound(player.getLocation(), sound, 10, 1);
-        }
-    }
-
-    public static void enviarMensajeYSonido (Player player, String mensaje, Sound sound) {
-        player.sendMessage(mensaje);
-        player.playSound(player.getLocation(), sound, 10, 1);
-    }
-
-    public static void enviarMensaje (String nombreJugador, String mensajeOnline, String mensajeOffline) {
-        Player player = Bukkit.getPlayer(nombreJugador);
-        if(player != null){
-            player.sendMessage(mensajeOnline);
-        }else{
-            DependecyContainer.get(MensajesService.class).save(nombreJugador, mensajeOffline);
-        }
-    }
-
     public static boolean cuincideNombre (String nombre, String... items){
         List<String> bannedNamesList = Arrays.asList(items);
 
         return bannedNamesList.stream()
                 .anyMatch( (name) -> name.equalsIgnoreCase(nombre));
-    }
-
-    public static void enviarMensaje (String nombreJugador, String mensajeOnline, String mensajeOffline, Sound sound, int v1, int v2) {
-        Player player = Bukkit.getPlayer(nombreJugador);
-        if (player != null) {
-            player.sendMessage(mensajeOnline);
-            player.playSound(player.getLocation(), sound, v1, v2);
-        } else {
-            DependecyContainer.get(MensajesService.class).save(nombreJugador, mensajeOffline);
-        }
     }
 }

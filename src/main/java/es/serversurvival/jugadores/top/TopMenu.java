@@ -5,9 +5,9 @@ import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.menustate.BeforeShow;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.PosicionCerrada;
+import es.serversurvival.jugadores._shared.application.CalculadorPatrimonio;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
@@ -26,8 +26,9 @@ import static es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosi
 import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
-public final class TopMenu extends Menu implements BeforeShow {
+public final class TopMenu extends Menu<Object> implements BeforeShow {
     private final PosicionesCerradasService posicionesCerradasService;
+    private final CalculadorPatrimonio calculadorPatrimonio;
     private final JugadoresService jugadoresService;
     private final MenuService menuService;
 
@@ -58,7 +59,7 @@ public final class TopMenu extends Menu implements BeforeShow {
                 .item(6, buildTopMenosFiablesJugadoresItem())
                 .item(7, buildItemPeoresOperacioensBolsa())
                 .item(8, buildMejoresComerciantes())
-                .item(9, buildItemGoBackToProfile(), (p,e) -> this.menuService.open(p, new PerfilMenu(p.getName())))
+                .item(9, buildItemGoBackToProfile(), (p,e) -> this.menuService.open(p, PerfilMenu.class, jugadoresService.getByNombre(p.getName())))
                 .build();
     }
 
@@ -176,7 +177,7 @@ public final class TopMenu extends Menu implements BeforeShow {
     }
 
     private ItemStack buildTopPobresJugadoresItem() {
-        Map<String, Double> listaRicos = crearMapaTopPatrimonioPlayers(true);
+        Map<String, Double> listaRicos = calculadorPatrimonio.calcularTopJugadores(true);
         String displayName = GREEN + "" + BOLD + "TOP POBRES";
         List<String> lore = new ArrayList<>();
         int pos = 1;
@@ -209,7 +210,7 @@ public final class TopMenu extends Menu implements BeforeShow {
     }
 
     private ItemStack buildTopRicosJugadoresItem() {
-        Map<String, Double> listaRicos = crearMapaTopPatrimonioPlayers(false);
+        Map<String, Double> listaRicos = calculadorPatrimonio.calcularTopJugadores(false);
         String displayName = GREEN + "" + BOLD + "TOP RICOS";
         List<String> lore = new ArrayList<>();
         int pos = 1;
@@ -226,7 +227,7 @@ public final class TopMenu extends Menu implements BeforeShow {
 
     private void initInfoJugadores () {
         List<Jugador> jugadores = jugadoresService.findAll();
-        Map<String, Double> mapPatrimonio = crearMapaTopPatrimonioPlayers(false);
+        Map<String, Double> mapPatrimonio = calculadorPatrimonio.calcularTopJugadores(false);
 
         for (Jugador jugador : jugadores) {
             String nombreJugador = jugador.getNombre();

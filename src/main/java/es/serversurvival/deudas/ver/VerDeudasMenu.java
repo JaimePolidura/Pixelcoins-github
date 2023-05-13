@@ -10,6 +10,7 @@ import es.serversurvival.deudas._shared.application.DeudasService;
 import es.serversurvival.deudas._shared.domain.Deuda;
 import es.serversurvival.deudas.cancelar.CancelarDeudaUseCase;
 import es.serversurvival.deudas.pagarTodo.PagarDeudaCompletaUseCase;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
 import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
@@ -25,11 +26,10 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
-public final class VerDeudasMenu extends Menu {
-    private static final String TITULO = DARK_RED + "" + BOLD + "        TUS DEUDAS";
-
+public final class VerDeudasMenu extends Menu<Object> {
     private final PagarDeudaCompletaUseCase pagarDeudaUseCase;
     private final CancelarDeudaUseCase cancelarDeudaUseCase;
+    private final JugadoresService jugadoresService;
     private final DeudasService deudasService;
     private final MenuService menuService;
 
@@ -46,7 +46,7 @@ public final class VerDeudasMenu extends Menu {
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
                 .fixedItems()
-                .title(TITULO)
+                .title(DARK_RED + "" + BOLD + "        TUS DEUDAS")
                 .item(1, buildItemInfo())
                 .items(2, this::buildItemsDeudas, this::onDeudaClicked)
                 .breakpoint(7, buildItemGoBackToProfile(), this::goBackToProfile)
@@ -82,7 +82,7 @@ public final class VerDeudasMenu extends Menu {
     }
     
     private void goBackToProfile(Player player, InventoryClickEvent event) {
-        this.menuService.open(player, new PerfilMenu(player.getName()));
+        this.menuService.open(player, PerfilMenu.class, this.jugadoresService.getByNombre(player.getName()));
     }
 
     private List<ItemStack> buildItemsDeudas(Player player) {

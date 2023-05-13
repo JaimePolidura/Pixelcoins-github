@@ -1,17 +1,15 @@
 package es.serversurvival.jugadores.venderjugador;
 
+import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
-import es.bukkitclassmapper.menus.MenuService;
 import es.jaime.javaddd.domain.exceptions.*;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
+import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static es.serversurvival._shared.utils.validaciones.Validaciones.*;
-import static org.bukkit.ChatColor.DARK_RED;
 import static org.bukkit.ChatColor.GOLD;
 
 @Command(
@@ -19,12 +17,9 @@ import static org.bukkit.ChatColor.GOLD;
         args = {"comprador", "pixelcoins"},
         explanation = "Vender a un nombreAccionista el item que tengas en la mano"
 )
+@AllArgsConstructor
 public class VenderJugadorComandoRunner implements CommandRunnerArgs<VenderJugadorComando> {
     private final MenuService menuService;
-
-    public VenderJugadorComandoRunner() {
-        this.menuService = DependecyContainer.get(MenuService.class);
-    }
 
     @Override
     public void execute(VenderJugadorComando venderJugadorComando, CommandSender sender) {
@@ -39,12 +34,8 @@ public class VenderJugadorComandoRunner implements CommandRunnerArgs<VenderJugad
         if(player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getType() == Material.AIR)
             throw new IllegalState("Tiens que tener un objeto en la mano");
 
-        this.menuService.open(comprador, new VenderJugadorConfirmacionMenu(
-                comprador,
-                player,
-                player.getInventory().getItemInMainHand(),
-                ((Player) sender).getInventory().getHeldItemSlot(),
-                pixelcoins
+        this.menuService.open(comprador, VenderJugadorConfirmacionMenu.class,  new VenderJugadorConfirmacionMenuState(
+                comprador, player, player.getInventory().getItemInMainHand(), ((Player) sender).getInventory().getHeldItemSlot(), pixelcoins
         ));
 
         sender.sendMessage(GOLD + "Has enviado la solicitud");

@@ -3,7 +3,6 @@ package es.serversurvival.tienda.vertienda;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.mobs.Mob;
 import es.bukkitclassmapper.mobs.OnPlayerInteractMob;
-import es.serversurvival.tienda.vertienda.menu.TiendaMenu;
 import lombok.AllArgsConstructor;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
@@ -14,6 +13,6 @@ public class MobTienda implements OnPlayerInteractMob {
 
     @Override
     public void execute(PlayerInteractEntityEvent event) {
-        this.menuService.open(event.getPlayer(), new TiendaMenu(event.getPlayer().getName()));
+        this.menuService.open(event.getPlayer(), TiendaMenu.class);
     }
 }

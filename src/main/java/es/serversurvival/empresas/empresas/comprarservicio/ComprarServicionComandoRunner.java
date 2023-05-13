@@ -4,6 +4,7 @@ import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival._shared.utils.Funciones;
+import lombok.AllArgsConstructor;
 import org.bukkit.command.CommandSender;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
@@ -15,12 +16,9 @@ import static org.bukkit.ChatColor.GOLD;
         args = {"empresa", "precio"},
         explanation = "Comprar un servicio a la empresa, <empresa> nombre de la empresa <precio> pixelcoisn a dar"
 )
+@AllArgsConstructor
 public class ComprarServicionComandoRunner implements CommandRunnerArgs<ComprarServicionComando> {
     private final ComprarServicioUseCase useCase;
-
-    public ComprarServicionComandoRunner(){
-        this.useCase = new ComprarServicioUseCase();
-    }
 
     @Override
     public void execute(ComprarServicionComando comprarServicionComando, CommandSender player) {

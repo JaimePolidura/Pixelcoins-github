@@ -1,10 +1,9 @@
 package es.serversurvival.empresas.empresas.comprarservicio;
 
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
-import es.dependencyinjector.annotations.UseCase;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
@@ -12,18 +11,12 @@ import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
 @UseCase
+@AllArgsConstructor
 public final class ComprarServicioUseCase {
     private final EmpresasService empresasService;
     private final JugadoresService jugadoresService;
     private final EventBus eventBus;
-
-    public ComprarServicioUseCase() {
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-    }
 
     public Empresa comprar (String jugador, String empresa, double pixelcoins) {
         this.ensurePixelcoinsCorrectFormat(pixelcoins);

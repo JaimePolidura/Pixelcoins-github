@@ -1,21 +1,18 @@
 package es.serversurvival.jugadores.setupjugadorunido;
 
-import es.dependencyinjector.annotations.UseCase;
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.serversurvival.Pixelcoin;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
 
 @UseCase
+@RequiredArgsConstructor
 public final class SetUpJugadorUseCase {
     private final JugadoresService jugadoresService;
-
-    public SetUpJugadorUseCase(){
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-    }
 
     public void setUpJugadorUnido (Player player) {
         Optional<Jugador> jugadorOptional = jugadoresService.findById(player.getUniqueId());

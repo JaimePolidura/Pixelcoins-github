@@ -1,22 +1,17 @@
 package es.serversurvival.mensajes.onplayerjoin;
 
-import es.dependencyinjector.annotations.Component;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.mensajes._shared.application.MensajesService;
+import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-@Component
+@AllArgsConstructor
+@es.dependencyinjector.dependencies.annotations.EventHandler
 public final class PlayerJoin implements Listener {
     private final MensajesService mensajesService;
-
-    public PlayerJoin(){
-        this.mensajesService = DependecyContainer.get(MensajesService.class);
-    }
-
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent evento) {
         Player player = evento.getPlayer();

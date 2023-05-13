@@ -28,6 +28,7 @@ public final class VenderAccionEmpresaPrecioSelectorMenu extends NumberSelectorM
         venderOfertaUseCase.vender(player.getName(), this.getState().accionAVender().getAccionistaServerId(),
                 precioVenta, this.getState().cantidadAVender());
 
+        //TODO Change better menus library
         var newPages = this.menuService.buildPages(new VerOfertasAccionesServerMenu(player));
         this.syncMenuService.sync(VerOfertasAccionesServerMenu.class, newPages);
 

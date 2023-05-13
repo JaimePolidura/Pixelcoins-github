@@ -1,27 +1,20 @@
 package es.serversurvival.empresas.empresas.editarnombre;
 
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.AlreadyExists;
 import es.jaime.javaddd.domain.exceptions.IllegalLength;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.dependencyinjector.annotations.UseCase;
-import es.serversurvival.Pixelcoin;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import io.vavr.control.Try;
 import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
 @UseCase
+@AllArgsConstructor
 public final class EditarNombreUseCase {
     private final EmpresasService empresasService;
     private final EventBus eventBus;
-
-    public EditarNombreUseCase(){
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-    }
 
     public void edit(String antiguoNombre, String nuevoNombre, String playerName) {
         this.ensureNombreEmpresaCorrectFormat(nuevoNombre);

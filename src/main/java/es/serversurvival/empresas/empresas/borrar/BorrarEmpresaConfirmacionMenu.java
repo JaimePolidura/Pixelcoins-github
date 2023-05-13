@@ -54,5 +54,4 @@ public final class BorrarEmpresaConfirmacionMenu extends Menu<BorrarEmpresaConfi
     private ItemStack buildItemCancel() {
         return ItemBuilder.of(Material.RED_WOOL).title(RED + "" + BOLD + "CANCELAR").build();
     }
-
 }

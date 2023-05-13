@@ -1,10 +1,9 @@
 package es.serversurvival.empresas.ofertasaccionesserver.venderofertaaccionaserver;
 
-import es.dependencyinjector.annotations.UseCase;
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.application.OfertasAccionesServerService;
@@ -20,12 +19,6 @@ public final class VenderOfertaAccionServerUseCase {
     private final AccionistasServerService accionistasEmpresasServerService;
     private final OfertasAccionesServerService ofertasAccionesServerService;
     private final EventBus eventBus;
-
-    public VenderOfertaAccionServerUseCase() {
-        this.accionistasEmpresasServerService = DependecyContainer.get(AccionistasServerService.class);
-        this.ofertasAccionesServerService = DependecyContainer.get(OfertasAccionesServerService.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-    }
 
     public void vender(String vendedorNombre, UUID accionEmpresServerId, double precio, int cantidad) {
         this.ensureCantidadAndPrecioCorrectFormat(precio, cantidad);

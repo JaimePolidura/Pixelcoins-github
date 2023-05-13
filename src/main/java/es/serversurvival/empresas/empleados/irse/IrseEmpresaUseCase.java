@@ -1,9 +1,8 @@
 package es.serversurvival.empresas.empleados.irse;
 
-import es.dependencyinjector.annotations.UseCase;
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
@@ -16,12 +15,6 @@ public final class IrseEmpresaUseCase {
     private final EmpresasService empresasService;
     private final EmpleadosService empleadosService;
     private final EventBus eventBus;
-
-    public IrseEmpresaUseCase() {
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
-        this.empleadosService = DependecyContainer.get(EmpleadosService.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-    }
 
     public void irse (String empleadoNombre, String empresaNombre) {
         Empresa empresa = this.empresasService.getByNombre(empresaNombre);

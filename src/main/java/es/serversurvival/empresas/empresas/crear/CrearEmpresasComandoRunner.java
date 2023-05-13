@@ -2,6 +2,7 @@ package es.serversurvival.empresas.empresas.crear;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
+import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -13,12 +14,9 @@ import org.bukkit.entity.Player;
         args = {"nombre", "...descripccion"},
         explanation = "Crear empresa en la que podras contratar jugadores, facturar etc"
 )
+@AllArgsConstructor
 public class CrearEmpresasComandoRunner implements CommandRunnerArgs<CrearEmpresasComando> {
     private final CrearEmpresaUseCase useCase;
-
-    public CrearEmpresasComandoRunner(){
-        this.useCase = new CrearEmpresaUseCase();
-    }
 
     @Override
     public void execute(CrearEmpresasComando crearEmpresasComando, CommandSender sender) {

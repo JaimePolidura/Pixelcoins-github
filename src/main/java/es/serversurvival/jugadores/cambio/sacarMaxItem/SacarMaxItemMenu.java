@@ -6,7 +6,8 @@ import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
-import es.serversurvival.jugadores.cambio.CambioPixelcoins;
+import es.serversurvival.jugadores.cambio.TipoCambioPixelcoins;
+import es.serversurvival.mensajes._shared.application.EnviadorMensajes;
 import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -19,11 +20,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
-import static es.serversurvival.jugadores.cambio.CambioPixelcoins.*;
+import static es.serversurvival.jugadores.cambio.TipoCambioPixelcoins.*;
 import static org.bukkit.ChatColor.DARK_RED;
 
 @AllArgsConstructor
 public final class SacarMaxItemMenu extends Menu {
+    private final SacarMaxItemUseCase sacarMaxItemUseCase;
+    private final EnviadorMensajes enviadorMensajes;
     private final JugadoresService jugadoresService;
     private final Jugador jugador;
 
@@ -52,6 +55,7 @@ public final class SacarMaxItemMenu extends Menu {
         ItemStack itemClickeado = event.getCurrentItem();
 
         String tipoItem = itemClickeado.getType().toString();
+        TipoCambioPixelcoins tipoCambio =  TipoCambioPixelcoins.valueOf(tipoItem);
         int espacios = Funciones.getEspaciosOcupados(player.getInventory());
         Jugador jugador = this.jugadoresService.getByNombre(player.getName());
 
@@ -60,14 +64,12 @@ public final class SacarMaxItemMenu extends Menu {
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
             return;
         }
-        if (!CambioPixelcoins.suficientesPixelcoins(tipoItem, 1, jugador.getPixelcoins())) {
-            Funciones.enviarMensajeYSonido(player, DARK_RED + "No tienes las suficientes pixelcoins", Sound.ENTITY_VILLAGER_NO);
+        if (tipoCambio.cambio > jugador.getPixelcoins()) {
+            enviadorMensajes.enviarMensajeYSonido(player, DARK_RED + "No tienes las suficientes pixelcoins", Sound.ENTITY_VILLAGER_NO);
             return;
         }
 
-        String tipoItemClickeado = itemClickeado.getType().toString();
-
-        SacarMaxItemUseCase.INSTANCE.sacarMaxItem(tipoItemClickeado, jugador);
+        sacarMaxItemUseCase.sacarMaxItem(jugador, tipoCambio);
     }
 
     private ItemStack buildItemInfo() {

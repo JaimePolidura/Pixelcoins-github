@@ -2,8 +2,8 @@ package es.serversurvival.jugadores.dinero;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.jugadores._shared.application.CalculadorPatrimonio;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
@@ -18,6 +18,7 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 )
 @AllArgsConstructor
 public class DineroComandoExecutor implements CommandRunnerNonArgs {
+    private final CalculadorPatrimonio calculadorPatrimonio;
     private final JugadoresService jugadoresService;
 
     @Override
@@ -25,7 +26,7 @@ public class DineroComandoExecutor implements CommandRunnerNonArgs {
         Player player = (Player) commandSender;
         String nombreJugador = player.getName();
 
-        double patrimonioJugador = Funciones.patrimonioJugador(nombreJugador);
+        double patrimonioJugador = this.calculadorPatrimonio.calcular(nombreJugador);
         double totalAhorrado = jugadoresService.getByNombre(nombreJugador).getPixelcoins();
 
         patrimonioJugador = patrimonioJugador - totalAhorrado;

@@ -1,7 +1,5 @@
 package es.serversurvival.deudas._shared.domain;
 
-
-import es.jaime.javaddd.domain.Aggregate;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

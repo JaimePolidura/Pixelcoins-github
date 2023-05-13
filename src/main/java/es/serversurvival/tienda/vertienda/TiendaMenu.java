@@ -1,4 +1,4 @@
-package es.serversurvival.tienda.vertienda.menu;
+package es.serversurvival.tienda.vertienda;
 
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
@@ -15,6 +15,7 @@ import es.serversurvival._shared.utils.MinecraftUtils;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
+import es.serversurvival.mensajes._shared.application.EnviadorMensajes;
 import es.serversurvival.tienda._shared.application.TiendaService;
 import es.serversurvival.tienda._shared.domain.TiendaObjeto;
 import es.serversurvival.tienda.comprar.ComprarTiendaObjetoUseCase;
@@ -37,15 +38,18 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
-public final class TiendaMenu extends Menu implements AfterShow {
+public final class TiendaMenu extends Menu<Object> implements AfterShow {
     public final static String OWNER_TIENDAOBJETO_ITEM_NAME = RED + "" + BOLD + "CLICK PARA RETIRAR";
     public final static String NO_OWNER_TIENDAOBJETO_ITEM_NAME = AQUA + "" + BOLD + "CLICK PARA COMPRAR";
     public final static String TITULO = ChatColor.DARK_RED + "" + ChatColor.BOLD + "            Tienda";
 
-    private final MenuService menuService;
-    private final TiendaService tiendaService;
+    private final ComprarTiendaObjetoUseCase comprarTiendaObjetoUseCase;
+    private final RetirarOfertaUseCase retirarOfertaUseCase;
+    private final EnviadorMensajes enviadorMensajes;
     private final JugadoresService jugadoresService;
     private final SyncMenuService syncMenuService;
+    private final TiendaService tiendaService;
+    private final MenuService menuService;
 
     private String jugadorNombre;
 
@@ -68,7 +72,7 @@ public final class TiendaMenu extends Menu implements AfterShow {
                 .fixedItems()
                 .item(1, buildItemInfo())
                 .items(2, buildItemTiendas(), this::onItemTiendaOnClick)
-                .breakpoint(7, Material.GREEN_BANNER, (p,e) -> this.menuService.open(p, new PerfilMenu(p.getName())))
+                .breakpoint(7, Material.GREEN_BANNER, (p,e) -> this.menuService.open(p, PerfilMenu.class, jugadoresService.getByNombre(p.getName())))
                 .sync(SyncMenuConfiguration.builder()
                         .mapper(this::onSyncItemMap)
                         .build())
@@ -102,7 +106,7 @@ public final class TiendaMenu extends Menu implements AfterShow {
             return;
         }
 
-        ItemStack itemComprado = ComprarTiendaObjetoUseCase.INSTANCE.realizarVenta(playerWhoClicked.getName(),
+        ItemStack itemComprado = this.comprarTiendaObjetoUseCase.realizarVenta(playerWhoClicked.getName(),
                 tiendaObjeto.getTiendaObjetoId());
 
         if(tiendaObjeto.getCantidad() == 1)
@@ -120,7 +124,7 @@ public final class TiendaMenu extends Menu implements AfterShow {
         String mensajeOfflineVendedor = playerWhoClicked.getName() + " te ha comprado 1 de " + itemComprado.getType() +
                 " por " + FORMATEA.format(tiendaObjeto.getPrecio()) + " PC";
 
-        Funciones.enviarMensaje(tiendaObjeto.getJugador(), mensajeOnlineToVendedor, mensajeOfflineVendedor,
+        enviadorMensajes.enviarMensaje(tiendaObjeto.getJugador(), mensajeOnlineToVendedor, mensajeOfflineVendedor,
                 Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
     }
 
@@ -132,11 +136,11 @@ public final class TiendaMenu extends Menu implements AfterShow {
         ItemStack itemComprado = super.getActualPage().getInventory().getItem(slotItem);
         itemComprado.setAmount(itemComprado.getAmount() - 1);
 
-        this.syncMenuService.sync(TiendaMenu.class, this.allPages());
+        this.syncMenuService.sync(this);
     }
 
     private void retirarItemTienda(Player player, UUID itemTiendaId, Jugador jugador, int itemSlot) {
-        var item = RetirarOfertaUseCase.INSTANCE.retirarOferta(jugador.getNombre(), itemTiendaId);
+        var item = this.retirarOfertaUseCase.retirarOferta(jugador.getNombre(), itemTiendaId);
 
         player.getInventory().addItem(item);
 
@@ -189,8 +193,7 @@ public final class TiendaMenu extends Menu implements AfterShow {
     }
 
     private void reloadMenu() {
-        TiendaMenu newMenu = new TiendaMenu(jugadorNombre);
-        this.menuService.open(Bukkit.getPlayer(jugadorNombre), newMenu);
+        var newMenu = this.menuService.open(Bukkit.getPlayer(jugadorNombre), TiendaMenu.class);
 
         this.syncMenuService.sync(newMenu);
     }

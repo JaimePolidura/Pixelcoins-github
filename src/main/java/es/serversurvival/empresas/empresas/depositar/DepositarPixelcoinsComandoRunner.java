@@ -3,6 +3,7 @@ package es.serversurvival.empresas.empresas.depositar;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.utils.Funciones;
+import lombok.AllArgsConstructor;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,12 +16,9 @@ import static org.bukkit.ChatColor.*;
         args = {"empresa", "pixelcoins"},
         explanation = "Depositar pixelcoins en la empresa <empresa>"
 )
+@AllArgsConstructor
 public class DepositarPixelcoinsComandoRunner implements CommandRunnerArgs<DepositarPixelcoinsComando> {
     private final DepositarPixelcoinsUseCase useCasse;
-
-    public DepositarPixelcoinsComandoRunner(){
-        this.useCasse = new DepositarPixelcoinsUseCase();
-    }
 
     @Override
     public void execute(DepositarPixelcoinsComando comando, CommandSender player) {

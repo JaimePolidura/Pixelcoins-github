@@ -2,20 +2,19 @@ package es.serversurvival.empresas.empleados.irse;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
+import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.checkerframework.checker.units.qual.A;
 
 @Command(
         value = "empleos irse",
         args = {"empresa"},
         explanation = "Irse de una empresa en la que estes contratado <empresa> nombre de la empresa para irse"
 )
+@AllArgsConstructor
 public class IrseEmpleoComandoRunner implements CommandRunnerArgs<IrseEmpleoComando> {
     private final IrseEmpresaUseCase useCase;
-
-    public IrseEmpleoComandoRunner() {
-        this.useCase = new IrseEmpresaUseCase();
-    }
 
     @Override
     public void execute(IrseEmpleoComando command, CommandSender player) {

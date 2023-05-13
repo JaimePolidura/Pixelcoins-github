@@ -3,7 +3,7 @@ package es.serversurvival;
 import es.bukkitbettermenus.BetterMenusInstanceProvider;
 import es.bukkitbettermenus.MenusDependenciesInstanceProvider;
 import es.bukkitclassmapper.ClassMapperConfiguration;
-import es.bukkitclassmapper._shared.utils.reflections.InstanceProvider;
+import es.bukkitclassmapper._shared.utils.reflections.BukkitClassMapperInstanceProvider;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.mobs.Mob;
 import es.bukkitclassmapper.task.BukkitTimeUnit;
@@ -14,7 +14,8 @@ import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.dependencyinjector.dependencies.InMemoryDependenciesRepository;
 import es.jaime.Event;
 import es.jaime.EventBus;
-import es.jaime.impl.EventBusSynch;
+import es.jaime.EventListenerDependencyProvider;
+import es.jaime.impl.EventBusSync;
 import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.scoreboards.ScoreBoardManager;
@@ -30,6 +31,7 @@ import static org.bukkit.ChatColor.*;
 
 /**
  * 11/05/2023 -> 16747
+ * 12/05/2023 -> 16246
  */
 public final class Pixelcoin extends JavaPlugin {
     private static final String ON_WRONG_COMMAND = DARK_RED + "Comando no encontrado /ayuda";
@@ -67,9 +69,12 @@ public final class Pixelcoin extends JavaPlugin {
         getLogger().info("------------Plugin activado -------------");
         getServer().getConsoleSender().sendMessage(GREEN + "------------------------------");
 
-        this.eventBus = new EventBusSynch("es.serversurvival");
-
         DependenciesRepository dependenciesRepository = new InMemoryDependenciesRepository();
+
+        InstanceProviderDependencyInjector instanceProvider = new InstanceProviderDependencyInjector(dependenciesRepository);
+        this.eventBus = new EventBusSync("es.serversurvival", instanceProvider);
+        dependenciesRepository.add(EventBus.class, this.eventBus);
+        dependenciesRepository.add(ExecutorService.class, Funciones.POOL);
 
         DependencyInjectorBootstrapper.init(DependencyInjectorConfiguration.builder()
                 .packageToScan(COMMON_PACKAGE)
@@ -77,7 +82,6 @@ public final class Pixelcoin extends JavaPlugin {
                 .customAnnotations(Command.class, Task.class, Mob.class)
                 .waitUntilCompletion()
                 .build());
-        InstanceProviderDependencyInjector instanceProvider = new InstanceProviderDependencyInjector(dependenciesRepository);
 
         BetterMenusInstanceProvider.setInstanceProvider(instanceProvider);
 
@@ -90,8 +94,6 @@ public final class Pixelcoin extends JavaPlugin {
                     .waitUntilCompletion()
                     .build()
                 .startScanning();
-
-        dependenciesRepository.add(ExecutorService.class, Funciones.POOL);
 
         this.setUpScoreboardUpdater();
 
@@ -106,7 +108,7 @@ public final class Pixelcoin extends JavaPlugin {
     }
 
     @AllArgsConstructor
-    private static class InstanceProviderDependencyInjector implements InstanceProvider, MenusDependenciesInstanceProvider {
+    private static class InstanceProviderDependencyInjector implements BukkitClassMapperInstanceProvider, MenusDependenciesInstanceProvider, EventListenerDependencyProvider {
         private final DependenciesRepository dependenciesRepository;
 
         @Override

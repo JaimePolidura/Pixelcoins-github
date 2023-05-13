@@ -1,16 +1,17 @@
 package es.serversurvival.tienda.vender;
 
-import es.bukkitclassmapper.menus.MenuService;
-import es.bukkitclassmapper.menus.modules.sync.SyncMenuService;
-import es.dependencyinjector.annotations.UseCase;
+import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.modules.sync.SyncMenuService;
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalType;
 import es.serversurvival.Pixelcoin;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.tienda._shared.application.TiendaService;
 import es.serversurvival.tienda._shared.domain.EncantamientoObjecto;
 import es.serversurvival.tienda._shared.domain.TiendaObjeto;
-import es.serversurvival.tienda.vertienda.menu.TiendaMenu;
+import es.serversurvival.tienda.vertienda.TiendaMenu;
+import lombok.AllArgsConstructor;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @UseCase
+@AllArgsConstructor
 public final class VenderTiendaUseCase {
     private static final List<String> bannedItems = Arrays.asList("POTION", "BANNER", "SPLASH_POTION", "LINGERING_POTION", "AIR");
     private static final int MAX_ITEMS_PER_PLAYER = 5;
@@ -28,12 +30,6 @@ public final class VenderTiendaUseCase {
     private final SyncMenuService syncMenuService;
     private final MenuService menuService;
     private final TiendaService tiendaService;
-
-    public VenderTiendaUseCase () {
-        this.syncMenuService = DependecyContainer.get(SyncMenuService.class);
-        this.menuService = DependecyContainer.get(MenuService.class);
-        this.tiendaService = DependecyContainer.get(TiendaService.class);
-    }
 
     public TiendaObjeto crearOferta(String nombreJugador, ItemStack itemAVender, double precio) {
         this.ensureCorrectFormatPixelcoins(precio);
@@ -45,8 +41,8 @@ public final class VenderTiendaUseCase {
                 itemAVender.getDurability(), getEncantamientosDeItem(itemAVender)
         );
 
-        var newPages = this.menuService.buildPages(new TiendaMenu(nombreJugador));
-        this.syncMenuService.sync(TiendaMenu.class, newPages);
+        var newMenu = this.menuService.buildMenu(Bukkit.getPlayer(nombreJugador), TiendaMenu.class);
+        this.syncMenuService.sync(newMenu);
 
         Pixelcoin.publish(new NuevoItemTienda(tiendaObjeto.getTiendaObjetoId(), nombreJugador, itemAVender));
 

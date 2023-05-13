@@ -3,6 +3,7 @@ package es.serversurvival.empresas.empresas.sacar;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.utils.Funciones;
+import lombok.AllArgsConstructor;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,13 +16,9 @@ import static org.bukkit.ChatColor.*;
         args = {"empresa", "pixelcoins"},
         explanation = "Sacar pixelcoins de tu empresa"
 )
+@AllArgsConstructor
 public class SacarPixelcoinsComandoRunner implements CommandRunnerArgs<SacarPixelcoinsComando> {
-    private final String usoIncorrecto = DARK_RED + "Uso incorrecto: /empresas sacar <empresa> <pixelcoins>";
     private final SacarPixelcoinsUseCase useCase;
-
-    public SacarPixelcoinsComandoRunner(){
-        this.useCase = new SacarPixelcoinsUseCase();
-    }
 
     @Override
     public void execute(SacarPixelcoinsComando comando, CommandSender player) {

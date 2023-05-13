@@ -1,9 +1,10 @@
 package es.serversurvival.empresas.ofertasaccionesserver.verofertasaccioneserver;
 
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
-import es.bukkitclassmapper.menus.MenuService;
-import es.serversurvival._shared.DependecyContainer;
+import lombok.AllArgsConstructor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -11,15 +12,12 @@ import org.bukkit.entity.Player;
         value = "empresas mercado",
         explanation = "Ver todas las ofertas de venta de cantidad de empresas del servidor"
 )
+@AllArgsConstructor
 public class MercadoEmpresas implements CommandRunnerNonArgs {
     private final MenuService menuService;
 
-    public MercadoEmpresas() {
-        this.menuService = DependecyContainer.get(MenuService.class);
-    }
-
     @Override
     public void execute(CommandSender sender) {
-        this.menuService.open((Player) sender, new VerOfertasAccionesServerMenu((Player) sender));
+        this.menuService.open((Player) sender, (Class<? extends Menu<?>>) VerOfertasAccionesServerMenu.class);
     }
 }

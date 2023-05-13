@@ -3,6 +3,7 @@ package es.serversurvival.empresas.empresas.despedir;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival.empresas.empleados.despedir.DespedirEmpleadoUseCase;
+import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -14,12 +15,9 @@ import static es.serversurvival._shared.utils.Funciones.*;
         args = {"empresa", "nombreAccionista", "razon"},
         explanation = "Despedir a un nombreAccionista de tu empresa"
 )
+@AllArgsConstructor
 public class DespedirEmpleadoComandoRunner implements CommandRunnerArgs<DespedirEmpleadoComando> {
     private final DespedirEmpleadoUseCase useCase;
-
-    public DespedirEmpleadoComandoRunner(){
-        this.useCase = new DespedirEmpleadoUseCase();
-    }
 
     @Override
     public void execute(DespedirEmpleadoComando comando, CommandSender player) {

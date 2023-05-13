@@ -1,10 +1,10 @@
 package es.serversurvival.deudas.ver;
 
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.deudas._shared.application.DeudasService;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival._shared.scoreboards.SingleScoreboard;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -12,14 +12,10 @@ import org.bukkit.scoreboard.Scoreboard;
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival._shared.utils.MinecraftUtils.*;
 
+@RequiredArgsConstructor
 public class DeudasDisplayScoreboard implements SingleScoreboard {
     private final DeudasService deudasService;
     private final JugadoresService jugadoresService;
-
-    public DeudasDisplayScoreboard(){
-        this.deudasService = DependecyContainer.get(DeudasService.class);
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-    }
 
     @Override
     public Scoreboard createScoreborad(java.lang.String jugador) {

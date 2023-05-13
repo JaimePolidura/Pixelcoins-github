@@ -1,10 +1,9 @@
 package es.serversurvival.empresas.ofertasaccionesserver.comprarofertasaccionesserver;
 
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
-import es.dependencyinjector.annotations.UseCase;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
@@ -18,24 +17,14 @@ import lombok.AllArgsConstructor;
 
 import java.util.UUID;
 
-@AllArgsConstructor
 @UseCase
+@AllArgsConstructor
 public final class ComprarOfertaMercadoUseCase {
-    public final static ComprarOfertaMercadoUseCase INSTANCE = new ComprarOfertaMercadoUseCase();
-
     private final JugadoresService jugadoresService;
     private final OfertasAccionesServerService ofertasAccionesServerService;
     private final AccionistasServerService accionistasServerService;
     private final EmpresasService empresasService;
     private final EventBus eventBus;
-
-    public ComprarOfertaMercadoUseCase () {
-        this.jugadoresService = DependecyContainer.get(JugadoresService.class);
-        this.ofertasAccionesServerService= DependecyContainer.get(OfertasAccionesServerService.class);
-        this.accionistasServerService = DependecyContainer.get(AccionistasServerService.class);
-        this.empresasService = DependecyContainer.get(EmpresasService.class);
-        this.eventBus = DependecyContainer.get(EventBus.class);
-    }
 
     public void comprarOfertaMercadoAccionServer (String compradorName, UUID idOfeta, int cantidadAComprar) {
         var ofertaAComprar = ofertasAccionesServerService.getById(idOfeta);

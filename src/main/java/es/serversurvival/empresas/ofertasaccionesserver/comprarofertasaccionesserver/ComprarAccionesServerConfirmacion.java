@@ -1,11 +1,14 @@
 package es.serversurvival.empresas.ofertasaccionesserver.comprarofertasaccionesserver;
 
 import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.menustate.BeforeShow;
 import es.bukkitbettermenus.modules.sync.SyncMenuService;
 import es.serversurvival._shared.menus.NumberSelectorMenu;
 import es.serversurvival.empresas.ofertasaccionesserver._shared.domain.OfertaAccionServer;
 import es.serversurvival.empresas.ofertasaccionesserver.verofertasaccioneserver.VerOfertasAccionesServerMenu;
+import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
+import es.serversurvival.mensajes._shared.application.EnviadorMensajes;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -15,26 +18,29 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import java.util.List;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
-import static es.serversurvival._shared.utils.Funciones.enviarMensajeYSonido;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
-public final class ComprarAccionesServerConfirmacion extends NumberSelectorMenu<OfertaAccionServer> {
+public final class ComprarAccionesServerConfirmacion extends NumberSelectorMenu<OfertaAccionServer> implements BeforeShow {
+    private final ComprarOfertaMercadoUseCase comprarOfertaMercadoUseCase;
+    private final JugadoresService jugadoresService;
+    private final EnviadorMensajes enviadorMensajes;
     private final SyncMenuService syncMenuService;
-    private final Jugador compradorJugador;
     private final MenuService menuService;
+
+    private Jugador jugador;
 
     @Override
     public void onAccept(Player player, InventoryClickEvent event) {
         int cantidadToComprar = (int) super.getPropertyDouble("cantidad");
 
-        new ComprarOfertaMercadoUseCase().comprarOfertaMercadoAccionServer(player.getName(),
+        comprarOfertaMercadoUseCase.comprarOfertaMercadoAccionServer(player.getName(),
                 getState().getOfertaAccionServerId(), cantidadToComprar);
 
-        var newPages = this.menuService.buildPages(new VerOfertasAccionesServerMenu(player));
-        this.syncMenuService.sync(VerOfertasAccionesServerMenu.class, newPages);
+        var newPages = this.menuService.buildPages(player, VerOfertasAccionesServerMenu.class);
+        syncMenuService.sync(VerOfertasAccionesServerMenu.class, newPages, this.getConfiguration().getSyncMenuConfiguration());
 
-        enviarMensajeYSonido(player, GOLD + "Has comprado " + FORMATEA.format(cantidadToComprar) + " cantidad a " + GREEN +
+        enviadorMensajes.enviarMensajeYSonido(player, GOLD + "Has comprado " + FORMATEA.format(cantidadToComprar) + " cantidad a " + GREEN +
                 FORMATEA.format(getState().getPrecio()) + " PC" + GOLD + " que es un total de " + GREEN + FORMATEA.format(
                 cantidadToComprar * getState().getPrecio()) + " PC " + GOLD + " comandos: " + AQUA +
                 "/bolsa vender /bolsa cartera", Sound.ENTITY_PLAYER_LEVELUP);
@@ -49,19 +55,24 @@ public final class ComprarAccionesServerConfirmacion extends NumberSelectorMenu<
                 GOLD + "Comprar: " + cantidad + " cantidad de " + this.getState().getEmpresa(),
                 GOLD + "Precio/Accion: " + GREEN + FORMATEA.format(getState().getPrecio()) + " PC",
                 GOLD + "Total: " + GREEN + FORMATEA.format(getState().getPrecio() * cantidad) + " PC",
-                GOLD + "Tus pixelcoins: " + GREEN + FORMATEA.format(this.compradorJugador.getPixelcoins()) + " PC"
+                GOLD + "Tus pixelcoins: " + GREEN + FORMATEA.format(this.jugador.getPixelcoins()) + " PC"
         );
     }
 
     @Override
     public double maxValue() {
-        return this.compradorJugador.getPixelcoins() >= (getState().getCantidad() * getState().getPrecio()) ?
+        return this.jugador.getPixelcoins() >= (getState().getCantidad() * getState().getPrecio()) ?
                 getState().getCantidad() :
-                compradorJugador.getPixelcoins() / getState().getPrecio();
+                jugador.getPixelcoins() / getState().getPrecio();
     }
 
     @Override
     public double initialValue() {
         return 1;
+    }
+
+    @Override
+    public void beforeShow(Player player) {
+        this.jugador = this.jugadoresService.getByNombre(player.getName());
     }
 }

@@ -1,21 +1,19 @@
 package es.serversurvival.jugadores.cambio.sacarMaxItem;
 
-import es.bukkitclassmapper.menus.MenuService;
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.mobs.Mob;
 import es.bukkitclassmapper.mobs.OnPlayerInteractMob;
-import es.serversurvival._shared.DependecyContainer;
+import lombok.AllArgsConstructor;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 @Mob(x = 261,y = 64, z = -211)
+@AllArgsConstructor
 public class PixelcoinsMaxItemsMob implements OnPlayerInteractMob {
     private final MenuService menuService;
 
-    public PixelcoinsMaxItemsMob() {
-        this.menuService = DependecyContainer.get(MenuService.class);
-    }
-
     @Override
     public void execute(PlayerInteractEntityEvent event) {
-        this.menuService.open(event.getPlayer(), new SacarMaxItemMenu(event.getPlayer().getName()));
+        this.menuService.open(event.getPlayer(), (Class<? extends Menu<?>>) SacarMaxItemMenu.class);
     }
 }

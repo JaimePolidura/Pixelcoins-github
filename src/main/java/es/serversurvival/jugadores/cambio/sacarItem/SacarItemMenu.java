@@ -5,7 +5,9 @@ import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.jugadores._shared.domain.Jugador;
-import es.serversurvival.jugadores.cambio.CambioPixelcoins;
+import es.serversurvival.jugadores.cambio.TipoCambioPixelcoins;
+import es.serversurvival.mensajes._shared.application.EnviadorMensajes;
+import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -17,10 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
-import static es.serversurvival.jugadores.cambio.CambioPixelcoins.*;
+import static es.serversurvival.jugadores.cambio.TipoCambioPixelcoins.*;
 import static org.bukkit.ChatColor.*;
 
+@AllArgsConstructor
 public final class SacarItemMenu extends Menu<Jugador> {
+    private final SacarItemUseCase sacarItemUseCase;
+    private final EnviadorMensajes enviadorMensajes;
+
     @Override
     public int[][] items() {
         return new int[][] {
@@ -48,28 +54,30 @@ public final class SacarItemMenu extends Menu<Jugador> {
         Jugador jugador = getState();
         ItemStack itemClickeado = event.getCurrentItem();
         int espacios = Funciones.getEspaciosOcupados(player.getInventory());
-
         boolean inventarioLleno = espacios == 36 || (Funciones.esDeTipoItem(itemClickeado, "DIAMOND", "DIAMOND_BLOCK", "QUARTZ_BLOCK",
                 "LAPIS_LAZULI", "LAPIS_BLOCK") && itemClickeado.getAmount() == 64);
+
         if(inventarioLleno){
             player.sendMessage(ChatColor.DARK_RED + "Necesitas tener el inventario con espacios libres");
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
             return;
         }
 
-        String tipoItem = itemClickeado.getType().toString();
-        double cambioPixelcoins = CambioPixelcoins.getCambioTotal(tipoItem, 1); //Pixelcoins a sacar
+        String tipoItemClickeado = itemClickeado.getType().toString();
+        TipoCambioPixelcoins tipoCambio = TipoCambioPixelcoins.valueOf(tipoItemClickeado);
+        double cambioPixelcoins = tipoCambio.cambio; //Pixelcoins a sacar
         if(jugador.getPixelcoins() < cambioPixelcoins){
-            Funciones.enviarMensajeYSonido(player, DARK_RED + "Necesitas tener minimo " + cambioPixelcoins + " pixelcoins para convertirlo", Sound.ENTITY_VILLAGER_NO);
+            enviadorMensajes.enviarMensajeYSonido(player, DARK_RED + "Necesitas tener minimo " + cambioPixelcoins + " pixelcoins para convertirlo", Sound.ENTITY_VILLAGER_NO);
             return;
         }
 
-        CambioPixelcoins.sacarItem(jugador, tipoItem);
-        player.getInventory().addItem(new ItemStack(Material.getMaterial(tipoItem), 1));
+        sacarItemUseCase.sacarItem(jugador, tipoCambio, 1);
+
+        player.getInventory().addItem(new ItemStack(Material.getMaterial(tipoItemClickeado), 1));
 
         setState(jugador.decrementPixelcoinsBy(cambioPixelcoins));
 
-        Funciones.enviarMensajeYSonido(player, GOLD + "Has convertido las pixelcoins: " + RED + "-" + FORMATEA.format(cambioPixelcoins) + " PC " + GOLD +
+        enviadorMensajes.enviarMensajeYSonido(player, GOLD + "Has convertido las pixelcoins: " + RED + "-" + FORMATEA.format(cambioPixelcoins) + " PC " + GOLD +
                 "Quedan " + GREEN + FORMATEA.format(jugador.getPixelcoins() - cambioPixelcoins) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
 
     }

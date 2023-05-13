@@ -2,6 +2,8 @@ package es.serversurvival.empresas.accionistasserver.misacciones.vender;
 
 import es.bukkitbettermenus.MenuService;
 import es.serversurvival._shared.menus.NumberSelectorMenu;
+import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
+import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -12,15 +14,15 @@ import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
 public final class VenderAccionEmpresaCantidadSelectorMenu extends NumberSelectorMenu<VenderAccionesEmpresaCantidadSelectorMenuState> {
+    private final AccionistasServerService accionistasServerService;
     private final MenuService menuService;
 
     @Override
     public void onAccept(Player player, InventoryClickEvent event) {
+        AccionistaServer accionAVender = accionistasServerService.getById(getState().accionistaId());
         int cantidadAccionesAVender = (int) super.getPropertyDouble("cantidad");
 
-        this.menuService.open(player, new VenderAccionEmpresaPrecioSelectorMenu(
-                cantidadAccionesAVender, this.accionistaId)
-        );
+        this.menuService.open(player, VenderAccionEmpresaPrecioSelectorMenu.class, VenderAccionEmpresaPrecioSelectorMenuState.from(cantidadAccionesAVender, accionAVender));
     }
 
     //By this we can open another menu when item aceptar is clicked

@@ -1,11 +1,10 @@
 package es.serversurvival.deudas.prestar;
 
+import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
-import es.bukkitclassmapper.menus.MenuService;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
-import es.serversurvival._shared.DependecyContainer;
 import lombok.AllArgsConstructor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -33,13 +32,7 @@ public class PrestarComandoRunner implements CommandRunnerArgs<PrestarComando> {
         if(enviador.getName().equalsIgnoreCase(comando.getJugador().getName()))
             throw new CannotBeYourself("No te puedes autoprestar dinero");
 
-        this.menuService.open(destinatario, new PrestamoConfirmacionMenu(
-                destinatario.getName(),
-                enviador.getName(),
-                pixelcoins,
-                dias,
-                interes
-        ));
+        this.menuService.open(destinatario, PrestamoConfirmacionMenu.class, PrestamoConfirmacionMenuState.fromCommnad(enviador.getName(), comando));
 
         enviador.sendMessage(GOLD + "Has enviado la solicidtud de prestamo");
     }

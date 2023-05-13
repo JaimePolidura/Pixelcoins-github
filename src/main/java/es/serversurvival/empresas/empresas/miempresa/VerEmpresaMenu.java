@@ -13,6 +13,7 @@ import es.serversurvival.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.empresas.empleados.despedir.DespedirEmpleadoUseCase;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.empresas.borrar.BorrarEmpresaConfirmacionMenu;
+import es.serversurvival.empresas.empresas.borrar.BorrarEmpresaConfirmacionMenuState;
 import es.serversurvival.empresas.empresas.pagardividendos.PagarDividendosConfirmacionMenu;
 import es.serversurvival.jugadores.perfil.PerfilMenu;
 import lombok.AllArgsConstructor;
@@ -38,9 +39,8 @@ import static org.bukkit.ChatColor.DARK_RED;
 
 @AllArgsConstructor
 public final class VerEmpresaMenu extends Menu<Empresa> implements AfterShow {
-    public static final String TITULO = DARK_RED + "" + BOLD + "        Tu empresa %s";
-
     private final AccionistasServerService accionistasServerService;
+    private final DespedirEmpleadoUseCase despedirEmpleadoUseCase;
     private final EmpleadosService empleadosService;
     private final MenuService menuService;
 
@@ -60,7 +60,7 @@ public final class VerEmpresaMenu extends Menu<Empresa> implements AfterShow {
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
                 .fixedItems()
-                .title(format(TITULO, this.getState().getNombre()))
+                .title(format(DARK_RED + "" + BOLD + "        Tu empresa %s", this.getState().getNombre()))
                 .item(1, buildItemInfo())
                 .item(2, buildItemEmpresaStats())
                 .item(3, buildItemAccionistas())
@@ -76,17 +76,17 @@ public final class VerEmpresaMenu extends Menu<Empresa> implements AfterShow {
     }
 
     private void pagarDividendos(Player player, InventoryClickEvent event) {
-        this.menuService.open(player, new PagarDividendosConfirmacionMenu(this.getState()));
+        this.menuService.open(player, PagarDividendosConfirmacionMenu.class, this.getState());
     }
 
     private void abrirBorrarEmpresaConfirmacion(Player player, InventoryClickEvent event) {
-        this.menuService.open(player, new BorrarEmpresaConfirmacionMenu(player.getName(), this.getState()));
+        this.menuService.open(player, BorrarEmpresaConfirmacionMenu.class, new BorrarEmpresaConfirmacionMenuState(this.getState().getNombre()));
     }
 
     private void despedirEmpleado(Player player, InventoryClickEvent event) {
         String empleadoNombre = ItemUtils.getLore(event.getCurrentItem(), 1).split(" ")[1];
 
-        (new DespedirEmpleadoUseCase()).despedir(player.getName(), empleadoNombre, getState().getNombre(), "Despedido");
+        this.despedirEmpleadoUseCase.despedir(player.getName(), empleadoNombre, getState().getNombre(), "Despedido");
         player.sendMessage(ChatColor.GOLD + "Has despedido a: " + empleadoNombre);
         String mensajeOnline = ChatColor.RED + "Has sido despedido de " + getState().getNombre() + " razon: " + "Despedido";
         enviarMensaje(empleadoNombre, mensajeOnline, mensajeOnline, Sound.BLOCK_ANVIL_LAND, 10, 1);
@@ -95,7 +95,7 @@ public final class VerEmpresaMenu extends Menu<Empresa> implements AfterShow {
     }
 
     private void goBackToProfileMenu(Player player, InventoryClickEvent event) {
-        this.menuService.open(player, new PerfilMenu(player.getName()));
+        this.menuService.open(player, PerfilMenu.class);
     }
 
     private List<ItemStack> buildItemEmpleados() {

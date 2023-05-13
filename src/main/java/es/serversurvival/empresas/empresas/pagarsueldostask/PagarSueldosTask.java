@@ -2,7 +2,6 @@ package es.serversurvival.empresas.empresas.pagarsueldostask;
 
 import es.bukkitclassmapper.task.Task;
 import es.bukkitclassmapper.task.TaskRunner;
-import es.serversurvival._shared.DependecyContainer;
 import es.serversurvival.empresas.empleados._shared.application.EmpleadosService;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;

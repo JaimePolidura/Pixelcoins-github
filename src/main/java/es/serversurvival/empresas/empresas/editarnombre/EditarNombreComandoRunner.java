@@ -3,6 +3,7 @@ package es.serversurvival.empresas.empresas.editarnombre;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.utils.Funciones;
+import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -13,12 +14,9 @@ import org.bukkit.entity.Player;
         args = {"empresa", "nuevoNombre"},
         explanation = "Cambiar el nombre de tu empresa a otro, el nombre no puede estar cogido"
 )
+@AllArgsConstructor
 public class EditarNombreComandoRunner implements CommandRunnerArgs<EditarNombreComando> {
     private final EditarNombreUseCase useCase;
-
-    public EditarNombreComandoRunner() {
-        this.useCase = new EditarNombreUseCase();
-    }
 
     @Override
     public void execute(EditarNombreComando editarNombreComando, CommandSender sender) {
