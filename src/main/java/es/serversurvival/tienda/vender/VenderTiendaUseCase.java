@@ -3,6 +3,7 @@ package es.serversurvival.tienda.vender;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.modules.sync.SyncMenuService;
 import es.dependencyinjector.dependencies.annotations.UseCase;
+import es.jaime.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalType;
 import es.serversurvival.Pixelcoin;
@@ -28,8 +29,9 @@ public final class VenderTiendaUseCase {
     private static final int MAX_ITEMS_PER_PLAYER = 5;
 
     private final SyncMenuService syncMenuService;
-    private final MenuService menuService;
     private final TiendaService tiendaService;
+    private final MenuService menuService;
+    private final EventBus eventBus;
 
     public TiendaObjeto crearOferta(String nombreJugador, ItemStack itemAVender, double precio) {
         this.ensureCorrectFormatPixelcoins(precio);
@@ -44,7 +46,7 @@ public final class VenderTiendaUseCase {
         var newMenu = this.menuService.buildMenu(Bukkit.getPlayer(nombreJugador), TiendaMenu.class);
         this.syncMenuService.sync(newMenu);
 
-        Pixelcoin.publish(new NuevoItemTienda(tiendaObjeto.getTiendaObjetoId(), nombreJugador, itemAVender));
+        this.eventBus.publish(new NuevoItemTienda(tiendaObjeto.getTiendaObjetoId(), nombreJugador, itemAVender));
 
         return tiendaObjeto;
     }

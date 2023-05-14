@@ -6,75 +6,45 @@ import es.bukkitclassmapper.ClassMapperConfiguration;
 import es.bukkitclassmapper._shared.utils.reflections.BukkitClassMapperInstanceProvider;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.mobs.Mob;
-import es.bukkitclassmapper.task.BukkitTimeUnit;
 import es.bukkitclassmapper.task.Task;
 import es.dependencyinjector.DependencyInjectorBootstrapper;
 import es.dependencyinjector.DependencyInjectorConfiguration;
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.dependencyinjector.dependencies.InMemoryDependenciesRepository;
-import es.jaime.Event;
 import es.jaime.EventBus;
 import es.jaime.EventListenerDependencyProvider;
 import es.jaime.impl.EventBusSync;
 import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
-import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival._shared.scoreboards.ScoreBoardManager;
-import es.serversurvival._shared.scoreboards.ScoreboardUpdateTask;
 
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.concurrent.ExecutorService;
 
 import static org.bukkit.ChatColor.*;
 
 /**
  * 11/05/2023 -> 16747
  * 12/05/2023 -> 16246
+ * 13/05/2023 -> 16145
+ * 14/05/2023 -> 15974
  */
 public final class Pixelcoin extends JavaPlugin {
     private static final String ON_WRONG_COMMAND = DARK_RED + "Comando no encontrado /ayuda";
     private static final String ON_WRONG_PERMISSION = DARK_RED + "Tienes que ser administrador para ejecutar ese comando";
     private static final String COMMON_PACKAGE = "es.serversurvival";
 
-    private static Pixelcoin plugin;
-    private ScoreBoardManager scoreBoardManager;
-    private EventBus eventBus;
-    private ScoreboardUpdateTask updater;
-
-    public static Pixelcoin getInstance() {
-        return plugin;
-    }
-
-    public static void publish (Event event) {
-        plugin.eventBus.publish(event);
-    }
-
-    public static ScoreBoardManager scoreboarManager () {
-        return plugin.scoreBoardManager;
-    }
-
-    public static ScoreboardUpdateTask scoreboardUpdater() {
-        return plugin.updater;
-    }
-
     @SneakyThrows
     @Override
     public void onEnable() {
-        plugin = this;
-
-        this.scoreBoardManager = new ScoreBoardManager();
-
-        getLogger().info("------------Plugin activado -------------");
+        getLogger().info("------------Iniciando Pixelcoins -------------");
         getServer().getConsoleSender().sendMessage(GREEN + "------------------------------");
 
         DependenciesRepository dependenciesRepository = new InMemoryDependenciesRepository();
 
         InstanceProviderDependencyInjector instanceProvider = new InstanceProviderDependencyInjector(dependenciesRepository);
-        this.eventBus = new EventBusSync("es.serversurvival", instanceProvider);
-        dependenciesRepository.add(EventBus.class, this.eventBus);
-        dependenciesRepository.add(ExecutorService.class, Funciones.POOL);
+        EventBus eventBus = new EventBusSync("es.serversurvival", instanceProvider);
+        dependenciesRepository.add(EventBus.class, eventBus);
 
         DependencyInjectorBootstrapper.init(DependencyInjectorConfiguration.builder()
                 .packageToScan(COMMON_PACKAGE)
@@ -95,16 +65,9 @@ public final class Pixelcoin extends JavaPlugin {
                     .build()
                 .startScanning();
 
-        this.setUpScoreboardUpdater();
-
         getServer().getConsoleSender().sendMessage(GREEN + "------------------------------");
 
-        this.eventBus.publish(new PluginIniciado());
-    }
-
-    private void setUpScoreboardUpdater () {
-        this.updater = new ScoreboardUpdateTask();
-        updater.runTaskTimer(this, BukkitTimeUnit.MINUTE, BukkitTimeUnit.MINUTE);
+        eventBus.publish(new PluginIniciado());
     }
 
     @AllArgsConstructor

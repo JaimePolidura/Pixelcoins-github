@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 
 import java.util.*;
 
-import static es.serversurvival._shared.utils.CollectionUtils.*;
+import static es.jaime.javaddd.application.utils.CollectionUtils.*;
 
 @Service
 @AllArgsConstructor
@@ -57,19 +57,11 @@ public class DeudasService {
     }
 
     public double getAllPixelcoinsDeudasAcredor (String jugador) {
-        return getSumaTotalListDouble( findByAcredor(jugador), Deuda::getPixelcoinsRestantes);
+        return getSum( findByAcredor(jugador), Deuda::getPixelcoinsRestantes);
     }
 
     public double getAllPixelcoinsDeudasDeudor (String jugador) {
-        return getSumaTotalListDouble( findByDeudor(jugador), Deuda::getPixelcoinsRestantes);
-    }
-
-    public Map<String, List<Deuda>> getAllDeudasDeudorMap () {
-        return mergeMapList(this.findAll(), Deuda::getDeudor);
-    }
-
-    public Map<String, List<Deuda>> getAllDeudasAcredorMap () {
-        return mergeMapList(this.findAll(), Deuda::getAcredor);
+        return getSum( findByDeudor(jugador), Deuda::getPixelcoinsRestantes);
     }
 
     public void deleteById(UUID id) {

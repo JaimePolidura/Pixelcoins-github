@@ -1,6 +1,7 @@
 package es.serversurvival.jugadores.cambio.ingresarItem;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
+import es.jaime.EventBus;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
@@ -13,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 @AllArgsConstructor
 public final class IngresarItemUseCase {
     private final JugadoresService jugadoresService;
+    private final EventBus eventBus;
 
     public void ingresarItem(String nombrJugador, TipoCambioPixelcoins tipoCambio, int cantidad) {
         Jugador jugador = jugadoresService.getByNombre(nombrJugador);
@@ -21,6 +23,6 @@ public final class IngresarItemUseCase {
 
         this.jugadoresService.save(jugador.incrementPixelcoinsBy(pixelcoinsAnadir));
 
-        Pixelcoin.publish(new ItemIngresadoEvento(jugador, pixelcoinsAnadir, tipoCambio.name()));
+        this.eventBus.publish(new ItemIngresadoEvento(jugador, pixelcoinsAnadir, tipoCambio.name()));
     }
 }

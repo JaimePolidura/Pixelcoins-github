@@ -15,21 +15,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
-import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
-import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
-import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
-import es.serversurvival.deudas._shared.application.DeudasService;
-import es.serversurvival.deudas._shared.domain.Deuda;
-import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
-import es.serversurvival.empresas.empresas._shared.domain.Empresa;
-import es.serversurvival.jugadores._shared.application.JugadoresService;
-import es.serversurvival.jugadores._shared.domain.Jugador;
-import es.serversurvival.mensajes._shared.application.MensajesService;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -41,8 +27,6 @@ public final class Funciones {
     public static final DateTimeFormatter DATE_FORMATER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final ExecutorService POOL = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     public static final ObjectMapper MAPPER = new ObjectMapper();
-
-    private Funciones () {}
 
     public static int getEspaciosOcupados(Inventory inventory) {
         int espaciosLibres = 36;
@@ -123,10 +107,6 @@ public final class Funciones {
         return parser.parse(response.toString());
     }
 
-    public static boolean noCuincideNombre (String nombre, String... items){
-        return !cuincideNombre(nombre, items);
-    }
-
     public static boolean esDeTipo (ItemStack item, Material... tipos) {
         return Arrays.stream(tipos)
                 .anyMatch(mat -> mat == item.getType());
@@ -134,10 +114,6 @@ public final class Funciones {
 
     public static boolean esDeTipoItem(ItemStack item, String...tipos) {
         return cuincideNombre(item.getType().toString(), tipos);
-    }
-
-    public static boolean noEsDeTipoItem(ItemStack item, String...tipos) {
-        return !cuincideNombre(item.getType().toString(), tipos);
     }
 
     public static int generateRandomNumber (int from, int to) {
@@ -191,20 +167,6 @@ public final class Funciones {
         return stringBuilder.toString();
     }
 
-    public static String buildStringFromArray (String[] array, int startIndex) {
-        StringBuilder builder = new StringBuilder();
-
-        for(int i = startIndex; i < array.length; i++){
-            builder.append(array[i]);
-
-            if((array.length - 1) != i) {
-                builder.append(" ");
-            }
-        }
-
-        return builder.toString();
-    }
-    
     public static boolean esHoyDiaSemana (int... diaSemanas) {
         LocalDate localDate = LocalDate.now();
 
@@ -219,16 +181,7 @@ public final class Funciones {
     }
 
     public static boolean mercadoEstaAbierto() {
-//        return !Funciones.esHoyDiaSemana(7, 1) && Funciones.esHoyHora(15, 30, 22, 30);
-        return true;
-    }
-
-    public static boolean mercadoNoEstaAbierto() {
-        return !mercadoEstaAbierto();
-    }
-
-    public static String buildStringFromArray (String[] array) {
-        return buildStringFromArray(array, 0);
+        return !Funciones.esHoyDiaSemana(7, 1) && Funciones.esHoyHora(15, 30, 22, 30);
     }
 
     public static boolean cuincideNombre (String nombre, String... items){

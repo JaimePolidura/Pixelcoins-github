@@ -2,7 +2,6 @@ package es.serversurvival.empresas.accionistasserver.onpixelcoinssacadas;
 
 import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventListener;
-import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.empresas.accionistasserver._shared.application.AccionistasServerService;
 import es.serversurvival.empresas.accionistasserver._shared.domain.AccionistaServer;
 import es.serversurvival.empresas.empresas.sacar.PixelcoinsSacadasEvento;

@@ -1,6 +1,7 @@
 package es.serversurvival.jugadores.venderjugador;
 
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.jaime.EventBus;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.menus.ConfirmacionMenu;
 import es.serversurvival.jugadores.pagar.PagarUseCase;
@@ -20,6 +21,7 @@ import static org.bukkit.ChatColor.*;
 @AllArgsConstructor
 public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu<VenderJugadorConfirmacionMenuState> {
     private final PagarUseCase pagarUseCase;
+    private final EventBus eventBus;
 
     @Override
     public void onAceptar(Player player, InventoryClickEvent event, VenderJugadorConfirmacionMenuState state) {
@@ -48,7 +50,7 @@ public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu<Vender
         jugadorComprador.sendMessage(ChatColor.GOLD + "Has comprado el item");
         jugadorComprador.playSound(jugadorComprador.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
-        Pixelcoin.publish(new ItemVendidoJugadorEvento(jugadorComprador.getName(), jugadorVendedor.getName(), precio, itemAVender.getType().toString()));
+        this.eventBus.publish(new ItemVendidoJugadorEvento(jugadorComprador.getName(), jugadorVendedor.getName(), precio, itemAVender.getType().toString()));
     }
 
     private boolean isItemInInventory(Player jugadorVendedor, ItemStack itemAVender, int slotItemVender) {

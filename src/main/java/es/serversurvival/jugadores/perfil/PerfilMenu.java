@@ -4,6 +4,7 @@ import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.jaime.javaddd.application.utils.CollectionUtils;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas.vercartera.VerBolsaCarteraMenu;
 import es.serversurvival.bolsa.posicionescerradas._shared.application.PosicionesCerradasService;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static es.serversurvival._shared.utils.CollectionUtils.getPoisitionOfKeyInMap;
+import static es.jaime.javaddd.application.utils.CollectionUtils.*;
 import static es.serversurvival._shared.utils.Funciones.*;
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
@@ -159,7 +160,7 @@ public final class PerfilMenu extends Menu<Jugador> {
         double beneficios = getState().getIngresos() - getState().getGastos();
         double rentabilidad = getState().getIngresos() == 0 ? -100 : rentabilidad(getState().getIngresos(), beneficios);
 
-        int posTopRicps = getPoisitionOfKeyInMap(calculadorPatrimonio.calcularTopJugadores(false), k -> k.equalsIgnoreCase(getState().getNombre()));
+        int posTopRicps = calculadorPatrimonio.getPosicionTopRicos(getState().getNombre());
         int posTopVendedores = jugadoresService.sortJugadoresBy(Comparator.comparingInt(Jugador::getNventas)).indexOf(getState()) + 1;
 
         List<String> lore = new ArrayList<>();

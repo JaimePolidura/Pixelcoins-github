@@ -1,11 +1,13 @@
-package es.serversurvival.bolsa.posicionesabiertas.vercartera;
+package es.serversurvival._shared.scoreboards.displays;
 
+import es.serversurvival._shared.scoreboards.ScoreboardCreator;
+import es.serversurvival._shared.scoreboards.ServerScoreboardCreator;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
-import es.serversurvival._shared.scoreboards.SingleScoreboard;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
@@ -13,17 +15,23 @@ import java.util.*;
 
 import static es.serversurvival._shared.utils.MinecraftUtils.*;
 
+@ScoreboardCreator
 @RequiredArgsConstructor
-public class BolsaCarteraScoreboard implements SingleScoreboard {
+public class BolsaCarteraScoreboard implements ServerScoreboardCreator {
     private final ActivosInfoService activoInfoService;
     private final PosicionesUtils posicionesUtils;
 
     @Override
-    public Scoreboard createScoreborad(String jugador) {
+    public boolean isGlobal() {
+        return false;
+    }
+
+    @Override
+    public Scoreboard create(Player player) {
         Scoreboard scoreboard = createScoreboard("bolsa", ChatColor.GOLD + "" + ChatColor.BOLD + "TUS MEJORES ACCIONES");
         Objective objective = scoreboard.getObjective("bolsa");
 
-        Map<PosicionAbierta, Double> posicionAbiertas = this.posicionesUtils.calcularTopPosicionesAbiertas(jugador);
+        Map<PosicionAbierta, Double> posicionAbiertas = this.posicionesUtils.calcularTopPosicionesAbiertas(player.getName());
         int loops = 0;
         int pos = 0;
         for(Map.Entry<PosicionAbierta, Double> entry : posicionAbiertas.entrySet()){

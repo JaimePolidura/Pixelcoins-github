@@ -177,7 +177,7 @@ public final class TopMenu extends Menu<Object> implements BeforeShow {
     }
 
     private ItemStack buildTopPobresJugadoresItem() {
-        Map<String, Double> listaRicos = calculadorPatrimonio.calcularTopJugadores(true);
+        Map<String, Double> listaRicos = calculadorPatrimonio.calcularTopJugadores(true, 5);
         String displayName = GREEN + "" + BOLD + "TOP POBRES";
         List<String> lore = new ArrayList<>();
         int pos = 1;
@@ -210,7 +210,7 @@ public final class TopMenu extends Menu<Object> implements BeforeShow {
     }
 
     private ItemStack buildTopRicosJugadoresItem() {
-        Map<String, Double> listaRicos = calculadorPatrimonio.calcularTopJugadores(false);
+        Map<String, Double> listaRicos = calculadorPatrimonio.calcularTopJugadores(false, 5);
         String displayName = GREEN + "" + BOLD + "TOP RICOS";
         List<String> lore = new ArrayList<>();
         int pos = 1;
@@ -227,7 +227,7 @@ public final class TopMenu extends Menu<Object> implements BeforeShow {
 
     private void initInfoJugadores () {
         List<Jugador> jugadores = jugadoresService.findAll();
-        Map<String, Double> mapPatrimonio = calculadorPatrimonio.calcularTopJugadores(false);
+        Map<String, Double> mapPatrimonio = calculadorPatrimonio.calcularTopJugadores(false, 5);
 
         for (Jugador jugador : jugadores) {
             String nombreJugador = jugador.getNombre();

@@ -1,5 +1,6 @@
 package es.serversurvival.jugadores.cambio.sacarItem;
 
+import es.jaime.EventBus;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
@@ -10,6 +11,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public final class SacarItemUseCase {
     private final JugadoresService jugadoresService;
+    private final EventBus eventBus;
 
     public void sacarItem(Jugador jugador, TipoCambioPixelcoins tipoCambio, int cantidad) {
         this.ensureHasEnoughPixelcoins(jugador, tipoCambio, cantidad);
@@ -18,7 +20,7 @@ public final class SacarItemUseCase {
 
         jugadoresService.save(jugador.decrementPixelcoinsBy(pixelcoinsASacar));
 
-        Pixelcoin.publish(new ItemSacadoEvento(jugador, tipoCambio.name(), (int) pixelcoinsASacar));
+        this.eventBus.publish(new ItemSacadoEvento(jugador, tipoCambio.name(), (int) pixelcoinsASacar));
     }
 
     private void ensureHasEnoughPixelcoins(Jugador jugador, TipoCambioPixelcoins tipoCambio, int cantidad) {

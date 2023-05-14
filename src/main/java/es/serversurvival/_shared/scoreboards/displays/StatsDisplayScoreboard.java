@@ -1,13 +1,15 @@
-package es.serversurvival.jugadores.perfil;
+package es.serversurvival._shared.scoreboards.displays;
 
+import es.serversurvival._shared.scoreboards.ScoreboardCreator;
+import es.serversurvival._shared.scoreboards.ServerScoreboardCreator;
 import es.serversurvival.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
-import es.serversurvival._shared.scoreboards.SingleScoreboard;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival._shared.utils.MinecraftUtils;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
@@ -16,23 +18,29 @@ import java.util.List;
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival._shared.utils.MinecraftUtils.addLineToScoreboard;
 
+@ScoreboardCreator
 @RequiredArgsConstructor
-public class StatsDisplayScoreboard implements SingleScoreboard {
+public class StatsDisplayScoreboard implements ServerScoreboardCreator {
     private final JugadoresService jugadoresService;
     private final EmpresasService empresasService;
 
     @Override
-    public Scoreboard createScoreborad(String jugador) {
+    public boolean isGlobal() {
+        return false;
+    }
+
+    @Override
+    public Scoreboard create(Player player) {
         Scoreboard scoreboard = MinecraftUtils.createScoreboard("dinero", ChatColor.GOLD + "" + ChatColor.BOLD + "JUGADOR");
         Objective objective = scoreboard.getObjective("dinero");
 
-        double dineroJugador = jugadoresService.getByNombre(jugador).getPixelcoins();
+        double dineroJugador = jugadoresService.getByNombre(player.getName()).getPixelcoins();
 
         addLineToScoreboard(objective, ChatColor.GOLD + "Tus ahorros: " + ChatColor.GREEN + FORMATEA.format(Math.round(dineroJugador)) + " PC", 1);
         addLineToScoreboard(objective, "     ", 0);
         addLineToScoreboard(objective, ChatColor.GOLD + "-------Empresas-----", -2);
 
-        List<Empresa> empresas = sortEmpresaByPixelcoins(empresasService.getByOwner(jugador));
+        List<Empresa> empresas = sortEmpresaByPixelcoins(empresasService.getByOwner(player.getName()));
         for(int i = 0; i < empresas.size(); i++){
             Empresa empresa = empresas.get(i);
 
@@ -67,12 +75,7 @@ public class StatsDisplayScoreboard implements SingleScoreboard {
     }
 
     private List<Empresa> sortEmpresaByPixelcoins (List<Empresa> empresas) {
-        empresas.sort((o1, o2) -> {
-            if (o1.getPixelcoins() >= o2.getPixelcoins())
-                return -1;
-            else
-                return 1;
-        });
+        empresas.sort((o1, o2) -> o1.getPixelcoins() >= o2.getPixelcoins() ? -1 : 1);
 
         return empresas;
     }

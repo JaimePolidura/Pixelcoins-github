@@ -4,17 +4,15 @@ import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival._shared.cache.Cache;
 import es.serversurvival._shared.cache.LRUCache;
-import es.serversurvival._shared.utils.CollectionUtils;
 import es.serversurvival.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.empresas.empresas._shared.domain.EmpresasRepostiory;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
-import static es.serversurvival._shared.utils.CollectionUtils.*;
+import static es.jaime.javaddd.application.utils.CollectionUtils.getSum;
 
 @Service
 public class EmpresasService {
@@ -72,16 +70,12 @@ public class EmpresasService {
     }
 
     public double getAllPixelcoinsEnEmpresas (String jugador){
-        return getSumaTotalListDouble( getByOwner(jugador), Empresa::getPixelcoins );
+        return getSum( getByOwner(jugador), Empresa::getPixelcoins );
     }
 
     public void deleteByEmpresaId(UUID empresaId) {
         this.empresasRepostiory.deleteById(empresaId);
         this.cache.remove(empresa -> empresa.getEmpresaId().equals(empresaId));
-    }
-
-    public Map<String, List<Empresa>> getAllEmpresasJugadorMap () {
-        return CollectionUtils.mergeMapList(this.findAll(), Empresa::getOwner);
     }
 
     private Function<Empresa, Empresa> saveEmpresaToCache(){

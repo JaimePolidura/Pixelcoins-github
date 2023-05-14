@@ -2,6 +2,7 @@ package es.serversurvival.bolsa.posicionesabiertas.vercarterajugador;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
+import es.jaime.javaddd.application.utils.CollectionUtils;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
 import es.serversurvival.bolsa.posicionesabiertas._shared.application.PosicionesUtils;
@@ -11,10 +12,10 @@ import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-import static es.serversurvival._shared.utils.CollectionUtils.*;
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 
 @Command(
@@ -70,7 +71,7 @@ public class VerCarteraJugadorComandoRunner implements CommandRunnerArgs<VerCart
             }
         }
 
-        return sortMapByValueDecre(posicionesAbiertasOrednadas);
+        return CollectionUtils.sortMapByValue(posicionesAbiertasOrednadas, Comparator.reverseOrder());
     }
 
     private record AccionPesoUsuario(int peso, TipoActivo tipoActivo, TipoPosicion tipoPosicion) implements Comparable<AccionPesoUsuario>{

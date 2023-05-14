@@ -3,10 +3,12 @@ package es.serversurvival.transacciones._shared.application;
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.serversurvival.transacciones._shared.domain.Transaccion;
 import es.serversurvival.transacciones._shared.domain.TransaccionesRepository;
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public final class TransaccionesService {
     private final TransaccionesRepository repository;
 

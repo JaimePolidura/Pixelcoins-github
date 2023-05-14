@@ -1,30 +1,38 @@
-package es.serversurvival.deudas.ver;
+package es.serversurvival._shared.scoreboards.displays;
 
+import es.serversurvival._shared.scoreboards.ScoreboardCreator;
+import es.serversurvival._shared.scoreboards.ServerScoreboardCreator;
 import es.serversurvival.deudas._shared.application.DeudasService;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
-import es.serversurvival._shared.scoreboards.SingleScoreboard;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival._shared.utils.MinecraftUtils.*;
 
+@ScoreboardCreator
 @RequiredArgsConstructor
-public class DeudasDisplayScoreboard implements SingleScoreboard {
+public class DeudasDisplayScoreboard implements ServerScoreboardCreator {
     private final DeudasService deudasService;
     private final JugadoresService jugadoresService;
 
     @Override
-    public Scoreboard createScoreborad(java.lang.String jugador) {
+    public boolean isGlobal() {
+        return false;
+    }
+
+    @Override
+    public Scoreboard create(Player player) {
         Scoreboard scoreboard = createScoreboard("deudas", ChatColor.GOLD + "" + ChatColor.BOLD + "DEUDAS");
         Objective objective = scoreboard.getObjective("deudas");
 
-        Jugador jugadorScoreboear = jugadoresService.getByNombre(jugador);
-        double totalAPagar = this.deudasService.getAllPixelcoinsDeudasDeudor(jugador);
-        double totalASerPagado = this.deudasService.getAllPixelcoinsDeudasDeudor(jugador);
+        Jugador jugadorScoreboear = jugadoresService.getByNombre(player.getName());
+        double totalAPagar = this.deudasService.getAllPixelcoinsDeudasDeudor(player.getName());
+        double totalASerPagado = this.deudasService.getAllPixelcoinsDeudasDeudor(player.getName());
 
         addLineToScoreboard(objective, ChatColor.GOLD + "Pixelcoins que debes: " + ChatColor.GREEN + FORMATEA.format(totalAPagar) + " PC", 0);
         addLineToScoreboard(objective, ChatColor.GOLD + "Pixelcoins que te deben: " + ChatColor.GREEN + FORMATEA.format(totalASerPagado) + " PC", -1);

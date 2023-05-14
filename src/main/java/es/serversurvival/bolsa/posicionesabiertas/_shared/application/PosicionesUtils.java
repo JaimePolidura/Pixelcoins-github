@@ -1,17 +1,18 @@
 package es.serversurvival.bolsa.posicionesabiertas._shared.application;
 
+import es.jaime.javaddd.application.utils.CollectionUtils;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivosInfoService;
-import es.serversurvival.bolsa.activosinfo._shared.domain.ActivoInfo;
 import es.serversurvival.bolsa.posicionescerradas._shared.domain.TipoPosicion;
 import es.serversurvival.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
 import lombok.AllArgsConstructor;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import static es.serversurvival._shared.utils.CollectionUtils.*;
+import static es.jaime.javaddd.application.utils.CollectionUtils.*;
 import static es.serversurvival._shared.utils.Funciones.*;
 import static java.lang.Math.abs;
 
@@ -25,9 +26,9 @@ public final class PosicionesUtils {
         var posCortas = posicionesAbiertasService.findByJugador(jugador, PosicionAbierta::esCorto);
 
         double pixelcoinsEnLargos =
-                getSumaTotalListDouble(posLargas, pos -> activosInfoService.getByNombreActivo(pos.getNombreActivo(), pos.getTipoActivo()).getPrecio() * pos.getCantidad());
+                getSum(posLargas, pos -> activosInfoService.getByNombreActivo(pos.getNombreActivo(), pos.getTipoActivo()).getPrecio() * pos.getCantidad());
         double pixelcoinsEnCortos =
-                getSumaTotalListDouble(posCortas, pos -> (pos.getPrecioApertura() - activosInfoService.getByNombreActivo(pos.getNombreActivo(), pos.getTipoActivo()).getPrecio() * pos.getCantidad()));
+                getSum(posCortas, pos -> (pos.getPrecioApertura() - activosInfoService.getByNombreActivo(pos.getNombreActivo(), pos.getTipoActivo()).getPrecio() * pos.getCantidad()));
 
         return pixelcoinsEnLargos + pixelcoinsEnCortos;
     }
@@ -69,12 +70,6 @@ public final class PosicionesUtils {
             posicionAbiertasConRentabilidad.put(posicion, rentabildad);
         }
 
-        return sortMapByValueDecre(posicionAbiertasConRentabilidad);
-    }
-
-    public Map<String, List<PosicionAbierta>> getAllPosicionesAbiertasMap (Predicate<PosicionAbierta> condition) {
-        List<PosicionAbierta> posicionAbiertas = posicionesAbiertasService.findAll(condition);
-
-        return mergeMapList(posicionAbiertas, PosicionAbierta::getJugador);
+        return CollectionUtils.sortMapByValue(posicionAbiertasConRentabilidad, Comparator.reverseOrder());
     }
 }

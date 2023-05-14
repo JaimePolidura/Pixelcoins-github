@@ -1,7 +1,7 @@
 package es.serversurvival.jugadores.cambio.sacarMaxItem;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
-import es.serversurvival.Pixelcoin;
+import es.jaime.EventBus;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
 import es.serversurvival.jugadores.cambio.TipoCambioPixelcoins;
@@ -13,12 +13,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import static es.serversurvival._shared.utils.CollectionUtils.*;
-
 @UseCase
 @AllArgsConstructor
 public final class SacarMaxItemUseCase {
     private final JugadoresService jugadoresService;
+    private final EventBus eventBus;
 
     public void sacarMaxItem(Jugador jugador, TipoCambioPixelcoins tipoCambio) {
         switch (tipoCambio) {
@@ -54,7 +53,7 @@ public final class SacarMaxItemUseCase {
         int coste = (TipoCambioPixelcoins.DIAMANTE * bloquesAnadidos * 9) + (TipoCambioPixelcoins.DIAMANTE * diamantesAnadidos);
         this.jugadoresService.save(jugador.decrementPixelcoinsBy(coste));
 
-        Pixelcoin.publish(new ItemSacadoMaxEvento(jugador, "DIAMOND", coste));
+        this.eventBus.publish(new ItemSacadoMaxEvento(jugador, "DIAMOND", coste));
     }
 
     public void sacarMaxItemLapisLazuli (Jugador jugador) {
@@ -83,7 +82,7 @@ public final class SacarMaxItemUseCase {
         int coste = (TipoCambioPixelcoins.LAPISLAZULI * bloquesAnadidos * 9) + (TipoCambioPixelcoins.LAPISLAZULI * diamantesAnadidos);
         this.jugadoresService.save(jugador.decrementPixelcoinsBy(coste));
 
-        Pixelcoin.publish(new ItemSacadoMaxEvento(jugador, "LAPIS_LAZULI", coste));
+        this.eventBus.publish(new ItemSacadoMaxEvento(jugador, "LAPIS_LAZULI", coste));
     }
 
     public void sacarMaxItemQuartzBlock (Jugador jugador) {
@@ -103,6 +102,21 @@ public final class SacarMaxItemUseCase {
         int coste = (TipoCambioPixelcoins.CUARZO * bloquesAnadidos);
         this.jugadoresService.save(jugador.decrementPixelcoinsBy(coste));
 
-        Pixelcoin.publish(new ItemSacadoMaxEvento(jugador, "QUARTZ_BLOCK", coste));
+        this.eventBus.publish(new ItemSacadoMaxEvento(jugador, "QUARTZ_BLOCK", coste));
+    }
+
+    private int[] slotsItem(int n, int slotsLibres) {
+        int[] arr = new int[slotsLibres];
+
+        for (int i = 0; i < slotsLibres; i++) {
+            if (n - 64 > 0) {
+                arr[i] = 64;
+                n = n - 64;
+            } else {
+                arr[i] = n;
+                break;
+            }
+        }
+        return arr;
     }
 }

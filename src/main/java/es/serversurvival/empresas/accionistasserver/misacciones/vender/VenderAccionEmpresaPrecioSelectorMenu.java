@@ -1,6 +1,5 @@
 package es.serversurvival.empresas.accionistasserver.misacciones.vender;
 
-import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.modules.sync.SyncMenuService;
 import es.serversurvival._shared.menus.NumberSelectorMenu;

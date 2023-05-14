@@ -1,6 +1,7 @@
 package es.serversurvival.jugadores.setupjugadorunido;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
+import es.jaime.EventBus;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival.jugadores._shared.application.JugadoresService;
 import es.serversurvival.jugadores._shared.domain.Jugador;
@@ -13,6 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public final class SetUpJugadorUseCase {
     private final JugadoresService jugadoresService;
+    private final EventBus eventBus;
 
     public void setUpJugadorUnido (Player player) {
         Optional<Jugador> jugadorOptional = jugadoresService.findById(player.getUniqueId());
@@ -23,7 +25,7 @@ public final class SetUpJugadorUseCase {
             if(jugadorPorNombre.isEmpty()){
                 jugadoresService.save(player.getUniqueId(), player.getName());
             }else{
-                Pixelcoin.publish(new JugadorCambiadoDeNombreEvento(player.getName(), player.getName()));
+                this.eventBus.publish(new JugadorCambiadoDeNombreEvento(player.getName(), player.getName()));
             }
         }else{
             Jugador jugador = jugadorOptional.get();
@@ -31,7 +33,7 @@ public final class SetUpJugadorUseCase {
             if(!player.getName().equalsIgnoreCase(jugador.getNombre())){
                 jugadoresService.save(jugador.withNombre(jugador.getNombre()));
 
-                Pixelcoin.publish(new JugadorCambiadoDeNombreEvento(jugador.getNombre(), player.getName()));
+                this.eventBus.publish(new JugadorCambiadoDeNombreEvento(jugador.getNombre(), player.getName()));
             }
 
             if(jugador.getNumeroVerificacionCuenta() == 0){

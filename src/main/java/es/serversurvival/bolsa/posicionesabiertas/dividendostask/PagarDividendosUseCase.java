@@ -1,6 +1,7 @@
 package es.serversurvival.bolsa.posicionesabiertas.dividendostask;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
+import es.jaime.EventBus;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival.bolsa.activosinfo._shared.application.ActivoInfoDataService;
 import es.serversurvival.bolsa.activosinfo._shared.domain.tipoactivos.TipoActivo;
@@ -24,6 +25,7 @@ public final class PagarDividendosUseCase {
     private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
     private final ActivoInfoDataService activoInfoDataService;
     private final JugadoresService jugadoresService;
+    private final EventBus eventBus;
 
     public void pagarDividendos() {
         Date hoy = new Date();
@@ -58,7 +60,7 @@ public final class PagarDividendosUseCase {
                 .incrementPixelcoinsBy(totalDividendoInflow)
                 .incrementIngresosBy(totalDividendoInflow));
 
-        Pixelcoin.publish(new DividendoPagadoEvento(posicionAbierta.getPosicionAbiertaId(), posicionAbierta.getJugador(),
+        this.eventBus.publish(new DividendoPagadoEvento(posicionAbierta.getPosicionAbiertaId(), posicionAbierta.getJugador(),
                 posicionAbierta.getNombreActivo(), totalDividendoInflow));
     }
 
