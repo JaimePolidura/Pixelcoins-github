@@ -1,0 +1,58 @@
+package es.serversurvival.v1.bolsa.posicionesabiertas.venderlargo;
+
+import es.dependencyinjector.dependencies.annotations.UseCase;
+import es.jaime.EventBus;
+import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
+import es.jaime.javaddd.domain.exceptions.NotTheOwner;
+import es.serversurvival.v1.bolsa.activosinfo._shared.application.ActivosInfoService;
+import es.serversurvival.v1.bolsa.posicionesabiertas._shared.application.PosicionesAbiertasSerivce;
+import es.serversurvival.v1.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
+import es.serversurvival.v1.jugadores._shared.application.JugadoresService;
+import lombok.AllArgsConstructor;
+
+import java.util.UUID;
+
+@UseCase
+@AllArgsConstructor
+public class VenderLargoUseCase {
+    private final PosicionesAbiertasSerivce posicionesAbiertasSerivce;
+    private final JugadoresService jugadoresService;
+    private final ActivosInfoService activoInfoService;
+    private final EventBus eventBus;
+    
+    public void venderPosicion(UUID posicionAbiertaIdAVender, int cantidad, String nombreJugador) {
+        var posicionAVender = this.posicionesAbiertasSerivce.getById(posicionAbiertaIdAVender);
+        this.ensureOwnerOfPosicionAbierta(posicionAVender, nombreJugador);
+        this.ensureCantidadCorrectFormat(posicionAVender, cantidad);
+        var activoInfo = this.activoInfoService.getByNombreActivo(posicionAVender.getNombreActivo(), posicionAVender.getTipoActivo());
+        var vendedor = jugadoresService.getByNombre(posicionAVender.getJugador());
+
+        double precioActual = activoInfo.getPrecio();
+        String nombreValor = activoInfo.getNombreActivoLargo();
+        String ticker = posicionAVender.getNombreActivo();
+        int nAccionesTotlaesEnCartera = posicionAVender.getCantidad();
+        double precioApertura = posicionAVender.getPrecioApertura();
+        double valorTotalAVender = precioActual * cantidad;
+        String fechaApertura = posicionAVender.getFechaApertura();
+
+        if (cantidad == nAccionesTotlaesEnCartera)
+            posicionesAbiertasSerivce.deleteById(posicionAVender.getPosicionAbiertaId());
+        else
+            posicionesAbiertasSerivce.save(posicionAVender.withCantidad(nAccionesTotlaesEnCartera - cantidad));
+
+        this.jugadoresService.save(vendedor.incrementPixelcoinsBy(valorTotalAVender).incrementIngresosBy(valorTotalAVender));
+
+        this.eventBus.publish(new PosicionVentaLargoEvento(nombreJugador, ticker, nombreValor, precioApertura, fechaApertura,
+                precioActual, cantidad, posicionAVender.getTipoActivo()));
+    }
+
+    private void ensureCantidadCorrectFormat(PosicionAbierta posicionAVender, int cantidad) {
+        if(cantidad <= 0 || posicionAVender.getCantidad() < cantidad)
+            throw new IllegalQuantity("No puedes vender mas de lo que tiens");
+    }
+
+    private void ensureOwnerOfPosicionAbierta(PosicionAbierta posicionAVender, String nombreJugador) {
+        if(!posicionAVender.getJugador().equalsIgnoreCase(nombreJugador))
+            throw new NotTheOwner("No eres el owner de la posicion abierta");
+    }
+}

@@ -1,0 +1,74 @@
+package es.serversurvival.v1.bolsa.posicionesabiertas._shared.application;
+
+import es.jaime.javaddd.application.utils.CollectionUtils;
+import es.serversurvival.v1.bolsa.activosinfo._shared.application.ActivosInfoService;
+import es.serversurvival.v1.bolsa.posicionescerradas._shared.domain.TipoPosicion;
+import es.serversurvival.v1.bolsa.posicionesabiertas._shared.domain.PosicionAbierta;
+import lombok.AllArgsConstructor;
+
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static es.jaime.javaddd.application.utils.CollectionUtils.*;
+import static es.serversurvival.v1._shared.utils.Funciones.*;
+import static java.lang.Math.abs;
+
+@AllArgsConstructor
+public final class PosicionesUtils {
+    private final PosicionesAbiertasSerivce posicionesAbiertasService;
+    private final ActivosInfoService activosInfoService;
+
+    public double getAllPixeloinsEnValores(String jugador) {
+        var posLargas = posicionesAbiertasService.findByJugador(jugador, PosicionAbierta::esLargo);
+        var posCortas = posicionesAbiertasService.findByJugador(jugador, PosicionAbierta::esCorto);
+
+        double pixelcoinsEnLargos =
+                getSum(posLargas, pos -> activosInfoService.getByNombreActivo(pos.getNombreActivo(), pos.getTipoActivo()).getPrecio() * pos.getCantidad());
+        double pixelcoinsEnCortos =
+                getSum(posCortas, pos -> (pos.getPrecioApertura() - activosInfoService.getByNombreActivo(pos.getNombreActivo(), pos.getTipoActivo()).getPrecio() * pos.getCantidad()));
+
+        return pixelcoinsEnLargos + pixelcoinsEnCortos;
+    }
+
+    public Map<PosicionAbierta, Integer> getPosicionesAbiertasConPesoJugador(String jugador, double totalInverito) {
+        List<PosicionAbierta> posicionAbiertasJugador = posicionesAbiertasService.findByJugador(jugador);
+
+        Map<PosicionAbierta, Integer> posicionesAbiertasConPeso = new HashMap<>();
+
+        for (PosicionAbierta posicion : posicionAbiertasJugador) {
+            var nombreActivo = posicion.getNombreActivo();
+            var tipoActivo = posicion.getTipoActivo();
+            int cantidad = posicion.getCantidad();
+            double precioApertura = posicion.getPrecioApertura();
+
+            double valorTotalPosicion = posicion.esLargo() ?
+                    cantidad * activosInfoService.getByNombreActivo(nombreActivo, tipoActivo).getPrecio() :
+                    (precioApertura - activosInfoService.getByNombreActivo(nombreActivo, tipoActivo).getPrecio()) * cantidad;
+
+            posicionesAbiertasConPeso.put(posicion, (int) rentabilidad(
+                    Math.abs(totalInverito), Math.abs(valorTotalPosicion)
+            ));
+        }
+
+        return posicionesAbiertasConPeso;
+    }
+
+    public Map<PosicionAbierta, Double> calcularTopPosicionesAbiertas (String jugador) {
+        List<PosicionAbierta> posicionAbiertas = posicionesAbiertasService.findByJugador(jugador, PosicionAbierta::esLargo);
+        Map<PosicionAbierta, Double> posicionAbiertasConRentabilidad = new HashMap<>();
+
+        for (PosicionAbierta posicion : posicionAbiertas) {
+            double precioInicial = posicion.getPrecioApertura();
+            double precioActual = activosInfoService.getByNombreActivo(posicion.getNombreActivo(), posicion.getTipoActivo()).getPrecio();
+            double rentabildad = posicion.getTipoPosicion() == TipoPosicion.LARGO ?
+                    redondeoDecimales(diferenciaPorcntual(precioInicial, precioActual), 2) :
+                    abs(redondeoDecimales(diferenciaPorcntual(precioActual, precioInicial), 2));
+
+            posicionAbiertasConRentabilidad.put(posicion, rentabildad);
+        }
+
+        return CollectionUtils.sortMapByValue(posicionAbiertasConRentabilidad, Comparator.reverseOrder());
+    }
+}

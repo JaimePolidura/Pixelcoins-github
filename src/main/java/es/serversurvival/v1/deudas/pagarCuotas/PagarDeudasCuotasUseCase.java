@@ -1,0 +1,84 @@
+package es.serversurvival.v1.deudas.pagarCuotas;
+
+import es.dependencyinjector.dependencies.annotations.UseCase;
+import es.jaime.EventBus;
+import es.serversurvival.v1._shared.utils.Funciones;
+import es.serversurvival.v1.deudas._shared.application.DeudasService;
+import es.serversurvival.v1.deudas._shared.domain.Deuda;
+import es.serversurvival.v1.jugadores._shared.application.JugadoresService;
+import es.serversurvival.v1.jugadores._shared.domain.Jugador;
+import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+
+import java.util.Date;
+import java.util.UUID;
+
+import static es.serversurvival.v1._shared.utils.Funciones.DATE_FORMATER_LEGACY;
+
+@UseCase
+@AllArgsConstructor
+public final class PagarDeudasCuotasUseCase {
+    private final DeudasService deudasService;
+    private final JugadoresService jugadoresService;
+    private final EventBus eventBus;
+
+    public void pagarDeudas () {
+        for (Deuda deuda : this.deudasService.findAll()) {
+            Date fechaHoy = formatFehcaDeHoyException();
+            Date fechaUltimaPagaBaseDatos = formatFechaDeLaBaseDatosException(deuda.getFechaUltimapaga());
+            Jugador deudor = this.jugadoresService.getByNombre(deuda.getDeudor());
+            Jugador acredor = this.jugadoresService.getByNombre(deuda.getAcredor());
+
+            boolean esElDiaDeLaPaga = fechaHoy.compareTo(fechaUltimaPagaBaseDatos) != 0;
+            if(esElDiaDeLaPaga){
+                if(deudor.getPixelcoins() >= deuda.getCuota()){
+                    pagarDeudaYBorrarSiEsNecesario(deuda, acredor, deudor);
+                }else{
+                    sumarUnNinpagoAlDeudor(acredor, deudor, deuda.getDeudaId());
+                }
+            }
+        }
+    }
+
+    private void pagarDeudaYBorrarSiEsNecesario(Deuda deuda, Jugador acredor, Jugador deudor) {
+        String deudorNombre = deudor.getNombre();
+        String acredorNombre = acredor.getNombre();
+        double cuota = deuda.getCuota();
+        UUID deudaId = deuda.getDeudaId();
+        int tiempo = deuda.getTiempoRestante();
+
+        if(tiempo == 1){
+            this.deudasService.deleteById(deudaId);
+        }else{
+            deudasService.save(deuda
+                    .decrementPixelcoinsRestantes(cuota)
+                    .decrementTiempoRestanteByOne()
+                    .withFechaUltimoPago(Funciones.hoy()));
+        }
+
+        this.jugadoresService.realizarTransferencia(
+                deudor, acredor, cuota
+        );
+        this.jugadoresService.save(deudor.incrementNPagos());
+
+        this.eventBus.publish(new DeudaCuotaPagadaEvento(deuda.getDeudaId(), acredorNombre, deudorNombre, cuota, tiempo - 1));
+    }
+
+    private void sumarUnNinpagoAlDeudor(Jugador acredor, Jugador deudor, UUID deudaId) {
+        this.jugadoresService.save(deudor.incrementNInpago());
+
+        this.eventBus.publish(new DeudaCuotaNoPagadaEvento(acredor.getNombre(), deudor.getNombre(), deudaId));
+    }
+
+    @SneakyThrows
+    private Date formatFehcaDeHoyException () {
+        DATE_FORMATER_LEGACY.parse(Funciones.hoy());
+
+        return DATE_FORMATER_LEGACY.parse(Funciones.hoy());
+    }
+
+    @SneakyThrows
+    private Date formatFechaDeLaBaseDatosException (String fecha) {
+        return DATE_FORMATER_LEGACY.parse(fecha);
+    }
+}

@@ -1,0 +1,40 @@
+package es.serversurvival.v1.empresas.accionistasserver.onpixelcoinssacadas;
+
+import es.dependencyinjector.dependencies.annotations.EventHandler;
+import es.jaime.EventListener;
+import es.serversurvival.v1.empresas.accionistasserver._shared.application.AccionistasServerService;
+import es.serversurvival.v1.empresas.accionistasserver._shared.domain.AccionistaServer;
+import es.serversurvival.v1.empresas.empresas.sacar.PixelcoinsSacadasEvento;
+import es.serversurvival.v1.mensajes._shared.application.EnviadorMensajes;
+import lombok.AllArgsConstructor;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import static java.lang.String.format;
+import static org.bukkit.ChatColor.*;
+
+@EventHandler
+@AllArgsConstructor
+public final class OnPixelcoinsSacadasEvento {
+    private final AccionistasServerService accionistasServerService;
+    private final EnviadorMensajes enviadorMensajes;
+
+    @EventListener
+    public void on(PixelcoinsSacadasEvento evento){
+        String empresaNombre = evento.getEmpresaNombre();
+        String mensajeOnline = format(GOLD + "La empresa %s de la que eres accionista el owner ha sacado %s pixelcoins para el", empresaNombre);
+        String mensajeOffline = format(GOLD + "La empresa %s de la que eres accionista el owner ha sacado %s pixelcoins para el", empresaNombre);
+        Set<String> jugadoresMensajesYaEnviados = new HashSet<>();
+
+        this.accionistasServerService.findByEmpresa(empresaNombre, AccionistaServer::esJugador).forEach(accionista -> {
+            String accionistaNombre = accionista.getNombreAccionista();
+
+            if(!jugadoresMensajesYaEnviados.contains(accionistaNombre)){
+                enviadorMensajes.enviarMensaje(accionistaNombre, mensajeOnline, mensajeOffline);
+
+                jugadoresMensajesYaEnviados.add(accionistaNombre);
+            }
+        });
+    }
+}

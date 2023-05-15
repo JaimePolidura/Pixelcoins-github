@@ -1,0 +1,80 @@
+package es.serversurvival.v1.tienda._shared.application;
+
+import es.dependencyinjector.dependencies.annotations.Service;
+import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.serversurvival.v1._shared.cache.LRUCache;
+import es.serversurvival.v1._shared.cache.LimitedCache;
+import es.serversurvival.v1.tienda._shared.domain.EncantamientoObjecto;
+import es.serversurvival.v1.tienda._shared.domain.TiendaObjeto;
+import es.serversurvival.v1.tienda._shared.domain.TiendaRepository;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Function;
+
+@Service
+public class TiendaService {
+    private final TiendaRepository repositoryDb;
+    private final LimitedCache<UUID, TiendaObjeto> cache;
+
+    public TiendaService(TiendaRepository tiendaRepository){
+        this.repositoryDb = tiendaRepository;
+        this.cache = new LRUCache<>(150);
+    }
+
+    public void save(TiendaObjeto tiendaObjeto) {
+        this.repositoryDb.save(tiendaObjeto);
+        this.cache.put(tiendaObjeto.getTiendaObjetoId(), tiendaObjeto);
+    }
+
+    public TiendaObjeto save(String jugador, String objetoNombre, int cantidad, double precio,
+                             short durabilidad, List<EncantamientoObjecto> encantamientos){
+        var objetoTienda = new TiendaObjeto(UUID.randomUUID(), jugador, objetoNombre,
+                cantidad, precio, durabilidad, encantamientos);
+
+        this.save(objetoTienda);
+
+        return objetoTienda;
+    }
+
+    public TiendaObjeto getById(UUID id) {
+        return this.cache.find(id).orElseGet(() -> this.repositoryDb.findById(id)
+                .map(saveItemToCache())
+                .orElseThrow(() -> new ResourceNotFound("Objeto en la tienda no encontrado")));
+    }
+
+    public List<TiendaObjeto> findByJugador(String jugador) {
+        return this.cache.isNotFull() ?
+                this.cache.findValuesIf(tiendaObjeto -> tiendaObjeto.getJugador().equals(jugador)) :
+                this.repositoryDb.findByJugador(jugador).stream().peek(tiendaObjeto -> {
+                    this.cache.put(tiendaObjeto.getTiendaObjetoId(), tiendaObjeto);
+                }).toList();
+    }
+
+    public List<TiendaObjeto> findAll() {
+        return !this.cache.isEmpty() ?
+                this.cache.all() :
+                this.repositoryDb.findAll().stream().peek(tiendaObjeto -> {
+                    this.cache.put(tiendaObjeto.getTiendaObjetoId(), tiendaObjeto);
+                }).toList();
+    }
+
+    public void deleteById(UUID id) {
+        this.repositoryDb.deleteById(id);
+        this.cache.remove(id);
+    }
+
+    private Function<TiendaObjeto, TiendaObjeto> saveItemToCache(){
+        return tiendaObjeto -> {
+            this.cache.put(tiendaObjeto.getTiendaObjetoId(), tiendaObjeto);
+
+            return tiendaObjeto;
+        };
+    }
+
+    public void initializeCache(){
+        this.repositoryDb.findAll().forEach((tiendaObjeto -> {
+            this.cache.put(tiendaObjeto.getTiendaObjetoId(), tiendaObjeto);
+        }));
+    }
+}
