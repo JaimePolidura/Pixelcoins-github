@@ -10,6 +10,8 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
@@ -40,6 +42,13 @@ public final class Funciones {
         }
         
         return espaciosLibres;
+    }
+
+    public static long toMillis(LocalDateTime localDateTime) {
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime zonedDateTime = localDateTime.atZone(zoneId);
+
+        return zonedDateTime.toInstant().toEpochMilli();
     }
 
     public static int aumentarPorcentaje(double num, double porcentaje) {

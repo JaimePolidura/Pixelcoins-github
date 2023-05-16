@@ -27,6 +27,20 @@ public final class MySQLTransaccionesRepository extends DataBaseRepository<Trans
     }
 
     @Override
+    public List<Transaccion> findByPagadorId(UUID pagadorId) {
+        return buildListFromQuery(
+                Select.from(TABLE_NAME).where("pagadorId").equal(pagadorId)
+        );
+    }
+
+    @Override
+    public List<Transaccion> findByPagadoId(UUID pagadorId) {
+        return buildListFromQuery(
+                Select.from(TABLE_NAME).where("pagadoId").equal(pagadorId)
+        );
+    }
+
+    @Override
     public List<Transaccion> findByPagadorAndTipo(UUID pagadorId, TipoTransaccion tipo) {
         return buildListFromQuery(
                 Select.from(TABLE_NAME)

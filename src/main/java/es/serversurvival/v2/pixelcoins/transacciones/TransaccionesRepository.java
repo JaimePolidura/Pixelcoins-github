@@ -6,9 +6,9 @@ import java.util.UUID;
 public interface TransaccionesRepository {
     void save(Transaccion transaccion);
 
-    List<Transaccion> findByPagador(UUID pagadorId);
+    List<Transaccion> findByPagadorId(UUID pagadorId);
 
-    List<Transaccion> findByPagado(UUID pagadorId);
+    List<Transaccion> findByPagadoId(UUID pagadorId);
 
     List<Transaccion> findByPagadorAndTipo(UUID pagadorId, TipoTransaccion tipo);
 

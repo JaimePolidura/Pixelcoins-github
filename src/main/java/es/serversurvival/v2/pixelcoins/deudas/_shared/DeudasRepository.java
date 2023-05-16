@@ -1,0 +1,15 @@
+package es.serversurvival.v2.pixelcoins.deudas._shared;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+public interface DeudasRepository {
+    void save(Deuda deuda);
+
+    Optional<Deuda> findById(UUID id);
+
+    List<Deuda> findAll();
+
+    void deleteById(UUID id);
+}

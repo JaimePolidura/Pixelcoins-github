@@ -2,7 +2,6 @@ package es.serversurvival.v2.pixelcoins.transacciones;
 
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.application.cache.MUCache;
-import es.jaime.javaddd.application.utils.CollectionUtils;
 import es.jaime.javaddd.domain.cache.Cache;
 
 import java.util.Optional;
@@ -35,7 +34,7 @@ public final class TransaccionesService {
     private double getPixelcoinsPagado(UUID pagadoId) {
         return this.cachePixelcoinsPagado.find(pagadoId)
                 .or(() -> {
-                    double fromDb = getSum(this.repository.findByPagado(pagadoId), Transaccion::getPixelcoins);
+                    double fromDb = getSum(this.repository.findByPagadoId(pagadoId), Transaccion::getPixelcoins);
                     this.cachePixelcoinsPagado.put(pagadoId, fromDb);
                     return Optional.of(fromDb);
                 })
@@ -45,7 +44,7 @@ public final class TransaccionesService {
     private double getPixelcoinsPagador(UUID pagadorId) {
         return this.cachePixelcoinsPagador.find(pagadorId)
                 .or(() -> {
-                    double fromDb = getSum(this.repository.findByPagador(pagadorId), Transaccion::getPixelcoins);
+                    double fromDb = getSum(this.repository.findByPagadorId(pagadorId), Transaccion::getPixelcoins);
                     this.cachePixelcoinsPagador.put(pagadorId, fromDb);
                     return Optional.of(fromDb);
                 })
