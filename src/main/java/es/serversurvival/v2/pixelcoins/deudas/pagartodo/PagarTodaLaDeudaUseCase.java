@@ -29,7 +29,7 @@ public final class PagarTodaLaDeudaUseCase {
 
         asegurarseDeudorDeDeuda(deuda, deudorId);
         asegurarseDeudaPendiente(deuda);
-        validador.asegurarseJugadorTienePixelcoins(deudorId, pixelcoinsRestantes);
+        validador.jugadorTienePixelcoins(deudorId, pixelcoinsRestantes);
 
         deudasService.save(deuda.anotarPagadoPorCompleto());
         transaccionesService.save(Transaccion.builder()

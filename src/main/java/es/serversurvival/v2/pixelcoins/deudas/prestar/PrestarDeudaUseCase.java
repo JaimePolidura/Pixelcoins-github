@@ -19,10 +19,10 @@ public final class PrestarDeudaUseCase {
     private final EventBus eventBus;
 
     public void prestar(PrestDeudaUseCaseParametros parametros) {
-        validador.asegurarseNumeroMayorQueCero("Nominal", parametros.getNominal());
-        validador.asegurarseNumeroMayorQueCero("Interes", parametros.getInteres());
-        validador.asegurarseNumeroMayorQueCero("Numero de cuotas", parametros.getInteres());
-        validador.asegurarseJugadorTienePixelcoins(parametros.getAcredorJugadorId(), parametros.getNominal());
+        validador.numeroMayorQueCero(parametros.getNominal(), "Nominal");
+        validador.numeroMayorQueCero(parametros.getInteres(), "Interes");
+        validador.numeroMayorQueCero(parametros.getInteres(), "Numero de cuotas");
+        validador.jugadorTienePixelcoins(parametros.getAcredorJugadorId(), parametros.getNominal());
 
         Deuda deuda = Deuda.fromParametrosUseCase(parametros);
 

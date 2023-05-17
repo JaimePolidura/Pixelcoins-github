@@ -57,9 +57,9 @@ public final class PagadorDeudaCuotas {
     }
 
     private int getCuotasPendientesDePagar(Deuda deuda) {
-        long ulitmoPagoMs = toMillis(deuda.getFechaUltimoPagoCuota());
         long periodoPagoCuotaMs = deuda.getPeriodoPagoCuotaMs();
         long hoyMs = System.currentTimeMillis();
+        long ulitmoPagoMs = toMillis(deuda.getFechaUltimoPagoCuota());
 
         long tiempoTranscurriendoTrasUltimoPago = hoyMs - ulitmoPagoMs;
 

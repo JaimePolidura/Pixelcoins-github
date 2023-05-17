@@ -69,6 +69,8 @@ public final class Deuda {
     }
 
     public static Deuda fromParametrosUseCase(PrestDeudaUseCaseParametros parametros) {
+        LocalDateTime fechaHoy = LocalDateTime.now();
+
         return new Deuda(
                 UUID.randomUUID(),
                 parametros.getAcredorJugadorId(),
@@ -78,8 +80,8 @@ public final class Deuda {
                 parametros.getNumeroCuotasTotales(),
                 0,
                 0,
-                null,
-                LocalDateTime.now(),
+                fechaHoy,
+                fechaHoy,
                 parametros.getPeriodoPagoCuita(),
                 EstadoDeuda.PENDIENTE
         );
