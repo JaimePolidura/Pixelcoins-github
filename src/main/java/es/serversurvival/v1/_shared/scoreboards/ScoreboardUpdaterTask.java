@@ -28,7 +28,7 @@ public final class ScoreboardUpdaterTask extends BukkitRunnable implements After
 
     @Override
     public void afterAllScanned(DependenciesRepository dependenciesRepository) {
-        this.scoreboards = dependenciesRepository.queryByImplementsInterface(ServerScoreboardCreator.class);
+        this.scoreboards = dependenciesRepository.filterByImplementsInterface(ServerScoreboardCreator.class);
         this.nextScoreboard = CollectionUtils.newCircularIterator(scoreboards);
     }
 }

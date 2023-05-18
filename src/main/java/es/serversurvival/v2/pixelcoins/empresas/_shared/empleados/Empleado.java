@@ -27,6 +27,11 @@ public final class Empleado {
     @Getter private final LocalDateTime fechaDespido;
     @Getter private final String causaDespido;
 
+    public Empleado marcarSueldoPagado() {
+        return new Empleado(empleadoId, empleadoJugadorId, empresaId, descripccion, sueldo, periodoPagoMs, fechaUltimoPago.plusNanos(periodoPagoMs * 1_000_000),
+                fechaContratacion, estaContratado, fechaDespido, causaDespido);
+    }
+
     public Empleado editar(EditarEmpleadoUseCaseParametros parametros) {
         return new Empleado(empleadoId, empleadoJugadorId, empresaId, parametros.getNuevaDescripccion(), parametros.getNuevoSueldo(),
                 parametros.getNuevoPeriodoPago(), parametros.getNuevoPeriodoPago() == periodoPagoMs ? LocalDateTime.now() : fechaUltimoPago ,

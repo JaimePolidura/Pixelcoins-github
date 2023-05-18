@@ -40,6 +40,13 @@ public final class Deuda {
         return cuota;
     }
 
+    public Deuda nuevoAcredor(UUID nuevoAcredorId) {
+        return new Deuda(
+                deudaId, nuevoAcredorId, deudorJugadorId, nominal, interes, nCuotasTotales, nCuotasTotales,
+                nCuotasImpagadas, fechaUltimoPagoCuota, fechaCreacion, periodoPagoCuotaMs, estadoDeuda
+        );
+    }
+
     public Deuda cancelar() {
         return new Deuda(
                 deudaId, acredorJugadorId, deudorJugadorId, nominal, interes, nCuotasTotales, nCuotasTotales,
@@ -57,7 +64,7 @@ public final class Deuda {
     public Deuda anotarPagoCuota() {
         return new Deuda(
                 deudaId, acredorJugadorId, deudorJugadorId, nominal, interes, nCuotasTotales, nCuotasPagadas + 1,
-                nCuotasImpagadas, LocalDateTime.now(), fechaCreacion, periodoPagoCuotaMs, nCuotasImpagadas + 1 == nCuotasTotales ? EstadoDeuda.PAGADA : EstadoDeuda.PENDIENTE
+                nCuotasImpagadas, fechaUltimoPagoCuota.plusNanos(periodoPagoCuotaMs * 1_000_000), fechaCreacion, periodoPagoCuotaMs, nCuotasImpagadas + 1 == nCuotasTotales ? EstadoDeuda.PAGADA : EstadoDeuda.PENDIENTE
         );
     }
 

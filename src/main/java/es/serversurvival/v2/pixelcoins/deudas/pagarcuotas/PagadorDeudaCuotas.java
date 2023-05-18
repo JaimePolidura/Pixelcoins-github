@@ -20,13 +20,7 @@ public final class PagadorDeudaCuotas {
     private final EventBus eventBus;
 
     public void pagarCuotas(Deuda deuda) {
-        int cuotasPendientesDePagar = getCuotasPendientesDePagar(deuda);
-
-        if(cuotasPendientesDePagar == 0){
-            return;
-        }
-
-        repeat(cuotasPendientesDePagar, () ->  {
+        repeat(getNumeroCuotasPendientesDePagar(deuda), () ->  {
             pagarCuota(deuda);
         });
     }
@@ -56,7 +50,7 @@ public final class PagadorDeudaCuotas {
         eventBus.publish(new CuotaDeudaNoPagadaEvento(deuda.getDeudaId(), deuda.getCuota()));
     }
 
-    private int getCuotasPendientesDePagar(Deuda deuda) {
+    private int getNumeroCuotasPendientesDePagar(Deuda deuda) {
         long periodoPagoCuotaMs = deuda.getPeriodoPagoCuotaMs();
         long hoyMs = System.currentTimeMillis();
         long ulitmoPagoMs = toMillis(deuda.getFechaUltimoPagoCuota());
