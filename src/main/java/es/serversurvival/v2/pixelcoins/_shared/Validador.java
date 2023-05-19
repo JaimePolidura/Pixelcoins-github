@@ -1,6 +1,7 @@
 package es.serversurvival.v2.pixelcoins._shared;
 
 import es.dependencyinjector.dependencies.annotations.Service;
+import es.jaime.javaddd.domain.exceptions.IllegalAccess;
 import es.jaime.javaddd.domain.exceptions.IllegalLength;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.serversurvival.v1._shared.exceptions.NotEnoughPixelcoins;
@@ -23,6 +24,12 @@ public final class Validador {
     public void stringNoVacio(String texto, String nombre) {
         if(texto == null || texto.length() == 0) {
             throw new IllegalLength(String.format("%s no puede estar vacio", nombre));
+        }
+    }
+
+    public void noNull(Object object, String nombre) {
+        if(object == null){
+            throw new IllegalArgumentException(String.format("%s no puede ser null", nombre));
         }
     }
 

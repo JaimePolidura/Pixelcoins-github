@@ -18,6 +18,12 @@ public final class OfertasValidator {
         }
     }
 
+    public void laOfertaNoEsRepetida(TipoOferta tipoOferta, String objeto) {
+        if(tipoOferta.isObjetoDeOfertaUnico() && ofertasService.findByObjeto(objeto).isPresent()){
+            throw new NotEnoughPixelcoins("No puedes subir ofertas iguales");
+        }
+    }
+
     public void esVendedor(UUID ofertaId, UUID jugadorId) {
         if(!ofertasService.getById(ofertaId).getVendedorId().equals(jugadorId)) {
             throw new NotTheOwner("No eres el vendedor de la oferta");

@@ -37,12 +37,18 @@ public abstract class Oferta {
         public AbstractOfertaBuilder() {
             this.ofertaId = UUID.randomUUID();
             this.fechaSubida = LocalDateTime.now();
+            this.cantidad = 1;
         }
 
         public abstract Oferta build();
 
         public AbstractOfertaBuilder tipoOferta(TipoOferta tipoOferta) {
             this.tipoOferta = tipoOferta;
+            return this;
+        }
+
+        public AbstractOfertaBuilder objeto(UUID objeto) {
+            this.objeto = objeto.toString();
             return this;
         }
 

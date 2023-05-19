@@ -1,6 +1,6 @@
 package es.serversurvival.v2.pixelcoins.deudas._shared;
 
-import es.serversurvival.v2.pixelcoins.deudas.prestar.PrestDeudaUseCaseParametros;
+import es.serversurvival.v2.pixelcoins.deudas.prestar.PrestarDeudaUseCaseParametros;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -75,7 +75,7 @@ public final class Deuda {
         );
     }
 
-    public static Deuda fromParametrosUseCase(PrestDeudaUseCaseParametros parametros) {
+    public static Deuda fromParametrosUseCase(PrestarDeudaUseCaseParametros parametros) {
         LocalDateTime fechaHoy = LocalDateTime.now();
 
         return new Deuda(

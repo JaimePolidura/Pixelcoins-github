@@ -5,23 +5,28 @@ import es.jaime.EventBus;
 import es.serversurvival.v2.pixelcoins._shared.Validador;
 import es.serversurvival.v2.pixelcoins.deudas._shared.Deuda;
 import es.serversurvival.v2.pixelcoins.deudas._shared.DeudasService;
+import es.serversurvival.v2.pixelcoins.deudas._shared.DeudasValidador;
 import es.serversurvival.v2.pixelcoins.transacciones.TipoTransaccion;
 import es.serversurvival.v2.pixelcoins.transacciones.Transaccion;
 import es.serversurvival.v2.pixelcoins.transacciones.TransaccionesService;
 import lombok.AllArgsConstructor;
 
+import java.util.UUID;
+
 @UseCase
 @AllArgsConstructor
 public final class PrestarDeudaUseCase {
     private final TransaccionesService transaccionesService;
+    private final DeudasValidador deudasValidador;
     private final DeudasService deudasService;
     private final Validador validador;
     private final EventBus eventBus;
 
-    public void prestar(PrestDeudaUseCaseParametros parametros) {
-        validador.numeroMayorQueCero(parametros.getNominal(), "Nominal");
-        validador.numeroMayorQueCero(parametros.getInteres(), "Interes");
-        validador.numeroMayorQueCero(parametros.getInteres(), "Numero de cuotas");
+    public UUID prestar(PrestarDeudaUseCaseParametros parametros) {
+        deudasValidador.nominalCorrecto(parametros.getNominal());
+        deudasValidador.interesCorreto(parametros.getInteres());
+        deudasValidador.numeroCuotasCorrecto(parametros.getNumeroCuotasTotales());
+        deudasValidador.periodoPagoCuotasCorrecto(parametros.getPeriodoPagoCuita());
         validador.jugadorTienePixelcoins(parametros.getAcredorJugadorId(), parametros.getNominal());
 
         Deuda deuda = Deuda.fromParametrosUseCase(parametros);
@@ -36,5 +41,7 @@ public final class PrestarDeudaUseCase {
                 .build());
 
         eventBus.publish(new PixelcoinsPrestadasEvento(deuda));
+
+        return deuda.getDeudaId();
     }
 }

@@ -5,6 +5,7 @@ import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -22,6 +23,10 @@ public final class OfertasService {
 
     public List<Oferta> findByTipo(TipoOferta tipoOferta) {
         return this.repository.findByTipo(tipoOferta);
+    }
+
+    public Optional<Oferta> findByObjeto(String objeto) {
+        return this.repository.findByObjeto(objeto);
     }
 
     public void deleteById(UUID ofertaId) {

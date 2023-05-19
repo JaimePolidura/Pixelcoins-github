@@ -7,6 +7,7 @@ import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival.v2.pixelcoins._shared.Validador;
 import es.serversurvival.v2.pixelcoins.deudas._shared.Deuda;
 import es.serversurvival.v2.pixelcoins.deudas._shared.DeudasService;
+import es.serversurvival.v2.pixelcoins.deudas._shared.DeudasValidador;
 import es.serversurvival.v2.pixelcoins.deudas._shared.EstadoDeuda;
 import es.serversurvival.v2.pixelcoins.transacciones.TipoTransaccion;
 import es.serversurvival.v2.pixelcoins.transacciones.Transaccion;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public final class PagarTodaLaDeudaUseCase {
     private final TransaccionesService transaccionesService;
+    private final DeudasValidador deudasValidador;
     private final DeudasService deudasService;
     private final Validador validador;
     private final EventBus eventBus;
@@ -27,9 +29,9 @@ public final class PagarTodaLaDeudaUseCase {
         var deuda = this.deudasService.getById(deudaId);
         var pixelcoinsRestantes = deuda.getPixelcoinsTodasLasCuotasRestantes();
 
-        asegurarseDeudorDeDeuda(deuda, deudorId);
-        asegurarseDeudaPendiente(deuda);
-        validador.jugadorTienePixelcoins(deudorId, pixelcoinsRestantes);
+        deudasValidador.deudorDeDeuda(deudaId, deudorId);
+        deudasValidador.deudaPendiente(deudaId);
+        validador.jugadorTienePixelcoins(deudorId, deuda.getPixelcoinsTodasLasCuotasRestantes());
 
         deudasService.save(deuda.anotarPagadoPorCompleto());
         transaccionesService.save(Transaccion.builder()
@@ -41,17 +43,5 @@ public final class PagarTodaLaDeudaUseCase {
                 .build());
 
         eventBus.publish(new DeudaPagadoPorCompleto(deudaId));
-    }
-
-    private void asegurarseDeudaPendiente(Deuda deuda) {
-        if(deuda.getEstadoDeuda() != EstadoDeuda.PENDIENTE){
-            throw new IllegalState("La deuda tiene que estar pendiente");
-        }
-    }
-
-    private void asegurarseDeudorDeDeuda(Deuda deuda, UUID deudorId) {
-        if(deuda.getDeudorJugadorId() != deudorId){
-            throw new NotTheOwner("No eres deudor de esa deuda");
-        }
     }
 }
