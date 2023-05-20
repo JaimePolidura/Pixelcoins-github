@@ -14,7 +14,7 @@ public final class EditarEmpresaUseCase {
     private final EmpresasService empresasService;
     private final EventBus eventBus;
 
-    public void editar(EditarEmpresaUseCaseParametros parametros) {
+    public void editar(EditarEmpresaParametros parametros) {
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
         empresasValidador.descripccionCorrecta(parametros.getNuevaDescripccion());

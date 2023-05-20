@@ -24,7 +24,7 @@ public final class CerrarEmpresaUseCase {
     private final EmpresasService empresasService;
     private final EventBus eventBus;
 
-    public void cerrar(CerrarEmpresaUseCaseParametros parametros) {
+    public void cerrar(CerrarEmpresaParametros parametros) {
         validador.empresaNoCerrada(parametros.getEmpresaId());
         validador.empresaNoCotizada(parametros.getEmpresaId());
         validador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
@@ -45,7 +45,7 @@ public final class CerrarEmpresaUseCase {
     }
 
     private void despedirATodosLosEmpleados(UUID empresaId) {
-        this.empleadosService.findByEmpresaId(empresaId).forEach(empleado -> {
+        this.empleadosService.findEmpleoActivoByEmpresaId(empresaId).forEach(empleado -> {
             this.empleadosService.save(empleado.despedir("La empresa se ha cerrado"));
         });
     }

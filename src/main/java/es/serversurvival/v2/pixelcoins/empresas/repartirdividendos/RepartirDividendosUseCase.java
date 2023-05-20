@@ -23,7 +23,7 @@ public final class RepartirDividendosUseCase {
     private final Validador validador;
     private final EventBus eventBus;
 
-    public void repartirDividendos(RepartirDividendosUseCaseParametros parametros) {
+    public void repartirDividendos(RepartirDividendosParametros parametros) {
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.empresaCotizada(parametros.getEmpresaId());
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());

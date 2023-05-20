@@ -11,11 +11,9 @@ public interface EmpleadosRepository {
 
     Optional<Empleado> findById(UUID empleadoId);
 
-    Optional<Empleado> findByEmpresaIdYEmpleadoJugadorId(UUID empresaId, UUID empleadoJugadorId);
-
-    List<Empleado> findByJugadorId(UUID jugadorId);
+    List<Empleado> findByEmpresaIdAndEmpleadoJugadorId(UUID empresaId, UUID empleadoJugadorId);
 
     List<Empleado> findByEmpresaId(UUID empresaId);
 
-    List<Empresa> findAll();
+    void deleteById(UUID empleadoId);
 }

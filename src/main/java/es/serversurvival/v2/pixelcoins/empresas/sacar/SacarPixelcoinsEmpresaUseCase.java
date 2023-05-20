@@ -17,7 +17,7 @@ public final class SacarPixelcoinsEmpresaUseCase {
     private final Validador validador;
     private final EventBus eventBus;
 
-    public void sacar(SacarPixelcoinsEmpresaUseCaseParametros parametros) {
+    public void sacar(SacarPixelcoinsEmpresaParametros parametros) {
         validador.numeroMayorQueCero(parametros.getPixelcoins(), "Las pixelcoins a sacar");
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.empresaNoCotizada(parametros.getEmpresaId());

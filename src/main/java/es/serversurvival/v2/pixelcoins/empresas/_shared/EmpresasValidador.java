@@ -9,8 +9,8 @@ import es.serversurvival.v1._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.v2.pixelcoins._shared.Validador;
 import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.AccionistaEmpresa;
 import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.AccionistasEmpresasService;
+import es.serversurvival.v2.pixelcoins.empresas._shared.empleados.Empleado;
 import es.serversurvival.v2.pixelcoins.empresas._shared.empleados.EmpleadosService;
-import es.serversurvival.v2.pixelcoins.empresas._shared.empresas.Empresa;
 import es.serversurvival.v2.pixelcoins.empresas._shared.empresas.EmpresasService;
 import es.serversurvival.v2.pixelcoins.transacciones.TransaccionesService;
 import lombok.AllArgsConstructor;
@@ -89,14 +89,16 @@ public final class EmpresasValidador {
         }
     }
 
-    public void empleadoEmpresa(UUID empresaId, UUID empleadoJugadorId) {
-        if(empleadosService.findByEmpresaIdYEmpleadoJugadorId(empresaId, empleadoJugadorId).isEmpty()){
+    public void empleadoEmpresaActivo(UUID empresaId, UUID empleadoJugadorId) {
+        Optional<Empleado> empleado = empleadosService.findEmpleoActivoByEmpresaIdAndEmpleadoJugadorId(empresaId, empleadoJugadorId);
+        if(empleado.isEmpty()){
             throw new NotTheOwner("El jugador no esta empleado");
         }
     }
 
     public void noEmpleadoEmpresa(UUID empresaId, UUID jugadorId) {
-        if(empleadosService.findByEmpresaIdYEmpleadoJugadorId(empresaId, jugadorId).isPresent()){
+        Optional<Empleado> empleado = empleadosService.findEmpleoActivoByEmpresaIdAndEmpleadoJugadorId(empresaId, jugadorId);
+        if(empleado.isPresent()){
             throw new NotTheOwner("El jugador ya esta empleado");
         }
     }

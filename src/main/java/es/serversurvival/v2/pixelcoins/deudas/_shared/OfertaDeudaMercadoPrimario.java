@@ -21,10 +21,43 @@ public final class OfertaDeudaMercadoPrimario extends Oferta {
         this.periodoPagoCuota = periodoPagoCuota;
     }
 
-    public static OfertaDeudaMercadoPrimario fromParametosEmitirDeuda(EmitirDeudaUseCaseParametros parametros) {
-        return new OfertaDeudaMercadoPrimario(
-                UUID.randomUUID(), parametros.getJugadorId(), LocalDateTime.now(), 1, parametros.getNominal(), "", TipoOferta.DEUDA_MERCADO_PRIMARIO,
-                parametros.getInteres(), parametros.getNumeroCuotasTotales(), parametros.getPeriodoPagoCuota()
-        );
+    public static OfertaDeudaMercadoPrimarioBuilder builder() {
+        return new OfertaDeudaMercadoPrimarioBuilder();
+    }
+
+    public static class OfertaDeudaMercadoPrimarioBuilder extends Oferta.AbstractOfertaBuilder<OfertaDeudaMercadoPrimarioBuilder> {
+        private double interes;
+        private int numeroCuotasTotales;
+        private long periodoPagoCuota;
+
+        public OfertaDeudaMercadoPrimarioBuilder() {
+            this.ofertaId = UUID.randomUUID();
+            this.fechaSubida = LocalDateTime.now();
+            this.cantidad = 1;
+            this.objeto = "";
+            this.tipoOferta = TipoOferta.DEUDA_MERCADO_PRIMARIO;
+        }
+
+        public OfertaDeudaMercadoPrimarioBuilder interes(double interes) {
+            this.interes = interes;
+            return this;
+        }
+
+        public OfertaDeudaMercadoPrimarioBuilder periodoPagoCuota(long periodoPagoCuota) {
+            this.periodoPagoCuota = periodoPagoCuota;
+            return this;
+        }
+
+
+        public OfertaDeudaMercadoPrimarioBuilder numeroCuotasTotales(int numeroCuotasTotales) {
+            this.numeroCuotasTotales = numeroCuotasTotales;
+            return this;
+        }
+
+        @Override
+        public OfertaDeudaMercadoPrimario build() {
+            return new OfertaDeudaMercadoPrimario(ofertaId, vendedorId, fechaSubida, cantidad, precio, objeto, tipoOferta,
+                    interes, numeroCuotasTotales, periodoPagoCuota);
+        }
     }
 }

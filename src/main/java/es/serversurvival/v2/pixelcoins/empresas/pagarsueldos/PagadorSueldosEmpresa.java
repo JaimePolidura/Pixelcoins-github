@@ -20,7 +20,7 @@ public final class PagadorSueldosEmpresa {
     private final EventBus eventBus;
 
     public void pagar(Empresa empresa) {
-        empleadosService.findByEmpresaId(empresa.getEmpresaId()).stream()
+        empleadosService.findEmpleoActivoByEmpresaId(empresa.getEmpresaId()).stream()
                 .filter(Empleado::isEstaContratado)
                 .forEach(empleado -> pagarSueldosPendientes(empresa, empleado));
     }

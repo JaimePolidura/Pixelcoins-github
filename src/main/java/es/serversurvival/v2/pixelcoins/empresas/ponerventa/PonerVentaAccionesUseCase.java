@@ -6,7 +6,6 @@ import es.serversurvival.v2.pixelcoins.empresas._shared.EmpresasValidador;
 import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.AccionistaEmpresa;
 import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.AccionistasEmpresasService;
 import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.OfertaAccionMercadoJugador;
-import es.serversurvival.v2.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.v2.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.v2.pixelcoins.mercado._shared.TipoOferta;
 import lombok.AllArgsConstructor;
@@ -19,7 +18,7 @@ public final class PonerVentaAccionesUseCase {
     private final OfertasService ofertasService;
     private final EventBus eventBus;
 
-    public void ponerVenta(PonerVentaAccionesUseCaseParametros parametros) {
+    public void ponerVenta(PonerVentaAccionesParametros parametros) {
         empresasValidador.numerAccionesValido(parametros.getCantidadAcciones());
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.empresaCotizada(parametros.getEmpresaId());
@@ -29,7 +28,7 @@ public final class PonerVentaAccionesUseCase {
 
         AccionistaEmpresa acciones = accionistasEmpresasService.getByEmpresaIdAndJugadorId(parametros.getEmpresaId(), parametros.getJugadorId());
 
-        Oferta oferta = OfertaAccionMercadoJugador.builder()
+        ofertasService.save(OfertaAccionMercadoJugador.builder()
                 .vendedorId(parametros.getJugadorId())
                 .accionistaJugadorId(parametros.getJugadorId())
                 .tipoOferta(TipoOferta.ACCIONES_SERVER_JUGADOR)
@@ -37,10 +36,8 @@ public final class PonerVentaAccionesUseCase {
                 .precio(parametros.getPrecioPorAccion())
                 .empresaId(parametros.getEmpresaId())
                 .objeto(acciones.getAccionistaId())
-                .build();
+                .build());
 
-        ofertasService.save(oferta);
-
-        eventBus.publish(new AccionPuestaVenta(oferta.getOfertaId()));
+        eventBus.publish(new AccionPuestaVenta(parametros));
     }
 }

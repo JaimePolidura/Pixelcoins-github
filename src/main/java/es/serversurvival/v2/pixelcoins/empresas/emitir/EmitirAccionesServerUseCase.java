@@ -16,23 +16,21 @@ public final class EmitirAccionesServerUseCase {
     private final OfertasService ofertasService;
     private final EventBus eventBus;
 
-    public void emitir(EmitirAccionesServerUseCaseParametros parametros) {
+    public void emitir(EmitirAccionesServerParametros parametros) {
         empresasValidador.numerAccionesValido(parametros.getNumeroNuevasAcciones());
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
         empresasValidador.empresaCotizada(parametros.getEmpresaId());
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.precioPorAccion(parametros.getPrecioPorAccoin());
 
-        Oferta oferta = OfertaAccionMercadoEmision.builder()
+        ofertasService.save(OfertaAccionMercadoEmision.builder()
                 .vendedorId(parametros.getEmpresaId())
                 .precio(parametros.getPrecioPorAccoin())
                 .cantidad(parametros.getNumeroNuevasAcciones())
                 .objeto(parametros.getEmpresaId())
                 .tipoOferta(TipoOferta.ACCIONES_SERVER_EMISION)
-                .build();
+                .build());
 
-        ofertasService.save(oferta);
-
-        eventBus.publish(new AccionesEmitidasEmpresa(oferta.getOfertaId()));
+        eventBus.publish(new AccionesEmitidasEmpresa(parametros));
     }
 }

@@ -1,7 +1,7 @@
 package es.serversurvival.v2.pixelcoins.empresas._shared.empresas;
 
-import es.serversurvival.v2.pixelcoins.empresas.crear.CrearEmpresaUseCaseParametros;
-import es.serversurvival.v2.pixelcoins.empresas.editarempresa.EditarEmpresaUseCaseParametros;
+import es.serversurvival.v2.pixelcoins.empresas.crear.CrearEmpresaParametros;
+import es.serversurvival.v2.pixelcoins.empresas.editarempresa.EditarEmpresaParametros;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,12 +41,12 @@ public final class Empresa {
                 fechaCreacion, esCotizada, true, LocalDateTime.now());
     }
 
-    public Empresa editar(EditarEmpresaUseCaseParametros parametros) {
+    public Empresa editar(EditarEmpresaParametros parametros) {
         return new Empresa(empresaId, parametros.getNuevoNombre(), fundadorJugadorId, directorJugadorId, parametros.getNuevaDescripccion(),
                 parametros.getNuevoIcono(), nTotalAcciones, fechaCreacion, esCotizada, estaCerrado, fechaCerrado);
     }
 
-    public static Empresa fromParametrosCrearEmpresa(CrearEmpresaUseCaseParametros comando) {
+    public static Empresa fromParametrosCrearEmpresa(CrearEmpresaParametros comando) {
         return Empresa.builder()
                 .empresaId(UUID.randomUUID())
                 .nombre(comando.getNombre())

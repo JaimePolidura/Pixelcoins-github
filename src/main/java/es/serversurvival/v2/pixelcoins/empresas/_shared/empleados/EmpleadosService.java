@@ -22,19 +22,19 @@ public final class EmpleadosService {
         return this.repository.findById(empleadoId).orElseThrow(() -> new ResourceNotFound("Empleado no encontrado"));
     }
 
-    public Optional<Empleado> findByEmpresaIdYEmpleadoJugadorId(UUID empresaId, UUID empleadoJugadorId) {
-        return this.repository.findByEmpresaIdYEmpleadoJugadorId(empresaId, empleadoJugadorId);
+    public Optional<Empleado> findEmpleoActivoByEmpresaIdAndEmpleadoJugadorId(UUID empresaId, UUID empleadoJugadorId) {
+        return this.repository.findByEmpresaIdAndEmpleadoJugadorId(empresaId, empleadoJugadorId).stream()
+                .filter(Empleado::isEstaContratado)
+                .findFirst();
     }
 
-    public List<Empleado> findByJugadorId(UUID jugadorId) {
-        return this.repository.findByJugadorId(jugadorId);
+    public List<Empleado> findEmpleoActivoByEmpresaId(UUID empresaId) {
+        return this.repository.findByEmpresaId(empresaId).stream()
+                .filter(Empleado::isEstaContratado)
+                .toList();
     }
 
-    public List<Empleado> findByEmpresaId(UUID empresaId) {
-        return this.repository.findByEmpresaId(empresaId);
-    }
-
-    public List<Empresa> findAll() {
-        return this.repository.findAll();
+    public void deleteById(UUID empleadoId) {
+        this.repository.deleteById(empleadoId);
     }
 }

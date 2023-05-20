@@ -1,6 +1,7 @@
 package es.serversurvival.v2.pixelcoins._shared;
 
 import es.dependencyinjector.dependencies.annotations.Service;
+import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalAccess;
 import es.jaime.javaddd.domain.exceptions.IllegalLength;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
@@ -24,6 +25,12 @@ public final class Validador {
     public void stringNoVacio(String texto, String nombre) {
         if(texto == null || texto.length() == 0) {
             throw new IllegalLength(String.format("%s no puede estar vacio", nombre));
+        }
+    }
+
+    public void notEqual(UUID a, UUID b, String message) {
+        if(a.equals(b)){
+            throw new CannotBeYourself(message);
         }
     }
 

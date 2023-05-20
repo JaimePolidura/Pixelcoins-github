@@ -17,26 +17,21 @@ import lombok.AllArgsConstructor;
 public final class PonerVentaDeudaUseCase {
     private final OfrecerOfertaUseCase ofrecerOfertaUseCase;
     private final DeudasValidador deudasValidador;
-    private final DeudasService deudasService;
     private final Validador validador;
     private final EventBus eventBus;
 
-    public void vender(PonerVentaDeudaUseCaseParametros parametros) {
+    public void vender(PonerVentaDeudaParametros parametros) {
         deudasValidador.deudaPendiente(parametros.getDeudaId());
         deudasValidador.acredorDeDeuda(parametros.getDeudaId(), parametros.getJugadorId());
         validador.numeroMayorQueCero(parametros.getPrecio(), "El precio de la deuda");
 
-        Deuda deudaAVender = deudasService.getById(parametros.getDeudaId());
-
-        Oferta oferta = OfertaDeudaMercadoSecundario.builder()
+        ofrecerOfertaUseCase.ofrecer(OfertaDeudaMercadoSecundario.builder()
                 .vendedorId(parametros.getJugadorId())
                 .precio(parametros.getPrecio())
                 .tipoOferta(TipoOferta.DEUDA_MERCADO_SECUNDARIO)
-                .objeto(deudaAVender.getDeudaId())
-                .build();
+                .objeto(parametros.getDeudaId())
+                .build());
 
-        ofrecerOfertaUseCase.ofrecer(oferta);
-
-        eventBus.publish(new DeudaPuestaVenta(deudaAVender.getDeudaId(), oferta.getOfertaId(), oferta.getPrecio()));
+        eventBus.publish(new DeudaPuestaVenta(parametros));
     }
 }

@@ -17,7 +17,7 @@ public final class ComprarServicioUseCase {
     private final Validador validador;
     private final EventBus eventBus;
 
-    public void comprarServicio(ComprarServicioUseCaseParametros parametros) {
+    public void comprarServicio(ComprarServicioParametros parametros) {
         validador.numeroMayorQueCero(parametros.getPixelcoins(), "Pixelcoins");
         validador.jugadorTienePixelcoins(parametros.getCompradorJugadorId(), parametros.getPixelcoins());
         empresasValidador.noEmpleadoEmpresa(parametros.getEmpresaId(), parametros.getCompradorJugadorId());

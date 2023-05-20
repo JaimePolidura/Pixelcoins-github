@@ -16,11 +16,11 @@ public final class DespedirEmpleadoUseCase  {
     private final Validador validador;
     private final EventBus eventBus;
 
-    public void despedir(DespedirEmpleadoUseCaseParametros parametros) {
+    public void despedir(DespedirEmpleadoParametros parametros) {
         validador.stringLongitudEntre(parametros.getCausa(), 1, 16, "causa de despido");
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorIdQueDespide());
-        empresasValidador.empleadoEmpresa(parametros.getEmpresaId(), parametros.getEmpleadoIdADespedir());
+        empresasValidador.empleadoEmpresaActivo(parametros.getEmpresaId(), parametros.getEmpleadoIdADespedir());
         empresasValidador.empleadoNoEsDirector(parametros.getEmpresaId(), parametros.getEmpleadoIdADespedir());
 
         Empleado empleado = this.empleadosService.getById(parametros.getEmpleadoIdADespedir());

@@ -7,7 +7,6 @@ import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.AccionistaEm
 import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.AccionistasEmpresasService;
 import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.OfertaAccionMercadoJugador;
 import es.serversurvival.v2.pixelcoins.empresas._shared.empresas.EmpresasService;
-import es.serversurvival.v2.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.v2.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival.v2.pixelcoins.mercado.ofrecer.OfrecerOfertaUseCase;
 import lombok.AllArgsConstructor;
@@ -21,7 +20,7 @@ public final class EmpresasIPOUseCase {
     private final EmpresasService empresasService;
     private final EventBus eventBus;
 
-    public void ipo(EmpresasIPOUseCaseParametros parametros) {
+    public void ipo(EmpresaIPOParametros parametros) {
         empresasValidador.numerAccionesValido(parametros.getNumeroAccionesVender());
         empresasValidador.precioPorAccion(parametros.getPrecioPorAccion());
         empresasValidador.empresaNoCotizada(parametros.getEmpresaId());
@@ -31,7 +30,7 @@ public final class EmpresasIPOUseCase {
 
         AccionistaEmpresa acciones = accionistasEmpresasService.getByEmpresaIdAndJugadorId(parametros.getEmpresaId(), parametros.getJugadorId());
 
-        Oferta oferta = OfertaAccionMercadoJugador.builder()
+        ofrecerOfertaUseCase.ofrecer(OfertaAccionMercadoJugador.builder()
                 .vendedorId(parametros.getEmpresaId())
                 .accionistaJugadorId(parametros.getJugadorId())
                 .precio(parametros.getPrecioPorAccion())
@@ -39,12 +38,10 @@ public final class EmpresasIPOUseCase {
                 .tipoOferta(TipoOferta.ACCIONES_SERVER_JUGADOR)
                 .empresaId(parametros.getEmpresaId())
                 .objeto(acciones.getAccionistaId())
-                .build();
-
-        ofrecerOfertaUseCase.ofrecer(oferta);
+                .build());
 
         empresasService.save(empresasService.getById(parametros.getEmpresaId()).marcarComoCotizada());
 
-        eventBus.publish(new EmpresaIPORealizada(oferta.getOfertaId()));
+        eventBus.publish(new EmpresaIPORealizada(parametros));
     }
 }

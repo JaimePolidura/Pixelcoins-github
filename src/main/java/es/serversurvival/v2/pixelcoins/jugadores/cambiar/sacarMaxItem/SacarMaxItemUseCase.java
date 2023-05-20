@@ -21,13 +21,13 @@ public final class SacarMaxItemUseCase {
     private final TransaccionesService transaccionesService;
     private final EventBus eventBus;
 
-    public void sacarMaxItem(Jugador jugador, TipoCambioPixelcoins tipoCambio) {
-        var pixelcoinsJugador = transaccionesService.getBalancePixelcions(jugador.getJugadorId());
+    public void sacarMaxItem(SacarMaxItemParametros parametros) {
+        var pixelcoinsJugador = transaccionesService.getBalancePixelcions(parametros.getJugador().getJugadorId());
 
-        switch (tipoCambio) {
-            case DIAMOND, DIAMOND_BLOCK -> sacarMaxItemDiamond(jugador, pixelcoinsJugador);
-            case LAPIS_BLOCK, LAPIS_LAZULI -> sacarMaxItemLapisLazuli(jugador, pixelcoinsJugador);
-            case QUARTZ_BLOCK -> sacarMaxItemQuartzBlock(jugador, pixelcoinsJugador);
+        switch (parametros.getTipoCambio()) {
+            case DIAMOND, DIAMOND_BLOCK -> sacarMaxItemDiamond(parametros.getJugador(), pixelcoinsJugador);
+            case LAPIS_BLOCK, LAPIS_LAZULI -> sacarMaxItemLapisLazuli(parametros.getJugador(), pixelcoinsJugador);
+            case QUARTZ_BLOCK -> sacarMaxItemQuartzBlock(parametros.getJugador(), pixelcoinsJugador);
         }
     }
 

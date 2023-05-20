@@ -16,9 +16,9 @@ public final class SacarItemUseCase {
     private final JugadoresService jugadoresService;
     private final EventBus eventBus;
 
-    public void sacarItem(String jugadorNombre, TipoCambioPixelcoins tipoCambio, int cantidad) {
-        var jugador = this.jugadoresService.getByNombre(jugadorNombre);
-        var pixelcoinsASacar = tipoCambio.cambio * cantidad;
+    public void sacarItem(SacarItemParametros parametros) {
+        var jugador = this.jugadoresService.getByNombre(parametros.getJugadorNombre());
+        var pixelcoinsASacar = parametros.getTipoCambio().cambio * parametros.getCantidad();
 
         asegurarseQueTengaPixelcoins(jugador, pixelcoinsASacar);
 
@@ -26,10 +26,10 @@ public final class SacarItemUseCase {
                 .tipo(TipoTransaccion.JUGADORES_CAMBIO_SACAR_ITEM)
                 .pagadorId(jugador.getJugadorId())
                 .pixelcoins(pixelcoinsASacar)
-                .objeto(tipoCambio.name())
+                .objeto(parametros.getTipoCambio().name())
                 .build());
 
-        this.eventBus.publish(new ItemSacadoEvento(jugador, tipoCambio.name(), pixelcoinsASacar));
+        this.eventBus.publish(new ItemSacadoEvento(jugador, parametros.getTipoCambio().name(), pixelcoinsASacar));
     }
 
     private void asegurarseQueTengaPixelcoins(Jugador jugador, double pixelcoinsASacar) {

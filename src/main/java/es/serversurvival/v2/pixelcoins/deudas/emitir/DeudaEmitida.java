@@ -8,5 +8,5 @@ import java.util.UUID;
 
 @AllArgsConstructor
 public final class DeudaEmitida extends PixelcoinsEvento {
-    @Getter private final UUID ofertaId;
+    @Getter private final EmitirDeudaUseCaseParametros deudaEmitidaParametros;
 }

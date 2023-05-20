@@ -2,7 +2,7 @@ package es.serversurvival.v2.pixelcoins.empresas._shared.empleados;
 
 import es.serversurvival.v2.pixelcoins.empresas._shared.empresas.Empresa;
 import es.serversurvival.v2.pixelcoins.empresas.contratar.ContratarEmpleadoUseCaseParametros;
-import es.serversurvival.v2.pixelcoins.empresas.editarempleado.EditarEmpleadoUseCaseParametros;
+import es.serversurvival.v2.pixelcoins.empresas.editarempleado.EditarEmpleadoParametros;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,7 +32,7 @@ public final class Empleado {
                 fechaContratacion, estaContratado, fechaDespido, causaDespido);
     }
 
-    public Empleado editar(EditarEmpleadoUseCaseParametros parametros) {
+    public Empleado editar(EditarEmpleadoParametros parametros) {
         return new Empleado(empleadoId, empleadoJugadorId, empresaId, parametros.getNuevaDescripccion(), parametros.getNuevoSueldo(),
                 parametros.getNuevoPeriodoPago(), parametros.getNuevoPeriodoPago() == periodoPagoMs ? LocalDateTime.now() : fechaUltimoPago ,
                 fechaContratacion, estaContratado, fechaDespido, causaDespido);

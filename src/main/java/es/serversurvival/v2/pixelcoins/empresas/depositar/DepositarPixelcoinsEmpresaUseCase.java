@@ -17,7 +17,7 @@ public final class DepositarPixelcoinsEmpresaUseCase {
     private final Validador validador;
     private final EventBus eventBus;
 
-    public void depositar(DepositarPixelcoinsEmpresaUseCaseParametros parametros) {
+    public void depositar(DepositarPixelcoinsEmpresaParametros parametros) {
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.empresaNoCotizada(parametros.getEmpresaId());
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());

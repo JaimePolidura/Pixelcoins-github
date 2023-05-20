@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Builder
 @AllArgsConstructor
-public final class PrestarDeudaUseCaseParametros {
+public final class PrestarDeudaParametros {
     @Getter private final UUID acredorJugadorId;
     @Getter private final UUID deudorJugadorId;
     @Getter private final double nominal;
@@ -17,8 +17,8 @@ public final class PrestarDeudaUseCaseParametros {
     @Getter private final int numeroCuotasTotales;
     @Getter private final long periodoPagoCuita;
 
-    public static PrestarDeudaUseCaseParametros fromOfertaDeudaMercadoPrimario(OfertaDeudaMercadoPrimario oferta, UUID compradorId) {
-        return new PrestarDeudaUseCaseParametros(
+    public static PrestarDeudaParametros fromOfertaDeudaMercadoPrimario(OfertaDeudaMercadoPrimario oferta, UUID compradorId) {
+        return new PrestarDeudaParametros(
                 compradorId,
                 oferta.getVendedorId(),
                 oferta.getPrecio(),

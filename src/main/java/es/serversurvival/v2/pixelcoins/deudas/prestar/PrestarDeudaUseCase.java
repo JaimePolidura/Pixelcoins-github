@@ -22,7 +22,7 @@ public final class PrestarDeudaUseCase {
     private final Validador validador;
     private final EventBus eventBus;
 
-    public UUID prestar(PrestarDeudaUseCaseParametros parametros) {
+    public UUID prestar(PrestarDeudaParametros parametros) {
         deudasValidador.nominalCorrecto(parametros.getNominal());
         deudasValidador.interesCorreto(parametros.getInteres());
         deudasValidador.numeroCuotasCorrecto(parametros.getNumeroCuotasTotales());

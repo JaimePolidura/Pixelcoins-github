@@ -2,7 +2,6 @@ package es.serversurvival.v2.pixelcoins.empresas.crear;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
-import es.jaime.javaddd.domain.exceptions.AlreadyExists;
 import es.serversurvival.v2.pixelcoins.empresas._shared.EmpresasValidador;
 import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.AccionistaEmpresa;
 import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.AccionistasEmpresasService;
@@ -21,7 +20,7 @@ public final class CrearEmpresaUseCase {
     private final EmpresasService empresasService;
     private final EventBus eventBus;
 
-    public void crear(CrearEmpresaUseCaseParametros parametros) {
+    public void crear(CrearEmpresaParametros parametros) {
         empresasValidador.descripccionCorrecta(parametros.getDescripccion());
         empresasValidador.nombreEmpresaCorrecta(parametros.getNombre());
         empresasValidador.validarIcono(parametros.getIcono());

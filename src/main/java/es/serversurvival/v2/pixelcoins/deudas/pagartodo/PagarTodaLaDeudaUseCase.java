@@ -28,24 +28,24 @@ public final class PagarTodaLaDeudaUseCase {
     private final Validador validador;
     private final EventBus eventBus;
 
-    public void pagarTodaLaDeuda(UUID deudaId, UUID deudorId) {
-        var deuda = this.deudasService.getById(deudaId);
+    public void pagarTodaLaDeuda(PagarTodaLaDeudaParametros parametros) {
+        var deuda = this.deudasService.getById(parametros.getDeudaId());
         var pixelcoinsRestantes = deuda.getPixelcoinsTodasLasCuotasRestantes();
 
-        deudasValidador.deudorDeDeuda(deudaId, deudorId);
-        deudasValidador.deudaPendiente(deudaId);
-        validador.jugadorTienePixelcoins(deudorId, deuda.getPixelcoinsTodasLasCuotasRestantes());
+        deudasValidador.deudorDeDeuda(parametros.getDeudaId(), parametros.getJugadorId());
+        deudasValidador.deudaPendiente(parametros.getDeudaId());
+        validador.jugadorTienePixelcoins(parametros.getJugadorId(), deuda.getPixelcoinsTodasLasCuotasRestantes());
 
         deudasService.save(deuda.anotarPagadoPorCompleto());
-        ofertasService.deleteByObjetoYTipo(deudaId.toString(), TipoOferta.DEUDA_MERCADO_SECUNDARIO);
+        ofertasService.deleteByObjetoYTipo(parametros.getDeudaId().toString(), TipoOferta.DEUDA_MERCADO_SECUNDARIO);
         transaccionesService.save(Transaccion.builder()
                     .pagadoId(deuda.getAcredorJugadorId())
-                    .pagadorId(deudorId)
+                    .pagadorId(parametros.getJugadorId())
                     .pixelcoins(pixelcoinsRestantes)
                     .objeto(deuda.getDeudaId().toString())
                     .tipo(TipoTransaccion.DEUDAS_PAGO_COMPLETO)
                 .build());
 
-        eventBus.publish(new DeudaPagadoPorCompleto(deudaId));
+        eventBus.publish(new DeudaPagadoPorCompleto(parametros.getDeudaId()));
     }
 }

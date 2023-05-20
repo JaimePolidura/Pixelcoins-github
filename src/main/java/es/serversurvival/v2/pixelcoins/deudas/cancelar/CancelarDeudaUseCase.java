@@ -22,15 +22,15 @@ public final class CancelarDeudaUseCase {
     private final DeudasService deudasService;
     private final EventBus eventBus;
 
-    public void cancelar(UUID deudaId, UUID acredorId) {
-        deudasValidador.acredorDeDeuda(deudaId, acredorId);
-        deudasValidador.deudaPendiente(deudaId);
+    public void cancelar(CancelarDeudaParametros parametros) {
+        deudasValidador.acredorDeDeuda(parametros.getDeudaId(), parametros.getJugadorId());
+        deudasValidador.deudaPendiente(parametros.getDeudaId());
 
-        Deuda deuda = deudasService.getById(deudaId);
+        Deuda deuda = deudasService.getById(parametros.getDeudaId());
 
         deudasService.save(deuda.cancelar());
         ofertasService.deleteByObjetoYTipo(deuda.getDeudaId().toString(), TipoOferta.DEUDA_MERCADO_SECUNDARIO);
 
-        eventBus.publish(new DeudaCancelada(deudaId));
+        eventBus.publish(new DeudaCancelada(parametros.getDeudaId()));
     }
 }

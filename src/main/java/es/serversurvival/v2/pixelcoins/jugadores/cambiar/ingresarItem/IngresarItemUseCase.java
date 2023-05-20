@@ -17,18 +17,18 @@ public final class IngresarItemUseCase {
     private final JugadoresService jugadoresService;
     private final EventBus eventBus;
 
-    public void ingresarItem(String nombreJugador, TipoCambioPixelcoins tipoCambio, int cantidad) {
-        Jugador jugador = jugadoresService.getByNombre(nombreJugador);
+    public void ingresarItem(IngresarItemParametros parametros) {
+        Jugador jugador = jugadoresService.getByNombre(parametros.getNombreJugador());
 
-        double pixelcoinsAnadir = tipoCambio.cambio * cantidad;
+        double pixelcoinsAnadir = parametros.getTipoCambioPixelcoins().cambio * parametros.getCantiadad();
 
         this.transaccionesService.save(Transaccion.builder()
                         .tipo(TipoTransaccion.JUGADORES_CAMBIO_INGRESAR_ITEM)
                         .pagadoId(jugador.getJugadorId())
                         .pixelcoins(pixelcoinsAnadir)
-                        .objeto(tipoCambio.name())
+                        .objeto(parametros.getTipoCambioPixelcoins().name())
                 .build());
 
-        this.eventBus.publish(new ItemIngresadoEvento(jugador, pixelcoinsAnadir, tipoCambio.name()));
+        this.eventBus.publish(new ItemIngresadoEvento(jugador, pixelcoinsAnadir, parametros.getTipoCambioPixelcoins().name()));
     }
 }

@@ -4,6 +4,7 @@ import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.EventBus;
 import es.serversurvival.v2.pixelcoins.deudas._shared.DeudasValidador;
 import es.serversurvival.v2.pixelcoins.deudas._shared.OfertaDeudaMercadoPrimario;
+import es.serversurvival.v2.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival.v2.pixelcoins.mercado.ofrecer.OfrecerOfertaUseCase;
 import lombok.AllArgsConstructor;
 
@@ -20,10 +21,15 @@ public final class EmitirDeudaUseCase {
         deudasValidador.nominalCorrecto(parametros.getNominal());
         deudasValidador.interesCorreto(parametros.getInteres());
 
-        OfertaDeudaMercadoPrimario oferta = OfertaDeudaMercadoPrimario.fromParametosEmitirDeuda(parametros);
+        ofrecerOfertaUseCase.ofrecer(OfertaDeudaMercadoPrimario.builder()
+                        .vendedorId(parametros.getJugadorId())
+                        .precio(parametros.getNominal())
+                        .tipoOferta(TipoOferta.DEUDA_MERCADO_PRIMARIO)
+                        .interes(parametros.getInteres())
+                        .numeroCuotasTotales(parametros.getNumeroCuotasTotales())
+                        .periodoPagoCuota(parametros.getPeriodoPagoCuota())
+                .build());
 
-        ofrecerOfertaUseCase.ofrecer(oferta);
-
-        eventBus.publish(new DeudaEmitida(oferta.getOfertaId()));
+        eventBus.publish(new DeudaEmitida(parametros));
     }
 }
