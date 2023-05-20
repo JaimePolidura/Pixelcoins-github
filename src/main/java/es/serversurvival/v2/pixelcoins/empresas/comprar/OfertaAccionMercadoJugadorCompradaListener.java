@@ -19,7 +19,7 @@ public final class OfertaAccionMercadoJugadorCompradaListener implements CustomO
     @Override
     public void on(OfertaAccionMercadoJugador ofertaComprada, UUID compradorId) {
         UUID empresaId = ofertaComprada.getObjetoToUUID();
-        UUID vendedorId = ofertaComprada.getAccionistaJugadorId();
+        UUID vendedorId = ofertaComprada.getEmpresaId();
 
         incrementarPosicionAccionComprador(compradorId, empresaId);
         decrementarPosicionAccionVendedor(vendedorId, empresaId);

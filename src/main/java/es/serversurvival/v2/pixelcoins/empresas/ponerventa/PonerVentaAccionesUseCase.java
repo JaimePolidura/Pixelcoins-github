@@ -3,6 +3,8 @@ package es.serversurvival.v2.pixelcoins.empresas.ponerventa;
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.v2.pixelcoins.empresas._shared.EmpresasValidador;
+import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.AccionistaEmpresa;
+import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.AccionistasEmpresasService;
 import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.OfertaAccionMercadoJugador;
 import es.serversurvival.v2.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.v2.pixelcoins.mercado._shared.OfertasService;
@@ -12,25 +14,29 @@ import lombok.AllArgsConstructor;
 @UseCase
 @AllArgsConstructor
 public final class PonerVentaAccionesUseCase {
+    private final AccionistasEmpresasService accionistasEmpresasService;
     private final EmpresasValidador empresasValidador;
     private final OfertasService ofertasService;
     private final EventBus eventBus;
 
     public void ponerVenta(PonerVentaAccionesUseCaseParametros parametros) {
+        empresasValidador.numerAccionesValido(parametros.getCantidadAcciones());
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.empresaCotizada(parametros.getEmpresaId());
         empresasValidador.accionistaDeEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
         empresasValidador.precioPorAccion(parametros.getPrecioPorAccion());
         empresasValidador.jugadorTieneAcciones(parametros.getEmpresaId(), parametros.getJugadorId(), parametros.getCantidadAcciones());
-        empresasValidador.numerAccionesValido(parametros.getCantidadAcciones());
+
+        AccionistaEmpresa acciones = accionistasEmpresasService.getByEmpresaIdAndJugadorId(parametros.getEmpresaId(), parametros.getJugadorId());
 
         Oferta oferta = OfertaAccionMercadoJugador.builder()
                 .vendedorId(parametros.getJugadorId())
                 .accionistaJugadorId(parametros.getJugadorId())
-                .tipoOferta(TipoOferta.ACCIONES_EMPRESA_SERVER_MERCADO_JUGADOR)
+                .tipoOferta(TipoOferta.ACCIONES_SERVER_JUGADOR)
                 .cantidad(parametros.getCantidadAcciones())
                 .precio(parametros.getPrecioPorAccion())
-                .objeto(parametros.getEmpresaId())
+                .empresaId(parametros.getEmpresaId())
+                .objeto(acciones.getAccionistaId())
                 .build();
 
         ofertasService.save(oferta);

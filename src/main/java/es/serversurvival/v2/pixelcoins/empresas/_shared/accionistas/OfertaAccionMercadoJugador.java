@@ -9,10 +9,13 @@ import java.util.UUID;
 
 public final class OfertaAccionMercadoJugador extends Oferta {
     @Getter private final UUID accionistaJugadorId;
+    @Getter private final UUID empresaId;
 
-    public OfertaAccionMercadoJugador(UUID ofertaId, UUID vendedorId, LocalDateTime fechaSubida, int cantidad, double precio, String objeto, TipoOferta tipoOferta, UUID accionistaJugadorId) {
+    public OfertaAccionMercadoJugador(UUID ofertaId, UUID vendedorId, LocalDateTime fechaSubida, int cantidad, double precio,
+                                      String objeto, TipoOferta tipoOferta, UUID accionistaJugadorId, UUID empresaId) {
         super(ofertaId, vendedorId, fechaSubida, cantidad, precio, objeto, tipoOferta);
         this.accionistaJugadorId = accionistaJugadorId;
+        this.empresaId = empresaId;
     }
 
     public static OfertaAccionMercadoJugadorBuiler builder() {
@@ -21,6 +24,12 @@ public final class OfertaAccionMercadoJugador extends Oferta {
 
     public static class OfertaAccionMercadoJugadorBuiler extends Oferta.AbstractOfertaBuilder<OfertaAccionMercadoJugadorBuiler> {
         private UUID accionistaJugadorId;
+        private UUID empresaId;
+
+        public OfertaAccionMercadoJugadorBuiler empresaId(UUID empresaId) {
+            this.empresaId = empresaId;
+            return this;
+        }
 
         public OfertaAccionMercadoJugadorBuiler accionistaJugadorId(UUID accionistaJugadorId) {
             this.accionistaJugadorId = accionistaJugadorId;
@@ -29,7 +38,7 @@ public final class OfertaAccionMercadoJugador extends Oferta {
 
         @Override
         public Oferta build() {
-            return new OfertaAccionMercadoJugador(ofertaId, vendedorId, fechaSubida, cantidad, precio, objeto, tipoOferta, accionistaJugadorId);
+            return new OfertaAccionMercadoJugador(ofertaId, vendedorId, fechaSubida, cantidad, precio, objeto, tipoOferta, accionistaJugadorId, empresaId);
         }
     }
 }

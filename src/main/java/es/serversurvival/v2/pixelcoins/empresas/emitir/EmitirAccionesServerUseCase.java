@@ -28,7 +28,7 @@ public final class EmitirAccionesServerUseCase {
                 .precio(parametros.getPrecioPorAccoin())
                 .cantidad(parametros.getNumeroNuevasAcciones())
                 .objeto(parametros.getEmpresaId())
-                .tipoOferta(TipoOferta.ACCIONES_EMPRESA_SERVER_MERCADO_EMISION)
+                .tipoOferta(TipoOferta.ACCIONES_SERVER_EMISION)
                 .build();
 
         ofertasService.save(oferta);

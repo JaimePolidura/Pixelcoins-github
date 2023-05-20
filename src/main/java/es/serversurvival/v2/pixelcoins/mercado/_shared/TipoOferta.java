@@ -10,8 +10,8 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum TipoOferta {
-    ACCIONES_EMPRESA_SERVER_MERCADO_EMISION(TipoTransaccion.EMPRESAS_ACCIONES_COMPRA_MERCADO_EMISION, false, OfertaAccionMercadoEmision.class),
-    ACCIONES_EMPRESA_SERVER_MERCADO_JUGADOR(TipoTransaccion.EMPRESAS_ACCIONES_COMPRA_MERCADO_JUGADOR, false, OfertaAccionMercadoJugador.class),
+    ACCIONES_SERVER_EMISION(TipoTransaccion.EMPRESAS_ACCIONES_COMPRA_EMISION, false, OfertaAccionMercadoEmision.class),
+    ACCIONES_SERVER_JUGADOR(TipoTransaccion.EMPRESAS_ACCIONES_COMPRA_JUGADOR, true, OfertaAccionMercadoJugador.class),
     DEUDA_MERCADO_SECUNDARIO(TipoTransaccion.DEUDAS_MERCADO_SECUNDARIO_COMPRA, true, OfertaDeudaMercadoSecundario.class),
     DEUDA_MERCADO_PRIMARIO(TipoTransaccion.DEUDAS_MERCADO_PRIMARIO_COMPRA, false, OfertaDeudaMercadoPrimario.class);
 
