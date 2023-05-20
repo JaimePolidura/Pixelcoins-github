@@ -16,6 +16,18 @@ public final class AccionistaEmpresa {
     @Getter private final UUID accionisaJugadorId;
     @Getter private final int nAcciones;
 
+    public AccionistaEmpresa decrementarNAccionesPorUno() {
+        return new AccionistaEmpresa(accionistaId, empresaId, accionistaId, nAcciones - 1);
+    }
+
+    public AccionistaEmpresa incrementarNAccionesEnUno() {
+        return new AccionistaEmpresa(accionistaId, empresaId, accionistaId, nAcciones + 1);
+    }
+
+    public boolean noTieneMasAcciones() {
+        return this.nAcciones <= 0;
+    }
+
     public static AccionistaEmpresa fromFundadorEmpresa(Empresa empresa) {
         return AccionistaEmpresa.builder()
                 .accionistaId(UUID.randomUUID())

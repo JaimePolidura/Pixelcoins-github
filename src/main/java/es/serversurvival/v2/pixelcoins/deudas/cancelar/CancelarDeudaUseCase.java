@@ -8,6 +8,8 @@ import es.serversurvival.v2.pixelcoins.deudas._shared.Deuda;
 import es.serversurvival.v2.pixelcoins.deudas._shared.DeudasService;
 import es.serversurvival.v2.pixelcoins.deudas._shared.DeudasValidador;
 import es.serversurvival.v2.pixelcoins.deudas._shared.EstadoDeuda;
+import es.serversurvival.v2.pixelcoins.mercado._shared.OfertasService;
+import es.serversurvival.v2.pixelcoins.mercado._shared.TipoOferta;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;
@@ -16,6 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public final class CancelarDeudaUseCase {
     private final DeudasValidador deudasValidador;
+    private final OfertasService ofertasService;
     private final DeudasService deudasService;
     private final EventBus eventBus;
 
@@ -24,7 +27,9 @@ public final class CancelarDeudaUseCase {
         deudasValidador.deudaPendiente(deudaId);
 
         Deuda deuda = deudasService.getById(deudaId);
+
         deudasService.save(deuda.cancelar());
+        ofertasService.deleteByObjetoYTipo(deuda.getDeudaId().toString(), TipoOferta.DEUDA_MERCADO_SECUNDARIO);
 
         eventBus.publish(new DeudaCancelada(deudaId));
     }

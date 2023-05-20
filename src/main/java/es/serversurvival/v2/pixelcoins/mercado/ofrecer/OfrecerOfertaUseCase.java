@@ -19,7 +19,7 @@ public final class OfrecerOfertaUseCase {
         validador.numeroMayorQueCero(nuevaOferta.getCantidad(), "La cantidad");
         validador.noNull(nuevaOferta.getVendedorId(), "El vendedor");
         validador.noNull(nuevaOferta.getTipoOferta(), "El tipo oferta");
-        ofertasValidator.laOfertaNoEsRepetida(nuevaOferta.getTipoOferta(), nuevaOferta.getObjeto());
+        ofertasValidator.ofertaNoEsRepetida(nuevaOferta.getTipoOferta(), nuevaOferta.getObjeto());
 
         ofertasService.save(nuevaOferta);
     }

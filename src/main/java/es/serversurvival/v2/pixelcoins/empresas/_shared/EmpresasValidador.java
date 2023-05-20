@@ -2,20 +2,26 @@ package es.serversurvival.v2.pixelcoins.empresas._shared;
 
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.AlreadyExists;
+import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival.v1._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.v2.pixelcoins._shared.Validador;
+import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.AccionistaEmpresa;
+import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.AccionistasEmpresasService;
 import es.serversurvival.v2.pixelcoins.empresas._shared.empleados.EmpleadosService;
+import es.serversurvival.v2.pixelcoins.empresas._shared.empresas.Empresa;
 import es.serversurvival.v2.pixelcoins.empresas._shared.empresas.EmpresasService;
 import es.serversurvival.v2.pixelcoins.transacciones.TransaccionesService;
 import lombok.AllArgsConstructor;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public final class EmpresasValidador {
+    private final AccionistasEmpresasService accionistasEmpresasService;
     private final TransaccionesService transaccionesService;
     private final EmpleadosService empleadosService;
     private final EmpresasService empresasService;
@@ -65,6 +71,12 @@ public final class EmpresasValidador {
         }
     }
 
+    public void accionistaDeEmpresa(UUID empresaId, UUID jugadorId) {
+        if(this.accionistasEmpresasService.findByEmpresaIdAndJugadorId(empresaId, jugadorId).isEmpty()){
+            throw new IllegalState("No eres accionista de la empresa");
+        }
+    }
+
     public void empresaNoCerrada(UUID empresaId) {
         if(empresasService.getById(empresaId).isEstaCerrado()){
             throw new IllegalState("La empresa esta cerrada");
@@ -86,6 +98,25 @@ public final class EmpresasValidador {
     public void noEmpleadoEmpresa(UUID empresaId, UUID jugadorId) {
         if(empleadosService.findByEmpresaIdYEmpleadoJugadorId(empresaId, jugadorId).isPresent()){
             throw new NotTheOwner("El jugador ya esta empleado");
+        }
+    }
+
+    public void precioPorAccion(double precioPorAccion) {
+        if(precioPorAccion <= 0){
+            throw new IllegalQuantity("El precio por accion tiene que ser mayor que 0");
+        }
+    }
+
+    public void numerAccionesValido(double numeroAcciones) {
+        if(numeroAcciones <= 0){
+            throw new IllegalQuantity("El numero de acciones tiene que ser negativo ni cero");
+        }
+    }
+
+    public void jugadorTieneAcciones(UUID empresaId, UUID jugadorId, int supuestoNumeroAccionesTiene) {
+        Optional<AccionistaEmpresa> accionistaEmpresa = accionistasEmpresasService.findByEmpresaIdAndJugadorId(empresaId, jugadorId);
+        if(accionistaEmpresa.isEmpty() || accionistaEmpresa.get().getNAcciones() < supuestoNumeroAccionesTiene){
+            throw new IllegalQuantity("No tienes las suficientes acciones");
         }
     }
 

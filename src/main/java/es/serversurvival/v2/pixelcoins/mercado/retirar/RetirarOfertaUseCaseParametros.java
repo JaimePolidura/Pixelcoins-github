@@ -7,6 +7,6 @@ import java.util.UUID;
 
 @AllArgsConstructor
 public final class RetirarOfertaUseCaseParametros {
-    @Getter private final UUID jugadorId;
+    @Getter private final UUID retiradorId;
     @Getter private final UUID ofertaId;
 }

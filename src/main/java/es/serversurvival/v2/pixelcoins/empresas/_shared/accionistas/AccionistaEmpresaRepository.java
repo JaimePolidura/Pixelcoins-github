@@ -13,7 +13,11 @@ public interface AccionistaEmpresaRepository {
 
     List<AccionistaEmpresa> findByEmpresaId(UUID empresaId);
 
+    Optional<AccionistaEmpresa> findByEmpresaIdAndJugadorId(UUID empresaId, UUID jugadorId);
+
     List<AccionistaEmpresa> findAll();
 
     void deleteByEmpresaId(UUID empresaId);
+
+    void deleteById(UUID accionistaId);
 }

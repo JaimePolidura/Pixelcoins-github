@@ -1,8 +1,8 @@
-package es.serversurvival.v2.pixelcoins.deudas.comprar.primario;
+package es.serversurvival.v2.pixelcoins.deudas.comprar;
 
 import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventBus;
-import es.serversurvival.v2.pixelcoins.deudas.comprar.DeudaComprada;
+import es.serversurvival.v2.pixelcoins.deudas._shared.OfertaDeudaMercadoPrimario;
 import es.serversurvival.v2.pixelcoins.deudas.prestar.PrestarDeudaUseCase;
 import es.serversurvival.v2.pixelcoins.deudas.prestar.PrestarDeudaUseCaseParametros;
 import es.serversurvival.v2.pixelcoins.mercado._shared.accion.CustomOfertaCompradaListener;

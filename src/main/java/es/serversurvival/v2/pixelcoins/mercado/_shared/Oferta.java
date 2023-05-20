@@ -21,11 +21,11 @@ public abstract class Oferta {
         return this;
     }
 
-    public UUID objetoToUUID() {
+    public UUID getObjetoToUUID() {
         return UUID.fromString(objeto);
     }
 
-    public static abstract class AbstractOfertaBuilder {
+    public static abstract class AbstractOfertaBuilder<T extends AbstractOfertaBuilder> {
         protected UUID ofertaId;
         protected UUID vendedorId;
         protected LocalDateTime fechaSubida;
@@ -42,34 +42,34 @@ public abstract class Oferta {
 
         public abstract Oferta build();
 
-        public AbstractOfertaBuilder tipoOferta(TipoOferta tipoOferta) {
+        public T tipoOferta(TipoOferta tipoOferta) {
             this.tipoOferta = tipoOferta;
-            return this;
+            return (T) this;
         }
 
-        public AbstractOfertaBuilder objeto(UUID objeto) {
+        public T objeto(UUID objeto) {
             this.objeto = objeto.toString();
-            return this;
+            return (T) this;
         }
 
-        public AbstractOfertaBuilder objeto(String objeto) {
+        public T objeto(String objeto) {
             this.objeto = objeto;
-            return this;
+            return (T) this;
         }
 
-        public AbstractOfertaBuilder precio(double precio) {
+        public T precio(double precio) {
             this.precio = precio;
-            return this;
+            return (T) this;
         }
 
-        public AbstractOfertaBuilder cantidad(int cantidad) {
+        public T cantidad(int cantidad) {
             this.cantidad = cantidad;
-            return this;
+            return (T) this;
         }
-
-        public AbstractOfertaBuilder vendedorId(UUID vendedorId) {
+        
+        public T vendedorId(UUID vendedorId) {
             this.vendedorId = vendedorId;
-            return this;
+            return (T) this;
         }
     }
 }

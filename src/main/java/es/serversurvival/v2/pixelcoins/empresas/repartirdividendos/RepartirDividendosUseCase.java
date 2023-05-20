@@ -23,7 +23,7 @@ public final class RepartirDividendosUseCase {
     private final Validador validador;
     private final EventBus eventBus;
 
-    public void pagar(RepartirDividendosUseCaseParametros parametros) {
+    public void repartirDividendos(RepartirDividendosUseCaseParametros parametros) {
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.empresaCotizada(parametros.getEmpresaId());
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
@@ -33,13 +33,13 @@ public final class RepartirDividendosUseCase {
         empresasValidador.tienePixelcoinsSuficientes(parametros.getEmpresaId(), gastosTotales);
 
         accionistasEmpresasService.findByEmpresaId(parametros.getEmpresaId()).forEach(accionistaEmpresa -> {
-            pagarDividendo(accionistaEmpresa, parametros.getDividendoPorAccion());
+            repartirDividendo(accionistaEmpresa, parametros.getDividendoPorAccion());
         });
 
         eventBus.publish(new DividendosEmpresaRepartido(parametros.getEmpresaId(), parametros.getDividendoPorAccion()));
     }
 
-    private void pagarDividendo(AccionistaEmpresa accionista, double dividendoPorAccion) {
+    private void repartirDividendo(AccionistaEmpresa accionista, double dividendoPorAccion) {
         this.transaccionesService.save(Transaccion.builder()
                         .pagadorId(accionista.getEmpresaId())
                         .pagadoId(accionista.getAccionisaJugadorId())

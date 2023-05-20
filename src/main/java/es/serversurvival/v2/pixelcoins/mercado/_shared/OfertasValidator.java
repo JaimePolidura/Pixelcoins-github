@@ -18,8 +18,8 @@ public final class OfertasValidator {
         }
     }
 
-    public void laOfertaNoEsRepetida(TipoOferta tipoOferta, String objeto) {
-        if(tipoOferta.isObjetoDeOfertaUnico() && ofertasService.findByObjeto(objeto).isPresent()){
+    public void ofertaNoEsRepetida(TipoOferta tipoOferta, String objeto) {
+        if(tipoOferta.isObjetoDeOfertaUnico() && ofertasService.findByObjetoAndTipo(objeto, tipoOferta).isPresent()){
             throw new NotEnoughPixelcoins("No puedes subir ofertas iguales");
         }
     }

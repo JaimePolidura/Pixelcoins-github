@@ -1,4 +1,4 @@
-package es.serversurvival.v2.pixelcoins.deudas.comprar.primario;
+package es.serversurvival.v2.pixelcoins.deudas._shared;
 
 import es.serversurvival.v2.pixelcoins.deudas.emitir.EmitirDeudaUseCaseParametros;
 import es.serversurvival.v2.pixelcoins.mercado._shared.Oferta;

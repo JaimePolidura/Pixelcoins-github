@@ -75,6 +75,10 @@ public final class Deuda {
         );
     }
 
+    public boolean estaPendiente() {
+        return this.estadoDeuda == EstadoDeuda.PENDIENTE;
+    }
+
     public static Deuda fromParametrosUseCase(PrestarDeudaUseCaseParametros parametros) {
         LocalDateTime fechaHoy = LocalDateTime.now();
 

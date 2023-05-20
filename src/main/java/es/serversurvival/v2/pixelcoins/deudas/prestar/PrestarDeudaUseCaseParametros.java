@@ -1,6 +1,6 @@
 package es.serversurvival.v2.pixelcoins.deudas.prestar;
 
-import es.serversurvival.v2.pixelcoins.deudas.comprar.primario.OfertaDeudaMercadoPrimario;
+import es.serversurvival.v2.pixelcoins.deudas._shared.OfertaDeudaMercadoPrimario;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

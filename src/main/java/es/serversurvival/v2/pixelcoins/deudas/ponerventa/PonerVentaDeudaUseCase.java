@@ -6,7 +6,7 @@ import es.serversurvival.v2.pixelcoins._shared.Validador;
 import es.serversurvival.v2.pixelcoins.deudas._shared.Deuda;
 import es.serversurvival.v2.pixelcoins.deudas._shared.DeudasService;
 import es.serversurvival.v2.pixelcoins.deudas._shared.DeudasValidador;
-import es.serversurvival.v2.pixelcoins.deudas.comprar.secundario.OfertaDeudaMercadoSecundario;
+import es.serversurvival.v2.pixelcoins.deudas._shared.OfertaDeudaMercadoSecundario;
 import es.serversurvival.v2.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.v2.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival.v2.pixelcoins.mercado.ofrecer.OfrecerOfertaUseCase;

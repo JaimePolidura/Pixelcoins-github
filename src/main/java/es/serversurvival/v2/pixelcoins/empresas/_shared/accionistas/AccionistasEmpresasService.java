@@ -5,6 +5,7 @@ import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -20,8 +21,12 @@ public final class AccionistasEmpresasService {
         return this.repository.findById(accionistaId).orElseThrow(() -> new ResourceNotFound("Accionista no encontrado"));
     }
 
-    public List<AccionistaEmpresa> findByJugadorId(UUID jugadorId) {
-        return this.repository.findByJugadorId(jugadorId);
+    public AccionistaEmpresa getByEmpresaIdAndJugadorId(UUID empresaId, UUID jugadorId) {
+        return this.repository.findByEmpresaIdAndJugadorId(empresaId, jugadorId).orElseThrow(() -> new ResourceNotFound("Accionista no encontrado"));
+    }
+
+    public Optional<AccionistaEmpresa> findByEmpresaIdAndJugadorId(UUID empresaId, UUID jugadorId) {
+        return this.repository.findByEmpresaIdAndJugadorId(empresaId, jugadorId);
     }
 
     public List<AccionistaEmpresa> findByEmpresaId(UUID empresaId) {
@@ -34,5 +39,15 @@ public final class AccionistasEmpresasService {
 
     public void deleteByEmpresaId(UUID empresaId) {
         this.repository.deleteByEmpresaId(empresaId);
+    }
+
+    public void deleteById(UUID accionistaId) {
+        repository.deleteById(accionistaId);
+    }
+
+    public void incrementarPosicionAccionEnUno(UUID empresaId, UUID compradorId) {
+        save(findByEmpresaIdAndJugadorId(empresaId, compradorId)
+                .orElse(new AccionistaEmpresa(UUID.randomUUID(), empresaId, compradorId, 0))
+                .incrementarNAccionesEnUno());
     }
 }

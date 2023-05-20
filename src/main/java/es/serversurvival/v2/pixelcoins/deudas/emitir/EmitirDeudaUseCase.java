@@ -3,7 +3,7 @@ package es.serversurvival.v2.pixelcoins.deudas.emitir;
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.EventBus;
 import es.serversurvival.v2.pixelcoins.deudas._shared.DeudasValidador;
-import es.serversurvival.v2.pixelcoins.deudas.comprar.primario.OfertaDeudaMercadoPrimario;
+import es.serversurvival.v2.pixelcoins.deudas._shared.OfertaDeudaMercadoPrimario;
 import es.serversurvival.v2.pixelcoins.mercado.ofrecer.OfrecerOfertaUseCase;
 import lombok.AllArgsConstructor;
 

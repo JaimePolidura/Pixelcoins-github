@@ -4,6 +4,8 @@ import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.EventBus;
 import es.serversurvival.v2.pixelcoins.deudas._shared.Deuda;
 import es.serversurvival.v2.pixelcoins.deudas._shared.DeudasService;
+import es.serversurvival.v2.pixelcoins.mercado._shared.OfertasService;
+import es.serversurvival.v2.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival.v2.pixelcoins.transacciones.TipoTransaccion;
 import es.serversurvival.v2.pixelcoins.transacciones.Transaccion;
 import es.serversurvival.v2.pixelcoins.transacciones.TransaccionesService;
@@ -16,6 +18,7 @@ import static es.serversurvival.v1._shared.utils.Funciones.*;
 @AllArgsConstructor
 public final class PagadorDeudaCuotas {
     private final TransaccionesService transaccionesService;
+    private final OfertasService ofertasService;
     private final DeudasService deudasService;
     private final EventBus eventBus;
 
@@ -41,6 +44,10 @@ public final class PagadorDeudaCuotas {
                 .tipo(TipoTransaccion.DEUDAS_CUOTA)
                 .objeto(deuda.getDeudaId().toString())
                 .build());
+
+        if(!deuda.estaPendiente()){
+            ofertasService.deleteByObjetoYTipo(deuda.getDeudaId().toString(), TipoOferta.DEUDA_MERCADO_SECUNDARIO);
+        }
 
         eventBus.publish(new CuotaDeudaNoPagadaEvento(deuda.getDeudaId(), deuda.getCuota()));
     }

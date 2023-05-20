@@ -25,11 +25,19 @@ public final class OfertasService {
         return this.repository.findByTipo(tipoOferta);
     }
 
-    public Optional<Oferta> findByObjeto(String objeto) {
-        return this.repository.findByObjeto(objeto);
+    public Optional<Oferta> findByObjetoAndTipo(String objeto, TipoOferta tipo) {
+        return this.repository.findByObjetoAndTipo(objeto, tipo);
+    }
+
+    public Optional<Oferta> findByObjetoAndTipo(UUID objetoId, TipoOferta tipo) {
+        return this.repository.findByObjetoAndTipo(objetoId.toString(), tipo);
     }
 
     public void deleteById(UUID ofertaId) {
         this.repository.deleteById(ofertaId);
+    }
+
+    public void deleteByObjetoYTipo(String objeto, TipoOferta tipo) {
+        this.repository.deleteByObjetoYTipo(objeto, tipo);
     }
 }

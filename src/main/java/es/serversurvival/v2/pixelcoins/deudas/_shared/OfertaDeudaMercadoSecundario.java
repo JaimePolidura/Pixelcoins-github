@@ -1,4 +1,4 @@
-package es.serversurvival.v2.pixelcoins.deudas.comprar.secundario;
+package es.serversurvival.v2.pixelcoins.deudas._shared;
 
 import es.serversurvival.v2.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.v2.pixelcoins.mercado._shared.TipoOferta;

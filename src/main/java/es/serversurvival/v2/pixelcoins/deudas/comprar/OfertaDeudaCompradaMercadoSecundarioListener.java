@@ -1,10 +1,10 @@
-package es.serversurvival.v2.pixelcoins.deudas.comprar.secundario;
+package es.serversurvival.v2.pixelcoins.deudas.comprar;
 
 import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventBus;
 import es.serversurvival.v2.pixelcoins.deudas._shared.Deuda;
 import es.serversurvival.v2.pixelcoins.deudas._shared.DeudasService;
-import es.serversurvival.v2.pixelcoins.deudas.comprar.DeudaComprada;
+import es.serversurvival.v2.pixelcoins.deudas._shared.OfertaDeudaMercadoSecundario;
 import es.serversurvival.v2.pixelcoins.mercado._shared.accion.CustomOfertaCompradaListener;
 import lombok.AllArgsConstructor;
 
@@ -18,7 +18,7 @@ public final class OfertaDeudaCompradaMercadoSecundarioListener implements Custo
 
     @Override
     public void on(OfertaDeudaMercadoSecundario ofertaComprada, UUID compradorJugadorId) {
-        UUID deudaId = ofertaComprada.objetoToUUID();
+        UUID deudaId = ofertaComprada.getObjetoToUUID();
         Deuda deuda = deudasService.getById(deudaId);
 
         deudasService.save(deuda.nuevoAcredor(compradorJugadorId));

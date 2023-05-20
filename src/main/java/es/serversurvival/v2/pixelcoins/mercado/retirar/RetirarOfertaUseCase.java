@@ -14,11 +14,11 @@ public final class RetirarOfertaUseCase {
     private final OfertasService ofertasService;
 
     public void retirarOfertaUseCase(RetirarOfertaUseCaseParametros parametros) {
-        ofertasValidator.esVendedor(parametros.getOfertaId(), parametros.getJugadorId());
+        ofertasValidator.esVendedor(parametros.getOfertaId(), parametros.getRetiradorId());
 
         Oferta ofertaRetirada = ofertasService.getById(parametros.getOfertaId());
         ofertasService.deleteById(ofertaRetirada.getOfertaId());
 
-        customOfertaAccionCaller.call(CustomOfertaRetiradaListener.class, ofertaRetirada, parametros.getJugadorId());
+        customOfertaAccionCaller.call(CustomOfertaRetiradaListener.class, ofertaRetirada, parametros.getRetiradorId());
     }
 }

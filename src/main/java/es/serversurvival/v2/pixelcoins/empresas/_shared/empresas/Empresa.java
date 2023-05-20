@@ -12,7 +12,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 public final class Empresa {
-    public static final int N_ACCIONES_INICIAL = 100;
+    public static final int N_ACCIONES_INICIAL = 1000;
 
     @Getter private final UUID empresaId;
     @Getter private final String nombre;
@@ -25,6 +25,16 @@ public final class Empresa {
     @Getter private final boolean esCotizada;
     @Getter private final boolean estaCerrado;
     @Getter private final LocalDateTime fechaCerrado;
+
+    public Empresa incrementNTotalAccionesEn(int nTotalAccionesAIncrementar){
+        return new Empresa(empresaId, nombre, fundadorJugadorId, directorJugadorId, descripccion, icono, nTotalAcciones + nTotalAccionesAIncrementar,
+                fechaCreacion, esCotizada, estaCerrado, fechaCerrado);
+    }
+
+    public Empresa marcarComoCotizada() {
+        return new Empresa(empresaId, nombre, fundadorJugadorId, directorJugadorId, descripccion, icono, nTotalAcciones,
+                fechaCreacion, true, estaCerrado, fechaCerrado);
+    }
 
     public Empresa cerrar() {
         return new Empresa(empresaId, nombre, fundadorJugadorId, directorJugadorId, descripccion, icono, nTotalAcciones,

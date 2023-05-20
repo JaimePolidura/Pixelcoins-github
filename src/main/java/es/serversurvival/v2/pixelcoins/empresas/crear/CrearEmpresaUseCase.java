@@ -35,10 +35,4 @@ public final class CrearEmpresaUseCase {
 
         eventBus.publish(new EmpresaCreada(empresa.getEmpresaId()));
     }
-
-    private void aseguraseEmpresaNoExiste(String nombre) {
-        if(this.empresasService.findByNombre(nombre).isPresent()){
-            throw new AlreadyExists("El nombre de la empresa ya existe");
-        }
-    }
 }

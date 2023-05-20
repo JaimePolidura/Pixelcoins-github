@@ -11,7 +11,9 @@ public interface MercadoOfertasRepository {
 
     List<Oferta> findByTipo(TipoOferta tipoOferta);
 
-    Optional<Oferta> findByObjeto(String objeto);
+    Optional<Oferta> findByObjetoAndTipo(String objeto, TipoOferta tipo);
 
     void deleteById(UUID ofertaId);
+
+    void deleteByObjetoYTipo(String objeto, TipoOferta tipo);
 }

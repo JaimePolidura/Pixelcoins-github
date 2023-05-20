@@ -1,13 +1,17 @@
 package es.serversurvival.v2.pixelcoins.mercado._shared;
 
-import es.serversurvival.v2.pixelcoins.deudas.comprar.secundario.OfertaDeudaMercadoSecundario;
-import es.serversurvival.v2.pixelcoins.deudas.comprar.primario.OfertaDeudaMercadoPrimario;
+import es.serversurvival.v2.pixelcoins.deudas._shared.OfertaDeudaMercadoSecundario;
+import es.serversurvival.v2.pixelcoins.deudas._shared.OfertaDeudaMercadoPrimario;
+import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.OfertaAccionMercadoJugador;
+import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.OfertaAccionMercadoEmision;
 import es.serversurvival.v2.pixelcoins.transacciones.TipoTransaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 public enum TipoOferta {
+    ACCIONES_EMPRESA_SERVER_MERCADO_EMISION(TipoTransaccion.EMPRESAS_ACCIONES_COMPRA_MERCADO_EMISION, false, OfertaAccionMercadoEmision.class),
+    ACCIONES_EMPRESA_SERVER_MERCADO_JUGADOR(TipoTransaccion.EMPRESAS_ACCIONES_COMPRA_MERCADO_JUGADOR, false, OfertaAccionMercadoJugador.class),
     DEUDA_MERCADO_SECUNDARIO(TipoTransaccion.DEUDAS_MERCADO_SECUNDARIO_COMPRA, true, OfertaDeudaMercadoSecundario.class),
     DEUDA_MERCADO_PRIMARIO(TipoTransaccion.DEUDAS_MERCADO_PRIMARIO_COMPRA, false, OfertaDeudaMercadoPrimario.class);
 
