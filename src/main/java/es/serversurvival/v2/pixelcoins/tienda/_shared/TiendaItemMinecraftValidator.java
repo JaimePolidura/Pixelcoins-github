@@ -1,9 +1,12 @@
 package es.serversurvival.v2.pixelcoins.tienda._shared;
 
 import es.dependencyinjector.dependencies.annotations.Service;
+import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.IllegalType;
 import es.serversurvival.v2.pixelcoins._shared.Validador;
 import lombok.AllArgsConstructor;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
@@ -18,6 +21,14 @@ public final class TiendaItemMinecraftValidator {
 
     public void precio(double precio) {
         validador.numeroMayorQueCero(precio, "El precio");
+    }
+
+    public void tieneEspacioEnElInventario(Player player) {
+        boolean tieneEspacio = Arrays.stream(player.getInventory().getContents())
+                .anyMatch(item -> item == null || item.getType() == Material.AIR);
+        if(!tieneEspacio) {
+            throw new IllegalState("Tienes el inventario lleno");
+        }
     }
 
     public void itemNoBaneado(ItemStack itemStack) {

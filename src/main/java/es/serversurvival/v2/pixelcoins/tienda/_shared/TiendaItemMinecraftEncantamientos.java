@@ -4,6 +4,8 @@ import es.serversurvival.v1._shared.utils.Funciones;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
 
 @AllArgsConstructor
 public final class TiendaItemMinecraftEncantamientos {

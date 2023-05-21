@@ -5,7 +5,7 @@ import es.jaime.EventBus;
 import es.serversurvival.v2.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.v2.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival.v2.pixelcoins.tienda._shared.TiendaItemMinecraftValidator;
-import es.serversurvival.v2.pixelcoins.tienda._shared.OfertaTiendaItemMinecraftMercado;
+import es.serversurvival.v2.pixelcoins.tienda._shared.OfertaTiendaItemMinecraft;
 import lombok.AllArgsConstructor;
 
 @UseCase
@@ -19,7 +19,7 @@ public final class PonerVentaTiendaItemMinecraftUseCase {
         itemTiendaValidator.itemNoBaneado(parametros.getItem());
         itemTiendaValidator.precio(parametros.getPrecio());
 
-        ofertasService.save(OfertaTiendaItemMinecraftMercado.builder()
+        ofertasService.save(OfertaTiendaItemMinecraft.builder()
                 .vendedorId(parametros.getJugadorId())
                 .precio(parametros.getPrecio())
                 .cantidad(parametros.getItem().getAmount())

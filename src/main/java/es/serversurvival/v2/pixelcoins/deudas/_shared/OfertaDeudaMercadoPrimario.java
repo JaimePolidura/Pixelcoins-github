@@ -1,6 +1,5 @@
 package es.serversurvival.v2.pixelcoins.deudas._shared;
 
-import es.serversurvival.v2.pixelcoins.deudas.emitir.EmitirDeudaUseCaseParametros;
 import es.serversurvival.v2.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.v2.pixelcoins.mercado._shared.TipoOferta;
 import lombok.Getter;

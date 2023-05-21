@@ -1,10 +1,9 @@
-package es.serversurvival.v2.pixelcoins.empresas.emitir;
+package es.serversurvival.v2.pixelcoins.empresas.emitiracciones;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.v2.pixelcoins.empresas._shared.EmpresasValidador;
 import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.OfertaAccionMercadoEmision;
-import es.serversurvival.v2.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.v2.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.v2.pixelcoins.mercado._shared.TipoOferta;
 import lombok.AllArgsConstructor;

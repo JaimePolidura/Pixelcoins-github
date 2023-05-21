@@ -1,4 +1,4 @@
-package es.serversurvival.v2.pixelcoins.empresas.emitir;
+package es.serversurvival.v2.pixelcoins.empresas.emitiracciones;
 
 import es.serversurvival.v1._shared.eventospixelcoins.PixelcoinsEvento;
 import lombok.AllArgsConstructor;

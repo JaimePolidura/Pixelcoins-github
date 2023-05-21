@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class ContratarEmpleadoUseCaseParametros {
+public final class ContratarEmpleadoParametros {
     @Getter private final UUID jugadorIdContrador;
     @Getter private final UUID jugadorIdAContratar;
     @Getter private final UUID empresaId;

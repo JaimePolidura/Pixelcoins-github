@@ -15,7 +15,7 @@ public final class EmitirDeudaUseCase {
     private final DeudasValidador deudasValidador;
     private final EventBus eventBus;
 
-    public void emitir(EmitirDeudaUseCaseParametros parametros) {
+    public void emitir(EmitirDeudaParametros parametros) {
         deudasValidador.periodoPagoCuotasCorrecto(parametros.getPeriodoPagoCuota());
         deudasValidador.numeroCuotasCorrecto(parametros.getNumeroCuotasTotales());
         deudasValidador.nominalCorrecto(parametros.getNominal());

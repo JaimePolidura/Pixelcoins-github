@@ -13,7 +13,7 @@ public final class RetirarOfertaUseCase {
     private final OfertasValidator ofertasValidator;
     private final OfertasService ofertasService;
 
-    public void retirarOfertaUseCase(RetirarOfertaUseCaseParametros parametros) {
+    public void retirarOfertaUseCase(RetirarOfertaParametros parametros) {
         ofertasValidator.esVendedor(parametros.getOfertaId(), parametros.getRetiradorId());
 
         Oferta ofertaRetirada = ofertasService.getById(parametros.getOfertaId());

@@ -18,7 +18,7 @@ public final class ComprarOfertaUseCase {
     private final OfertasValidator ofertasValidator;
     private final OfertasService ofertasService;
 
-    public void comprarOferta(ComprarOfertaUseCaseParametros parametros) {
+    public void comprarOferta(ComprarOfertaParametros parametros) {
         ofertasValidator.tienePixelcoinsSuficientes(parametros.getOfertaId(), parametros.getJugadorId());
         ofertasValidator.noEsVendedor(parametros.getOfertaId(), parametros.getJugadorId());
 

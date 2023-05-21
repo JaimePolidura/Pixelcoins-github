@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class RetirarOfertaUseCaseParametros {
+public final class RetirarOfertaParametros {
     @Getter private final UUID retiradorId;
     @Getter private final UUID ofertaId;
 }

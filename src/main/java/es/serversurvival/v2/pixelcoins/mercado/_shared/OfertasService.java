@@ -17,20 +17,17 @@ public final class OfertasService {
         this.repository.save(oferta);
     }
 
+    public <T extends Oferta> T getById(UUID ofertaId, Class<? extends T> ofertaTypeClazz) {
+        Oferta oferta = this.repository.findById(ofertaId).orElseThrow(() -> new ResourceNotFound("Oferta no encontrada"));
+        return ofertaTypeClazz.cast(oferta);
+    }
+
     public Oferta getById(UUID ofertaId) {
         return this.repository.findById(ofertaId).orElseThrow(() -> new ResourceNotFound("Oferta no encontrada"));
     }
 
-    public List<Oferta> findByTipo(TipoOferta tipoOferta) {
-        return this.repository.findByTipo(tipoOferta);
-    }
-
     public Optional<Oferta> findByObjetoAndTipo(String objeto, TipoOferta tipo) {
         return this.repository.findByObjetoAndTipo(objeto, tipo);
-    }
-
-    public Optional<Oferta> findByObjetoAndTipo(UUID objetoId, TipoOferta tipo) {
-        return this.repository.findByObjetoAndTipo(objetoId.toString(), tipo);
     }
 
     public void deleteById(UUID ofertaId) {

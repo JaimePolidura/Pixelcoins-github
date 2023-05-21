@@ -1,7 +1,7 @@
 package es.serversurvival.v2.pixelcoins.empresas._shared.empleados;
 
 import es.serversurvival.v2.pixelcoins.empresas._shared.empresas.Empresa;
-import es.serversurvival.v2.pixelcoins.empresas.contratar.ContratarEmpleadoUseCaseParametros;
+import es.serversurvival.v2.pixelcoins.empresas.contratar.ContratarEmpleadoParametros;
 import es.serversurvival.v2.pixelcoins.empresas.editarempleado.EditarEmpleadoParametros;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,7 +43,7 @@ public final class Empleado {
                 fechaContratacion, false, LocalDateTime.now(), causaDespido);
     }
 
-    public static Empleado fromContratarParametros(ContratarEmpleadoUseCaseParametros parametros) {
+    public static Empleado fromContratarParametros(ContratarEmpleadoParametros parametros) {
         LocalDateTime fechaAhora = LocalDateTime.now();
 
         return Empleado.builder()
