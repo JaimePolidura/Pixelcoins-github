@@ -26,6 +26,11 @@ public final class Empresa {
     @Getter private final boolean estaCerrado;
     @Getter private final LocalDateTime fechaCerrado;
 
+    public Empresa nuevoDirector(UUID directorJugadorId) {
+        return new Empresa(empresaId, nombre, fundadorJugadorId, directorJugadorId, descripccion, icono, nTotalAcciones,
+                fechaCreacion, esCotizada, estaCerrado, fechaCerrado);
+    }
+
     public Empresa incrementNTotalAccionesEn(int nTotalAccionesAIncrementar){
         return new Empresa(empresaId, nombre, fundadorJugadorId, directorJugadorId, descripccion, icono, nTotalAcciones + nTotalAccionesAIncrementar,
                 fechaCreacion, esCotizada, estaCerrado, fechaCerrado);

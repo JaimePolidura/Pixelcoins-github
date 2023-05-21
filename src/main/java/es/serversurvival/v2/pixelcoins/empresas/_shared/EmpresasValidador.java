@@ -12,6 +12,10 @@ import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.AccionistasE
 import es.serversurvival.v2.pixelcoins.empresas._shared.empleados.Empleado;
 import es.serversurvival.v2.pixelcoins.empresas._shared.empleados.EmpleadosService;
 import es.serversurvival.v2.pixelcoins.empresas._shared.empresas.EmpresasService;
+import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones.votaciones.EstadoVotacion;
+import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones.votaciones.Votacion;
+import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones.votaciones.VotacionesService;
+import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votos.VotosService;
 import es.serversurvival.v2.pixelcoins.transacciones.TransaccionesService;
 import lombok.AllArgsConstructor;
 
@@ -23,8 +27,10 @@ import java.util.UUID;
 public final class EmpresasValidador {
     private final AccionistasEmpresasService accionistasEmpresasService;
     private final TransaccionesService transaccionesService;
+    private final VotacionesService votacionesService;
     private final EmpleadosService empleadosService;
     private final EmpresasService empresasService;
+    private final VotosService votosService;
     private final Validador validador;
 
     public void tienePixelcoinsSuficientes(UUID empresaId, double pixelcoins) {
@@ -119,6 +125,41 @@ public final class EmpresasValidador {
         Optional<AccionistaEmpresa> accionistaEmpresa = accionistasEmpresasService.findByEmpresaIdAndJugadorId(empresaId, jugadorId);
         if(accionistaEmpresa.isEmpty() || accionistaEmpresa.get().getNAcciones() < supuestoNumeroAccionesTiene){
             throw new IllegalQuantity("No tienes las suficientes acciones");
+        }
+    }
+
+    public void votacionPerteneceAEmpresa(UUID empresaId, UUID votacionId) {
+        if(!this.votacionesService.getById(votacionId).getEmpresaId().equals(empresaId)){
+            throw new NotTheOwner("La votacion no esta asignada a la empresa");
+        }
+    }
+
+    public void noHaVotado(UUID votacionId, UUID jugadorId) {
+        boolean yaHaVotado = votosService.findByVotacionId(votacionId).stream()
+                .anyMatch(voto -> voto.getJugadorId().equals(jugadorId));
+
+        if(yaHaVotado){
+            throw new AlreadyExists("Ya has votado");
+        }
+    }
+
+    public void votacionAbierta(UUID votacionId) {
+        if(this.votacionesService.getById(votacionId).getEstado() != EstadoVotacion.ABIERTA){
+            throw new NotTheOwner("La votacion no esta abierta");
+        }
+    }
+
+    public void noDirectorEmpresa(UUID empresaId, UUID supuestoDirector) {
+        if(empresasService.getById(empresaId).getDirectorJugadorId().equals(supuestoDirector)){
+            throw new NotTheOwner("Ya es el director de empresa");
+        }
+    }
+
+    public void votacionNoRepetida(Votacion votacion) {
+        boolean repetida = votacionesService.findByEmpresaId(votacion.getEmpresaId()).stream()
+                .anyMatch(it -> it.getTipo() == votacion.getTipo() && it.getEstado() == EstadoVotacion.ABIERTA);
+        if(repetida){
+            throw new AlreadyExists("La votacion ya existe");
         }
     }
 

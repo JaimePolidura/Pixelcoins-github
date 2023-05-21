@@ -10,12 +10,12 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public final class CustomOfertaAccionCaller {
-    private final DependenciesRepository dependenciesRepository;
+public final class OfertaAccionCaller {
+    private final DependenciesRepository dependencies;
 
-    public void call(Class<? extends CustomOfertaAccionListener> customOfertaAccionListenerClazz,
+    public void call(Class<? extends OfertaAccionListener> customOfertaAccionListenerClazz,
                                         Oferta oferta, UUID jugadorId) {
-        Optional<CustomOfertaAccionListener> customOfertaAccionListener = (Optional<CustomOfertaAccionListener>) dependenciesRepository.filterByImplementsInterfaceWithGeneric(
+        Optional<OfertaAccionListener> customOfertaAccionListener = (Optional<OfertaAccionListener>) dependencies.filterByImplementsInterfaceWithGeneric(
                 customOfertaAccionListenerClazz,
                 oferta.getTipoOferta().getOfertaClass()
         );

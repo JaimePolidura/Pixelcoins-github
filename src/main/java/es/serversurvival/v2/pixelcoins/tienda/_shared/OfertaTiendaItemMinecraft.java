@@ -74,6 +74,10 @@ public final class OfertaTiendaItemMinecraft extends Oferta {
         private short durabilidad;
         private String nombre;
 
+        public OfertaItemTiendaMercadoBuilder() {
+            this.tipoOferta = TipoOferta.TIENDA_ITEM_MINECRAFT;
+        }
+
         public OfertaItemTiendaMercadoBuilder item(ItemStack itemStack) {
             this.tieneNombre = itemStack.getItemMeta().hasDisplayName();
             this.nombre = itemStack.getItemMeta().getDisplayName();

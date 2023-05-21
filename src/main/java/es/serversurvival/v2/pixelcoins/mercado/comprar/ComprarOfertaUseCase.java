@@ -1,8 +1,8 @@
 package es.serversurvival.v2.pixelcoins.mercado.comprar;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
-import es.serversurvival.v2.pixelcoins.mercado._shared.accion.CustomOfertaAccionCaller;
-import es.serversurvival.v2.pixelcoins.mercado._shared.accion.CustomOfertaCompradaListener;
+import es.serversurvival.v2.pixelcoins.mercado._shared.accion.OfertaAccionCaller;
+import es.serversurvival.v2.pixelcoins.mercado._shared.accion.OfertaCompradaListener;
 import es.serversurvival.v2.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.v2.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.v2.pixelcoins.mercado._shared.OfertasValidator;
@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 @UseCase
 @AllArgsConstructor
 public final class ComprarOfertaUseCase {
-    private final CustomOfertaAccionCaller customOfertaAccionCaller;
+    private final OfertaAccionCaller ofertaAccionCaller;
     private final TransaccionesService transaccionesService;
     private final OfertasValidator ofertasValidator;
     private final OfertasService ofertasService;
@@ -34,7 +34,7 @@ public final class ComprarOfertaUseCase {
                         .tipo(ofertaAComprar.getTipoOferta().getTipoTransaccion())
                 .build());
 
-        customOfertaAccionCaller.call(CustomOfertaCompradaListener.class, ofertaAComprar, parametros.getJugadorId());
+        ofertaAccionCaller.call(OfertaCompradaListener.class, ofertaAComprar, parametros.getJugadorId());
     }
 
     private void decrementarCantidadOBorrar(Oferta ofertaAComprar) {

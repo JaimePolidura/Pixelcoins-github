@@ -6,14 +6,14 @@ import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.AccionistasE
 import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.OfertaAccionMercadoEmision;
 import es.serversurvival.v2.pixelcoins.empresas._shared.empresas.Empresa;
 import es.serversurvival.v2.pixelcoins.empresas._shared.empresas.EmpresasService;
-import es.serversurvival.v2.pixelcoins.mercado._shared.accion.CustomOfertaCompradaListener;
+import es.serversurvival.v2.pixelcoins.mercado._shared.accion.OfertaCompradaListener;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;
 
 @EventHandler
 @AllArgsConstructor
-public final class OfertaAccionMercadoEmisionCompradaListener implements CustomOfertaCompradaListener<OfertaAccionMercadoEmision> {
+public final class OfertaAccionMercadoEmisionCompradaListener implements OfertaCompradaListener<OfertaAccionMercadoEmision> {
     private final AccionistasEmpresasService accionistasEmpresasService;
     private final EmpresasService empresasService;
     private final EventBus eventBus;

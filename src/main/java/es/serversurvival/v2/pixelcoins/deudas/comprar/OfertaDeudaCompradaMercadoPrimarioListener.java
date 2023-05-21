@@ -5,14 +5,14 @@ import es.jaime.EventBus;
 import es.serversurvival.v2.pixelcoins.deudas._shared.OfertaDeudaMercadoPrimario;
 import es.serversurvival.v2.pixelcoins.deudas.prestar.PrestarDeudaUseCase;
 import es.serversurvival.v2.pixelcoins.deudas.prestar.PrestarDeudaParametros;
-import es.serversurvival.v2.pixelcoins.mercado._shared.accion.CustomOfertaCompradaListener;
+import es.serversurvival.v2.pixelcoins.mercado._shared.accion.OfertaCompradaListener;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;
 
 @EventHandler
 @AllArgsConstructor
-public final class OfertaDeudaCompradaMercadoPrimarioListener implements CustomOfertaCompradaListener<OfertaDeudaMercadoPrimario> {
+public final class OfertaDeudaCompradaMercadoPrimarioListener implements OfertaCompradaListener<OfertaDeudaMercadoPrimario> {
     private final PrestarDeudaUseCase prestarDeudaUseCase;
     private final EventBus eventBus;
 

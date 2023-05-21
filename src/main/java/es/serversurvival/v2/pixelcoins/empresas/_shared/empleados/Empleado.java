@@ -1,6 +1,7 @@
 package es.serversurvival.v2.pixelcoins.empresas._shared.empleados;
 
 import es.serversurvival.v2.pixelcoins.empresas._shared.empresas.Empresa;
+import es.serversurvival.v2.pixelcoins.empresas.cambiardirector.CambiarDirectorVotacion;
 import es.serversurvival.v2.pixelcoins.empresas.contratar.ContratarEmpleadoParametros;
 import es.serversurvival.v2.pixelcoins.empresas.editarempleado.EditarEmpleadoParametros;
 import lombok.AllArgsConstructor;
@@ -41,6 +42,22 @@ public final class Empleado {
     public Empleado despedir(String causaDespido) {
         return new Empleado(empleadoId, empleadoJugadorId, empresaId, descripccion, sueldo, periodoPagoMs, fechaUltimoPago,
                 fechaContratacion, false, LocalDateTime.now(), causaDespido);
+    }
+
+    public static Empleado fromVotacionCambiarDirector(CambiarDirectorVotacion votacion) {
+        LocalDateTime fechaAhora = LocalDateTime.now();
+
+        return Empleado.builder()
+                .empleadoId(UUID.randomUUID())
+                .empleadoJugadorId(votacion.getNuevoDirectorJugadorId())
+                .empresaId(votacion.getEmpresaId())
+                .descripccion("Director")
+                .sueldo(votacion.getSueldo())
+                .periodoPagoMs(votacion.getPeriodoPagoMs())
+                .fechaUltimoPago(fechaAhora)
+                .fechaContratacion(fechaAhora)
+                .estaContratado(true)
+                .build();
     }
 
     public static Empleado fromContratarParametros(ContratarEmpleadoParametros parametros) {

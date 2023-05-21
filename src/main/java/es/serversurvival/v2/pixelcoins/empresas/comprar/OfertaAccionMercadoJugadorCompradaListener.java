@@ -2,18 +2,21 @@ package es.serversurvival.v2.pixelcoins.empresas.comprar;
 
 import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventBus;
-import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.AccionistaEmpresa;
 import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.AccionistasEmpresasService;
+import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.DecrementorPosicionesAccionesJugador;
 import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.OfertaAccionMercadoJugador;
-import es.serversurvival.v2.pixelcoins.mercado._shared.accion.CustomOfertaCompradaListener;
+import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votos.VotosService;
+import es.serversurvival.v2.pixelcoins.mercado._shared.accion.OfertaCompradaListener;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;
 
 @EventHandler
 @AllArgsConstructor
-public final class OfertaAccionMercadoJugadorCompradaListener implements CustomOfertaCompradaListener<OfertaAccionMercadoJugador> {
+public final class OfertaAccionMercadoJugadorCompradaListener implements OfertaCompradaListener<OfertaAccionMercadoJugador> {
+    private final DecrementorPosicionesAccionesJugador decrementorPosicionesAccionesJugador;
     private final AccionistasEmpresasService accionistasEmpresasService;
+    private final VotosService votosService;
     private final EventBus eventBus;
 
     @Override
@@ -21,24 +24,9 @@ public final class OfertaAccionMercadoJugadorCompradaListener implements CustomO
         UUID empresaId = ofertaComprada.getObjetoToUUID();
         UUID vendedorId = ofertaComprada.getEmpresaId();
 
-        incrementarPosicionAccionComprador(compradorId, empresaId);
-        decrementarPosicionAccionVendedor(vendedorId, empresaId);
+        accionistasEmpresasService.incrementarPosicionAccionEnUno(empresaId, compradorId);
+        decrementorPosicionesAccionesJugador.decrementarEnUno(vendedorId, empresaId);
 
         eventBus.publish(new AccionServerComprada(empresaId, compradorId, ofertaComprada.getPrecio()));
-    }
-
-    private void decrementarPosicionAccionVendedor(UUID vendedorId, UUID empresaId) {
-        AccionistaEmpresa accionistaServer = accionistasEmpresasService.getByEmpresaIdAndJugadorId(empresaId, vendedorId)
-                .decrementarNAccionesPorUno();
-
-        if(accionistaServer.noTieneMasAcciones()){
-            accionistasEmpresasService.deleteById(accionistaServer.getAccionistaId());
-        }else{
-            accionistasEmpresasService.save(accionistaServer);
-        }
-    }
-
-    private void incrementarPosicionAccionComprador(UUID compradorId, UUID empresaId) {
-        accionistasEmpresasService.incrementarPosicionAccionEnUno(empresaId, compradorId);
     }
 }

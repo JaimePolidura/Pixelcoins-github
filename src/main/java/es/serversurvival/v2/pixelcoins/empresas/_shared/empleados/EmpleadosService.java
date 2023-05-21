@@ -22,6 +22,11 @@ public final class EmpleadosService {
         return this.repository.findById(empleadoId).orElseThrow(() -> new ResourceNotFound("Empleado no encontrado"));
     }
 
+    public Empleado getEmpleoActivoByEmpresaIdAndEmpleadoJugadorId(UUID empresaId, UUID empleadoJugadorId) {
+        return findEmpleoActivoByEmpresaIdAndEmpleadoJugadorId(empresaId, empleadoJugadorId)
+                .orElseThrow(() -> new ResourceNotFound("Empleado no encontrado"));
+    }
+
     public Optional<Empleado> findEmpleoActivoByEmpresaIdAndEmpleadoJugadorId(UUID empresaId, UUID empleadoJugadorId) {
         return this.repository.findByEmpresaIdAndEmpleadoJugadorId(empresaId, empleadoJugadorId).stream()
                 .filter(Empleado::isEstaContratado)
