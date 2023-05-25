@@ -4,7 +4,7 @@ import es.bukkitclassmapper.task.BukkitTimeUnit;
 import es.bukkitclassmapper.task.Task;
 import es.bukkitclassmapper.task.TaskRunner;
 import es.serversurvival.v1.mensajes._shared.domain.Mensaje;
-import es.serversurvival.v2.pixelcoins.mensajes._shared.mensajes.MensajesService;
+import es.serversurvival.v2.pixelcoins.mensajes._shared.MensajesService;
 import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;

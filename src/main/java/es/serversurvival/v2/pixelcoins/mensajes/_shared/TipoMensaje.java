@@ -1,10 +1,10 @@
-package es.serversurvival.v2.pixelcoins.mensajes._shared.tipomensajes;
+package es.serversurvival.v2.pixelcoins.mensajes._shared;
 
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 
-public enum TipoContenidoMensaje {
+public enum TipoMensaje {
     INFO(ChatColor.DARK_AQUA, null),
     AVISO(ChatColor.YELLOW, Sound.ENTITY_VILLAGER_NO),
     INFLOW_PIXELCOINS(ChatColor.GREEN, Sound.ENTITY_PLAYER_LEVELUP),
@@ -13,7 +13,7 @@ public enum TipoContenidoMensaje {
     @Getter private final ChatColor color;
     @Getter private final Sound sound;
 
-    TipoContenidoMensaje(ChatColor color, Sound sound) {
+    TipoMensaje(ChatColor color, Sound sound) {
         this.color = color;
         this.sound = sound;
     }

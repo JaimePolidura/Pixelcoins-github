@@ -15,14 +15,14 @@ public final class ActivoInfoDataService {
 
     public double getPrecio(TipoActivo tipoActivo, String nombreActivo) throws Exception {
         Class<? extends TipoActivoService> tipoActivoServiceClass = tipoActivo.getTipoActivoService();
-        TipoActivoService tipoActivoService = (TipoActivoService) dependenciesRepository.get(tipoActivoServiceClass);
+        TipoActivoService tipoActivoService = dependenciesRepository.get(tipoActivoServiceClass);
 
         return tipoActivoService.getPrecio(nombreActivo);
     }
 
     public String getNombreActivoLargo(TipoActivo tipoActivo, String nombreActivo) throws Exception {
         Class<? extends TipoActivoService> tipoActivoServiceClass = tipoActivo.getTipoActivoService();
-        TipoActivoService tipoActivoService = (TipoActivoService) dependenciesRepository.get(tipoActivoServiceClass);
+        TipoActivoService tipoActivoService = dependenciesRepository.get(tipoActivoServiceClass);
 
         return tipoActivoService.getNombreActivoLargo(nombreActivo);
     }

@@ -1,5 +1,6 @@
-package es.serversurvival.v2.pixelcoins.mensajes._shared.mensajes;
+package es.serversurvival.v2.pixelcoins.mensajes._shared;
 
+import es.serversurvival.v2.pixelcoins.mensajes._shared.TipoMensaje;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import java.util.UUID;
 public final class Mensaje {
     @Getter private final UUID mensajeId;
     @Getter private final UUID destinatarioId;
-    @Getter private final int tipoMensajeId;
+    @Getter private final TipoMensaje tipoMensaje;
     @Getter private final LocalDateTime fechaEnvio;
     @Getter private final LocalDateTime fechaVista;
     @Getter private final String mensaje;

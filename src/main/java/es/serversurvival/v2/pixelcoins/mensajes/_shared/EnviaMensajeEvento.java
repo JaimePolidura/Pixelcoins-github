@@ -3,7 +3,7 @@ package es.serversurvival.v2.pixelcoins.mensajes._shared;
 import java.util.UUID;
 
 public interface EnviaMensajeEvento {
-    int tipoMensajeId();
+    String mensaje();
     UUID destinatario();
-    String[] formatMensajeValues();
+    TipoMensaje tipoMensaje();
 }

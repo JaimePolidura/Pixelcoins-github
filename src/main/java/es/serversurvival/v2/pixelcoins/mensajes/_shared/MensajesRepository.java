@@ -1,4 +1,4 @@
-package es.serversurvival.v2.pixelcoins.mensajes._shared.mensajes;
+package es.serversurvival.v2.pixelcoins.mensajes._shared;
 
 import java.time.LocalDateTime;
 import java.util.List;
