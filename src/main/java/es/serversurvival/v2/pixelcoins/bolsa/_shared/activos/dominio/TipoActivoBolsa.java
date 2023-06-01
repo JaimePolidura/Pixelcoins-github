@@ -1,8 +1,8 @@
-package es.serversurvival.v2.pixelcoins.bolsa.activos.dominio;
+package es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio;
 
-import es.serversurvival.v2.pixelcoins.bolsa.activos.infraestroctura.AccionesBolsaInformationAPIService;
-import es.serversurvival.v2.pixelcoins.bolsa.activos.infraestroctura.CriptoMonedasBolsaInformationAPIService;
-import es.serversurvival.v2.pixelcoins.bolsa.activos.infraestroctura.MateriasPrimasBolsaInfomationAPIService;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.infraestroctura.AccionesBolsaInformationAPIService;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.infraestroctura.CriptoMonedasBolsaInformationAPIService;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.infraestroctura.MateriasPrimasBolsaInfomationAPIService;
 import lombok.Getter;
 
 public enum TipoActivoBolsa {

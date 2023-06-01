@@ -1,11 +1,13 @@
-package es.serversurvival.v2.pixelcoins.bolsa.activos.dominio;
+package es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 public final class ActivoBolsa {
-    @Getter private final int activoBolsaId;
+    @Getter private final UUID activoBolsaId;
     @Getter private final TipoActivoBolsa tipoActivoBolsa;
     @Getter private final String nombreCorto;
     @Getter private final String nombreLargo;
@@ -36,7 +38,7 @@ public final class ActivoBolsa {
         }
 
         public ActivoBolsa build() {
-            return new ActivoBolsa(-1, tipoActivoBolsa, nomnbreCorto, nombreLargo, 0);
+            return new ActivoBolsa(UUID.randomUUID(), tipoActivoBolsa, nomnbreCorto, nombreLargo, 0);
         }
     }
 }

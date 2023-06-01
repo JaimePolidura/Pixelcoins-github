@@ -1,15 +1,20 @@
-package es.serversurvival.v2.pixelcoins.bolsa.activos.dominio;
+package es.serversurvival.v2.pixelcoins.bolsa._shared.activos.aplicacion;
 
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.dependencyinjector.dependencies.annotations.Service;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsaInformationAPIService;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio.TipoActivoBolsa;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio.ActivosBolsaService;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public final class ActivoBolsaUltimosPreciosService {
-    private final Map<Integer, Double> cacheByActivoBolsaId;
+    private final Map<UUID, Double> cacheByActivoBolsaId;
     private final Map<String, Double> cacheByNombreCorto;
 
     private final DependenciesRepository dependencies;
@@ -35,7 +40,7 @@ public final class ActivoBolsaUltimosPreciosService {
     }
 
 
-    public double getUltimoPrecio(int activoBolsaId) {
+    public double getUltimoPrecio(UUID activoBolsaId) {
         if(cacheByActivoBolsaId.containsKey(activoBolsaId)){
             return cacheByActivoBolsaId.get(activoBolsaId);
         }

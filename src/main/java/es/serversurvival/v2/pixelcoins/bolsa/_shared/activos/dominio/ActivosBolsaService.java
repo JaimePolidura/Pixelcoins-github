@@ -1,10 +1,11 @@
-package es.serversurvival.v2.pixelcoins.bolsa.activos.dominio;
+package es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio;
 
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -15,11 +16,11 @@ public final class ActivosBolsaService {
         repository.save(activoBolsa);
     }
 
-    public Optional<ActivoBolsa> findById(int activoInfoId) {
+    public Optional<ActivoBolsa> findById(UUID activoInfoId) {
         return repository.findById(activoInfoId);
     }
 
-    public ActivoBolsa getById(int activoInfoId) {
+    public ActivoBolsa getById(UUID activoInfoId) {
         return repository.findById(activoInfoId)
                 .orElseThrow(() -> new ResourceNotFound("Activo no encontrado"));
     }

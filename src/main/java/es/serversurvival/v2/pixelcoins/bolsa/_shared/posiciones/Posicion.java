@@ -1,4 +1,4 @@
-package es.serversurvival.v2.pixelcoins.bolsa.posiciones;
+package es.serversurvival.v2.pixelcoins.bolsa._shared.posiciones;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public final class Posicion {
     @Getter private final UUID posicionId;
-    @Getter private final int activoBolsaId;
+    @Getter private final UUID activoBolsaId;
     @Getter private final UUID jugadorId;
     @Getter private final int cantidad;
     @Getter private final TipoBolsaApuesta tipoApuesta;

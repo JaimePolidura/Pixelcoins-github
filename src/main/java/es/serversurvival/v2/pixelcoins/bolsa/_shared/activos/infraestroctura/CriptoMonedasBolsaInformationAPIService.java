@@ -1,6 +1,6 @@
-package es.serversurvival.v2.pixelcoins.bolsa.activos.infraestroctura;
+package es.serversurvival.v2.pixelcoins.bolsa._shared.activos.infraestroctura;
 
-import es.serversurvival.v2.pixelcoins.bolsa.activos.dominio.ActivoBolsaInformationAPIService;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsaInformationAPIService;
 
 public final class CriptoMonedasBolsaInformationAPIService implements ActivoBolsaInformationAPIService {
     @Override

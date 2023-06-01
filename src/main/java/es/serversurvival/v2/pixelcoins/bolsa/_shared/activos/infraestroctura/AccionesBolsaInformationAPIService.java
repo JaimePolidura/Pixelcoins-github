@@ -1,7 +1,7 @@
-package es.serversurvival.v2.pixelcoins.bolsa.activos.infraestroctura;
+package es.serversurvival.v2.pixelcoins.bolsa._shared.activos.infraestroctura;
 
 import es.dependencyinjector.dependencies.annotations.Service;
-import es.serversurvival.v2.pixelcoins.bolsa.activos.dominio.ActivoBolsaInformationAPIService;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsaInformationAPIService;
 
 @Service
 public final class AccionesBolsaInformationAPIService implements ActivoBolsaInformationAPIService {

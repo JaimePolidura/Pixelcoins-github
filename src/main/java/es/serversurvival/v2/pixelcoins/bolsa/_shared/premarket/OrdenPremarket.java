@@ -1,4 +1,4 @@
-package es.serversurvival.v2.pixelcoins.bolsa.premarket;
+package es.serversurvival.v2.pixelcoins.bolsa._shared.premarket;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
