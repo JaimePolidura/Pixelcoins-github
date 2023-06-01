@@ -25,9 +25,13 @@ public final class Deuda {
     @Getter private final EstadoDeuda estadoDeuda;
 
     public double getCuota() {
-        return this.nCuotasPagadas + 1 == this.nCuotasImpagadas ?
-                this.nominal :
-                this.nominal * this.interes;
+        return soloQuedaUnaCuotaPorPagar() ?
+                nominal + nominal * interes :
+                nominal;
+    }
+
+    public boolean soloQuedaUnaCuotaPorPagar() {
+        return this.nCuotasPagadas + 1 == this.nCuotasTotales;
     }
 
     public double getPixelcoinsTodasLasCuotasRestantes() {
