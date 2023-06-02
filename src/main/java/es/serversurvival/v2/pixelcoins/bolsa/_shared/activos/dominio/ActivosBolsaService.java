@@ -4,6 +4,7 @@ import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,6 +23,10 @@ public final class ActivosBolsaService {
 
     public void decrementarNReferencias(UUID activoBolsaId){
         repository.save(getById(activoBolsaId).decrementarNReferencias());
+    }
+
+    public List<ActivoBolsa> findAllNReferenciasMayorQue0() {
+        return repository.findAllNReferenciasMayorQue0();
     }
 
     public Optional<ActivoBolsa> findById(UUID activoInfoId) {

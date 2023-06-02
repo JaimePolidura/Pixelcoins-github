@@ -1,7 +1,6 @@
 package es.serversurvival.v2.pixelcoins.bolsa.abrir;
 
-import es.dependencyinjector.dependencies.DependenciesRepository;
-import es.dependencyinjector.dependencies.annotations.Service;
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.BolsaValidator;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBolsaUltimosPreciosService;
@@ -14,7 +13,7 @@ import lombok.AllArgsConstructor;
 
 import java.util.UUID;
 
-@Service
+@UseCase
 @AllArgsConstructor
 public final class AbrirPosicionBolsaUseCase {
     private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;

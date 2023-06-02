@@ -4,7 +4,9 @@ import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -21,6 +23,12 @@ public final class PosicionesService {
         }else{
             save(posicion);
         }
+    }
+
+    public List<Posicion> findPosicionesAbiertasByJugadorId(UUID jugadorId) {
+        return repository.findByJugadorId(jugadorId).stream()
+                .filter(posicion -> posicion.getTipoPosicion() == TipoPosicion.ABIERTO)
+                .collect(Collectors.toList());
     }
 
     public Posicion getById(UUID posicionId) {

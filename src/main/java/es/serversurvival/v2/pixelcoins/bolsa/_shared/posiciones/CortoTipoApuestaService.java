@@ -27,4 +27,11 @@ public final class CortoTipoApuestaService implements TipoApuestaService {
 
         return (posicion.getPrecioApertura() - ultimoPrecio) * cantidad;
     }
+
+    @Override
+    public double getPixelcoinsCerrarPosicion(UUID posicionId, int cantidad, double precioActual) {
+        Posicion posicion = posicionesService.getById(posicionId);
+
+        return (posicion.getPrecioApertura() - precioActual) * cantidad;
+    }
 }

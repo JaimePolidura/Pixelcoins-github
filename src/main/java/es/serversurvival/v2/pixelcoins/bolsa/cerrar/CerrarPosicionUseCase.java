@@ -1,7 +1,7 @@
 package es.serversurvival.v2.pixelcoins.bolsa.cerrar;
 
 import es.dependencyinjector.dependencies.DependenciesRepository;
-import es.dependencyinjector.dependencies.annotations.Service;
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.BolsaValidator;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBolsaUltimosPreciosService;
@@ -12,7 +12,7 @@ import es.serversurvival.v2.pixelcoins.transacciones.Transaccion;
 import es.serversurvival.v2.pixelcoins.transacciones.TransaccionesService;
 import lombok.AllArgsConstructor;
 
-@Service
+@UseCase
 @AllArgsConstructor
 public final class CerrarPosicionUseCase {
     private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;
@@ -37,9 +37,7 @@ public final class CerrarPosicionUseCase {
 
         posicionesService.savePosicionAbiertaConNuevaCantidad(posicionAbierta);
         posicionesService.save(posicionCerrada);
-
         activosBolsaService.decrementarNReferencias(posicionCerrada.getActivoBolsaId());
-
         transaccionesService.save(Transaccion.builder()
                 .pagadoId(parametros.getJugadorId())
                 .tipo(posicionCerrada.getTipoApuesta().getTipoTransaccionCerrar())

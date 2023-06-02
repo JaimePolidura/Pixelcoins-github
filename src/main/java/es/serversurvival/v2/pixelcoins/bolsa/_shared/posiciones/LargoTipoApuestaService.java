@@ -22,4 +22,9 @@ public final class LargoTipoApuestaService implements TipoApuestaService {
     public double getPixelcoinsCerrarPosicion(UUID posicionId, int cantidad) {
         return activoBolsaUltimosPreciosService.getUltimoPrecio(posicionesService.getById(posicionId).getActivoBolsaId()) * cantidad;
     }
+
+    @Override
+    public double getPixelcoinsCerrarPosicion(UUID posicionId, int cantidad, double precioActual) {
+        return precioActual * cantidad;
+    }
 }

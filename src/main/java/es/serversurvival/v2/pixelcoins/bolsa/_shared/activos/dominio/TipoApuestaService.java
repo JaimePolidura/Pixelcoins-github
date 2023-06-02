@@ -4,5 +4,7 @@ import java.util.UUID;
 
 public interface TipoApuestaService {
     double getPixelcoinsAbrirPosicion(UUID activoBolsaId, int cantidad);
+
     double getPixelcoinsCerrarPosicion(UUID posicionId, int cantidad);
+    double getPixelcoinsCerrarPosicion(UUID posicionId, int cantidad, double precioActual);
 }
