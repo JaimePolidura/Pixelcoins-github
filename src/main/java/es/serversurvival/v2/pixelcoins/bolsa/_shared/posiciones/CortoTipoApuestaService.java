@@ -1,0 +1,30 @@
+package es.serversurvival.v2.pixelcoins.bolsa._shared.posiciones;
+
+import es.dependencyinjector.dependencies.annotations.Service;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBolsaUltimosPreciosService;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio.TipoApuestaService;
+import lombok.AllArgsConstructor;
+
+import java.util.UUID;
+
+@Service
+@AllArgsConstructor
+public final class CortoTipoApuestaService implements TipoApuestaService {
+    public static final double COMISION_ABRIR_CORTO = 0.3;
+
+    private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;
+    private final PosicionesService posicionesService;
+
+    @Override
+    public double getPixelcoinsAbrirPosicion(UUID activoBolsaId, int cantidad) {
+        return activoBolsaUltimosPreciosService.getUltimoPrecio(activoBolsaId) * cantidad * COMISION_ABRIR_CORTO;
+    }
+
+    @Override
+    public double getPixelcoinsCerrarPosicion(UUID posicionId, int cantidad) {
+        Posicion posicion = posicionesService.getById(posicionId);
+        double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(posicion.getActivoBolsaId());
+
+        return (posicion.getPrecioApertura() - ultimoPrecio) * cantidad;
+    }
+}

@@ -58,6 +58,11 @@ public final class Transaccion {
             return this;
         }
 
+        public TransaccionBuilder objeto(UUID objeto) {
+            this.objeto = objeto.toString();
+            return this;
+        }
+
         public TransaccionBuilder objeto(String objeto) {
             this.objeto = objeto;
             return this;

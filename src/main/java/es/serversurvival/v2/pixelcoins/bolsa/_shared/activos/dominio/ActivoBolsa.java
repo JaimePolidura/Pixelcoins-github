@@ -13,6 +13,14 @@ public final class ActivoBolsa {
     @Getter private final String nombreLargo;
     @Getter private final int nReferencias;
 
+    public ActivoBolsa decrementarNReferencias() {
+        return new ActivoBolsa(activoBolsaId, tipoActivoBolsa, nombreCorto, nombreLargo, nReferencias - 1);
+    }
+
+    public ActivoBolsa incrementarNReferencias() {
+        return new ActivoBolsa(activoBolsaId, tipoActivoBolsa, nombreCorto, nombreLargo, nReferencias + 1);
+    }
+
     public static ActivoBolsaBuilder builder() {
         return new ActivoBolsaBuilder();
     }

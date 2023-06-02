@@ -16,6 +16,14 @@ public final class ActivosBolsaService {
         repository.save(activoBolsa);
     }
 
+    public void incrementarNReferencias(UUID activoBolsaId){
+        repository.save(getById(activoBolsaId).incrementarNReferencias());
+    }
+
+    public void decrementarNReferencias(UUID activoBolsaId){
+        repository.save(getById(activoBolsaId).decrementarNReferencias());
+    }
+
     public Optional<ActivoBolsa> findById(UUID activoInfoId) {
         return repository.findById(activoInfoId);
     }

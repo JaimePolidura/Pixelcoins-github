@@ -5,6 +5,7 @@ import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.EventBus;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.BolsaValidator;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBolsaUltimosPreciosService;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio.ActivosBolsaService;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.posiciones.PosicionAbiertaBuilder;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.posiciones.PosicionesService;
 import es.serversurvival.v2.pixelcoins.transacciones.Transaccion;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public final class AbrirPosicionBolsaUseCase {
     private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;
     private final TransaccionesService transaccionesService;
+    private final ActivosBolsaService activosBolsaService;
     private final PosicionesService posicionesService;
     private final BolsaValidator validator;
     private final EventBus eventBus;
@@ -32,20 +34,22 @@ public final class AbrirPosicionBolsaUseCase {
         double totalPixelcoins = validator.getPixelcoinsAbrirPosicion(parametros.getActiboBolsaId(), parametros.getCantidad(),
                 parametros.getTipoApuesta());
 
+        activosBolsaService.incrementarNReferencias(parametros.getActiboBolsaId());
+
         transaccionesService.save(Transaccion.builder()
-                        .pagadorId(parametros.getJugadorId())
-                        .objeto(parametros.getActiboBolsaId().toString())
-                        .pixelcoins(totalPixelcoins)
-                        .tipo(parametros.getTipoApuesta().getTipoTransaccionAbrir())
+                .pagadorId(parametros.getJugadorId())
+                .objeto(parametros.getActiboBolsaId())
+                .pixelcoins(totalPixelcoins)
+                .tipo(parametros.getTipoApuesta().getTipoTransaccionAbrir())
                 .build());
 
         posicionesService.save(PosicionAbiertaBuilder.builder()
-                        .posicionId(posicionAAbrirId)
-                        .tipoApuesta(parametros.getTipoApuesta())
-                        .activoBolsaId(parametros.getActiboBolsaId())
-                        .precioApertura(precioApertura)
-                        .cantidad(parametros.getCantidad())
-                        .jugadorId(parametros.getJugadorId())
+                .posicionId(posicionAAbrirId)
+                .tipoApuesta(parametros.getTipoApuesta())
+                .activoBolsaId(parametros.getActiboBolsaId())
+                .precioApertura(precioApertura)
+                .cantidad(parametros.getCantidad())
+                .jugadorId(parametros.getJugadorId())
                 .build());
 
         eventBus.publish(new PosicionBolsaAbierta(posicionAAbrirId));

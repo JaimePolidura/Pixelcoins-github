@@ -1,7 +1,5 @@
 package es.serversurvival.v2.pixelcoins.bolsa._shared.posiciones;
 
-import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio.CortoTipoApuestaService;
-import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio.LargoTipoApuestaService;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio.TipoApuestaService;
 import es.serversurvival.v2.pixelcoins.transacciones.TipoTransaccion;
 import lombok.Getter;
