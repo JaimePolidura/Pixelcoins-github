@@ -8,6 +8,7 @@ import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBo
 import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio.ActivosBolsaService;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.posiciones.Posicion;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.posiciones.PosicionesService;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.premarket.application.AbridorOrdenesPremarket;
 import es.serversurvival.v2.pixelcoins.transacciones.Transaccion;
 import es.serversurvival.v2.pixelcoins.transacciones.TransaccionesService;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public final class CerrarPosicionUseCase {
     private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;
+    private final AbridorOrdenesPremarket abridorOrdenesPremarket;
     private final DependenciesRepository dependenciesRepository;
     private final TransaccionesService transaccionesService;
     private final ActivosBolsaService activosBolsaService;
@@ -27,6 +29,11 @@ public final class CerrarPosicionUseCase {
         validator.jugaodrTienePosicion(parametros.getPosicionAbiertaId(), parametros.getJugadorId());
         validator.posicionTieneCantidad(parametros.getPosicionAbiertaId(), parametros.getCantidad());
         validator.posicionAbierta(parametros.getPosicionAbiertaId());
+
+        if(!abridorOrdenesPremarket.estaElMercadoAbierto()){
+            abridorOrdenesPremarket.abrirOrdenCerrar(parametros.toAbrirOrdenPremarketCerrarParametros());
+            return;
+        }
 
         Posicion posicionAbierta = posicionesService.getById(parametros.getPosicionAbiertaId());
         double precioPorUnidad = activoBolsaUltimosPreciosService.getUltimoPrecio(posicionAbierta.getActivoBolsaId());

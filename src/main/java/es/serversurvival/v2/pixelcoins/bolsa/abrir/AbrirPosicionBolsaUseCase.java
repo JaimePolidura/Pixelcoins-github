@@ -7,6 +7,7 @@ import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBo
 import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio.ActivosBolsaService;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.posiciones.PosicionAbiertaBuilder;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.posiciones.PosicionesService;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.premarket.application.AbridorOrdenesPremarket;
 import es.serversurvival.v2.pixelcoins.transacciones.Transaccion;
 import es.serversurvival.v2.pixelcoins.transacciones.TransaccionesService;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public final class AbrirPosicionBolsaUseCase {
     private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;
+    private final AbridorOrdenesPremarket abridorOrdenesPremarket;
     private final TransaccionesService transaccionesService;
     private final ActivosBolsaService activosBolsaService;
     private final PosicionesService posicionesService;
@@ -27,6 +29,11 @@ public final class AbrirPosicionBolsaUseCase {
         validator.activoBolsaExsiste(parametros.getActiboBolsaId());
         validator.cantidadCorrecta(parametros.getCantidad());
         validator.suficientesPixelcoinsAbrir(parametros);
+
+        if(!abridorOrdenesPremarket.estaElMercadoAbierto()){
+            abridorOrdenesPremarket.abrirOrdenAbrir(parametros.toAbrirOrdenPremarketAbrirParametros());
+            return;
+        }
 
         UUID posicionAAbrirId = UUID.randomUUID();
         double precioApertura = activoBolsaUltimosPreciosService.getUltimoPrecio(parametros.getActiboBolsaId());

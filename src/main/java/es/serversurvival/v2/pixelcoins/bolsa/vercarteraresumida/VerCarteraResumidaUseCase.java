@@ -39,7 +39,6 @@ public final class VerCarteraResumidaUseCase {
 
             CarteraResumidaItemBuilder carteraItemExistente = itemsCarteraResumida.get(identificadorIt);
             CarteraResumidaItemBuilder carteraItemMerged = carteraItemExistente.merge(it, precioActual, valorPosicion);
-
             itemsCarteraResumida.put(identificadorIt, carteraItemMerged);
         }
 
