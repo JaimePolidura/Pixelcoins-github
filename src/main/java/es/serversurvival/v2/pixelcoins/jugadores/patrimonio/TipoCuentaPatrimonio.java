@@ -1,9 +1,17 @@
 package es.serversurvival.v2.pixelcoins.jugadores.patrimonio;
 
+import lombok.Getter;
+
 public enum TipoCuentaPatrimonio {
-    EFECTIVO,
-    BOLSA,
-    DEUDA_ACREDOR,
-    DEUDA_DEUDOR,
-    EMPRESAS_ACCIONES
+    EFECTIVO("Efectivo"),
+    BOLSA("Bolsa"),
+    DEUDA_ACREDOR("Deudas acredor"),
+    DEUDA_DEUDOR("Deudas deudor"),
+    EMPRESAS_ACCIONES("Empresas");
+
+    @Getter private final String alias;
+
+    TipoCuentaPatrimonio(String alias) {
+        this.alias = alias;
+    }
 }
