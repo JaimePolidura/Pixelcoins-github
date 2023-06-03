@@ -8,11 +8,13 @@ import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival.v1._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.v2.pixelcoins._shared.Validador;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBolsaUltimosPreciosService;
-import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio.ActivosBolsaService;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio.TipoApuestaService;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.posiciones.PosicionesService;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.posiciones.TipoBolsaApuesta;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.posiciones.TipoPosicion;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.premarket.application.OrdenesPremarketService;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.premarket.domain.OrdenPremarket;
 import es.serversurvival.v2.pixelcoins.bolsa.abrir.AbrirPosicoinBolsaParametros;
 import es.serversurvival.v2.pixelcoins.transacciones.TransaccionesService;
 import lombok.AllArgsConstructor;
@@ -23,6 +25,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public final class BolsaValidator {
     private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;
+    private final OrdenesPremarketService ordenesPremarketService;
     private final DependenciesRepository dependenciesRepository;
     private final TransaccionesService transaccionesService;
     private final ActivosBolsaService activosBolsaService;
@@ -48,7 +51,7 @@ public final class BolsaValidator {
     }
 
     public void suficientesPixelcoinsAbrir(AbrirPosicoinBolsaParametros parametros) {
-        double precioBolsaTotal = getPixelcoinsAbrirPosicion(parametros.getActiboBolsaId(), parametros.getCantidad(),
+        double precioBolsaTotal = getPixelcoinsAbrirPosicion(parametros.getActivoBolsaId(), parametros.getCantidad(),
                 parametros.getTipoApuesta());
         double pixelcoinsJugador = transaccionesService.getBalancePixelcions(parametros.getJugadorId());
 
@@ -68,5 +71,22 @@ public final class BolsaValidator {
     public double getPixelcoinsAbrirPosicion(UUID activoBolsaId, int cantidad, TipoBolsaApuesta tipoBolsaApuesta) {
         TipoApuestaService tipoApuestaService = dependenciesRepository.get(tipoBolsaApuesta.getTipoApuestaService());
         return tipoApuestaService.getPixelcoinsAbrirPosicion(activoBolsaId, cantidad);
+    }
+
+    public void jugadorTieneOrden(UUID ordenPremarketId, UUID jugadorId) {
+        if(!ordenesPremarketService.getById(ordenPremarketId).getJugadorId().equals(jugadorId)){
+            throw new NotTheOwner("La orden premarket no te pertenece");
+        }
+    }
+
+    public void ordenesCerrarCantidadNoMayorPosicion(UUID posicionId, int cantidadNuevaACerrar) {
+        int cantidadEnOdenesPremarket = ordenesPremarketService.findByPosicionAbiertaId(posicionId).stream()
+                .mapToInt(OrdenPremarket::getCantidad)
+                .sum();
+        int cantidadEnPosicion = posicionesService.getById(posicionId).getCantidad();
+
+        if(cantidadEnOdenesPremarket + cantidadNuevaACerrar > cantidadEnPosicion){
+            throw new IllegalQuantity("No puedes poner una orden premarket para vender mas de lo que tieens");
+        }
     }
 }

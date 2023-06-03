@@ -2,6 +2,8 @@ package es.serversurvival.v2.pixelcoins.bolsa._shared.premarket.domain;
 
 import es.serversurvival.v2.pixelcoins.bolsa._shared.posiciones.TipoBolsaApuesta;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.posiciones.TipoPosicion;
+import es.serversurvival.v2.pixelcoins.bolsa.abrir.AbrirPosicoinBolsaParametros;
+import es.serversurvival.v2.pixelcoins.bolsa.cerrar.CerrarPosicionParametros;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -20,6 +22,14 @@ public final class OrdenPremarket {
     @Getter private final UUID activoBolsaId;
 
     @Getter private final UUID posicionAbiertaId;
+
+    public AbrirPosicoinBolsaParametros toAbrirPosicoinBolsaParametros() {
+        return new AbrirPosicoinBolsaParametros(jugadorId, tipoBolsaApuesta, activoBolsaId, cantidad);
+    }
+
+    public CerrarPosicionParametros toCerrarPosicionParametros() {
+        return new CerrarPosicionParametros(jugadorId, cantidad, posicionAbiertaId);
+    }
 
     public static OrdenPremarketAbrirBuilder abrirBuilder() {
         return new OrdenPremarketAbrirBuilder();

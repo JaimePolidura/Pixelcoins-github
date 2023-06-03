@@ -1,7 +1,10 @@
-package es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio;
+package es.serversurvival.v2.pixelcoins.bolsa._shared.activos.aplicacion;
 
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsaRepository;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio.TipoActivoBolsa;
 import lombok.AllArgsConstructor;
 
 import java.util.List;

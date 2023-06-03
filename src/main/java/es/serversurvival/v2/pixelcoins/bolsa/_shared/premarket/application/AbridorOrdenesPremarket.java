@@ -3,6 +3,7 @@ package es.serversurvival.v2.pixelcoins.bolsa._shared.premarket.application;
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.EventBus;
 import es.serversurvival.v1._shared.utils.Funciones;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.BolsaValidator;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.posiciones.Posicion;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.posiciones.PosicionesService;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.premarket.domain.OrdenPremarket;
@@ -16,7 +17,7 @@ import java.util.UUID;
 public final class AbridorOrdenesPremarket {
     private final OrdenesPremarketService ordenesPremarketService;
     private final PosicionesService posicionesService;
-    private final OrdenPremarketValidator validator;
+    private final BolsaValidator validator;
     private final EventBus eventBus;
 
     public boolean estaElMercadoAbierto() {

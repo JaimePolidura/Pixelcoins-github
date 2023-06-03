@@ -11,10 +11,10 @@ import java.util.UUID;
 public final class AbrirPosicoinBolsaParametros {
     @Getter private final UUID jugadorId;
     @Getter private final TipoBolsaApuesta tipoApuesta;
-    @Getter private final UUID actiboBolsaId;
+    @Getter private final UUID activoBolsaId;
     @Getter private final int cantidad;
 
     public AbrirOrdenPremarketAbrirParametros toAbrirOrdenPremarketAbrirParametros() {
-        return new AbrirOrdenPremarketAbrirParametros(jugadorId, cantidad, actiboBolsaId, tipoApuesta);
+        return new AbrirOrdenPremarketAbrirParametros(jugadorId, cantidad, activoBolsaId, tipoApuesta);
     }
 }

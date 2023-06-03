@@ -5,7 +5,7 @@ import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.BolsaValidator;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBolsaUltimosPreciosService;
-import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.dominio.ActivosBolsaService;
+import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.posiciones.Posicion;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.posiciones.PosicionesService;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.premarket.application.AbridorOrdenesPremarket;
