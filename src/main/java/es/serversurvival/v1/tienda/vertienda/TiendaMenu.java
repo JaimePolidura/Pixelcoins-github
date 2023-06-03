@@ -11,7 +11,7 @@ import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
 import es.serversurvival.v1._shared.utils.Funciones;
 import es.serversurvival.v1._shared.utils.ItemsUtils;
-import es.serversurvival.v1._shared.utils.MinecraftUtils;
+import es.serversurvival.v2.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.v1.jugadores._shared.application.JugadoresService;
 import es.serversurvival.v1.jugadores._shared.domain.Jugador;
 import es.serversurvival.v1.jugadores.perfil.PerfilMenu;

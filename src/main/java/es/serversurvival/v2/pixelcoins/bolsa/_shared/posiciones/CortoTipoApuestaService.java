@@ -10,7 +10,7 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public final class CortoTipoApuestaService implements TipoApuestaService {
-    public static final double COMISION_ABRIR_CORTO = 0.3;
+    public static final double COMISION_ABRIR_CORTO = 0.5;
 
     private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;
     private final PosicionesService posicionesService;
@@ -33,5 +33,10 @@ public final class CortoTipoApuestaService implements TipoApuestaService {
         Posicion posicion = posicionesService.getById(posicionId);
 
         return (posicion.getPrecioApertura() - precioActual) * cantidad;
+    }
+
+    @Override
+    public double calcularRentabilidad(double precioApertura, double precioCierre) {
+        return 1 - (precioCierre / precioApertura);
     }
 }

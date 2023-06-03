@@ -29,6 +29,10 @@ public final class AccionistasEmpresasService {
         return this.repository.findByEmpresaIdAndJugadorId(empresaId, jugadorId);
     }
 
+    public List<AccionistaEmpresa> findByJugadorId(UUID jugadorId) {
+        return repository.findByJugadorId(jugadorId);
+    }
+
     public List<AccionistaEmpresa> findByEmpresaId(UUID empresaId) {
         return this.repository.findByEmpresaId(empresaId);
     }

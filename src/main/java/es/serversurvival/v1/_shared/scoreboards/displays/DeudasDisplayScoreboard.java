@@ -12,7 +12,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 import static es.serversurvival.v1._shared.utils.Funciones.FORMATEA;
-import static es.serversurvival.v1._shared.utils.MinecraftUtils.*;
+import static es.serversurvival.v2.minecraftserver._shared.MinecraftUtils.*;
 
 @ScoreboardCreator
 @RequiredArgsConstructor

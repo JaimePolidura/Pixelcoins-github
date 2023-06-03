@@ -5,7 +5,7 @@ import es.serversurvival.v1._shared.scoreboards.ServerScoreboardCreator;
 import es.serversurvival.v1.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.v1.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.v1._shared.utils.Funciones;
-import es.serversurvival.v1._shared.utils.MinecraftUtils;
+import es.serversurvival.v2.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.v1.jugadores._shared.application.JugadoresService;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
@@ -16,7 +16,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import java.util.List;
 
 import static es.serversurvival.v1._shared.utils.Funciones.FORMATEA;
-import static es.serversurvival.v1._shared.utils.MinecraftUtils.addLineToScoreboard;
+import static es.serversurvival.v2.minecraftserver._shared.MinecraftUtils.addLineToScoreboard;
 
 @ScoreboardCreator
 @RequiredArgsConstructor

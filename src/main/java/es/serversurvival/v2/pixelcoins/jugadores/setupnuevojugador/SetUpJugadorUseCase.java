@@ -1,8 +1,8 @@
 package es.serversurvival.v2.pixelcoins.jugadores.setupnuevojugador;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
-import es.serversurvival.v2.pixelcoins.jugadores._shared.Jugador;
-import es.serversurvival.v2.pixelcoins.jugadores._shared.JugadoresService;
+import es.serversurvival.v2.pixelcoins.jugadores._shared.jugadores.Jugador;
+import es.serversurvival.v2.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 

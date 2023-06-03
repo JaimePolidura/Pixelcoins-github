@@ -2,8 +2,8 @@ package es.serversurvival.v2.minecraftserver.jugadores.cambio.ingresaritem.diama
 
 import es.bukkitclassmapper.mobs.Mob;
 import es.bukkitclassmapper.mobs.OnPlayerInteractMob;
-import es.serversurvival.v1.jugadores.cambio.TipoCambioPixelcoins;
-import es.serversurvival.v1.jugadores.cambio.ingresarItem.IngresadorItem;
+import es.serversurvival.v2.minecraftserver.jugadores.cambio.ingresaritem.IngresadorItem;
+import es.serversurvival.v2.pixelcoins.jugadores.cambiar.TipoCambioPixelcoins;
 import lombok.AllArgsConstructor;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 

@@ -13,7 +13,7 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.*;
 
-import static es.serversurvival.v1._shared.utils.MinecraftUtils.*;
+import static es.serversurvival.v2.minecraftserver._shared.MinecraftUtils.*;
 
 @ScoreboardCreator
 @RequiredArgsConstructor

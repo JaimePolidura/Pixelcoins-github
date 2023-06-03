@@ -4,7 +4,8 @@ import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.jaime.EventBus;
 import es.serversurvival.v1._shared.menus.ConfirmacionMenu;
 import es.serversurvival.v1._shared.utils.Funciones;
-import es.serversurvival.v1.jugadores.pagar.PagarUseCase;
+import es.serversurvival.v2.pixelcoins.jugadores.pagar.HacerPagarParametros;
+import es.serversurvival.v2.pixelcoins.jugadores.pagar.PagarUseCase;
 import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -37,7 +38,7 @@ public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu<Vender
             return;
         }
 
-        pagarUseCase.realizarPago(jugadorComprador.getName(), jugadorVendedor.getName(), precio);
+        pagarUseCase.hacerPago(HacerPagarParametros.of(jugadorComprador.getUniqueId(), jugadorVendedor.getUniqueId(), precio));
 
         jugadorComprador.getInventory().addItem(itemAVender);
         jugadorVendedor.getInventory().clear(slotItemVender);
@@ -49,7 +50,7 @@ public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu<Vender
         jugadorComprador.sendMessage(ChatColor.GOLD + "Has comprado el item");
         jugadorComprador.playSound(jugadorComprador.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
-        this.eventBus.publish(new ItemVendidoJugadorEvento(jugadorComprador.getName(), jugadorVendedor.getName(), precio, itemAVender.getType().toString()));
+        this.eventBus.publish(new ItemVendidoJugadorEvento(jugadorComprador.getUniqueId(), jugadorVendedor.getUniqueId(), precio, itemAVender.getType().toString()));
     }
 
     private boolean isItemInInventory(Player jugadorVendedor, ItemStack itemAVender, int slotItemVender) {

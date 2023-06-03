@@ -49,12 +49,12 @@ public final class PagadorDeudaCuotas {
             ofertasService.deleteByObjetoYTipo(deuda.getDeudaId().toString(), TipoOferta.DEUDA_MERCADO_SECUNDARIO);
         }
 
-        eventBus.publish(new CuotaDeudaNoPagadaEvento(deuda.getDeudaId(), deuda.getCuota()));
+        eventBus.publish(new CuotaDeudaPagadaEvento(deuda.getDeudaId(), deuda.getCuota(), deuda.getDeudorJugadorId()));
     }
 
     private void anotarImpagoDeudaCuota(Deuda deuda) {
         deudasService.save(deuda.incrementarNImpago());
-        eventBus.publish(new CuotaDeudaNoPagadaEvento(deuda.getDeudaId(), deuda.getCuota()));
+        eventBus.publish(new CuotaDeudaNoPagadaEvento(deuda.getDeudaId(), deuda.getCuota(), deuda.getDeudorJugadorId()));
     }
 
     private int getNumeroCuotasPendientesDePagar(Deuda deuda) {

@@ -4,7 +4,7 @@ import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
 import es.serversurvival.v1._shared.utils.Funciones;
 import es.serversurvival.v1.jugadores._shared.application.CalculadorPatrimonio;
-import es.serversurvival.v1.jugadores._shared.application.JugadoresService;
+import es.serversurvival.v2.pixelcoins.transacciones.TransaccionesService;
 import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
 @AllArgsConstructor
 public class DineroComandoExecutor implements CommandRunnerNonArgs {
     private final CalculadorPatrimonio calculadorPatrimonio;
-    private final JugadoresService jugadoresService;
+    private final TransaccionesService transaccionesService;
 
     @Override
     public void execute(CommandSender commandSender) {
@@ -25,9 +25,7 @@ public class DineroComandoExecutor implements CommandRunnerNonArgs {
         String nombreJugador = player.getName();
 
         double patrimonioJugador = this.calculadorPatrimonio.calcular(nombreJugador);
-        double totalAhorrado = jugadoresService.getByNombre(nombreJugador).getPixelcoins();
-
-        patrimonioJugador = patrimonioJugador - totalAhorrado;
+        double totalAhorrado = transaccionesService.getBalancePixelcions(player.getUniqueId());
 
         player.sendMessage(ChatColor.GOLD + "Ahorrado (disponible) : " + ChatColor.GREEN + Funciones.FORMATEA.format(totalAhorrado) + " PC");
         if(patrimonioJugador != 0){

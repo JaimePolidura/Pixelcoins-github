@@ -18,18 +18,19 @@ public final class Posicion {
     @Getter private final LocalDateTime fechaApertura;
     @Getter private final double precioCierre;
     @Getter private final LocalDateTime fechaCierre;
+    @Getter private final double rentabilidad;
 
     public boolean estaLaPosicionVacia() {
         return cantidad <= 0;
     }
 
-    public Posicion cerrar(int cantidadACerrar, double precioCierre) {
+    public Posicion cerrar(int cantidadACerrar, double precioCierre, double rentabilidad) {
         return new Posicion(posicionId, activoBolsaId, jugadorId, cantidadACerrar, tipoApuesta, TipoPosicion.CERRADO,
-                precioApertura, fechaApertura, precioCierre, LocalDateTime.now());
+                precioApertura, fechaApertura, precioCierre, LocalDateTime.now(), rentabilidad);
     }
 
     public Posicion decrementarCantidad(int cantidadDecrementar) {
         return new Posicion(posicionId, activoBolsaId, jugadorId, cantidad - cantidadDecrementar, tipoApuesta,
-                tipoPosicion, precioApertura, fechaApertura, precioCierre, fechaCierre);
+                tipoPosicion, precioApertura, fechaApertura, precioCierre, fechaCierre, rentabilidad);
     }
 }

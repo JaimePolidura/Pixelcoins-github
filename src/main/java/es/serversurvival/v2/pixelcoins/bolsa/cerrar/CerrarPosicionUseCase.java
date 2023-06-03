@@ -38,8 +38,9 @@ public final class CerrarPosicionUseCase {
         Posicion posicionAbierta = posicionesService.getById(parametros.getPosicionAbiertaId());
         double precioPorUnidad = activoBolsaUltimosPreciosService.getUltimoPrecio(posicionAbierta.getActivoBolsaId());
         double valorPosicion = getValorPosicion(parametros, posicionAbierta);
+        double rentabilidad = calcularRentabilidad(posicionAbierta);
 
-        Posicion posicionCerrada = posicionAbierta.cerrar(parametros.getCantidad(), precioPorUnidad);
+        Posicion posicionCerrada = posicionAbierta.cerrar(parametros.getCantidad(), precioPorUnidad, rentabilidad);
         posicionAbierta = posicionAbierta.decrementarCantidad(parametros.getCantidad());
 
         posicionesService.savePosicionAbiertaConNuevaCantidad(posicionAbierta);
@@ -52,7 +53,12 @@ public final class CerrarPosicionUseCase {
                 .objeto(posicionCerrada.getActivoBolsaId())
                 .build());
 
-        eventBus.publish(new PosicionBolsaCerrada(posicionCerrada.getPosicionId()));
+        eventBus.publish(new PosicionBolsaCerrada(posicionCerrada.getJugadorId(), posicionCerrada.getPosicionId()));
+    }
+
+    private double calcularRentabilidad(Posicion posicionAbierta) {
+        return dependenciesRepository.get(posicionAbierta.getTipoApuesta().getTipoApuestaService())
+                .calcularRentabilidad(posicionAbierta.getPrecioApertura(), posicionAbierta.getPrecioCierre());
     }
 
     private double getValorPosicion(CerrarPosicionParametros parametros, Posicion posicion) {

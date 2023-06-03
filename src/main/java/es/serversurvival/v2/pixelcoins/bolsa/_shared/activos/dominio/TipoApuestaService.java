@@ -7,4 +7,6 @@ public interface TipoApuestaService {
 
     double getPixelcoinsCerrarPosicion(UUID posicionId, int cantidad);
     double getPixelcoinsCerrarPosicion(UUID posicionId, int cantidad, double precioActual);
+
+    double calcularRentabilidad(double precioApertura, double precioCierre);
 }

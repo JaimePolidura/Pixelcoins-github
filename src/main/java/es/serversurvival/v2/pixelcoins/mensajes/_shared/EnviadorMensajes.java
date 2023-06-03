@@ -1,6 +1,7 @@
 package es.serversurvival.v2.pixelcoins.mensajes._shared;
 
 import es.dependencyinjector.dependencies.annotations.Service;
+import es.serversurvival.v2.minecraftserver._shared.MinecraftUtils;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -25,8 +26,7 @@ public final class EnviadorMensajes {
                     .mensaje(mensaje)
                     .build());
         }else{
-            player.sendMessage(tipoMensaje.getColor() + mensaje);
-            player.playSound(player, tipoMensaje.getSound(), 10, 1);
+            MinecraftUtils.enviarMensajeYSonido(player,  mensaje, tipoMensaje.getSound());
         }
     }
 }

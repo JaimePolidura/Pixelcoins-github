@@ -17,8 +17,6 @@ public final class SacarMaxItemCommandRunner implements CommandRunnerNonArgs {
 
     @Override
     public void execute(CommandSender commandSender) {
-        Player player = (Player) commandSender;
-
-        this.menuService.open(player, SacarMaxItemMenu.class);
+        this.menuService.open((Player) commandSender, SacarMaxItemMenu.class);
     }
 }

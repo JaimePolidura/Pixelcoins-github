@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -14,6 +15,19 @@ public final class DeudasService {
 
     public void save(Deuda deuda) {
         this.deudasRepository.save(deuda);
+    }
+
+    public List<Deuda> findByAcredorJugadorIdPendiente(UUID acredorJugadorId) {
+        return deudasRepository.findByAcredorJugadorId(acredorJugadorId).stream()
+                .filter(Deuda::estaPendiente)
+                .collect(Collectors.toList());
+    }
+
+
+    public List<Deuda> findByDeudorJugadorIdPendiente(UUID deudorJugadorId) {
+        return deudasRepository.findByDeudorJugadorId(deudorJugadorId).stream()
+                .filter(Deuda::estaPendiente)
+                .collect(Collectors.toList());
     }
 
     public Deuda getById(UUID deudaId) {

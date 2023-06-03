@@ -18,13 +18,14 @@ import es.serversurvival.v1.empresas.empresas._shared.domain.Empresa;
 import es.serversurvival.v1.empresas.empresas.vertodas.VerTodasEmpresasMenu;
 import es.serversurvival.v1.jugadores._shared.application.CalculadorPatrimonio;
 import es.serversurvival.v1.jugadores._shared.application.JugadoresService;
-import es.serversurvival.v1.jugadores._shared.domain.Jugador;
 import es.serversurvival.v1.jugadores.top.TopMenu;
 import es.serversurvival.v1.tienda.vertienda.TiendaMenu;
+import es.serversurvival.v2.pixelcoins.jugadores._shared.jugadores.Jugador;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
@@ -37,7 +38,7 @@ import static es.serversurvival.v1._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
-public final class PerfilMenu extends Menu<Jugador> {
+public final class PerfilMenu extends Menu<Player> {
     private final PosicionesCerradasService posicionesCerradasService;
     private final CalculadorPatrimonio calculadorPatrimonio;
     private final EmpleadosService empleadosService;
@@ -79,7 +80,7 @@ public final class PerfilMenu extends Menu<Jugador> {
 
         List<String> lore = new ArrayList<>();
         lore.add("  ");
-        List<Empleado> empleos = empleadosService.findByJugador(getState().getNombre());
+        List<Empleado> empleos = empleadosService.findByJugador(getState().getName());
         empleos.forEach( (emp) -> {
             lore.add(ChatColor.GOLD + "" + emp.getEmpresa() + " " + ChatColor.GREEN + FORMATEA.format(emp.getSueldo()) +
                     " PC " + ChatColor.GOLD + "/ " + emp.getTipoSueldo().nombre);
@@ -93,7 +94,7 @@ public final class PerfilMenu extends Menu<Jugador> {
 
         List<String> lore = new ArrayList<>();
         lore.add("  ");
-        List<Empresa> empresas = empresasService.getByOwner(getState().getNombre());
+        List<Empresa> empresas = empresasService.getByOwner(getState().getName());
         empresas.forEach( (empresa) -> {
             lore.add(ChatColor.GOLD + "- " + empresa.getNombre() + " ( " + ChatColor.GREEN +
                     FORMATEA.format(empresa.getPixelcoins()) + " PC" +  ChatColor.GOLD + ")");
@@ -105,7 +106,7 @@ public final class PerfilMenu extends Menu<Jugador> {
     private ItemStack buildItemBolsa () {
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK VER TUS ACCIONES";
 
-        List<PosicionCerrada> posicionCerradas = posicionesCerradasService.findByJugador(getState().getNombre()).stream()
+        List<PosicionCerrada> posicionCerradas = posicionesCerradasService.findByJugador(getState().getName()).stream()
                 .limit(7).toList();
         List<String> lore = new ArrayList<>();
         lore.add("   ");
@@ -123,8 +124,8 @@ public final class PerfilMenu extends Menu<Jugador> {
     private ItemStack buildItemDeudas () {
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TUS DEUDAS";
 
-        double totalQueLeDeben = deudasService.getAllPixelcoinsDeudasAcredor(getState().getNombre());
-        double totalQueDebe = deudasService.getAllPixelcoinsDeudasDeudor(getState().getNombre());
+        double totalQueLeDeben = deudasService.getAllPixelcoinsDeudasAcredor(getState().getName());
+        double totalQueDebe = deudasService.getAllPixelcoinsDeudasDeudor(getState().getName());
 
         List<String> lore = new ArrayList<>() {{
             add("    ");
@@ -143,22 +144,22 @@ public final class PerfilMenu extends Menu<Jugador> {
         ItemStack stats = new ItemStack(Material.PLAYER_HEAD);
 
         SkullMeta metaStats = (SkullMeta) stats.getItemMeta();
-        metaStats.setOwningPlayer(Bukkit.getPlayer(getState().getNombre()));
+        metaStats.setOwningPlayer(Bukkit.getPlayer(getState().getName()));
         metaStats.setDisplayName(GOLD + "" + BOLD + "" + UNDERLINE + "CLICK PARA VER EL TOP JUGADORES");
 
         if(getState() == null) return stats;
 
         double totalAhorrado = getState().getPixelcoins();
-        double totalDebe = deudasService.getAllPixelcoinsDeudasDeudor(getState().getNombre());
-        double totalDeben = deudasService.getAllPixelcoinsDeudasAcredor(getState().getNombre());
-        double totalEnAcciones = posicionesUtils.getAllPixeloinsEnValores(getState().getNombre());
-        double totalEmpresas = empresasService.getAllPixelcoinsEnEmpresas(getState().getNombre());
+        double totalDebe = deudasService.getAllPixelcoinsDeudasDeudor(getState().getName());
+        double totalDeben = deudasService.getAllPixelcoinsDeudasAcredor(getState().getName());
+        double totalEnAcciones = posicionesUtils.getAllPixeloinsEnValores(getState().getName());
+        double totalEmpresas = empresasService.getAllPixelcoinsEnEmpresas(getState().getName());
         double resultado = (totalAhorrado + totalDeben + totalEnAcciones + totalEmpresas) - totalDebe;
 
         double beneficios = getState().getIngresos() - getState().getGastos();
         double rentabilidad = getState().getIngresos() == 0 ? -100 : rentabilidad(getState().getIngresos(), beneficios);
 
-        int posTopRicps = calculadorPatrimonio.getPosicionTopRicos(getState().getNombre());
+        int posTopRicps = calculadorPatrimonio.getPosicionTopRicos(getState().getName());
         int posTopVendedores = jugadoresService.sortJugadoresBy(Comparator.comparingInt(Jugador::getNventas)).indexOf(getState()) + 1;
 
         List<String> lore = new ArrayList<>();

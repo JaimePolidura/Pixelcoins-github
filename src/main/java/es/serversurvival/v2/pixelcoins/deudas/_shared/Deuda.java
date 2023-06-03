@@ -34,7 +34,7 @@ public final class Deuda {
         return this.nCuotasPagadas + 1 == this.nCuotasTotales;
     }
 
-    public double getPixelcoinsTodasLasCuotasRestantes() {
+    public double getPixelcoinsRestantesDePagar() {
         double cuota = 0;
 
         for (int i = 0; i < nCuotasTotales - nCuotasPagadas - 1; i++)

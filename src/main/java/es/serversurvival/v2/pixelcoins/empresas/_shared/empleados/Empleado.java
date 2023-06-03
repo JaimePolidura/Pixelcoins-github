@@ -28,6 +28,10 @@ public final class Empleado {
     @Getter private final LocalDateTime fechaDespido;
     @Getter private final String causaDespido;
 
+    public int periodoSueldoToDias() {
+        return (int) (periodoPagoMs / (1000 * 60 * 60 * 24));
+    }
+
     public Empleado marcarSueldoPagado() {
         return new Empleado(empleadoId, empleadoJugadorId, empresaId, descripccion, sueldo, periodoPagoMs, fechaUltimoPago.plusNanos(periodoPagoMs * 1_000_000),
                 fechaContratacion, estaContratado, fechaDespido, causaDespido);

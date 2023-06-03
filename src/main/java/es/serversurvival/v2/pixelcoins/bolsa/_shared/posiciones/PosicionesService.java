@@ -17,12 +17,22 @@ public final class PosicionesService {
         repository.save(posicion);
     }
 
+    public List<Posicion> findPosicionesCerradasSortByRentabilidad() {
+        return repository.findPosicionesCerradasSortByRentabilidad();
+    }
+
     public void savePosicionAbiertaConNuevaCantidad(Posicion posicion) {
         if(posicion.estaLaPosicionVacia()){
             deleteById(posicion.getPosicionId());
         }else{
             save(posicion);
         }
+    }
+
+    public List<Posicion> findPosicionesCerradasByJugadorId(UUID jugadorId) {
+        return repository.findByJugadorId(jugadorId).stream()
+                .filter(posicion -> posicion.getTipoPosicion() == TipoPosicion.CERRADO)
+                .collect(Collectors.toList());
     }
 
     public List<Posicion> findPosicionesAbiertasByJugadorId(UUID jugadorId) {

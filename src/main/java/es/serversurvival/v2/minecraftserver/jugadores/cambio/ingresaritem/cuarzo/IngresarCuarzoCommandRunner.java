@@ -2,8 +2,8 @@ package es.serversurvival.v2.minecraftserver.jugadores.cambio.ingresaritem.cuarz
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
-import es.serversurvival.v1.jugadores.cambio.TipoCambioPixelcoins;
-import es.serversurvival.v1.jugadores.cambio.ingresarItem.IngresadorItem;
+import es.serversurvival.v2.minecraftserver.jugadores.cambio.ingresaritem.IngresadorItem;
+import es.serversurvival.v2.pixelcoins.jugadores.cambiar.TipoCambioPixelcoins;
 import lombok.AllArgsConstructor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

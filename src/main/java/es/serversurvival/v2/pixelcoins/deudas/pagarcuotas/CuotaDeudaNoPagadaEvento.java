@@ -10,4 +10,5 @@ import java.util.UUID;
 public final class CuotaDeudaNoPagadaEvento extends PixelcoinsEvento {
     @Getter private final UUID deudaId;
     @Getter private final double cuota;
+    @Getter private final UUID deudorJugadorId;
 }

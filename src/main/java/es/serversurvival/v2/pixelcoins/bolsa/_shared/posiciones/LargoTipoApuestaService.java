@@ -27,4 +27,9 @@ public final class LargoTipoApuestaService implements TipoApuestaService {
     public double getPixelcoinsCerrarPosicion(UUID posicionId, int cantidad, double precioActual) {
         return precioActual * cantidad;
     }
+
+    @Override
+    public double calcularRentabilidad(double precioApertura, double precioCierre) {
+        return (precioCierre / precioApertura) - 1;
+    }
 }

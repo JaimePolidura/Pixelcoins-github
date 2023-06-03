@@ -2,7 +2,7 @@ package es.serversurvival.v1._shared.scoreboards.displays;
 
 import es.serversurvival.v1._shared.scoreboards.ScoreboardCreator;
 import es.serversurvival.v1._shared.scoreboards.ServerScoreboardCreator;
-import es.serversurvival.v1._shared.utils.MinecraftUtils;
+import es.serversurvival.v2.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.v1.jugadores._shared.application.CalculadorPatrimonio;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;

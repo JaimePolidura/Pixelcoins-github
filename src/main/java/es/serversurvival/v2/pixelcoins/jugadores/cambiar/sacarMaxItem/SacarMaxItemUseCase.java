@@ -3,7 +3,9 @@ package es.serversurvival.v2.pixelcoins.jugadores.cambiar.sacarMaxItem;
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.v1._shared.utils.Funciones;
-import es.serversurvival.v2.pixelcoins.jugadores._shared.Jugador;
+import es.serversurvival.v2.pixelcoins._shared.Validador;
+import es.serversurvival.v2.pixelcoins.jugadores._shared.jugadores.Jugador;
+import es.serversurvival.v2.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import es.serversurvival.v2.pixelcoins.jugadores.cambiar.TipoCambioPixelcoins;
 import es.serversurvival.v2.pixelcoins.transacciones.TipoTransaccion;
 import es.serversurvival.v2.pixelcoins.transacciones.Transaccion;
@@ -19,15 +21,20 @@ import org.bukkit.inventory.ItemStack;
 @AllArgsConstructor
 public final class SacarMaxItemUseCase {
     private final TransaccionesService transaccionesService;
+    private final JugadoresService jugadoresService;
+    private final Validador validador;
     private final EventBus eventBus;
 
     public void sacarMaxItem(SacarMaxItemParametros parametros) {
-        var pixelcoinsJugador = transaccionesService.getBalancePixelcions(parametros.getJugador().getJugadorId());
+        validador.jugadorTienePixelcoins(parametros.getJugadorId(), parametros.getTipoCambio().cambio);
+
+        double pixelcoinsJugador = transaccionesService.getBalancePixelcions(parametros.getJugadorId());
+        Jugador jugador = jugadoresService.getById(parametros.getJugadorId());
 
         switch (parametros.getTipoCambio()) {
-            case DIAMOND, DIAMOND_BLOCK -> sacarMaxItemDiamond(parametros.getJugador(), pixelcoinsJugador);
-            case LAPIS_BLOCK, LAPIS_LAZULI -> sacarMaxItemLapisLazuli(parametros.getJugador(), pixelcoinsJugador);
-            case QUARTZ_BLOCK -> sacarMaxItemQuartzBlock(parametros.getJugador(), pixelcoinsJugador);
+            case DIAMOND, DIAMOND_BLOCK -> sacarMaxItemDiamond(jugador, pixelcoinsJugador);
+            case LAPIS_BLOCK, LAPIS_LAZULI -> sacarMaxItemLapisLazuli(jugador, pixelcoinsJugador);
+            case QUARTZ_BLOCK -> sacarMaxItemQuartzBlock(jugador, pixelcoinsJugador);
         }
     }
 

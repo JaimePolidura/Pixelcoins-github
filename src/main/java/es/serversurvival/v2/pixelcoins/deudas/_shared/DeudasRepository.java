@@ -9,6 +9,10 @@ public interface DeudasRepository {
 
     Optional<Deuda> findById(UUID id);
 
+    List<Deuda> findByAcredorJugadorId(UUID acredorJugadorId);
+
+    List<Deuda> findByDeudorJugadorId(UUID deudorJugadorId);
+
     List<Deuda> findAll();
 
     void deleteById(UUID id);

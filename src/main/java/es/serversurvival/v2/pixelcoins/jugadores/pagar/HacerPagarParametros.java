@@ -9,5 +9,9 @@ import java.util.UUID;
 public final class HacerPagarParametros {
     @Getter private final UUID pagadorId;
     @Getter private final UUID pagadoId;
-    @Getter private final double pixelcions;
+    @Getter private final double pixelcoins;
+
+    public static HacerPagarParametros of(UUID pagadorId, UUID pagadoId, double pixelcoins) {
+        return new HacerPagarParametros(pagadorId, pagadoId, pixelcoins);
+    }
 }

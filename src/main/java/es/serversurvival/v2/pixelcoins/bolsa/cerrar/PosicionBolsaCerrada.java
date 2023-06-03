@@ -9,4 +9,5 @@ import java.util.UUID;
 @AllArgsConstructor
 public final class PosicionBolsaCerrada extends PixelcoinsEvento {
     @Getter private final UUID posicionCerradaId;
+    @Getter private final UUID jugadorId;
 }

@@ -2,8 +2,10 @@ package es.serversurvival.v2.minecraftserver.jugadores.pagar;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival.v1.jugadores.pagar.PagarUseCase;
-import es.serversurvival.v1.mensajes._shared.application.EnviadorMensajes;
+import es.serversurvival.v2.pixelcoins.jugadores.pagar.HacerPagarParametros;
+import es.serversurvival.v2.pixelcoins.jugadores.pagar.PagarUseCase;
+import es.serversurvival.v2.pixelcoins.mensajes._shared.EnviadorMensajes;
+import es.serversurvival.v2.pixelcoins.mensajes._shared.TipoMensaje;
 import lombok.AllArgsConstructor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -24,20 +26,18 @@ public class PagarComandoRunner implements CommandRunnerArgs<PagarComando> {
 
     @Override
     public void execute(PagarComando comando, CommandSender sender) {
-        String pagador = sender.getName();
+        Player player = (Player) sender;
         double pixelcoins = comando.getPixelcoins();
 
-        this.pagarUseCase.realizarPago(pagador, comando.getDestino().getName(), pixelcoins);
+        pagarUseCase.hacerPago(HacerPagarParametros.of(player.getUniqueId(), comando.getDestino().getUniqueId(), comando.getPixelcoins()));
 
-        sendMessage((Player) sender, comando.getDestino().getName(), pixelcoins);
+        sendMessage((Player) sender, comando.getDestino(), pixelcoins);
     }
 
-    private void sendMessage (Player pagador, String pagado, double pixelcoins) {
+    private void sendMessage (Player pagador, Player pagado, double pixelcoins) {
         pagador.sendMessage(GOLD + "Has pagado: " + GREEN + FORMATEA.format(pixelcoins) + " PC " + GOLD + "a " + pagado);
 
-        String mensajeOnline = GOLD + pagador.getName() + " te ha pagado " + GREEN + FORMATEA.format(pixelcoins) + "PC!";
-        String mensajeOffline = pagador.getName() + " te ha pagado " + FORMATEA.format(pixelcoins) + "PC!";
-
-        enviadorMensajes.enviarMensaje(pagado, mensajeOnline, mensajeOffline);
+        enviadorMensajes.enviar(TipoMensaje.INFLOW_PIXELCOINS, pagado.getUniqueId(),
+                GOLD + pagador.getName() + " te ha pagado " + GREEN + FORMATEA.format(pixelcoins) + "PC!");
     }
 }

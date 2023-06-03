@@ -1,6 +1,8 @@
-package es.serversurvival.v1._shared.utils;
+package es.serversurvival.v2.minecraftserver._shared;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -12,6 +14,11 @@ import java.util.List;
 
 public final class MinecraftUtils {
     private MinecraftUtils() {}
+
+    public static void enviarMensajeYSonido (Player player, String mensaje, Sound sound) {
+        player.sendMessage(mensaje);
+        player.playSound(player.getLocation(), sound, 10, 1);
+    }
 
     public static void setLore (ItemStack itemStack, List<String> lore) {
         ItemMeta itemMeta = itemStack.getItemMeta();

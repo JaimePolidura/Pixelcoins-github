@@ -12,4 +12,6 @@ public interface PosicionesRepository {
     Optional<Posicion> findById(UUID posicionId);
 
     void deleteById(UUID posicionId);
+
+    List<Posicion> findPosicionesCerradasSortByRentabilidad();
 }

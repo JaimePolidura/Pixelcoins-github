@@ -1,4 +1,4 @@
-package es.serversurvival.v2.pixelcoins.jugadores._shared;
+package es.serversurvival.v2.pixelcoins.jugadores._shared.jugadores;
 
 import java.util.List;
 import java.util.Optional;
