@@ -71,7 +71,9 @@ public final class Pixelcoin extends JavaPlugin {
     }
 
     @AllArgsConstructor
-    private static class InstanceProviderDependencyInjector implements BukkitClassMapperInstanceProvider, MenusDependenciesInstanceProvider, EventListenerDependencyProvider {
+    private static class InstanceProviderDependencyInjector implements BukkitClassMapperInstanceProvider,
+            MenusDependenciesInstanceProvider, EventListenerDependencyProvider {
+
         private final DependenciesRepository dependenciesRepository;
 
         @Override

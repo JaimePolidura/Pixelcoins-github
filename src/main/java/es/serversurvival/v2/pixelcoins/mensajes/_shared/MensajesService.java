@@ -20,7 +20,7 @@ public final class MensajesService {
         return repository.findByJugadorIdNoVistos(jugadorId);
     }
 
-    public void deleteByFechaVistaLessThan(LocalDateTime value){
+    public void deleteByFechaVistoLessThan(LocalDateTime value){
         repository.deleteByFechaVistaLessThan(value);
     }
 }

@@ -19,6 +19,6 @@ public final class MensajesAntiguosBorrador implements TaskRunner {
         LocalDateTime fechaHoy = LocalDateTime.now();
         LocalDateTime fechaMinimoEnviado = fechaHoy.minusNanos(Mensaje.TIEMPO_MAXIMO_MENSAJE_MS * 1_000_000);
 
-        mensajesService.deleteByFechaVistaLessThan(fechaMinimoEnviado);
+        mensajesService.deleteByFechaVistoLessThan(fechaMinimoEnviado);
     }
 }

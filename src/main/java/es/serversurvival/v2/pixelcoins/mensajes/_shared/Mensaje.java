@@ -1,11 +1,11 @@
 package es.serversurvival.v2.pixelcoins.mensajes._shared;
 
-import es.serversurvival.v2.pixelcoins.mensajes._shared.TipoMensaje;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.UUID;
 
 @Builder
@@ -15,10 +15,18 @@ public final class Mensaje {
     @Getter private final UUID destinatarioId;
     @Getter private final TipoMensaje tipoMensaje;
     @Getter private final LocalDateTime fechaEnvio;
-    @Getter private final LocalDateTime fechaVista;
+    @Getter private final LocalDateTime fechaVisto;
     @Getter private final String mensaje;
 
+    public Mensaje marcarComoVisto() {
+        return new Mensaje(mensajeId, destinatarioId, tipoMensaje, fechaEnvio, LocalDateTime.now(), mensaje);
+    }
+
     public boolean haSidoVisto() {
-        return this.fechaVista != null;
+        return this.fechaVisto != null;
+    }
+
+    public static Comparator<Mensaje> sortByMostRecentFechaEnvio() {
+        return (a, b) -> b.fechaEnvio.compareTo(a.fechaEnvio);
     }
 }
