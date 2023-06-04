@@ -1,0 +1,115 @@
+package es.serversurvival.v2.minecraftserver.deudas.verdeudasmercado;
+
+import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.modules.sync.SyncMenuService;
+import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.serversurvival.v1._shared.utils.Funciones;
+import es.serversurvival.v2.minecraftserver._shared.MinecraftUtils;
+import es.serversurvival.v2.minecraftserver.mercado.VerOfertasMercadoMenu;
+import es.serversurvival.v2.pixelcoins.deudas._shared.*;
+import es.serversurvival.v2.pixelcoins.jugadores._shared.jugadores.JugadoresService;
+import es.serversurvival.v2.pixelcoins.mercado._shared.OfertasService;
+import es.serversurvival.v2.pixelcoins.mercado._shared.TipoOferta;
+import es.serversurvival.v2.pixelcoins.mercado.comprar.ComprarOfertaUseCase;
+import es.serversurvival.v2.pixelcoins.mercado.retirar.RetirarOfertaUseCase;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.*;
+
+import static es.serversurvival.v1._shared.utils.Funciones.FORMATEA;
+import static org.bukkit.ChatColor.*;
+
+public final class MercadoDeudaMenu extends VerOfertasMercadoMenu<OfertaDeudaMercado> {
+    private final JugadoresService jugadoresService;
+    private final DeudasService deudasService;
+
+    public MercadoDeudaMenu(ComprarOfertaUseCase comprarOfertaUseCase, RetirarOfertaUseCase retirarOfertaUseCase, SyncMenuService syncMenuService,
+                            OfertasService ofertasService, MenuService menuService, JugadoresService jugadoresService, DeudasService deudasService) {
+        super(comprarOfertaUseCase, retirarOfertaUseCase, syncMenuService, ofertasService, menuService);
+        this.jugadoresService = jugadoresService;
+        this.deudasService = deudasService;
+    }
+
+    @Override
+    public TipoOferta[] tipoOfertas() {
+        return new TipoOferta[]{TipoOferta.DEUDA_MERCADO_PRIMARIO, TipoOferta.DEUDA_MERCADO_SECUNDARIO};
+    }
+
+    @Override
+    public Class<OfertaDeudaMercado> ofertaClass() {
+        return OfertaDeudaMercado.class;
+    }
+
+    @Override
+    public String titulo() {
+        return ChatColor.DARK_RED + "" + ChatColor.BOLD + "            Tienda";
+    }
+
+    @Override
+    public List<String> loreItemInfo() {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public ItemStack buildItemFromOferta(OfertaDeudaMercado oferta) {
+        return oferta.esMercadoPrimario() ?
+                buildItemMercadoPrimario((OfertaDeudaMercadoPrimario) oferta) :
+                buildItemMercadoSecundario((OfertaDeudaMercadoSecundario) oferta);
+    }
+
+    @Override
+    public String mensajeCompraExsitosaAlComprador(OfertaDeudaMercado oferta, ItemStack item) {
+        String vendedor = jugadoresService.getNombreById(oferta.getVendedorId());
+
+        return GOLD + "Has comprado la deuda de " + vendedor + " por " + GREEN + FORMATEA.format(oferta.getPrecio()) +  "PC";
+    }
+
+    @Override
+    public String mensajeCompraExsitosaAlVendedor(OfertaDeudaMercado oferta, ItemStack item, String comprador) {
+        return GOLD + comprador + " ha comprado la deuda por " + GREEN + FORMATEA.format(oferta.getPrecio()) +  "PC";
+    }
+
+    private ItemStack buildItemMercadoSecundario(OfertaDeudaMercadoSecundario oferta) {
+        ItemStack itemStack = ItemBuilder.of(Material.WRITTEN_BOOK).build();
+        String vendedor = jugadoresService.getNombreById(oferta.getVendedorId());
+        Deuda deuda = deudasService.getById(oferta.getObjetoToUUID());
+
+        List<String> lore =  buidLoreOfertaDeudaItem(oferta.getPrecio(), vendedor, deuda.getInteres(), deuda.getNominal(), deuda.getPeriodoPagoCuotaMs(),
+                deuda.getNCuotasTotales() - deuda.getNCuotasPagadas(), deuda.getNCuotasImpagadas(), deuda.getPixelcoinsRestantesDePagar());
+
+        MinecraftUtils.setLore(itemStack, lore);
+
+        return itemStack;
+    }
+
+    private ItemStack buildItemMercadoPrimario(OfertaDeudaMercadoPrimario oferta) {
+        ItemStack itemStack = ItemBuilder.of(Material.WRITTEN_BOOK).build();
+        String vendedor = jugadoresService.getNombreById(oferta.getVendedorId());
+        double cuota = oferta.getInteres() * oferta.getPrecio();
+
+        List<String> lore = buidLoreOfertaDeudaItem(oferta.getPrecio(), vendedor, oferta.getInteres(), oferta.getPrecio(), oferta.getPeriodoPagoCuotaMs(),
+                oferta.getNumeroCuotasTotales(), 0, oferta.getNumeroCuotasTotales() * cuota + oferta.getPrecio());
+
+        MinecraftUtils.setLore(itemStack, lore);
+
+        return itemStack;
+    }
+
+    private List<String> buidLoreOfertaDeudaItem(double precio, String vendedorNombre, double interes, double nominal, long periodoPagoCuotasMs,
+                                                 int nCuotasRestantes, int nCuotasImpagados, double pixelcoinsTotalesDevolver) {
+        return List.of(
+                GOLD + "Precio: " + GREEN + FORMATEA.format(precio) + " PC",
+                GOLD + "Vendedor: " + vendedorNombre,
+                GOLD + " ",
+                GOLD + "Pagos/Cuotas: " + GREEN + FORMATEA.format(interes * nominal) + " PC",
+                GOLD + "Interes: " + FORMATEA.format(interes * 100) + "%",
+                GOLD + "Reembolso final/Nominal: " + GREEN + FORMATEA.format(nominal) + " PC",
+                GOLD + "Pagaos cada: " + Funciones.millisToDias(periodoPagoCuotasMs) + " dias",
+                GOLD + "Nº Pagos restantes: " + nCuotasRestantes,
+                GOLD + "Nº Pagos impagados: " + (nCuotasImpagados > 0 ? RED : GOLD) + " " + nCuotasImpagados,
+                GOLD + "Total pixelcoins a devolver: " + GREEN + FORMATEA.format(pixelcoinsTotalesDevolver) + " PC"
+        );
+    }
+}

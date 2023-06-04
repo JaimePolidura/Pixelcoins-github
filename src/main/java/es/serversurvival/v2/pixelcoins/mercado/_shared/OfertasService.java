@@ -23,8 +23,12 @@ public final class OfertasService {
         return ofertaTypeClazz.cast(oferta);
     }
 
-    public <T extends Oferta> List<T> findByTipo(TipoOferta tipoOferta, Class<T> classOferta) {
-        return repository.findByTipo(tipoOferta).stream()
+    public List<Oferta> findByTipo(TipoOferta... tipoOfertas) {
+        return repository.findByTipo(tipoOfertas);
+    }
+
+    public <T extends Oferta> List<T> findByTipo(Class<T> classOferta, TipoOferta... tipoOfertas) {
+        return repository.findByTipo(tipoOfertas).stream()
                 .map(classOferta::cast)
                 .collect(Collectors.toList());
     }

@@ -1,0 +1,156 @@
+package es.serversurvival.v2.minecraftserver.mercado;
+
+import es.bukkitbettermenus.Menu;
+import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.configuration.MenuConfiguration;
+import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
+import es.bukkitbettermenus.modules.sync.SyncMenuConfiguration;
+import es.bukkitbettermenus.modules.sync.SyncMenuService;
+import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitclassmapper._shared.utils.ItemUtils;
+import es.serversurvival.v2.minecraftserver._shared.MinecraftUtils;
+import es.serversurvival.v2.minecraftserver.jugadores.perfil.PerfilMenu;
+import es.serversurvival.v2.pixelcoins.mercado._shared.Oferta;
+import es.serversurvival.v2.pixelcoins.mercado._shared.OfertasService;
+import es.serversurvival.v2.pixelcoins.mercado._shared.TipoOferta;
+import es.serversurvival.v2.pixelcoins.mercado.comprar.ComprarOfertaParametros;
+import es.serversurvival.v2.pixelcoins.mercado.comprar.ComprarOfertaUseCase;
+import es.serversurvival.v2.pixelcoins.mercado.retirar.RetirarOfertaParametros;
+import es.serversurvival.v2.pixelcoins.mercado.retirar.RetirarOfertaUseCase;
+import lombok.RequiredArgsConstructor;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static es.serversurvival.v2.minecraftserver._shared.MinecraftUtils.enviarMensajeYSonido;
+import static org.bukkit.ChatColor.*;
+import static org.bukkit.ChatColor.BOLD;
+
+@RequiredArgsConstructor
+public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu<Player> {
+    public final static String PROPIETARIO_OFERTA_ITEM_DISPLAYNAME = RED + "" + BOLD + "CLICK PARA RETIRAR";
+    public final static String NO_PROPIETARIO_OFERTA_DISPLAYNAME = AQUA + "" + BOLD + "CLICK PARA COMPRAR";
+
+    private final ComprarOfertaUseCase comprarOfertaUseCase;
+    private final RetirarOfertaUseCase retirarOfertaUseCase;
+    private final SyncMenuService syncMenuService;
+    private final OfertasService ofertasService;
+    private final MenuService menuService;
+
+    @Override
+    public final int[][] items() {
+        return new int[][] {
+                {1, 0, 0, 0, 0, 0, 0, 0, 0},
+                {2, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 7, 8, 9}
+        };
+    }
+
+    @Override
+    public final MenuConfiguration configuration() {
+        return MenuConfiguration.builder()
+                .title(titulo())
+                .fixedItems()
+                .item(1, buildItemInfo())
+                .items(2, buildItemsOfertas(), this::onItemTiendaOfertaClicked)
+                .breakpoint(7, Material.GREEN_BANNER, (p, e) -> menuService.open(p, PerfilMenu.class, p))
+                .paginated(PaginationConfiguration.builder()
+                        .backward(8, Material.RED_WOOL)
+                        .forward(9, Material.GREEN_WOOL)
+                        .build())
+                .sync(SyncMenuConfiguration.builder()
+                        .mapper(this::mapSyncedOfertaItem)
+                        .lockOnSync(true)
+                        .build())
+                .build();
+    }
+
+    public abstract TipoOferta[] tipoOfertas();
+    public abstract Class<T> ofertaClass();
+    public abstract String titulo();
+    public abstract List<String> loreItemInfo();
+    public abstract ItemStack buildItemFromOferta(T oferta);
+    public abstract String mensajeCompraExsitosaAlComprador(T oferta, ItemStack item);
+    public abstract String mensajeCompraExsitosaAlVendedor(T oferta, ItemStack item, String comprador);
+
+    private void onItemTiendaOfertaClicked(Player player, InventoryClickEvent event) {
+        ItemStack item = event.getCurrentItem();
+        boolean propietario = player.getUniqueId().equals(MinecraftUtils.getLastLineOfLore(item, 1));
+        T oferta = ofertasService.getById(MinecraftUtils.getLastLineOfLore(item, 0), ofertaClass());
+
+        if(propietario) {
+            retirarOferta(oferta);
+        }else{
+            comprarOferta(oferta, event.getCurrentItem());
+        }
+
+        event.getWhoClicked().sendMessage(mensajeCompraExsitosaAlComprador(oferta, item));
+        enviarMensajeYSonido(oferta.getVendedorId(), mensajeCompraExsitosaAlVendedor(oferta, item, player.getName()), Sound.ENTITY_PLAYER_LEVELUP);
+    }
+
+    private void comprarOferta(Oferta oferta, ItemStack itemOfertaComprado) {
+        int cantidadItem = itemOfertaComprado.getAmount();
+
+        comprarOfertaUseCase.comprarOferta(ComprarOfertaParametros.of(getState().getUniqueId(), oferta.getOfertaId()));
+
+        if(cantidadItem > 1){
+            itemOfertaComprado.setAmount(cantidadItem - 1);
+        }else{
+            reloadTodoElMenu();
+        }
+    }
+
+    private void retirarOferta(Oferta oferta) {
+        retirarOfertaUseCase.retirarOfertaUseCase(RetirarOfertaParametros.of(getState().getUniqueId(), oferta.getOfertaId()));
+        reloadTodoElMenu();
+    }
+
+    private void reloadTodoElMenu() {
+        this.syncMenuService.sync(menuService.open(getState(), (Class<? extends Menu<Player>>) this.getClass(), getState()));
+    }
+
+    private List<ItemStack> buildItemsOfertas() {
+        return ofertasService.findByTipo(ofertaClass(), tipoOfertas()).stream()
+                .map(this::buildItemAndSetDisplayNameAndLoreOfertaInfo)
+                .collect(Collectors.toList());
+    }
+
+    private ItemStack buildItemAndSetDisplayNameAndLoreOfertaInfo(T oferta) {
+        ItemStack item = buildItemFromOferta(oferta);
+
+        ItemUtils.setDisplayname(item, oferta.getVendedorId().equals(getState().getUniqueId()) ?
+                PROPIETARIO_OFERTA_ITEM_DISPLAYNAME : NO_PROPIETARIO_OFERTA_DISPLAYNAME);
+        List<String> lore = item.getItemMeta().getLore();
+        lore.add("  ");
+        lore.add(getState().getUniqueId().toString());
+        lore.add(oferta.getOfertaId().toString());
+        MinecraftUtils.setLore(item, lore);
+
+        return item;
+    }
+
+    private ItemStack mapSyncedOfertaItem(ItemStack item, Integer itemNum) {
+        boolean perteneceItemEnLaTienda = itemNum == 2;
+
+        return perteneceItemEnLaTienda ? cambiarDisplayNameItem(item) : item;
+    }
+
+    private ItemStack cambiarDisplayNameItem(ItemStack item) {
+        boolean propietarioItem = MinecraftUtils.getLastLineOfLore(item, 2).equals(getState().getUniqueId());
+
+        return ItemUtils.setDisplayname(item, propietarioItem ? PROPIETARIO_OFERTA_ITEM_DISPLAYNAME : NO_PROPIETARIO_OFERTA_DISPLAYNAME);
+    }
+
+    private ItemStack buildItemInfo() {
+        return ItemBuilder.of(Material.PAPER).title(ChatColor.GOLD + "" + ChatColor.BOLD + "INFO").lore(loreItemInfo()).build();
+    }
+}

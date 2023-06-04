@@ -6,7 +6,7 @@ import es.serversurvival.v2.pixelcoins.mercado._shared.TipoOferta;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public final class OfertaDeudaMercadoSecundario extends Oferta {
+public final class OfertaDeudaMercadoSecundario extends OfertaDeudaMercado {
     public OfertaDeudaMercadoSecundario(UUID ofertaId, UUID vendedorId, LocalDateTime fechaSubida, int cantidad, double precio, String objeto, TipoOferta tipoOferta) {
         super(ofertaId, vendedorId, fechaSubida, cantidad, precio, objeto, tipoOferta);
     }

@@ -7,17 +7,17 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public final class OfertaDeudaMercadoPrimario extends Oferta {
+public final class OfertaDeudaMercadoPrimario extends OfertaDeudaMercado {
     @Getter private final double interes;
     @Getter private final int numeroCuotasTotales;
-    @Getter private final long periodoPagoCuota;
+    @Getter private final long periodoPagoCuotaMs;
 
     public OfertaDeudaMercadoPrimario(UUID ofertaId, UUID vendedorId, LocalDateTime fechaSubida, int cantidad, double precio,
                                       String objeto, TipoOferta tipoOferta, double interes, int numeroCuotasTotales, long periodoPagoCuota) {
         super(ofertaId, vendedorId, fechaSubida, cantidad, precio, objeto, tipoOferta);
         this.interes = interes;
         this.numeroCuotasTotales = numeroCuotasTotales;
-        this.periodoPagoCuota = periodoPagoCuota;
+        this.periodoPagoCuotaMs = periodoPagoCuota;
     }
 
     public static OfertaDeudaMercadoPrimarioBuilder builder() {

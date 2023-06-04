@@ -200,4 +200,8 @@ public final class Funciones {
         return bannedNamesList.stream()
                 .anyMatch( (name) -> name.equalsIgnoreCase(nombre));
     }
+
+    public static int millisToDias(long millis) {
+        return (int) (millis / (24 * 60 * 60 * 1000));
+    }
 }

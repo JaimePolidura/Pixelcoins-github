@@ -16,7 +16,7 @@ public final class PrestarDeudaParametros {
     @Getter private final double interes;
     @Getter private final int numeroCuotasTotales;
     @Getter private final long periodoPagoCuita;
-
+    
     public static PrestarDeudaParametros fromOfertaDeudaMercadoPrimario(OfertaDeudaMercadoPrimario oferta, UUID compradorId) {
         return new PrestarDeudaParametros(
                 compradorId,
@@ -24,7 +24,7 @@ public final class PrestarDeudaParametros {
                 oferta.getPrecio(),
                 oferta.getInteres(),
                 oferta.getNumeroCuotasTotales(),
-                oferta.getPeriodoPagoCuota()
+                oferta.getPeriodoPagoCuotaMs()
         );
     }
 }

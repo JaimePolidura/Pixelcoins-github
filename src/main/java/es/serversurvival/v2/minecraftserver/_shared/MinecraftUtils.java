@@ -38,6 +38,13 @@ public final class MinecraftUtils {
         itemStack.setItemMeta(itemMeta);
     }
 
+    public static UUID getLastLineOfLore(ItemStack itemStack, int indexStaringFromLast) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        List<String> lore = itemMeta.getLore();
+
+        return UUID.fromString(lore.get(lore.size() - indexStaringFromLast - 1));
+    }
+
     public static void setLoreAndDisplayName (ItemStack itemStack, List<String> lore, String displayname) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setLore(lore);
