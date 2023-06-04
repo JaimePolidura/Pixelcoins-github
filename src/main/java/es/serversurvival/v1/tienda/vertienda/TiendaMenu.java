@@ -69,7 +69,6 @@ public final class TiendaMenu extends Menu<Object> implements AfterShow {
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
                 .title(TITULO)
-                .fixedItems()
                 .item(1, buildItemInfo())
                 .items(2, buildItemTiendas(), this::onItemTiendaOnClick)
                 .breakpoint(7, Material.GREEN_BANNER, (p,e) -> this.menuService.open(p, PerfilMenu.class, jugadoresService.getByNombre(p.getName())))

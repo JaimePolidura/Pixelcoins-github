@@ -5,16 +5,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 
 public enum TipoMensaje {
-    INFO(ChatColor.DARK_AQUA, null),
-    AVISO(ChatColor.YELLOW, Sound.ENTITY_VILLAGER_NO),
-    INFLOW_PIXELCOINS(ChatColor.GREEN, Sound.ENTITY_PLAYER_LEVELUP),
-    OUTFLOW_PIXELCOINS(ChatColor.RED, Sound.BLOCK_ANVIL_LAND);
+    INFO(ChatColor.DARK_AQUA),
+    AVISO(ChatColor.YELLOW),
+    INFLOW_PIXELCOINS(ChatColor.GREEN),
+    OUTFLOW_PIXELCOINS(ChatColor.RED);
 
     @Getter private final ChatColor color;
-    @Getter private final Sound sound;
 
-    TipoMensaje(ChatColor color, Sound sound) {
+    TipoMensaje(ChatColor color) {
         this.color = color;
-        this.sound = sound;
     }
 }

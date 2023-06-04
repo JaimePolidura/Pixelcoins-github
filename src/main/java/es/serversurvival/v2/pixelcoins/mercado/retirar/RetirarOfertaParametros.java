@@ -9,4 +9,8 @@ import java.util.UUID;
 public final class RetirarOfertaParametros {
     @Getter private final UUID retiradorId;
     @Getter private final UUID ofertaId;
+
+    public static RetirarOfertaParametros of(UUID retiradorId, UUID ofertaId) {
+        return new RetirarOfertaParametros(retiradorId, ofertaId);
+    }
 }

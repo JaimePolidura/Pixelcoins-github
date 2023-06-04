@@ -15,18 +15,12 @@ public final class EnviadorMensajes {
     private final MensajesService mensajesService;
 
     public void enviar(TipoMensaje tipoMensaje, UUID jugadorIdDestinatario, String mensaje) {
-        Player player = Bukkit.getPlayer(jugadorIdDestinatario);
-
-        if(player == null){
-            mensajesService.save(Mensaje.builder()
-                    .mensajeId(UUID.randomUUID())
-                    .destinatarioId(jugadorIdDestinatario)
-                    .tipoMensaje(tipoMensaje)
-                    .fechaEnvio(LocalDateTime.now())
-                    .mensaje(mensaje)
-                    .build());
-        }else{
-            MinecraftUtils.enviarMensajeYSonido(player,  mensaje, tipoMensaje.getSound());
-        }
+        mensajesService.save(Mensaje.builder()
+                .mensajeId(UUID.randomUUID())
+                .destinatarioId(jugadorIdDestinatario)
+                .tipoMensaje(tipoMensaje)
+                .fechaEnvio(LocalDateTime.now())
+                .mensaje(mensaje)
+                .build());
     }
 }

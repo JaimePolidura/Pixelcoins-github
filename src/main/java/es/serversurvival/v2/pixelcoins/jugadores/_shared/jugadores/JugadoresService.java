@@ -42,6 +42,10 @@ public final class JugadoresService {
                 .orElseThrow(() -> new ResourceNotFound("Jugador no encontrado")));
     }
 
+    public String getNombreById(UUID jugadorId) {
+        return this.getById(jugadorId).getNombre();
+    }
+
     public Optional<Jugador> findByNombre(String nombre){
         return jugadoresRepository.findByNombre(nombre);
     }

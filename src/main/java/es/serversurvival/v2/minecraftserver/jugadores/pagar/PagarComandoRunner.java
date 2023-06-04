@@ -2,11 +2,13 @@ package es.serversurvival.v2.minecraftserver.jugadores.pagar;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
+import es.serversurvival.v2.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.v2.pixelcoins.jugadores.pagar.HacerPagarParametros;
 import es.serversurvival.v2.pixelcoins.jugadores.pagar.PagarUseCase;
 import es.serversurvival.v2.pixelcoins.mensajes._shared.EnviadorMensajes;
 import es.serversurvival.v2.pixelcoins.mensajes._shared.TipoMensaje;
 import lombok.AllArgsConstructor;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -21,7 +23,6 @@ import static org.bukkit.ChatColor.GREEN;
 )
 @AllArgsConstructor
 public class PagarComandoRunner implements CommandRunnerArgs<PagarComando> {
-    private final EnviadorMensajes enviadorMensajes;
     private final PagarUseCase pagarUseCase;
 
     @Override
@@ -37,7 +38,7 @@ public class PagarComandoRunner implements CommandRunnerArgs<PagarComando> {
     private void sendMessage (Player pagador, Player pagado, double pixelcoins) {
         pagador.sendMessage(GOLD + "Has pagado: " + GREEN + FORMATEA.format(pixelcoins) + " PC " + GOLD + "a " + pagado);
 
-        enviadorMensajes.enviar(TipoMensaje.INFLOW_PIXELCOINS, pagado.getUniqueId(),
-                GOLD + pagador.getName() + " te ha pagado " + GREEN + FORMATEA.format(pixelcoins) + "PC!");
+        MinecraftUtils.enviarMensajeYSonido(pagado.getUniqueId(),GOLD + pagador.getName() + " te ha pagado " + GREEN + FORMATEA.format(pixelcoins) + "PC!",
+                Sound.ENTITY_PLAYER_LEVELUP);
     }
 }

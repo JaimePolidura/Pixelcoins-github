@@ -23,19 +23,11 @@ public final class TiendaItemMinecraftValidator {
         validador.numeroMayorQueCero(precio, "El precio");
     }
 
-    public void tieneEspacioEnElInventario(Player player) {
-        boolean tieneEspacio = Arrays.stream(player.getInventory().getContents())
-                .anyMatch(item -> item == null || item.getType() == Material.AIR);
-        if(!tieneEspacio) {
-            throw new IllegalState("Tienes el inventario lleno");
-        }
-    }
-
     public void itemNoBaneado(ItemStack itemStack) {
         boolean baneado = BANNED_ITEMS.stream()
                 .anyMatch(itemBaneadoNombre -> itemBaneadoNombre.equalsIgnoreCase(itemStack.getType().toString()));
 
-        if(baneado){
+        if(baneado || itemStack == null){
             throw new IllegalType("Ese tipo de item no se puede subir a la tienda");
         }
     }

@@ -1,5 +1,6 @@
 package es.serversurvival.v2.pixelcoins.mercado._shared;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -9,6 +10,8 @@ public interface MercadoOfertasRepository {
     Optional<Oferta> findById(UUID ofertaId);
 
     Optional<Oferta> findByObjetoAndTipo(String objeto, TipoOferta tipo);
+
+    List<Oferta> findByTipo(TipoOferta tipoOferta);
 
     void deleteById(UUID ofertaId);
 
