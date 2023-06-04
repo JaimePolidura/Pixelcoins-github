@@ -23,6 +23,11 @@ public final class DeudasService {
                 .collect(Collectors.toList());
     }
 
+    public List<Deuda> findByJugadorIdPendiente(UUID jugadorId) {
+        return deudasRepository.findByJugadorId(jugadorId).stream()
+                .filter(Deuda::estaPendiente)
+                .collect(Collectors.toList());
+    }
 
     public List<Deuda> findByDeudorJugadorIdPendiente(UUID deudorJugadorId) {
         return deudasRepository.findByDeudorJugadorId(deudorJugadorId).stream()

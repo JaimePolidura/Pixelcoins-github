@@ -39,6 +39,11 @@ public final class MySQLDeudasRepository extends DataBaseRepository<Deuda, UUID>
     }
 
     @Override
+    public List<Deuda> findByJugadorId(UUID jugadorId) {
+        return null;
+    }
+
+    @Override
     public List<Deuda> findAll() {
         return super.all();
     }

@@ -80,7 +80,7 @@ public abstract class NumberSelectorMenu<T> extends Menu<T> {
         super.setItemLoreActualPage(14, loreItemAceptar(cantidad));
     }
 
-    public ItemStack buildItemAccept (){
+    public ItemStack buildItemAccept() {
         return ItemBuilder.of(Material.GREEN_WOOL)
                 .title(itemAcceptTitle())
                 .lore(loreItemAceptar(initialValue()))

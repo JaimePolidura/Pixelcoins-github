@@ -9,4 +9,8 @@ import java.util.UUID;
 public final class CancelarDeudaParametros {
     @Getter private final UUID jugadorId;
     @Getter private final UUID deudaId;
+
+    public static CancelarDeudaParametros of(UUID jugadorId, UUID deudaId) {
+        return new CancelarDeudaParametros(jugadorId, deudaId);
+    }
 }

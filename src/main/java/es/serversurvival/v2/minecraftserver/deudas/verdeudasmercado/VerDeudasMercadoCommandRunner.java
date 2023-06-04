@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
         explanation = "Ver el mercado de deuda"
 )
 @AllArgsConstructor
-public final class VerDeudasMercado implements CommandRunnerNonArgs {
+public final class VerDeudasMercadoCommandRunner implements CommandRunnerNonArgs {
     private final MenuService menuService;
 
     @Override

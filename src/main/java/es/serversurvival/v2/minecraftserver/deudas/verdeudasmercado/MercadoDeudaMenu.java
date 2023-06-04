@@ -26,7 +26,8 @@ public final class MercadoDeudaMenu extends VerOfertasMercadoMenu<OfertaDeudaMer
     private final DeudasService deudasService;
 
     public MercadoDeudaMenu(ComprarOfertaUseCase comprarOfertaUseCase, RetirarOfertaUseCase retirarOfertaUseCase, SyncMenuService syncMenuService,
-                            OfertasService ofertasService, MenuService menuService, JugadoresService jugadoresService, DeudasService deudasService) {
+                            OfertasService ofertasService, MenuService menuService, JugadoresService jugadoresService,
+                            DeudasService deudasService) {
         super(comprarOfertaUseCase, retirarOfertaUseCase, syncMenuService, ofertasService, menuService);
         this.jugadoresService = jugadoresService;
         this.deudasService = deudasService;

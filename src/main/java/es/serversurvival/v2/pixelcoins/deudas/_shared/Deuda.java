@@ -35,13 +35,12 @@ public final class Deuda {
     }
 
     public double getPixelcoinsRestantesDePagar() {
-        double cuota = 0;
+        double cuota = interes * nominal;
+        return getCuotasRestantes() * cuota + nominal;
+    }
 
-        for (int i = 0; i < nCuotasTotales - nCuotasPagadas - 1; i++)
-            cuota += interes * nominal;
-        cuota += cuota + nominal;
-
-        return cuota;
+    public int getCuotasRestantes() {
+        return nCuotasTotales - nCuotasPagadas;
     }
 
     public Deuda nuevoAcredor(UUID nuevoAcredorId) {
