@@ -23,8 +23,7 @@ public class VenderJugadorComandoRunner implements CommandRunnerArgs<VenderJugad
     private final MenuService menuService;
 
     @Override
-    public void execute(VenderJugadorComando venderJugadorComando, CommandSender sender) {
-        Player player = (Player) sender;
+    public void execute(VenderJugadorComando venderJugadorComando, Player player) {
         Player comprador = venderJugadorComando.getComprador();
         double pixelcoins = venderJugadorComando.getPixelcoins();
 
@@ -36,9 +35,9 @@ public class VenderJugadorComandoRunner implements CommandRunnerArgs<VenderJugad
             throw new IllegalState("Tiens que tener un objeto en la mano");
 
         this.menuService.open(comprador, VenderJugadorConfirmacionMenu.class,  new VenderJugadorConfirmacionMenuState(
-                comprador, player, player.getInventory().getItemInMainHand(), ((Player) sender).getInventory().getHeldItemSlot(), pixelcoins
+                comprador, player, player.getInventory().getItemInMainHand(), player.getInventory().getHeldItemSlot(), pixelcoins
         ));
 
-        sender.sendMessage(GOLD + "Has enviado la solicitud");
+        player.sendMessage(GOLD + "Has enviado la solicitud");
     }
 }

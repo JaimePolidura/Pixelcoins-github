@@ -17,7 +17,7 @@ public final class IngresarLapisCommandRunner implements CommandRunnerNonArgs {
     private final IngresadorItem ingresadorItem;
 
     @Override
-    public void execute(CommandSender sender) {
-        this.ingresadorItem.ingresarItemInMano((Player) sender, TipoCambioPixelcoins.LAPIS_LAZULI, TipoCambioPixelcoins.LAPIS_BLOCK);
+    public void execute(Player player) {
+        this.ingresadorItem.ingresarItemInMano(player, TipoCambioPixelcoins.LAPIS_LAZULI, TipoCambioPixelcoins.LAPIS_BLOCK);
     }
 }

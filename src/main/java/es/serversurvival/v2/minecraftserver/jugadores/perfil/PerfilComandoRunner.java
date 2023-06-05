@@ -13,7 +13,7 @@ public class PerfilComandoRunner implements CommandRunnerNonArgs {
     private final MenuService menuService;
 
     @Override
-    public void execute(CommandSender sender) {
-        this.menuService.open((Player) sender, PerfilMenu.class, (Player) sender);
+    public void execute(Player sender) {
+        this.menuService.open(sender, PerfilMenu.class, sender);
     }
 }

@@ -3,6 +3,7 @@ package es.serversurvival.v2.minecraftserver.deudas.emitir;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 
 @Command(
@@ -12,7 +13,7 @@ import org.bukkit.command.CommandSender;
 )
 public final class EmitirDeudaCommandRunner implements CommandRunnerNonArgs {
     @Override
-    public void execute(CommandSender sender) {
+    public void execute(Player sender) {
 
     }
 }

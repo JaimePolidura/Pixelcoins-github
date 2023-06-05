@@ -16,7 +16,7 @@ public final class SacarItemCommandRunner implements CommandRunnerNonArgs {
     private final MenuService menuService;
 
     @Override
-    public void execute(CommandSender commandSender) {
-        this.menuService.open((Player) commandSender, SacarItemMenu.class);
+    public void execute(Player commandSender) {
+        this.menuService.open(commandSender, SacarItemMenu.class);
     }
 }

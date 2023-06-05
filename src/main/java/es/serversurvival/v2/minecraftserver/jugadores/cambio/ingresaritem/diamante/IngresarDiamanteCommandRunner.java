@@ -17,7 +17,7 @@ public final class IngresarDiamanteCommandRunner implements CommandRunnerNonArgs
     private final IngresadorItem ingresadorItem;
 
     @Override
-    public void execute(CommandSender sender) {
-        this.ingresadorItem.ingresarItemInMano((Player) sender, TipoCambioPixelcoins.DIAMOND, TipoCambioPixelcoins.DIAMOND_BLOCK);
+    public void execute(Player player) {
+        this.ingresadorItem.ingresarItemInMano(player, TipoCambioPixelcoins.DIAMOND, TipoCambioPixelcoins.DIAMOND_BLOCK);
     }
 }

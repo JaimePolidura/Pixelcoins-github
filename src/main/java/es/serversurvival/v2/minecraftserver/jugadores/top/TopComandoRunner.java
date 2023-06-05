@@ -16,7 +16,7 @@ public class TopComandoRunner implements CommandRunnerNonArgs {
     private final MenuService menuService;
 
     @Override
-    public void execute(CommandSender sender) {
-        this.menuService.open((Player) sender, TopMenu.class);
+    public void execute(Player sender) {
+        this.menuService.open(sender, TopMenu.class);
     }
 }

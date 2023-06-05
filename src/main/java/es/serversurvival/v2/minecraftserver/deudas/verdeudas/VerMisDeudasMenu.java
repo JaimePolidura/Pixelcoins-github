@@ -24,7 +24,7 @@ import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.GOLD;
 
 @RequiredArgsConstructor
-public final class VerMisDeudasMenu extends Menu<Player> {
+public final class VerMisDeudasMenu extends Menu {
     private final DeudaItemMercadoLore deudaItemMercadoLore;
     private final DeudasService deudasService;
     private final MenuService menuService;
@@ -66,7 +66,7 @@ public final class VerMisDeudasMenu extends Menu<Player> {
     }
 
     private ItemStack buildItemDeuda(Deuda deuda) {
-        boolean esAcredor = deuda.getAcredorJugadorId().equals(getState().getUniqueId());
+        boolean esAcredor = deuda.getAcredorJugadorId().equals(getPlayer().getUniqueId());
 
         return ItemBuilder.of(esAcredor ? Material.GREEN_BANNER : Material.RED_BANNER)
                 .title(GOLD + "" + BOLD + "CLICK PARA " + (esAcredor ? "CANCELAR" : "PAGAR"))

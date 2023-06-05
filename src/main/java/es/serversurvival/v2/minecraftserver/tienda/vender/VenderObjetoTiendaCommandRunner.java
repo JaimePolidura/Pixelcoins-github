@@ -23,9 +23,7 @@ public final class VenderObjetoTiendaCommandRunner implements CommandRunnerArgs<
     private final MenuService menuService;
 
     @Override
-    public void execute(VenderObjetoTiendaComando comando, CommandSender sender) {
-        Player player = (Player) sender;
-
+    public void execute(VenderObjetoTiendaComando comando, Player player) {
         ponerVentaTiendaItemMinecraftUseCase.ponerVenta(PonerVentaTiendaItemMinecraftParametros.builder()
                 .item(player.getInventory().getItemInMainHand())
                 .jugadorId(player.getUniqueId())

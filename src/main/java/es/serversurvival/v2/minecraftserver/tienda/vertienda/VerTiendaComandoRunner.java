@@ -5,6 +5,7 @@ import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
 import lombok.AllArgsConstructor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 @Command(
         value = "tienda ver",
@@ -15,6 +16,6 @@ public final class VerTiendaComandoRunner implements CommandRunnerNonArgs {
     private final MenuService menuService;
 
     @Override
-    public void execute(CommandSender sender) {
+    public void execute(Player player) {
     }
 }

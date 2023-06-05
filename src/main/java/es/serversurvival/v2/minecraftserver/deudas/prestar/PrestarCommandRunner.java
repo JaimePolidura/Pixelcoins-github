@@ -3,6 +3,7 @@ package es.serversurvival.v2.minecraftserver.deudas.prestar;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 @Command(
         value = "deudas prestar",
@@ -10,7 +11,7 @@ import org.bukkit.command.CommandSender;
 )
 public final class PrestarCommandRunner implements CommandRunnerNonArgs {
     @Override
-    public void execute(CommandSender commandSender) {
+    public void execute(Player commandSender) {
 
     }
 }

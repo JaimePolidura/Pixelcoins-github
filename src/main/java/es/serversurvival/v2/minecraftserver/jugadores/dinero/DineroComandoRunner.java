@@ -33,22 +33,22 @@ public class DineroComandoRunner implements CommandRunnerArgs<DineroComando> {
     private final JugadoresService jugadoresService;
 
     @Override
-    public void execute(DineroComando comando, CommandSender sender) {
-        UUID jugadorIdVerPatrimonio = getIdJugador(comando, (Player) sender);
+    public void execute(DineroComando comando, Player player) {
+        UUID jugadorIdVerPatrimonio = getIdJugador(comando, player);
 
         Map<TipoCuentaPatrimonio, Double> desglosadoPatrimonio = calculadorPatrimonioService.calcularDesglosadoPorCuentas(jugadorIdVerPatrimonio);
 
-        printPatrimonioJugador(desglosadoPatrimonio, comando, sender);
+        printPatrimonioJugador(desglosadoPatrimonio, comando, player);
 
         for (Map.Entry<TipoCuentaPatrimonio, Double> entry : desglosadoPatrimonio.entrySet()) {
             TipoCuentaPatrimonio tipoCuenta = entry.getKey();
             double pixelcoins = entry.getValue();
 
-            sender.sendMessage(GOLD + " " + tipoCuenta.getAlias() + ": " + (pixelcoins < 0 ? RED : GREEN) + FORMATEA.format(pixelcoins) + " PC");
+            player.sendMessage(GOLD + " " + tipoCuenta.getAlias() + ": " + (pixelcoins < 0 ? RED : GREEN) + FORMATEA.format(pixelcoins) + " PC");
         }
     }
 
-    private void printPatrimonioJugador(Map<TipoCuentaPatrimonio, Double> desglosadoPatrimonio, DineroComando comando, CommandSender sender) {
+    private void printPatrimonioJugador(Map<TipoCuentaPatrimonio, Double> desglosadoPatrimonio, DineroComando comando, Player sender) {
         double suma = desglosadoPatrimonio.values().stream()
                 .mapToDouble(a -> a)
                 .sum();

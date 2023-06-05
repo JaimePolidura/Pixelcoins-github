@@ -17,7 +17,7 @@ public final class IngresarCuarzoCommandRunner implements CommandRunnerNonArgs {
     private final IngresadorItem ingresadorItem;
 
     @Override
-    public void execute(CommandSender sender) {
-        this.ingresadorItem.ingresarItemInMano((Player) sender, TipoCambioPixelcoins.QUARTZ_BLOCK);
+    public void execute(Player player) {
+        this.ingresadorItem.ingresarItemInMano(player, TipoCambioPixelcoins.QUARTZ_BLOCK);
     }
 }

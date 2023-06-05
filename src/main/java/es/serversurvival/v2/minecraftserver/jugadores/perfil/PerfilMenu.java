@@ -36,7 +36,7 @@ import static es.serversurvival.v1._shared.utils.Funciones.*;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
-public final class PerfilMenu extends Menu<Player> {
+public final class PerfilMenu extends Menu {
     private final CalculadorPatrimonioService calculadorPatrimonioService;
     private final AccionistasEmpresasService accionistasEmpresasService;
     private final DependenciesRepository dependenciesRepository;
@@ -79,7 +79,7 @@ public final class PerfilMenu extends Menu<Player> {
 
         List<String> lore = new ArrayList<>();
         lore.add("  ");
-        List<Empleado> empleos = empleadosService.findByEmpleadoJugadorId(getState().getUniqueId());
+        List<Empleado> empleos = empleadosService.findByEmpleadoJugadorId(getPlayer().getUniqueId());
         empleos.forEach( (emp) -> {
             Empresa empresa = empresasService.getById(emp.getEmpresaId());
 
@@ -95,7 +95,7 @@ public final class PerfilMenu extends Menu<Player> {
         List<String> lore = new ArrayList<>();
         lore.add("  ");
 
-        List<AccionistaEmpresa> acciones = accionistasEmpresasService.findByJugadorId(getState().getUniqueId());
+        List<AccionistaEmpresa> acciones = accionistasEmpresasService.findByJugadorId(getPlayer().getUniqueId());
         for (AccionistaEmpresa accion : acciones) {
             Empresa empresa = empresasService.getById(accion.getEmpresaId());
             double porcentajeEmpresa = (double) accion.getNAcciones() / empresa.getNTotalAcciones();
@@ -111,7 +111,7 @@ public final class PerfilMenu extends Menu<Player> {
     private ItemStack buildItemBolsa () {
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK VER TUS ACCIONES";
 
-        List<Posicion> posicionCerradas = posicionesService.findPosicionesCerradasByJugadorId(getState().getUniqueId()).stream()
+        List<Posicion> posicionCerradas = posicionesService.findPosicionesCerradasByJugadorId(getPlayer().getUniqueId()).stream()
                 .limit(7).toList();
         List<String> lore = new ArrayList<>();
         lore.add("   ");
@@ -133,8 +133,8 @@ public final class PerfilMenu extends Menu<Player> {
     private ItemStack buildItemDeudas () {
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TUS DEUDAS";
 
-        double totalQueLeDeben = calculadorPatrimonioService.calcularCuenta(TipoCuentaPatrimonio.DEUDA_ACREDOR, getState().getUniqueId());
-        double totalQueDebe = calculadorPatrimonioService.calcularCuenta(TipoCuentaPatrimonio.DEUDA_DEUDOR, getState().getUniqueId());
+        double totalQueLeDeben = calculadorPatrimonioService.calcularCuenta(TipoCuentaPatrimonio.DEUDA_ACREDOR, getPlayer().getUniqueId());
+        double totalQueDebe = calculadorPatrimonioService.calcularCuenta(TipoCuentaPatrimonio.DEUDA_DEUDOR, getPlayer().getUniqueId());
 
         List<String> lore = new ArrayList<>() {{
             add("    ");
@@ -153,12 +153,12 @@ public final class PerfilMenu extends Menu<Player> {
         ItemStack stats = new ItemStack(Material.PLAYER_HEAD);
 
         SkullMeta metaStats = (SkullMeta) stats.getItemMeta();
-        metaStats.setOwningPlayer(getState());
+        metaStats.setOwningPlayer(getPlayer());
         metaStats.setDisplayName(GOLD + "" + BOLD + "" + UNDERLINE + "CLICK PARA VER EL TOP JUGADORES");
 
-        if(getState() == null) return stats;
+        if(getPlayer() == null) return stats;
 
-        Map<TipoCuentaPatrimonio, Double> patrimonioDesglosado = calculadorPatrimonioService.calcularDesglosadoPorCuentas(getState().getUniqueId());
+        Map<TipoCuentaPatrimonio, Double> patrimonioDesglosado = calculadorPatrimonioService.calcularDesglosadoPorCuentas(getPlayer().getUniqueId());
 
         double totalEfectivo = patrimonioDesglosado.get(TipoCuentaPatrimonio.EFECTIVO);
         double totalDeudasDeudor = patrimonioDesglosado.get(TipoCuentaPatrimonio.DEUDA_DEUDOR);
@@ -167,7 +167,7 @@ public final class PerfilMenu extends Menu<Player> {
         double totalAccionesEmpresas = patrimonioDesglosado.get(TipoCuentaPatrimonio.EMPRESAS_ACCIONES);
         double patrimonioNeto = totalEfectivo + totalDeudasAcredor + totalBolsa + totalAccionesEmpresas + totalDeudasDeudor;
 
-        int posTopRicps = calculadorPatrimonioService.getPosicionTopRicos(getState().getName());
+        int posTopRicps = calculadorPatrimonioService.getPosicionTopRicos(getPlayer().getName());
 
         List<String> lore = new ArrayList<>();
         lore.add("  ");

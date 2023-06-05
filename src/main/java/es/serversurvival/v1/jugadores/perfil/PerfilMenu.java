@@ -38,7 +38,7 @@ import static es.serversurvival.v1._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
-public final class PerfilMenu extends Menu<Player> {
+public final class PerfilMenu extends Menu {
     private final PosicionesCerradasService posicionesCerradasService;
     private final CalculadorPatrimonio calculadorPatrimonio;
     private final EmpleadosService empleadosService;
@@ -80,7 +80,7 @@ public final class PerfilMenu extends Menu<Player> {
 
         List<String> lore = new ArrayList<>();
         lore.add("  ");
-        List<Empleado> empleos = empleadosService.findByJugador(getState().getName());
+        List<Empleado> empleos = empleadosService.findByJugador(getPlayer().getName());
         empleos.forEach( (emp) -> {
             lore.add(ChatColor.GOLD + "" + emp.getEmpresa() + " " + ChatColor.GREEN + FORMATEA.format(emp.getSueldo()) +
                     " PC " + ChatColor.GOLD + "/ " + emp.getTipoSueldo().nombre);
@@ -94,7 +94,7 @@ public final class PerfilMenu extends Menu<Player> {
 
         List<String> lore = new ArrayList<>();
         lore.add("  ");
-        List<Empresa> empresas = empresasService.getByOwner(getState().getName());
+        List<Empresa> empresas = empresasService.getByOwner(getPlayer().getName());
         empresas.forEach( (empresa) -> {
             lore.add(ChatColor.GOLD + "- " + empresa.getNombre() + " ( " + ChatColor.GREEN +
                     FORMATEA.format(empresa.getPixelcoins()) + " PC" +  ChatColor.GOLD + ")");
@@ -106,7 +106,7 @@ public final class PerfilMenu extends Menu<Player> {
     private ItemStack buildItemBolsa () {
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK VER TUS ACCIONES";
 
-        List<PosicionCerrada> posicionCerradas = posicionesCerradasService.findByJugador(getState().getName()).stream()
+        List<PosicionCerrada> posicionCerradas = posicionesCerradasService.findByJugador(getPlayer().getName()).stream()
                 .limit(7).toList();
         List<String> lore = new ArrayList<>();
         lore.add("   ");
@@ -124,8 +124,8 @@ public final class PerfilMenu extends Menu<Player> {
     private ItemStack buildItemDeudas () {
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TUS DEUDAS";
 
-        double totalQueLeDeben = deudasService.getAllPixelcoinsDeudasAcredor(getState().getName());
-        double totalQueDebe = deudasService.getAllPixelcoinsDeudasDeudor(getState().getName());
+        double totalQueLeDeben = deudasService.getAllPixelcoinsDeudasAcredor(getPlayer().getName());
+        double totalQueDebe = deudasService.getAllPixelcoinsDeudasDeudor(getPlayer().getName());
 
         List<String> lore = new ArrayList<>() {{
             add("    ");
@@ -149,15 +149,15 @@ public final class PerfilMenu extends Menu<Player> {
 
         if(getState() == null) return stats;
 
-        double totalAhorrado = getState().getPixelcoins();
-        double totalDebe = deudasService.getAllPixelcoinsDeudasDeudor(getState().getName());
-        double totalDeben = deudasService.getAllPixelcoinsDeudasAcredor(getState().getName());
-        double totalEnAcciones = posicionesUtils.getAllPixeloinsEnValores(getState().getName());
-        double totalEmpresas = empresasService.getAllPixelcoinsEnEmpresas(getState().getName());
+        double totalAhorrado = getPlayer().getPixelcoins();
+        double totalDebe = deudasService.getAllPixelcoinsDeudasDeudor(getPlayer().getName());
+        double totalDeben = deudasService.getAllPixelcoinsDeudasAcredor(getPlayer().getName());
+        double totalEnAcciones = posicionesUtils.getAllPixeloinsEnValores(getPlayer().getName());
+        double totalEmpresas = empresasService.getAllPixelcoinsEnEmpresas(getPlayer().getName());
         double resultado = (totalAhorrado + totalDeben + totalEnAcciones + totalEmpresas) - totalDebe;
 
-        double beneficios = getState().getIngresos() - getState().getGastos();
-        double rentabilidad = getState().getIngresos() == 0 ? -100 : rentabilidad(getState().getIngresos(), beneficios);
+        double beneficios = getPlayer().getIngresos() - getPlayer().getGastos();
+        double rentabilidad = getPlayer().getIngresos() == 0 ? -100 : rentabilidad(getState().getIngresos(), beneficios);
 
         int posTopRicps = calculadorPatrimonio.getPosicionTopRicos(getState().getName());
         int posTopVendedores = jugadoresService.sortJugadoresBy(Comparator.comparingInt(Jugador::getNventas)).indexOf(getState()) + 1;

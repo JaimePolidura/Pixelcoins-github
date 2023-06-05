@@ -17,27 +17,26 @@ import static org.bukkit.ChatColor.*;
 @Command(
         value = "patrimonio",
         explanation = "Ver el patrimonio de un jugador",
-        args = {"[jugador]"},
-        canBeTypedInConsole = true
+        args = {"[jugador]"}
 )
 @AllArgsConstructor
 public final class VerPatrimonioJugadorCommandRunner implements CommandRunnerArgs<VerPatrimonioComando> {
     private final CalculadorPatrimonioService calculadorPatrimonioService;
 
     @Override
-    public void execute(VerPatrimonioComando comando, CommandSender sender) {
-        String jugadorNombreVerPatrimonio = comando.getJugador() == null ? sender.getName() : comando.getJugador().getName();
-        UUID jugadorIdVerPatrimonio = comando.getJugador() == null ? ((Player) sender).getUniqueId() : comando.getJugador().getUniqueId();
+    public void execute(VerPatrimonioComando comando, Player player) {
+        String jugadorNombreVerPatrimonio = comando.getJugador() == null ? player.getName() : comando.getJugador().getName();
+        UUID jugadorIdVerPatrimonio = comando.getJugador() == null ? player.getUniqueId() : comando.getJugador().getUniqueId();
 
         Map<TipoCuentaPatrimonio, Double> desglosadoPatrimonio = calculadorPatrimonioService.calcularDesglosadoPorCuentas(jugadorIdVerPatrimonio);
 
-        sender.sendMessage(GOLD + "El patrimonio de esta "+jugadorNombreVerPatrimonio+" formado por: ");
+        player.sendMessage(GOLD + "El patrimonio de esta "+jugadorNombreVerPatrimonio+" formado por: ");
 
         for (Map.Entry<TipoCuentaPatrimonio, Double> entry : desglosadoPatrimonio.entrySet()) {
             TipoCuentaPatrimonio tipoCuenta = entry.getKey();
             double pixelcoins = entry.getValue();
 
-            sender.sendMessage(GOLD + " " + tipoCuenta.getAlias() + ": " + (pixelcoins < 0 ? RED : GREEN) + FORMATEA.format(pixelcoins) + " PC");
+            player.sendMessage(GOLD + " " + tipoCuenta.getAlias() + ": " + (pixelcoins < 0 ? RED : GREEN) + FORMATEA.format(pixelcoins) + " PC");
         }
     }
 }

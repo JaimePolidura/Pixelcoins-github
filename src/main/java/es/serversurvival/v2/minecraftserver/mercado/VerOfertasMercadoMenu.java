@@ -33,7 +33,7 @@ import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.BOLD;
 
 @RequiredArgsConstructor
-public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu<Player> {
+public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
     public final static String PROPIETARIO_OFERTA_ITEM_DISPLAYNAME = RED + "" + BOLD + "CLICK PARA RETIRAR";
     public final static String NO_PROPIETARIO_OFERTA_DISPLAYNAME = AQUA + "" + BOLD + "CLICK PARA COMPRAR";
 
@@ -62,7 +62,7 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu<Playe
                 .fixedItems()
                 .item(1, buildItemInfo())
                 .items(2, buildItemsOfertas(), this::onItemTiendaOfertaClicked)
-                .breakpoint(7, Material.GREEN_BANNER, (p, e) -> menuService.open(p, PerfilMenu.class, p))
+                .breakpoint(7, Material.GREEN_BANNER, (p, e) -> menuService.open(p, PerfilMenu.class))
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
                         .forward(9, Material.GREEN_WOOL)
@@ -100,7 +100,7 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu<Playe
     private void comprarOferta(Oferta oferta, ItemStack itemOfertaComprado) {
         int cantidadItem = itemOfertaComprado.getAmount();
 
-        comprarOfertaUseCase.comprarOferta(ComprarOfertaParametros.of(getState().getUniqueId(), oferta.getOfertaId()));
+        comprarOfertaUseCase.comprarOferta(ComprarOfertaParametros.of(getPlayer().getUniqueId(), oferta.getOfertaId()));
 
         if(cantidadItem > 1){
             itemOfertaComprado.setAmount(cantidadItem - 1);
@@ -110,12 +110,12 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu<Playe
     }
 
     private void retirarOferta(Oferta oferta) {
-        retirarOfertaUseCase.retirarOfertaUseCase(RetirarOfertaParametros.of(getState().getUniqueId(), oferta.getOfertaId()));
+        retirarOfertaUseCase.retirarOfertaUseCase(RetirarOfertaParametros.of(getPlayer().getUniqueId(), oferta.getOfertaId()));
         reloadTodoElMenu();
     }
 
     private void reloadTodoElMenu() {
-        this.syncMenuService.sync(menuService.open(getState(), (Class<? extends Menu<Player>>) this.getClass(), getState()));
+        this.syncMenuService.sync(menuService.open(getPlayer(), this.getClass()));
     }
 
     private List<ItemStack> buildItemsOfertas() {
@@ -127,11 +127,11 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu<Playe
     private ItemStack buildItemAndSetDisplayNameAndLoreOfertaInfo(T oferta) {
         ItemStack item = buildItemFromOferta(oferta);
 
-        ItemUtils.setDisplayname(item, oferta.getVendedorId().equals(getState().getUniqueId()) ?
+        ItemUtils.setDisplayname(item, oferta.getVendedorId().equals(getPlayer().getUniqueId()) ?
                 PROPIETARIO_OFERTA_ITEM_DISPLAYNAME : NO_PROPIETARIO_OFERTA_DISPLAYNAME);
         List<String> lore = item.getItemMeta().getLore();
         lore.add("  ");
-        lore.add(getState().getUniqueId().toString());
+        lore.add(getPlayer().getUniqueId().toString());
         lore.add(oferta.getOfertaId().toString());
         MinecraftUtils.setLore(item, lore);
 
@@ -145,7 +145,7 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu<Playe
     }
 
     private ItemStack cambiarDisplayNameItem(ItemStack item) {
-        boolean propietarioItem = MinecraftUtils.getLastLineOfLore(item, 2).equals(getState().getUniqueId());
+        boolean propietarioItem = MinecraftUtils.getLastLineOfLore(item, 2).equals(getPlayer().getUniqueId());
 
         return ItemUtils.setDisplayname(item, propietarioItem ? PROPIETARIO_OFERTA_ITEM_DISPLAYNAME : NO_PROPIETARIO_OFERTA_DISPLAYNAME);
     }
