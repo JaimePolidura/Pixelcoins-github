@@ -21,16 +21,16 @@ public final class VenderEmpresaConfirmacionMenu extends ConfirmacionMenu<Vender
     private final VenderEmpresaUseCase venderEmpresaUseCase;
 
     @Override
-    public void onAceptar(Player player, InventoryClickEvent event, VenderEmpresaConfirmacionMenuState state) {
+    public void onAceptar(Player destinatario, InventoryClickEvent event, VenderEmpresaConfirmacionMenuState state) {
         this.venderEmpresaUseCase.vender(getState().enviador(), getState().destinatario(), getState().precio(), getState().empresa());
 
-        player.sendMessage(ChatColor.GOLD + "Ahora eres dueño de " + ChatColor.DARK_AQUA + getState().empresa() + ChatColor.GOLD + " ," +
+        destinatario.sendMessage(ChatColor.GOLD + "Ahora eres dueño de " + ChatColor.DARK_AQUA + getState().empresa() + ChatColor.GOLD + " ," +
                 "la has comprado por " + ChatColor.GREEN + getState().precio() + " PC");
-        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        destinatario.playSound(destinatario.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
         Player vendedor = Bukkit.getPlayer(getState().enviador());
 
-        vendedor.sendMessage(ChatColor.GOLD + player.getName() + " te ha comprado " + ChatColor.DARK_AQUA + getState().empresa() + ChatColor.GOLD + " por " +
+        vendedor.sendMessage(ChatColor.GOLD + destinatario.getName() + " te ha comprado " + ChatColor.DARK_AQUA + getState().empresa() + ChatColor.GOLD + " por " +
                 ChatColor.GREEN + getState().precio() + " PC " + ChatColor.GOLD + ", ahora ya no eres dueño");
         vendedor.playSound(vendedor.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
     }

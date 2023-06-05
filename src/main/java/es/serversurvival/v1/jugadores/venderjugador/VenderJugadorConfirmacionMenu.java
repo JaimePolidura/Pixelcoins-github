@@ -23,7 +23,7 @@ public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu<Vender
     private final EventBus eventBus;
 
     @Override
-    public void onAceptar(Player player, InventoryClickEvent event, VenderJugadorConfirmacionMenuState state) {
+    public void onAceptar(Player destinatario, InventoryClickEvent event, VenderJugadorConfirmacionMenuState state) {
         var jugadorVendedor = state.jugadorVendedor();
         var jugadorComprador = state.jugadorComprador();
         var itemAVender = state.itemAVender();

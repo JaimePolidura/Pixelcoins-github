@@ -21,7 +21,7 @@ public final class PrestamoConfirmacionMenu extends ConfirmacionMenu<PrestamoCon
     private final PrestarUseCase prestarUseCase;
 
     @Override
-    public void onAceptar(Player player, InventoryClickEvent event, PrestamoConfirmacionMenuState confirmacion) {
+    public void onAceptar(Player destinatario, InventoryClickEvent event, PrestamoConfirmacionMenuState confirmacion) {
         Player enviadorPlayer = Bukkit.getPlayer(confirmacion.enviadorJugadorNombre());
         Player destinatarioPlayer = Bukkit.getPlayer(confirmacion.destinatarioJugadorNombre());
 

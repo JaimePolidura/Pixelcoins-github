@@ -5,5 +5,5 @@ import es.serversurvival.v2.minecraftserver.webaction.messages.WebActionRequestB
 import java.util.UUID;
 
 public interface WebActionHandler<T extends WebActionRequestBody> {
-    void handle(UUID jugadorId, T body);
+    void handle(UUID jugadorId, T body) throws WebActionException;
 }

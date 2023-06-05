@@ -12,7 +12,7 @@ import java.util.UUID;
 public final class WebActionUrlGenerator {
     private final WebActionTokenService webActionTokenService;
 
-    public String generator(WebActionType actionType, UUID jugadorId) {
+    public String generate(WebActionType actionType, UUID jugadorId) {
         String token = webActionTokenService.generate(actionType, jugadorId);
 
         return String.format("http://%s:%s/%s?token=%s", HttpServer.HTTP_WEB_ACTION_SERVER_IP, HttpServer.HTTP_WEB_ACTION_SERVER_PORT,

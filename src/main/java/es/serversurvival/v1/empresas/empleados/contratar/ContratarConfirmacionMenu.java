@@ -19,7 +19,7 @@ public final class ContratarConfirmacionMenu extends ConfirmacionMenu<ContratarC
     private final ContratarUseCase contratarUseCase;
 
     @Override
-    public void onAceptar(Player player, InventoryClickEvent event, ContratarConfirmacionMenuState contratacionInfo) {
+    public void onAceptar(Player destinatario, InventoryClickEvent event, ContratarConfirmacionMenuState contratacionInfo) {
         Player enviadorPlayer = Bukkit.getPlayer(contratacionInfo.enviadorJugadorNombre());
         Player destinatarioPlayer = Bukkit.getPlayer(contratacionInfo.destinatarioJugadorNombre());
 

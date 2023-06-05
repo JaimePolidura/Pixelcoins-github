@@ -22,7 +22,7 @@ public final class EmpresaIPOConfirmMenu extends ConfirmacionMenu<EmpresaIPOConf
     private final RealizarIPOUseCase realizarIPOUseCase;
 
     @Override
-    public void onAceptar(Player player, InventoryClickEvent event, EmpresaIPOConfirmMenuState state) {
+    public void onAceptar(Player destinatario, InventoryClickEvent event, EmpresaIPOConfirmMenuState state) {
         this.realizarIPOUseCase.makeIPO(state.empresaToIpo().getOwner(), new IPOCommand(
                 state.empresaToIpo().getNombre(),
                 state.accionesTotales(),
@@ -30,10 +30,10 @@ public final class EmpresaIPOConfirmMenu extends ConfirmacionMenu<EmpresaIPOConf
                 state.precioPorAccion()
         ));
 
-        player.sendMessage(GOLD + "Has sacado a bolsa la empresa " + state.empresaToIpo().getNombre() + AQUA + "/empresas mercado");
-        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        destinatario.sendMessage(GOLD + "Has sacado a bolsa la empresa " + state.empresaToIpo().getNombre() + AQUA + "/empresas mercado");
+        destinatario.playSound(destinatario.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
-        Bukkit.broadcastMessage(GOLD + player.getName() + " ha sacado a bolsa " + state.empresaToIpo().getNombre() + " " + AQUA + "/empresas mercado");
+        Bukkit.broadcastMessage(GOLD + destinatario.getName() + " ha sacado a bolsa " + state.empresaToIpo().getNombre() + " " + AQUA + "/empresas mercado");
     }
 
     @Override

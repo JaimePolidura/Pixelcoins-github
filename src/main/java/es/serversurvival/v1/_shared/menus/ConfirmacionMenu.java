@@ -41,6 +41,6 @@ public abstract class ConfirmacionMenu<T> extends Menu<T> {
         return DARK_RED + "" + BOLD + "          CONFIRMAR";
     }
 
-    public abstract void onAceptar(Player player, InventoryClickEvent event, T state);
+    public abstract void onAceptar(Player destinatario, InventoryClickEvent event, T state);
     public abstract ItemStack aceptarItem();
 }

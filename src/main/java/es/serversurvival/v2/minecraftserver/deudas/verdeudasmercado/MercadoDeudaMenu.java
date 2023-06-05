@@ -3,8 +3,8 @@ package es.serversurvival.v2.minecraftserver.deudas.verdeudasmercado;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.modules.sync.SyncMenuService;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import es.serversurvival.v1._shared.utils.Funciones;
 import es.serversurvival.v2.minecraftserver._shared.MinecraftUtils;
+import es.serversurvival.v2.minecraftserver.deudas._shared.DeudaItemMercadoLore;
 import es.serversurvival.v2.minecraftserver.mercado.VerOfertasMercadoMenu;
 import es.serversurvival.v2.pixelcoins.deudas._shared.*;
 import es.serversurvival.v2.pixelcoins.jugadores._shared.jugadores.JugadoresService;
@@ -22,13 +22,15 @@ import static es.serversurvival.v1._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 public final class MercadoDeudaMenu extends VerOfertasMercadoMenu<OfertaDeudaMercado> {
+    private final DeudaItemMercadoLore deudaItemMercadoLore;
     private final JugadoresService jugadoresService;
     private final DeudasService deudasService;
 
     public MercadoDeudaMenu(ComprarOfertaUseCase comprarOfertaUseCase, RetirarOfertaUseCase retirarOfertaUseCase, SyncMenuService syncMenuService,
-                            OfertasService ofertasService, MenuService menuService, JugadoresService jugadoresService,
+                            OfertasService ofertasService, MenuService menuService, DeudaItemMercadoLore deudaItemMercadoLore, JugadoresService jugadoresService,
                             DeudasService deudasService) {
         super(comprarOfertaUseCase, retirarOfertaUseCase, syncMenuService, ofertasService, menuService);
+        this.deudaItemMercadoLore = deudaItemMercadoLore;
         this.jugadoresService = jugadoresService;
         this.deudasService = deudasService;
     }
@@ -77,7 +79,7 @@ public final class MercadoDeudaMenu extends VerOfertasMercadoMenu<OfertaDeudaMer
         String vendedor = jugadoresService.getNombreById(oferta.getVendedorId());
         Deuda deuda = deudasService.getById(oferta.getObjetoToUUID());
 
-        List<String> lore =  buidLoreOfertaDeudaItem(oferta.getPrecio(), vendedor, deuda.getInteres(), deuda.getNominal(), deuda.getPeriodoPagoCuotaMs(),
+        List<String> lore =  deudaItemMercadoLore.buildOfertaDeudaMercado(oferta.getPrecio(), vendedor, deuda.getInteres(), deuda.getNominal(), deuda.getPeriodoPagoCuotaMs(),
                 deuda.getNCuotasTotales() - deuda.getNCuotasPagadas(), deuda.getNCuotasImpagadas(), deuda.getPixelcoinsRestantesDePagar());
 
         MinecraftUtils.setLore(itemStack, lore);
@@ -90,27 +92,11 @@ public final class MercadoDeudaMenu extends VerOfertasMercadoMenu<OfertaDeudaMer
         String vendedor = jugadoresService.getNombreById(oferta.getVendedorId());
         double cuota = oferta.getInteres() * oferta.getPrecio();
 
-        List<String> lore = buidLoreOfertaDeudaItem(oferta.getPrecio(), vendedor, oferta.getInteres(), oferta.getPrecio(), oferta.getPeriodoPagoCuotaMs(),
+        List<String> lore = deudaItemMercadoLore.buildOfertaDeudaMercado(oferta.getPrecio(), vendedor, oferta.getInteres(), oferta.getPrecio(), oferta.getPeriodoPagoCuotaMs(),
                 oferta.getNumeroCuotasTotales(), 0, oferta.getNumeroCuotasTotales() * cuota + oferta.getPrecio());
 
         MinecraftUtils.setLore(itemStack, lore);
 
         return itemStack;
-    }
-
-    private List<String> buidLoreOfertaDeudaItem(double precio, String vendedorNombre, double interes, double nominal, long periodoPagoCuotasMs,
-                                                 int nCuotasRestantes, int nCuotasImpagados, double pixelcoinsTotalesDevolver) {
-        return List.of(
-                GOLD + "Precio: " + GREEN + FORMATEA.format(precio) + " PC",
-                GOLD + "Vendedor: " + vendedorNombre,
-                GOLD + " ",
-                GOLD + "Pagos/Cuotas: " + GREEN + FORMATEA.format(interes * nominal) + " PC",
-                GOLD + "Interes: " + FORMATEA.format(interes * 100) + "%",
-                GOLD + "Reembolso final/Nominal: " + GREEN + FORMATEA.format(nominal) + " PC",
-                GOLD + "Pagaos cada: " + Funciones.millisToDias(periodoPagoCuotasMs) + " dias",
-                GOLD + "Nº Pagos restantes: " + nCuotasRestantes,
-                GOLD + "Nº Pagos impagados: " + (nCuotasImpagados > 0 ? RED : GOLD) + " " + nCuotasImpagados,
-                GOLD + "Total pixelcoins a devolver: " + GREEN + FORMATEA.format(pixelcoinsTotalesDevolver) + " PC"
-        );
     }
 }

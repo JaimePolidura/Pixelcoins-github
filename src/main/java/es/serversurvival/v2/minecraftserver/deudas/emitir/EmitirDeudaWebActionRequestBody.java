@@ -1,15 +1,11 @@
-package es.serversurvival.v2.pixelcoins.deudas.emitir;
+package es.serversurvival.v2.minecraftserver.deudas.emitir;
 
+import es.serversurvival.v2.minecraftserver.webaction.messages.WebActionRequestBody;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 
-import java.util.UUID;
-
-@Builder
 @AllArgsConstructor
-public final class EmitirDeudaParametros {
-    @Getter private final UUID jugadorId;
+public final class EmitirDeudaWebActionRequestBody extends WebActionRequestBody {
     @Getter private final double nominal;
     @Getter private final double interes;
     @Getter private final int numeroCuotasTotales;

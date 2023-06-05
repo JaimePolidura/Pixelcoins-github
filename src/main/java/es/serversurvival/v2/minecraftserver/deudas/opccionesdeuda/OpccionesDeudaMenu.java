@@ -38,7 +38,7 @@ public final class OpccionesDeudaMenu extends Menu<Deuda> {
         return MenuConfiguration.builder()
                 .title(DARK_RED + "" + BOLD + "        DEUDA")
                 .fixedItems()
-                .item(5, Material.GREEN_BANNER, (p, e) -> menuService.open(p, VerMisDeudasMenu.class, p))
+                .item(5, Material.GREEN_BANNER, (p, e) -> menuService.open(p, VerMisDeudasMenu.class))
                 .item(1, this::buildPagarOCancelarDeuda, this::pagarOCancelarDeuda)
                 .item(2, this::buildVenderDeudaMeradoItem, this::venderDeudaMercado)
                 .item(4, this::buildItemInfo)

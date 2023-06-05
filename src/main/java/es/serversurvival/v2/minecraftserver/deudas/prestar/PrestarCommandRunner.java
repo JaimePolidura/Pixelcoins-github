@@ -2,16 +2,24 @@ package es.serversurvival.v2.minecraftserver.deudas.prestar;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
-import org.bukkit.command.CommandSender;
+import es.serversurvival.v2.minecraftserver.webaction.WebActionType;
+import es.serversurvival.v2.minecraftserver.webaction.WebActionUrlGenerator;
+import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
+
+import static org.bukkit.ChatColor.*;
 
 @Command(
         value = "deudas prestar",
         explanation = "Prestar pixelcoins a un jugador"
 )
+@AllArgsConstructor
 public final class PrestarCommandRunner implements CommandRunnerNonArgs {
-    @Override
-    public void execute(Player commandSender) {
+    private final WebActionUrlGenerator webActionUrlGenerator;
 
+    @Override
+    public void execute(Player player) {
+        String url =  webActionUrlGenerator.generate(WebActionType.DEUDAS_EMITIR    , player.getUniqueId());
+        player.sendMessage(GOLD + "Para emitir deuda: " + AQUA + url);
     }
 }

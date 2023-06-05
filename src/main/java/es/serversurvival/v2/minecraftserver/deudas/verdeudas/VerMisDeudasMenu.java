@@ -45,7 +45,7 @@ public final class VerMisDeudasMenu extends Menu {
                 .title(DARK_RED + "" + BOLD + "        TUS DEUDAS")
                 .item(1, buildItemInfo())
                 .items(2, this::buildItemsDeudas, this::onDeudaItemClicked)
-                .breakpoint(7, Material.GREEN_BANNER, (p, e) -> menuService.open(p, PerfilMenu.class, p))
+                .breakpoint(7, Material.GREEN_BANNER, (p, e) -> menuService.open(p, PerfilMenu.class))
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
                         .forward(9, Material.GREEN_WOOL)
