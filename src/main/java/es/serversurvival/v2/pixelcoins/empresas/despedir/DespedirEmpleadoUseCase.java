@@ -19,7 +19,7 @@ public final class DespedirEmpleadoUseCase  {
     public void despedir(DespedirEmpleadoParametros parametros) {
         validador.stringLongitudEntre(parametros.getCausa(), 1, 16, "causa de despido");
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
-        empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorIdQueDespide());
+        empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
         empresasValidador.empleadoEmpresaActivo(parametros.getEmpresaId(), parametros.getEmpleadoIdADespedir());
         empresasValidador.empleadoNoEsDirector(parametros.getEmpresaId(), parametros.getEmpleadoIdADespedir());
 

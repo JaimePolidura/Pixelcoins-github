@@ -2,7 +2,7 @@ package es.serversurvival.v2.minecraftserver.tienda.vertienda;
 
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.modules.sync.SyncMenuService;
-import es.serversurvival.v2.minecraftserver.mercado.VerOfertasMercadoMenu;
+import es.serversurvival.v2.minecraftserver._shared.VerOfertasMercadoMenu;
 import es.serversurvival.v2.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.v2.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival.v2.pixelcoins.mercado.comprar.ComprarOfertaUseCase;

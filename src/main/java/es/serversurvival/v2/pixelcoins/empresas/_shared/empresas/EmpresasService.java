@@ -21,6 +21,11 @@ public final class EmpresasService {
         return this.empresasRepository.findById(empresaId).orElseThrow(() -> new ResourceNotFound("Empresa no encontrada"));
     }
 
+    public Empresa getByNombre(String nombre) {
+        return this.empresasRepository.findByNombre(nombre)
+                .orElseThrow(() -> new ResourceNotFound("Empresa no encontrada"));
+    }
+
     public Optional<Empresa> findByNombre(String nombre) {
         return this.empresasRepository.findByNombre(nombre);
     }

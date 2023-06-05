@@ -2,7 +2,6 @@ package es.serversurvival.v2.pixelcoins.empresas._shared.empleados;
 
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.serversurvival.v2.pixelcoins.empresas._shared.empresas.Empresa;
 import lombok.AllArgsConstructor;
 
 import java.util.List;

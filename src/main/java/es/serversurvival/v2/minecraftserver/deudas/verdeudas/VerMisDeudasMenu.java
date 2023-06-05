@@ -7,7 +7,6 @@ import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival.v2.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.v2.minecraftserver.deudas._shared.DeudaItemMercadoLore;
-import es.serversurvival.v2.minecraftserver.deudas.opccionesdeuda.OpccionesDeudaMenu;
 import es.serversurvival.v2.minecraftserver.jugadores.perfil.PerfilMenu;
 import es.serversurvival.v2.pixelcoins.deudas._shared.Deuda;
 import es.serversurvival.v2.pixelcoins.deudas._shared.DeudasService;

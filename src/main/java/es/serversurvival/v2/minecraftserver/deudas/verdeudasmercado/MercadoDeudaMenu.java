@@ -5,7 +5,7 @@ import es.bukkitbettermenus.modules.sync.SyncMenuService;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival.v2.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.v2.minecraftserver.deudas._shared.DeudaItemMercadoLore;
-import es.serversurvival.v2.minecraftserver.mercado.VerOfertasMercadoMenu;
+import es.serversurvival.v2.minecraftserver._shared.VerOfertasMercadoMenu;
 import es.serversurvival.v2.pixelcoins.deudas._shared.*;
 import es.serversurvival.v2.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import es.serversurvival.v2.pixelcoins.mercado._shared.OfertasService;

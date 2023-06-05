@@ -1,4 +1,4 @@
-package es.serversurvival.v2.minecraftserver.deudas.opccionesdeuda;
+package es.serversurvival.v2.minecraftserver.deudas.verdeudas;
 
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
@@ -56,7 +56,7 @@ public final class OpccionesDeudaMenu extends Menu<Deuda> {
         return !esAcredor(player) ?
                 ItemBuilder.of(Material.AIR).build() :
                 ItemBuilder.of(Material.YELLOW_WOOL)
-                        .title(GOLD + "" + BOLD + "CLICK PARA PONER A LA VENTA")
+                        .title(GOLD + "" + BOLD + UNDERLINE + "CLICK PARA PONER A LA VENTA")
                         .build();
     }
 
@@ -68,7 +68,7 @@ public final class OpccionesDeudaMenu extends Menu<Deuda> {
 
     private ItemStack buildPagarOCancelarDeuda(Player player) {
         return ItemBuilder.of(esAcredor(player) ? Material.GREEN_WOOL : Material.RED_WOOL)
-                .title(GOLD + "" + BOLD + "CLICK PARA " + (esAcredor(player) ? "CANCELAR" : "PAGAR"))
+                .title(GOLD + "" + BOLD + UNDERLINE + "CLICK PARA " + (esAcredor(player) ? "CANCELAR" : "PAGAR"))
                 .build();
     }
 

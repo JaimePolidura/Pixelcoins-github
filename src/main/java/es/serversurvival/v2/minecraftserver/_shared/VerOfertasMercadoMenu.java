@@ -1,4 +1,4 @@
-package es.serversurvival.v2.minecraftserver.mercado;
+package es.serversurvival.v2.minecraftserver._shared;
 
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
@@ -34,8 +34,8 @@ import static org.bukkit.ChatColor.BOLD;
 
 @RequiredArgsConstructor
 public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
-    public final static String PROPIETARIO_OFERTA_ITEM_DISPLAYNAME = RED + "" + BOLD + "CLICK PARA RETIRAR";
-    public final static String NO_PROPIETARIO_OFERTA_DISPLAYNAME = AQUA + "" + BOLD + "CLICK PARA COMPRAR";
+    public final static String PROPIETARIO_OFERTA_ITEM_DISPLAYNAME = RED + "" + BOLD + UNDERLINE + "CLICK PARA RETIRAR";
+    public final static String NO_PROPIETARIO_OFERTA_DISPLAYNAME = AQUA + "" + BOLD + UNDERLINE + "CLICK PARA COMPRAR";
 
     private final ComprarOfertaUseCase comprarOfertaUseCase;
     private final RetirarOfertaUseCase retirarOfertaUseCase;

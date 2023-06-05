@@ -1,4 +1,4 @@
-package es.serversurvival.v1.empresas.empresas.miempresa;
+package es.serversurvival.v2.minecraftserver.empresas.miempresa;
 
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
@@ -7,21 +7,20 @@ import es.bukkitbettermenus.menustate.AfterShow;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
+import es.serversurvival.v1._shared.utils.Funciones;
+import es.serversurvival.v2.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.v2.minecraftserver.empresas.cerrar.CerrarEmpresaConfirmacionMenu;
 import es.serversurvival.v2.minecraftserver.empresas.repatirdividendos.RepartirDividendosConfirmacionMenu;
 import es.serversurvival.v1.jugadores.perfil.PerfilMenu;
-import es.serversurvival.v1.mensajes._shared.application.EnviadorMensajes;
 import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.AccionistasEmpresasService;
 import es.serversurvival.v2.pixelcoins.empresas._shared.empleados.Empleado;
 import es.serversurvival.v2.pixelcoins.empresas._shared.empleados.EmpleadosService;
 import es.serversurvival.v2.pixelcoins.empresas._shared.empresas.Empresa;
-import es.serversurvival.v2.pixelcoins.empresas.despedir.DespedirEmpleadoUseCase;
 import es.serversurvival.v2.pixelcoins.jugadores._shared.jugadores.JugadoresService;
-import lombok.AllArgsConstructor;
+import es.serversurvival.v2.pixelcoins.transacciones.TransaccionesService;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -29,22 +28,20 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static es.serversurvival.v1._shared.utils.Funciones.*;
-import static es.serversurvival.v1._shared.utils.Funciones.FORMATEA;
 import static java.lang.String.format;
 import static org.bukkit.ChatColor.*;
-import static org.bukkit.ChatColor.BOLD;
-import static org.bukkit.ChatColor.DARK_RED;
+import static org.bukkit.ChatColor.GOLD;
 
-@AllArgsConstructor
-public final class VerEmpresaMenu extends Menu<Empresa> implements AfterShow {
-    private final AccionistasEmpresasService accionistasServerService;
-    private final DespedirEmpleadoUseCase despedirEmpleadoUseCase;
-    private final JugadoresService jugadoresService;
-    private final EnviadorMensajes enviadorMensajes;
+@RequiredArgsConstructor
+public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
+    private final AccionistasEmpresasService accionistasEmpresasService;
+    private final TransaccionesService transaccionesService;
     private final EmpleadosService empleadosService;
+    private final JugadoresService jugadoresService;
     private final MenuService menuService;
 
     @Override
@@ -67,9 +64,9 @@ public final class VerEmpresaMenu extends Menu<Empresa> implements AfterShow {
                 .item(1, buildItemInfo())
                 .item(2, buildItemEmpresaStats())
                 .item(3, buildItemAccionistas())
-                .item(4, buildItemRepartirDividendo(), this::pagarDividendos)
+                .item(4, buildItemRepartirDividendo(), this::repartirDividendos)
                 .item(5, buildItemCerrarEmpresa(), this::abrirCerrarEmpresaConfirmacion)
-                .items(6, buildItemEmpleados(), this::despedirEmpleado)
+                .items(6, buildItemsEmpleados(), this::abrirMenuOpccionesEmpleado)
                 .breakpoint(7, Material.GREEN_BANNER, this::goBackToProfileMenu)
                 .paginated(PaginationConfiguration.builder()
                         .forward(9, Material.GREEN_WOOL)
@@ -78,51 +75,43 @@ public final class VerEmpresaMenu extends Menu<Empresa> implements AfterShow {
                 .build();
     }
 
-    private void pagarDividendos(Player player, InventoryClickEvent event) {
+    private void repartirDividendos(Player player, InventoryClickEvent event) {
         this.menuService.open(player, RepartirDividendosConfirmacionMenu.class, this.getState());
     }
 
     private void abrirCerrarEmpresaConfirmacion(Player player, InventoryClickEvent event) {
-        if(!getState().isEsCotizada()){
-            this.menuService.open(player, CerrarEmpresaConfirmacionMenu.class, getState());
-        }
+        this.menuService.open(player, CerrarEmpresaConfirmacionMenu.class, getState());
     }
 
-    private void despedirEmpleado(Player player, InventoryClickEvent event) {
-        String empleadoNombre = ItemUtils.getLore(event.getCurrentItem(), 1).split(" ")[1];
+    private void abrirMenuOpccionesEmpleado(Player player, InventoryClickEvent event) {
+        UUID empleadoId = MinecraftUtils.getLastLineOfLore(event.getCurrentItem(), 0);
+        Empleado empleado = empleadosService.getById(empleadoId);
 
-        this.despedirEmpleadoUseCase.despedir(player.getName(), empleadoNombre, getState().getNombre(), "Despedido");
-        player.sendMessage(ChatColor.GOLD + "Has despedido a: " + empleadoNombre);
-        String mensajeOnline = ChatColor.RED + "Has sido despedido de " + getState().getNombre() + " razon: " + "Despedido";
-        enviadorMensajes.enviarMensaje(empleadoNombre, mensajeOnline, mensajeOnline, Sound.BLOCK_ANVIL_LAND, 10, 1);
-
-        super.deleteItem(event.getSlot(), super.getActualPageNumber());
+        menuService.open(player, OpccionesEmpleadoMenu.class, empleado);
     }
 
     private void goBackToProfileMenu(Player player, InventoryClickEvent event) {
         this.menuService.open(player, PerfilMenu.class);
     }
 
-    private List<ItemStack> buildItemEmpleados() {
-        return this.empleadosService.findEmpleoActivoByEmpresaId(this.getState().getEmpresaId()).stream()
+    private List<ItemStack> buildItemsEmpleados() {
+        return this.empleadosService.findByEmpleadoJugadorId(this.getState().getEmpresaId()).stream()
                 .map(this::buildEmpleadoItem)
                 .toList();
     }
 
     private ItemStack buildEmpleadoItem(Empleado empleado) {
         return ItemBuilder.of(Material.PLAYER_HEAD)
-                .title(RED + "" + BOLD + "" + UNDERLINE + "CLICK PARA DESPEDIR")
+                .title(GREEN + "" + BOLD + "" + UNDERLINE + "CLICK PARA VER OPCCIONES")
                 .lore(List.of(
                         "   ",
-                        GOLD + "Empleado: " + ju empleado.getNombre(),
-                        GOLD + "Cargo: " + empleado.getCargo(),
-                        GOLD + "Sueldo: " + GREEN + FORMATEA.format(empleado.getSueldo()) + " PC/" + empleado.getTipoSueldo().nombre,
-                        GOLD + "ID: " + empleado.getEmpleadoId(),
+                        GOLD + "Empleado: " + jugadoresService.getNombreById(empleado.getEmpleadoJugadorId()),
+                        GOLD + "Cargo: " + empleado.getDescripccion(),
+                        GOLD + "Sueldo: " + GREEN + FORMATEA.format(empleado.getSueldo()) + " PC / " + Funciones.millisToDias(empleado.getPeriodoPagoMs()) + " dias",
                         "   ",
-                        "/empresas editarempleado " + getState().getNombre() + " " + empleado.getNombre(),
-                        "  sueldo <sueldo>",
-                        "/empresas editarempleado " + getState().getNombre() + " " + empleado.getNombre(),
-                        "  tiposueldo <tipo (ver en info)>"
+                        "/empresas editarempleado " + getState().getNombre() + " " + jugadoresService.getNombreById(empleado.getEmpleadoJugadorId()),
+                        " ",
+                        empleado.getEmpleadoId().toString()
                 ))
                 .build();
     }
@@ -135,20 +124,20 @@ public final class VerEmpresaMenu extends Menu<Empresa> implements AfterShow {
 
     private ItemStack buildItemRepartirDividendo() {
         return ItemBuilder.of(Material.GOLD_INGOT)
-                .title(GOLD + "" + BOLD + "REPARTIR DIVIDENDO")
+                .title(GOLD + "" + BOLD + "REPARTIR DIVIDENDOS")
                 .lore(GOLD + "Repartir pixelcoins por cada accion")
                 .build();
     }
 
     private ItemStack buildItemAccionistas() {
-        List<String> loreAccionistas = accionistasServerService.findByEmpresa(getState().getNombre()).stream()
-                .map(posicion -> new Accionista(posicion.getNombreAccionista(), posicion.getCantidad()))
-                .collect(Collectors.toMap(Accionista::nombreAccionista, Accionista::cantidad, Integer::sum))
-                .entrySet().stream()
-                .map(accionista -> new Accionista(accionista.getKey(), accionista.getValue()))
-                .sorted()
+        List<String> loreAccionistas = accionistasEmpresasService.findByEmpresaId(getState().getEmpresaId()).stream()
+                .map(posicion -> new Accionista(
+                        jugadoresService.getNombreById(posicion.getAccionisaJugadorId()),
+                        posicion.getNAcciones(),
+                        (double) posicion.getNAcciones() / getState().getNTotalAcciones()))
+                .sorted((a, b) -> b.nAcciones - a.nAcciones)
                 .map(this::getLoreAccionista)
-                .toList();
+                .collect(Collectors.toList());
 
         return ItemBuilder.of(Material.NETHERITE_SCRAP)
                 .title(GOLD + "" + BOLD + "ACCIONISTAS")
@@ -156,16 +145,10 @@ public final class VerEmpresaMenu extends Menu<Empresa> implements AfterShow {
                 .build();
     }
 
-    private record Accionista(String nombreAccionista, int cantidad) implements  Comparable<Accionista>{
-        @Override
-        public int compareTo(Accionista o) {
-            return o.cantidad - cantidad;
-        }
-    }
+    private record Accionista(String nombreAccionista, int nAcciones, double porcentajeNTotalAcciones) {}
 
     private String getLoreAccionista(Accionista accionista) {
-        double ownership = (double)accionista.cantidad() / (double)getState().getAccionesTotales();
-        double percentajeOwnership = redondeoDecimales(ownership * 100, 1);
+        double percentajeOwnership = redondeoDecimales(accionista.nAcciones * 100, 1);
 
         return GOLD + accionista.nombreAccionista() + ": " + GREEN + FORMATEA.format(percentajeOwnership) + "%";
     }
@@ -175,26 +158,17 @@ public final class VerEmpresaMenu extends Menu<Empresa> implements AfterShow {
         lore.add(GOLD + "Descripccion:");
         lore.add(1, GOLD + "" + getState().getDescripcion());
         lore.add("  ");
-        lore.add(GOLD + "Pixelcoins: " + GREEN + FORMATEA.format(getState().getPixelcoins()) + " PC");
-        lore.add(GOLD + "Ingresos: " + GREEN + FORMATEA.format(getState().getIngresos()) + " PC");
-        lore.add(GOLD + "Gastos: " + GREEN + FORMATEA.format(getState().getGastos()) + " PC");
-        double beneficiosPerdidas = getState().getIngresos() - getState().getGastos();
-        if(beneficiosPerdidas >= 0){
-            lore.add(GOLD + "Beneficios: "  +  GREEN + "+" +  FORMATEA.format(beneficiosPerdidas) + " PC");
-            lore.add(GOLD + "Rentabilidad: " + GREEN + "+" + redondeoDecimales(rentabilidad(getState().getIngresos(), beneficiosPerdidas),1) + "%");
-        }else{
-            lore.add(GOLD + "Perdidas: " + RED + FORMATEA.format(beneficiosPerdidas) + " PC");
-            lore.add(GOLD + "Rentabilidad: " + RED + redondeoDecimales(rentabilidad(getState().getIngresos(), beneficiosPerdidas),1) + "%");
-        }
+        lore.add(GOLD + "Pixelcoins: " + GREEN + FORMATEA.format(transaccionesService.getBalancePixelcions(getState().getEmpresaId())) + " PC");
+        lore.add(GOLD + "Fundador: " + jugadoresService.getNombreById(getState().getFundadorJugadorId()));
+        lore.add(GOLD + "Director: " + jugadoresService.getNombreById(getState().getDirectorJugadorId()));
+        lore.add(GOLD + "Nº Total acciones: " + getState().getNTotalAcciones());
+        lore.add(GOLD + "Fecha creacion: " + getState().getFechaCreacion().toString());
+        lore.add(GOLD + (getState().isEsCotizada() ? "Es publica" : "No es publica"));
         lore.add("   ");
         lore.add("/empresas depositar " + getState().getNombre() + " <pixelcoins>");
         lore.add("/empresas sacar " + getState().getNombre() + " <pixelcoins>");
         lore.add("/empresas logotipo " + getState().getNombre() + "");
-        lore.add("/empresas editardescripccion " + getState().getNombre());
-        lore.add("  <nueva desc>");
-        lore.add("/empresas editarnombre " + getState().getNombre() + " <nombre>");
         lore.add("Mas info en /ayuda empresario o:");
-        lore.add("http://serversurvival.ddns.net/perfil");
 
         return ItemBuilder.of(Material.WRITABLE_BOOK)
                 .title(GOLD + "" + BOLD + "" + getState().getNombre().toUpperCase())
@@ -226,11 +200,6 @@ public final class VerEmpresaMenu extends Menu<Empresa> implements AfterShow {
 
     @Override
     public void afterShow(Player player) {
-        if(getState().isCotizada()){
-            super.getActualPage().setItem(2, buildItemAccionistas(), 3);
-            super.getActualPage().setItem(3, buildItemRepartirDividendo(), 4);
-        }
-
         for (ItemStack itemEmpleado : super.getItemsByItemNum(6)) {
             SkullMeta currentItemMeta = (SkullMeta) itemEmpleado.getItemMeta();
             String empleadoNombre = ItemUtils.getLore(itemEmpleado, 1).split(" ")[1];

@@ -16,6 +16,6 @@ public final class VerDeudasMercadoCommandRunner implements CommandRunnerNonArgs
 
     @Override
     public void execute(Player sender) {
-        menuService.open(sender, MercadoDeudaMenu.class, sender);
+        menuService.open(sender, MercadoDeudaMenu.class);
     }
 }
