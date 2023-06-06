@@ -21,12 +21,7 @@ public final class EmpresasIPOUseCase {
     private final EventBus eventBus;
 
     public void ipo(EmpresaIPOParametros parametros) {
-        empresasValidador.numerAccionesValido(parametros.getNumeroAccionesVender());
-        empresasValidador.precioPorAccion(parametros.getPrecioPorAccion());
-        empresasValidador.empresaNoCotizada(parametros.getEmpresaId());
-        empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
-        empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
-        empresasValidador.jugadorTieneAcciones(parametros.getEmpresaId(), parametros.getJugadorId(), parametros.getNumeroAccionesVender());
+        validar(parametros);
 
         AccionistaEmpresa acciones = accionistasEmpresasService.getByEmpresaIdAndJugadorId(parametros.getEmpresaId(), parametros.getJugadorId());
 
@@ -43,5 +38,14 @@ public final class EmpresasIPOUseCase {
         empresasService.save(empresasService.getById(parametros.getEmpresaId()).marcarComoCotizada());
 
         eventBus.publish(new EmpresaIPORealizada(parametros));
+    }
+
+    public void validar(EmpresaIPOParametros parametros) {
+        empresasValidador.numerAccionesValido(parametros.getNumeroAccionesVender());
+        empresasValidador.precioPorAccion(parametros.getPrecioPorAccion());
+        empresasValidador.empresaNoCotizada(parametros.getEmpresaId());
+        empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
+        empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
+        empresasValidador.jugadorTieneAcciones(parametros.getEmpresaId(), parametros.getJugadorId(), parametros.getNumeroAccionesVender());
     }
 }

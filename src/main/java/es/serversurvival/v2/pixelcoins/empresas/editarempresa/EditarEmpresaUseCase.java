@@ -22,8 +22,13 @@ public final class EditarEmpresaUseCase {
         empresasValidador.validarIcono(parametros.getNuevoNombre());
 
         Empresa empresa = empresasService.getById(parametros.getEmpresaId());
+
+        if(!empresa.getNombre().equalsIgnoreCase(parametros.getNuevoNombre()))
+            empresasValidador.empresaNoExiste(parametros.getNuevoNombre());
+
         empresasService.save(empresa.editar(parametros));
 
         eventBus.publish(new EmpresaEditada(parametros.getEmpresaId()));
     }
+
 }

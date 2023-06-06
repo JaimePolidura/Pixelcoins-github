@@ -19,17 +19,17 @@ public final class ComprarServicioUseCase {
 
     public void comprarServicio(ComprarServicioParametros parametros) {
         validador.numeroMayorQueCero(parametros.getPixelcoins(), "Pixelcoins");
-        validador.jugadorTienePixelcoins(parametros.getCompradorJugadorId(), parametros.getPixelcoins());
-        empresasValidador.noEmpleadoEmpresa(parametros.getEmpresaId(), parametros.getCompradorJugadorId());
+        validador.jugadorTienePixelcoins(parametros.getJugadorId(), parametros.getPixelcoins());
+        empresasValidador.noEmpleadoEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
 
         this.transaccionesService.save(Transaccion.builder()
-                        .pagadorId(parametros.getCompradorJugadorId())
+                        .pagadorId(parametros.getJugadorId())
                         .pagadoId(parametros.getEmpresaId())
                         .pixelcoins(parametros.getPixelcoins())
                         .tipo(TipoTransaccion.EMPRESAS_COMPRA_SERVICIO)
                 .build());
 
-        eventBus.publish(new EmpresaServicioComprado(parametros.getEmpresaId(), parametros.getCompradorJugadorId(), parametros.getPixelcoins()));
+        eventBus.publish(new EmpresaServicioComprado(parametros.getEmpresaId(), parametros.getJugadorId(), parametros.getPixelcoins()));
     }
 }

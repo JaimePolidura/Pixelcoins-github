@@ -1,10 +1,13 @@
 package es.serversurvival.v2.pixelcoins.empresas.editarempresa;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+@Builder
 @AllArgsConstructor
 public final class EditarEmpresaParametros {
     @Getter private final UUID empresaId;

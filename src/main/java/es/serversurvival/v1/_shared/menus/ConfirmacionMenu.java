@@ -13,12 +13,12 @@ import static org.bukkit.ChatColor.*;
 
 public abstract class ConfirmacionMenu<T> extends Menu<T> {
     @Override
-    public int[][] items() {
+    public final int[][] items() {
         return new int[][]{{1, 0, 0, 0, 2}};
     }
 
     @Override
-    public MenuConfiguration configuration() {
+    public final MenuConfiguration configuration() {
         return MenuConfiguration.builder()
                 .title(titulo())
                 .fixedItems()

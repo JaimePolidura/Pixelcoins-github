@@ -11,18 +11,19 @@ import es.serversurvival.v2.pixelcoins.empresas.editarempleado.EditarEmpleadoUse
 import es.serversurvival.v2.pixelcoins.jugadores._shared.jugadores.Jugador;
 import es.serversurvival.v2.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import lombok.AllArgsConstructor;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 @Command(
         value = "empresas editarempleado",
-        args = {"empresa", "empleado", "queSeEditar", "nuevoValor"},
-        explanation = "Editar un empleado que este en tu empresa. <queSeEditar> puede ser 'sueldo' ejemplo: '/empresas editarempleado empr empl sueldo 10'. " +
-                "Tambien puede ser 'cargo' o 'descipccion', ejemplo: '/empresas editarempleado empr empl cargo jefe'. " +
-                "Tambien puede ser 'periodopago' expresado en dias, ejemplo: /empresas editarempleado empr empl periodoPago 10'"
+        args = {"empresa", "empleado", "queSeEdita", "nuevoValor"},
+        explanation = "'/empresas editarempleado <nombre de tu empresa> <nombre del empleado> sueldo 10' " +
+                "'/empresas editarempleado <nombre de tu empresa> <nombre del empleado> cargo nuevoCargo'. " +
+                "'/empresas editarempleado <nombre de tu empresa> <nombre del empleado> periodoPago 10 (10 expresado en dias)'"
 )
 @AllArgsConstructor
 public final class EditarEmpleadoCommandRunner implements CommandRunnerArgs<EditarEmpleadoComando> {
-    private final EditarEmpleadoUseCase editarEmpleadoUseCase;
+    private final EditarEmpleadoUseCase editor;
     private final EmpleadosService empleadosService;
     private final JugadoresService jugadoresService;
     private final EmpresasService empresasService;
@@ -42,12 +43,14 @@ public final class EditarEmpleadoCommandRunner implements CommandRunnerArgs<Edit
                 .nuevoPeriodoPago(empleado.getPeriodoPagoMs())
                 .empresaId(empresa.getEmpresaId());
 
-        switch (comando.getQueSeEditar().toLowerCase()) {
-            case "sueldo" -> editarEmpleadoUseCase.editar(editarEmpleadoBuilder.nuevoSueldo(Double.parseDouble(comando.getNuevoValor())).build());
-            case "cargo", "descipccion" -> editarEmpleadoUseCase.editar(editarEmpleadoBuilder.nuevaDescripccion(comando.getNuevoValor()).build());
-            case "periodopago" -> editarEmpleadoUseCase.editar(editarEmpleadoBuilder.nuevoPeriodoPago(
-                    Long.parseLong(comando.getNuevoValor()) * 24 * 60 * 60 * 1000
+        switch (comando.getQueSeEdita().toLowerCase()) {
+            case "sueldo" -> editor.editar(editarEmpleadoBuilder.nuevoSueldo(comando.nuevoValorToDouble()).build());
+            case "cargo", "descipccion", "desc" -> editor.editar(editarEmpleadoBuilder.nuevaDescripccion(comando.getNuevoValor()).build());
+            case "periodopago" -> editor.editar(editarEmpleadoBuilder.nuevoPeriodoPago(
+                    comando.nuevoValorToLong() * 24 * 60 * 60 * 1000
             ).build());
         }
+
+        player.sendMessage(ChatColor.GOLD + "Has editado el empleado");
     }
 }

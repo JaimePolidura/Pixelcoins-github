@@ -5,6 +5,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.dependencyinjector.dependencies.annotations.Service;
+import es.jaime.javaddd.domain.exceptions.DomainException;
 import es.serversurvival.v2.minecraftserver.webaction.WebActionException;
 import es.serversurvival.v2.minecraftserver.webaction.WebActionHandler;
 import es.serversurvival.v2.minecraftserver.webaction.WebActionType;
@@ -31,10 +32,11 @@ public final class HttpRequestHandler implements HttpHandler {
     public void handle(HttpExchange client) throws IOException {
         try{
             tryHandleWebActionRequest(client);
-        }catch (WebActionException e) {
+        }catch (WebActionException | DomainException e) {
             send(client, e.getMessage(), 400);
         }catch (Exception e) {
             send(client, e.getMessage(), 500);
+            e.printStackTrace();
         }
     }
 

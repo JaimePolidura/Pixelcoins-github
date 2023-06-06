@@ -1,10 +1,12 @@
 package es.serversurvival.v2.pixelcoins.empresas.contratar;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.UUID;
 
+@Builder
 @AllArgsConstructor
 public final class ContratarEmpleadoParametros {
     @Getter private final UUID jugadorIdContrador;
