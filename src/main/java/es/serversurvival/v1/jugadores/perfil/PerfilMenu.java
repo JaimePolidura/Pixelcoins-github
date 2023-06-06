@@ -15,7 +15,7 @@ import es.serversurvival.v1.empresas.empleados._shared.domain.Empleado;
 import es.serversurvival.v1.empresas.empleados.misempleos.VerEmpleosMenu;
 import es.serversurvival.v1.empresas.empresas._shared.application.EmpresasService;
 import es.serversurvival.v1.empresas.empresas._shared.domain.Empresa;
-import es.serversurvival.v1.empresas.empresas.vertodas.VerTodasEmpresasMenu;
+import es.serversurvival.v2.minecraftserver.empresas.vertodas.VerTodasEmpresasMenu;
 import es.serversurvival.v1.jugadores._shared.application.CalculadorPatrimonio;
 import es.serversurvival.v1.jugadores._shared.application.JugadoresService;
 import es.serversurvival.v1.jugadores.top.TopMenu;
@@ -25,7 +25,6 @@ import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 

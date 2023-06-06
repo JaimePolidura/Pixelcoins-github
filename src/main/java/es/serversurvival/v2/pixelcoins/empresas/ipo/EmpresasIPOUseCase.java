@@ -27,9 +27,9 @@ public final class EmpresasIPOUseCase {
 
         ofrecerOfertaUseCase.ofrecer(OfertaAccionMercadoJugador.builder()
                 .vendedorId(parametros.getEmpresaId())
-                .accionistaJugadorId(parametros.getJugadorId())
                 .precio(parametros.getPrecioPorAccion())
                 .cantidad(parametros.getNumeroAccionesVender())
+                .empresaId(parametros.getEmpresaId())
                 .tipoOferta(TipoOferta.ACCIONES_SERVER_JUGADOR)
                 .empresaId(parametros.getEmpresaId())
                 .objeto(acciones.getAccionistaId())

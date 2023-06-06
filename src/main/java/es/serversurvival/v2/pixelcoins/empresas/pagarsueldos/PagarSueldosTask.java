@@ -14,7 +14,7 @@ public final class PagarSueldosTask implements TaskRunner {
 
     @Override
     public void run() {
-        this.empresasService.findAll().stream()
+        this.empresasService.findAllNoCerradas().stream()
                 .filter(empresa -> !empresa.isEstaCerrado())
                 .forEach(this.pagadorSueldosEmpresa::pagar);
     }

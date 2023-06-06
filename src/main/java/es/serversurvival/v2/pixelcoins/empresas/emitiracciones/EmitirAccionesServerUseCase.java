@@ -20,12 +20,13 @@ public final class EmitirAccionesServerUseCase {
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
         empresasValidador.empresaCotizada(parametros.getEmpresaId());
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
-        empresasValidador.precioPorAccion(parametros.getPrecioPorAccoin());
+        empresasValidador.precioPorAccion(parametros.getPrecioPorAccion());
 
         ofertasService.save(OfertaAccionMercadoEmision.builder()
                 .vendedorId(parametros.getEmpresaId())
-                .precio(parametros.getPrecioPorAccoin())
+                .precio(parametros.getPrecioPorAccion())
                 .cantidad(parametros.getNumeroNuevasAcciones())
+                .empresaId(parametros.getEmpresaId())
                 .objeto(parametros.getEmpresaId())
                 .tipoOferta(TipoOferta.ACCIONES_SERVER_EMISION)
                 .build());

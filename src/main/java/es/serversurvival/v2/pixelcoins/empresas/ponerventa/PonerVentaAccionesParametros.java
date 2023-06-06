@@ -1,10 +1,12 @@
 package es.serversurvival.v2.pixelcoins.empresas.ponerventa;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.UUID;
 
+@Builder
 @AllArgsConstructor
 public final class PonerVentaAccionesParametros {
     @Getter private final UUID empresaId;

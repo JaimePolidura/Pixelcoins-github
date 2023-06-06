@@ -104,6 +104,7 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
 
         if(cantidadItem > 1){
             itemOfertaComprado.setAmount(cantidadItem - 1);
+            this.syncMenuService.sync(this);
         }else{
             reloadTodoElMenu();
         }

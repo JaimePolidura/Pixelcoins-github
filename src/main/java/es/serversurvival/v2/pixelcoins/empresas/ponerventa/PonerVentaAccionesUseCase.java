@@ -14,23 +14,22 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public final class PonerVentaAccionesUseCase {
     private final AccionistasEmpresasService accionistasEmpresasService;
-    private final EmpresasValidador empresasValidador;
     private final OfertasService ofertasService;
+    private final EmpresasValidador validador;
     private final EventBus eventBus;
 
     public void ponerVenta(PonerVentaAccionesParametros parametros) {
-        empresasValidador.numerAccionesValido(parametros.getCantidadAcciones());
-        empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
-        empresasValidador.empresaCotizada(parametros.getEmpresaId());
-        empresasValidador.accionistaDeEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
-        empresasValidador.precioPorAccion(parametros.getPrecioPorAccion());
-        empresasValidador.jugadorTieneAcciones(parametros.getEmpresaId(), parametros.getJugadorId(), parametros.getCantidadAcciones());
-
+        validador.numerAccionesValido(parametros.getCantidadAcciones());
+        validador.empresaNoCerrada(parametros.getEmpresaId());
+        validador.empresaCotizada(parametros.getEmpresaId());
+        validador.accionistaDeEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
+        validador.precioPorAccion(parametros.getPrecioPorAccion());
+        validador.jugadorTieneAcciones(parametros.getEmpresaId(), parametros.getJugadorId(), parametros.getCantidadAcciones());
         AccionistaEmpresa acciones = accionistasEmpresasService.getByEmpresaIdAndJugadorId(parametros.getEmpresaId(), parametros.getJugadorId());
+        validador.accionesNoEstanYaALaVenta(acciones.getAccionistaId(), parametros.getCantidadAcciones());
 
         ofertasService.save(OfertaAccionMercadoJugador.builder()
                 .vendedorId(parametros.getJugadorId())
-                .accionistaJugadorId(parametros.getJugadorId())
                 .tipoOferta(TipoOferta.ACCIONES_SERVER_JUGADOR)
                 .cantidad(parametros.getCantidadAcciones())
                 .precio(parametros.getPrecioPorAccion())

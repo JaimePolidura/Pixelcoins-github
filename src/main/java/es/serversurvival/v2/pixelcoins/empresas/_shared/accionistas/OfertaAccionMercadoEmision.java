@@ -6,10 +6,10 @@ import es.serversurvival.v2.pixelcoins.mercado._shared.TipoOferta;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public final class OfertaAccionMercadoEmision extends Oferta {
+public final class OfertaAccionMercadoEmision extends OfertaAccionMercado {
     public OfertaAccionMercadoEmision(UUID ofertaId, UUID vendedorId, LocalDateTime fechaSubida, int cantidad, double precio,
-                                      String objeto, TipoOferta tipoOferta) {
-        super(ofertaId, vendedorId, fechaSubida, cantidad, precio, objeto, tipoOferta);
+                                      String objeto, TipoOferta tipoOferta, UUID empresaId) {
+        super(ofertaId, vendedorId, fechaSubida, cantidad, precio, objeto, tipoOferta, empresaId);
     }
 
     public static OfertaAccionMercadoEmision.OfertaAccionMercadoEmisionBuiler builder() {
@@ -17,9 +17,16 @@ public final class OfertaAccionMercadoEmision extends Oferta {
     }
 
     public static class OfertaAccionMercadoEmisionBuiler extends Oferta.AbstractOfertaBuilder<OfertaAccionMercadoEmisionBuiler> {
+        private UUID empresaId;
+
+        public OfertaAccionMercadoEmisionBuiler empresaId(UUID empresaId) {
+            this.empresaId = empresaId;
+            return this;
+        }
+
         @Override
         public Oferta build() {
-            return new OfertaAccionMercadoEmision(ofertaId, vendedorId, fechaSubida, cantidad, precio, objeto, tipoOferta);
+            return new OfertaAccionMercadoEmision(ofertaId, vendedorId, fechaSubida, cantidad, precio, objeto, tipoOferta, empresaId);
         }
     }
 }

@@ -8,7 +8,7 @@ import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.serversurvival.v1.bolsa.posicionesabiertas.vercartera.VerBolsaCarteraMenu;
 import es.serversurvival.v1.deudas.ver.VerDeudasMenu;
 import es.serversurvival.v1.empresas.empleados.misempleos.VerEmpleosMenu;
-import es.serversurvival.v1.empresas.empresas.vertodas.VerTodasEmpresasMenu;
+import es.serversurvival.v2.minecraftserver.empresas.vertodas.VerTodasEmpresasMenu;
 import es.serversurvival.v1.tienda.vertienda.TiendaMenu;
 import es.serversurvival.v2.minecraftserver.jugadores.top.TopMenu;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
@@ -26,7 +26,6 @@ import es.serversurvival.v2.pixelcoins.transacciones.TransaccionesService;
 import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 

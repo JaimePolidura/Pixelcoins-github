@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -30,7 +31,9 @@ public final class EmpresasService {
         return this.empresasRepository.findByNombre(nombre);
     }
 
-    public List<Empresa> findAll() {
-        return this.empresasRepository.findAll();
+    public List<Empresa> findAllNoCerradas() {
+        return this.empresasRepository.findAll().stream()
+                .filter(empresa -> !empresa.isEstaCerrado())
+                .collect(Collectors.toList());
     }
 }

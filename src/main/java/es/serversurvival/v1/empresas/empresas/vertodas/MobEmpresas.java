@@ -4,6 +4,7 @@ import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.mobs.Mob;
 import es.bukkitclassmapper.mobs.OnPlayerInteractMob;
+import es.serversurvival.v2.minecraftserver.empresas.vertodas.VerTodasEmpresasMenu;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 

@@ -16,6 +16,10 @@ import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones.votaciones.Es
 import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones.votaciones.Votacion;
 import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones.votaciones.VotacionesService;
 import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votos.VotosService;
+import es.serversurvival.v2.pixelcoins.mercado._shared.MercadoOfertasRepository;
+import es.serversurvival.v2.pixelcoins.mercado._shared.Oferta;
+import es.serversurvival.v2.pixelcoins.mercado._shared.OfertasService;
+import es.serversurvival.v2.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival.v2.pixelcoins.transacciones.TransaccionesService;
 import lombok.AllArgsConstructor;
 
@@ -30,6 +34,7 @@ public final class EmpresasValidador {
     private final VotacionesService votacionesService;
     private final EmpleadosService empleadosService;
     private final EmpresasService empresasService;
+    private final OfertasService ofertasService;
     private final VotosService votosService;
     private final Validador validador;
 
@@ -62,6 +67,20 @@ public final class EmpresasValidador {
     public void empresaNoExiste(String nombreEmpresa) {
         if(this.empresasService.findByNombre(nombreEmpresa).isPresent()){
             throw new AlreadyExists("El nombre de la empresa ya existe");
+        }
+    }
+
+    public void accionesNoEstanYaALaVenta(UUID accionistaId, int nuevasAccionesALaVenta) {
+        AccionistaEmpresa accionistaEmpresa = accionistasEmpresasService.getById(accionistaId);
+        Optional<Oferta> ofertaAccionesOptional = ofertasService.findByObjetoAndTipo(accionistaId.toString(), TipoOferta.ACCIONES_SERVER_JUGADOR);
+
+        if(ofertaAccionesOptional.isEmpty()){
+            return;
+        }
+
+        Oferta ofertaAcciones = ofertaAccionesOptional.get();
+        if(ofertaAcciones.getCantidad() + nuevasAccionesALaVenta > accionistaEmpresa.getNAcciones()){
+            throw new IllegalQuantity("No puedes poner mas acciones de las que tienes a la venta");
         }
     }
 
@@ -102,6 +121,13 @@ public final class EmpresasValidador {
         }
     }
 
+    public void empleadoEmpresa(UUID empresaId, UUID jugadorId) {
+        Optional<Empleado> empleado = empleadosService.findEmpleoActivoByEmpresaIdAndEmpleadoJugadorId(empresaId, jugadorId);
+        if(empleado.isEmpty()){
+            throw new NotTheOwner("No estas empleado en la empresa");
+        }
+    }
+
     public void noEmpleadoEmpresa(UUID empresaId, UUID jugadorId) {
         Optional<Empleado> empleado = empleadosService.findEmpleoActivoByEmpresaIdAndEmpleadoJugadorId(empresaId, jugadorId);
         if(empleado.isPresent()){
@@ -120,6 +146,7 @@ public final class EmpresasValidador {
             throw new IllegalQuantity("El numero de acciones tiene que ser negativo ni cero");
         }
     }
+
 
     public void jugadorTieneAcciones(UUID empresaId, UUID jugadorId, int supuestoNumeroAccionesTiene) {
         Optional<AccionistaEmpresa> accionistaEmpresa = accionistasEmpresasService.findByEmpresaIdAndJugadorId(empresaId, jugadorId);
