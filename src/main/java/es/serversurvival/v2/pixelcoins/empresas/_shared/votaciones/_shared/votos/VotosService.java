@@ -5,6 +5,7 @@ import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -34,6 +35,14 @@ public final class VotosService {
                 .filter(Voto::isAfavor)
                 .mapToInt(Voto::getNAcciones)
                 .sum();
+    }
+
+    public boolean haVotado(UUID jugadorId, UUID votacionId) {
+        return findByJugadorIdAndVotacionId(jugadorId, votacionId).isPresent();
+    }
+
+    public Optional<Voto> findByJugadorIdAndVotacionId(UUID jugadorId, UUID votacionId) {
+        return repository.findByJugadorIdAndVotacionId(jugadorId, votacionId);
     }
 
     public List<Voto> findByVotacionId(UUID votacionId) {

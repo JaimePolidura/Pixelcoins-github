@@ -11,6 +11,7 @@ import es.serversurvival.v2.minecraftserver.empresas.votaciones.lorevotacionitem
 import es.serversurvival.v2.pixelcoins.empresas._shared.empresas.Empresa;
 import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votaciones.Votacion;
 import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votaciones.VotacionesService;
+import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votos.Voto;
 import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votos.VotosService;
 import es.serversurvival.v2.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -65,9 +67,10 @@ public final class VerVotacionesEmpresaMenu extends Menu<Empresa> {
 
     private void abrirVotarMenu(Player player, InventoryClickEvent event) {
         UUID votacionId = MinecraftUtils.getLastLineOfLore(event.getCurrentItem(), 0);
-        Votacion votacion = votacionesService.getById(votacionId);
 
-        menuService.open(player, VotarMenu.class, votacion);
+        if(!votosService.haVotado(player.getUniqueId(), votacionId)){
+            menuService.open(player, VotarMenu.class, votacionesService.getById(votacionId));
+        }
     }
 
     private List<ItemStack> buildItemVotaciones() {
@@ -89,7 +92,14 @@ public final class VerVotacionesEmpresaMenu extends Menu<Empresa> {
             case ACEPTADO -> GREEN + "" + BOLD + "ACEPTADO";
             case RECHAZADO -> RED + "" + BOLD + "RECHARZADO";
             case EMPATE -> YELLOW + "" + BOLD + "EMPTATE";
-            case ABIERTA -> GOLD + "" + BOLD + UNDERLINE + "CLICK PARA VOTAR";
+            case ABIERTA -> {
+                Optional<Voto> voto = votosService.findByJugadorIdAndVotacionId(getPlayer().getUniqueId(), votacion.getVotacionId());
+
+                if(voto.isPresent())
+                    yield GOLD + "" + BOLD + "HAS VOTADO " + (voto.get().isAfavor() ? "A FAVOR" : "EN CONTRA");
+                else
+                    yield GOLD + "" + BOLD + UNDERLINE + "CLICK PARA VOTAR";
+            }
         };
     }
 

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -19,6 +20,16 @@ public final class Posicion {
     @Getter private final double precioCierre;
     @Getter private final LocalDateTime fechaCierre;
     @Getter private final double rentabilidad;
+
+    public static Comparator<Posicion> sortByRentabilidad() {
+        return Comparator.comparing(Posicion::getRentabilidad)
+                .reversed();
+    }
+
+    public static Comparator<Posicion> sortByFechaCierre() {
+        return Comparator.comparing(Posicion::getFechaCierre)
+                .reversed();
+    }
 
     public boolean estaLaPosicionVacia() {
         return cantidad <= 0;

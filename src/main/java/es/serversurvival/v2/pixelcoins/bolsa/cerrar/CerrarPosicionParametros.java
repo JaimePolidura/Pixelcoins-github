@@ -2,11 +2,13 @@ package es.serversurvival.v2.pixelcoins.bolsa.cerrar;
 
 import es.serversurvival.v2.pixelcoins.bolsa._shared.premarket.application.AbrirOrdenPremarketCerrarParametros;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.UUID;
 
 @AllArgsConstructor
+@Builder
 public final class CerrarPosicionParametros {
     @Getter private final UUID jugadorId;
     @Getter private final int cantidad;

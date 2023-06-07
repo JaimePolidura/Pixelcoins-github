@@ -11,5 +11,7 @@ public interface VotosRepository {
 
     Optional<Voto> findById(UUID votoId);
 
+    Optional<Voto> findByJugadorIdAndVotacionId(UUID jugadorId, UUID votacionId);
+
     void deleteById(UUID votoId);
 }

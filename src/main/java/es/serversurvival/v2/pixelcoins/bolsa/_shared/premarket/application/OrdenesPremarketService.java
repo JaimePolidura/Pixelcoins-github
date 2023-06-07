@@ -19,6 +19,10 @@ public final class OrdenesPremarketService {
         return orden.getOrdenPremarketId();
     }
 
+    public List<OrdenPremarket> findByJugadorId(UUID jugadorId) {
+        return repository.findByJugadorId(jugadorId);
+    }
+
     public OrdenPremarket getById(UUID ordenPremarketId) {
         return repository.findById(ordenPremarketId)
                 .orElseThrow(() -> new ResourceNotFound("Orden premarket no encontrada"));
@@ -30,6 +34,10 @@ public final class OrdenesPremarketService {
 
     public List<OrdenPremarket> findAll() {
         return repository.findAll();
+    }
+
+    public void deletebyPosicionAbiertId(UUID posicionAbiertaId) {
+        repository.deletebyPosicionAbiertId(posicionAbiertaId);
     }
 
     public void deleteById(UUID ordenPremarketId) {

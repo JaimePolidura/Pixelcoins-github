@@ -20,6 +20,7 @@ public class OrdenesPremarketService {
                 tipoAccion, posicionAbiertaId));
     }
 
+
     public void save(OrdenPremarket orden) {
         this.repositoryDb.save(orden);
     }

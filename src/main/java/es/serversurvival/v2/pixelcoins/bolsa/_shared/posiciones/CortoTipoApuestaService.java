@@ -39,4 +39,9 @@ public final class CortoTipoApuestaService implements TipoApuestaService {
     public double calcularRentabilidad(double precioApertura, double precioCierre) {
         return 1 - (precioCierre / precioApertura);
     }
+
+    @Override
+    public double calcularBeneficiosOPerdidas(double precioApertura, double precioCierre, int cantidad) {
+        return (precioApertura - precioCierre) * cantidad;
+    }
 }

@@ -9,9 +9,13 @@ public interface OrdenesPremarketRepository {
 
     Optional<OrdenPremarket> findById(UUID ordenPremarketId);
 
+    List<OrdenPremarket> findByJugadorId(UUID jugadorId);
+
     List<OrdenPremarket> findByPosicionAbiertaId(UUID posicionAbiertaId);
 
     List<OrdenPremarket> findAll();
 
     void deleteById(UUID ordenPremarketId);
+
+    void deletebyPosicionAbiertId(UUID posicionAbiertaId);
 }
