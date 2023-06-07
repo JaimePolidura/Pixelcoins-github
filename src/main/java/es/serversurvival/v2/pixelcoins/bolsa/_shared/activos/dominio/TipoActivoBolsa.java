@@ -4,17 +4,20 @@ import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.infraestroctura.Acc
 import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.infraestroctura.CriptoMonedasBolsaInformationAPIService;
 import es.serversurvival.v2.pixelcoins.bolsa._shared.activos.infraestroctura.MateriasPrimasBolsaInfomationAPIService;
 import lombok.Getter;
+import org.bukkit.Material;
 
 public enum TipoActivoBolsa {
-    ACCION(AccionesBolsaInformationAPIService.class, "acciones"),
-    MATERIA_PRIMA(MateriasPrimasBolsaInfomationAPIService.class, "unidades"),
-    CRIPTOMONEDAS(CriptoMonedasBolsaInformationAPIService.class, "criptomonedas");
+    CRIPTOMONEDAS(CriptoMonedasBolsaInformationAPIService.class, "criptomonedas", Material.GOLD_INGOT),
+    MATERIA_PRIMA(MateriasPrimasBolsaInfomationAPIService.class, "unidades", Material.CHARCOAL),
+    ACCION(AccionesBolsaInformationAPIService.class, "acciones", Material.BOOK);
 
     @Getter private final Class<? extends ActivoBolsaInformationAPIService> activoInfoService;
-    @Getter private final String alias;
+    @Getter private final String nombreUnidad;
+    @Getter private final Material material;
 
-    TipoActivoBolsa(Class<? extends ActivoBolsaInformationAPIService> activoInfoService, String alias) {
+    TipoActivoBolsa(Class<? extends ActivoBolsaInformationAPIService> activoInfoService, String nombreUnidad, Material material) {
         this.activoInfoService = activoInfoService;
-        this.alias = alias;
+        this.nombreUnidad = nombreUnidad;
+        this.material = material;
     }
 }

@@ -12,11 +12,10 @@ import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.AccionistasE
 import es.serversurvival.v2.pixelcoins.empresas._shared.empleados.Empleado;
 import es.serversurvival.v2.pixelcoins.empresas._shared.empleados.EmpleadosService;
 import es.serversurvival.v2.pixelcoins.empresas._shared.empresas.EmpresasService;
-import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones.votaciones.EstadoVotacion;
-import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones.votaciones.Votacion;
-import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones.votaciones.VotacionesService;
+import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votaciones.EstadoVotacion;
+import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votaciones.Votacion;
+import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votaciones.VotacionesService;
 import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votos.VotosService;
-import es.serversurvival.v2.pixelcoins.mercado._shared.MercadoOfertasRepository;
 import es.serversurvival.v2.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.v2.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.v2.pixelcoins.mercado._shared.TipoOferta;

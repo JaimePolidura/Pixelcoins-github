@@ -1,7 +1,7 @@
 package es.serversurvival.v2.pixelcoins.empresas._shared.accionistas;
 
 import es.dependencyinjector.dependencies.annotations.Service;
-import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones.votaciones.VotacionesService;
+import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votaciones.VotacionesService;
 import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votos.Voto;
 import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votos.VotosService;
 import lombok.AllArgsConstructor;

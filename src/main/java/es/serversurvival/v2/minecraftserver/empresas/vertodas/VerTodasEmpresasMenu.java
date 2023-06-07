@@ -49,7 +49,7 @@ public final class VerTodasEmpresasMenu extends Menu<Object> {
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
                 .fixedItems()
-                .title(ChatColor.DARK_RED + "" + ChatColor.BOLD + "        EMPRESAS")
+                .title(DARK_RED + "" + BOLD + "        EMPRESAS")
                 .item(1, buildItemInfo())
                 .items(2, this::buildItemsEmpresas, this::onItemEmpresaClicked)
                 .breakpoint(7, Material.GREEN_BANNER, this::goBackToProfileMenu)

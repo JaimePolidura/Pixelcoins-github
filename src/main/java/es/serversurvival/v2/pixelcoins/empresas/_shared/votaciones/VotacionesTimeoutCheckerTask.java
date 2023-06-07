@@ -3,8 +3,8 @@ package es.serversurvival.v2.pixelcoins.empresas._shared.votaciones;
 import es.bukkitclassmapper.task.BukkitTimeUnit;
 import es.bukkitclassmapper.task.Task;
 import es.bukkitclassmapper.task.TaskRunner;
-import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones.votaciones.EstadoVotacion;
-import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones.votaciones.VotacionesService;
+import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votaciones.EstadoVotacion;
+import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votaciones.VotacionesService;
 import lombok.AllArgsConstructor;
 
 @Task(BukkitTimeUnit.DAY)

@@ -12,15 +12,20 @@ import es.serversurvival.v2.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.v2.minecraftserver.empresas.cerrar.CerrarEmpresaConfirmacionMenu;
 import es.serversurvival.v2.minecraftserver.empresas.repatirdividendos.RepartirDividendosConfirmacionMenu;
 import es.serversurvival.v1.jugadores.perfil.PerfilMenu;
+import es.serversurvival.v2.minecraftserver.empresas.votaciones.VerVotacionesEmpresaMenu;
 import es.serversurvival.v2.pixelcoins.empresas._shared.accionistas.AccionistasEmpresasService;
 import es.serversurvival.v2.pixelcoins.empresas._shared.empleados.Empleado;
 import es.serversurvival.v2.pixelcoins.empresas._shared.empleados.EmpleadosService;
 import es.serversurvival.v2.pixelcoins.empresas._shared.empresas.Empresa;
+import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votaciones.Votacion;
+import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votaciones.VotacionesService;
 import es.serversurvival.v2.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import es.serversurvival.v2.pixelcoins.transacciones.TransaccionesService;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -40,6 +45,7 @@ import static org.bukkit.ChatColor.GOLD;
 public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
     private final AccionistasEmpresasService accionistasEmpresasService;
     private final TransaccionesService transaccionesService;
+    private final VotacionesService votacionesService;
     private final EmpleadosService empleadosService;
     private final JugadoresService jugadoresService;
     private final MenuService menuService;
@@ -47,12 +53,12 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
     @Override
     public int[][] items() {
         return new int[][] {
-                {1, 2, 0, 0, 0, 0, 0, 0, 5},
-                {6, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 7, 8, 9}
+                {1, 2, 0, 0, 0, 0, 0, 10, 5},
+                {6, 0, 0, 0, 0, 0, 0,  0,  0},
+                {0, 0, 0, 0, 0, 0, 0,  0,  0},
+                {0, 0, 0, 0, 0, 0, 0,  0,  0},
+                {0, 0, 0, 0, 0, 0, 0,  0,  0},
+                {0, 0, 0, 0, 0, 0, 7,  8,  9}
         };
     }
 
@@ -65,6 +71,7 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
                 .item(2, buildItemEmpresaStats())
                 .item(3, buildItemAccionistas())
                 .item(4, buildItemRepartirDividendo(), this::repartirDividendos)
+                .item(10, buildItemVotaciones(), this::openMenuVotaciones)
                 .item(5, buildItemCerrarEmpresa(), this::abrirCerrarEmpresaConfirmacion)
                 .items(6, buildItemsEmpleados(), this::abrirMenuOpccionesEmpleado)
                 .breakpoint(7, Material.GREEN_BANNER, this::goBackToProfileMenu)
@@ -73,6 +80,10 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
                         .backward(8, Material.RED_WOOL)
                         .build())
                 .build();
+    }
+
+    private void openMenuVotaciones(Player player, InventoryClickEvent event) {
+        this.menuService.open(player, VerVotacionesEmpresaMenu.class, getState());
     }
 
     private void repartirDividendos(Player player, InventoryClickEvent event) {
@@ -92,6 +103,19 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
 
     private void goBackToProfileMenu(Player player, InventoryClickEvent event) {
         this.menuService.open(player, PerfilMenu.class);
+    }
+
+    private ItemStack buildItemVotaciones() {
+        int numeroVotacionesPendientes = (int) votacionesService.findByEmpresaId(getState().getEmpresaId()).stream()
+                .filter(Votacion::estaAbierta)
+                .count();
+        boolean hayVotacionesPendienets = numeroVotacionesPendientes > 0;
+
+        return ItemBuilder.of(Material.WHITE_BANNER)
+                .title(hayVotacionesPendienets ? GOLD + "" + BOLD + UNDERLINE + "CLICK PARA VER LAS VOTACIONES" : GOLD + "" + BOLD + "VOTACIONES")
+                .lore(hayVotacionesPendienets ? RED + "Hay votaciones pendientes" : GOLD + "No hay votaciones pendientes")
+                .addEnchantment(hayVotacionesPendienets ? Enchantment.ARROW_FIRE : null, hayVotacionesPendienets ? 1 : 0)
+                .build();
     }
 
     private List<ItemStack> buildItemsEmpleados() {

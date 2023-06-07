@@ -6,8 +6,8 @@ import es.serversurvival.v2.pixelcoins.empresas._shared.empleados.Empleado;
 import es.serversurvival.v2.pixelcoins.empresas._shared.empleados.EmpleadosService;
 import es.serversurvival.v2.pixelcoins.empresas._shared.empresas.Empresa;
 import es.serversurvival.v2.pixelcoins.empresas._shared.empresas.EmpresasService;
-import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones.votaciones.ResultadoVotacion;
-import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones.votaciones.VotacionFinalizadaListener;
+import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votaciones.ResultadoVotacion;
+import es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votaciones.VotacionFinalizadaListener;
 import es.serversurvival.v2.pixelcoins.empresas.cambiardirector.CambiarDirectorVotacion;
 import lombok.AllArgsConstructor;
 

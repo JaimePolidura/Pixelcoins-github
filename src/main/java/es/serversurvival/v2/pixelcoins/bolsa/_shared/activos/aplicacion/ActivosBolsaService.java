@@ -20,6 +20,10 @@ public final class ActivosBolsaService {
         repository.save(activoBolsa);
     }
 
+    public List<ActivoBolsa> findByTipo(TipoActivoBolsa tipo) {
+        return repository.findByTipo(tipo);
+    }
+
     public void incrementarNReferencias(UUID activoBolsaId){
         repository.save(getById(activoBolsaId).incrementarNReferencias());
     }

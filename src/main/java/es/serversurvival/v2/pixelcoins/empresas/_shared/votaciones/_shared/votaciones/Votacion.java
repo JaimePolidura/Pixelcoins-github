@@ -1,9 +1,10 @@
-package es.serversurvival.v2.pixelcoins.empresas._shared.votaciones.votaciones;
+package es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votaciones;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -25,6 +26,15 @@ public abstract class Votacion {
         this.fechaFinalizacion = LocalDateTime.now();
 
         return this;
+    }
+
+    public boolean estaAbierta() {
+        return this.estado == EstadoVotacion.ABIERTA;
+    }
+
+    public static Comparator<Votacion> sortByPrioridad() {
+        return Comparator.<Votacion>comparingInt(a -> a.getEstado().getShowPriority())
+                .thenComparing(Votacion::getFechaInicio);
     }
 
     public static abstract class AbstractVotacionBuilder<T extends AbstractVotacionBuilder> {

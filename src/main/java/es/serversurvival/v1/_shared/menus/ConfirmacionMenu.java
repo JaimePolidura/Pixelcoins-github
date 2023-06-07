@@ -23,17 +23,18 @@ public abstract class ConfirmacionMenu<T> extends Menu<T> {
                 .title(titulo())
                 .fixedItems()
                 .confirmation(ConfirmationConfiguration.builder()
+                        .closeOnAction(true)
                         .cancel(1, cancelarItem(), this::onCancelar)
                         .accept(2, aceptarItem(), (player, event) -> onAceptar(player, event, getState()))
                         .build())
                 .build();
     }
 
-    private ItemStack cancelarItem() {
+    public ItemStack cancelarItem() {
         return ItemBuilder.of(Material.RED_WOOL).title(RED + "" + BOLD + "CANCELAR").build();
     }
 
-    private void onCancelar(Player player, InventoryClickEvent event) {
+    public void onCancelar(Player player, InventoryClickEvent event) {
         player.sendMessage(GOLD + "Lo has cancelado");
     }
 

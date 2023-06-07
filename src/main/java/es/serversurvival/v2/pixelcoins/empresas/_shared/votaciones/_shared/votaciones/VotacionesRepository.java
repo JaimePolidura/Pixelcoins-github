@@ -1,4 +1,4 @@
-package es.serversurvival.v2.pixelcoins.empresas._shared.votaciones.votaciones;
+package es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votaciones;
 
 import java.util.List;
 import java.util.Optional;

@@ -19,7 +19,7 @@ public final class PrestarCommandRunner implements CommandRunnerNonArgs {
 
     @Override
     public void execute(Player player) {
-        String url =  webActionUrlGenerator.generate(WebActionType.DEUDAS_EMITIR    , player.getUniqueId());
-        player.sendMessage(GOLD + "Para emitir deuda: " + AQUA + url);
+        String url =  webActionUrlGenerator.generate(WebActionType.DEUDAS_PRESTAR , player.getUniqueId());
+        player.sendMessage(GOLD + "Para prestar: " + AQUA + url);
     }
 }

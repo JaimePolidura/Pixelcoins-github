@@ -1,4 +1,4 @@
-package es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votar;
+package es.serversurvival.v2.pixelcoins.empresas._shared.votaciones.votar;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.serversurvival.v2.pixelcoins.empresas._shared.EmpresasValidador;
@@ -27,7 +27,7 @@ public final class VotarVotacionUseCase {
 
         int numeroAccionesEnPropiedad = accionistasEmpresasService.getByEmpresaIdAndJugadorId(parametros.getEmpresaId(), parametros.getJugadorId())
                 .getNAcciones();
-
+        
         votosService.save(Voto.builder()
                 .votoId(UUID.randomUUID())
                 .votacionId(parametros.getVotacionId())

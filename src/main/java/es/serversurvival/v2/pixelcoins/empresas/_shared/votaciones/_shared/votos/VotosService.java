@@ -16,7 +16,7 @@ public final class VotosService {
         repository.save(voto);
     }
 
-    public int getNumeroAccionesVotadas(UUID votacionId) {
+    public int getNAccionesVotadas(UUID votacionId) {
         return this.repository.findByVotacionId(votacionId).stream()
                 .mapToInt(Voto::getNAcciones)
                 .sum();

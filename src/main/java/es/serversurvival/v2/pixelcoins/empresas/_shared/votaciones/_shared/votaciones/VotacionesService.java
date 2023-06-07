@@ -1,11 +1,10 @@
-package es.serversurvival.v2.pixelcoins.empresas._shared.votaciones.votaciones;
+package es.serversurvival.v2.pixelcoins.empresas._shared.votaciones._shared.votaciones;
 
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

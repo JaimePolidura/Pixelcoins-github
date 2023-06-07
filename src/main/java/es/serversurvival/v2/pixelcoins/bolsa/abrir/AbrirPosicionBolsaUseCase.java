@@ -25,14 +25,14 @@ public final class AbrirPosicionBolsaUseCase {
     private final BolsaValidator validator;
     private final EventBus eventBus;
 
-    public void abrir(AbrirPosicoinBolsaParametros parametros) {
+    public boolean abrir(AbrirPosicoinBolsaParametros parametros) {
         validator.activoBolsaExsiste(parametros.getActivoBolsaId());
         validator.cantidadCorrecta(parametros.getCantidad());
         validator.suficientesPixelcoinsAbrir(parametros);
 
         if(!abridorOrdenesPremarket.estaElMercadoAbierto()){
             abridorOrdenesPremarket.abrirOrdenAbrir(parametros.toAbrirOrdenPremarketAbrirParametros());
-            return;
+            return false;
         }
 
         UUID posicionAAbrirId = UUID.randomUUID();
@@ -59,5 +59,7 @@ public final class AbrirPosicionBolsaUseCase {
                 .build());
 
         eventBus.publish(new PosicionBolsaAbierta(posicionAAbrirId));
+
+        return true;
     }
 }
