@@ -2,6 +2,7 @@ package es.serversurvival.pixelcoins.empresas.cambiardirector.proponer;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.TipoVotacion;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones.votar.VotarVotacionParametros;
@@ -14,13 +15,14 @@ import java.util.UUID;
 
 @UseCase
 @AllArgsConstructor
-public final class ProponerNuevoDirectorUseCase {
+public final class ProponerNuevoDirectorUseCase implements UseCaseHandler<ProponerNuevoDirectorParametros> {
     private final IniciarVotacionUseCase iniciarVotacionUseCase;
     private final VotarVotacionUseCase votarVotacionUseCase;
     private final EmpresasValidador empresasValidador;
     private final EventBus eventBus;
 
-    public void proponer(ProponerNuevoDirectorParametros parametros) {
+    @Override
+    public void handle(ProponerNuevoDirectorParametros parametros) throws Exception {
         empresasValidador.noDirectorEmpresa(parametros.getEmpresaId(), parametros.getNuevoDirectorId());
         empresasValidador.sueldoCorrecto(parametros.getSueldo());
         empresasValidador.periodoPagoCorrecto(parametros.getPeriodoPagoMs());

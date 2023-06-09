@@ -1,6 +1,7 @@
 package es.serversurvival.pixelcoins.jugadores.setupnuevojugador;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.Jugador;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import lombok.RequiredArgsConstructor;

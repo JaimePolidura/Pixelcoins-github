@@ -3,6 +3,7 @@ package es.serversurvival.pixelcoins.jugadores.cambiar.sacarMaxItem;
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.Validador;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
 import es.serversurvival.pixelcoins.transacciones.Transaccion;
 import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
@@ -19,13 +20,14 @@ import org.bukkit.inventory.ItemStack;
 
 @UseCase
 @AllArgsConstructor
-public final class SacarMaxItemUseCase {
+public final class SacarMaxItemUseCase implements UseCaseHandler<SacarMaxItemParametros> {
     private final TransaccionesService transaccionesService;
     private final JugadoresService jugadoresService;
     private final Validador validador;
     private final EventBus eventBus;
 
-    public void sacarMaxItem(SacarMaxItemParametros parametros) {
+    @Override
+    public void handle(SacarMaxItemParametros parametros) throws Exception {
         validador.jugadorTienePixelcoins(parametros.getJugadorId(), parametros.getTipoCambio().cambio);
 
         double pixelcoinsJugador = transaccionesService.getBalancePixelcions(parametros.getJugadorId());

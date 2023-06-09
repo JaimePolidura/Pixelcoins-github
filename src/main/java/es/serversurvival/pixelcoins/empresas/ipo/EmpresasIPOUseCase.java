@@ -2,6 +2,7 @@ package es.serversurvival.pixelcoins.empresas.ipo;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.AccionistaEmpresa;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.AccionistasEmpresasService;
@@ -13,14 +14,15 @@ import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
-public final class EmpresasIPOUseCase {
+public final class EmpresasIPOUseCase implements UseCaseHandler<EmpresaIPOParametros> {
     private final AccionistasEmpresasService accionistasEmpresasService;
     private final OfrecerOfertaUseCase ofrecerOfertaUseCase;
     private final EmpresasValidador empresasValidador;
     private final EmpresasService empresasService;
     private final EventBus eventBus;
 
-    public void ipo(EmpresaIPOParametros parametros) {
+    @Override
+    public void handle(EmpresaIPOParametros parametros) throws Exception {
         validar(parametros);
 
         AccionistaEmpresa acciones = accionistasEmpresasService.getByEmpresaIdAndJugadorId(parametros.getEmpresaId(), parametros.getJugadorId());

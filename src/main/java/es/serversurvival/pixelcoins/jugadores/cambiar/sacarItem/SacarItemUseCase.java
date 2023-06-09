@@ -2,6 +2,7 @@ package es.serversurvival.pixelcoins.jugadores.cambiar.sacarItem;
 
 import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.Validador;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
 import es.serversurvival.pixelcoins.transacciones.Transaccion;
 import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
@@ -9,13 +10,14 @@ import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public final class SacarItemUseCase {
+public final class SacarItemUseCase implements UseCaseHandler<SacarItemParametros> {
     private final TransaccionesService transaccionesService;
     private final JugadoresService jugadoresService;
     private final Validador validador;
     private final EventBus eventBus;
 
-    public void sacarItem(SacarItemParametros parametros) {
+    @Override
+    public void handle(SacarItemParametros parametros) throws Exception {
         var jugador = this.jugadoresService.getById(parametros.getJugadorId());
         var pixelcoinsASacar = parametros.getTipoCambio().cambio * parametros.getCantidad();
 

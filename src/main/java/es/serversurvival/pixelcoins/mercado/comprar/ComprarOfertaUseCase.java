@@ -1,6 +1,7 @@
 package es.serversurvival.pixelcoins.mercado.comprar;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.mercado._shared.accion.OfertaAccionCaller;
 import es.serversurvival.pixelcoins.mercado._shared.accion.OfertaCompradaListener;
 import es.serversurvival.pixelcoins.mercado._shared.Oferta;
@@ -12,13 +13,14 @@ import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
-public final class ComprarOfertaUseCase {
+public final class ComprarOfertaUseCase implements UseCaseHandler<ComprarOfertaParametros> {
     private final OfertaAccionCaller ofertaAccionCaller;
     private final TransaccionesService transaccionesService;
     private final OfertasValidator ofertasValidator;
     private final OfertasService ofertasService;
 
-    public void comprarOferta(ComprarOfertaParametros parametros) {
+    @Override
+    public void handle(ComprarOfertaParametros parametros) throws Exception {
         ofertasValidator.tienePixelcoinsSuficientes(parametros.getOfertaId(), parametros.getJugadorId());
         ofertasValidator.noEsVendedor(parametros.getOfertaId(), parametros.getJugadorId());
 
@@ -27,11 +29,11 @@ public final class ComprarOfertaUseCase {
 
         decrementarCantidadOBorrar(ofertaAComprar);
         transaccionesService.save(Transaccion.builder()
-                        .pagadoId(ofertaAComprar.getVendedorId())
-                        .pagadorId(parametros.getJugadorId())
-                        .pixelcoins(ofertaAComprar.getPrecio())
-                        .objeto(ofertaAComprar.getObjeto())
-                        .tipo(ofertaAComprar.getTipoOferta().getTipoTransaccion())
+                .pagadoId(ofertaAComprar.getVendedorId())
+                .pagadorId(parametros.getJugadorId())
+                .pixelcoins(ofertaAComprar.getPrecio())
+                .objeto(ofertaAComprar.getObjeto())
+                .tipo(ofertaAComprar.getTipoOferta().getTipoTransaccion())
                 .build());
 
         ofertaAccionCaller.call(OfertaCompradaListener.class, ofertaAComprar, parametros.getJugadorId());

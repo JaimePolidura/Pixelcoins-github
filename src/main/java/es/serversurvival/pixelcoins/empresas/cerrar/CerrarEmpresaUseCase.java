@@ -2,6 +2,7 @@ package es.serversurvival.pixelcoins.empresas.cerrar;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.AccionistasEmpresasService;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.EmpleadosService;
@@ -16,7 +17,7 @@ import java.util.UUID;
 
 @UseCase
 @AllArgsConstructor
-public final class CerrarEmpresaUseCase {
+public final class CerrarEmpresaUseCase implements UseCaseHandler<CerrarEmpresaParametros> {
     private final AccionistasEmpresasService accionistasEmpresasService;
     private final TransaccionesService transaccionesService;
     private final EmpresasValidador validador;
@@ -24,7 +25,8 @@ public final class CerrarEmpresaUseCase {
     private final EmpresasService empresasService;
     private final EventBus eventBus;
 
-    public void cerrar(CerrarEmpresaParametros parametros) {
+    @Override
+    public void handle(CerrarEmpresaParametros parametros) throws Exception {
         validador.empresaNoCerrada(parametros.getEmpresaId());
         validador.empresaNoCotizada(parametros.getEmpresaId());
         validador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
@@ -35,10 +37,10 @@ public final class CerrarEmpresaUseCase {
         empresasService.save(empresa.cerrar());
         accionistasEmpresasService.deleteByEmpresaId(parametros.getEmpresaId());
         transaccionesService.save(Transaccion.builder()
-                        .pagadoId(parametros.getJugadorId())
-                        .pagadorId(parametros.getEmpresaId())
-                        .pixelcoins(transaccionesService.getBalancePixelcions(parametros.getEmpresaId()))
-                        .tipo(TipoTransaccion.EMPRESAS_CERRAR)
+                .pagadoId(parametros.getJugadorId())
+                .pagadorId(parametros.getEmpresaId())
+                .pixelcoins(transaccionesService.getBalancePixelcions(parametros.getEmpresaId()))
+                .tipo(TipoTransaccion.EMPRESAS_CERRAR)
                 .build());
 
         eventBus.publish(new EmpresaCerrada(empresa.getEmpresaId()));

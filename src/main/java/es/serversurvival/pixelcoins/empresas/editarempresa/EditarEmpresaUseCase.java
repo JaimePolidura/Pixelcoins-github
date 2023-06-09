@@ -2,6 +2,7 @@ package es.serversurvival.pixelcoins.empresas.editarempresa;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.EmpresasService;
@@ -9,12 +10,13 @@ import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
-public final class EditarEmpresaUseCase {
+public final class EditarEmpresaUseCase implements UseCaseHandler<EditarEmpresaParametros> {
     private final EmpresasValidador empresasValidador;
     private final EmpresasService empresasService;
     private final EventBus eventBus;
 
-    public void editar(EditarEmpresaParametros parametros) {
+    @Override
+    public void handle(EditarEmpresaParametros parametros) throws Exception {
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
         empresasValidador.descripccionCorrecta(parametros.getNuevaDescripccion());
@@ -30,5 +32,4 @@ public final class EditarEmpresaUseCase {
 
         eventBus.publish(new EmpresaEditada(parametros.getEmpresaId()));
     }
-
 }

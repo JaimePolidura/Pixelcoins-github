@@ -16,6 +16,7 @@ import es.jaime.EventListenerDependencyProvider;
 import es.jaime.impl.EventBusSync;
 import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
 
+import es.serversurvival.minecraftserver.webaction.server.WebAcionHttpServer;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -53,6 +54,8 @@ public final class Pixelcoin extends JavaPlugin {
                 .waitUntilCompletion()
                 .build());
 
+        dependenciesRepository.get(WebAcionHttpServer.class).iniciar();
+
         BetterMenusInstanceProvider.setInstanceProvider(instanceProvider);
 
         ClassMapperConfiguration.builder(this, COMMON_PACKAGE)
@@ -71,8 +74,10 @@ public final class Pixelcoin extends JavaPlugin {
     }
 
     @AllArgsConstructor
-    private static class InstanceProviderDependencyInjector implements BukkitClassMapperInstanceProvider,
-            MenusDependenciesInstanceProvider, EventListenerDependencyProvider {
+    private static class InstanceProviderDependencyInjector implements
+            BukkitClassMapperInstanceProvider,
+            MenusDependenciesInstanceProvider,
+            EventListenerDependencyProvider {
 
         private final DependenciesRepository dependenciesRepository;
 

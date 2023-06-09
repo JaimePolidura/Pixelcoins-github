@@ -3,6 +3,7 @@ package es.serversurvival.pixelcoins.empresas.depositar;
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.Validador;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
 import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
 import es.serversurvival.pixelcoins.transacciones.Transaccion;
@@ -11,13 +12,14 @@ import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
-public final class DepositarPixelcoinsEmpresaUseCase {
+public final class DepositarPixelcoinsEmpresaUseCase implements UseCaseHandler<DepositarPixelcoinsEmpresaParametros> {
     private final TransaccionesService transaccionesService;
     private final EmpresasValidador empresasValidador;
     private final Validador validador;
     private final EventBus eventBus;
 
-    public void depositar(DepositarPixelcoinsEmpresaParametros parametros) {
+    @Override
+    public void handle(DepositarPixelcoinsEmpresaParametros parametros) throws Exception {
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.empresaNoCotizada(parametros.getEmpresaId());
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
@@ -25,10 +27,10 @@ public final class DepositarPixelcoinsEmpresaUseCase {
         validador.numeroMayorQueCero(parametros.getPixelcoins(), "Las Pixelcoins");
 
         transaccionesService.save(Transaccion.builder()
-                        .pagadorId(parametros.getJugadorId())
-                        .pagadoId(parametros.getEmpresaId())
-                        .pixelcoins(parametros.getPixelcoins())
-                        .tipo(TipoTransaccion.EMPRESAS_DEPOSITAR)
+                .pagadorId(parametros.getJugadorId())
+                .pagadoId(parametros.getEmpresaId())
+                .pixelcoins(parametros.getPixelcoins())
+                .tipo(TipoTransaccion.EMPRESAS_DEPOSITAR)
                 .build());
 
         eventBus.publish(new PixelcoinsDepositadas(parametros.getEmpresaId(), parametros.getPixelcoins()));

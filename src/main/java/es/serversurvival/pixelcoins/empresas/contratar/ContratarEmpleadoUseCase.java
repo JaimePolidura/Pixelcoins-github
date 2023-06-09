@@ -2,6 +2,7 @@ package es.serversurvival.pixelcoins.empresas.contratar;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.Empleado;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.EmpleadosService;
@@ -9,12 +10,13 @@ import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
-public final class ContratarEmpleadoUseCase {
+public final class ContratarEmpleadoUseCase implements UseCaseHandler<ContratarEmpleadoParametros> {
     private final EmpresasValidador empresasValidador;
     private final EmpleadosService empleadosService;
     private final EventBus eventBus;
 
-    public void contratar(ContratarEmpleadoParametros parametros) {
+    @Override
+    public void handle(ContratarEmpleadoParametros parametros) throws Exception {
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.noEmpleadoEmpresa(parametros.getEmpresaId(), parametros.getJugadorIdAContratar());
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorIdContrador());

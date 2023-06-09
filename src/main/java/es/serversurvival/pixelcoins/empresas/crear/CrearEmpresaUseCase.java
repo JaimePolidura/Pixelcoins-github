@@ -2,6 +2,7 @@ package es.serversurvival.pixelcoins.empresas.crear;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.AccionistaEmpresa;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.AccionistasEmpresasService;
@@ -13,14 +14,15 @@ import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
-public final class CrearEmpresaUseCase {
+public final class CrearEmpresaUseCase implements UseCaseHandler<CrearEmpresaParametros> {
     private final AccionistasEmpresasService accionistasEmpresasService;
     private final EmpresasValidador empresasValidador;
     private final EmpleadosService empleadosService;
     private final EmpresasService empresasService;
     private final EventBus eventBus;
 
-    public void crear(CrearEmpresaParametros parametros) {
+    @Override
+    public void handle(CrearEmpresaParametros parametros) throws Exception {
         empresasValidador.descripccionCorrecta(parametros.getDescripccion());
         empresasValidador.nombreEmpresaCorrecta(parametros.getNombre());
         empresasValidador.validarIcono(parametros.getIcono());

@@ -2,6 +2,7 @@ package es.serversurvival.pixelcoins.empresas.ponerventa;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
@@ -12,13 +13,14 @@ import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
-public final class PonerVentaAccionesUseCase {
+public final class PonerVentaAccionesUseCase implements UseCaseHandler<PonerVentaAccionesParametros> {
     private final AccionistasEmpresasService accionistasEmpresasService;
     private final OfertasService ofertasService;
     private final EmpresasValidador validador;
     private final EventBus eventBus;
 
-    public void ponerVenta(PonerVentaAccionesParametros parametros) {
+    @Override
+    public void handle(PonerVentaAccionesParametros parametros) throws Exception {
         validador.numerAccionesValido(parametros.getCantidadAcciones());
         validador.empresaNoCerrada(parametros.getEmpresaId());
         validador.empresaCotizada(parametros.getEmpresaId());

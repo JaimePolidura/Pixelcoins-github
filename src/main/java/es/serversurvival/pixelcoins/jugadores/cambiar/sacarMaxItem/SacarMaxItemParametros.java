@@ -1,5 +1,6 @@
 package es.serversurvival.pixelcoins.jugadores.cambiar.sacarMaxItem;
 
+import es.serversurvival.pixelcoins._shared.usecases.ParametrosUseCase;
 import es.serversurvival.pixelcoins.jugadores.cambiar.TipoCambioPixelcoins;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +8,7 @@ import lombok.Getter;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class SacarMaxItemParametros {
+public final class SacarMaxItemParametros implements ParametrosUseCase {
     @Getter private final UUID jugadorId;
     @Getter private final TipoCambioPixelcoins tipoCambio;
 

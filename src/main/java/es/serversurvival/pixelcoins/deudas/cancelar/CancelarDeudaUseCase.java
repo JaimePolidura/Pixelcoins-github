@@ -2,6 +2,7 @@ package es.serversurvival.pixelcoins.deudas.cancelar;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival.pixelcoins.deudas._shared.Deuda;
@@ -11,13 +12,14 @@ import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
-public final class CancelarDeudaUseCase {
+public final class CancelarDeudaUseCase implements UseCaseHandler<CancelarDeudaParametros> {
     private final DeudasValidador deudasValidador;
     private final OfertasService ofertasService;
     private final DeudasService deudasService;
     private final EventBus eventBus;
 
-    public void cancelar(CancelarDeudaParametros parametros) {
+    @Override
+    public void handle(CancelarDeudaParametros parametros) throws Exception {
         deudasValidador.acredorDeDeuda(parametros.getDeudaId(), parametros.getJugadorId());
         deudasValidador.deudaPendiente(parametros.getDeudaId());
 

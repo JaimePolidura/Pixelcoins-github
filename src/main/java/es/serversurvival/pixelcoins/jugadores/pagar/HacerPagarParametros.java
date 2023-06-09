@@ -1,12 +1,13 @@
 package es.serversurvival.pixelcoins.jugadores.pagar;
 
+import es.serversurvival.pixelcoins._shared.usecases.ParametrosUseCase;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class HacerPagarParametros {
+public final class HacerPagarParametros implements ParametrosUseCase {
     @Getter private final UUID pagadorId;
     @Getter private final UUID pagadoId;
     @Getter private final double pixelcoins;

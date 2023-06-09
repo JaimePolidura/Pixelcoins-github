@@ -2,6 +2,7 @@ package es.serversurvival.pixelcoins.bolsa.abrir;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.bolsa._shared.BolsaValidator;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBolsaUltimosPreciosService;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
@@ -16,7 +17,7 @@ import java.util.UUID;
 
 @UseCase
 @AllArgsConstructor
-public final class AbrirPosicionBolsaUseCase {
+public final class AbrirPosicionBolsaUseCase implements UseCaseHandler<AbrirPosicoinBolsaParametros> {
     private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;
     private final AbridorOrdenesPremarket abridorOrdenesPremarket;
     private final TransaccionesService transaccionesService;
@@ -25,14 +26,15 @@ public final class AbrirPosicionBolsaUseCase {
     private final BolsaValidator validator;
     private final EventBus eventBus;
 
-    public boolean abrir(AbrirPosicoinBolsaParametros parametros) {
+    @Override
+    public void handle(AbrirPosicoinBolsaParametros parametros) throws Exception {
         validator.activoBolsaExsiste(parametros.getActivoBolsaId());
         validator.cantidadCorrecta(parametros.getCantidad());
         validator.suficientesPixelcoinsAbrir(parametros);
 
         if(!abridorOrdenesPremarket.estaElMercadoAbierto()){
             abridorOrdenesPremarket.abrirOrdenAbrir(parametros.toAbrirOrdenPremarketAbrirParametros());
-            return false;
+            return;
         }
 
         UUID posicionAAbrirId = UUID.randomUUID();
@@ -59,7 +61,5 @@ public final class AbrirPosicionBolsaUseCase {
                 .build());
 
         eventBus.publish(new PosicionBolsaAbierta(posicionAAbrirId));
-
-        return true;
     }
 }

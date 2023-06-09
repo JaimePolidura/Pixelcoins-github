@@ -3,6 +3,7 @@ package es.serversurvival.pixelcoins.deudas.pagartodo;
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.Validador;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
@@ -15,7 +16,7 @@ import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
-public final class PagarTodaLaDeudaUseCase {
+public final class PagarTodaLaDeudaUseCase implements UseCaseHandler<PagarTodaLaDeudaParametros> {
     private final TransaccionesService transaccionesService;
     private final DeudasValidador deudasValidador;
     private final OfertasService ofertasService;
@@ -23,7 +24,8 @@ public final class PagarTodaLaDeudaUseCase {
     private final Validador validador;
     private final EventBus eventBus;
 
-    public void pagarTodaLaDeuda(PagarTodaLaDeudaParametros parametros) {
+    @Override
+    public void handle(PagarTodaLaDeudaParametros parametros) throws Exception {
         Deuda deuda = this.deudasService.getById(parametros.getDeudaId());
         double pixelcoinsRestantes = deuda.getPixelcoinsRestantesDePagar();
 
@@ -34,11 +36,11 @@ public final class PagarTodaLaDeudaUseCase {
         deudasService.save(deuda.anotarPagadoPorCompleto());
         ofertasService.deleteByObjetoYTipo(parametros.getDeudaId().toString(), TipoOferta.DEUDA_MERCADO_SECUNDARIO);
         transaccionesService.save(Transaccion.builder()
-                    .pagadoId(deuda.getAcredorJugadorId())
-                    .pagadorId(parametros.getJugadorId())
-                    .pixelcoins(pixelcoinsRestantes)
-                    .objeto(deuda.getDeudaId().toString())
-                    .tipo(TipoTransaccion.DEUDAS_PAGO_COMPLETO)
+                .pagadoId(deuda.getAcredorJugadorId())
+                .pagadorId(parametros.getJugadorId())
+                .pixelcoins(pixelcoinsRestantes)
+                .objeto(deuda.getDeudaId().toString())
+                .tipo(TipoTransaccion.DEUDAS_PAGO_COMPLETO)
                 .build());
 
         eventBus.publish(new DeudaPagadoPorCompleto(parametros.getDeudaId(), deuda.getDeudorJugadorId()));

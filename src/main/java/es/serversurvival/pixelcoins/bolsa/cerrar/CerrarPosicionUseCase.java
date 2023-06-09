@@ -3,6 +3,8 @@ package es.serversurvival.pixelcoins.bolsa.cerrar;
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
+import es.serversurvival.pixelcoins._shared.usecases.ParametrosUseCase;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.bolsa._shared.BolsaValidator;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBolsaUltimosPreciosService;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
@@ -16,7 +18,7 @@ import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
-public final class CerrarPosicionUseCase {
+public final class CerrarPosicionUseCase implements UseCaseHandler<CerrarPosicionParametros> {
     private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;
     private final AbridorOrdenesPremarket abridorOrdenesPremarket;
     private final OrdenesPremarketService ordenesPremarketService;
@@ -27,7 +29,8 @@ public final class CerrarPosicionUseCase {
     private final BolsaValidator validator;
     private final EventBus eventBus;
 
-    public void cerrar(CerrarPosicionParametros parametros) {
+    @Override
+    public void handle(CerrarPosicionParametros parametros) throws Exception {
         validator.jugaodrTienePosicion(parametros.getPosicionAbiertaId(), parametros.getJugadorId());
         validator.posicionTieneCantidad(parametros.getPosicionAbiertaId(), parametros.getCantidad());
         validator.posicionAbierta(parametros.getPosicionAbiertaId());

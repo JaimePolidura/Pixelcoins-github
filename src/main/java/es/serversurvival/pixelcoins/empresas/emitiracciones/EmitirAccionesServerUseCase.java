@@ -2,6 +2,7 @@ package es.serversurvival.pixelcoins.empresas.emitiracciones;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
@@ -10,12 +11,13 @@ import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
-public final class EmitirAccionesServerUseCase {
+public final class EmitirAccionesServerUseCase implements UseCaseHandler<EmitirAccionesServerParametros> {
     private final EmpresasValidador empresasValidador;
     private final OfertasService ofertasService;
     private final EventBus eventBus;
 
-    public void emitir(EmitirAccionesServerParametros parametros) {
+    @Override
+    public void handle(EmitirAccionesServerParametros parametros) throws Exception {
         empresasValidador.numerAccionesValido(parametros.getNumeroNuevasAcciones());
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
         empresasValidador.empresaCotizada(parametros.getEmpresaId());

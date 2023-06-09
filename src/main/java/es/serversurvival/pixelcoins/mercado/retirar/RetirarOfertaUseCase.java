@@ -1,6 +1,7 @@
 package es.serversurvival.pixelcoins.mercado.retirar;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasValidator;
@@ -10,12 +11,13 @@ import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
-public final class RetirarOfertaUseCase {
+public final class RetirarOfertaUseCase implements UseCaseHandler<RetirarOfertaParametros> {
     private final OfertaAccionCaller ofertaAccionCaller;
     private final OfertasValidator ofertasValidator;
     private final OfertasService ofertasService;
 
-    public void retirarOfertaUseCase(RetirarOfertaParametros parametros) {
+    @Override
+    public void handle(RetirarOfertaParametros parametros) throws Exception {
         ofertasValidator.esVendedor(parametros.getOfertaId(), parametros.getRetiradorId());
 
         Oferta ofertaRetirada = ofertasService.getById(parametros.getOfertaId());

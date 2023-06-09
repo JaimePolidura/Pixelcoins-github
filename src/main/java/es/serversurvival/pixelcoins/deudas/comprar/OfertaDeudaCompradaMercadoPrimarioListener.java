@@ -14,14 +14,11 @@ import java.util.UUID;
 @AllArgsConstructor
 public final class OfertaDeudaCompradaMercadoPrimarioListener implements OfertaCompradaListener<OfertaDeudaMercadoPrimario> {
     private final PrestarDeudaUseCase prestarDeudaUseCase;
-    private final EventBus eventBus;
 
     @Override
     public void on(OfertaDeudaMercadoPrimario ofertaComprada, UUID compradorId) {
-        var deudaId = prestarDeudaUseCase.prestar(
+         prestarDeudaUseCase.prestar(
                 PrestarDeudaParametros.fromOfertaDeudaMercadoPrimario(ofertaComprada, compradorId)
         );
-
-        eventBus.publish(new DeudaComprada(deudaId, compradorId, ofertaComprada.getPrecio()));
     }
 }

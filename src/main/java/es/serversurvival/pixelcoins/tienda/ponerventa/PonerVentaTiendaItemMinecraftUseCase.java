@@ -2,6 +2,7 @@ package es.serversurvival.pixelcoins.tienda.ponerventa;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival.pixelcoins.tienda._shared.TiendaItemMinecraftValidator;
@@ -10,14 +11,15 @@ import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
-public final class PonerVentaTiendaItemMinecraftUseCase {
-    private final TiendaItemMinecraftValidator itemTiendaValidator;
+public final class PonerVentaTiendaItemMinecraftUseCase implements UseCaseHandler<PonerVentaTiendaItemMinecraftParametros> {
+    private final TiendaItemMinecraftValidator validator;
     private final OfertasService ofertasService;
     private final EventBus eventBus;
 
-    public void ponerVenta(PonerVentaTiendaItemMinecraftParametros parametros) {
-        itemTiendaValidator.itemNoBaneado(parametros.getItem());
-        itemTiendaValidator.precio(parametros.getPrecio());
+    @Override
+    public void handle(PonerVentaTiendaItemMinecraftParametros parametros) throws Exception {
+        validator.itemNoBaneado(parametros.getItem());
+        validator.precio(parametros.getPrecio());
 
         ofertasService.save(OfertaTiendaItemMinecraft.builder()
                 .vendedorId(parametros.getJugadorId())

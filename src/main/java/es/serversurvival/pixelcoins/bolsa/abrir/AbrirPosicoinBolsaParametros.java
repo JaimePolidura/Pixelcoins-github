@@ -1,5 +1,6 @@
 package es.serversurvival.pixelcoins.bolsa.abrir;
 
+import es.serversurvival.pixelcoins._shared.usecases.ParametrosUseCase;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.TipoBolsaApuesta;
 import es.serversurvival.pixelcoins.bolsa._shared.premarket.application.AbrirOrdenPremarketAbrirParametros;
 import lombok.AllArgsConstructor;
@@ -10,7 +11,7 @@ import java.util.UUID;
 
 @Builder
 @AllArgsConstructor
-public final class AbrirPosicoinBolsaParametros {
+public final class AbrirPosicoinBolsaParametros implements ParametrosUseCase {
     @Getter private final UUID jugadorId;
     @Getter private final TipoBolsaApuesta tipoApuesta;
     @Getter private final UUID activoBolsaId;

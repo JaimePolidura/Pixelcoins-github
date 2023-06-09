@@ -2,6 +2,7 @@ package es.serversurvival.pixelcoins.empresas.dejarempleo;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.Empleado;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.EmpleadosService;
@@ -9,12 +10,13 @@ import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
-public final class DejarEmploUseCase {
+public final class DejarEmploUseCase implements UseCaseHandler<DejarEmploParametros> {
     private final EmpresasValidador empresasValidador;
     private final EmpleadosService empleadosService;
     private final EventBus eventBus;
 
-    public void dejar(DejarEmploParametros parametros) {
+    @Override
+    public void handle(DejarEmploParametros parametros) throws Exception {
         empresasValidador.empleadoEmpresaActivo(parametros.getEmpresaId(), parametros.getJugadorId());
 
         Empleado empleao = empleadosService.findEmpleoActivoByEmpresaIdAndEmpleadoJugadorId(parametros.getEmpresaId(), parametros.getJugadorId())

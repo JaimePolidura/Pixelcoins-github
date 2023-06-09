@@ -3,6 +3,7 @@ package es.serversurvival.pixelcoins.empresas.repartirdividendos;
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.Validador;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
 import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
 import es.serversurvival.pixelcoins.transacciones.Transaccion;
@@ -15,7 +16,7 @@ import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
-public final class RepartirDividendosUseCase {
+public final class RepartirDividendosUseCase implements UseCaseHandler<RepartirDividendosParametros> {
     private final AccionistasEmpresasService accionistasEmpresasService;
     private final TransaccionesService transaccionesService;
     private final EmpresasValidador empresasValidador;
@@ -23,11 +24,13 @@ public final class RepartirDividendosUseCase {
     private final Validador validador;
     private final EventBus eventBus;
 
-    public void repartirDividendos(RepartirDividendosParametros parametros) {
+    @Override
+    public void handle(RepartirDividendosParametros parametros) throws Exception {
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.empresaCotizada(parametros.getEmpresaId());
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
         validador.numeroMayorQueCero(parametros.getDividendoPorAccion(), "El dividendo");
+
         Empresa empresa = empresasService.getById(parametros.getEmpresaId());
         double gastosTotales = empresa.getNTotalAcciones() * parametros.getDividendoPorAccion();
         empresasValidador.tienePixelcoinsSuficientes(parametros.getEmpresaId(), gastosTotales);
