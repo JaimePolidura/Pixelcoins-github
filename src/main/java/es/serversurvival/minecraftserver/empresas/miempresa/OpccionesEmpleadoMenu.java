@@ -6,10 +6,10 @@ import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.menustate.BeforeShow;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.Empleado;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.EmpresasService;
 import es.serversurvival.pixelcoins.empresas.despedir.DespedirEmpleadoParametros;
-import es.serversurvival.pixelcoins.empresas.despedir.DespedirEmpleadoUseCase;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
@@ -21,10 +21,10 @@ import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
 public final class OpccionesEmpleadoMenu extends Menu<Empleado> implements BeforeShow {
-    private final DespedirEmpleadoUseCase despedirEmpleadoUseCase;
     private final JugadoresService jugadoresService;
     private final EmpresasService empresasService;
     private final MenuService menuService;
+    private final UseCaseBus useCaseBus;
 
     private String nombreEmpleado;
     private String nombreEmpresa;
@@ -52,7 +52,7 @@ public final class OpccionesEmpleadoMenu extends Menu<Empleado> implements Befor
     }
 
     private void despedirEmpleado(Player player, InventoryClickEvent event) {
-        despedirEmpleadoUseCase.despedir(DespedirEmpleadoParametros.builder()
+        useCaseBus.handle(DespedirEmpleadoParametros.builder()
                 .empleadoIdADespedir(getState().getEmpleadoId())
                 .causa("Por ser un vago")
                 .empresaId(getState().getEmpresaId())

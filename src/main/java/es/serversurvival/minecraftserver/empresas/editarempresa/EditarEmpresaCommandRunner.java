@@ -2,6 +2,7 @@ package es.serversurvival.minecraftserver.empresas.editarempresa;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.EmpresasService;
 import es.serversurvival.pixelcoins.empresas.editarempresa.EditarEmpresaParametros;
@@ -20,8 +21,8 @@ import org.bukkit.inventory.ItemStack;
 )
 @RequiredArgsConstructor
 public final class EditarEmpresaCommandRunner implements CommandRunnerArgs<EditarEmpresaComando> {
-    private final EditarEmpresaUseCase editor;
     private final EmpresasService empresasService;
+    private final UseCaseBus useCaseBus;
 
     @Override
     public void execute(EditarEmpresaComando comando, Player player) {
@@ -36,9 +37,9 @@ public final class EditarEmpresaCommandRunner implements CommandRunnerArgs<Edita
                 .nuevoNombre(empresa.getNombre());
 
         switch (comando.getQueSeEdita().toLowerCase()) {
-            case "nombre", "n" -> editor.editar(parametrosBuilder.nuevoNombre(comando.getNuevoValor()).build());
-            case "descipccion", "desc", "d" -> editor.editar(parametrosBuilder.nuevaDescripccion(comando.getNuevoValor()).build());
-            case "logotipo", "l" -> editor.editar(parametrosBuilder.nuevoIcono(itemPlayerHand.getType().toString()).build());
+            case "nombre", "n" -> useCaseBus.handle(parametrosBuilder.nuevoNombre(comando.getNuevoValor()).build());
+            case "descipccion", "desc", "d" -> useCaseBus.handle(parametrosBuilder.nuevaDescripccion(comando.getNuevoValor()).build());
+            case "logotipo", "l" -> useCaseBus.handle(parametrosBuilder.nuevoIcono(itemPlayerHand.getType().toString()).build());
         }
 
         player.sendMessage(ChatColor.GOLD + "Has editado la empresa");

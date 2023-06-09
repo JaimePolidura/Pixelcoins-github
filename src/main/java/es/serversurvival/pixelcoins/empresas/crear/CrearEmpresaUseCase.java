@@ -22,7 +22,7 @@ public final class CrearEmpresaUseCase implements UseCaseHandler<CrearEmpresaPar
     private final EventBus eventBus;
 
     @Override
-    public void handle(CrearEmpresaParametros parametros) throws Exception {
+    public void handle(CrearEmpresaParametros parametros) {
         empresasValidador.descripccionCorrecta(parametros.getDescripccion());
         empresasValidador.nombreEmpresaCorrecta(parametros.getNombre());
         empresasValidador.validarIcono(parametros.getIcono());

@@ -19,7 +19,7 @@ public final class ComprarServicioUseCase implements UseCaseHandler<ComprarServi
     private final EventBus eventBus;
 
     @Override
-    public void handle(ComprarServicioParametros parametros) throws Exception {
+    public void handle(ComprarServicioParametros parametros) {
         validador.numeroMayorQueCero(parametros.getPixelcoins(), "Pixelcoins");
         validador.jugadorTienePixelcoins(parametros.getJugadorId(), parametros.getPixelcoins());
         empresasValidador.noEmpleadoEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());

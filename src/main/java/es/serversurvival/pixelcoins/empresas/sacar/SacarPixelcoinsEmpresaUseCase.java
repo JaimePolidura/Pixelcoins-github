@@ -19,7 +19,7 @@ public final class SacarPixelcoinsEmpresaUseCase implements UseCaseHandler<Sacar
     private final EventBus eventBus;
 
     @Override
-    public void handle(SacarPixelcoinsEmpresaParametros parametros) throws Exception {
+    public void handle(SacarPixelcoinsEmpresaParametros parametros) {
         validador.numeroMayorQueCero(parametros.getPixelcoins(), "Las pixelcoins a sacar");
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.empresaNoCotizada(parametros.getEmpresaId());

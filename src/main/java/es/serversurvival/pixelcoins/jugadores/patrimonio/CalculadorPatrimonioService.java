@@ -2,6 +2,7 @@ package es.serversurvival.pixelcoins.jugadores.patrimonio;
 
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.dependencyinjector.dependencies.annotations.Service;
+import es.jaime.javaddd.application.utils.CollectionUtils;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.Jugador;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import lombok.AllArgsConstructor;
@@ -34,9 +35,11 @@ public final class CalculadorPatrimonioService {
     }
 
     public Map<TipoCuentaPatrimonio, Double> calcularDesglosadoPorCuentas(UUID jugadorId) {
-        return dependencies.filterByImplementsInterface(CalculadorPatrimonio.class).stream()
+        Map<TipoCuentaPatrimonio, Double> collect = dependencies.filterByImplementsInterface(CalculadorPatrimonio.class).stream()
                 .parallel()
-                .collect(Collectors.toMap(CalculadorPatrimonio::tipoCuenta, c->calcular(jugadorId)));
+                .collect(Collectors.toMap(CalculadorPatrimonio::tipoCuenta, c -> calcular(jugadorId)));
+
+        return CollectionUtils.sortMapByValue(collect, (a, b) -> Double.compare(b, a));
     }
 
     public int getPosicionTopRicos(String jugadorNombre) {

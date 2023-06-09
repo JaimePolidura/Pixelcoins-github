@@ -6,6 +6,7 @@ import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.deudas._shared.DeudasValidador;
 import es.serversurvival.pixelcoins.deudas._shared.OfertaDeudaMercadoPrimario;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
+import es.serversurvival.pixelcoins.mercado.ofrecer.OfrecerOfertaParametros;
 import es.serversurvival.pixelcoins.mercado.ofrecer.OfrecerOfertaUseCase;
 import lombok.AllArgsConstructor;
 
@@ -17,20 +18,20 @@ public final class EmitirDeudaUseCase implements UseCaseHandler<EmitirDeudaParam
     private final EventBus eventBus;
 
     @Override
-    public void handle(EmitirDeudaParametros parametros) throws Exception {
+    public void handle(EmitirDeudaParametros parametros) {
         deudasValidador.periodoPagoCuotasCorrecto(parametros.getPeriodoPagoCuota());
         deudasValidador.numeroCuotasCorrecto(parametros.getNumeroCuotasTotales());
         deudasValidador.nominalCorrecto(parametros.getNominal());
         deudasValidador.interesCorreto(parametros.getInteres());
 
-        ofrecerOfertaUseCase.ofrecer(OfertaDeudaMercadoPrimario.builder()
+        ofrecerOfertaUseCase.handle(OfrecerOfertaParametros.of(OfertaDeudaMercadoPrimario.builder()
                 .vendedorId(parametros.getJugadorId())
                 .precio(parametros.getNominal())
                 .tipoOferta(TipoOferta.DEUDA_MERCADO_PRIMARIO)
                 .interes(parametros.getInteres())
                 .numeroCuotasTotales(parametros.getNumeroCuotasTotales())
                 .periodoPagoCuota(parametros.getPeriodoPagoCuota())
-                .build());
+                .build()));
 
         eventBus.publish(new DeudaEmitida(parametros));
     }

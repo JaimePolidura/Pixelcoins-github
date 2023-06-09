@@ -25,7 +25,7 @@ public final class RepartirDividendosUseCase implements UseCaseHandler<RepartirD
     private final EventBus eventBus;
 
     @Override
-    public void handle(RepartirDividendosParametros parametros) throws Exception {
+    public void handle(RepartirDividendosParametros parametros) {
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.empresaCotizada(parametros.getEmpresaId());
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());

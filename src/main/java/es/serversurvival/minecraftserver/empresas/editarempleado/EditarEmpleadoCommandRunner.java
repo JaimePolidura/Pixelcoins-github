@@ -2,6 +2,7 @@ package es.serversurvival.minecraftserver.empresas.editarempleado;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.Empleado;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.EmpleadosService;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
@@ -23,10 +24,10 @@ import org.bukkit.entity.Player;
 )
 @AllArgsConstructor
 public final class EditarEmpleadoCommandRunner implements CommandRunnerArgs<EditarEmpleadoComando> {
-    private final EditarEmpleadoUseCase editor;
     private final EmpleadosService empleadosService;
     private final JugadoresService jugadoresService;
     private final EmpresasService empresasService;
+    private final UseCaseBus useCaseBus;
 
     @Override
     public void execute(EditarEmpleadoComando comando, Player player) {
@@ -44,9 +45,9 @@ public final class EditarEmpleadoCommandRunner implements CommandRunnerArgs<Edit
                 .empresaId(empresa.getEmpresaId());
 
         switch (comando.getQueSeEdita().toLowerCase()) {
-            case "sueldo" -> editor.editar(editarEmpleadoBuilder.nuevoSueldo(comando.nuevoValorToDouble()).build());
-            case "cargo", "descipccion", "desc" -> editor.editar(editarEmpleadoBuilder.nuevaDescripccion(comando.getNuevoValor()).build());
-            case "periodopago" -> editor.editar(editarEmpleadoBuilder.nuevoPeriodoPago(
+            case "sueldo" -> useCaseBus.handle(editarEmpleadoBuilder.nuevoSueldo(comando.nuevoValorToDouble()).build());
+            case "cargo", "descipccion", "desc" -> useCaseBus.handle(editarEmpleadoBuilder.nuevaDescripccion(comando.getNuevoValor()).build());
+            case "periodopago" -> useCaseBus.handle(editarEmpleadoBuilder.nuevoPeriodoPago(
                     comando.nuevoValorToLong() * 24 * 60 * 60 * 1000
             ).build());
         }

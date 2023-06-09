@@ -4,8 +4,8 @@ import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.jugadores.pagar.HacerPagarParametros;
-import es.serversurvival.pixelcoins.jugadores.pagar.PagarUseCase;
 import lombok.AllArgsConstructor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -20,13 +20,13 @@ import static org.bukkit.ChatColor.GREEN;
 )
 @AllArgsConstructor
 public class PagarComandoRunner implements CommandRunnerArgs<PagarComando> {
-    private final PagarUseCase pagarUseCase;
+    private final UseCaseBus useCaseBus;
 
     @Override
     public void execute(PagarComando comando, Player sender) {
         double pixelcoins = comando.getPixelcoins();
 
-        pagarUseCase.hacerPago(HacerPagarParametros.of(sender.getUniqueId(), comando.getDestino().getUniqueId(), comando.getPixelcoins()));
+        useCaseBus.handle(HacerPagarParametros.of(sender.getUniqueId(), comando.getDestino().getUniqueId(), comando.getPixelcoins()));
 
         sendMessage(sender, comando.getDestino(), pixelcoins);
     }

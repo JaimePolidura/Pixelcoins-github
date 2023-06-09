@@ -1,5 +1,6 @@
 package es.serversurvival.minecraftserver.bolsa.vervalores;
 
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
 import es.serversurvival.minecraftserver._shared.menus.NumberSelectorMenu;
 import es.serversurvival._shared.utils.Funciones;
@@ -21,29 +22,30 @@ import static org.bukkit.Sound.ENTITY_PLAYER_LEVELUP;
 
 @RequiredArgsConstructor
 public final class SeleccionarCantidadComprarBolsaMenu extends NumberSelectorMenu<SeleccionarCantidadComprarBolsaMenu.SeleccionarCantidadComprarBolsaMenuState> {
-    private final AbrirPosicionBolsaUseCase abrirPosicionBolsaUseCase;
+    private final UseCaseBus useCaseBus;
 
     @Override
     public void onAccept(Player player, double cantidad, InventoryClickEvent event) {
-        boolean ordenEjecutada = abrirPosicionBolsaUseCase.abrir(AbrirPosicoinBolsaParametros.builder()
+        useCaseBus.handle(AbrirPosicoinBolsaParametros.builder()
                         .activoBolsaId(getState().activoBolsa.getActivoBolsaId())
                         .cantidad((int) cantidad)
                         .jugadorId(player.getUniqueId())
                         .tipoApuesta(TipoBolsaApuesta.LARGO)
                 .build());
 
-        if(ordenEjecutada){
-            Bukkit.broadcastMessage(GOLD + player.getName() + " ha comprado " + cantidad + " " + getState().getNombreUnidadTipoActivo() + " de "
-                    + getState().activoBolsa.getNombreLargo() + " a " + GREEN + Funciones.FORMATEA.format(getState().precioPorUnidad) + "PC");
-
-            MinecraftUtils.enviarMensajeYSonido(player, GOLD + "Has comprado " + Funciones.FORMATEA.format(cantidad)
-                    + " cantidad a " + GREEN + Funciones.FORMATEA.format(getState().precioPorUnidad) + " PC" + GOLD + " que es un total de " + GREEN +
-                    Funciones.FORMATEA.format(getState().precioPorUnidad * cantidad) + " PC " + GOLD + " comandos: " +
-                    AQUA + "/bolsa cartera", ENTITY_PLAYER_LEVELUP);
-        }else{
-            player.sendMessage(GOLD + "La compra no se ha podida ejecutar por que el mercado esta cerrado, cuando abra se ejecutara "
-                    + AQUA + "/bolsa premarket");
-        }
+        //TODO Externalizar con los eventos
+//        if(ordenEjecutada){
+//            Bukkit.broadcastMessage(GOLD + player.getName() + " ha comprado " + cantidad + " " + getState().getNombreUnidadTipoActivo() + " de "
+//                    + getState().activoBolsa.getNombreLargo() + " a " + GREEN + Funciones.FORMATEA.format(getState().precioPorUnidad) + "PC");
+//
+//            MinecraftUtils.enviarMensajeYSonido(player, GOLD + "Has comprado " + Funciones.FORMATEA.format(cantidad)
+//                    + " cantidad a " + GREEN + Funciones.FORMATEA.format(getState().precioPorUnidad) + " PC" + GOLD + " que es un total de " + GREEN +
+//                    Funciones.FORMATEA.format(getState().precioPorUnidad * cantidad) + " PC " + GOLD + " comandos: " +
+//                    AQUA + "/bolsa cartera", ENTITY_PLAYER_LEVELUP);
+//        }else{
+//            player.sendMessage(GOLD + "La compra no se ha podida ejecutar por que el mercado esta cerrado, cuando abra se ejecutara "
+//                    + AQUA + "/bolsa premarket");
+//        }
     }
 
     @Override

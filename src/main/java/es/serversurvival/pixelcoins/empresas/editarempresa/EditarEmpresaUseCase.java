@@ -16,7 +16,7 @@ public final class EditarEmpresaUseCase implements UseCaseHandler<EditarEmpresaP
     private final EventBus eventBus;
 
     @Override
-    public void handle(EditarEmpresaParametros parametros) throws Exception {
+    public void handle(EditarEmpresaParametros parametros) {
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
         empresasValidador.descripccionCorrecta(parametros.getNuevaDescripccion());

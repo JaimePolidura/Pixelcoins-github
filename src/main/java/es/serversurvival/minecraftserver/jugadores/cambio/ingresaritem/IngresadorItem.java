@@ -2,9 +2,9 @@ package es.serversurvival.minecraftserver.jugadores.cambio.ingresaritem;
 
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.jugadores.cambiar.TipoCambioPixelcoins;
 import es.serversurvival.pixelcoins.jugadores.cambiar.ingresarItem.IngresarItemParametros;
-import es.serversurvival.pixelcoins.jugadores.cambiar.ingresarItem.IngresarItemUseCase;
 import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
@@ -15,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
-import static es.serversurvival.minecraftserver._shared.MinecraftUtils.enviarMensajeYSonido;
 import static org.bukkit.ChatColor.GOLD;
 import static org.bukkit.ChatColor.GREEN;
 
@@ -23,7 +22,7 @@ import static org.bukkit.ChatColor.GREEN;
 @RequiredArgsConstructor
 public final class IngresadorItem {
     private final TransaccionesService transaccionesService;
-    private final IngresarItemUseCase ingresarItemUseCase;
+    private final UseCaseBus useCaseBus;
 
     public void ingresarItemInMano(Player player, TipoCambioPixelcoins... tipoCambioPixelcoinsPermitidos) {
         ItemStack itemEnMano = player.getInventory().getItemInMainHand();
@@ -35,7 +34,7 @@ public final class IngresadorItem {
             return;
         }
 
-        ingresarItemUseCase.ingresarItem(IngresarItemParametros.of(player.getUniqueId(), tipoCambio, itemEnMano.getAmount()));
+        useCaseBus.handle(IngresarItemParametros.of(player.getUniqueId(), tipoCambio, itemEnMano.getAmount()));
 
         player.getInventory().clear(player.getInventory().getHeldItemSlot());
 

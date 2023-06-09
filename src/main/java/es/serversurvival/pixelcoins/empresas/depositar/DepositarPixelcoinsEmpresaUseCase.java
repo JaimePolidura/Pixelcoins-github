@@ -19,7 +19,7 @@ public final class DepositarPixelcoinsEmpresaUseCase implements UseCaseHandler<D
     private final EventBus eventBus;
 
     @Override
-    public void handle(DepositarPixelcoinsEmpresaParametros parametros) throws Exception {
+    public void handle(DepositarPixelcoinsEmpresaParametros parametros) {
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.empresaNoCotizada(parametros.getEmpresaId());
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());

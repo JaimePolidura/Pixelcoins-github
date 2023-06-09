@@ -3,22 +3,28 @@ package es.serversurvival.minecraftserver.scoreboards.displays;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver.scoreboards.ScoreboardCreator;
 import es.serversurvival.minecraftserver.scoreboards.ServerScoreboardCreator;
-import es.serversurvival.v1.deudas._shared.application.DeudasService;
-import es.serversurvival.v1.jugadores._shared.application.JugadoresService;
-import es.serversurvival.v1.jugadores._shared.domain.Jugador;
+import es.serversurvival.pixelcoins.deudas._shared.Deuda;
+import es.serversurvival.pixelcoins.deudas._shared.DeudasService;
+import es.serversurvival.pixelcoins.jugadores._shared.estadisticas.JugadorEstadisticas;
+import es.serversurvival.pixelcoins.jugadores._shared.estadisticas.JugadoresEstadisticasService;
+import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
+import java.util.stream.Collectors;
+
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+import static es.serversurvival.minecraftserver._shared.MinecraftUtils.*;
 
 @ScoreboardCreator
 @RequiredArgsConstructor
 public class DeudasDisplayScoreboard implements ServerScoreboardCreator {
-    private final DeudasService deudasService;
+    private final JugadoresEstadisticasService jugadoresEstadisticasService;
     private final JugadoresService jugadoresService;
+    private final DeudasService deudasService;
 
     @Override
     public boolean isGlobal() {
@@ -27,19 +33,31 @@ public class DeudasDisplayScoreboard implements ServerScoreboardCreator {
 
     @Override
     public Scoreboard create(Player player) {
-        Scoreboard scoreboard = MinecraftUtils.createScoreboard("deudas", ChatColor.GOLD + "" + ChatColor.BOLD + "DEUDAS");
+        Scoreboard scoreboard = createScoreboard("deudas", ChatColor.GOLD + "" + ChatColor.BOLD + "DEUDAS");
         Objective objective = scoreboard.getObjective("deudas");
 
-        Jugador jugadorScoreboear = jugadoresService.getByNombre(player.getName());
-        double totalAPagar = this.deudasService.getAllPixelcoinsDeudasDeudor(player.getName());
-        double totalASerPagado = this.deudasService.getAllPixelcoinsDeudasDeudor(player.getName());
+        JugadorEstadisticas estadisticas = jugadoresEstadisticasService.getById(player.getUniqueId());
+        double totalAPagar = getPixelcoinsTotalesDeudor(player);
+        double totalASerPagado = getPixelcoinsTotalesCredor(player);
 
-        MinecraftUtils.addLineToScoreboard(objective, ChatColor.GOLD + "Pixelcoins que debes: " + ChatColor.GREEN + FORMATEA.format(totalAPagar) + " PC", 0);
-        MinecraftUtils.addLineToScoreboard(objective, ChatColor.GOLD + "Pixelcoins que te deben: " + ChatColor.GREEN + FORMATEA.format(totalASerPagado) + " PC", -1);
-        MinecraftUtils.addLineToScoreboard(objective, "     ", -2);
-        MinecraftUtils.addLineToScoreboard(objective, ChatColor.GOLD + "Nº de veces pagadas la deuda: " + FORMATEA.format(jugadorScoreboear.getNpagosDeuda()), -3);
-        MinecraftUtils.addLineToScoreboard(objective, ChatColor.GOLD + "Nº de veces no pagadas la deuda: " + FORMATEA.format(jugadorScoreboear.getNinpagosDeuda()), -4);
+        addLineToScoreboard(objective, ChatColor.GOLD + "Pixelcoins que debes: " + ChatColor.GREEN + FORMATEA.format(totalAPagar) + " PC", 0);
+        addLineToScoreboard(objective, ChatColor.GOLD + "Pixelcoins que te deben: " + ChatColor.GREEN + FORMATEA.format(totalASerPagado) + " PC", -1);
+        addLineToScoreboard(objective, "     ", -2);
+        addLineToScoreboard(objective, ChatColor.GOLD + "Nº de veces pagadas la deuda: " + FORMATEA.format(estadisticas.getNDeudaPagos()), -3);
+        addLineToScoreboard(objective, ChatColor.GOLD + "Nº de veces no pagadas la deuda: " + FORMATEA.format(estadisticas.getNDeudaInpagos()), -4);
 
         return scoreboard;
+    }
+
+    private double getPixelcoinsTotalesCredor(Player player) {
+        return this.deudasService.findByAcredorJugadorIdPendiente(player.getUniqueId()).stream()
+                .mapToDouble(Deuda::getPixelcoinsRestantesDePagar)
+                .sum();
+    }
+
+    private double getPixelcoinsTotalesDeudor(Player player) {
+        return this.deudasService.findByDeudorJugadorIdPendiente(player.getUniqueId()).stream()
+                .mapToDouble(Deuda::getPixelcoinsRestantesDePagar)
+                .sum();
     }
 }

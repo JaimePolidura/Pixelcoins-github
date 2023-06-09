@@ -3,6 +3,7 @@ package es.serversurvival.minecraftserver.empresas.contratar;
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.serversurvival.minecraftserver.webaction.WebActionException;
 import es.serversurvival.minecraftserver.webaction.WebActionHandler;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.EmpresasService;
 import es.serversurvival.pixelcoins.empresas.contratar.ContratarEmpleadoParametros;
@@ -20,9 +21,9 @@ import static org.bukkit.Sound.*;
 @Service
 @AllArgsConstructor
 public final class ContratarEmpleadoWebActionHandler implements WebActionHandler<ContratarEmpleadoWebActionRequestBody> {
-    private final ContratarEmpleadoUseCase contratarEmpleadoUseCase;
     private final JugadoresService jugadoresService;
     private final EmpresasService empresasService;
+    private final UseCaseBus useCaseBus;
 
     @Override
     public void handle(UUID jugadorId, ContratarEmpleadoWebActionRequestBody body) throws WebActionException {
@@ -30,7 +31,7 @@ public final class ContratarEmpleadoWebActionHandler implements WebActionHandler
         UUID jugadorIdAContratar = jugadoresService.getByNombre(body.getJugadorNombreAContratar())
                 .getJugadorId();
 
-        contratarEmpleadoUseCase.contratar(ContratarEmpleadoParametros.builder()
+        useCaseBus.handle(ContratarEmpleadoParametros.builder()
                 .jugadorIdAContratar(jugadorIdAContratar)
                 .descripccion(body.getDescripccion())
                 .empresaId(empresa.getEmpresaId())

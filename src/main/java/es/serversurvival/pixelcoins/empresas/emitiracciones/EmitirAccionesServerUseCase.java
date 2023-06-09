@@ -17,7 +17,7 @@ public final class EmitirAccionesServerUseCase implements UseCaseHandler<EmitirA
     private final EventBus eventBus;
 
     @Override
-    public void handle(EmitirAccionesServerParametros parametros) throws Exception {
+    public void handle(EmitirAccionesServerParametros parametros) {
         empresasValidador.numerAccionesValido(parametros.getNumeroNuevasAcciones());
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
         empresasValidador.empresaCotizada(parametros.getEmpresaId());

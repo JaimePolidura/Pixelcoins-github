@@ -20,7 +20,7 @@ public final class PonerVentaAccionesUseCase implements UseCaseHandler<PonerVent
     private final EventBus eventBus;
 
     @Override
-    public void handle(PonerVentaAccionesParametros parametros) throws Exception {
+    public void handle(PonerVentaAccionesParametros parametros) {
         validador.numerAccionesValido(parametros.getCantidadAcciones());
         validador.empresaNoCerrada(parametros.getEmpresaId());
         validador.empresaCotizada(parametros.getEmpresaId());

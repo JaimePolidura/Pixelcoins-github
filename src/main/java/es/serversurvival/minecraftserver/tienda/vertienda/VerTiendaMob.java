@@ -13,6 +13,6 @@ public final class VerTiendaMob implements OnPlayerInteractMob {
 
     @Override
     public void execute(PlayerInteractEntityEvent event) {
-        this.menuService.open(event.getPlayer(), TiendaMenu.class, event.getPlayer());
+        this.menuService.open(event.getPlayer(), TiendaMenu.class);
     }
 }

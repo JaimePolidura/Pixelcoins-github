@@ -2,6 +2,7 @@ package es.serversurvival.minecraftserver.empresas.ipo;
 
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival.minecraftserver._shared.menus.ConfirmacionMenu;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
 import es.serversurvival.pixelcoins.empresas.ipo.EmpresaIPOParametros;
 import es.serversurvival.pixelcoins.empresas.ipo.EmpresasIPOUseCase;
@@ -21,11 +22,11 @@ import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
 public final class ConfirmarIPOMenu extends ConfirmacionMenu<ConfirmarIPOMenu.ConfirmarIPOMenuState> {
-    private final EmpresasIPOUseCase empresasIPOUseCase;
-
+    private final UseCaseBus useCaseBus;
+        
     @Override
     public void onAceptar(Player player, InventoryClickEvent event, ConfirmarIPOMenuState state) {
-        empresasIPOUseCase.ipo(EmpresaIPOParametros.builder()
+        useCaseBus.handle(EmpresaIPOParametros.builder()
                 .precioPorAccion(state.getPrecioPorAccion())
                 .numeroAccionesVender(state.getNumeroAccionesEnPropiedadAVender())
                 .jugadorId(player.getUniqueId())

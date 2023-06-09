@@ -5,6 +5,7 @@ import es.bukkitbettermenus.menustate.BeforeShow;
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.menus.NumberSelectorMenu;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.TipoApuestaService;
 import es.serversurvival.pixelcoins.bolsa.cerrar.CerrarPosicionParametros;
 import es.serversurvival.pixelcoins.bolsa.cerrar.CerrarPosicionUseCase;
@@ -19,8 +20,9 @@ import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
 public final class BolsaCerrarPosicionMenu extends NumberSelectorMenu<Posicion> implements BeforeShow {
+    private final UseCaseBus useCaseBus;
+
     private final DependenciesRepository dependenciesRepository;
-    private final CerrarPosicionUseCase cerrarPosicionUseCase;
     private final MenuService menuService;
 
     private double valorTotalPorAccion;
@@ -28,7 +30,7 @@ public final class BolsaCerrarPosicionMenu extends NumberSelectorMenu<Posicion> 
 
     @Override
     public void onAccept(Player player, double cantidad, InventoryClickEvent event) {
-        cerrarPosicionUseCase.cerrar(CerrarPosicionParametros.builder()
+        useCaseBus.handle(CerrarPosicionParametros.builder()
                 .posicionAbiertaId(getState().getPosicionId())
                 .cantidad((int) cantidad)
                 .jugadorId(player.getUniqueId())

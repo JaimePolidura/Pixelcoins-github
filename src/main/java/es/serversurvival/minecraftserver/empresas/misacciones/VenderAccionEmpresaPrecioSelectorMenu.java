@@ -4,10 +4,10 @@ import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.modules.sync.SyncMenuService;
 import es.serversurvival.minecraftserver._shared.menus.NumberSelectorMenu;
 import es.serversurvival.minecraftserver.empresas.mercado.MercadoAccionesEmpresasMenu;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.AccionistaEmpresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
 import es.serversurvival.pixelcoins.empresas.ponerventa.PonerVentaAccionesParametros;
-import es.serversurvival.pixelcoins.empresas.ponerventa.PonerVentaAccionesUseCase;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -22,13 +22,13 @@ import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
 public final class VenderAccionEmpresaPrecioSelectorMenu extends NumberSelectorMenu<VenderAccionEmpresaPrecioSelectorMenu.VenderAccionEmpresaPrecioSelectorMenuState> {
-    private final PonerVentaAccionesUseCase ponerVentaAccionesUseCase;
     private final SyncMenuService syncMenuService;
     private final MenuService menuService;
+    private final UseCaseBus useCaseBus;
 
     @Override
     public void onAccept(Player player, double precio, InventoryClickEvent event) {
-        ponerVentaAccionesUseCase.ponerVenta(PonerVentaAccionesParametros.builder()
+        useCaseBus.handle(PonerVentaAccionesParametros.builder()
                         .cantidadAcciones(getState().cantidadAVender)
                         .empresaId(getState().empresa().getEmpresaId())
                         .precioPorAccion(precio)

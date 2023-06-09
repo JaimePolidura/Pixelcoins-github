@@ -21,7 +21,7 @@ public final class UseCaseBus {
         this.dependencies = dependencies;
     }
 
-    private <T extends ParametrosUseCase> void handle(T parametros) {
+    public <T extends ParametrosUseCase> void handle(T parametros) {
         UseCaseHandler<T> useCase =  getUseCase(parametros);
 
         try {

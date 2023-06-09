@@ -15,7 +15,7 @@ public final class CancelarOrdenPremarketUseCase implements UseCaseHandler<Cance
     private final EventBus eventBus;
 
     @Override
-    public void handle(CancelarOrdenPremarketParametros parametros) throws Exception {
+    public void handle(CancelarOrdenPremarketParametros parametros) {
         validator.jugadorTieneOrden(parametros.getOrdenPremarketId(), parametros.getJugadorId());
 
         ordenesPremarketService.deleteById(parametros.getOrdenPremarketId());

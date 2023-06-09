@@ -5,15 +5,15 @@ import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.dependencyinjector.dependencies.DependenciesRepository;
+import es.serversurvival.minecraftserver.bolsa.vercartera.VerBolsaCarteraMenu;
+import es.serversurvival.minecraftserver.deudas.verdeudas.VerMisDeudasMenu;
+import es.serversurvival.minecraftserver.empresas.misempleos.VerMisEmpleosMenu;
 import es.serversurvival.minecraftserver.empresas.vertodas.VerTodasEmpresasMenu;
+import es.serversurvival.minecraftserver.tienda.vertienda.TiendaMenu;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
 import es.serversurvival.pixelcoins.jugadores.patrimonio.CalculadorPatrimonioService;
 import es.serversurvival.pixelcoins.jugadores.patrimonio.TipoCuentaPatrimonio;
 import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
-import es.serversurvival.v1.bolsa.posicionesabiertas.vercartera.VerBolsaCarteraMenu;
-import es.serversurvival.v1.deudas.ver.VerDeudasMenu;
-import es.serversurvival.v1.empresas.empleados.misempleos.VerEmpleosMenu;
-import es.serversurvival.v1.tienda.vertienda.TiendaMenu;
 import es.serversurvival.minecraftserver.jugadores.top.TopMenu;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.Posicion;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.PosicionesService;
@@ -66,10 +66,10 @@ public final class PerfilMenu extends Menu {
                 .item(1, Material.BLACK_STAINED_GLASS_PANE)
                 .item(3, buildItemStats(), (p, e) -> this.menuService.open(p, TopMenu.class))
                 .item(4, buildItemTienda(), (p, e) -> this.menuService.open(p, TiendaMenu.class))
-                .item(5, buildItemDeudas(), (p, e) -> this.menuService.open(p, VerDeudasMenu.class))
+                .item(5, buildItemDeudas(), (p, e) -> this.menuService.open(p, VerMisDeudasMenu.class))
                 .item(6, buildItemBolsa(), (p, e) -> this.menuService.open(p, VerBolsaCarteraMenu.class))
                 .item(7, buildItemEmpresa(), (p, e) -> this.menuService.open(p, VerTodasEmpresasMenu.class))
-                .item(8, buildItemEmpleos(), (p, e) -> this.menuService.open(p, VerEmpleosMenu.class))
+                .item(8, buildItemEmpleos(), (p, e) -> this.menuService.open(p, VerMisEmpleosMenu.class))
                 .build();
     }
 

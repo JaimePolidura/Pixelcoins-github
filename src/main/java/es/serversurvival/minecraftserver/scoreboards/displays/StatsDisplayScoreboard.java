@@ -1,81 +1,50 @@
 package es.serversurvival.minecraftserver.scoreboards.displays;
 
-import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver.scoreboards.ScoreboardCreator;
 import es.serversurvival.minecraftserver.scoreboards.ServerScoreboardCreator;
-import es.serversurvival.v1.empresas.empresas._shared.application.EmpresasService;
-import es.serversurvival.v1.empresas.empresas._shared.domain.Empresa;
-import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.v1.jugadores._shared.application.JugadoresService;
+import es.serversurvival.pixelcoins.jugadores.patrimonio.CalculadorPatrimonioService;
+import es.serversurvival.pixelcoins.jugadores.patrimonio.TipoCuentaPatrimonio;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
-import java.util.List;
+import java.util.Map;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+import static es.serversurvival.minecraftserver._shared.MinecraftUtils.*;
+import static org.bukkit.ChatColor.*;
 
 @ScoreboardCreator
 @RequiredArgsConstructor
 public class StatsDisplayScoreboard implements ServerScoreboardCreator {
-    private final JugadoresService jugadoresService;
-    private final EmpresasService empresasService;
-
-    @Override
-    public boolean isGlobal() {
-        return false;
-    }
+    private final CalculadorPatrimonioService calculadorPatrimonioService;
 
     @Override
     public Scoreboard create(Player player) {
-        Scoreboard scoreboard = MinecraftUtils.createScoreboard("dinero", ChatColor.GOLD + "" + ChatColor.BOLD + "JUGADOR");
+        Scoreboard scoreboard = createScoreboard("dinero", GOLD + "" + BOLD + "JUGADOR");
         Objective objective = scoreboard.getObjective("dinero");
 
-        double dineroJugador = jugadoresService.getByNombre(player.getName()).getPixelcoins();
+        Map<TipoCuentaPatrimonio, Double> patrimonioDesglosado = calculadorPatrimonioService.calcularDesglosadoPorCuentas(player.getUniqueId());
+        double patriominioTotal = patrimonioDesglosado.values().stream().mapToDouble(a -> a).sum();
 
-        MinecraftUtils.addLineToScoreboard(objective, ChatColor.GOLD + "Tus ahorros: " + ChatColor.GREEN + FORMATEA.format(Math.round(dineroJugador)) + " PC", 1);
-        MinecraftUtils.addLineToScoreboard(objective, "     ", 0);
-        MinecraftUtils.addLineToScoreboard(objective, ChatColor.GOLD + "-------Empresas-----", -2);
+        addLineToScoreboard(objective, GOLD + "Tu patrimonio total: " + FORMATEA.format(Math.round(patriominioTotal)) + " PC", 1);
+        addLineToScoreboard(objective, GOLD + "------------" + " PC", 2);
+        int scoreBoardLine = 3;
 
-        List<Empresa> empresas = sortEmpresaByPixelcoins(empresasService.getByOwner(player.getName()));
-        for(int i = 0; i < empresas.size(); i++){
-            Empresa empresa = empresas.get(i);
+        for (TipoCuentaPatrimonio cuenta : patrimonioDesglosado.keySet()) {
+            double patriomnioCuenta = patrimonioDesglosado.get(cuenta);
 
-            String mensaje = ChatColor.GOLD + "- " + empresa.getNombre() + " (" + ChatColor.GREEN + FORMATEA.format(empresa.getPixelcoins()) + " PC ";
-            mensaje = mensaje + calcularRentabilidadEmpresaYFormatear(empresa);
-            mensaje = cambiarLongitudDelMensajeSiEsNecesario(mensaje, empresa);
+            addLineToScoreboard(objective, GOLD + cuenta.getAlias() + GREEN + FORMATEA.format(Math.round(patriomnioCuenta)) + " PC", scoreBoardLine);
 
-            MinecraftUtils.addLineToScoreboard(objective, mensaje, i - 100);
+            scoreBoardLine++;
         }
 
         return scoreboard;
     }
 
-    private String cambiarLongitudDelMensajeSiEsNecesario (String mensaje, Empresa empresa) {
-        if (mensaje.length() > 40) {
-            mensaje = ChatColor.GOLD + "- " + empresa.getNombre() + " (" + ChatColor.GREEN + FORMATEA.format(empresa.getPixelcoins()) + " PC";
-            if (mensaje.length() > 40) {
-                mensaje = ChatColor.GOLD + "- " + empresa.getNombre();
-            }
-        }
-        return mensaje;
-    }
-
-    private String calcularRentabilidadEmpresaYFormatear (Empresa empresa) {
-        double rentabilidad = Funciones.rentabilidad(empresa.getIngresos(), empresa.getIngresos() - empresa.getGastos());
-
-        if(rentabilidad < 0){
-            return ChatColor.RED + "" + (int) rentabilidad + "%" + ChatColor.GOLD + " )";
-        }else{
-            return ChatColor.GREEN + "" + (int) rentabilidad + "%" + ChatColor.GOLD + " )";
-        }
-    }
-
-    private List<Empresa> sortEmpresaByPixelcoins (List<Empresa> empresas) {
-        empresas.sort((o1, o2) -> o1.getPixelcoins() >= o2.getPixelcoins() ? -1 : 1);
-
-        return empresas;
+    @Override
+    public boolean isGlobal() {
+        return false;
     }
 }

@@ -27,7 +27,7 @@ public final class SacarMaxItemUseCase implements UseCaseHandler<SacarMaxItemPar
     private final EventBus eventBus;
 
     @Override
-    public void handle(SacarMaxItemParametros parametros) throws Exception {
+    public void handle(SacarMaxItemParametros parametros) {
         validador.jugadorTienePixelcoins(parametros.getJugadorId(), parametros.getTipoCambio().cambio);
 
         double pixelcoinsJugador = transaccionesService.getBalancePixelcions(parametros.getJugadorId());

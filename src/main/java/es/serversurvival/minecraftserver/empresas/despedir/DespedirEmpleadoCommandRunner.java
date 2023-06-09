@@ -3,6 +3,7 @@ package es.serversurvival.minecraftserver.empresas.despedir;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.Empleado;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.EmpleadosService;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
@@ -24,10 +25,10 @@ import static org.bukkit.ChatColor.*;
 )
 @RequiredArgsConstructor
 public final class DespedirEmpleadoCommandRunner implements CommandRunnerArgs<DespedirEmpleadoComando> {
-    private final DespedirEmpleadoUseCase despedirEmpleadoUseCase;
     private final JugadoresService jugadoresService;
     private final EmpleadosService empleadosService;
     private final EmpresasService empresasService;
+    private final UseCaseBus useCaseBus;
 
     @Override
     public void execute(DespedirEmpleadoComando comando, Player player) {
@@ -35,7 +36,7 @@ public final class DespedirEmpleadoCommandRunner implements CommandRunnerArgs<De
         UUID jugadorDespedirId = jugadoresService.getByNombre(comando.getEmpleado()).getJugadorId();
         Empleado empleado = empleadosService.getEmpleoActivoByEmpresaIdAndEmpleadoJugadorId(empresa.getEmpresaId(), jugadorDespedirId);
 
-        despedirEmpleadoUseCase.despedir(DespedirEmpleadoParametros.builder()
+        useCaseBus.handle(DespedirEmpleadoParametros.builder()
                 .empleadoIdADespedir(empleado.getEmpleadoId())
                 .causa(comando.getCausaDespido())
                 .empresaId(empresa.getEmpresaId())

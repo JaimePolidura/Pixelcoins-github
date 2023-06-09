@@ -11,8 +11,8 @@ import es.serversurvival.minecraftserver.empresas.repatirdividendos.RepartirDivi
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver.empresas.cerrar.CerrarEmpresaConfirmacionMenu;
-import es.serversurvival.v1.jugadores.perfil.PerfilMenu;
 import es.serversurvival.minecraftserver.empresas.votaciones.VerVotacionesEmpresaMenu;
+import es.serversurvival.minecraftserver.jugadores.perfil.PerfilMenu;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.AccionistasEmpresasService;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.Empleado;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.EmpleadosService;

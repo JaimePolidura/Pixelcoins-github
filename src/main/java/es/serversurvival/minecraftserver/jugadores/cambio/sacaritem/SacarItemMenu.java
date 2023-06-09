@@ -5,9 +5,9 @@ import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.jugadores.cambiar.TipoCambioPixelcoins;
 import es.serversurvival.pixelcoins.jugadores.cambiar.sacarItem.SacarItemParametros;
-import es.serversurvival.pixelcoins.jugadores.cambiar.sacarItem.SacarItemUseCase;
 import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
 import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
@@ -26,7 +26,7 @@ import static org.bukkit.ChatColor.*;
 @AllArgsConstructor
 public final class SacarItemMenu extends Menu {
     private final TransaccionesService transaccionesService;
-    private final SacarItemUseCase sacarItemUseCase;
+    private final UseCaseBus useCaseBus;
 
     @Override
     public int[][] items() {
@@ -73,7 +73,7 @@ public final class SacarItemMenu extends Menu {
             return;
         }
 
-        sacarItemUseCase.sacarItem(SacarItemParametros.of(player.getUniqueId(), tipoCambio, 1));
+        useCaseBus.handle(SacarItemParametros.of(player.getUniqueId(), tipoCambio, 1));
 
         player.getInventory().addItem(new ItemStack(Material.getMaterial(tipoItemClickeado), 1));
 

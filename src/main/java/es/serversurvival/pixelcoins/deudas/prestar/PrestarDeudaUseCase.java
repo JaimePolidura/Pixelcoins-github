@@ -24,7 +24,7 @@ public final class PrestarDeudaUseCase implements UseCaseHandler<PrestarDeudaPar
     private final EventBus eventBus;
 
     @Override
-    public void handle(PrestarDeudaParametros parametros) throws Exception {
+    public void handle(PrestarDeudaParametros parametros) {
         deudasValidador.nominalCorrecto(parametros.getNominal());
         deudasValidador.interesCorreto(parametros.getInteres());
         deudasValidador.numeroCuotasCorrecto(parametros.getNumeroCuotasTotales());

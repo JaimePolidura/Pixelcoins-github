@@ -8,6 +8,7 @@ import es.bukkitbettermenus.modules.sync.SyncMenuConfiguration;
 import es.bukkitbettermenus.modules.sync.SyncMenuService;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
@@ -36,11 +37,10 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
     public final static String PROPIETARIO_OFERTA_ITEM_DISPLAYNAME = RED + "" + BOLD + UNDERLINE + "CLICK PARA RETIRAR";
     public final static String NO_PROPIETARIO_OFERTA_DISPLAYNAME = AQUA + "" + BOLD + UNDERLINE + "CLICK PARA COMPRAR";
 
-    private final ComprarOfertaUseCase comprarOfertaUseCase;
-    private final RetirarOfertaUseCase retirarOfertaUseCase;
     private final SyncMenuService syncMenuService;
     private final OfertasService ofertasService;
     private final MenuService menuService;
+    private final UseCaseBus useCaseBus;
 
     @Override
     public final int[][] items() {
@@ -99,7 +99,7 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
     private void comprarOferta(Oferta oferta, ItemStack itemOfertaComprado) {
         int cantidadItem = itemOfertaComprado.getAmount();
 
-        comprarOfertaUseCase.comprarOferta(ComprarOfertaParametros.of(getPlayer().getUniqueId(), oferta.getOfertaId()));
+        useCaseBus.handle(ComprarOfertaParametros.of(getPlayer().getUniqueId(), oferta.getOfertaId()));
 
         if(cantidadItem > 1){
             itemOfertaComprado.setAmount(cantidadItem - 1);
@@ -110,7 +110,7 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
     }
 
     private void retirarOferta(Oferta oferta) {
-        retirarOfertaUseCase.retirarOfertaUseCase(RetirarOfertaParametros.of(getPlayer().getUniqueId(), oferta.getOfertaId()));
+        useCaseBus.handle(RetirarOfertaParametros.of(getPlayer().getUniqueId(), oferta.getOfertaId()));
         reloadTodoElMenu();
     }
 

@@ -19,7 +19,7 @@ public final class CancelarDeudaUseCase implements UseCaseHandler<CancelarDeudaP
     private final EventBus eventBus;
 
     @Override
-    public void handle(CancelarDeudaParametros parametros) throws Exception {
+    public void handle(CancelarDeudaParametros parametros) {
         deudasValidador.acredorDeDeuda(parametros.getDeudaId(), parametros.getJugadorId());
         deudasValidador.deudaPendiente(parametros.getDeudaId());
 

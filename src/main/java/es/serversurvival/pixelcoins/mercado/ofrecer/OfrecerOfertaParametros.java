@@ -8,4 +8,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public final class OfrecerOfertaParametros implements ParametrosUseCase {
     @Getter private final Oferta nuevaOferta;
+
+    public static OfrecerOfertaParametros of(Oferta oferta) {
+        return new OfrecerOfertaParametros(oferta);
+    }
 }

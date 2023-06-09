@@ -16,7 +16,7 @@ public final class ContratarEmpleadoUseCase implements UseCaseHandler<ContratarE
     private final EventBus eventBus;
 
     @Override
-    public void handle(ContratarEmpleadoParametros parametros) throws Exception {
+    public void handle(ContratarEmpleadoParametros parametros) {
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.noEmpleadoEmpresa(parametros.getEmpresaId(), parametros.getJugadorIdAContratar());
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorIdContrador());

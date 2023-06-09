@@ -5,6 +5,7 @@ import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
 import es.serversurvival.pixelcoins.bolsa._shared.premarket.application.OrdenesPremarketService;
@@ -24,9 +25,9 @@ import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
 public final class BolsaVerOrdernesMenu extends Menu {
-    private final CancelarOrdenPremarketUseCase cancelarOrdenPremarketUseCase;
     private final OrdenesPremarketService ordenesPremarketService;
     private final ActivosBolsaService activosBolsaService;
+    private final UseCaseBus useCaseBus;
 
     @Override
     public int[][] items() {
@@ -58,7 +59,7 @@ public final class BolsaVerOrdernesMenu extends Menu {
     private void cancelOrder(Player player, InventoryClickEvent event) {
         UUID ordenId = MinecraftUtils.getLastLineOfLore(event.getCurrentItem(), 0);
 
-        cancelarOrdenPremarketUseCase.cancelar(new CancelarOrdenPremarketParametros(player.getUniqueId(), ordenId));
+        useCaseBus.handle(new CancelarOrdenPremarketParametros(player.getUniqueId(), ordenId));
         player.closeInventory();
         player.sendMessage(GOLD + "Has cancelado la orden");
     }

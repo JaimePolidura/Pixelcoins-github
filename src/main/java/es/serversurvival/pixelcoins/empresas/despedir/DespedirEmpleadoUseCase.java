@@ -18,7 +18,7 @@ public final class DespedirEmpleadoUseCase implements UseCaseHandler<DespedirEmp
     private final EventBus eventBus;
 
     @Override
-    public void handle(DespedirEmpleadoParametros parametros) throws Exception {
+    public void handle(DespedirEmpleadoParametros parametros) {
         validador.stringLongitudEntre(parametros.getCausa(), 1, 16, "causa de despido");
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());

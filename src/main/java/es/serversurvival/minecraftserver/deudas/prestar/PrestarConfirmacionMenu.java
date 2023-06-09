@@ -4,6 +4,7 @@ import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.menus.ConfirmacionMenu;
 import es.serversurvival.minecraftserver.deudas._shared.DeudaItemMercadoLore;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.deudas.prestar.PrestarDeudaParametros;
 import es.serversurvival.pixelcoins.deudas.prestar.PrestarDeudaUseCase;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
@@ -23,8 +24,8 @@ import static org.bukkit.ChatColor.*;
 @AllArgsConstructor
 public final class PrestarConfirmacionMenu extends ConfirmacionMenu<PrestarConfirmacionMenu.PrestarConfirmacionMenuState> {
     private final DeudaItemMercadoLore deudaItemMercadoLore;
-    private final PrestarDeudaUseCase prestarDeudaUseCase;
     private final JugadoresService jugadoresService;
+    private final UseCaseBus useCaseBus;
 
     @Override
     public String titulo() {
@@ -33,7 +34,7 @@ public final class PrestarConfirmacionMenu extends ConfirmacionMenu<PrestarConfi
 
     @Override
     public void onAceptar(Player destinatario, InventoryClickEvent event, PrestarConfirmacionMenuState state) {
-        prestarDeudaUseCase.prestar(PrestarDeudaParametros.builder()
+        useCaseBus.handle(PrestarDeudaParametros.builder()
                 .numeroCuotasTotales(state.getNumeroCuotasTotales())
                 .periodoPagoCuita(state.getPeriodoPagoCuotasMs())
                 .nominal(state.getNominal())

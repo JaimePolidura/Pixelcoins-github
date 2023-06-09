@@ -3,7 +3,6 @@ package es.serversurvival.minecraftserver.ayuda;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.mobs.Mob;
 import es.bukkitclassmapper.mobs.OnPlayerInteractMob;
-import es.serversurvival.v1.ayuda.verayudas.VerAyudasMenu;
 import lombok.AllArgsConstructor;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 

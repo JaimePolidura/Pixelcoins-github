@@ -16,7 +16,7 @@ public final class DejarEmpleoUseCase implements UseCaseHandler<DejarEmpleoParam
     private final EventBus eventBus;
 
     @Override
-    public void handle(DejarEmpleoParametros parametros) throws Exception {
+    public void handle(DejarEmpleoParametros parametros) {
         empresasValidador.empleadoEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
 
         Empleado empleado = empleadosService.getEmpleoActivoByEmpresaIdAndEmpleadoJugadorId(parametros.getEmpresaId(), parametros.getJugadorId());

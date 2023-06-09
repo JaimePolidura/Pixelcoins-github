@@ -2,6 +2,7 @@ package es.serversurvival.minecraftserver.empresas.emitiracciones;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.EmpresasService;
 import es.serversurvival.pixelcoins.empresas.emitiracciones.EmitirAccionesServerParametros;
@@ -19,14 +20,14 @@ import static org.bukkit.ChatColor.*;
 )
 @RequiredArgsConstructor
 public final class EmitirAccionesCommandRunner implements CommandRunnerArgs<EmitirAccionesCommand> {
-    private final EmitirAccionesServerUseCase emitirAccionesServerUseCase;
     private final EmpresasService empresasService;
+    private final UseCaseBus useCaseBus;
 
     @Override
     public void execute(EmitirAccionesCommand command, Player player) {
         Empresa empresa = empresasService.getByNombre(command.getEmpresa());
 
-        emitirAccionesServerUseCase.emitir(EmitirAccionesServerParametros.builder()
+        useCaseBus.handle(EmitirAccionesServerParametros.builder()
                 .numeroNuevasAcciones(command.getNumeroNuevasAcciones())
                 .precioPorAccion(command.getPrecioPorAccion())
                 .jugadorId(player.getUniqueId())

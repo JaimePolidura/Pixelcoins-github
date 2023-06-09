@@ -4,6 +4,7 @@ import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.modules.confirmation.ConfirmationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
 import es.serversurvival.pixelcoins.empresas.cerrar.CerrarEmpresaParametros;
 import es.serversurvival.pixelcoins.empresas.cerrar.CerrarEmpresaUseCase;
@@ -20,6 +21,7 @@ import static org.bukkit.ChatColor.*;
 @AllArgsConstructor
 public final class CerrarEmpresaConfirmacionMenu extends Menu<Empresa> {
     private final CerrarEmpresaUseCase cerrarEmpresaUseCase;
+    private final UseCaseBus useCaseBus;
 
     @Override
     public int[][] items() {
@@ -39,7 +41,7 @@ public final class CerrarEmpresaConfirmacionMenu extends Menu<Empresa> {
     }
 
     private void onAccept(Player player, InventoryClickEvent event) {
-        this.cerrarEmpresaUseCase.cerrar(new CerrarEmpresaParametros(getState().getEmpresaId(), getPlayer().getUniqueId()));
+        this.useCaseBus.handle(new CerrarEmpresaParametros(getState().getEmpresaId(), getPlayer().getUniqueId()));
 
         player.sendMessage(ChatColor.GOLD + "Has cerrado tu empresa, has recibido todas las pixelcoins");
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);

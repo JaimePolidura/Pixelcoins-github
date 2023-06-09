@@ -3,9 +3,9 @@ package es.serversurvival.minecraftserver.jugadores.cambio.sacarmaxitem;
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.jugadores.cambiar.TipoCambioPixelcoins;
 import es.serversurvival.pixelcoins.jugadores.cambiar.sacarMaxItem.SacarMaxItemParametros;
-import es.serversurvival.pixelcoins.jugadores.cambiar.sacarMaxItem.SacarMaxItemUseCase;
 import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
 import es.serversurvival._shared.utils.Funciones;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public final class SacarMaxItemMenu extends Menu {
     private final TransaccionesService transaccionesService;
-    private final SacarMaxItemUseCase sacarMaxItemUseCase;
+    private final UseCaseBus useCaseBus;
 
     @Override
     public int[][] items() {
@@ -58,7 +58,7 @@ public final class SacarMaxItemMenu extends Menu {
             return;
         }
 
-        sacarMaxItemUseCase.sacarMaxItem(SacarMaxItemParametros.of(player.getUniqueId(), tipoCambio));
+        useCaseBus.handle(SacarMaxItemParametros.of(player.getUniqueId(), tipoCambio));
     }
 
     private ItemStack buildItemInfo() {

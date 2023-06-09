@@ -8,6 +8,7 @@ import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver.jugadores.perfil.PerfilMenu;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.Empleado;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.EmpleadosService;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
@@ -27,11 +28,12 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
-public final class MisEmpleosMenu extends Menu {
+public final class VerMisEmpleosMenu extends Menu {
     private final DejarEmpleoUseCase dearEmpleoUseCase;
     private final EmpleadosService empleadosService;
     private final EmpresasService empresasService;
     private final MenuService menuService;
+    private final UseCaseBus useCaseBus;
 
     @Override
     public int[][] items() {
@@ -63,7 +65,7 @@ public final class MisEmpleosMenu extends Menu {
     private void dejarEmpleo(Player player, InventoryClickEvent event) {
         UUID empresaId = MinecraftUtils.getLastLineOfLore(event.getCurrentItem(), 0);
 
-        dearEmpleoUseCase.dejar(new DejarEmpleoParametros(player.getUniqueId(), empresaId));
+        useCaseBus.handle(new DejarEmpleoParametros(player.getUniqueId(), empresaId));
 
         this.menuService.close(player);
 

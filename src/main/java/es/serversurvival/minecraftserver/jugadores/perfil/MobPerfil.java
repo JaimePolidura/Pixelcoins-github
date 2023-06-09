@@ -3,6 +3,7 @@ package es.serversurvival.minecraftserver.jugadores.perfil;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.mobs.Mob;
 import es.bukkitclassmapper.mobs.OnPlayerInteractMob;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
@@ -13,6 +14,6 @@ public class MobPerfil implements OnPlayerInteractMob {
 
     @Override
     public void execute(PlayerInteractEntityEvent event) {
-        this.menuService.open(event.getPlayer(), PerfilMenu.class, event.getPlayer());
+        this.menuService.open(event.getPlayer(), PerfilMenu.class);
     }
 }

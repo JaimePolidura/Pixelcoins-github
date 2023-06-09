@@ -3,6 +3,7 @@ package es.serversurvival.minecraftserver.deudas.vendermercado;
 import es.serversurvival.minecraftserver._shared.menus.NumberSelectorMenu;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver.deudas._shared.DeudaItemMercadoLore;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.deudas._shared.Deuda;
 import es.serversurvival.pixelcoins.deudas.ponerventa.PonerVentaDeudaParametros;
 import es.serversurvival.pixelcoins.deudas.ponerventa.PonerVentaDeudaUseCase;
@@ -16,8 +17,8 @@ import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
 public final class PonerVentaDeudaMercadoPrecioSelectorMenu extends NumberSelectorMenu<Deuda> {
-    private final PonerVentaDeudaUseCase ponerVentaDeudaUseCase;
     private final DeudaItemMercadoLore deudaItemMercadoLore;
+    private final UseCaseBus useCaseBus;
 
     @Override
     public double maxValue() {
@@ -41,7 +42,7 @@ public final class PonerVentaDeudaMercadoPrecioSelectorMenu extends NumberSelect
 
     @Override
     public void onAccept(Player player, double precio, InventoryClickEvent event) {
-        ponerVentaDeudaUseCase.vender(PonerVentaDeudaParametros.builder()
+        useCaseBus.handle(PonerVentaDeudaParametros.builder()
                 .deudaId(getState().getDeudaId())
                 .precio(precio)
                 .jugadorId(player.getUniqueId())

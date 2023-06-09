@@ -15,7 +15,7 @@ public final class IngresarItemUseCase implements UseCaseHandler<IngresarItemPar
     private final EventBus eventBus;
 
     @Override
-    public void handle(IngresarItemParametros parametros) throws Exception {
+    public void handle(IngresarItemParametros parametros) {
         double pixelcoinsAnadir = parametros.getTipoCambio().cambio * parametros.getCantiadad();
 
         this.transaccionesService.save(Transaccion.builder()

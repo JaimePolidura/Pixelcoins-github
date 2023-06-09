@@ -3,10 +3,9 @@ package es.serversurvival.minecraftserver.tienda.vertienda;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.modules.sync.SyncMenuService;
 import es.serversurvival.minecraftserver._shared.VerOfertasMercadoMenu;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
-import es.serversurvival.pixelcoins.mercado.comprar.ComprarOfertaUseCase;
-import es.serversurvival.pixelcoins.mercado.retirar.RetirarOfertaUseCase;
 import es.serversurvival.pixelcoins.tienda._shared.OfertaTiendaItemMinecraft;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
@@ -17,9 +16,8 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 public final class TiendaMenu extends VerOfertasMercadoMenu<OfertaTiendaItemMinecraft> {
-    public TiendaMenu(ComprarOfertaUseCase comprarOfertaUseCase, RetirarOfertaUseCase retirarOfertaUseCase,
-                      SyncMenuService syncMenuService, OfertasService ofertasService, MenuService menuService) {
-        super(comprarOfertaUseCase, retirarOfertaUseCase, syncMenuService, ofertasService, menuService);
+    public TiendaMenu(SyncMenuService syncMenuService, OfertasService ofertasService, MenuService menuService, UseCaseBus useCaseBus) {
+        super(syncMenuService, ofertasService, menuService, useCaseBus);
     }
 
     @Override

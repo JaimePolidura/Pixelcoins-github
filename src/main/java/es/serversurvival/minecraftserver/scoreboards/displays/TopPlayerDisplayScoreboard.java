@@ -3,7 +3,7 @@ package es.serversurvival.minecraftserver.scoreboards.displays;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver.scoreboards.ScoreboardCreator;
 import es.serversurvival.minecraftserver.scoreboards.ServerScoreboardCreator;
-import es.serversurvival.v1.jugadores._shared.application.CalculadorPatrimonio;
+import es.serversurvival.pixelcoins.jugadores.patrimonio.CalculadorPatrimonioService;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -17,7 +17,7 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 @ScoreboardCreator
 @RequiredArgsConstructor
 public class TopPlayerDisplayScoreboard implements ServerScoreboardCreator {
-    private final CalculadorPatrimonio calculadorPatrimonio;
+    private final CalculadorPatrimonioService calculadorPatrimonioService;
 
     @Override
     public boolean isGlobal() {
@@ -29,20 +29,18 @@ public class TopPlayerDisplayScoreboard implements ServerScoreboardCreator {
         Scoreboard scoreboard = MinecraftUtils.createScoreboard("topjugadores", ChatColor.GOLD + "" + ChatColor.BOLD + "TOP RICOS");
         Objective objective = scoreboard.getObjective("topjugadores");
 
-        Map<String, Double> topPlayers = calculadorPatrimonio.calcularTopJugadores(false, 5);
+        Map<String, Double> topPlayers = calculadorPatrimonioService.calcularTopJugadores(false, 3);
 
         int fila = 0;
-        int pos = 1;
+        int posicionTopReico = 1;
 
         for (Map.Entry<String, Double> entry : topPlayers.entrySet()) {
-            if(pos >= 4) break;
-
-            String mensaje = ChatColor.GOLD + "" + pos + ": " + entry.getKey() + ChatColor.GREEN + " " + FORMATEA.format(entry.getValue()) + " PC";
+            String mensaje = ChatColor.GOLD + "" + posicionTopReico + ": " + entry.getKey() + ChatColor.GREEN + " " + FORMATEA.format(entry.getValue()) + " PC";
 
             MinecraftUtils.addLineToScoreboard(objective, mensaje, fila);
 
             fila--;
-            pos++;
+            posicionTopReico++;
         }
 
         return scoreboard;

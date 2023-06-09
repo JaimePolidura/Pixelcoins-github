@@ -20,7 +20,7 @@ public final class ComprarOfertaUseCase implements UseCaseHandler<ComprarOfertaP
     private final OfertasService ofertasService;
 
     @Override
-    public void handle(ComprarOfertaParametros parametros) throws Exception {
+    public void handle(ComprarOfertaParametros parametros) {
         ofertasValidator.tienePixelcoinsSuficientes(parametros.getOfertaId(), parametros.getJugadorId());
         ofertasValidator.noEsVendedor(parametros.getOfertaId(), parametros.getJugadorId());
 

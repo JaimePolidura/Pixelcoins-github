@@ -17,7 +17,7 @@ public final class PonerVentaTiendaItemMinecraftUseCase implements UseCaseHandle
     private final EventBus eventBus;
 
     @Override
-    public void handle(PonerVentaTiendaItemMinecraftParametros parametros) throws Exception {
+    public void handle(PonerVentaTiendaItemMinecraftParametros parametros) {
         validator.itemNoBaneado(parametros.getItem());
         validator.precio(parametros.getPrecio());
 

@@ -22,7 +22,7 @@ public final class ProponerNuevoDirectorUseCase implements UseCaseHandler<Propon
     private final EventBus eventBus;
 
     @Override
-    public void handle(ProponerNuevoDirectorParametros parametros) throws Exception {
+    public void handle(ProponerNuevoDirectorParametros parametros) {
         empresasValidador.noDirectorEmpresa(parametros.getEmpresaId(), parametros.getNuevoDirectorId());
         empresasValidador.sueldoCorrecto(parametros.getSueldo());
         empresasValidador.periodoPagoCorrecto(parametros.getPeriodoPagoMs());

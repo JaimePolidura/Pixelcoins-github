@@ -30,7 +30,7 @@ public final class CerrarPosicionUseCase implements UseCaseHandler<CerrarPosicio
     private final EventBus eventBus;
 
     @Override
-    public void handle(CerrarPosicionParametros parametros) throws Exception {
+    public void handle(CerrarPosicionParametros parametros) {
         validator.jugaodrTienePosicion(parametros.getPosicionAbiertaId(), parametros.getJugadorId());
         validator.posicionTieneCantidad(parametros.getPosicionAbiertaId(), parametros.getCantidad());
         validator.posicionAbierta(parametros.getPosicionAbiertaId());

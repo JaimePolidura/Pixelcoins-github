@@ -12,6 +12,7 @@ public final class PosicionAbiertaBuilder {
     private TipoPosicion tipoPosicion;
     private double precioApertura;
     private LocalDateTime fechaApertura;
+    private double rentabilidad;
 
     public PosicionAbiertaBuilder() {
         this.posicionId = UUID.randomUUID();
@@ -25,7 +26,12 @@ public final class PosicionAbiertaBuilder {
 
     public Posicion build() {
         return new Posicion(posicionId, activoBolsaId, jugadorId, cantidad, tipoApuesta, tipoPosicion, precioApertura,
-                fechaApertura, 0, null);
+                fechaApertura, 0, null, rentabilidad);
+    }
+
+    public PosicionAbiertaBuilder rentabilidad(double rentabilidad) {
+        this.rentabilidad = rentabilidad;
+        return this;
     }
 
     public PosicionAbiertaBuilder precioApertura(double precioApertura) {

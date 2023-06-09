@@ -3,7 +3,7 @@ package es.serversurvival.minecraftserver.empresas.repatirdividendos;
 import es.bukkitbettermenus.menustate.BeforeShow;
 import es.serversurvival.minecraftserver._shared.menus.NumberSelectorMenu;
 import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.v1.mensajes._shared.application.EnviadorMensajes;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
 import es.serversurvival.pixelcoins.empresas.repartirdividendos.RepartirDividendosParametros;
 import es.serversurvival.pixelcoins.empresas.repartirdividendos.RepartirDividendosUseCase;
@@ -15,26 +15,26 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.List;
 
+import static es.serversurvival.minecraftserver._shared.MinecraftUtils.*;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.BOLD;
 
 @AllArgsConstructor
 public final class RepartirDividendosConfirmacionMenu extends NumberSelectorMenu<Empresa> implements BeforeShow {
-    private final RepartirDividendosUseCase repartirDividendosUseCase;
     private final TransaccionesService transaccionesService;
-    private final EnviadorMensajes enviadorMensajes;
+    private final UseCaseBus useCaseBus;
 
     private double pixelcoinsEmpresa;
 
     @Override
     public void onAccept(Player player, double dividendoPorAccion, InventoryClickEvent event) {
-        repartirDividendosUseCase.repartirDividendos(RepartirDividendosParametros.builder()
+        useCaseBus.handle(RepartirDividendosParametros.builder()
                 .empresaId(getState().getEmpresaId())
                 .jugadorId(player.getUniqueId())
                 .dividendoPorAccion(dividendoPorAccion)
                 .build());
 
-        enviadorMensajes.enviarMensajeYSonido(player, GOLD + "Se han pagado todos los dividendos", Sound.ENTITY_PLAYER_LEVELUP);
+        enviarMensajeYSonido(player, GOLD + "Se han pagado todos los dividendos", Sound.ENTITY_PLAYER_LEVELUP);
     }
 
     @Override

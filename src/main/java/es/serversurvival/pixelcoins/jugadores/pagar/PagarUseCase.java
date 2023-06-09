@@ -17,7 +17,7 @@ public final class PagarUseCase implements UseCaseHandler<HacerPagarParametros> 
     private final EventBus eventBus;
 
     @Override
-    public void handle(HacerPagarParametros parametros) throws Exception {
+    public void handle(HacerPagarParametros parametros) {
         validador.jugadorTienePixelcoins(parametros.getPagadorId(), parametros.getPixelcoins());
         validador.numeroMayorQueCero(parametros.getPixelcoins(), "Las pixelcoins");
         validador.notEqual(parametros.getPagadorId(), parametros.getPagadoId(), "Tu eres tonto o q te pasa?!");

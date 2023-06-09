@@ -26,7 +26,7 @@ public final class CerrarEmpresaUseCase implements UseCaseHandler<CerrarEmpresaP
     private final EventBus eventBus;
 
     @Override
-    public void handle(CerrarEmpresaParametros parametros) throws Exception {
+    public void handle(CerrarEmpresaParametros parametros) {
         validador.empresaNoCerrada(parametros.getEmpresaId());
         validador.empresaNoCotizada(parametros.getEmpresaId());
         validador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());

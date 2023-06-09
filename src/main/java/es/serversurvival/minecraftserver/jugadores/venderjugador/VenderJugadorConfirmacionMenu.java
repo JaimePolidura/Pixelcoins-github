@@ -3,6 +3,7 @@ package es.serversurvival.minecraftserver.jugadores.venderjugador;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.jaime.EventBus;
 import es.serversurvival.minecraftserver._shared.menus.ConfirmacionMenu;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.jugadores.pagar.HacerPagarParametros;
 import es.serversurvival.pixelcoins.jugadores.pagar.PagarUseCase;
 import es.serversurvival._shared.utils.Funciones;
@@ -20,7 +21,7 @@ import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
 public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu<VenderJugadorConfirmacionMenuState> {
-    private final PagarUseCase pagarUseCase;
+    private final UseCaseBus useCaseBus;
     private final EventBus eventBus;
 
     @Override
@@ -38,7 +39,7 @@ public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu<Vender
             return;
         }
 
-        pagarUseCase.hacerPago(HacerPagarParametros.of(jugadorComprador.getUniqueId(), jugadorVendedor.getUniqueId(), precio));
+        useCaseBus.handle(HacerPagarParametros.of(jugadorComprador.getUniqueId(), jugadorVendedor.getUniqueId(), precio));
 
         jugadorComprador.getInventory().addItem(itemAVender);
         jugadorVendedor.getInventory().clear(slotItemVender);

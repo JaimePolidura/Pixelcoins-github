@@ -2,6 +2,7 @@ package es.serversurvival.minecraftserver.empresas.comprarservicio;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.EmpresasService;
 import es.serversurvival.pixelcoins.empresas.comprarservicio.ComprarServicioParametros;
 import es.serversurvival.pixelcoins.empresas.comprarservicio.ComprarServicioUseCase;
@@ -22,12 +23,13 @@ import static org.bukkit.ChatColor.*;
 public final class EmpresaComprarServicioCommandRunner implements CommandRunnerArgs<EmpresaComprarServicioComando> {
     private final ComprarServicioUseCase comprarServicioUseCase;
     private final EmpresasService empresasService;
+    private final UseCaseBus useCaseBus;
 
     @Override
     public void execute(EmpresaComprarServicioComando comando, Player player) {
         UUID empresaId = empresasService.getByNombre(comando.getEmpresa()).getEmpresaId();
 
-        comprarServicioUseCase.comprarServicio(ComprarServicioParametros.builder()
+        useCaseBus.handle(ComprarServicioParametros.builder()
                 .jugadorId(player.getUniqueId())
                 .empresaId(empresaId)
                 .pixelcoins(comando.getPrecio())

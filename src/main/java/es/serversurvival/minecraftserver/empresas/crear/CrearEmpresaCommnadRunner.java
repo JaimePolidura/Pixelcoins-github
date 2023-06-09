@@ -2,6 +2,7 @@ package es.serversurvival.minecraftserver.empresas.crear;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas.crear.CrearEmpresaParametros;
 import es.serversurvival.pixelcoins.empresas.crear.CrearEmpresaUseCase;
 import lombok.AllArgsConstructor;
@@ -20,11 +21,11 @@ import static org.bukkit.ChatColor.*;
 )
 @AllArgsConstructor
 public final class CrearEmpresaCommnadRunner implements CommandRunnerArgs<CrearEmpresaComando> {
-    private final CrearEmpresaUseCase crearEmpresaUseCase;
+    private final UseCaseBus useCaseBus;
 
     @Override
     public void execute(CrearEmpresaComando comando, Player player) {
-        crearEmpresaUseCase.crear(CrearEmpresaParametros.builder()
+        useCaseBus.handle(CrearEmpresaParametros.builder()
                 .descripccion(comando.getDescripccion())
                 .nombre(comando.getEmpresa())
                 .icono(Material.DIAMOND_PICKAXE.toString())

@@ -27,7 +27,7 @@ public final class AbrirPosicionBolsaUseCase implements UseCaseHandler<AbrirPosi
     private final EventBus eventBus;
 
     @Override
-    public void handle(AbrirPosicoinBolsaParametros parametros) throws Exception {
+    public void handle(AbrirPosicoinBolsaParametros parametros) {
         validator.activoBolsaExsiste(parametros.getActivoBolsaId());
         validator.cantidadCorrecta(parametros.getCantidad());
         validator.suficientesPixelcoinsAbrir(parametros);

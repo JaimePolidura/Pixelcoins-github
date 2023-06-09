@@ -3,9 +3,8 @@ package es.serversurvival.minecraftserver.empresas.mercado;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.modules.sync.SyncMenuService;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
-import es.serversurvival.pixelcoins.mercado.comprar.ComprarOfertaUseCase;
-import es.serversurvival.pixelcoins.mercado.retirar.RetirarOfertaUseCase;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.VerOfertasMercadoMenu;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.OfertaAccionMercado;
@@ -26,10 +25,9 @@ public final class MercadoAccionesEmpresasMenu extends VerOfertasMercadoMenu<Ofe
     private final JugadoresService jugadoresService;
     private final EmpresasService empresasService;
 
-    public MercadoAccionesEmpresasMenu(ComprarOfertaUseCase comprarOfertaUseCase, RetirarOfertaUseCase retirarOfertaUseCase,
-                                       SyncMenuService syncMenuService, OfertasService ofertasService, MenuService menuService,
-                                       JugadoresService jugadoresService, EmpresasService empresasService) {
-        super(comprarOfertaUseCase, retirarOfertaUseCase, syncMenuService, ofertasService, menuService);
+    public MercadoAccionesEmpresasMenu(SyncMenuService syncMenuService, OfertasService ofertasService, MenuService menuService,
+                                       UseCaseBus useCaseBus, JugadoresService jugadoresService, EmpresasService empresasService) {
+        super(syncMenuService, ofertasService, menuService, useCaseBus);
         this.jugadoresService = jugadoresService;
         this.empresasService = empresasService;
     }

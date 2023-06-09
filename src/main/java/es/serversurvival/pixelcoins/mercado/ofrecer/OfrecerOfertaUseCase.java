@@ -17,7 +17,7 @@ public final class OfrecerOfertaUseCase implements UseCaseHandler<OfrecerOfertaP
     private final Validador validador;
 
     @Override
-    public void handle(OfrecerOfertaParametros parametros) throws Exception {
+    public void handle(OfrecerOfertaParametros parametros) {
         Oferta nuevaOferta = parametros.getNuevaOferta();
         validador.numeroMayorQueCero(nuevaOferta.getPrecio(), "El precio");
         validador.numeroMayorQueCero(nuevaOferta.getCantidad(), "La cantidad");

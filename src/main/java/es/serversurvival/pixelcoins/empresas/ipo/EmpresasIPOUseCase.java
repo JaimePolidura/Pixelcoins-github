@@ -9,6 +9,7 @@ import es.serversurvival.pixelcoins.empresas._shared.accionistas.AccionistasEmpr
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.OfertaAccionMercadoJugador;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.EmpresasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
+import es.serversurvival.pixelcoins.mercado.ofrecer.OfrecerOfertaParametros;
 import es.serversurvival.pixelcoins.mercado.ofrecer.OfrecerOfertaUseCase;
 import lombok.AllArgsConstructor;
 
@@ -22,12 +23,12 @@ public final class EmpresasIPOUseCase implements UseCaseHandler<EmpresaIPOParame
     private final EventBus eventBus;
 
     @Override
-    public void handle(EmpresaIPOParametros parametros) throws Exception {
+    public void handle(EmpresaIPOParametros parametros) {
         validar(parametros);
 
         AccionistaEmpresa acciones = accionistasEmpresasService.getByEmpresaIdAndJugadorId(parametros.getEmpresaId(), parametros.getJugadorId());
 
-        ofrecerOfertaUseCase.ofrecer(OfertaAccionMercadoJugador.builder()
+        ofrecerOfertaUseCase.handle(OfrecerOfertaParametros.of(OfertaAccionMercadoJugador.builder()
                 .vendedorId(parametros.getEmpresaId())
                 .precio(parametros.getPrecioPorAccion())
                 .cantidad(parametros.getNumeroAccionesVender())
@@ -35,7 +36,7 @@ public final class EmpresasIPOUseCase implements UseCaseHandler<EmpresaIPOParame
                 .tipoOferta(TipoOferta.ACCIONES_SERVER_JUGADOR)
                 .empresaId(parametros.getEmpresaId())
                 .objeto(acciones.getAccionistaId())
-                .build());
+                .build()));
 
         empresasService.save(empresasService.getById(parametros.getEmpresaId()).marcarComoCotizada());
 

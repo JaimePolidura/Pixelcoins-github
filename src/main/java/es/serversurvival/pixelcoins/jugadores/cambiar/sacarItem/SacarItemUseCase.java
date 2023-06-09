@@ -17,7 +17,7 @@ public final class SacarItemUseCase implements UseCaseHandler<SacarItemParametro
     private final EventBus eventBus;
 
     @Override
-    public void handle(SacarItemParametros parametros) throws Exception {
+    public void handle(SacarItemParametros parametros) {
         var jugador = this.jugadoresService.getById(parametros.getJugadorId());
         var pixelcoinsASacar = parametros.getTipoCambio().cambio * parametros.getCantidad();
 

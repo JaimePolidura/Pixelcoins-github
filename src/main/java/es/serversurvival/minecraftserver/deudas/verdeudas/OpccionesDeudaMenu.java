@@ -6,6 +6,7 @@ import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival.minecraftserver.deudas.vendermercado.PonerVentaDeudaMercadoPrecioSelectorMenu;
 import es.serversurvival.minecraftserver.deudas._shared.DeudaItemMercadoLore;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.deudas._shared.Deuda;
 import es.serversurvival.pixelcoins.deudas.cancelar.CancelarDeudaParametros;
 import es.serversurvival.pixelcoins.deudas.cancelar.CancelarDeudaUseCase;
@@ -26,6 +27,7 @@ public final class OpccionesDeudaMenu extends Menu<Deuda> {
     private final CancelarDeudaUseCase cancelarDeudaUseCase;
     private final DeudaItemMercadoLore deudaItemMercadoLore;
     private final MenuService menuService;
+    private final UseCaseBus useCaseBus;
 
     @Override
     public int[][] items() {
@@ -79,13 +81,13 @@ public final class OpccionesDeudaMenu extends Menu<Deuda> {
     }
 
     private void cancelarDeuda(Player player) {
-        cancelarDeudaUseCase.cancelar(CancelarDeudaParametros.of(player.getUniqueId(), getState().getDeudaId()));
+        useCaseBus.handle(CancelarDeudaParametros.of(player.getUniqueId(), getState().getDeudaId()));
         player.sendMessage(GOLD + "Has cancelado la deuda");
         player.closeInventory();
     }
 
     private void pagarDeuda(Player player) {
-        pagarTodaLaDeudaUseCase.pagarTodaLaDeuda(PagarTodaLaDeudaParametros.of(getState().getDeudaId(), player.getUniqueId()));
+        useCaseBus.handle(PagarTodaLaDeudaParametros.of(getState().getDeudaId(), player.getUniqueId()));
         player.sendMessage(GOLD + "Has pagado toda la deuda. En total han sido -" + RED + FORMATEA.format(getState().getPixelcoinsRestantesDePagar()) + " PC");
         player.closeInventory();
     }

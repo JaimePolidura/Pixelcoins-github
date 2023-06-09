@@ -17,7 +17,7 @@ public final class RetirarOfertaUseCase implements UseCaseHandler<RetirarOfertaP
     private final OfertasService ofertasService;
 
     @Override
-    public void handle(RetirarOfertaParametros parametros) throws Exception {
+    public void handle(RetirarOfertaParametros parametros) {
         ofertasValidator.esVendedor(parametros.getOfertaId(), parametros.getRetiradorId());
 
         Oferta ofertaRetirada = ofertasService.getById(parametros.getOfertaId());

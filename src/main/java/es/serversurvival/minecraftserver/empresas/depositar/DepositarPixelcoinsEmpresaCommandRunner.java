@@ -2,6 +2,7 @@ package es.serversurvival.minecraftserver.empresas.depositar;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.EmpresasService;
 import es.serversurvival.pixelcoins.empresas.depositar.DepositarPixelcoinsEmpresaParametros;
@@ -21,14 +22,14 @@ import static org.bukkit.ChatColor.*;
 )
 @AllArgsConstructor
 public final class DepositarPixelcoinsEmpresaCommandRunner implements CommandRunnerArgs<DepositarPixelcoinsEmpresaComando> {
-    private final DepositarPixelcoinsEmpresaUseCase depositarPixelcoinsEmpresaUseCase;
     private final EmpresasService empresasService;
+    private final UseCaseBus useCaseBus;
 
     @Override
     public void execute(DepositarPixelcoinsEmpresaComando comando, Player player) {
         Empresa empresa = empresasService.getByNombre(comando.getEmpresa());
 
-        depositarPixelcoinsEmpresaUseCase.depositar(DepositarPixelcoinsEmpresaParametros.builder()
+        useCaseBus.handle(DepositarPixelcoinsEmpresaParametros.builder()
                 .empresaId(empresa.getEmpresaId())
                 .jugadorId(player.getUniqueId())
                 .pixelcoins(comando.getPixelcoins())

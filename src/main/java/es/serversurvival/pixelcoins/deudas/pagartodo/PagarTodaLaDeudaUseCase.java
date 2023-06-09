@@ -25,7 +25,7 @@ public final class PagarTodaLaDeudaUseCase implements UseCaseHandler<PagarTodaLa
     private final EventBus eventBus;
 
     @Override
-    public void handle(PagarTodaLaDeudaParametros parametros) throws Exception {
+    public void handle(PagarTodaLaDeudaParametros parametros) {
         Deuda deuda = this.deudasService.getById(parametros.getDeudaId());
         double pixelcoinsRestantes = deuda.getPixelcoinsRestantesDePagar();
 

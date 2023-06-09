@@ -17,7 +17,7 @@ public final class OfertaDeudaCompradaMercadoPrimarioListener implements OfertaC
 
     @Override
     public void on(OfertaDeudaMercadoPrimario ofertaComprada, UUID compradorId) {
-         prestarDeudaUseCase.prestar(
+         prestarDeudaUseCase.handle(
                 PrestarDeudaParametros.fromOfertaDeudaMercadoPrimario(ofertaComprada, compradorId)
         );
     }
