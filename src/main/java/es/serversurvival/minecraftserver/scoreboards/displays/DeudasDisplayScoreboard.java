@@ -1,20 +1,17 @@
 package es.serversurvival.minecraftserver.scoreboards.displays;
 
-import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver.scoreboards.ScoreboardCreator;
 import es.serversurvival.minecraftserver.scoreboards.ServerScoreboardCreator;
-import es.serversurvival.pixelcoins.deudas._shared.Deuda;
-import es.serversurvival.pixelcoins.deudas._shared.DeudasService;
-import es.serversurvival.pixelcoins.jugadores._shared.estadisticas.JugadorEstadisticas;
-import es.serversurvival.pixelcoins.jugadores._shared.estadisticas.JugadoresEstadisticasService;
+import es.serversurvival.pixelcoins.deudas._shared.domain.Deuda;
+import es.serversurvival.pixelcoins.deudas._shared.application.DeudasService;
+import es.serversurvival.pixelcoins.jugadores._shared.estadisticas.domain.JugadorEstadisticas;
+import es.serversurvival.pixelcoins.jugadores._shared.estadisticas.application.JugadoresEstadisticasService;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
-
-import java.util.stream.Collectors;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static es.serversurvival.minecraftserver._shared.MinecraftUtils.*;

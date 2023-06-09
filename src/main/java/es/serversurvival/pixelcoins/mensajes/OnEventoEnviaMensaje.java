@@ -2,8 +2,8 @@ package es.serversurvival.pixelcoins.mensajes;
 
 import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventListener;
-import es.serversurvival.pixelcoins.mensajes._shared.EnviaMensajeEvento;
-import es.serversurvival.pixelcoins.mensajes._shared.EnviadorMensajes;
+import es.serversurvival.pixelcoins.mensajes._shared.domain.EnviaMensajeEvento;
+import es.serversurvival.pixelcoins.mensajes._shared.application.EnviadorMensajes;
 import lombok.AllArgsConstructor;
 
 @EventHandler

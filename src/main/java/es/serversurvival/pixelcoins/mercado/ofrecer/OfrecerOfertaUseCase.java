@@ -2,7 +2,6 @@ package es.serversurvival.pixelcoins.mercado.ofrecer;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.serversurvival.pixelcoins._shared.Validador;
-import es.serversurvival.pixelcoins._shared.usecases.ParametrosUseCase;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
@@ -22,8 +21,8 @@ public final class OfrecerOfertaUseCase implements UseCaseHandler<OfrecerOfertaP
         validador.numeroMayorQueCero(nuevaOferta.getPrecio(), "El precio");
         validador.numeroMayorQueCero(nuevaOferta.getCantidad(), "La cantidad");
         validador.noNull(nuevaOferta.getVendedorId(), "El vendedor");
-        validador.noNull(nuevaOferta.getTipoOferta(), "El tipo oferta");
-        ofertasValidator.ofertaNoEsRepetida(nuevaOferta.getTipoOferta(), nuevaOferta.getObjeto());
+        validador.noNull(nuevaOferta.getTipo(), "El tipo oferta");
+        ofertasValidator.ofertaNoEsRepetida(nuevaOferta.getTipo(), nuevaOferta.getObjeto());
 
         ofertasService.save(nuevaOferta);
     }

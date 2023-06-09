@@ -3,8 +3,8 @@ package es.serversurvival.minecraftserver.empresas.votaciones.lorevotacionitem;
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.TipoVotacion;
-import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.Votacion;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.TipoVotacion;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.Votacion;
 import lombok.AllArgsConstructor;
 
 import java.util.Arrays;

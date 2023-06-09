@@ -1,8 +1,8 @@
 package es.serversurvival.pixelcoins.empresas.cambiardirector;
 
-import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.EstadoVotacion;
-import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.TipoVotacion;
-import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.Votacion;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.EstadoVotacion;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.TipoVotacion;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.Votacion;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

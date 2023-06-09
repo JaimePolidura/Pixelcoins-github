@@ -14,7 +14,7 @@ public abstract class Oferta {
     @Getter private int cantidad;
     @Getter private final double precio;
     @Getter private final String objeto;
-    @Getter private final TipoOferta tipoOferta;
+    @Getter private final TipoOferta tipo;
 
     public Oferta decrementarCantidad() {
         this.cantidad--;

@@ -5,9 +5,9 @@ import es.jaime.EventBus;
 import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
 import es.serversurvival.pixelcoins.transacciones.Transaccion;
 import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
-import es.serversurvival.pixelcoins.empresas._shared.empleados.Empleado;
-import es.serversurvival.pixelcoins.empresas._shared.empleados.EmpleadosService;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
+import es.serversurvival.pixelcoins.empresas._shared.empleados.domain.Empleado;
+import es.serversurvival.pixelcoins.empresas._shared.empleados.application.EmpleadosService;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import lombok.AllArgsConstructor;
 
 import static es.serversurvival._shared.utils.Funciones.*;

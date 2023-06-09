@@ -4,7 +4,7 @@ import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
-import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.TipoVotacion;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.TipoVotacion;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones.votar.VotarVotacionParametros;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones.votar.VotarVotacionUseCase;
 import es.serversurvival.pixelcoins.empresas.cambiardirector.CambiarDirectorVotacion;

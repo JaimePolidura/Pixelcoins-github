@@ -1,7 +1,7 @@
 package es.serversurvival.pixelcoins.deudas.prestar;
 
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
-import es.serversurvival.pixelcoins.deudas._shared.Deuda;
+import es.serversurvival.pixelcoins.deudas._shared.domain.Deuda;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

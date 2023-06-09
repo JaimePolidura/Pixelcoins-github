@@ -2,10 +2,10 @@ package es.serversurvival.pixelcoins.empresas.comprar;
 
 import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventBus;
-import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votos.VotosService;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votos.application.VotosService;
 import es.serversurvival.pixelcoins.mercado._shared.accion.OfertaCompradaListener;
-import es.serversurvival.pixelcoins.empresas._shared.accionistas.AccionistasEmpresasService;
-import es.serversurvival.pixelcoins.empresas._shared.accionistas.DecrementorPosicionesAccionesJugador;
+import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.AccionistasEmpresasService;
+import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.DecrementorPosicionesAccionesJugador;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.OfertaAccionMercadoJugador;
 import lombok.AllArgsConstructor;
 

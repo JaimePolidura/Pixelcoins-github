@@ -4,8 +4,8 @@ import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventListener;
 import es.serversurvival.pixelcoins.bolsa.abrir.PosicionBolsaAbierta;
 import es.serversurvival.pixelcoins.bolsa.cerrar.PosicionBolsaCerrada;
-import es.serversurvival.pixelcoins.jugadores._shared.estadisticas.JugadorTipoContadorEstadistica;
-import es.serversurvival.pixelcoins.jugadores._shared.estadisticas.JugadoresEstadisticasService;
+import es.serversurvival.pixelcoins.jugadores._shared.estadisticas.domain.JugadorTipoContadorEstadistica;
+import es.serversurvival.pixelcoins.jugadores._shared.estadisticas.application.JugadoresEstadisticasService;
 import lombok.AllArgsConstructor;
 
 @EventHandler

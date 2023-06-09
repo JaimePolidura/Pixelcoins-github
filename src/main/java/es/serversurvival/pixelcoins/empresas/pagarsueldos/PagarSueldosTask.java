@@ -3,7 +3,7 @@ package es.serversurvival.pixelcoins.empresas.pagarsueldos;
 import es.bukkitclassmapper.task.BukkitTimeUnit;
 import es.bukkitclassmapper.task.Task;
 import es.bukkitclassmapper.task.TaskRunner;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.EmpresasService;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

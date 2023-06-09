@@ -17,7 +17,7 @@ public final class OfertaAccionCaller {
                                         Oferta oferta, UUID jugadorId) {
         Optional<OfertaAccionListener> customOfertaAccionListener = (Optional<OfertaAccionListener>) dependencies.filterByImplementsInterfaceWithGeneric(
                 customOfertaAccionListenerClazz,
-                oferta.getTipoOferta().getOfertaClass()
+                oferta.getTipo().getOfertaClass()
         );
 
         if(customOfertaAccionListener.isPresent()){

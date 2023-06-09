@@ -1,6 +1,6 @@
 package es.serversurvival.minecraftserver.empresas.votaciones.lorevotacionitem;
 
-import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.Votacion;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.Votacion;
 
 import java.util.List;
 

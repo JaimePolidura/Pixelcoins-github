@@ -7,6 +7,8 @@ import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.VerOfertasMercadoMenu;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.deudas._shared.*;
+import es.serversurvival.pixelcoins.deudas._shared.application.DeudasService;
+import es.serversurvival.pixelcoins.deudas._shared.domain.Deuda;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival.minecraftserver.deudas._shared.DeudaItemMercadoLore;
@@ -94,7 +96,7 @@ public final class MercadoDeudaMenu extends VerOfertasMercadoMenu<OfertaDeudaMer
         double cuota = oferta.getInteres() * oferta.getPrecio();
 
         List<String> lore = deudaItemMercadoLore.buildOfertaDeudaMercado(oferta.getPrecio(), vendedor, oferta.getInteres(), oferta.getPrecio(), oferta.getPeriodoPagoCuotaMs(),
-                oferta.getNumeroCuotasTotales(), 0, oferta.getNumeroCuotasTotales() * cuota + oferta.getPrecio());
+                oferta.getNCuotasTotales(), 0, oferta.getNCuotasTotales() * cuota + oferta.getPrecio());
 
         MinecraftUtils.setLore(itemStack, lore);
 

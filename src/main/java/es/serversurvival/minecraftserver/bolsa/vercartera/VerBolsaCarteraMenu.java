@@ -13,8 +13,8 @@ import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBols
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.TipoApuestaService;
 import es.serversurvival.minecraftserver.jugadores.perfil.PerfilMenu;
-import es.serversurvival.pixelcoins.bolsa._shared.posiciones.Posicion;
-import es.serversurvival.pixelcoins.bolsa._shared.posiciones.PosicionesService;
+import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.Posicion;
+import es.serversurvival.pixelcoins.bolsa._shared.posiciones.application.PosicionesService;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -105,7 +105,7 @@ public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
         lore.add(GOLD + "Empresa " + activoBolsa.getNombreLargo());
         lore.add(GOLD + "Ticker " + activoBolsa.getNombreCorto());
         lore.add("   ");
-        lore.add(GOLD + "Cantidad: " + FORMATEA.format(posicion.getCantidad()) + " " + activoBolsa.getTipoActivoBolsa().getNombreUnidad());
+        lore.add(GOLD + "Cantidad: " + FORMATEA.format(posicion.getCantidad()) + " " + activoBolsa.getTipoActivo().getNombreUnidad());
         lore.add(GOLD + "Precio apertura: " + GREEN + FORMATEA.format(posicion.getPrecioApertura()) + " PC");
         lore.add(GOLD + "Precio actual: " + GREEN + FORMATEA.format(ultimoPrecio) + " PC");
         lore.add(GOLD + "Rentabilidad: " + (rentabilidad >= 0 ? GREEN + "+" + rentabilidad : RED + "" +rentabilidad) + "%");

@@ -4,12 +4,12 @@ import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
-import es.serversurvival.pixelcoins.empresas._shared.accionistas.AccionistaEmpresa;
-import es.serversurvival.pixelcoins.empresas._shared.accionistas.AccionistasEmpresasService;
-import es.serversurvival.pixelcoins.empresas._shared.empleados.Empleado;
-import es.serversurvival.pixelcoins.empresas._shared.empleados.EmpleadosService;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.EmpresasService;
+import es.serversurvival.pixelcoins.empresas._shared.accionistas.domain.AccionistaEmpresa;
+import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.AccionistasEmpresasService;
+import es.serversurvival.pixelcoins.empresas._shared.empleados.domain.Empleado;
+import es.serversurvival.pixelcoins.empresas._shared.empleados.application.EmpleadosService;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import lombok.AllArgsConstructor;
 
 @UseCase

@@ -5,7 +5,7 @@ import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.modules.confirmation.ConfirmationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas.cerrar.CerrarEmpresaParametros;
 import es.serversurvival.pixelcoins.empresas.cerrar.CerrarEmpresaUseCase;
 import lombok.AllArgsConstructor;

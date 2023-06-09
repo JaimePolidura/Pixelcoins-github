@@ -33,7 +33,7 @@ public final class ComprarOfertaUseCase implements UseCaseHandler<ComprarOfertaP
                 .pagadorId(parametros.getJugadorId())
                 .pixelcoins(ofertaAComprar.getPrecio())
                 .objeto(ofertaAComprar.getObjeto())
-                .tipo(ofertaAComprar.getTipoOferta().getTipoTransaccion())
+                .tipo(ofertaAComprar.getTipo().getTipoTransaccion())
                 .build());
 
         ofertaAccionCaller.call(OfertaCompradaListener.class, ofertaAComprar, parametros.getJugadorId());

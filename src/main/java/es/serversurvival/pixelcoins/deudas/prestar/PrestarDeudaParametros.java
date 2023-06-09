@@ -24,7 +24,7 @@ public final class PrestarDeudaParametros implements ParametrosUseCase {
                 oferta.getVendedorId(),
                 oferta.getPrecio(),
                 oferta.getInteres(),
-                oferta.getNumeroCuotasTotales(),
+                oferta.getNCuotasTotales(),
                 oferta.getPeriodoPagoCuotaMs()
         );
     }

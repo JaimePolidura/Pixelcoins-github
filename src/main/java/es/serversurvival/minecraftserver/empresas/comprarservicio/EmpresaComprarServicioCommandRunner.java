@@ -3,7 +3,7 @@ package es.serversurvival.minecraftserver.empresas.comprarservicio;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.EmpresasService;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import es.serversurvival.pixelcoins.empresas.comprarservicio.ComprarServicioParametros;
 import es.serversurvival.pixelcoins.empresas.comprarservicio.ComprarServicioUseCase;
 import lombok.AllArgsConstructor;

@@ -1,8 +1,8 @@
 package es.serversurvival.pixelcoins.mensajes;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
-import es.serversurvival.pixelcoins.mensajes._shared.Mensaje;
-import es.serversurvival.pixelcoins.mensajes._shared.MensajesService;
+import es.serversurvival.pixelcoins.mensajes._shared.domain.Mensaje;
+import es.serversurvival.pixelcoins.mensajes._shared.application.MensajesService;
 import lombok.AllArgsConstructor;
 
 import java.util.List;

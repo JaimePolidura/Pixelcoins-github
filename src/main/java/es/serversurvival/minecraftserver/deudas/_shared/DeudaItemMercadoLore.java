@@ -2,7 +2,7 @@ package es.serversurvival.minecraftserver.deudas._shared;
 
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.pixelcoins.deudas._shared.Deuda;
+import es.serversurvival.pixelcoins.deudas._shared.domain.Deuda;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import lombok.AllArgsConstructor;
 

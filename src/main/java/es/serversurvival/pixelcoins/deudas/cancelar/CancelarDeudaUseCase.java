@@ -5,9 +5,9 @@ import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
-import es.serversurvival.pixelcoins.deudas._shared.Deuda;
-import es.serversurvival.pixelcoins.deudas._shared.DeudasService;
-import es.serversurvival.pixelcoins.deudas._shared.DeudasValidador;
+import es.serversurvival.pixelcoins.deudas._shared.domain.Deuda;
+import es.serversurvival.pixelcoins.deudas._shared.application.DeudasService;
+import es.serversurvival.pixelcoins.deudas._shared.application.DeudasValidador;
 import lombok.AllArgsConstructor;
 
 @UseCase

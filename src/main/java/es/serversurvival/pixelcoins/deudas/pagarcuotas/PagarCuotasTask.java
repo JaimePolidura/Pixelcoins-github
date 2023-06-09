@@ -3,8 +3,8 @@ package es.serversurvival.pixelcoins.deudas.pagarcuotas;
 import es.bukkitclassmapper.task.BukkitTimeUnit;
 import es.bukkitclassmapper.task.Task;
 import es.bukkitclassmapper.task.TaskRunner;
-import es.serversurvival.pixelcoins.deudas._shared.DeudasService;
-import es.serversurvival.pixelcoins.deudas._shared.EstadoDeuda;
+import es.serversurvival.pixelcoins.deudas._shared.application.DeudasService;
+import es.serversurvival.pixelcoins.deudas._shared.domain.EstadoDeuda;
 import lombok.AllArgsConstructor;
 
 @Task(value = BukkitTimeUnit.DAY)

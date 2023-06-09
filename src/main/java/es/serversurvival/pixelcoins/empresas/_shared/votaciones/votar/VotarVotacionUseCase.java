@@ -2,9 +2,9 @@ package es.serversurvival.pixelcoins.empresas._shared.votaciones.votar;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
-import es.serversurvival.pixelcoins.empresas._shared.accionistas.AccionistasEmpresasService;
-import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votos.Voto;
-import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votos.VotosService;
+import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.AccionistasEmpresasService;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votos.domain.Voto;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votos.application.VotosService;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones.ResultadoVotacionChecker;
 import lombok.AllArgsConstructor;
 

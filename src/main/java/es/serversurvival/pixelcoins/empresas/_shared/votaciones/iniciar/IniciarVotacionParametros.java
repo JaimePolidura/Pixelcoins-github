@@ -1,6 +1,6 @@
 package es.serversurvival.pixelcoins.empresas._shared.votaciones.iniciar;
 
-import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.Votacion;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.Votacion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

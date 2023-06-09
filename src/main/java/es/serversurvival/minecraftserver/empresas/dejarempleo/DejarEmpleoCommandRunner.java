@@ -3,10 +3,9 @@ package es.serversurvival.minecraftserver.empresas.dejarempleo;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.EmpresasService;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import es.serversurvival.pixelcoins.empresas.irseempleo.DejarEmpleoParametros;
-import es.serversurvival.pixelcoins.empresas.irseempleo.DejarEmpleoUseCase;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 

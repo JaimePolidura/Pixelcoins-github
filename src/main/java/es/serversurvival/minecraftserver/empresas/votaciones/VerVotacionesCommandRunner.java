@@ -4,8 +4,8 @@ import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.EmpresasService;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 

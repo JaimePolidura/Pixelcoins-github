@@ -2,11 +2,11 @@ package es.serversurvival.pixelcoins.jugadores.estadisticas;
 
 import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventListener;
-import es.serversurvival.pixelcoins.jugadores._shared.estadisticas.JugadoresEstadisticasService;
+import es.serversurvival.pixelcoins.jugadores._shared.estadisticas.application.JugadoresEstadisticasService;
 import es.serversurvival.pixelcoins.tienda.comprar.TiendaItemMinecraftVendido;
 import lombok.AllArgsConstructor;
 
-import static es.serversurvival.pixelcoins.jugadores._shared.estadisticas.JugadorTipoContadorEstadistica.*;
+import static es.serversurvival.pixelcoins.jugadores._shared.estadisticas.domain.JugadorTipoContadorEstadistica.*;
 
 @EventHandler
 @AllArgsConstructor

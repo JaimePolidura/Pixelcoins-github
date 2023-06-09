@@ -1,7 +1,7 @@
 package es.serversurvival.pixelcoins.bolsa.vercarteraresumida;
 
-import es.serversurvival.pixelcoins.bolsa._shared.posiciones.Posicion;
-import es.serversurvival.pixelcoins.bolsa._shared.posiciones.TipoBolsaApuesta;
+import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.Posicion;
+import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.TipoBolsaApuesta;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.With;

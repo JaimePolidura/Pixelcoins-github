@@ -2,12 +2,12 @@ package es.serversurvival.pixelcoins.empresas.cambiardirector.votacionfinalizada
 
 import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventBus;
-import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.VotacionFinalizadaListener;
-import es.serversurvival.pixelcoins.empresas._shared.empleados.Empleado;
-import es.serversurvival.pixelcoins.empresas._shared.empleados.EmpleadosService;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.EmpresasService;
-import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.ResultadoVotacion;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.VotacionFinalizadaListener;
+import es.serversurvival.pixelcoins.empresas._shared.empleados.domain.Empleado;
+import es.serversurvival.pixelcoins.empresas._shared.empleados.application.EmpleadosService;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.ResultadoVotacion;
 import es.serversurvival.pixelcoins.empresas.cambiardirector.CambiarDirectorVotacion;
 import lombok.AllArgsConstructor;
 

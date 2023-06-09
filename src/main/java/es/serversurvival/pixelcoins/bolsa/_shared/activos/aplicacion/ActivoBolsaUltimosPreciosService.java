@@ -94,7 +94,7 @@ public final class ActivoBolsaUltimosPreciosService {
 
     private void actualizarUltimoPrecioEnCache(ActivoBolsa activoBolsa) {
         tryLockOnce(updateCacheLock, () -> {
-            double ultimoPrecioDesdeAPI = getUltimoPrecioDesdeAPI(activoBolsa.getNombreCorto(), activoBolsa.getTipoActivoBolsa());
+            double ultimoPrecioDesdeAPI = getUltimoPrecioDesdeAPI(activoBolsa.getNombreCorto(), activoBolsa.getTipoActivo());
 
             cacheByNombreCorto.put(activoBolsa.getNombreCorto(), ultimoPrecioDesdeAPI);
             cacheByActivoBolsaId.put(activoBolsa.getActivoBolsaId(), ultimoPrecioDesdeAPI);

@@ -1,7 +1,11 @@
 package es.serversurvival.pixelcoins.empresas._shared.votaciones;
 
-import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.*;
-import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votos.VotosService;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.application.VotacionFinalizadoCaller;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.application.VotacionesService;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.EstadoVotacion;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.ResultadoVotacion;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.Votacion;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votos.application.VotosService;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

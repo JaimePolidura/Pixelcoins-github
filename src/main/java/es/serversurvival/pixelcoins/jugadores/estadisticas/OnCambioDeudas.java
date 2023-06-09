@@ -5,8 +5,8 @@ import es.jaime.EventListener;
 import es.serversurvival.pixelcoins.deudas.pagarcuotas.CuotaDeudaNoPagadaEvento;
 import es.serversurvival.pixelcoins.deudas.pagarcuotas.CuotaDeudaPagadaEvento;
 import es.serversurvival.pixelcoins.deudas.pagartodo.DeudaPagadoPorCompleto;
-import es.serversurvival.pixelcoins.jugadores._shared.estadisticas.JugadorTipoContadorEstadistica;
-import es.serversurvival.pixelcoins.jugadores._shared.estadisticas.JugadoresEstadisticasService;
+import es.serversurvival.pixelcoins.jugadores._shared.estadisticas.domain.JugadorTipoContadorEstadistica;
+import es.serversurvival.pixelcoins.jugadores._shared.estadisticas.application.JugadoresEstadisticasService;
 import lombok.AllArgsConstructor;
 
 @EventHandler

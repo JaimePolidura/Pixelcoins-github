@@ -22,7 +22,8 @@ public final class OfertaTiendaItemMinecraft extends Oferta {
     @Getter private final String nombre;
 
     public OfertaTiendaItemMinecraft(UUID ofertaId, UUID vendedorId, LocalDateTime fechaSubida, int cantidad, double precio, String objeto,
-                                     TipoOferta tipoOferta, List<TiendaItemMinecraftEncantamientos> encantamientos, short durabilidad, boolean tieneNombre, String nombre) {
+                                     TipoOferta tipoOferta, List<TiendaItemMinecraftEncantamientos> encantamientos, short durabilidad, boolean tieneNombre,
+                                     String nombre) {
         super(ofertaId, vendedorId, fechaSubida, cantidad, precio, objeto, tipoOferta);
         this.encantamientos = encantamientos;
         this.durabilidad = durabilidad;

@@ -2,7 +2,7 @@ package es.serversurvival.minecraftserver.empresas.votaciones;
 
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival.minecraftserver._shared.menus.ConfirmacionMenu;
-import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.Votacion;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.Votacion;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones.votar.VotarVotacionParametros;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones.votar.VotarVotacionUseCase;
 import lombok.RequiredArgsConstructor;

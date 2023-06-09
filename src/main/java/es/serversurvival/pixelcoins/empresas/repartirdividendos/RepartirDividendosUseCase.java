@@ -8,10 +8,10 @@ import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
 import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
 import es.serversurvival.pixelcoins.transacciones.Transaccion;
 import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
-import es.serversurvival.pixelcoins.empresas._shared.accionistas.AccionistaEmpresa;
-import es.serversurvival.pixelcoins.empresas._shared.accionistas.AccionistasEmpresasService;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.EmpresasService;
+import es.serversurvival.pixelcoins.empresas._shared.accionistas.domain.AccionistaEmpresa;
+import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.AccionistasEmpresasService;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import lombok.AllArgsConstructor;
 
 @UseCase

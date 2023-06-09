@@ -7,7 +7,7 @@ import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival.minecraftserver.deudas.vendermercado.PonerVentaDeudaMercadoPrecioSelectorMenu;
 import es.serversurvival.minecraftserver.deudas._shared.DeudaItemMercadoLore;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
-import es.serversurvival.pixelcoins.deudas._shared.Deuda;
+import es.serversurvival.pixelcoins.deudas._shared.domain.Deuda;
 import es.serversurvival.pixelcoins.deudas.cancelar.CancelarDeudaParametros;
 import es.serversurvival.pixelcoins.deudas.cancelar.CancelarDeudaUseCase;
 import es.serversurvival.pixelcoins.deudas.pagartodo.PagarTodaLaDeudaParametros;

@@ -6,8 +6,8 @@ import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
-import es.serversurvival.pixelcoins.empresas._shared.accionistas.AccionistaEmpresa;
-import es.serversurvival.pixelcoins.empresas._shared.accionistas.AccionistasEmpresasService;
+import es.serversurvival.pixelcoins.empresas._shared.accionistas.domain.AccionistaEmpresa;
+import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.AccionistasEmpresasService;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.OfertaAccionMercadoJugador;
 import lombok.AllArgsConstructor;
 

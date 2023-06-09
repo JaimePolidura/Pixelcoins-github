@@ -8,8 +8,8 @@ import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.VerOfertasMercadoMenu;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.OfertaAccionMercado;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.EmpresasService;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.Jugador;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
@@ -66,7 +66,7 @@ public final class MercadoAccionesEmpresasMenu extends VerOfertasMercadoMenu<Ofe
 
     private String getVendedorNombre(OfertaAccionMercado oferta) {
         Optional<Jugador> optionalJugador = jugadoresService.findById(oferta.getVendedorId());
-        return oferta.getTipoOferta() == TipoOferta.ACCIONES_SERVER_EMISION || optionalJugador.isEmpty() ?
+        return oferta.getTipo() == TipoOferta.ACCIONES_SERVER_EMISION || optionalJugador.isEmpty() ?
                 "La propia empresa" :
                 optionalJugador.get().getNombre();
     }

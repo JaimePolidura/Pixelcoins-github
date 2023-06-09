@@ -1,7 +1,7 @@
 package es.serversurvival.pixelcoins.bolsa.abrir;
 
 import es.serversurvival.pixelcoins._shared.usecases.ParametrosUseCase;
-import es.serversurvival.pixelcoins.bolsa._shared.posiciones.TipoBolsaApuesta;
+import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.TipoBolsaApuesta;
 import es.serversurvival.pixelcoins.bolsa._shared.premarket.application.AbrirOrdenPremarketAbrirParametros;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

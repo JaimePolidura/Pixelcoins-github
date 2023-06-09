@@ -1,11 +1,11 @@
 package es.serversurvival.pixelcoins.empresas._shared.votaciones;
 
 import es.dependencyinjector.dependencies.annotations.Service;
-import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.Votacion;
-import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votos.VotosService;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.EmpresasService;
-import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.VotacionesService;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.Votacion;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votos.application.VotosService;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
+import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.application.VotacionesService;
 import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;

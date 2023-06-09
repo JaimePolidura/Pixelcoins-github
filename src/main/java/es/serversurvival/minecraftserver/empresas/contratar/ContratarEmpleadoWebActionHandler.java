@@ -4,10 +4,9 @@ import es.dependencyinjector.dependencies.annotations.Service;
 import es.serversurvival.minecraftserver.webaction.WebActionException;
 import es.serversurvival.minecraftserver.webaction.WebActionHandler;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.EmpresasService;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import es.serversurvival.pixelcoins.empresas.contratar.ContratarEmpleadoParametros;
-import es.serversurvival.pixelcoins.empresas.contratar.ContratarEmpleadoUseCase;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import lombok.AllArgsConstructor;
 

@@ -10,9 +10,9 @@ import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBols
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.pixelcoins._shared.Validador;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.TipoApuestaService;
-import es.serversurvival.pixelcoins.bolsa._shared.posiciones.PosicionesService;
-import es.serversurvival.pixelcoins.bolsa._shared.posiciones.TipoBolsaApuesta;
-import es.serversurvival.pixelcoins.bolsa._shared.posiciones.TipoPosicion;
+import es.serversurvival.pixelcoins.bolsa._shared.posiciones.application.PosicionesService;
+import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.TipoBolsaApuesta;
+import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.TipoPosicion;
 import es.serversurvival.pixelcoins.bolsa._shared.premarket.application.OrdenesPremarketService;
 import es.serversurvival.pixelcoins.bolsa._shared.premarket.domain.OrdenPremarket;
 import es.serversurvival.pixelcoins.bolsa.abrir.AbrirPosicoinBolsaParametros;

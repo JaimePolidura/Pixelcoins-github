@@ -12,6 +12,6 @@ public abstract class OfertaDeudaMercado extends Oferta {
     }
 
     public boolean esMercadoPrimario() {
-        return getTipoOferta() == TipoOferta.DEUDA_MERCADO_PRIMARIO;
+        return getTipo() == TipoOferta.DEUDA_MERCADO_PRIMARIO;
     }
 }

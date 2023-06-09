@@ -7,7 +7,7 @@ import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival.pixelcoins.mercado.ofrecer.OfrecerOfertaParametros;
 import es.serversurvival.pixelcoins.mercado.ofrecer.OfrecerOfertaUseCase;
-import es.serversurvival.pixelcoins.deudas._shared.DeudasValidador;
+import es.serversurvival.pixelcoins.deudas._shared.application.DeudasValidador;
 import es.serversurvival.pixelcoins.deudas._shared.OfertaDeudaMercadoSecundario;
 import lombok.AllArgsConstructor;
 

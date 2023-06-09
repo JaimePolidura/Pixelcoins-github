@@ -4,21 +4,17 @@ import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
 import es.serversurvival.minecraftserver._shared.menus.NumberSelectorMenu;
 import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.minecraftserver._shared.MinecraftUtils;
-import es.serversurvival.pixelcoins.bolsa._shared.posiciones.TipoBolsaApuesta;
-import es.serversurvival.pixelcoins.bolsa.abrir.AbrirPosicionBolsaUseCase;
+import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.TipoBolsaApuesta;
 import es.serversurvival.pixelcoins.bolsa.abrir.AbrirPosicoinBolsaParametros;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.List;
 
 import static org.bukkit.ChatColor.*;
-import static org.bukkit.Sound.ENTITY_PLAYER_LEVELUP;
 
 @RequiredArgsConstructor
 public final class SeleccionarCantidadComprarBolsaMenu extends NumberSelectorMenu<SeleccionarCantidadComprarBolsaMenu.SeleccionarCantidadComprarBolsaMenuState> {
@@ -79,7 +75,7 @@ public final class SeleccionarCantidadComprarBolsaMenu extends NumberSelectorMen
         @Getter private final double pixelcoinsJugador;
 
         public String getNombreUnidadTipoActivo() {
-            return activoBolsa.getTipoActivoBolsa().getNombreUnidad();
+            return activoBolsa.getTipoActivo().getNombreUnidad();
         }
     }
 }

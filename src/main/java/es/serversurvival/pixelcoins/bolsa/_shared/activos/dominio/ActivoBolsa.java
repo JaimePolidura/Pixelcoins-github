@@ -8,17 +8,17 @@ import java.util.UUID;
 @AllArgsConstructor
 public final class ActivoBolsa {
     @Getter private final UUID activoBolsaId;
-    @Getter private final TipoActivoBolsa tipoActivoBolsa;
+    @Getter private final TipoActivoBolsa tipoActivo;
     @Getter private final String nombreCorto;
     @Getter private final String nombreLargo;
     @Getter private final int nReferencias;
 
     public ActivoBolsa decrementarNReferencias() {
-        return new ActivoBolsa(activoBolsaId, tipoActivoBolsa, nombreCorto, nombreLargo, nReferencias - 1);
+        return new ActivoBolsa(activoBolsaId, tipoActivo, nombreCorto, nombreLargo, nReferencias - 1);
     }
 
     public ActivoBolsa incrementarNReferencias() {
-        return new ActivoBolsa(activoBolsaId, tipoActivoBolsa, nombreCorto, nombreLargo, nReferencias + 1);
+        return new ActivoBolsa(activoBolsaId, tipoActivo, nombreCorto, nombreLargo, nReferencias + 1);
     }
 
     public static ActivoBolsaBuilder builder() {

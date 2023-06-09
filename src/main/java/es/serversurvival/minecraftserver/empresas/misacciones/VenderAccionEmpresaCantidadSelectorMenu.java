@@ -2,9 +2,9 @@ package es.serversurvival.minecraftserver.empresas.misacciones;
 
 import es.bukkitbettermenus.MenuService;
 import es.serversurvival.minecraftserver._shared.menus.NumberSelectorMenu;
-import es.serversurvival.pixelcoins.empresas._shared.accionistas.AccionistaEmpresa;
-import es.serversurvival.pixelcoins.empresas._shared.accionistas.AccionistasEmpresasService;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.Empresa;
+import es.serversurvival.pixelcoins.empresas._shared.accionistas.domain.AccionistaEmpresa;
+import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.AccionistasEmpresasService;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
