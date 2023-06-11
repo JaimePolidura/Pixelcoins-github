@@ -1,32 +1,28 @@
 package es.serversurvival.minecraftserver.webaction.server;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.DomainException;
-import es.serversurvival.minecraftserver.webaction.messages.WebActionRequestBody;
+import es.serversurvival.minecraftserver.webaction.*;
+import es.serversurvival.minecraftserver.webaction.requesthandlers.WebActionExecutor;
+import es.serversurvival.minecraftserver.webaction.requesthandlers.WebActionDataSender;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
-import es.serversurvival.minecraftserver.webaction.WebActionException;
-import es.serversurvival.minecraftserver.webaction.WebActionHandler;
-import es.serversurvival.minecraftserver.webaction.WebActionType;
 import es.serversurvival.minecraftserver.webaction.token.WebActionTokenService;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public final class HttpRequestHandler implements HttpHandler {
-    private final DependenciesRepository dependenciesRepository;
+    private final WebActionDataSender webActionDataSender;
+    private final WebActionExecutor webActionExecutor;
+
     private final WebActionTokenService webActionTokenService;
     private final JugadoresService jugadoresService;
-    private final ObjectMapper objectMapper;
 
     @Override
     public void handle(HttpExchange client) throws IOException {
@@ -50,26 +46,11 @@ public final class HttpRequestHandler implements HttpHandler {
         UUID jugadorId = webActionTokenService.getJugadorIdFromToken(token);
         elJugadorExisteYActionTypeTambien(actionType, jugadorId);
 
-        WebActionHandler webActionHandler = webActionHandlerRegistrado(actionType);
-        WebActionRequestBody requestBody = getWebActionRequestBody(client, actionType);
-        webActionHandler.handle(jugadorId, requestBody);
-    }
-
-    private WebActionRequestBody getWebActionRequestBody(HttpExchange client, WebActionType actionType) throws IOException {
-        InputStream inputStream = client.getRequestBody();
-        byte[] jsonRaw = inputStream.readAllBytes();
-
-        return objectMapper.readValue(jsonRaw, actionType.getRequestBodyClass());
-    }
-
-    private WebActionHandler webActionHandlerRegistrado(WebActionType actionType) throws WebActionException {
-        Optional<WebActionHandler> webActionHandler = dependenciesRepository.filterByImplementsInterfaceWithGeneric(WebActionHandler.class,
-                actionType.getRequestBodyClass());
-
-        if(webActionHandler.isEmpty())
-            throw new WebActionException("Operacion no encontrada");
-
-        return webActionHandler.get();
+        if(client.getRequestMethod().equals("POST")){
+            webActionExecutor.execute(jugadorId, actionType, client);
+        }else{
+            webActionDataSender.sendWebActionData(client, actionType);
+        }
     }
 
     private void elJugadorExisteYActionTypeTambien(WebActionType actionType, UUID jugadorId) throws WebActionException {

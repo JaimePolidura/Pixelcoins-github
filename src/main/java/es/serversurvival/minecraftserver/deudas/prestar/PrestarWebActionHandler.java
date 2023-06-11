@@ -17,7 +17,7 @@ public final class PrestarWebActionHandler implements WebActionHandler<PrestarWe
 
     @Override
     public void handle(UUID jugadorId, PrestarWebActionRequestBody body) throws WebActionException {
-        Player deudorJugador = Bukkit.getPlayer(body.getDeudorJugadorNombre());
+        Player deudorJugador = Bukkit.getPlayer(body.getNombreDelJugadorAPrestar());
         if(deudorJugador == null)
             throw new WebActionException(deudorJugador.getName() + " no esta online");
 

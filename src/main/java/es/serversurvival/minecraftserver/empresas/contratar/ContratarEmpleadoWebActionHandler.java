@@ -26,8 +26,8 @@ public final class ContratarEmpleadoWebActionHandler implements WebActionHandler
 
     @Override
     public void handle(UUID jugadorId, ContratarEmpleadoWebActionRequestBody body) throws WebActionException {
-        Empresa empresa = empresasService.getByNombre(body.getEmpresa());
-        UUID jugadorIdAContratar = jugadoresService.getByNombre(body.getJugadorNombreAContratar())
+        Empresa empresa = empresasService.getByNombre(body.getNombreDeLaEmpresa());
+        UUID jugadorIdAContratar = jugadoresService.getByNombre(body.getNombreJugadorAContratar())
                 .getJugadorId();
 
         useCaseBus.handle(ContratarEmpleadoParametros.builder()
@@ -35,14 +35,14 @@ public final class ContratarEmpleadoWebActionHandler implements WebActionHandler
                 .descripccion(body.getDescripccion())
                 .empresaId(empresa.getEmpresaId())
                 .jugadorIdContrador(jugadorId)
-                .periodoPagoMs(body.getPeriodoPagoMs())
+                .periodoPagoMs(body.getPeriodoPagoEnSegundos())
                 .sueldo(body.getSueldo())
                 .build());
 
-        enviarMensajeYSonido(jugadorId, GOLD + "Has contratado a " + body.getJugadorNombreAContratar() +
-                " en la empresa " + body.getEmpresa(), ENTITY_PLAYER_LEVELUP) ;
-        enviarMensajeYSonido(jugadorIdAContratar, GOLD + "Has sido contratado en " + body.getEmpresa() + "con el cargo " +
+        enviarMensajeYSonido(jugadorId, GOLD + "Has contratado a " + body.getNombreJugadorAContratar() +
+                " en la empresa " + body.getNombreDeLaEmpresa(), ENTITY_PLAYER_LEVELUP) ;
+        enviarMensajeYSonido(jugadorIdAContratar, GOLD + "Has sido contratado en " + body.getNombreDeLaEmpresa() + "con el cargo " +
                 body.getDescripccion() + " con un sueldo de " + GREEN + FORMATEA.format(body.getSueldo()) + " PC / " +
-                millisToDias(body.getPeriodoPagoMs()) + " dias", ENTITY_PLAYER_LEVELUP);
+                millisToDias(body.getPeriodoPagoEnSegundos()) + " dias", ENTITY_PLAYER_LEVELUP);
     }
 }

@@ -98,8 +98,7 @@ public final class VerPosicionesCerradasMenu extends Menu<VerPosicionesCerradasM
     }
 
     private ItemStack buildItemInfo() {
-        //TODO
-        return null;
+        return ItemBuilder.of(Material.PAPER).build();
     }
 
     public enum Orden {

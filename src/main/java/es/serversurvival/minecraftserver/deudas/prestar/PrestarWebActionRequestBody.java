@@ -8,13 +8,13 @@ import java.util.UUID;
 
 @AllArgsConstructor
 public final class PrestarWebActionRequestBody extends WebActionRequestBody {
-    @Getter private final String deudorJugadorNombre;
+    @Getter private final String nombreDelJugadorAPrestar;
     @Getter private final double nominal;
     @Getter private final double interes;
     @Getter private final int numeroCuotasTotales;
-    @Getter private final long periodoPagoCuota;
+    @Getter private final long periodoPagoCuotaEnSegundos;
 
     public PrestarConfirmacionMenu.PrestarConfirmacionMenuState toPrestarConfirmacionMenuState(UUID acredorJugadorId) {
-        return new PrestarConfirmacionMenu.PrestarConfirmacionMenuState(acredorJugadorId, nominal, interes, numeroCuotasTotales, periodoPagoCuota);
+        return new PrestarConfirmacionMenu.PrestarConfirmacionMenuState(acredorJugadorId, nominal, interes, numeroCuotasTotales, periodoPagoCuotaEnSegundos);
     }
 }

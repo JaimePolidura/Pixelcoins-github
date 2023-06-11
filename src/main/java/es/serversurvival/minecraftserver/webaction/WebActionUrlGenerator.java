@@ -2,7 +2,6 @@ package es.serversurvival.minecraftserver.webaction;
 
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.serversurvival._shared.Configuration;
-import es.serversurvival.minecraftserver.webaction.server.WebAcionHttpServer;
 import es.serversurvival.minecraftserver.webaction.token.WebActionTokenService;
 import lombok.AllArgsConstructor;
 

@@ -6,9 +6,9 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public final class ContratarEmpleadoWebActionRequestBody extends WebActionRequestBody {
-    @Getter private final String jugadorNombreAContratar;
-    @Getter private final String empresa;
+    @Getter private final String nombreJugadorAContratar;
+    @Getter private final String nombreDeLaEmpresa;
     @Getter private final String descripccion;
     @Getter private final double sueldo;
-    @Getter private final long periodoPagoMs;
+    @Getter private final long periodoPagoEnSegundos;
 }

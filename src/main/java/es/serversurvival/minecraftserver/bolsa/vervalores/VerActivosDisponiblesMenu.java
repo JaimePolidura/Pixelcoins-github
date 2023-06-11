@@ -116,8 +116,7 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
     }
 
     private ItemStack itemInfo() {
-        //TODO
-        return null;
+        return ItemBuilder.of(Material.PAPER).build();
     }
 
     private ItemStack itemNextPage() {

@@ -90,8 +90,7 @@ public final class MisAccionesMenu extends Menu {
     }
 
     private ItemStack buildItemInfo() {
-        //TODO
-        return null;
+        return ItemBuilder.of(Material.PAPER).build();
     }
 
     private ItemStack buildItemMercado() {

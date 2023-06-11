@@ -1,0 +1,26 @@
+<div class="web-action-form">
+  <h1>{{nombre}}</h1>
+  <hr>
+
+  <form (ngSubmit)="onSubmit($event)" [formGroup]="formulario">
+    <div class="error-msg" *ngIf="($error | async) != ''">
+      <span style="text-align: center; color: red">× {{$error | async}} ×</span>
+    </div>
+
+    <div *ngFor="let campoFormulario of formulario.controls | keyvalue; let i = index">
+      <div *ngIf="i == 0">
+        <input type="text" class="form-control" placeholder="{{splitNombreCamelCaseEnEspacios(campoFormulario.key)}}" autofocus>
+      </div>
+      <div *ngIf="i != 0">
+        <input type="text" class="form-control" placeholder="{{splitNombreCamelCaseEnEspacios(campoFormulario.key)}}">
+      </div>
+
+      <br>
+    </div>
+
+    <br>
+    <hr>
+
+    <button type="submit" class="btn btn-success webaction-form-button">✓ {{getNombreBoton(nombre)}} ✓</button>
+  </form>
+</div>

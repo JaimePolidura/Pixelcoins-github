@@ -25,20 +25,20 @@ public final class ProponerDirectorWebActionHandler implements WebActionHandler<
 
     @Override
     public void handle(UUID jugadorId, ProponerDirectorWebActionRequestBody body) throws WebActionException {
-        UUID nuevoDirectorId = jugadoresService.getByNombre(body.getNuevoDirectorNombre()).getJugadorId();
-        UUID empresaId = empresasService.getByNombre(body.getEmpresaNombre()).getEmpresaId();
+        UUID nuevoDirectorId = jugadoresService.getByNombre(body.getNombreDelNuevoDirector()).getJugadorId();
+        UUID empresaId = empresasService.getByNombre(body.getNombreDeLaEmpresa()).getEmpresaId();
 
         useCaseBus.handle(ProponerNuevoDirectorParametros.builder()
                 .nuevoDirectorId(nuevoDirectorId)
                 .descripccion(body.getDescripccion())
                 .jugadorId(jugadorId)
                 .empresaId(empresaId)
-                .periodoPagoMs(body.getPeriodoPagoMs())
+                .periodoPagoMs(body.getPeriodoPagoEnSegundos())
                 .sueldo(body.getSueldo())
                 .build());
 
-        enviarMensajeYSonido(jugadorId, GOLD + "Has propuesto como director a " + body.getNuevoDirectorNombre() +
-                " de la empresa " + body.getEmpresaNombre() + ". Ahora el resto de accionistas tendran que votar a favor. " +
-                "Para ver las votaciones " + AQUA + "/empresas votaciones " + body.getEmpresaNombre(), ENTITY_PLAYER_LEVELUP);
+        enviarMensajeYSonido(jugadorId, GOLD + "Has propuesto como director a " + body.getNombreDelNuevoDirector() +
+                " de la empresa " + body.getNombreDeLaEmpresa() + ". Ahora el resto de accionistas tendran que votar a favor. " +
+                "Para ver las votaciones " + AQUA + "/empresas votaciones " + body.getNombreDeLaEmpresa(), ENTITY_PLAYER_LEVELUP);
     }
 }

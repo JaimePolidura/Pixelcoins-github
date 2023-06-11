@@ -8,16 +8,16 @@ import es.serversurvival.minecraftserver.webaction.messages.WebActionRequestBody
 import lombok.Getter;
 
 public enum WebActionType {
-    EMPRESAS_PROPONER_DIRECTOR("proponerdirector", ProponerDirectorWebActionRequestBody.class),
-    EMPRESAS_CONTRATAR("contratar", ContratarEmpleadoWebActionRequestBody.class),
-    DEUDAS_EMITIR("emitir", EmitirDeudaWebActionRequestBody.class),
-    DEUDAS_PRESTAR("prestar", PrestarWebActionRequestBody.class);
-
-    @Getter private final String urlFrontend;
+    EMPRESAS_PROPONER_DIRECTOR("Proponer director", ProponerDirectorWebActionRequestBody.class),
+    EMPRESAS_CONTRATAR("Contratar", ContratarEmpleadoWebActionRequestBody.class),
+    DEUDAS_EMITIR("Emitir deuda", EmitirDeudaWebActionRequestBody.class),
+    DEUDAS_PRESTAR("Prestar", PrestarWebActionRequestBody.class);
+    
+    @Getter private final String nombre;
     @Getter private final Class<? extends WebActionRequestBody> requestBodyClass;
 
-    WebActionType(String urlFrontend, Class<? extends WebActionRequestBody> requestBody) {
-        this.urlFrontend = urlFrontend;
+    WebActionType(String nombre, Class<? extends WebActionRequestBody> requestBody) {
+        this.nombre = nombre;
         this.requestBodyClass = requestBody;
     }
 }

@@ -9,5 +9,5 @@ public final class EmitirDeudaWebActionRequestBody extends WebActionRequestBody 
     @Getter private final double nominal;
     @Getter private final double interes;
     @Getter private final int numeroCuotasTotales;
-    @Getter private final long periodoPagoCuota;
+    @Getter private final long periodoPagoCuotaEnSegundos;
 }

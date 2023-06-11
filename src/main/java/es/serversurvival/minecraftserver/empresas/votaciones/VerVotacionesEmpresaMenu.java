@@ -135,8 +135,7 @@ public final class VerVotacionesEmpresaMenu extends Menu<Empresa> {
     }
 
     private ItemStack buildItemInfo() {
-        //TODO
-        return null;
+        return ItemBuilder.of(Material.PAPER).build();
     }
 
     private void irAMiEmpresaMenu(Player player, InventoryClickEvent event) {
