@@ -3,3 +3,8 @@
   margin-left: 2%;
   width: 95%;
 }
+
+.form-control-disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}

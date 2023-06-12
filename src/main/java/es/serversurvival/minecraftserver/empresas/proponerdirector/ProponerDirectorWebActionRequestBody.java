@@ -10,5 +10,5 @@ public final class ProponerDirectorWebActionRequestBody extends WebActionRequest
     @Getter private String nombreDelNuevoDirector;
     @Getter private String descripccion;
     @Getter private double sueldo;
-    @Getter private long periodoPagoEnSegundos;
+    @Getter private long periodoPagoEnDias;
 }

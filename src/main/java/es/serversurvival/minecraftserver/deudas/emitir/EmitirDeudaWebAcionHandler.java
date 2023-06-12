@@ -22,11 +22,11 @@ public final class EmitirDeudaWebAcionHandler implements WebActionHandler<Emitir
     @Override
     public void handle(UUID jugadorId, EmitirDeudaWebActionRequestBody body) throws WebActionException {
         useCaseBus.handle(EmitirDeudaParametros.builder()
-                .nominal(body.getNominal())
+                .nominal(body.getPixelcoins())
                 .interes(body.getInteres())
                 .jugadorId(jugadorId)
                 .numeroCuotasTotales(body.getNumeroCuotasTotales())
-                .periodoPagoCuota(body.getPeriodoPagoCuotaEnSegundos())
+                .periodoPagoCuota(body.getPeriodoPagoCuotaEnDias() * 24 * 60 * 60 * 1000)
                 .build());
 
         MinecraftUtils.enviarMensajeYSonido(Bukkit.getPlayer(jugadorId), GOLD + "Has puesto la deuda en el mercado. Para verlo: " +

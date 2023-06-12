@@ -33,7 +33,7 @@ public final class ProponerDirectorWebActionHandler implements WebActionHandler<
                 .descripccion(body.getDescripccion())
                 .jugadorId(jugadorId)
                 .empresaId(empresaId)
-                .periodoPagoMs(body.getPeriodoPagoEnSegundos())
+                .periodoPagoMs(body.getPeriodoPagoEnDias() * 24 * 60 * 60 * 1000)
                 .sueldo(body.getSueldo())
                 .build());
 

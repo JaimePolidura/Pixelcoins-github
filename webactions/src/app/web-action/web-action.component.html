@@ -4,23 +4,31 @@
 
   <form (ngSubmit)="onSubmit($event)" [formGroup]="formulario">
     <div class="error-msg" *ngIf="($error | async) != ''">
-      <span style="text-align: center; color: red">× {{$error | async}} ×</span>
+      <span style="text-align: center; color: red"><h4>× {{$error | async}} ×</h4></span>
+      <br>
     </div>
-
+    
     <div *ngFor="let campoFormulario of formulario.controls | keyvalue; let i = index">
-      <div *ngIf="i == 0">
-        <input type="text" class="form-control" placeholder="{{splitNombreCamelCaseEnEspacios(campoFormulario.key)}}" autofocus>
-      </div>
-      <div *ngIf="i != 0">
-        <input type="text" class="form-control" placeholder="{{splitNombreCamelCaseEnEspacios(campoFormulario.key)}}">
-      </div>
-
+      <input type="{{camposByNombre.get(campoFormulario.key)?.tipo == 'TEXTO' ? 'text' : 'number'}}"
+             class="form-control"
+             [ngClass]="{'form-control-disabled': ($loading | async) == true}"
+             placeholder="{{splitNombreCamelCaseEnEspacios(campoFormulario.key)}}"
+             autofocus>
       <br>
     </div>
 
-    <br>
-    <hr>
+    <br><hr>
 
-    <button type="submit" class="btn btn-success webaction-form-button">✓ {{getNombreBoton(nombre)}} ✓</button>
+    <button type="submit"
+            class="btn btn-success webaction-form-button"
+            [ngClass]="{'disabled': ($loading | async) == true}">
+      <div *ngIf="($loading | async) == false"> ✓ {{getNombreBoton(nombre)}} ✓</div>
+      <div *ngIf="($loading | async) == true">
+        <div class="spinner-border" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </button>
+
   </form>
 </div>

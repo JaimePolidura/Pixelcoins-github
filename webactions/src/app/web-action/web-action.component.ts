@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {
   WebActionApiService,
-  WebActionFormCamposResponse,
+  WebActionFormCampo,
   WebActionFormResponse
 } from "../_shared/web-action-api.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
@@ -15,12 +15,13 @@ import {BehaviorSubject} from "rxjs";
 })
 export class WebActionComponent implements OnInit {
   nombre: string = "";
-
   formulario: FormGroup;
-
   token: string = "";
 
+  $loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   $error: BehaviorSubject<string> = new BehaviorSubject<string>("");
+
+  camposByNombre: Map<string, WebActionFormCampo> = new Map<string, WebActionFormCampo>();
 
   constructor(
     private webActionBackend: WebActionApiService,
@@ -43,19 +44,24 @@ export class WebActionComponent implements OnInit {
 
   onSubmit($event: any): void {
     const formData: any = JSON.stringify(this.formulario.value);
+    this.$loading.next(true);
 
     this.webActionBackend.sendData(this.token, formData).subscribe(() => {
       this.router.navigateByUrl("/success");
+      this.$loading.next(false);
     }, err => {
-
+      this.$error.next(err.error.error ?? "Error hablar con Jaime");
+      console.error(err);
+      this.$loading.next(false);
     });
   }
 
   setupFormulario(formulario: WebActionFormResponse): void {
     this.nombre = formulario.nombre;
 
-    formulario.campos.forEach((parametro: WebActionFormCamposResponse): void => {
-      this.formulario.addControl(parametro.nombre, this.formBuilder.control("", Validators.required));
+    formulario.campos.forEach((campo: WebActionFormCampo): void => {
+      this.camposByNombre.set(campo.nombre, campo);
+      this.formulario.addControl(campo.nombre, this.formBuilder.control("", Validators.required));
     });
   }
 
@@ -78,8 +84,7 @@ export class WebActionComponent implements OnInit {
         return word.toLowerCase();
       }
     });
-    const result = capitalizedWords.join(' ');
 
-    return result;
+    return capitalizedWords.join(' ');
   }
 }

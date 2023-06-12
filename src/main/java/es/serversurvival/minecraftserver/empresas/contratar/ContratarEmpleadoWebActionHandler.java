@@ -35,7 +35,7 @@ public final class ContratarEmpleadoWebActionHandler implements WebActionHandler
                 .descripccion(body.getDescripccion())
                 .empresaId(empresa.getEmpresaId())
                 .jugadorIdContrador(jugadorId)
-                .periodoPagoMs(body.getPeriodoPagoEnSegundos())
+                .periodoPagoMs(body.getPeriodoPagoEnDias() * 24 * 60 * 60 * 1000)
                 .sueldo(body.getSueldo())
                 .build());
 
@@ -43,6 +43,6 @@ public final class ContratarEmpleadoWebActionHandler implements WebActionHandler
                 " en la empresa " + body.getNombreDeLaEmpresa(), ENTITY_PLAYER_LEVELUP) ;
         enviarMensajeYSonido(jugadorIdAContratar, GOLD + "Has sido contratado en " + body.getNombreDeLaEmpresa() + "con el cargo " +
                 body.getDescripccion() + " con un sueldo de " + GREEN + FORMATEA.format(body.getSueldo()) + " PC / " +
-                millisToDias(body.getPeriodoPagoEnSegundos()) + " dias", ENTITY_PLAYER_LEVELUP);
+                millisToDias(body.getPeriodoPagoEnDias()) + " dias", ENTITY_PLAYER_LEVELUP);
     }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Observable, of} from "rxjs";
+import {delay, Observable, of} from "rxjs";
 
 const urlApi: string = 'http://localhost:8080';
 
@@ -16,7 +16,8 @@ export class WebActionApiService {
     // return this.httpClient.post<void>(`${urlApi}/webaction?token=${token}`, datos);
     return new Observable<void>(subscriber => {
       subscriber.next();
-    });
+    })
+      .pipe(delay(2000));
   }
 
   public getWebActionFormData(token: string): Observable<WebActionFormResponse> {
@@ -36,10 +37,10 @@ export class WebActionApiService {
 
 export interface WebActionFormResponse {
   nombre: string;
-  campos: WebActionFormCamposResponse[];
+  campos: WebActionFormCampo[];
 }
 
-export interface WebActionFormCamposResponse {
+export interface WebActionFormCampo {
   nombre: string;
   tipo: 'TEXTO' | 'NUMERO';
 }

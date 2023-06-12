@@ -10,5 +10,5 @@ public final class ContratarEmpleadoWebActionRequestBody extends WebActionReques
     @Getter private final String nombreDeLaEmpresa;
     @Getter private final String descripccion;
     @Getter private final double sueldo;
-    @Getter private final long periodoPagoEnSegundos;
+    @Getter private final long periodoPagoEnDias;
 }
