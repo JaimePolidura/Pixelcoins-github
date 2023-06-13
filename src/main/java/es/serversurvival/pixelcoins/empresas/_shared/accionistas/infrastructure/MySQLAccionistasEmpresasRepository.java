@@ -18,9 +18,9 @@ import java.util.UUID;
 @Repository
 public final class MySQLAccionistasEmpresasRepository extends DataBaseRepository<AccionistaEmpresa, UUID> implements AccionistaEmpresaRepository {
     private final static String FIELD_ID = "accionistaId";
-    private final static String TABLE_NAME = "accionistas_empresas";
+    private final static String TABLE_NAME = "empresas_accionistas";
 
-    protected MySQLAccionistasEmpresasRepository(DatabaseConfiguration databaseConnection) {
+    public MySQLAccionistasEmpresasRepository(DatabaseConfiguration databaseConnection) {
         super(databaseConnection);
     }
 

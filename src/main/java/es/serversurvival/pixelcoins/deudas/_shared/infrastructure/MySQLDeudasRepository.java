@@ -21,7 +21,7 @@ public final class MySQLDeudasRepository extends DataBaseRepository<Deuda, UUID>
     private static final String FIELD_ID = "deudaId";
     private static final String TABLE_NAME = "deudas";
 
-    protected MySQLDeudasRepository(DatabaseConfiguration databaseConnection) {
+    public MySQLDeudasRepository(DatabaseConfiguration databaseConnection) {
         super(databaseConnection);
     }
 

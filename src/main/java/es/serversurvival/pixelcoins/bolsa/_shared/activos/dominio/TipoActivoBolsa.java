@@ -1,8 +1,8 @@
 package es.serversurvival.pixelcoins.bolsa._shared.activos.dominio;
 
-import es.serversurvival.pixelcoins.bolsa._shared.activos.infraestroctura.AccionesBolsaInformationAPIService;
-import es.serversurvival.pixelcoins.bolsa._shared.activos.infraestroctura.CriptoMonedasBolsaInformationAPIService;
-import es.serversurvival.pixelcoins.bolsa._shared.activos.infraestroctura.MateriasPrimasBolsaInfomationAPIService;
+import es.serversurvival.pixelcoins.bolsa._shared.activos.infrastructure.AccionesBolsaInformationAPIService;
+import es.serversurvival.pixelcoins.bolsa._shared.activos.infrastructure.CriptoMonedasBolsaInformationAPIService;
+import es.serversurvival.pixelcoins.bolsa._shared.activos.infrastructure.MateriasPrimasBolsaInfomationAPIService;
 import lombok.Getter;
 import org.bukkit.Material;
 

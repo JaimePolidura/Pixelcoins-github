@@ -22,7 +22,7 @@ public final class MySQLPosicionesRepository extends DataBaseRepository<Posicion
     private static final String TABLE_NAME = "posiciones";
     private static final String FIELD_ID = "posicionId";
 
-    protected MySQLPosicionesRepository(DatabaseConfiguration databaseConnection) {
+    public MySQLPosicionesRepository(DatabaseConfiguration databaseConnection) {
         super(databaseConnection);
     }
 

@@ -19,7 +19,7 @@ public final class Empresa {
     @Getter private final UUID fundadorJugadorId;
     @Getter private final UUID directorJugadorId;
     @Getter private final String descripcion;
-    @Getter private final String icono;
+    @Getter private final String logotipo;
     @Getter private final int nTotalAcciones;
     @Getter private final LocalDateTime fechaCreacion;
     @Getter private final boolean esCotizada;
@@ -27,22 +27,22 @@ public final class Empresa {
     @Getter private final LocalDateTime fechaCerrado;
 
     public Empresa nuevoDirector(UUID directorJugadorId) {
-        return new Empresa(empresaId, nombre, fundadorJugadorId, directorJugadorId, descripcion, icono, nTotalAcciones,
+        return new Empresa(empresaId, nombre, fundadorJugadorId, directorJugadorId, descripcion, logotipo, nTotalAcciones,
                 fechaCreacion, esCotizada, estaCerrado, fechaCerrado);
     }
 
     public Empresa incrementNTotalAccionesEn(int nTotalAccionesAIncrementar){
-        return new Empresa(empresaId, nombre, fundadorJugadorId, directorJugadorId, descripcion, icono, nTotalAcciones + nTotalAccionesAIncrementar,
+        return new Empresa(empresaId, nombre, fundadorJugadorId, directorJugadorId, descripcion, logotipo, nTotalAcciones + nTotalAccionesAIncrementar,
                 fechaCreacion, esCotizada, estaCerrado, fechaCerrado);
     }
 
     public Empresa marcarComoCotizada() {
-        return new Empresa(empresaId, nombre, fundadorJugadorId, directorJugadorId, descripcion, icono, nTotalAcciones,
+        return new Empresa(empresaId, nombre, fundadorJugadorId, directorJugadorId, descripcion, logotipo, nTotalAcciones,
                 fechaCreacion, true, estaCerrado, fechaCerrado);
     }
 
     public Empresa cerrar() {
-        return new Empresa(empresaId, nombre, fundadorJugadorId, directorJugadorId, descripcion, icono, nTotalAcciones,
+        return new Empresa(empresaId, nombre, fundadorJugadorId, directorJugadorId, descripcion, logotipo, nTotalAcciones,
                 fechaCreacion, esCotizada, true, LocalDateTime.now());
     }
 
@@ -58,7 +58,7 @@ public final class Empresa {
                 .fundadorJugadorId(comando.getJugadorCreadorId())
                 .directorJugadorId(comando.getJugadorCreadorId())
                 .descripcion(comando.getDescripccion())
-                .icono(comando.getIcono())
+                .logotipo(comando.getIcono())
                 .nTotalAcciones(N_ACCIONES_INICIAL)
                 .fechaCreacion(LocalDateTime.now())
                 .esCotizada(false)

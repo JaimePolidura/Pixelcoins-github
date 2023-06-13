@@ -20,7 +20,6 @@ import static es.serversurvival.minecraftserver._shared.MinecraftUtils.*;
 @RequiredArgsConstructor
 public class DeudasDisplayScoreboard implements ServerScoreboardCreator {
     private final JugadoresEstadisticasService jugadoresEstadisticasService;
-    private final JugadoresService jugadoresService;
     private final DeudasService deudasService;
 
     @Override

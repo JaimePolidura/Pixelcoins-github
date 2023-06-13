@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 
 import java.util.UUID;
 
+import static es.serversurvival._shared.Configuration.*;
+
 @Service
 @AllArgsConstructor
 public final class WebActionUrlGenerator {
@@ -15,7 +17,6 @@ public final class WebActionUrlGenerator {
     public String generate(WebActionType actionType, UUID jugadorId) {
         String token = webActionTokenService.generate(actionType, jugadorId);
 
-        return String.format("http://%s:%s/%s?token=%s", Configuration.WEB_ACTIONS_SERVER_IP, Configuration.WEB_ACTIONS_SERVER_PORT,
-                actionType.getUrlFrontend(), token);
+        return String.format("http://%s:%s/webaction?token=%s", WEB_ACTIONS_SERVER_IP, WEB_ACTIONS_SERVER_PORT, token);
     }
 }

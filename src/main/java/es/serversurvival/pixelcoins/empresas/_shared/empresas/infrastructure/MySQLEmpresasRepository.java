@@ -19,7 +19,7 @@ public final class MySQLEmpresasRepository extends DataBaseRepository<Empresa, U
     private static final String FIELD_ID = "empresaId";
     private static final String TABLE_NAME = "empresas";
 
-    protected MySQLEmpresasRepository(DatabaseConfiguration databaseConnection) {
+    public MySQLEmpresasRepository(DatabaseConfiguration databaseConnection) {
         super(databaseConnection);
     }
 
@@ -59,7 +59,7 @@ public final class MySQLEmpresasRepository extends DataBaseRepository<Empresa, U
                 UUID.fromString(rs.getString("fundadorJugadorId")),
                 UUID.fromString(rs.getString("directorJugadorId")),
                 rs.getString("descripcion"),
-                rs.getString("icono"),
+                rs.getString("logotipo"),
                 rs.getInt("nTotalAcciones"),
                 rs.getTimestamp("fechaCreacion").toLocalDateTime(),
                 rs.getBoolean("esCotizada"),

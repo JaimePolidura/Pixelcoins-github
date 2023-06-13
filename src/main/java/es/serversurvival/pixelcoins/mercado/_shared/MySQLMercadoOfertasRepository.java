@@ -30,7 +30,7 @@ public final class MySQLMercadoOfertasRepository extends DataBaseRepository<Ofer
 
     private final DependenciesRepository dependencies;
 
-    protected MySQLMercadoOfertasRepository(DatabaseConfiguration databaseConnection, DependenciesRepository dependencies) {
+    public MySQLMercadoOfertasRepository(DatabaseConfiguration databaseConnection, DependenciesRepository dependencies) {
         super(databaseConnection);
         this.dependencies = dependencies;
     }

@@ -80,7 +80,7 @@ public final class VerMisEmpleosMenu extends Menu {
 
     private ItemStack buildItemEmpleo(Empleado empleado) {
         Empresa empresaTrabajo = this.empresasService.getById(empleado.getEmpresaId());
-        Material materialIcono = Material.getMaterial(empresaTrabajo.getIcono());
+        Material materialIcono = Material.getMaterial(empresaTrabajo.getLogotipo());
         String displayName = RED + "" + BOLD + "" + UNDERLINE + "CLICK PARA IRTE";
 
         return ItemBuilder.of(materialIcono)

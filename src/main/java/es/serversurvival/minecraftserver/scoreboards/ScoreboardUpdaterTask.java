@@ -2,6 +2,7 @@ package es.serversurvival.minecraftserver.scoreboards;
 
 import es.bukkitclassmapper.task.BukkitTimeUnit;
 import es.bukkitclassmapper.task.Task;
+import es.bukkitclassmapper.task.TaskRunner;
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.dependencyinjector.hooks.AfterAllScanned;
 import es.jaime.javaddd.application.utils.CollectionUtils;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Task(value = BukkitTimeUnit.MINUTE, delay = BukkitTimeUnit.MINUTE)
-public final class ScoreboardUpdaterTask extends BukkitRunnable implements AfterAllScanned {
+public final class ScoreboardUpdaterTask implements TaskRunner, AfterAllScanned {
     private final ScoreboardDisplayer scoreBoardManager;
 
     private Iterator<ServerScoreboardCreator> nextScoreboard;

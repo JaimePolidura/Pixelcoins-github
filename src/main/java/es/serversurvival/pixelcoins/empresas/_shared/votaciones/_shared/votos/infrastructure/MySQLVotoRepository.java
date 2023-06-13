@@ -16,10 +16,10 @@ import java.util.UUID;
 
 @Repository
 public final class MySQLVotoRepository extends DataBaseRepository<Voto, UUID> implements VotosRepository {
-    public static final String TABLE_NAME = "votos";
+    public static final String TABLE_NAME = "empresas_votos";
     public static final String FIELD_ID = "votoId";
 
-    protected MySQLVotoRepository(DatabaseConfiguration databaseConnection) {
+    public MySQLVotoRepository(DatabaseConfiguration databaseConnection) {
         super(databaseConnection);
     }
 

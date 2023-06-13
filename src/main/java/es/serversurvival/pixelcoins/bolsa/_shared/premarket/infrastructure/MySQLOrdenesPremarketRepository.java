@@ -19,10 +19,10 @@ import java.util.UUID;
 
 @Repository
 public final class MySQLOrdenesPremarketRepository extends DataBaseRepository<OrdenPremarket, UUID> implements OrdenesPremarketRepository {
-    private static final String TABLE_NAME = "ordenes_premarket";
+    private static final String TABLE_NAME = "bolsa_ordenes_premarket";
     private static final String FIELD_ID = "ordenPremarketId";
 
-    protected MySQLOrdenesPremarketRepository(DatabaseConfiguration databaseConnection) {
+    public MySQLOrdenesPremarketRepository(DatabaseConfiguration databaseConnection) {
         super(databaseConnection);
     }
 

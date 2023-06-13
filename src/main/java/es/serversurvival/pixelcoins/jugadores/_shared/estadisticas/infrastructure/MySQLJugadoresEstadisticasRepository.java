@@ -21,7 +21,7 @@ public final class MySQLJugadoresEstadisticasRepository extends DataBaseReposito
     private static final String TABLE_NAME = "jugadores_estadisticas";
     private static final String ID_FIELD = "jugadorId";
 
-    protected MySQLJugadoresEstadisticasRepository(DatabaseConfiguration databaseConnection) {
+    public MySQLJugadoresEstadisticasRepository(DatabaseConfiguration databaseConnection) {
         super(databaseConnection);
     }
 
@@ -58,7 +58,7 @@ public final class MySQLJugadoresEstadisticasRepository extends DataBaseReposito
                 rs.getDouble("valorPixelcoinsVentasTienda"),
                 rs.getInt("nComprasTineda"),
                 rs.getDouble("valorPixelcoinsComprasTienda"),
-                rs.getInt("numeroCompraVentasBolsa")
+                rs.getInt("nCompraVentasBolsa")
         );
     }
 }

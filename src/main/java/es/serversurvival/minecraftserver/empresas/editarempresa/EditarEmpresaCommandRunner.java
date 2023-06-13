@@ -32,7 +32,7 @@ public final class EditarEmpresaCommandRunner implements CommandRunnerArgs<Edita
                 .empresaId(empresa.getEmpresaId())
                 .jugadorId(player.getUniqueId())
                 .nuevaDescripccion(empresa.getDescripcion())
-                .nuevoIcono(empresa.getIcono())
+                .nuevoIcono(empresa.getLogotipo())
                 .nuevoNombre(empresa.getNombre());
 
         switch (comando.getQueSeEdita().toLowerCase()) {

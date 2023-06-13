@@ -19,7 +19,7 @@ public final class MySQLMensajesRepository extends DataBaseRepository<Mensaje, U
     private static final String TABLE_NAME = "mensajes";
     private static final String ID_FIELD = "mensajeId";
 
-    protected MySQLMensajesRepository(DatabaseConfiguration databaseConnection) {
+    public MySQLMensajesRepository(DatabaseConfiguration databaseConnection) {
         super(databaseConnection);
     }
 

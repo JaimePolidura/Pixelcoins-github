@@ -1,4 +1,4 @@
-package es.serversurvival.pixelcoins.bolsa._shared.activos.infraestroctura;
+package es.serversurvival.pixelcoins.bolsa._shared.activos.infrastructure;
 
 import es.dependencyinjector.dependencies.annotations.Repository;
 import es.jaime.configuration.DatabaseConfiguration;
@@ -17,10 +17,10 @@ import java.util.UUID;
 
 @Repository
 public final class MySQLActivoBolsaRepository extends DataBaseRepository<ActivoBolsa, UUID> implements ActivoBolsaRepository {
-    private static final String TABLE_NAME = "activos_bolsa";
+    private static final String TABLE_NAME = "bolsa_activos";
     private static final String FIELD_ID = "activoBolsaId";
 
-    protected MySQLActivoBolsaRepository(DatabaseConfiguration databaseConnection) {
+    public MySQLActivoBolsaRepository(DatabaseConfiguration databaseConnection) {
         super(databaseConnection);
     }
 

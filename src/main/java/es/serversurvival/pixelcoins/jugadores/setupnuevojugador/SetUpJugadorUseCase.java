@@ -7,6 +7,7 @@ import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @UseCase
@@ -18,7 +19,7 @@ public final class SetUpJugadorUseCase {
         Optional<Jugador> jugadorOptional = jugadoresService.findById(player.getUniqueId());
 
         if(jugadorOptional.isEmpty()){
-            jugadoresService.save(new Jugador(player.getUniqueId(), player.getName()));
+            jugadoresService.save(new Jugador(player.getUniqueId(), player.getName(), LocalDateTime.now()));
         }else if(!jugadorOptional.get().getNombre().equalsIgnoreCase(player.getName())){
             jugadoresService.save(jugadorOptional.get().withNombre(player.getName()));
         }

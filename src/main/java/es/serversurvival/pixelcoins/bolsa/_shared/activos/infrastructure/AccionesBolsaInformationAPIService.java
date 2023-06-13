@@ -1,4 +1,4 @@
-package es.serversurvival.pixelcoins.bolsa._shared.activos.infraestroctura;
+package es.serversurvival.pixelcoins.bolsa._shared.activos.infrastructure;
 
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsaInformationAPIService;

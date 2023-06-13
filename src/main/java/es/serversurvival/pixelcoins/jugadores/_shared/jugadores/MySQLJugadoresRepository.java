@@ -50,10 +50,11 @@ public final class MySQLJugadoresRepository extends DataBaseRepository<Jugador, 
     }
 
     @Override
-    public Jugador buildObjectFromResultSet(ResultSet resultSet) throws SQLException {
+    public Jugador buildObjectFromResultSet(ResultSet rs) throws SQLException {
         return new Jugador(
-                UUID.fromString(resultSet.getString("jugadorId")),
-                resultSet.getString("nombre")
+                UUID.fromString(rs.getString("jugadorId")),
+                rs.getString("nombre"),
+                rs.getTimestamp("fechaCreacion").toLocalDateTime()
         );
     }
 }

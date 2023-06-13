@@ -19,7 +19,7 @@ public final class JugadorEstadisticas {
     @Getter private int nComprasTineda;
     @Getter private double valorPixelcoinsComprasTienda;
 
-    @Getter private int numeroCompraVentasBolsa;
+    @Getter private int nCompraVentasBolsa;
 
     @SneakyThrows
     public JugadorEstadisticas incrementar(JugadorTipoContadorEstadistica tipoContador, double incremento) {

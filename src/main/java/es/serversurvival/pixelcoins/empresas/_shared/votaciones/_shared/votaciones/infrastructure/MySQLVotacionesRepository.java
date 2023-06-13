@@ -21,12 +21,12 @@ import java.util.UUID;
 
 @Repository
 public final class MySQLVotacionesRepository extends DataBaseRepository<Votacion, UUID> implements VotacionesRepository {
-    private static final String TABLE_NAME = "votaciones";
+    private static final String TABLE_NAME = "empresas_votaciones";
     private static final String FIELD_ID = "votacionId";
 
     private final DependenciesRepository dependenciesRepository;
 
-    protected MySQLVotacionesRepository(DatabaseConfiguration databaseConnection, DependenciesRepository dependenciesRepository) {
+    public MySQLVotacionesRepository(DatabaseConfiguration databaseConnection, DependenciesRepository dependenciesRepository) {
         super(databaseConnection);
         this.dependenciesRepository = dependenciesRepository;
     }

@@ -13,25 +13,11 @@ export class WebActionApiService {
   ) { }
 
   public sendData(token: string, datos: any): Observable<void> {
-    // return this.httpClient.post<void>(`${urlApi}/webaction?token=${token}`, datos);
-    return new Observable<void>(subscriber => {
-      subscriber.next();
-    })
-      .pipe(delay(2000));
+    return this.httpClient.post<void>(`${urlApi}/webaction?token=${token}`, datos);
   }
 
   public getWebActionFormData(token: string): Observable<WebActionFormResponse> {
-    // return this.httpClient.get<WebActionFormResponse>(`${urlApi}/webaction?token=${token}`);
-    return of({
-      nombre: "Proponer director",
-      campos: [
-        {nombre: "nombreDeLaEmpresa", tipo: 'TEXTO'},
-        {nombre: "nombreDelNuevoDirector", tipo: 'TEXTO'},
-        {nombre: "descripccion", tipo: 'TEXTO'},
-        {nombre: "sueldo", tipo: 'NUMERO'},
-        {nombre: "periodoPagoEnSegundos", tipo: 'NUMERO'}
-      ]
-    });
+    return this.httpClient.get<WebActionFormResponse>(`${urlApi}/webaction?token=${token}`);
   }
 }
 

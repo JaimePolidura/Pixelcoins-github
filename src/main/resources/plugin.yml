@@ -1,8 +1,11 @@
 name: PixelCoins
 main: es.serversurvival.Pixelcoin
-version: 7.0
-api-version: "1.16"
+version: 11.0
+api-version: "1.19"
 commands:
+  patrimonio:
+    description: Cambio pixelcoins/items
+    usage: /<command>
   cambio:
     description: Cambio pixelcoins/items
     usage: /<command>

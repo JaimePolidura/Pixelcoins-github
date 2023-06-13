@@ -83,7 +83,7 @@ public final class VerTodasEmpresasMenu extends Menu<Object> {
                 .map(empleado -> jugadoresService.getNombreById(empleado.getEmpleadoJugadorId()))
                 .toList();
 
-        return ItemBuilder.of(Material.getMaterial(empresa.getIcono()))
+        return ItemBuilder.of(Material.getMaterial(empresa.getLogotipo()))
                 .title(jugadorMenuOwnerEmpresa ?
                         GOLD + "" + BOLD + "" + UNDERLINE + "CLICK PARA VER TU EMPRESA" :
                         GOLD + "" + BOLD + "" + empresa.getNombre())

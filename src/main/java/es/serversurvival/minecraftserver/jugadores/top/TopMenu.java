@@ -80,7 +80,7 @@ public final class TopMenu extends Menu {
             JugadorEstadisticas estadistica = topJugadores.get(i);
             String jugadorNombre = jugadoresService.getById(estadistica.getJugadorId()).getNombre();
 
-            lore.add(GOLD + "" + (i + 1) + "º " + jugadorNombre + ": " + GREEN + Funciones.FORMATEA.format(estadistica.getNumeroCompraVentasBolsa()) +
+            lore.add(GOLD + "" + (i + 1) + "º " + jugadorNombre + ": " + GREEN + Funciones.FORMATEA.format(estadistica.getNCompraVentasBolsa()) +
                     " nº operaciones bolsa");
         }
 
