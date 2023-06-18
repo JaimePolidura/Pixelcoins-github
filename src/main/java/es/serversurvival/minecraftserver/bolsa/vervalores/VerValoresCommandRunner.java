@@ -6,7 +6,10 @@ import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 
-@Command("bolsa valores")
+@Command(
+        value = "bolsa valores",
+        explanation = "Ver valores disponibles en bolsa para invertir"
+)
 @RequiredArgsConstructor
 public final class VerValoresCommandRunner implements CommandRunnerNonArgs {
     private final MenuService menuService;

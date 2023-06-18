@@ -1,13 +1,12 @@
 package es.serversurvival.minecraftserver.webaction;
 
 import es.dependencyinjector.dependencies.annotations.Service;
-import es.serversurvival._shared.Configuration;
 import es.serversurvival.minecraftserver.webaction.token.WebActionTokenService;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;
 
-import static es.serversurvival._shared.Configuration.*;
+import static es.serversurvival._shared.ConfigurationVariables.*;
 
 @Service
 @AllArgsConstructor

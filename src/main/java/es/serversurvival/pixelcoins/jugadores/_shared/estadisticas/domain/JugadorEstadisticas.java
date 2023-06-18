@@ -2,11 +2,13 @@ package es.serversurvival.pixelcoins.jugadores._shared.estadisticas.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 
 import java.lang.reflect.Field;
 import java.util.UUID;
 
+@NoArgsConstructor
 @AllArgsConstructor
 public final class JugadorEstadisticas {
     @Getter private UUID jugadorId;
@@ -20,6 +22,10 @@ public final class JugadorEstadisticas {
     @Getter private double valorPixelcoinsComprasTienda;
 
     @Getter private int nCompraVentasBolsa;
+
+    public static JugadorEstadisticas empty(UUID jugadorId) {
+        return new JugadorEstadisticas(jugadorId, 0, 0, 0, 0, 0, 0, 0);
+    }
 
     @SneakyThrows
     public JugadorEstadisticas incrementar(JugadorTipoContadorEstadistica tipoContador, double incremento) {

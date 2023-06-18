@@ -1,24 +1,21 @@
 package es.serversurvival.pixelcoins.transacciones;
 
-import es.dependencyinjector.dependencies.annotations.Repository;
-import es.jaime.configuration.DatabaseConfiguration;
-import es.jaime.mapper.EntityMapper;
-import es.jaime.repository.DataBaseRepository;
+import es.jaime.connection.ConnectionManager;
+import es.jaime.repository.EntityMapper;
+import es.jaime.repository.Repository;
 import es.jaimetruman.select.Select;
+import es.serversurvival._shared.mysql.MySQLRepository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
-@Repository
-public final class MySQLTransaccionesRepository extends DataBaseRepository<Transaccion, UUID> implements TransaccionesRepository {
+@MySQLRepository
+public final class MySQLTransaccionesRepository extends Repository<Transaccion, UUID, Object> implements TransaccionesRepository {
     private static final String TABLE_NAME = "transacciones";
-    private static final String ID_TABLE_NAME = "transaccionId";
+    private static final String ID_FIELD = "transaccionId";
 
-    public MySQLTransaccionesRepository(DatabaseConfiguration databaseConnection) {
-        super(databaseConnection);
+    public MySQLTransaccionesRepository(ConnectionManager connectionManager) {
+        super(connectionManager);
     }
 
     @Override
@@ -58,25 +55,12 @@ public final class MySQLTransaccionesRepository extends DataBaseRepository<Trans
         );
     }
 
-
     @Override
-    protected EntityMapper<Transaccion> entityMapper() {
-        return EntityMapper.table(TABLE_NAME)
+    public EntityMapper<Transaccion, Object> entityMapper() {
+        return EntityMapper.builder()
+                .idField(ID_FIELD)
+                .table(TABLE_NAME)
                 .classesToMap(Transaccion.class)
-                .idField(ID_TABLE_NAME)
                 .build();
-    }
-
-    @Override
-    public Transaccion buildObjectFromResultSet(ResultSet rs) throws SQLException {
-        return new Transaccion(
-                UUID.fromString(rs.getString("transaccionId")),
-                TipoTransaccion.valueOf(rs.getString("tipo")),
-                UUID.fromString(rs.getString("pagadorId")),
-                UUID.fromString(rs.getString("pagadoId")),
-                rs.getDouble("pixelcoins"),
-                Timestamp.valueOf(rs.getString("fecha")).toLocalDateTime(),
-                rs.getString("objeto")
-        );
     }
 }

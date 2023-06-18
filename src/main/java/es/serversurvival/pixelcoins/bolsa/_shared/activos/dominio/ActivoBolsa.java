@@ -2,16 +2,18 @@ package es.serversurvival.pixelcoins.bolsa._shared.activos.dominio;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+@NoArgsConstructor
 @AllArgsConstructor
 public final class ActivoBolsa {
-    @Getter private final UUID activoBolsaId;
-    @Getter private final TipoActivoBolsa tipoActivo;
-    @Getter private final String nombreCorto;
-    @Getter private final String nombreLargo;
-    @Getter private final int nReferencias;
+    @Getter private UUID activoBolsaId;
+    @Getter private TipoActivoBolsa tipoActivo;
+    @Getter private String nombreCorto;
+    @Getter private String nombreLargo;
+    @Getter private int nReferencias;
 
     public ActivoBolsa decrementarNReferencias() {
         return new ActivoBolsa(activoBolsaId, tipoActivo, nombreCorto, nombreLargo, nReferencias - 1);

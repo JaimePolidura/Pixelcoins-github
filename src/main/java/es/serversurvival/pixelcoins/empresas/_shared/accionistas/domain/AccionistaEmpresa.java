@@ -4,17 +4,19 @@ import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 //TODO AccionistaEmpresa y posiciones son muy similares
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public final class AccionistaEmpresa {
-    @Getter private final UUID accionistaId;
-    @Getter private final UUID empresaId;
-    @Getter private final UUID accionisaJugadorId;
-    @Getter private final int nAcciones;
+    @Getter private UUID accionistaId;
+    @Getter private UUID empresaId;
+    @Getter private UUID accionisaJugadorId;
+    @Getter private int nAcciones;
 
     public AccionistaEmpresa decrementarNAccionesPorUno() {
         return new AccionistaEmpresa(accionistaId, empresaId, accionistaId, nAcciones - 1);

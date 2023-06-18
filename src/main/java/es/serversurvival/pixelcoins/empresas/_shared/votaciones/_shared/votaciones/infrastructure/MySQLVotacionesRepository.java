@@ -1,34 +1,28 @@
 package es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.infrastructure;
 
-import es.dependencyinjector.dependencies.DependenciesRepository;
-import es.dependencyinjector.dependencies.annotations.Repository;
-import es.jaime.configuration.DatabaseConfiguration;
-import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.jaime.mapper.EntityMapper;
-import es.jaime.repository.DataBaseRepository;
+import es.jaime.connection.ConnectionManager;
+import es.jaime.repository.ConditionalClassMapping;
+import es.jaime.repository.EntityMapper;
+import es.jaime.repository.Repository;
 import es.jaimetruman.select.Select;
-import es.serversurvival._shared.mysql.ResultsetObjetBuilder;
+import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.TipoVotacion;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.Votacion;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.VotacionesRepository;
 import es.serversurvival.pixelcoins.empresas.cambiardirector.CambiarDirectorVotacion;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository
-public final class MySQLVotacionesRepository extends DataBaseRepository<Votacion, UUID> implements VotacionesRepository {
+@MySQLRepository
+public final class MySQLVotacionesRepository extends Repository<Votacion, UUID, TipoVotacion> implements VotacionesRepository {
     private static final String TABLE_NAME = "empresas_votaciones";
     private static final String FIELD_ID = "votacionId";
 
-    private final DependenciesRepository dependenciesRepository;
-
-    public MySQLVotacionesRepository(DatabaseConfiguration databaseConnection, DependenciesRepository dependenciesRepository) {
-        super(databaseConnection);
-        this.dependenciesRepository = dependenciesRepository;
+    public MySQLVotacionesRepository(ConnectionManager connectionManager) {
+        super(connectionManager);
     }
 
     @Override
@@ -48,24 +42,20 @@ public final class MySQLVotacionesRepository extends DataBaseRepository<Votacion
 
     @Override
     public List<Votacion> findAll() {
-        return super.all();
+        return super.findAll();
     }
 
     @Override
-    protected EntityMapper<Votacion> entityMapper() {
-        return EntityMapper.table(TABLE_NAME)
-                .classesToMap(CambiarDirectorVotacion.class)
+    public EntityMapper<Votacion, TipoVotacion> entityMapper() {
+        return EntityMapper.builder()
+                .classesToMap(Votacion.class)
                 .idField(FIELD_ID)
+                .table(TABLE_NAME)
+                .conditionalClassMapping(ConditionalClassMapping.<Votacion, TipoVotacion>builder()
+                        .entitiesTypeMapper(Map.of(TipoVotacion.CAMBIAR_DIRECTOR, CambiarDirectorVotacion.class))
+                        .typeValueAccessor(resultSet -> TipoVotacion.valueOf(resultSet.getString("tipo")))
+                        .typeClass(TipoVotacion.class)
+                        .build())
                 .build();
-    }
-
-    @Override
-    public Votacion buildObjectFromResultSet(ResultSet rs) throws SQLException {
-        TipoVotacion tipoVotacion = TipoVotacion.valueOf(rs.getString("tipo"));
-
-        return (Votacion) dependenciesRepository.filterByImplementsInterfaceWithGeneric(ResultsetObjetBuilder.class,
-                        tipoVotacion.getVotacionTypeClass())
-                .orElseThrow(() -> new ResourceNotFound("ResultsetObjetBuilder no enontrado para " + tipoVotacion))
-                .build(rs);
     }
 }

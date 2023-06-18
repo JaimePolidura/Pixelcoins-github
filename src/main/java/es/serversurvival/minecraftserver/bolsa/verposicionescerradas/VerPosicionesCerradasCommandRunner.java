@@ -6,7 +6,10 @@ import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 
-@Command("bolsa posicionescerradas")
+@Command(
+        value = "bolsa posicionescerradas",
+        explanation = "Ver todas tus operaciones pasadas en bolsa"
+)
 @RequiredArgsConstructor
 public final class VerPosicionesCerradasCommandRunner implements CommandRunnerNonArgs {
     private final MenuService menuService;

@@ -1,29 +1,26 @@
 package es.serversurvival.pixelcoins.bolsa._shared.posiciones.infrastructure;
 
-import es.dependencyinjector.dependencies.annotations.Repository;
-import es.jaime.configuration.DatabaseConfiguration;
-import es.jaime.mapper.EntityMapper;
-import es.jaime.repository.DataBaseRepository;
+import es.jaime.connection.ConnectionManager;
+import es.jaime.repository.EntityMapper;
+import es.jaime.repository.Repository;
 import es.jaimetruman.select.Order;
 import es.jaimetruman.select.Select;
+import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.Posicion;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.PosicionesRepository;
-import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.TipoBolsaApuesta;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.TipoPosicion;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository
-public final class MySQLPosicionesRepository extends DataBaseRepository<Posicion, UUID> implements PosicionesRepository {
+@MySQLRepository
+public final class MySQLPosicionesRepository extends Repository<Posicion, UUID, Object> implements PosicionesRepository {
     private static final String TABLE_NAME = "posiciones";
     private static final String FIELD_ID = "posicionId";
 
-    public MySQLPosicionesRepository(DatabaseConfiguration databaseConnection) {
-        super(databaseConnection);
+    public MySQLPosicionesRepository(ConnectionManager connectionManager) {
+        super(connectionManager);
     }
 
     @Override
@@ -54,27 +51,11 @@ public final class MySQLPosicionesRepository extends DataBaseRepository<Posicion
     }
 
     @Override
-    protected EntityMapper<Posicion> entityMapper() {
-        return EntityMapper.table(TABLE_NAME)
+    public EntityMapper<Posicion, Object> entityMapper() {
+        return EntityMapper.builder()
+                .table(TABLE_NAME)
                 .idField(FIELD_ID)
                 .classesToMap(Posicion.class)
                 .build();
-    }
-
-    @Override
-    public Posicion buildObjectFromResultSet(ResultSet rs) throws SQLException {
-        return new Posicion(
-                UUID.fromString(rs.getString("posicionId")),
-                UUID.fromString(rs.getString("activoBolsaId")),
-                UUID.fromString(rs.getString("jugadorId")),
-                rs.getInt("cantidad"),
-                TipoBolsaApuesta.valueOf(rs.getString("tipoApuesta")),
-                TipoPosicion.valueOf(rs.getString("tipoPosicion")),
-                rs.getDouble("precioApertura"),
-                rs.getTimestamp("fechaApertura").toLocalDateTime(),
-                rs.getDouble("precioCierre"),
-                rs.getTimestamp("fechaCierre") != null ? rs.getTimestamp("fechaCierre").toLocalDateTime() : null,
-                rs.getDouble("rentabilidad")
-        );
     }
 }

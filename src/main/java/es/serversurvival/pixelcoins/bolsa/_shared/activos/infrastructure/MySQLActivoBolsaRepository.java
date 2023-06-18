@@ -1,27 +1,25 @@
 package es.serversurvival.pixelcoins.bolsa._shared.activos.infrastructure;
 
-import es.dependencyinjector.dependencies.annotations.Repository;
-import es.jaime.configuration.DatabaseConfiguration;
-import es.jaime.mapper.EntityMapper;
-import es.jaime.repository.DataBaseRepository;
+import es.jaime.connection.ConnectionManager;
+import es.jaime.repository.EntityMapper;
+import es.jaime.repository.Repository;
 import es.jaimetruman.select.Select;
+import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsaRepository;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.TipoActivoBolsa;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository
-public final class MySQLActivoBolsaRepository extends DataBaseRepository<ActivoBolsa, UUID> implements ActivoBolsaRepository {
+@MySQLRepository
+public final class MySQLActivoBolsaRepository extends Repository<ActivoBolsa, UUID, Object> implements ActivoBolsaRepository {
     private static final String TABLE_NAME = "bolsa_activos";
     private static final String FIELD_ID = "activoBolsaId";
 
-    public MySQLActivoBolsaRepository(DatabaseConfiguration databaseConnection) {
-        super(databaseConnection);
+    public MySQLActivoBolsaRepository(ConnectionManager connectionManager) {
+        super(connectionManager);
     }
 
     @Override
@@ -52,21 +50,11 @@ public final class MySQLActivoBolsaRepository extends DataBaseRepository<ActivoB
     }
 
     @Override
-    protected EntityMapper<ActivoBolsa> entityMapper() {
-        return EntityMapper.table(TABLE_NAME)
-                .idField(FIELD_ID)
+    public EntityMapper<ActivoBolsa, Object> entityMapper() {
+        return EntityMapper.builder()
                 .classesToMap(ActivoBolsa.class)
+                .idField(FIELD_ID)
+                .table(TABLE_NAME)
                 .build();
-    }
-
-    @Override
-    public ActivoBolsa buildObjectFromResultSet(ResultSet rs) throws SQLException {
-        return new ActivoBolsa(
-                UUID.fromString(rs.getString("activoBolsaId")),
-                TipoActivoBolsa.valueOf("tipoActivo"),
-                rs.getString("nombreCorto"),
-                rs.getString("nombreLargo"),
-                rs.getInt("nReferencias")
-        );
     }
 }

@@ -1,26 +1,24 @@
 package es.serversurvival.pixelcoins.mensajes._shared.infrastructure;
 
-import es.dependencyinjector.dependencies.annotations.Repository;
-import es.jaime.configuration.DatabaseConfiguration;
-import es.jaime.mapper.EntityMapper;
-import es.jaime.repository.DataBaseRepository;
+import es.jaime.connection.ConnectionManager;
+import es.jaime.repository.EntityMapper;
+import es.jaime.repository.Repository;
+import es.jaimetruman.delete.Delete;
+import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival.pixelcoins.mensajes._shared.domain.Mensaje;
 import es.serversurvival.pixelcoins.mensajes._shared.domain.MensajesRepository;
-import es.serversurvival.pixelcoins.mensajes._shared.domain.TipoMensaje;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Repository
-public final class MySQLMensajesRepository extends DataBaseRepository<Mensaje, UUID> implements MensajesRepository {
+@MySQLRepository
+public final class MySQLMensajesRepository extends Repository<Mensaje, UUID, Object> implements MensajesRepository {
     private static final String TABLE_NAME = "mensajes";
     private static final String ID_FIELD = "mensajeId";
 
-    public MySQLMensajesRepository(DatabaseConfiguration databaseConnection) {
-        super(databaseConnection);
+    public MySQLMensajesRepository(ConnectionManager connectionManager) {
+        super(connectionManager);
     }
 
     @Override
@@ -35,26 +33,15 @@ public final class MySQLMensajesRepository extends DataBaseRepository<Mensaje, U
 
     @Override
     public void deleteByFechaVistaLessThan(LocalDateTime lessThan) {
-        super.execute(String.format("DELETE FROM %s WHERE fechaVisto < %s", TABLE_NAME, lessThan));
+        super.execute(Delete.from(TABLE_NAME).where("fechaVisto").smaller(lessThan));
     }
 
     @Override
-    protected EntityMapper<Mensaje> entityMapper() {
-        return EntityMapper.table(TABLE_NAME)
+    public EntityMapper<Mensaje, Object> entityMapper() {
+        return EntityMapper.builder()
                 .classesToMap(Mensaje.class)
                 .idField(ID_FIELD)
+                .table(TABLE_NAME)
                 .build();
-    }
-
-    @Override
-    public Mensaje buildObjectFromResultSet(ResultSet rs) throws SQLException {
-        return new Mensaje(
-                UUID.fromString(rs.getString("mensajeId")),
-                UUID.fromString(rs.getString("destinatarioId")),
-                TipoMensaje.valueOf(rs.getString("tipo")),
-                rs.getTimestamp("fechaEnvio").toLocalDateTime(),
-                rs.getString("fechaVisto") != null ? rs.getTimestamp("fechaVisto").toLocalDateTime() : null,
-                rs.getString("mensaje")
-        );
     }
 }

@@ -2,14 +2,16 @@ package es.serversurvival.pixelcoins.deudas._shared;
 
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@NoArgsConstructor
 public final class OfertaDeudaMercadoPrimario extends OfertaDeudaMercado {
-    @Getter private final double interes;
-    @Getter private final int nCuotasTotales;
-    @Getter private final long periodoPagoCuotaMs;
+    @Getter private double interes;
+    @Getter private int nCuotasTotales;
+    @Getter private long periodoPagoCuotaMs;
 
     public OfertaDeudaMercadoPrimario(UUID ofertaId, UUID vendedorId, LocalDateTime fechaSubida, int cantidad, double precio,
                                       String objeto, TipoOferta tipoOferta, double interes, int numeroCuotasTotales, long periodoPagoCuota) {

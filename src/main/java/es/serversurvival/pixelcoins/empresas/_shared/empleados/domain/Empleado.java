@@ -7,26 +7,28 @@ import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public final class Empleado {
-    @Getter private final UUID empleadoId;
-    @Getter private final UUID empleadoJugadorId;
-    @Getter private final UUID empresaId;
-    @Getter private final String descripccion;
+    @Getter private UUID empleadoId;
+    @Getter private UUID empleadoJugadorId;
+    @Getter private UUID empresaId;
+    @Getter private String descripccion;
 
-    @Getter private final double sueldo;
-    @Getter private final long periodoPagoMs;
-    @Getter private final LocalDateTime fechaUltimoPago;
+    @Getter private double sueldo;
+    @Getter private long periodoPagoMs;
+    @Getter private LocalDateTime fechaUltimoPago;
 
-    @Getter private final LocalDateTime fechaContratacion;
-    @Getter private final boolean estaContratado;
-    @Getter private final LocalDateTime fechaDespido;
-    @Getter private final String causaDespido;
+    @Getter private LocalDateTime fechaContratacion;
+    @Getter private boolean estaContratado;
+    @Getter private LocalDateTime fechaDespido;
+    @Getter private String causaDespido;
 
     public int periodoSueldoToDias() {
         return (int) (periodoPagoMs / (1000 * 60 * 60 * 24));

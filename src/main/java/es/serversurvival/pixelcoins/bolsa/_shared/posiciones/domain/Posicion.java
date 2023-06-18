@@ -2,24 +2,26 @@ package es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.UUID;
 
+@NoArgsConstructor
 @AllArgsConstructor
 public final class Posicion {
-    @Getter private final UUID posicionId;
-    @Getter private final UUID activoBolsaId;
-    @Getter private final UUID jugadorId;
-    @Getter private final int cantidad;
-    @Getter private final TipoBolsaApuesta tipoApuesta;
-    @Getter private final TipoPosicion tipoPosicion;
-    @Getter private final double precioApertura;
-    @Getter private final LocalDateTime fechaApertura;
-    @Getter private final double precioCierre;
-    @Getter private final LocalDateTime fechaCierre;
-    @Getter private final double rentabilidad;
+    @Getter private UUID posicionId;
+    @Getter private UUID activoBolsaId;
+    @Getter private UUID jugadorId;
+    @Getter private int cantidad;
+    @Getter private TipoBolsaApuesta tipoApuesta;
+    @Getter private TipoPosicion tipoPosicion;
+    @Getter private double precioApertura;
+    @Getter private LocalDateTime fechaApertura;
+    @Getter private double precioCierre;
+    @Getter private LocalDateTime fechaCierre;
+    @Getter private double rentabilidad;
 
     public static Comparator<Posicion> sortByRentabilidad() {
         return Comparator.comparing(Posicion::getRentabilidad)

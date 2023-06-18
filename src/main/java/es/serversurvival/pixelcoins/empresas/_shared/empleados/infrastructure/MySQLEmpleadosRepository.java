@@ -1,26 +1,24 @@
 package es.serversurvival.pixelcoins.empresas._shared.empleados.infrastructure;
 
-import es.dependencyinjector.dependencies.annotations.Repository;
-import es.jaime.configuration.DatabaseConfiguration;
-import es.jaime.mapper.EntityMapper;
-import es.jaime.repository.DataBaseRepository;
+import es.jaime.connection.ConnectionManager;
+import es.jaime.repository.EntityMapper;
+import es.jaime.repository.Repository;
 import es.jaimetruman.select.Select;
+import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.domain.Empleado;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.domain.EmpleadosRepository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository
-public final class MySQLEmpleadosRepository extends DataBaseRepository<Empleado, UUID> implements EmpleadosRepository {
+@MySQLRepository
+public final class MySQLEmpleadosRepository extends Repository<Empleado, UUID, Object> implements EmpleadosRepository {
     private static final String FIELD_ID = "empleadoId";
     private static final String TABLE_NAME = "empresas_empleados";
 
-    public MySQLEmpleadosRepository(DatabaseConfiguration databaseConnection) {
-        super(databaseConnection);
+    public MySQLEmpleadosRepository(ConnectionManager connectionManager) {
+        super(connectionManager);
     }
 
     @Override
@@ -56,27 +54,11 @@ public final class MySQLEmpleadosRepository extends DataBaseRepository<Empleado,
     }
 
     @Override
-    protected EntityMapper<Empleado> entityMapper() {
-        return EntityMapper.table(TABLE_NAME)
+    public EntityMapper<Empleado, Object> entityMapper() {
+        return EntityMapper.builder()
                 .idField(FIELD_ID)
                 .classesToMap(Empleado.class)
+                .table(TABLE_NAME)
                 .build();
-    }
-
-    @Override
-    public Empleado buildObjectFromResultSet(ResultSet rs) throws SQLException {
-        return new Empleado(
-                UUID.fromString(rs.getString("empleadoId")),
-                UUID.fromString(rs.getString("empleadoJugadorId")),
-                UUID.fromString(rs.getString("empresaId")),
-                rs.getString("descripccion"),
-                rs.getDouble("sueldo"),
-                rs.getLong("periodoPagoMs"),
-                rs.getString("fechaUltimoPago") == null ? rs.getTimestamp("fechaUltimoPago").toLocalDateTime() : null,
-                rs.getTimestamp("fechaContratacion").toLocalDateTime(),
-                rs.getBoolean("estaContratado"),
-                rs.getString("fechaDespido") == null ? rs.getTimestamp("fechaDespido").toLocalDateTime() : null,
-                rs.getString("causaDespido")
-        );
     }
 }

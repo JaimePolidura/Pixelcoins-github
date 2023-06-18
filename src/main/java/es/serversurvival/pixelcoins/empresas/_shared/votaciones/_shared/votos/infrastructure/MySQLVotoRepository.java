@@ -1,26 +1,24 @@
 package es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votos.infrastructure;
 
-import es.dependencyinjector.dependencies.annotations.Repository;
-import es.jaime.configuration.DatabaseConfiguration;
-import es.jaime.mapper.EntityMapper;
-import es.jaime.repository.DataBaseRepository;
+import es.jaime.connection.ConnectionManager;
+import es.jaime.repository.EntityMapper;
+import es.jaime.repository.Repository;
 import es.jaimetruman.select.Select;
+import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votos.domain.Voto;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votos.domain.VotosRepository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository
-public final class MySQLVotoRepository extends DataBaseRepository<Voto, UUID> implements VotosRepository {
+@MySQLRepository
+public final class MySQLVotoRepository extends Repository<Voto, UUID, Object> implements VotosRepository {
     public static final String TABLE_NAME = "empresas_votos";
     public static final String FIELD_ID = "votoId";
 
-    public MySQLVotoRepository(DatabaseConfiguration databaseConnection) {
-        super(databaseConnection);
+    public MySQLVotoRepository(ConnectionManager connectionManager) {
+        super(connectionManager);
     }
 
     @Override
@@ -51,22 +49,11 @@ public final class MySQLVotoRepository extends DataBaseRepository<Voto, UUID> im
     }
 
     @Override
-    protected EntityMapper<Voto> entityMapper() {
-        return EntityMapper.table(TABLE_NAME)
-                .classesToMap(Voto.class)
+    public EntityMapper<Voto, Object> entityMapper() {
+        return EntityMapper.builder()
                 .idField(FIELD_ID)
+                .table(TABLE_NAME)
+                .classesToMap(Voto.class)
                 .build();
-    }
-
-    @Override
-    public Voto buildObjectFromResultSet(ResultSet rs) throws SQLException {
-        return new Voto(
-                UUID.fromString(rs.getString("votoId")),
-                UUID.fromString(rs.getString("votacionId")),
-                UUID.fromString(rs.getString("jugadorId")),
-                rs.getBoolean("afavor"),
-                rs.getInt("nAcciones"),
-                rs.getTimestamp("fechaVotacion").toLocalDateTime()
-        );
     }
 }

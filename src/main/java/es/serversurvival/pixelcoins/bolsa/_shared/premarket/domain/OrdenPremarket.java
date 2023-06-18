@@ -6,22 +6,24 @@ import es.serversurvival.pixelcoins.bolsa.abrir.AbrirPosicoinBolsaParametros;
 import es.serversurvival.pixelcoins.bolsa.cerrar.CerrarPosicionParametros;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@NoArgsConstructor
 @AllArgsConstructor
 public final class OrdenPremarket {
-    @Getter private final UUID ordenPremarketId;
-    @Getter private final UUID jugadorId;
-    @Getter private final LocalDateTime fechaCreacion;
-    @Getter private final TipoPosicion tipoPosicion;
-    @Getter private final int cantidad;
-    @Getter private final TipoBolsaApuesta tipoBolsaApuesta;
+    @Getter private UUID ordenPremarketId;
+    @Getter private UUID jugadorId;
+    @Getter private LocalDateTime fechaCreacion;
+    @Getter private TipoPosicion tipoPosicion;
+    @Getter private int cantidad;
+    @Getter private TipoBolsaApuesta tipoBolsaApuesta;
 
-    @Getter private final UUID activoBolsaId;
+    @Getter private UUID activoBolsaId;
 
-    @Getter private final UUID posicionAbiertaId;
+    @Getter private UUID posicionAbiertaId;
 
     public AbrirPosicoinBolsaParametros toAbrirPosicoinBolsaParametros() {
         return new AbrirPosicoinBolsaParametros(jugadorId, tipoBolsaApuesta, activoBolsaId, cantidad);

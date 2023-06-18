@@ -1,6 +1,5 @@
 package es.serversurvival.minecraftserver.bolsa.vercartera;
 
-import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
@@ -27,27 +26,19 @@ public final class VerCarteraCommnadRunner implements CommandRunnerArgs<VerCarte
     private final VerCarteraResumidaUseCase verCarteraResumidaUseCase;
     private final ActivosBolsaService activosBolsaService;
     private final JugadoresService jugadoresService;
-    private final MenuService menuService;
 
     @Override
     public void execute(VerCarteraComando comando, Player player) {
-        if(comando.getJugador() == null){
-            mostrarMenuVerCarteraDelMismoJugador(comando, player);
-        }else{
-            mostrarCarteraResumidaDelOtroJugador(comando, player);
-        }
+        mostrarCarteraResumidaDelOtroJugador(comando.getJugador() == null || comando.getJugador().equals("") ?
+                player.getName() : comando.getJugador(), player);
     }
 
-    private void mostrarMenuVerCarteraDelMismoJugador(VerCarteraComando comando, Player player) {
-
-    }
-
-    private void mostrarCarteraResumidaDelOtroJugador(VerCarteraComando comando, Player player) {
-        UUID jugadorId = jugadoresService.getByNombre(comando.getJugador()).getJugadorId();
+    private void mostrarCarteraResumidaDelOtroJugador(String jugadorVerCartera, Player player) {
+        UUID jugadorId = jugadoresService.getByNombre(jugadorVerCartera).getJugadorId();
 
         CarteraBolsaResumida carteraBolsaResumida = verCarteraResumidaUseCase.ver(jugadorId);
 
-        player.sendMessage(GOLD + "Cartera de " + comando.getJugador() + " ~ " + GREEN + Funciones.FORMATEA.format(carteraBolsaResumida.getValorTotalCartera()) + " PC: ");
+        player.sendMessage(GOLD + "Cartera de " + jugadorVerCartera + " ~ " + GREEN + Funciones.FORMATEA.format(carteraBolsaResumida.getValorTotalCartera()) + " PC: ");
 
         for (CarteraResumidaItem itemCartera : carteraBolsaResumida.getItems()) {
             String nombreActivo = activosBolsaService.getById(itemCartera.getActivoBolsaId())

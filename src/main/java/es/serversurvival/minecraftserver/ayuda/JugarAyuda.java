@@ -3,7 +3,6 @@ package es.serversurvival.minecraftserver.ayuda;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @Command(value = "jugar", explanation = "Ver las cosas basicas para jugar al servidor")

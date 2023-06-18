@@ -1,38 +1,28 @@
 package es.serversurvival.pixelcoins.mercado._shared;
 
-import es.dependencyinjector.dependencies.DependenciesRepository;
-import es.dependencyinjector.dependencies.annotations.Repository;
-import es.jaime.configuration.DatabaseConfiguration;
-import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.jaime.mapper.EntityMapper;
-import es.jaime.repository.DataBaseRepository;
+import es.jaime.connection.ConnectionManager;
+import es.jaime.repository.ConditionalClassMapping;
+import es.jaime.repository.EntityMapper;
+import es.jaime.repository.Repository;
 import es.jaimetruman.delete.Delete;
 import es.jaimetruman.select.Select;
-import es.serversurvival._shared.mysql.ResultsetObjetBuilder;
+import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival.pixelcoins.deudas._shared.OfertaDeudaMercadoPrimario;
 import es.serversurvival.pixelcoins.deudas._shared.OfertaDeudaMercadoSecundario;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.OfertaAccionMercadoEmision;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.OfertaAccionMercadoJugador;
 import es.serversurvival.pixelcoins.tienda._shared.OfertaTiendaItemMinecraft;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
-@Repository
-public final class MySQLMercadoOfertasRepository extends DataBaseRepository<Oferta, UUID> implements MercadoOfertasRepository {
+@MySQLRepository
+public final class MySQLMercadoOfertasRepository extends Repository<Oferta, UUID, TipoOferta> implements MercadoOfertasRepository {
     private static final String TABLE_NAME = "mercados";
     private static final String FIELD_ID = "ofertaId";
 
-    private final DependenciesRepository dependencies;
-
-    public MySQLMercadoOfertasRepository(DatabaseConfiguration databaseConnection, DependenciesRepository dependencies) {
-        super(databaseConnection);
-        this.dependencies = dependencies;
+    public MySQLMercadoOfertasRepository(ConnectionManager connectionManager) {
+        super(connectionManager);
     }
 
     @Override
@@ -70,24 +60,22 @@ public final class MySQLMercadoOfertasRepository extends DataBaseRepository<Ofer
     }
 
     @Override
-    protected EntityMapper<Oferta> entityMapper() {
-        return EntityMapper.table(TABLE_NAME)
+    public EntityMapper<Oferta, TipoOferta> entityMapper() {
+        return EntityMapper.builder()
+                .table(TABLE_NAME)
                 .idField(FIELD_ID)
-                .classesToMap(
-                        OfertaAccionMercadoEmision.class,
-                        OfertaAccionMercadoJugador.class,
-                        OfertaDeudaMercadoPrimario.class,
-                        OfertaDeudaMercadoSecundario.class,
-                        OfertaTiendaItemMinecraft.class)
+                .classesToMap(Oferta.class)
+                .conditionalClassMapping(ConditionalClassMapping.<Oferta, TipoOferta>builder()
+                        .typeValueAccessor(resultSet -> TipoOferta.valueOf(resultSet.getString("tipo")))
+                        .typeClass(TipoOferta.class)
+                        .entitiesTypeMapper(Map.of(
+                                TipoOferta.DEUDA_MERCADO_SECUNDARIO, OfertaDeudaMercadoSecundario.class,
+                                TipoOferta.ACCIONES_SERVER_EMISION, OfertaAccionMercadoEmision.class,
+                                TipoOferta.ACCIONES_SERVER_JUGADOR, OfertaAccionMercadoJugador.class,
+                                TipoOferta.DEUDA_MERCADO_PRIMARIO, OfertaDeudaMercadoPrimario.class,
+                                TipoOferta.TIENDA_ITEM_MINECRAFT, OfertaTiendaItemMinecraft.class
+                        ))
+                        .build())
                 .build();
-    }
-
-    @Override
-    public Oferta buildObjectFromResultSet(ResultSet rs) throws SQLException {
-        TipoOferta tipoOferta = TipoOferta.valueOf(rs.getString("tipo"));
-
-        return (Oferta) dependencies.filterByImplementsInterfaceWithGeneric(ResultsetObjetBuilder.class, tipoOferta.getOfertaClass())
-                .orElseThrow(() -> new ResourceNotFound("ResultsetObjetBuilder no registrado para oferta " + tipoOferta))
-                .build(rs);
     }
 }

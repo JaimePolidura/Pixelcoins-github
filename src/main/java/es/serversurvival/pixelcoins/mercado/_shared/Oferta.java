@@ -2,19 +2,21 @@ package es.serversurvival.pixelcoins.mercado._shared;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@NoArgsConstructor
 @AllArgsConstructor
 public abstract class Oferta {
-    @Getter private final UUID ofertaId;
-    @Getter private final UUID vendedorId;
-    @Getter private final LocalDateTime fechaSubida;
+    @Getter private UUID ofertaId;
+    @Getter private UUID vendedorId;
+    @Getter private LocalDateTime fechaSubida;
     @Getter private int cantidad;
-    @Getter private final double precio;
-    @Getter private final String objeto;
-    @Getter private final TipoOferta tipo;
+    @Getter private double precio;
+    @Getter private String objeto;
+    @Getter private TipoOferta tipo;
 
     public Oferta decrementarCantidad() {
         this.cantidad--;

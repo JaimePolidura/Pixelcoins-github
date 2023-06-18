@@ -42,12 +42,15 @@ commands:
   comprar:
     description: comprar un servicio de una empresa por pixelcoins
     usage: /<command> <empresa> <precio>
+  cls:
+    description: Limpiar el chat
+    usage: /<command>
   empleos:
     description: Comandos relacionados con los trabajos
     usage: /<command> <subComandos...>
   ayuda:
     description: ver las ayudas
-    usage: /<command> <ayuda>
+    usage: /<command>
   bolsa:
     description: comando relacionado con los comandos de la bolsa
     usage: /<command> <subComandos...>

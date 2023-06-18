@@ -5,26 +5,28 @@ import es.serversurvival.pixelcoins.empresas.crear.CrearEmpresaParametros;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public final class Empresa {
     public static final int N_ACCIONES_INICIAL = 1000;
 
-    @Getter private final UUID empresaId;
-    @Getter private final String nombre;
-    @Getter private final UUID fundadorJugadorId;
-    @Getter private final UUID directorJugadorId;
-    @Getter private final String descripcion;
-    @Getter private final String logotipo;
-    @Getter private final int nTotalAcciones;
-    @Getter private final LocalDateTime fechaCreacion;
-    @Getter private final boolean esCotizada;
-    @Getter private final boolean estaCerrado;
-    @Getter private final LocalDateTime fechaCerrado;
+    @Getter private UUID empresaId;
+    @Getter private String nombre;
+    @Getter private UUID fundadorJugadorId;
+    @Getter private UUID directorJugadorId;
+    @Getter private String descripcion;
+    @Getter private String logotipo;
+    @Getter private int nTotalAcciones;
+    @Getter private LocalDateTime fechaCreacion;
+    @Getter private boolean esCotizada;
+    @Getter private boolean estaCerrado;
+    @Getter private LocalDateTime fechaCerrado;
 
     public Empresa nuevoDirector(UUID directorJugadorId) {
         return new Empresa(empresaId, nombre, fundadorJugadorId, directorJugadorId, descripcion, logotipo, nTotalAcciones,

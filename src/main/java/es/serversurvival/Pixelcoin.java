@@ -6,10 +6,11 @@ import es.bukkitbettermenus.MenusDependenciesInstanceProvider;
 import es.bukkitclassmapper.ClassMapperConfiguration;
 import es.bukkitclassmapper._shared.utils.reflections.BukkitClassMapperInstanceProvider;
 import es.bukkitclassmapper.commands.Command;
-import es.bukkitclassmapper.commands.commandrunners.CommandRunner;
+import es.bukkitclassmapper.commands.DefaultCommandExecutorEntrypoint;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
 import es.bukkitclassmapper.mobs.Mob;
+import es.bukkitclassmapper.mobs.MobMapper;
 import es.bukkitclassmapper.mobs.OnPlayerInteractMob;
 import es.bukkitclassmapper.task.Task;
 import es.bukkitclassmapper.task.TaskRunner;
@@ -19,22 +20,34 @@ import es.dependencyinjector.abstractions.AbstractionsRepository;
 import es.dependencyinjector.abstractions.InMemoryAbstractionsRepository;
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.dependencyinjector.dependencies.InMemoryDependenciesRepository;
-import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventBus;
 import es.jaime.EventListenerDependencyProvider;
+import es.jaime.connection.DatabaseTransactionManager;
 import es.jaime.impl.EventBusSync;
+import es.jaime.javaddd.application.utils.ExceptionUtils;
+import es.jaime.javaddd.domain.database.TransactionManager;
 import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
 
+import es.serversurvival._shared.mysql.MySQLRepository;
+import es.serversurvival.minecraftserver.jugadores.dinero.DineroComandoRunner;
 import es.serversurvival.minecraftserver.scoreboards.ScoreboardCreator;
 import es.serversurvival.minecraftserver.webaction.server.WebAcionHttpServer;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.scanners.TypeAnnotationsScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 
 
-import java.util.Set;
+import java.lang.annotation.Annotation;
+import java.util.Collection;
+import java.util.concurrent.Executors;
 
 import static org.bukkit.ChatColor.*;
 
@@ -43,6 +56,9 @@ import static org.bukkit.ChatColor.*;
  * 12/05/2023 -> 16246
  * 13/05/2023 -> 16145
  * 14/05/2023 -> 15974
+
+ * 14/06/2023 -> 12931
+ * 14/06/2023 -> 12641
  */
 public final class Pixelcoin extends JavaPlugin {
     private static final String ON_WRONG_COMMAND = DARK_RED + "Comando no encontrado /ayuda";
@@ -57,23 +73,30 @@ public final class Pixelcoin extends JavaPlugin {
         getLogger().info("------------Iniciando Pixelcoins -------------");
         getServer().getConsoleSender().sendMessage(GREEN + "------------------------------");
 
+        Reflections reflections = new Reflections(new ConfigurationBuilder()
+                .setUrls(ClasspathHelper.forPackage(COMMON_PACKAGE))
+                .setScanners(new TypeAnnotationsScanner(), new SubTypesScanner()));
+
         DependenciesRepository dependenciesRepository = new InMemoryDependenciesRepository();
         AbstractionsRepository abstractionsRepository = new InMemoryAbstractionsRepository();
 
         InstanceProviderDependencyInjector instanceProvider = new InstanceProviderDependencyInjector(dependenciesRepository);
-        EventBus eventBus = new EventBusSync("es.serversurvival", instanceProvider);
+        EventBus eventBus = new EventBusSync(COMMON_PACKAGE, instanceProvider);
         dependenciesRepository.add(EventBus.class, eventBus);
         dependenciesRepository.add(ObjectMapper.class, new ObjectMapper());
         abstractionsRepository.add(EventBus.class, EventBusSync.class);
+        abstractionsRepository.add(TransactionManager.class, DatabaseTransactionManager.class);
 
         DependencyInjectorBootstrapper.init(DependencyInjectorConfiguration.builder()
+                .singleThreadedScan()
                 .packageToScan(COMMON_PACKAGE)
+                .reflections(reflections)
                 .dependenciesRepository(dependenciesRepository)
                 .abstractionsRepository(abstractionsRepository)
-                .customAnnotations(Command.class, Task.class, Mob.class, ScoreboardCreator.class)
                 .logging(Bukkit.getLogger())
-                .singleThreadedScan()
-                .excludedAbstractions(TaskRunner.class, OnPlayerInteractMob.class, CommandRunnerArgs.class, CommandRunnerNonArgs.class)
+                .excludedDependencies(DefaultCommandExecutorEntrypoint.class, MobMapper.DefaultEntrypointPlayerInteractEntity.class)
+                .customAnnotations(Command.class, Task.class, Mob.class, ScoreboardCreator.class, MySQLRepository.class)
+                .excludedAbstractions(TaskRunner.class, OnPlayerInteractMob.class, CommandRunnerArgs.class, CommandRunnerNonArgs.class, UseCaseHandler.class)
                 .waitUntilCompletion()
                 .build());
 
@@ -82,13 +105,16 @@ public final class Pixelcoin extends JavaPlugin {
         BetterMenusInstanceProvider.setInstanceProvider(instanceProvider);
 
         ClassMapperConfiguration.builder(this, COMMON_PACKAGE)
-                    .instanceProvider(instanceProvider)
-                    .commandMapper(ON_WRONG_COMMAND, ON_WRONG_PERMISSION)
-                    .taskMapper()
-                    .mobMapper()
-                    .eventListenerMapper()
-                    .waitUntilCompletion()
-                    .build()
+                .useDebugLogging()
+                .reflections(reflections)
+                .instanceProvider(instanceProvider)
+                .threadPool(Executors.newCachedThreadPool())
+                .commandMapper(ON_WRONG_PERMISSION, ON_WRONG_COMMAND)
+                .taskMapper()
+                .mobMapper()
+                .eventListenerMapper()
+                .waitUntilCompletion()
+                .build()
                 .startScanning();
 
         getServer().getConsoleSender().sendMessage(GREEN + "------------------------------");

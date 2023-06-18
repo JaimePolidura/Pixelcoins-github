@@ -17,7 +17,7 @@ import java.util.Optional;
 @Command(
         value = "bolsa invertir",
         args = {"ticker", "cantidad", "[tipoApuesta]¡LARGO!"},
-        explanation = "Invertir en una accion en largo"
+        explanation = "Invertir en una accion en largo o en corto"
 )
 @AllArgsConstructor
 public final class InvertirBolsaCommandRunner implements CommandRunnerArgs<InvertirBolsaComando> {

@@ -6,10 +6,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @ToString
+@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public final class Jugador {
-    @Getter       private final UUID jugadorId;
-    @Getter @With private final String nombre;
-    @Getter       private final LocalDateTime fechaCreacion;
+    @Getter       private UUID jugadorId;
+    @Getter @With private String nombre;
+    @Getter       private LocalDateTime fechaCreacion;
 }

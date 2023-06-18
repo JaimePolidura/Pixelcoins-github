@@ -4,25 +4,27 @@ import es.serversurvival.pixelcoins.deudas.prestar.PrestarDeudaParametros;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public final class Deuda {
-    @Getter private final UUID deudaId;
-    @Getter private final UUID acredorJugadorId;
-    @Getter private final UUID deudorJugadorId;
-    @Getter private final double nominal;
-    @Getter private final double interes;
-    @Getter private final int nCuotasTotales;
-    @Getter private final int nCuotasPagadas;
-    @Getter private final int nCuotasImpagadas;
-    @Getter private final LocalDateTime fechaUltimoPagoCuota;
-    @Getter private final LocalDateTime fechaCreacion;
-    @Getter private final long periodoPagoCuotaMs;
-    @Getter private final EstadoDeuda estadoDeuda;
+    @Getter private UUID deudaId;
+    @Getter private UUID acredorJugadorId;
+    @Getter private UUID deudorJugadorId;
+    @Getter private double nominal;
+    @Getter private double interes;
+    @Getter private int nCuotasTotales;
+    @Getter private int nCuotasPagadas;
+    @Getter private int nCuotasImpagadas;
+    @Getter private LocalDateTime fechaUltimoPagoCuota;
+    @Getter private LocalDateTime fechaCreacion;
+    @Getter private long periodoPagoCuotaMs;
+    @Getter private EstadoDeuda estadoDeuda;
 
     public double getCuota() {
         return soloQuedaUnaCuotaPorPagar() ?

@@ -12,7 +12,11 @@ import org.bukkit.entity.Player;
 
 import static org.bukkit.ChatColor.*;
 
-@Command("bolsa preico")
+@Command(
+        value = "bolsa precio",
+        args = {"ticker"},
+        isAsync = true
+)
 @RequiredArgsConstructor
 public final class VerPrecioCommandRunner implements CommandRunnerArgs<VerPrecioComando> {
     private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;

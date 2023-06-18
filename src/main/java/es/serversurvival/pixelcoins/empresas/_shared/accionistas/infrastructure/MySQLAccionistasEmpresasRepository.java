@@ -1,27 +1,25 @@
 package es.serversurvival.pixelcoins.empresas._shared.accionistas.infrastructure;
 
-import es.dependencyinjector.dependencies.annotations.Repository;
-import es.jaime.configuration.DatabaseConfiguration;
-import es.jaime.mapper.EntityMapper;
-import es.jaime.repository.DataBaseRepository;
+import es.jaime.connection.ConnectionManager;
+import es.jaime.repository.EntityMapper;
+import es.jaime.repository.Repository;
 import es.jaimetruman.delete.Delete;
 import es.jaimetruman.select.Select;
+import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.domain.AccionistaEmpresa;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.domain.AccionistaEmpresaRepository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository
-public final class MySQLAccionistasEmpresasRepository extends DataBaseRepository<AccionistaEmpresa, UUID> implements AccionistaEmpresaRepository {
+@MySQLRepository
+public final class MySQLAccionistasEmpresasRepository extends Repository<AccionistaEmpresa, UUID, Object> implements AccionistaEmpresaRepository {
     private final static String FIELD_ID = "accionistaId";
     private final static String TABLE_NAME = "empresas_accionistas";
 
-    public MySQLAccionistasEmpresasRepository(DatabaseConfiguration databaseConnection) {
-        super(databaseConnection);
+    public MySQLAccionistasEmpresasRepository(ConnectionManager connectionManager) {
+        super(connectionManager);
     }
 
     @Override
@@ -52,7 +50,7 @@ public final class MySQLAccionistasEmpresasRepository extends DataBaseRepository
 
     @Override
     public List<AccionistaEmpresa> findAll() {
-        return super.all();
+        return super.findAll();
     }
 
     @Override
@@ -66,20 +64,11 @@ public final class MySQLAccionistasEmpresasRepository extends DataBaseRepository
     }
 
     @Override
-    protected EntityMapper<AccionistaEmpresa> entityMapper() {
-        return EntityMapper.table(TABLE_NAME)
-                .idField(FIELD_ID).
-                classesToMap(AccionistaEmpresa.class)
+    public EntityMapper<AccionistaEmpresa, Object> entityMapper() {
+        return EntityMapper.builder()
+                .table(TABLE_NAME)
+                .classesToMap(AccionistaEmpresa.class)
+                .idField(FIELD_ID)
                 .build();
-    }
-
-    @Override
-    public AccionistaEmpresa buildObjectFromResultSet(ResultSet rs) throws SQLException {
-        return new AccionistaEmpresa(
-                UUID.fromString(rs.getString("accionistaId")),
-                UUID.fromString(rs.getString("empresaId")),
-                UUID.fromString(rs.getString("accionisaJugadorId")),
-                rs.getInt("nAcciones")
-        );
     }
 }

@@ -6,7 +6,10 @@ import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 
-@Command("bolsa ordenespremarket")
+@Command(
+        value = "bolsa ordenespremarket",
+        explanation = "Ver todas las ordenes pendientes en bolsa cuando el mercado esta cerrado"
+)
 @RequiredArgsConstructor
 public final class VerOrdenesPremarketCommandRunner implements CommandRunnerNonArgs {
     private final MenuService menuService;

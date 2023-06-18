@@ -4,6 +4,7 @@ import es.serversurvival.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival._shared.utils.CuatriConsumer;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -15,11 +16,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+@NoArgsConstructor
 public final class OfertaTiendaItemMinecraft extends Oferta {
-    @Getter private final List<TiendaItemMinecraftEncantamientos> encantamientos;
-    @Getter private final short durabilidad;
-    @Getter private final boolean tieneNombre;
-    @Getter private final String nombre;
+    @Getter private List<TiendaItemMinecraftEncantamientos> encantamientos;
+    @Getter private short durabilidad;
+    @Getter private boolean tieneNombre;
+    @Getter private String nombre;
 
     public OfertaTiendaItemMinecraft(UUID ofertaId, UUID vendedorId, LocalDateTime fechaSubida, int cantidad, double precio, String objeto,
                                      TipoOferta tipoOferta, List<TiendaItemMinecraftEncantamientos> encantamientos, short durabilidad, boolean tieneNombre,

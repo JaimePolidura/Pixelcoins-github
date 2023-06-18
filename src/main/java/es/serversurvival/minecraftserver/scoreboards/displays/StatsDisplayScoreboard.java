@@ -29,7 +29,7 @@ public class StatsDisplayScoreboard implements ServerScoreboardCreator {
         double patriominioTotal = patrimonioDesglosado.values().stream().mapToDouble(a -> a).sum();
 
         addLineToScoreboard(objective, GOLD + "Tu patrimonio total: " + FORMATEA.format(Math.round(patriominioTotal)) + " PC", 1);
-        addLineToScoreboard(objective, GOLD + "------------" + " PC", 2);
+        addLineToScoreboard(objective, GOLD + "----------------", 2);
         int scoreBoardLine = 3;
 
         for (TipoCuentaPatrimonio cuenta : patrimonioDesglosado.keySet()) {

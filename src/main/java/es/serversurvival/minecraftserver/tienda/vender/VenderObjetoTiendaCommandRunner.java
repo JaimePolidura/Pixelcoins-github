@@ -7,7 +7,6 @@ import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival.minecraftserver.tienda.vertienda.TiendaMenu;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.tienda.ponerventa.PonerVentaTiendaItemMinecraftParametros;
-import es.serversurvival.pixelcoins.tienda.ponerventa.PonerVentaTiendaItemMinecraftUseCase;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 

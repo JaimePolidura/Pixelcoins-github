@@ -4,14 +4,16 @@ import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votacion
 import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.TipoVotacion;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.Votacion;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@NoArgsConstructor
 public final class CambiarDirectorVotacion extends Votacion {
-    @Getter private final UUID nuevoDirectorJugadorId;
-    @Getter private final long periodoPagoMs;
-    @Getter private final double sueldo;
+    @Getter private UUID nuevoDirectorJugadorId;
+    @Getter private long periodoPagoMs;
+    @Getter private double sueldo;
 
     public CambiarDirectorVotacion(UUID votacionId, UUID empresaId, TipoVotacion tipo, EstadoVotacion estado, UUID iniciadoPorJugadorId,
                                    LocalDateTime fechaFinalizacion, String descripccion, LocalDateTime fechaInicio, UUID nuevoDirectorJugadorId,

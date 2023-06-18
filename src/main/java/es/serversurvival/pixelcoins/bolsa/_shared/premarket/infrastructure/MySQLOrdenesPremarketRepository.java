@@ -1,29 +1,25 @@
 package es.serversurvival.pixelcoins.bolsa._shared.premarket.infrastructure;
 
-import es.dependencyinjector.dependencies.annotations.Repository;
-import es.jaime.configuration.DatabaseConfiguration;
-import es.jaime.mapper.EntityMapper;
-import es.jaime.repository.DataBaseRepository;
+import es.jaime.connection.ConnectionManager;
+import es.jaime.repository.EntityMapper;
+import es.jaime.repository.Repository;
 import es.jaimetruman.delete.Delete;
 import es.jaimetruman.select.Select;
-import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.TipoBolsaApuesta;
-import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.TipoPosicion;
+import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival.pixelcoins.bolsa._shared.premarket.domain.OrdenPremarket;
 import es.serversurvival.pixelcoins.bolsa._shared.premarket.domain.OrdenesPremarketRepository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository
-public final class MySQLOrdenesPremarketRepository extends DataBaseRepository<OrdenPremarket, UUID> implements OrdenesPremarketRepository {
+@MySQLRepository
+public final class MySQLOrdenesPremarketRepository extends Repository<OrdenPremarket, UUID, Object> implements OrdenesPremarketRepository {
     private static final String TABLE_NAME = "bolsa_ordenes_premarket";
     private static final String FIELD_ID = "ordenPremarketId";
 
-    public MySQLOrdenesPremarketRepository(DatabaseConfiguration databaseConnection) {
-        super(databaseConnection);
+    public MySQLOrdenesPremarketRepository(ConnectionManager connectionManager) {
+        super(connectionManager);
     }
 
     @Override
@@ -48,7 +44,7 @@ public final class MySQLOrdenesPremarketRepository extends DataBaseRepository<Or
 
     @Override
     public List<OrdenPremarket> findAll() {
-        return super.all();
+        return super.findAll();
     }
 
     @Override
@@ -62,24 +58,11 @@ public final class MySQLOrdenesPremarketRepository extends DataBaseRepository<Or
     }
 
     @Override
-    protected EntityMapper<OrdenPremarket> entityMapper() {
-        return EntityMapper.table(TABLE_NAME)
-                .classesToMap(OrdenPremarket.class)
+    public EntityMapper<OrdenPremarket, Object> entityMapper() {
+        return EntityMapper.builder()
+                .table(TABLE_NAME)
                 .idField(FIELD_ID)
+                .classesToMap(OrdenPremarket.class)
                 .build();
-    }
-
-    @Override
-    public OrdenPremarket buildObjectFromResultSet(ResultSet rs) throws SQLException {
-        return new OrdenPremarket(
-                UUID.fromString(rs.getString("ordenPremarketId")),
-                UUID.fromString(rs.getString("jugadorId")),
-                rs.getTimestamp("fechaCreacion").toLocalDateTime(),
-                TipoPosicion.valueOf(rs.getString("tipoPosicion")),
-                rs.getInt("cantidad"),
-                TipoBolsaApuesta.valueOf(rs.getString("tipoBolsaApuesta")),
-                rs.getString("activoBolsaId") != null ? UUID.fromString(rs.getString("activoBolsaId")) : null,
-                rs.getString("posicionAbiertaId") != null ? UUID.fromString(rs.getString("posicionAbiertaId")) : null
-        );
     }
 }

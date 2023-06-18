@@ -2,11 +2,13 @@ package es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votacio
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.UUID;
 
+@NoArgsConstructor
 @AllArgsConstructor
 public abstract class Votacion {
     public static final long DEFAULT_VOTACION_TIME_OUT = 24 * 60 * 60 * 1000;
