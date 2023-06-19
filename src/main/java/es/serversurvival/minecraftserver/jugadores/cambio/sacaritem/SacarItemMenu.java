@@ -100,7 +100,7 @@ public final class SacarItemMenu extends Menu {
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.AQUA + "1 "+itemACambiar+" -> " + ChatColor.GREEN + cambio);
         lore.add("   ");
-        lore.add("Tus pixelcoins disponibles: " + ChatColor.GREEN + Funciones.FORMATEA.format(pilxelcoinsJugaodor));
+        lore.add(GOLD + "Tus pixelcoins disponibles: " + ChatColor.GREEN + Funciones.FORMATEA.format(pilxelcoinsJugaodor));
 
         return ItemBuilder.of(itemMaterial).title(displayName).lore(lore).build();
     }

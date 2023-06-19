@@ -35,11 +35,18 @@ public final class CalculadorPatrimonioService {
     }
 
     public Map<TipoCuentaPatrimonio, Double> calcularDesglosadoPorCuentas(UUID jugadorId) {
-        Map<TipoCuentaPatrimonio, Double> collect = dependencies.filterByImplementsInterface(CalculadorPatrimonio.class).stream()
-                .parallel()
-                .collect(Collectors.toMap(CalculadorPatrimonio::tipoCuenta, c -> calcular(jugadorId)));
+        Map<TipoCuentaPatrimonio, Double> desglosadoPorTipoCuenta = dependencies.filterByImplementsInterface(CalculadorPatrimonio.class).stream()
+                .collect(Collectors.toMap(CalculadorPatrimonio::tipoCuenta, c -> calcular(c, jugadorId)));
 
-        return CollectionUtils.sortMapByValue(collect, (a, b) -> Double.compare(b, a));
+        TreeMap<TipoCuentaPatrimonio, Double> desglosadoPorTipoCuentaSinOrdenar = new TreeMap<>(Comparator.comparingInt(TipoCuentaPatrimonio::getShowPrioriy)
+                .reversed());
+        desglosadoPorTipoCuentaSinOrdenar.putAll(desglosadoPorTipoCuenta);
+
+        return desglosadoPorTipoCuentaSinOrdenar;
+    }
+
+    private Double calcular(CalculadorPatrimonio calculador, UUID jugadorId) {
+        return calculador.calcular(jugadorId);
     }
 
     public int getPosicionTopRicos(String jugadorNombre) {

@@ -36,7 +36,7 @@ public class DineroComandoRunner implements CommandRunnerArgs<DineroComando> {
             TipoCuentaPatrimonio tipoCuenta = entry.getKey();
             double pixelcoins = entry.getValue();
 
-            player.sendMessage(GOLD + " " + tipoCuenta.getAlias() + ": " + (pixelcoins < 0 ? RED : GREEN) + FORMATEA.format(pixelcoins) + " PC");
+            player.sendMessage(GOLD + "   " + tipoCuenta.getAlias() + ": " + (pixelcoins < 0 ? RED : GREEN) + FORMATEA.format(pixelcoins) + " PC");
         }
     }
 

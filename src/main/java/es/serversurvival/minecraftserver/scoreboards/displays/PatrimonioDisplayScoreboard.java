@@ -17,7 +17,7 @@ import static org.bukkit.ChatColor.*;
 
 @ScoreboardCreator
 @RequiredArgsConstructor
-public class StatsDisplayScoreboard implements ServerScoreboardCreator {
+public class PatrimonioDisplayScoreboard implements ServerScoreboardCreator {
     private final CalculadorPatrimonioService calculadorPatrimonioService;
 
     @Override
@@ -28,16 +28,16 @@ public class StatsDisplayScoreboard implements ServerScoreboardCreator {
         Map<TipoCuentaPatrimonio, Double> patrimonioDesglosado = calculadorPatrimonioService.calcularDesglosadoPorCuentas(player.getUniqueId());
         double patriominioTotal = patrimonioDesglosado.values().stream().mapToDouble(a -> a).sum();
 
-        addLineToScoreboard(objective, GOLD + "Tu patrimonio total: " + FORMATEA.format(Math.round(patriominioTotal)) + " PC", 1);
+        addLineToScoreboard(objective, GOLD + "Tu patrimonio total: " + GREEN + FORMATEA.format(Math.round(patriominioTotal)) + " PC", 1);
         addLineToScoreboard(objective, GOLD + "----------------", 2);
-        int scoreBoardLine = 3;
+        int scoreBoardLine = 3 + patrimonioDesglosado.size();
 
         for (TipoCuentaPatrimonio cuenta : patrimonioDesglosado.keySet()) {
             double patriomnioCuenta = patrimonioDesglosado.get(cuenta);
 
-            addLineToScoreboard(objective, GOLD + cuenta.getAlias() + GREEN + FORMATEA.format(Math.round(patriomnioCuenta)) + " PC", scoreBoardLine);
+            addLineToScoreboard(objective, GOLD + cuenta.getAlias() + ": " + GREEN + FORMATEA.format(Math.round(patriomnioCuenta)) + " PC", scoreBoardLine);
 
-            scoreBoardLine++;
+            scoreBoardLine--;
         }
 
         return scoreboard;

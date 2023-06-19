@@ -3,9 +3,6 @@ main: es.serversurvival.Pixelcoin
 version: 11.0
 api-version: "1.19"
 commands:
-  patrimonio:
-    description: Cambio pixelcoins/items
-    usage: /<command>
   cambio:
     description: Cambio pixelcoins/items
     usage: /<command>
@@ -39,9 +36,6 @@ commands:
   empresas:
     description: comandos relacionados con la empresas
     usage: /<command> <subcommands...>
-  comprar:
-    description: comprar un servicio de una empresa por pixelcoins
-    usage: /<command> <empresa> <precio>
   cls:
     description: Limpiar el chat
     usage: /<command>
@@ -54,15 +48,9 @@ commands:
   bolsa:
     description: comando relacionado con los comandos de la bolsa
     usage: /<command> <subComandos...>
-  cuentaweb:
-    description: ver todas tu numero de cuenta para iniciar sesion
-    usage: /<command>
   perfil:
     description: ver tu perfil
     usage: /<command>
   venderjugador:
     description: vender un objeto a un nombreAccionista
     usage: /<command> <nombreAccionista> <precio>
-  re:
-    description: Enviar un mensaje a un nombreAccionista que esta fuera del servidor (web)
-    usage: /<command> <mensaje>

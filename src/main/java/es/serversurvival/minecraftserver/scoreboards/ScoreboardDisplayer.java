@@ -19,9 +19,9 @@ public final class ScoreboardDisplayer implements Listener {
         this.lastScoreboardCreatorSelected = scoreboardCreator;
 
         if(scoreboardCreator.isGlobal()){
-            showGlobalScoreboard(players, scoreboardCreator);
+            showGlobalScoreboard(scoreboardCreator);
         }else{
-            showSingleScoreboard(players, scoreboardCreator);
+            showSingleScoreboard(scoreboardCreator);
         }
     }
 
@@ -31,14 +31,14 @@ public final class ScoreboardDisplayer implements Listener {
         }
     }
 
-    private void showGlobalScoreboard(List<Player> players, ServerScoreboardCreator actualScoreboard) {
+    private void showGlobalScoreboard(ServerScoreboardCreator actualScoreboard) {
         List<Player> onlinePlayers = (List<Player>) Bukkit.getOnlinePlayers();
 
         Scoreboard newScoreboard = actualScoreboard.create(null);
         onlinePlayers.forEach(ply -> ply.setScoreboard(newScoreboard));
     }
 
-    private void showSingleScoreboard(List<Player> players, ServerScoreboardCreator scoreboardCreator) {
+    private void showSingleScoreboard(ServerScoreboardCreator scoreboardCreator) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             Scoreboard newScoreboard = scoreboardCreator.create(player);
             player.setScoreboard(newScoreboard);

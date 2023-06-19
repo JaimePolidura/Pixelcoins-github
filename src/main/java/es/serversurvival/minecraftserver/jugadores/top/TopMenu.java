@@ -58,7 +58,7 @@ public final class TopMenu extends Menu {
                 .item(3, buildTopVendedoresJugadoresItem())
                 .item(4, buildTopCompradoresTienda())
                 .item(5, buildItemTopOperacionesBolsa())
-                .item(6, buildTopMenosFiablesJugadoresItem())
+                .item(6, buildTopMorososJugadoresItem())
                 .item(7, buildItemPeoresOperacioensBolsa())
                 .item(8, buildItemTopActivosBolsa())
                 .item(9, buildItemGoBackToProfile(), (p,e) -> this.menuService.open(p, PerfilMenu.class))
@@ -110,7 +110,7 @@ public final class TopMenu extends Menu {
         return ItemBuilder.of(Material.COAL_BLOCK).title(displayName).lore(lore).build();
     }
 
-    private ItemStack buildTopMenosFiablesJugadoresItem() {
+    private ItemStack buildTopMorososJugadoresItem() {
         List<JugadorEstadisticas> topMorosos = estadisticas.sortBy(JugadorTipoContadorEstadistica.N_DEUDA_INPAGOS, false, 5);
 
         String displayName = GREEN + "" + BOLD + "TOP MOROSOS";
@@ -122,7 +122,7 @@ public final class TopMenu extends Menu {
             JugadorEstadisticas jugadorEstadisticas = topMorosos.get(i);
             Jugador jugador = jugadoresService.getById(jugadorEstadisticas.getJugadorId());
 
-            lore.add(GOLD + "" + i  + "º " + jugador.getNombre() + ": " + GREEN + Funciones.FORMATEA.format(jugadorEstadisticas.getNDeudaInpagos()));
+            lore.add(GOLD + "" + (i + 1)  + "º " + jugador.getNombre() + ": " + GREEN + Funciones.FORMATEA.format(jugadorEstadisticas.getNDeudaInpagos()));
         }
 
         return ItemBuilder.of(Material.RED_WOOL).title(displayName).lore(lore).build();

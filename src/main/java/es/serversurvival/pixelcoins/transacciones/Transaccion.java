@@ -3,19 +3,21 @@ package es.serversurvival.pixelcoins.transacciones;
 import es.serversurvival._shared.utils.Funciones;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@NoArgsConstructor
 @AllArgsConstructor
 public final class Transaccion {
-    @Getter private final UUID transaccionId;
-    @Getter private final TipoTransaccion tipo;
-    @Getter private final UUID pagadorId;
-    @Getter private final UUID pagadoId;
-    @Getter private final double pixelcoins;
-    @Getter private final LocalDateTime fecha;
-    @Getter private final String objeto;
+    @Getter private UUID transaccionId;
+    @Getter private TipoTransaccion tipo;
+    @Getter private UUID pagadorId;
+    @Getter private UUID pagadoId;
+    @Getter private double pixelcoins;
+    @Getter private LocalDateTime fecha;
+    @Getter private String objeto;
 
     public static TransaccionBuilder builder() {
         return new TransaccionBuilder();

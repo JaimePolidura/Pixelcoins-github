@@ -3,6 +3,8 @@ package es.serversurvival;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import es.bukkitbettermenus.BetterMenusInstanceProvider;
 import es.bukkitbettermenus.MenusDependenciesInstanceProvider;
+import es.bukkitbettermenus.eventlisteners.OnInventoryClick;
+import es.bukkitbettermenus.eventlisteners.OnInventoryClose;
 import es.bukkitclassmapper.ClassMapperConfiguration;
 import es.bukkitclassmapper._shared.utils.reflections.BukkitClassMapperInstanceProvider;
 import es.bukkitclassmapper.commands.Command;
@@ -83,6 +85,8 @@ public final class Pixelcoin extends JavaPlugin {
         InstanceProviderDependencyInjector instanceProvider = new InstanceProviderDependencyInjector(dependenciesRepository);
         EventBus eventBus = new EventBusSync(COMMON_PACKAGE, instanceProvider);
         dependenciesRepository.add(EventBus.class, eventBus);
+        dependenciesRepository.add(OnInventoryClose.class, new OnInventoryClose());
+        dependenciesRepository.add(OnInventoryClick.class, new OnInventoryClick());
         dependenciesRepository.add(ObjectMapper.class, new ObjectMapper());
         abstractionsRepository.add(EventBus.class, EventBusSync.class);
         abstractionsRepository.add(TransactionManager.class, DatabaseTransactionManager.class);
