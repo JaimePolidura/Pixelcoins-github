@@ -6,6 +6,7 @@ import es.bukkitclassmapper.task.TaskRunner;
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.dependencyinjector.hooks.AfterAllScanned;
 import es.jaime.javaddd.application.utils.CollectionUtils;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -28,8 +29,8 @@ public final class ScoreboardUpdaterTask implements TaskRunner, AfterAllScanned 
     }
 
     @Override
-    public void afterAllScanned(DependenciesRepository dependenciesRepository) {
-        this.scoreboards = dependenciesRepository.filterByImplementsInterface(ServerScoreboardCreator.class);
+    public void afterAllScanned(DependenciesRepository dependencies) {
+        this.scoreboards = dependencies.filterByImplementsInterface(ServerScoreboardCreator.class);
         this.nextScoreboard = CollectionUtils.newCircularIterator(scoreboards);
     }
 }

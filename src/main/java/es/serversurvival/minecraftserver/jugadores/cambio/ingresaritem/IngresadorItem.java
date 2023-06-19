@@ -8,6 +8,7 @@ import es.serversurvival.pixelcoins.jugadores.cambiar.ingresarItem.IngresarItemP
 import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -26,13 +27,14 @@ public final class IngresadorItem {
 
     public void ingresarItemInMano(Player player, TipoCambioPixelcoins... tipoCambioPixelcoinsPermitidos) {
         ItemStack itemEnMano = player.getInventory().getItemInMainHand();
-        TipoCambioPixelcoins tipoCambio = TipoCambioPixelcoins.valueOf(itemEnMano.getType().name());
 
-        if(itemEnMano == null || !elTipoDeCambioDelItemEnLaManoEstaPermitido(tipoCambio, tipoCambioPixelcoinsPermitidos)){
+        if(itemEnMano == null || !elTipoDeCambioDelItemEnLaManoEstaPermitido(itemEnMano.getType(), tipoCambioPixelcoinsPermitidos)){
             player.sendMessage(ChatColor.DARK_RED + "Debes de tener un bloque en la mano para intecambiarlo con pixelcoins");
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
             return;
         }
+
+        TipoCambioPixelcoins tipoCambio = TipoCambioPixelcoins.valueOf(itemEnMano.getType().name());
 
         useCaseBus.handle(IngresarItemParametros.of(player.getUniqueId(), tipoCambio, itemEnMano.getAmount()));
 
@@ -48,8 +50,8 @@ public final class IngresadorItem {
                 + GOLD + " Tienes " + FORMATEA.format(pixelcoinsJugador) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
     }
 
-    private boolean elTipoDeCambioDelItemEnLaManoEstaPermitido(TipoCambioPixelcoins tipoCambioItemEnMano, TipoCambioPixelcoins[] tipoCambioPixelcoinsPermitidos) {
+    private boolean elTipoDeCambioDelItemEnLaManoEstaPermitido(Material materialItemEnLaMano, TipoCambioPixelcoins[] tipoCambioPixelcoinsPermitidos) {
         return Arrays.stream(tipoCambioPixelcoinsPermitidos)
-                .anyMatch(it -> it == tipoCambioItemEnMano);
+                .anyMatch(it -> it.name().equalsIgnoreCase(materialItemEnLaMano.name()));
     }
 }

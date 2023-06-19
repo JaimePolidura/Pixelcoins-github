@@ -93,7 +93,7 @@ public final class Pixelcoin extends JavaPlugin {
                 .reflections(reflections)
                 .dependenciesRepository(dependenciesRepository)
                 .abstractionsRepository(abstractionsRepository)
-                .logging(Bukkit.getLogger())
+                .useDebugLogging()
                 .excludedDependencies(DefaultCommandExecutorEntrypoint.class, MobMapper.DefaultEntrypointPlayerInteractEntity.class)
                 .customAnnotations(Command.class, Task.class, Mob.class, ScoreboardCreator.class, MySQLRepository.class)
                 .excludedAbstractions(TaskRunner.class, OnPlayerInteractMob.class, CommandRunnerArgs.class, CommandRunnerNonArgs.class, UseCaseHandler.class)

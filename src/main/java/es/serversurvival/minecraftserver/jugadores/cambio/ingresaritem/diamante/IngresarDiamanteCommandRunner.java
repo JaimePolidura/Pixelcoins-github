@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 @Command(
         value = "cambio diamante",
-        explanation = "Cambiar un objeto por pixelcoins"
+        explanation = "Selecciona diamantes o bloques de diamante y cambialo por " + TipoCambioPixelcoins.DIAMANTE + " PC / Diamante"
 )
 @AllArgsConstructor
 public final class IngresarDiamanteCommandRunner implements CommandRunnerNonArgs {

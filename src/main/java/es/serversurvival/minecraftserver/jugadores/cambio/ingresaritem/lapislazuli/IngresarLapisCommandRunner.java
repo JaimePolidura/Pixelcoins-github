@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 @Command(
         value = "cambio lapis",
-        explanation = "Cambiar un objeto por pixelcoins"
+        explanation = "Selecciona lapis o bloques de lapis y cambialo por " + TipoCambioPixelcoins.LAPISLAZULI + " PC / Lapis"
 )
 @AllArgsConstructor
 public final class IngresarLapisCommandRunner implements CommandRunnerNonArgs {

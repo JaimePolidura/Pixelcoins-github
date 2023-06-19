@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 @Command(
         value = "cambio cuarzo",
-        explanation = "Cambiar un objeto por pixelcoins"
+        explanation = "Selecciona bloques de cuazro y cambialo por " + TipoCambioPixelcoins.CUARZO + " PC"
 )
 @AllArgsConstructor
 public final class IngresarCuarzoCommandRunner implements CommandRunnerNonArgs {

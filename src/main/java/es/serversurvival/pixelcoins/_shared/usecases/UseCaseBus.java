@@ -2,9 +2,17 @@ package es.serversurvival.pixelcoins._shared.usecases;
 
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.dependencyinjector.dependencies.annotations.Service;
+import es.jaime.javaddd.application.utils.ReflectionUtils;
 import es.jaime.javaddd.domain.database.TransactionManager;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.serversurvival.pixelcoins.jugadores.cambiar.ingresarItem.IngresarItemUseCase;
+import lombok.SneakyThrows;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -39,8 +47,12 @@ public final class UseCaseBus {
             return (UseCaseHandler<T>) useCasesByParametrosCache.get(parametros.getClass());
         }
 
-        return (UseCaseHandler<T>) dependencies.filterByImplementsInterfaceWithGeneric(UseCaseHandler.class, parametros.getClass())
-                .map(useCase -> useCasesByParametrosCache.put(parametros.getClass(), useCase))
+        return dependencies.filterByImplementsInterfaceWithGeneric(UseCaseHandler.class, parametros.getClass())
+                .map(useCase -> {
+                    useCasesByParametrosCache.put(parametros.getClass(), useCase);
+                    return useCase;
+                })
                 .orElseThrow(() -> new ResourceNotFound("Caso de uso no registrado, hablar con Jaime"));
     }
+
 }
