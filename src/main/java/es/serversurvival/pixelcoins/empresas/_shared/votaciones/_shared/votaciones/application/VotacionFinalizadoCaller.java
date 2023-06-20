@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public final class VotacionFinalizadoCaller {
+public class VotacionFinalizadoCaller {
     private final DependenciesRepository dependencies;
 
     public void call(Votacion votacion, ResultadoVotacion resultado) {

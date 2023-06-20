@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public final class VotosService {
+public class VotosService {
     private final VotosRepository repository;
 
     public void save(Voto voto) {

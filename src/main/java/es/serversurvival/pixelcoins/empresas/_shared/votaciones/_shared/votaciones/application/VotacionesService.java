@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public final class VotacionesService {
+public class VotacionesService {
     private final VotacionesRepository repository;
 
     public void save(Votacion votacion) {

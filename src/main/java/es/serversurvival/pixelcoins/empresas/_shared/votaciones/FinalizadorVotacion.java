@@ -9,7 +9,7 @@ import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votos.ap
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public final class FinalizadorVotacion {
+public class FinalizadorVotacion {
     private final VotacionFinalizadoCaller votacionFinalizadoCaller;
     private final VotacionesService votacionesService;
     private final VotosService votosService;

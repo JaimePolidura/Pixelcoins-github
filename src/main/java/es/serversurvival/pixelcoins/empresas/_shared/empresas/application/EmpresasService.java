@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public final class EmpresasService {
+public class EmpresasService {
     private final EmpresasRepository empresasRepository;
 
     public void save(Empresa empresa) {
