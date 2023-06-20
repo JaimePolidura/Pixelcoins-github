@@ -98,7 +98,7 @@ public final class PerfilMenu extends Menu {
         for (AccionistaEmpresa accion : acciones) {
             Empresa empresa = empresasService.getById(accion.getEmpresaId());
             double porcentajeEmpresa = (double) accion.getNAcciones() / empresa.getNTotalAcciones();
-            double pixelcoinsCorrespondientes = porcentajeEmpresa * transaccionesService.getBalancePixelcions(empresa.getEmpresaId());
+            double pixelcoinsCorrespondientes = porcentajeEmpresa * transaccionesService.getBalancePixelcoins(empresa.getEmpresaId());
 
             lore.add(GOLD + "- " + empresa.getNombre() + " " + FORMATEA.format(porcentajeEmpresa * 100)
                     + "% Pixelcoins: " + GREEN + FORMATEA.format(pixelcoinsCorrespondientes) + " PC");

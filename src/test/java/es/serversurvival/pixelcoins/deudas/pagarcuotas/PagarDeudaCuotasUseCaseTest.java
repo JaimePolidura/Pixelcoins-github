@@ -51,7 +51,7 @@ public final class PagarDeudaCuotasUseCaseTest {
         UUID deudor = UUID.randomUUID();
         LocalDateTime ultimoPagoDeuda = LocalDateTime.now();
 
-        when(transaccionesService.getBalancePixelcions(deudor)).thenReturn(10000.0D);
+        when(transaccionesService.getBalancePixelcoins(deudor)).thenReturn(10000.0D);
         when(tiempoActual.toMillis(any())).thenReturn(ultimoPagoToMillis);
         when(tiempoActual.millis()).thenReturn(tiempoActualMillis);
 
@@ -102,7 +102,7 @@ public final class PagarDeudaCuotasUseCaseTest {
         UUID deudor = UUID.randomUUID();
         LocalDateTime ultimoPagoDeuda = LocalDateTime.now();
 
-        when(transaccionesService.getBalancePixelcions(deudor)).thenReturn(10000.0D);
+        when(transaccionesService.getBalancePixelcoins(deudor)).thenReturn(10000.0D);
         when(tiempoActual.toMillis(any())).thenReturn(ultimoPagoToMillis);
         when(tiempoActual.millis()).thenReturn(tiempoActualMillis);
 
@@ -145,7 +145,7 @@ public final class PagarDeudaCuotasUseCaseTest {
         UUID deudor = UUID.randomUUID();
         LocalDateTime ultimoPagoDeuda = LocalDateTime.now();
 
-        when(transaccionesService.getBalancePixelcions(deudor)).thenReturn(9.0d);
+        when(transaccionesService.getBalancePixelcoins(deudor)).thenReturn(9.0d);
         when(tiempoActual.toMillis(any())).thenReturn(ultimoPagoToMillis);
         when(tiempoActual.millis()).thenReturn(tiempoActualMillis);
         Deuda deuda = Deuda.builder()
@@ -177,13 +177,11 @@ public final class PagarDeudaCuotasUseCaseTest {
         when(tiempoActual.toMillis(any())).thenReturn(ultimoPagoToMillis);
         when(tiempoActual.millis()).thenReturn(tiempoActualMillis);
 
-        when(transaccionesService.getBalancePixelcions(any())).thenThrow(NullPointerException.class);
-
         this.useCase.handle(PagarDeudaCuotasParametros.from(Deuda.builder()
                 .periodoPagoCuotaMs(periodoPagoCuota)
                 .fechaUltimoPagoCuota(LocalDateTime.now())
                 .build()));
 
-        //Si no lanza exception no ha entrado al metodo de pagar cuotas
+        verify(this.transaccionesService, never()).save(any());
     }
 }

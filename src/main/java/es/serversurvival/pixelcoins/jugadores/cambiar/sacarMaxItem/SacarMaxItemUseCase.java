@@ -30,7 +30,7 @@ public final class SacarMaxItemUseCase implements UseCaseHandler<SacarMaxItemPar
     public void handle(SacarMaxItemParametros parametros) {
         validador.jugadorTienePixelcoins(parametros.getJugadorId(), parametros.getTipoCambio().cambio);
 
-        double pixelcoinsJugador = transaccionesService.getBalancePixelcions(parametros.getJugadorId());
+        double pixelcoinsJugador = transaccionesService.getBalancePixelcoins(parametros.getJugadorId());
         Jugador jugador = jugadoresService.getById(parametros.getJugadorId());
 
         switch (parametros.getTipoCambio()) {

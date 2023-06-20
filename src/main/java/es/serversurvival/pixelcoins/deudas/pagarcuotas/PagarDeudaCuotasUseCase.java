@@ -32,7 +32,7 @@ public final class PagarDeudaCuotasUseCase implements UseCaseHandler<PagarDeudaC
     }
 
     private void pagarCuota(Deuda deuda) {
-        boolean deudorTienePixelcoins = transaccionesService.getBalancePixelcions(deuda.getDeudorJugadorId()) >= deuda.getCuota();
+        boolean deudorTienePixelcoins = transaccionesService.getBalancePixelcoins(deuda.getDeudorJugadorId()) >= deuda.getCuota();
 
         if(!deudorTienePixelcoins){
             anotarImpagoDeudaCuota(deuda);

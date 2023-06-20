@@ -53,7 +53,7 @@ public final class BolsaValidator {
     public void suficientesPixelcoinsAbrir(AbrirPosicoinBolsaParametros parametros) {
         double precioBolsaTotal = getPixelcoinsAbrirPosicion(parametros.getActivoBolsaId(), parametros.getCantidad(),
                 parametros.getTipoApuesta());
-        double pixelcoinsJugador = transaccionesService.getBalancePixelcions(parametros.getJugadorId());
+        double pixelcoinsJugador = transaccionesService.getBalancePixelcoins(parametros.getJugadorId());
 
         if(precioBolsaTotal > pixelcoinsJugador){
             throw new NotEnoughPixelcoins("No tienes las suficientes pixelcoins");

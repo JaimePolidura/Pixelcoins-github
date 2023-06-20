@@ -1,7 +1,9 @@
 package es.serversurvival.pixelcoins.empresas.pagarsueldos;
 
-import es.dependencyinjector.dependencies.annotations.Service;
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
+import es.serversurvival._shared.TiempoService;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
 import es.serversurvival.pixelcoins.transacciones.Transaccion;
 import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
@@ -10,26 +12,25 @@ import es.serversurvival.pixelcoins.empresas._shared.empleados.application.Emple
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import lombok.AllArgsConstructor;
 
-import static es.serversurvival._shared.utils.Funciones.*;
-
-@Service
+@UseCase
 @AllArgsConstructor
-public final class PagadorSueldosEmpresa {
+public final class PagadorSueldosEmpresaUseCase implements UseCaseHandler<PagadorSueldosEmpresaParametros> {
     private final TransaccionesService transaccionesService;
     private final EmpleadosService empleadosService;
+    private final TiempoService tiempoService;
     private final EventBus eventBus;
 
-    public void pagar(Empresa empresa) {
-        empleadosService.findEmpleoActivoByEmpresaId(empresa.getEmpresaId()).stream()
-                .filter(Empleado::isEstaContratado)
-                .forEach(empleado -> pagarSueldosPendientes(empresa, empleado));
+    @Override
+    public void handle(PagadorSueldosEmpresaParametros parametros) {
+        empleadosService.findEmpleoActivoByEmpresaId(parametros.getEmpresa().getEmpresaId())
+                .forEach(empleado -> pagarSueldosPendientes(parametros.getEmpresa(), empleado));
     }
 
     private void pagarSueldosPendientes(Empresa empresa, Empleado empleado) {
         int numeroPagosPendientes = getNumeroSueldosPendientes(empleado);
 
         for (int i = 0; i < numeroPagosPendientes; i++) {
-            double pixelcoinsEmpresa = transaccionesService.getBalancePixelcions(empresa.getEmpresaId());
+            double pixelcoinsEmpresa = transaccionesService.getBalancePixelcoins(empresa.getEmpresaId());
 
             if(empleado.getSueldo() > pixelcoinsEmpresa){
                 eventBus.publish(new ErrorPagandoSueldoEmpresa(empleado.getEmpleadoId(), empleado.getSueldo()));
@@ -51,9 +52,9 @@ public final class PagadorSueldosEmpresa {
     }
 
     private int getNumeroSueldosPendientes(Empleado empleado) {
-        long ultimoPagoMs = toMillis(empleado.getFechaUltimoPago());
+        long ultimoPagoMs = tiempoService.toMillis(empleado.getFechaUltimoPago());
         long periodoPagosMs = empleado.getPeriodoPagoMs();
-        long tiempoAhoraMs = System.currentTimeMillis();
+        long tiempoAhoraMs = tiempoService.millis();
 
         long tiempoTranscurridoDesdeUltimaPaga = tiempoAhoraMs - ultimoPagoMs;
 

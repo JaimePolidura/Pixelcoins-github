@@ -182,7 +182,7 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
         lore.add(GOLD + "Descripccion:");
         lore.add(1, GOLD + "" + getState().getDescripcion());
         lore.add("  ");
-        lore.add(GOLD + "Pixelcoins: " + GREEN + FORMATEA.format(transaccionesService.getBalancePixelcions(getState().getEmpresaId())) + " PC");
+        lore.add(GOLD + "Pixelcoins: " + GREEN + FORMATEA.format(transaccionesService.getBalancePixelcoins(getState().getEmpresaId())) + " PC");
         lore.add(GOLD + "Fundador: " + jugadoresService.getNombreById(getState().getFundadorJugadorId()));
         lore.add(GOLD + "Director: " + jugadoresService.getNombreById(getState().getDirectorJugadorId()));
         lore.add(GOLD + "Nº Total acciones: " + getState().getNTotalAcciones());

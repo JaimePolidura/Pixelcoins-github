@@ -15,7 +15,7 @@ public final class EfectivoCalculadorPatrimonio implements CalculadorPatrimonio 
 
     @Override
     public double calcular(UUID jugadorId) {
-        return transaccionesService.getBalancePixelcions(jugadorId);
+        return transaccionesService.getBalancePixelcoins(jugadorId);
     }
 
     @Override

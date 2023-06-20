@@ -26,7 +26,7 @@ public final class EmpresasAccionesCalculadorPatrimonio implements CalculadorPat
 
         for (AccionistaEmpresa accion : acciones) {
             Empresa empresa = empresasService.getById(accion.getEmpresaId());
-            double pixelcoinsEmpresa = transaccionesService.getBalancePixelcions(empresa.getEmpresaId());
+            double pixelcoinsEmpresa = transaccionesService.getBalancePixelcoins(empresa.getEmpresaId());
             double porcentajeEmpresa = (double) accion.getNAcciones() / empresa.getNTotalAcciones();
 
             valorTotal += porcentajeEmpresa * pixelcoinsEmpresa;

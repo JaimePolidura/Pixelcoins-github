@@ -53,7 +53,7 @@ public final class SacarItemMenu extends Menu {
     }
 
     private void onClick(Player player, InventoryClickEvent event) {
-        double pixelcoinsJugador = transaccionesService.getBalancePixelcions(player.getUniqueId());
+        double pixelcoinsJugador = transaccionesService.getBalancePixelcoins(player.getUniqueId());
 
         ItemStack itemClickeado = event.getCurrentItem();
         int espacios = Funciones.getEspaciosOcupados(player.getInventory());
@@ -95,7 +95,7 @@ public final class SacarItemMenu extends Menu {
     }
 
     public ItemStack buildItem (UUID jugadorId, String itemACambiar, double cambio, Material itemMaterial) {
-        double pilxelcoinsJugaodor = transaccionesService.getBalancePixelcions(jugadorId);
+        double pilxelcoinsJugaodor = transaccionesService.getBalancePixelcoins(jugadorId);
 
         String displayName = MenuItems.CLICKEABLE + "SACAR UN " + itemACambiar;
         List<String> lore = new ArrayList<>();

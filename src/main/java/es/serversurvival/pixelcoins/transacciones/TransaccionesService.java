@@ -24,7 +24,7 @@ public class TransaccionesService {
         return transaccion;
     }
 
-    public double getBalancePixelcions(UUID entidadId) {
+    public double getBalancePixelcoins(UUID entidadId) {
         return cache.get(entidadId,
                 entidad -> getSum(this.repository.findByPagadoId(entidadId), Transaccion::getPixelcoins),
                 entidad -> getSum(this.repository.findByPagadorId(entidadId), Transaccion::getPixelcoins));

@@ -13,7 +13,7 @@ public final class OfertasValidator {
     private final OfertasService ofertasService;
 
     public void tienePixelcoinsSuficientes(UUID ofertaId, UUID jugadorId) {
-        if(transaccionesService.getBalancePixelcions(jugadorId) < ofertasService.getById(ofertaId).getPrecio()){
+        if(transaccionesService.getBalancePixelcoins(jugadorId) < ofertasService.getById(ofertaId).getPrecio()){
             throw new NotEnoughPixelcoins("La empresa no tiene las suficientes pixelcoins");
         }
     }

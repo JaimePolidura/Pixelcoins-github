@@ -39,7 +39,7 @@ public final class CerrarEmpresaUseCase implements UseCaseHandler<CerrarEmpresaP
         transaccionesService.save(Transaccion.builder()
                 .pagadoId(parametros.getJugadorId())
                 .pagadorId(parametros.getEmpresaId())
-                .pixelcoins(transaccionesService.getBalancePixelcions(parametros.getEmpresaId()))
+                .pixelcoins(transaccionesService.getBalancePixelcoins(parametros.getEmpresaId()))
                 .tipo(TipoTransaccion.EMPRESAS_CERRAR)
                 .build());
 

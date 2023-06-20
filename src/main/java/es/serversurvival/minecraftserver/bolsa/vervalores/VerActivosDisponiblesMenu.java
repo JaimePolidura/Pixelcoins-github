@@ -70,7 +70,7 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
         UUID activoBolsaId = MinecraftUtils.getLastLineOfLore(itemClicked, 0);
         ActivoBolsa activoBolsa = activosBolsaService.getById(activoBolsaId);
         double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(activoBolsaId);
-        double pixelcoinsJugador = transaccionesService.getBalancePixelcions(player.getUniqueId());
+        double pixelcoinsJugador = transaccionesService.getBalancePixelcoins(player.getUniqueId());
 
         if(pixelcoinsJugador < ultimoPrecio){
             MinecraftUtils.enviarMensajeYSonido(player, DARK_RED + "No tienes las suficientes pixelcoins", Sound.ENTITY_VILLAGER_NO);

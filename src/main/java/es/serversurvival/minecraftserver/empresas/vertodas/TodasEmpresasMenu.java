@@ -95,7 +95,7 @@ public final class TodasEmpresasMenu extends Menu {
                         GOLD + "Descripccion: " + empresa.getDescripcion(),
                         empresa.isEsCotizada() ? GOLD + "Cotiza en bolsa" : GOLD + "No cotiza en bolsa",
                         "     ",
-                        GOLD + "Pixelcoins: " + GREEN + FORMATEA.format(transaccionesService.getBalancePixelcions(empresa.getEmpresaId())) + " PC",
+                        GOLD + "Pixelcoins: " + GREEN + FORMATEA.format(transaccionesService.getBalancePixelcoins(empresa.getEmpresaId())) + " PC",
                         GOLD + "Nº Total acciones: " + empresa.getNTotalAcciones(),
                         "      ",
                         GOLD + (empleadosNombres.isEmpty() ? "Sin trabajadores" : GOLD + "Empleados: " + empleadosNombres),

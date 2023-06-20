@@ -35,8 +35,8 @@ public final class Empleado {
     }
 
     public Empleado marcarSueldoPagado() {
-        return new Empleado(empleadoId, empleadoJugadorId, empresaId, descripccion, sueldo, periodoPagoMs, fechaUltimoPago.plusNanos(periodoPagoMs * 1_000_000),
-                fechaContratacion, estaContratado, fechaDespido, causaDespido);
+        this.fechaUltimoPago = fechaUltimoPago.plusNanos(periodoPagoMs * 1_000_000);
+        return this;
     }
 
     public Empleado editar(EditarEmpleadoParametros parametros) {

@@ -45,7 +45,7 @@ public final class IngresadorItem {
 
     private void enviarMensaje(Player player, ItemStack itemEnMano, TipoCambioPixelcoins tipoCambio) {
         double pixelcoinsAnadidas = tipoCambio.cambio * itemEnMano.getAmount();
-        double pixelcoinsJugador = transaccionesService.getBalancePixelcions(player.getUniqueId());
+        double pixelcoinsJugador = transaccionesService.getBalancePixelcoins(player.getUniqueId());
         MinecraftUtils.enviarMensajeYSonido(player, GOLD + "Se ha añadido: " + GREEN + FORMATEA.format(pixelcoinsAnadidas)
                 + GOLD + " Tienes " + FORMATEA.format(pixelcoinsJugador) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
     }

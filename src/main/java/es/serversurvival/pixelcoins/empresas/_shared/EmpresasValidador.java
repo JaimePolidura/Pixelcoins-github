@@ -38,7 +38,7 @@ public final class EmpresasValidador {
     private final Validador validador;
 
     public void tienePixelcoinsSuficientes(UUID empresaId, double pixelcoins) {
-        if(transaccionesService.getBalancePixelcions(empresaId) < pixelcoins){
+        if(transaccionesService.getBalancePixelcoins(empresaId) < pixelcoins){
            throw new NotEnoughPixelcoins("La empresa no tiene las suficientes pixelcoins");
         }
     }

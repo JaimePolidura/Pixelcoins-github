@@ -62,6 +62,6 @@ public final class RepartirDividendosConfirmacionMenu extends NumberSelectorMenu
 
     @Override
     public void beforeShow(Player player) {
-        pixelcoinsEmpresa = transaccionesService.getBalancePixelcions(getState().getEmpresaId());
+        pixelcoinsEmpresa = transaccionesService.getBalancePixelcoins(getState().getEmpresaId());
     }
 }

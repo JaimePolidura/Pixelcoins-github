@@ -44,7 +44,7 @@ public final class Validador {
     }
 
     public void jugadorTienePixelcoins(UUID jugadorId, double pixelcoinsMinimo) {
-        if(transaccionesService.getBalancePixelcions(jugadorId) < pixelcoinsMinimo){
+        if(transaccionesService.getBalancePixelcoins(jugadorId) < pixelcoinsMinimo){
             throw new NotEnoughPixelcoins("No tienes las suficientes pixelcoins");
         }
     }
