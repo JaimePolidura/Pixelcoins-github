@@ -1,14 +1,12 @@
 package es.serversurvival.pixelcoins.deudas._shared.domain;
 
 import es.serversurvival.pixelcoins.deudas.prestar.PrestarDeudaParametros;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -27,9 +25,7 @@ public final class Deuda {
     @Getter private EstadoDeuda estadoDeuda;
 
     public double getCuota() {
-        return soloQuedaUnaCuotaPorPagar() ?
-                nominal + nominal * interes :
-                nominal;
+        return nominal * interes + (soloQuedaUnaCuotaPorPagar() ? nominal : 0);
     }
 
     public boolean soloQuedaUnaCuotaPorPagar() {
@@ -46,38 +42,35 @@ public final class Deuda {
     }
 
     public Deuda nuevoAcredor(UUID nuevoAcredorId) {
-        return new Deuda(
-                deudaId, nuevoAcredorId, deudorJugadorId, nominal, interes, nCuotasTotales, nCuotasTotales,
-                nCuotasImpagadas, fechaUltimoPagoCuota, fechaCreacion, periodoPagoCuotaMs, estadoDeuda
-        );
+        this.acredorJugadorId = nuevoAcredorId;
+        return this;
     }
 
     public Deuda cancelar() {
-        return new Deuda(
-                deudaId, acredorJugadorId, deudorJugadorId, nominal, interes, nCuotasTotales, nCuotasTotales,
-                nCuotasImpagadas, fechaUltimoPagoCuota, fechaCreacion, periodoPagoCuotaMs, EstadoDeuda.CANCELADA
-        );
+        this.estadoDeuda = EstadoDeuda.CANCELADA;
+        return this;
     }
 
     public Deuda anotarPagadoPorCompleto() {
-        return new Deuda(
-                deudaId, acredorJugadorId, deudorJugadorId, nominal, interes, nCuotasTotales, nCuotasTotales,
-                nCuotasImpagadas, LocalDateTime.now(), fechaCreacion, periodoPagoCuotaMs, EstadoDeuda.PAGADA
-        );
+        this.fechaUltimoPagoCuota = LocalDateTime.now();
+        this.estadoDeuda = EstadoDeuda.PAGADA;
+
+        return this;
     }
 
     public Deuda anotarPagoCuota() {
-        return new Deuda(
-                deudaId, acredorJugadorId, deudorJugadorId, nominal, interes, nCuotasTotales, nCuotasPagadas + 1,
-                nCuotasImpagadas, fechaUltimoPagoCuota.plusNanos(periodoPagoCuotaMs * 1_000_000), fechaCreacion, periodoPagoCuotaMs, nCuotasImpagadas + 1 == nCuotasTotales ? EstadoDeuda.PAGADA : EstadoDeuda.PENDIENTE
-        );
+        this.nCuotasPagadas = this.nCuotasPagadas + 1;
+        this.fechaUltimoPagoCuota = fechaUltimoPagoCuota.plusNanos(periodoPagoCuotaMs * 1_000_000);
+        this.estadoDeuda = nCuotasPagadas == nCuotasTotales ? EstadoDeuda.PAGADA : EstadoDeuda.PENDIENTE;
+
+        return this;
     }
 
     public Deuda incrementarNImpago() {
-        return new Deuda(
-                deudaId, acredorJugadorId, deudorJugadorId, nominal, interes, nCuotasTotales, nCuotasPagadas,
-                nCuotasImpagadas + 1, fechaUltimoPagoCuota, fechaCreacion, periodoPagoCuotaMs, EstadoDeuda.PENDIENTE
-        );
+        this.nCuotasImpagadas = this.nCuotasImpagadas + 1;
+        this.estadoDeuda = EstadoDeuda.PENDIENTE;
+
+        return this;
     }
 
     public boolean estaPendiente() {

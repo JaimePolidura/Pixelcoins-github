@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public final class DeudasService {
+public class DeudasService {
     private final DeudasRepository deudasRepository;
 
     public void save(Deuda deuda) {

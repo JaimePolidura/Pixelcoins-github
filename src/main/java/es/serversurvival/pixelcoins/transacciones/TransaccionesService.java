@@ -7,7 +7,7 @@ import java.util.UUID;
 import static es.jaime.javaddd.application.utils.CollectionUtils.*;
 
 @Service
-public final class TransaccionesService {
+public class TransaccionesService {
     private final TransaccionesBalanceCache cache;
     private final TransaccionesRepository repository;
 

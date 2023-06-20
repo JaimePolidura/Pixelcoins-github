@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public final class OfertasService {
+public class OfertasService {
     private final MercadoOfertasRepository repository;
 
     public void save(Oferta oferta) {

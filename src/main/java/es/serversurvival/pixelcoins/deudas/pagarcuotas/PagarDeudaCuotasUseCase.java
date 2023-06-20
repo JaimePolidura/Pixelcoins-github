@@ -1,7 +1,9 @@
 package es.serversurvival.pixelcoins.deudas.pagarcuotas;
 
-import es.dependencyinjector.dependencies.annotations.Service;
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
+import es.serversurvival._shared.TiempoService;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
@@ -12,19 +14,20 @@ import es.serversurvival.pixelcoins.deudas._shared.application.DeudasService;
 import lombok.AllArgsConstructor;
 
 import static es.jaime.javaddd.application.utils.Utils.*;
-import static es.serversurvival._shared.utils.Funciones.*;
 
-@Service
+@UseCase
 @AllArgsConstructor
-public final class PagadorDeudaCuotas {
+public final class PagarDeudaCuotasUseCase implements UseCaseHandler<PagarDeudaCuotasParametros> {
     private final TransaccionesService transaccionesService;
     private final OfertasService ofertasService;
     private final DeudasService deudasService;
+    private final TiempoService tiempoService;
     private final EventBus eventBus;
 
-    public void pagarCuotas(Deuda deuda) {
-        repeat(getNumeroCuotasPendientesDePagar(deuda), () ->  {
-            pagarCuota(deuda);
+    @Override
+    public void handle(PagarDeudaCuotasParametros parametros) {
+        repeat(getNumeroCuotasPendientesDePagar(parametros.getDeuda()), () ->  {
+            pagarCuota(parametros.getDeuda());
         });
     }
 
@@ -36,7 +39,6 @@ public final class PagadorDeudaCuotas {
             return;
         }
 
-        deudasService.save(deuda.anotarPagoCuota());
         transaccionesService.save(Transaccion.builder()
                 .pagadorId(deuda.getDeudorJugadorId())
                 .pagadoId(deuda.getAcredorJugadorId())
@@ -44,6 +46,7 @@ public final class PagadorDeudaCuotas {
                 .tipo(TipoTransaccion.DEUDAS_CUOTA)
                 .objeto(deuda.getDeudaId().toString())
                 .build());
+        deudasService.save(deuda.anotarPagoCuota());
 
         if(!deuda.estaPendiente()){
             ofertasService.deleteByObjetoYTipo(deuda.getDeudaId().toString(), TipoOferta.DEUDA_MERCADO_SECUNDARIO);
@@ -59,8 +62,8 @@ public final class PagadorDeudaCuotas {
 
     private int getNumeroCuotasPendientesDePagar(Deuda deuda) {
         long periodoPagoCuotaMs = deuda.getPeriodoPagoCuotaMs();
-        long hoyMs = System.currentTimeMillis();
-        long ulitmoPagoMs = toMillis(deuda.getFechaUltimoPagoCuota());
+        long hoyMs = tiempoService.millis();
+        long ulitmoPagoMs = tiempoService.toMillis(deuda.getFechaUltimoPagoCuota());
 
         long tiempoTranscurriendoTrasUltimoPago = hoyMs - ulitmoPagoMs;
 

@@ -4,10 +4,12 @@ import es.serversurvival._shared.utils.Funciones;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public final class Transaccion {
