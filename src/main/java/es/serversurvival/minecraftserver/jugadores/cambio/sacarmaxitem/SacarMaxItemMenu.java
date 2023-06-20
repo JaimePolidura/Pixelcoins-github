@@ -74,7 +74,7 @@ public final class SacarMaxItemMenu extends Menu {
     private ItemStack buildItem (UUID jugaodrId, String item, Material material, int cambioPixelcoins) {
         double pixelcoinsJugador = transaccionesService.getBalancePixelcions(jugaodrId);
 
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR MAXIMO DE " + item;
+        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "SACAR MAXIMO DE " + item;
         List<String> lore = new ArrayList<String>() {{
             add(ChatColor.BLUE + "1 DE "+item+" -> " + ChatColor.GREEN + cambioPixelcoins + " PC");
             add("    ");

@@ -16,6 +16,6 @@ public final class VerOrdenesPremarketCommandRunner implements CommandRunnerNonA
 
     @Override
     public void execute(Player player) {
-        menuService.open(player, BolsaVerOrdernesMenu.class);
+        menuService.open(player, MisOrdenesPremarketMenu.class);
     }
 }

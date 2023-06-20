@@ -5,6 +5,7 @@ import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.empresas.miempresa.MiEmpresaMenu;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver.jugadores.perfil.PerfilMenu;
@@ -25,7 +26,7 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
-public final class VerTodasEmpresasMenu extends Menu<Object> {
+public final class TodasEmpresasMenu extends Menu {
     private final TransaccionesService transaccionesService;
     private final EmpleadosService empleadosService;
     private final JugadoresService jugadoresService;
@@ -48,10 +49,10 @@ public final class VerTodasEmpresasMenu extends Menu<Object> {
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
                 .fixedItems()
-                .title(DARK_RED + "" + BOLD + "        EMPRESAS")
+                .title(DARK_RED + "" + BOLD + "           EMPRESAS")
                 .item(1, buildItemInfo())
                 .items(2, this::buildItemsEmpresas, this::onItemEmpresaClicked)
-                .breakpoint(7, Material.GREEN_BANNER, this::goBackToProfileMenu)
+                .breakpoint(7, MenuItems.GO_BACK_PERFIL, this::goBackToProfileMenu)
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
                         .forward(9, Material.GREEN_WOOL)
@@ -85,7 +86,7 @@ public final class VerTodasEmpresasMenu extends Menu<Object> {
 
         return ItemBuilder.of(Material.getMaterial(empresa.getLogotipo()))
                 .title(jugadorMenuOwnerEmpresa ?
-                        GOLD + "" + BOLD + "" + UNDERLINE + "CLICK PARA VER TU EMPRESA" :
+                        MenuItems.CLICKEABLE + "VER TU EMPRESA" :
                         GOLD + "" + BOLD + "" + empresa.getNombre())
                 .lore(List.of(
                         GOLD + "Empresa: " + empresa.getNombre(),

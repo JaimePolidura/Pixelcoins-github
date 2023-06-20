@@ -1,7 +1,7 @@
 package es.serversurvival;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import es.bukkitbettermenus.BetterMenusInstanceProvider;
+import es.bukkitbettermenus.BukkitBetterMenus;
 import es.bukkitbettermenus.MenusDependenciesInstanceProvider;
 import es.bukkitbettermenus.eventlisteners.OnInventoryClick;
 import es.bukkitbettermenus.eventlisteners.OnInventoryClose;
@@ -26,17 +26,14 @@ import es.jaime.EventBus;
 import es.jaime.EventListenerDependencyProvider;
 import es.jaime.connection.DatabaseTransactionManager;
 import es.jaime.impl.EventBusSync;
-import es.jaime.javaddd.application.utils.ExceptionUtils;
 import es.jaime.javaddd.domain.database.TransactionManager;
 import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
 
 import es.serversurvival._shared.mysql.MySQLRepository;
-import es.serversurvival.minecraftserver.jugadores.dinero.DineroComandoRunner;
 import es.serversurvival.minecraftserver.scoreboards.ScoreboardCreator;
 import es.serversurvival.minecraftserver.webaction.server.WebAcionHttpServer;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -47,8 +44,7 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
 
-import java.lang.annotation.Annotation;
-import java.util.Collection;
+import java.util.Set;
 import java.util.concurrent.Executors;
 
 import static org.bukkit.ChatColor.*;
@@ -81,12 +77,13 @@ public final class Pixelcoin extends JavaPlugin {
 
         DependenciesRepository dependenciesRepository = new InMemoryDependenciesRepository();
         AbstractionsRepository abstractionsRepository = new InMemoryAbstractionsRepository();
+        Set<Class<?>> excludedDependeies = Set.of(DefaultCommandExecutorEntrypoint.class, MobMapper.DefaultEntrypointPlayerInteractEntity.class,
+                OnInventoryClick.class, OnInventoryClose.class);
 
-        InstanceProviderDependencyInjector instanceProvider = new InstanceProviderDependencyInjector(dependenciesRepository);
+        InstanceProviderDependencyInjector instanceProvider = new InstanceProviderDependencyInjector(dependenciesRepository, excludedDependeies);
         EventBus eventBus = new EventBusSync(COMMON_PACKAGE, instanceProvider);
         dependenciesRepository.add(EventBus.class, eventBus);
-        dependenciesRepository.add(OnInventoryClose.class, new OnInventoryClose());
-        dependenciesRepository.add(OnInventoryClick.class, new OnInventoryClick());
+        dependenciesRepository.add(DependenciesRepository.class, dependenciesRepository);
         dependenciesRepository.add(ObjectMapper.class, new ObjectMapper());
         abstractionsRepository.add(EventBus.class, EventBusSync.class);
         abstractionsRepository.add(TransactionManager.class, DatabaseTransactionManager.class);
@@ -98,7 +95,7 @@ public final class Pixelcoin extends JavaPlugin {
                 .dependenciesRepository(dependenciesRepository)
                 .abstractionsRepository(abstractionsRepository)
                 .useDebugLogging()
-                .excludedDependencies(DefaultCommandExecutorEntrypoint.class, MobMapper.DefaultEntrypointPlayerInteractEntity.class)
+                .excludedDependencies(excludedDependeies.toArray(new Class[0]))
                 .customAnnotations(Command.class, Task.class, Mob.class, ScoreboardCreator.class, MySQLRepository.class)
                 .excludedAbstractions(TaskRunner.class, OnPlayerInteractMob.class, CommandRunnerArgs.class, CommandRunnerNonArgs.class, UseCaseHandler.class)
                 .waitUntilCompletion()
@@ -106,7 +103,8 @@ public final class Pixelcoin extends JavaPlugin {
 
         dependenciesRepository.get(WebAcionHttpServer.class).iniciar();
 
-        BetterMenusInstanceProvider.setInstanceProvider(instanceProvider);
+        BukkitBetterMenus.setInstanceProvider(instanceProvider);
+        BukkitBetterMenus.registerEventListeners(this, Bukkit.getPluginManager());
 
         ClassMapperConfiguration.builder(this, COMMON_PACKAGE)
                 .useDebugLogging()
@@ -141,10 +139,16 @@ public final class Pixelcoin extends JavaPlugin {
             EventListenerDependencyProvider {
 
         private final DependenciesRepository dependenciesRepository;
+        private final Set<Class<?>> excluded;
 
         @Override
         public <I, O extends I> O get(Class<I> clazz) {
             return (O) this.dependenciesRepository.get(clazz);
+        }
+
+        @Override
+        public boolean isExcluded(Class<?> clazz) {
+            return excluded.contains(clazz);
         }
     }
 }

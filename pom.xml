@@ -34,7 +34,7 @@
         <dependency>
             <groupId>com.github.JaimeTruman</groupId>
             <artifactId>Bukkit-Class-Mapper</artifactId>
-            <version>3.2.4</version>
+            <version>3.2.7</version>
         </dependency>
         <dependency>
             <groupId>com.github.JaimeTruman</groupId>
@@ -54,7 +54,7 @@
         <dependency>
             <groupId>com.github.JaimeTruman</groupId>
             <artifactId>Bukkit-better-menus</artifactId>
-            <version>1.1.10</version>
+            <version>1.1.12</version>
         </dependency>
         <dependency>
             <groupId>com.github.JaimeTruman</groupId>

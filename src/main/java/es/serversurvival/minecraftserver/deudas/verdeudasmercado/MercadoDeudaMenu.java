@@ -49,7 +49,7 @@ public final class MercadoDeudaMenu extends VerOfertasMercadoMenu<OfertaDeudaMer
 
     @Override
     public String titulo() {
-        return ChatColor.DARK_RED + "" + ChatColor.BOLD + "            Tienda";
+        return ChatColor.DARK_RED + "" + ChatColor.BOLD + "     MERCADO DE DEUDA";
     }
 
     @Override

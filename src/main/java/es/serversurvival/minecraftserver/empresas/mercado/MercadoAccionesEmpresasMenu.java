@@ -46,7 +46,7 @@ public final class MercadoAccionesEmpresasMenu extends VerOfertasMercadoMenu<Ofe
 
     @Override
     public String titulo() {
-        return DARK_RED + "" + BOLD + "ACCIONES EMPRESAS";
+        return DARK_RED + "" + BOLD + "    ACCIONES EMPRESAS";
     }
 
     @Override

@@ -38,7 +38,7 @@ public final class BolsaCerrarPosicionMenu extends NumberSelectorMenu<Posicion> 
 
     @Override
     public void onCancel(Player player, InventoryClickEvent event) {
-        this.menuService.open(player, VerBolsaCarteraMenu.class);
+        this.menuService.open(player, MiCarteraBolsaMenu.class);
     }
 
     @Override

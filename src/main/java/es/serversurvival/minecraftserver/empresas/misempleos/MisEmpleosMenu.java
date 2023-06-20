@@ -7,6 +7,7 @@ import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
+import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.jugadores.perfil.PerfilMenu;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.domain.Empleado;
@@ -28,7 +29,7 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
-public final class VerMisEmpleosMenu extends Menu {
+public final class MisEmpleosMenu extends Menu {
     private final DejarEmpleoUseCase dearEmpleoUseCase;
     private final EmpleadosService empleadosService;
     private final EmpresasService empresasService;
@@ -54,7 +55,7 @@ public final class VerMisEmpleosMenu extends Menu {
                 .title(DARK_RED + "" + BOLD + "        TUS EMPLEOS")
                 .item(1, buildItemInfo())
                 .items(2, this::buildItemsEmpleos, this::dejarEmpleo)
-                .breakpoint(7, Material.RED_BANNER, (p, e) -> menuService.open(p, PerfilMenu.class))
+                .breakpoint(7, MenuItems.GO_BACK_PERFIL, (p, e) -> menuService.open(p, PerfilMenu.class))
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
                         .forward(9, Material.GREEN_WOOL)
@@ -81,7 +82,7 @@ public final class VerMisEmpleosMenu extends Menu {
     private ItemStack buildItemEmpleo(Empleado empleado) {
         Empresa empresaTrabajo = this.empresasService.getById(empleado.getEmpresaId());
         Material materialIcono = Material.getMaterial(empresaTrabajo.getLogotipo());
-        String displayName = RED + "" + BOLD + "" + UNDERLINE + "CLICK PARA IRTE";
+        String displayName = MenuItems.CLICKEABLE + "DEJAR EMPLEO";
 
         return ItemBuilder.of(materialIcono)
                 .title(displayName)

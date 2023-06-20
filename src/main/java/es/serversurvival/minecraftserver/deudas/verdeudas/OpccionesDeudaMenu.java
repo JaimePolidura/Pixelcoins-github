@@ -4,14 +4,13 @@ import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.deudas.vendermercado.PonerVentaDeudaMercadoPrecioSelectorMenu;
 import es.serversurvival.minecraftserver.deudas._shared.DeudaItemMercadoLore;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.deudas._shared.domain.Deuda;
 import es.serversurvival.pixelcoins.deudas.cancelar.CancelarDeudaParametros;
-import es.serversurvival.pixelcoins.deudas.cancelar.CancelarDeudaUseCase;
 import es.serversurvival.pixelcoins.deudas.pagartodo.PagarTodaLaDeudaParametros;
-import es.serversurvival.pixelcoins.deudas.pagartodo.PagarTodaLaDeudaUseCase;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -23,8 +22,6 @@ import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
 public final class OpccionesDeudaMenu extends Menu<Deuda> {
-    private final PagarTodaLaDeudaUseCase pagarTodaLaDeudaUseCase;
-    private final CancelarDeudaUseCase cancelarDeudaUseCase;
     private final DeudaItemMercadoLore deudaItemMercadoLore;
     private final MenuService menuService;
     private final UseCaseBus useCaseBus;
@@ -39,7 +36,7 @@ public final class OpccionesDeudaMenu extends Menu<Deuda> {
         return MenuConfiguration.builder()
                 .title(DARK_RED + "" + BOLD + "        DEUDA")
                 .fixedItems()
-                .item(5, Material.GREEN_BANNER, (p, e) -> menuService.open(p, VerMisDeudasMenu.class))
+                .item(5, Material.GREEN_BANNER, (p, e) -> menuService.open(p, MisDeudasMenu.class))
                 .item(1, this::buildPagarOCancelarDeuda, this::pagarOCancelarDeuda)
                 .item(2, this::buildVenderDeudaMeradoItem, this::venderDeudaMercado)
                 .item(4, this::buildItemInfo)
@@ -57,7 +54,7 @@ public final class OpccionesDeudaMenu extends Menu<Deuda> {
         return !esAcredor(player) ?
                 ItemBuilder.of(Material.AIR).build() :
                 ItemBuilder.of(Material.YELLOW_WOOL)
-                        .title(GOLD + "" + BOLD + UNDERLINE + "CLICK PARA PONER A LA VENTA")
+                        .title(MenuItems.CLICKEABLE + "PONER A LA VENTA")
                         .build();
     }
 
@@ -69,7 +66,7 @@ public final class OpccionesDeudaMenu extends Menu<Deuda> {
 
     private ItemStack buildPagarOCancelarDeuda(Player player) {
         return ItemBuilder.of(esAcredor(player) ? Material.GREEN_WOOL : Material.RED_WOOL)
-                .title(GOLD + "" + BOLD + UNDERLINE + "CLICK PARA " + (esAcredor(player) ? "CANCELAR" : "PAGAR"))
+                .title(MenuItems.CLICKEABLE + (esAcredor(player) ? "CANCELAR" : "PAGAR"))
                 .build();
     }
 

@@ -8,6 +8,10 @@ import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
+import es.serversurvival.minecraftserver._shared.menus.MenuItems;
+import es.serversurvival.minecraftserver.bolsa.verordenespremarket.MisOrdenesPremarketMenu;
+import es.serversurvival.minecraftserver.bolsa.verposicionescerradas.VerPosicionesCerradasMenu;
+import es.serversurvival.minecraftserver.bolsa.vervalores.ElegirTipoActivoDisponibleMenu;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBolsaUltimosPreciosService;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
@@ -27,10 +31,11 @@ import java.util.List;
 import java.util.UUID;
 
 import static es.serversurvival._shared.utils.Funciones.*;
+import static es.serversurvival.minecraftserver._shared.menus.MenuItems.CLICKEABLE;
 import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
-public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
+public final class MiCarteraBolsaMenu extends Menu implements AfterShow {
     private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;
     private final DependenciesRepository dependenciesRepository;
     private final ActivosBolsaService activosBolsaService;
@@ -44,8 +49,8 @@ public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
     @Override
     public int[][] items() {
         return new int[][] {
-                {1, 0, 0, 0, 0, 0, 0, 0, 5 },
-                {2, 0, 0, 0, 0, 0, 0, 0, 0 },
+                {1, 2, 3, 0, 0, 0, 0, 0, 5 },
+                {6, 0, 0, 0, 0, 0, 0, 0, 0 },
                 {0, 0, 0, 0, 0, 0, 0, 0, 0 },
                 {0, 0, 0, 0, 0, 0, 0, 0, 0 },
                 {0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -56,17 +61,32 @@ public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
     @Override
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
-                .title(ChatColor.DARK_RED + "" + ChatColor.BOLD + " TU CARTERA DE ACCIONES")
+                .title(DARK_RED + "" + BOLD + " TU CARTERA DE ACCIONES")
                 .fixedItems()
                 .item(1, buildItemInfo())
+                .item(2, buildItemEligerInversion(), (p, e) -> menuService.open(p, ElegirTipoActivoDisponibleMenu.class))
+                .item(3, buildItemPosicionesCerradas(), (p, e) -> menuService.open(p, VerPosicionesCerradasMenu.class))
+                .item(4, buildItemOrdenesPremarket(), (p, e) -> menuService.open(p, MisOrdenesPremarketMenu.class))
                 .item(5, buildItemStats())
-                .items(2, this::buildItemsPosicionesAbiertas, this::cerrarPosicion)
+                .items(6, this::buildItemsPosicionesAbiertas, this::cerrarPosicion)
                 .breakpoint(7, buildItemGoBackToProfileMenu(), this::goToProfileMenu)
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
                         .forward(9, Material.GREEN_WOOL)
                         .build())
                 .build();
+    }
+
+    private ItemStack buildItemOrdenesPremarket() {
+        return ItemBuilder.of(Material.REPEATER).title(CLICKEABLE + "VER ORDENES PREMARKET").build();
+    }
+
+    private ItemStack buildItemEligerInversion() {
+        return ItemBuilder.of(Material.ENDER_EYE).title(CLICKEABLE + "ELEGIR INVERSION").build();
+    }
+
+    private ItemStack buildItemPosicionesCerradas() {
+        return ItemBuilder.of(Material.IRON_DOOR).title(CLICKEABLE + "VER POSICIONES CERRADAS").build();
     }
 
     //Lo actualizaremos cuando se ejecute aftershow
@@ -119,7 +139,7 @@ public final class VerBolsaCarteraMenu extends Menu implements AfterShow {
         lore.add(posicion.getPosicionId().toString());
         
         return ItemBuilder.of(posicion.getTipoApuesta().getMaterial())
-                .title(GOLD + "" + BOLD + UNDERLINE + "CLICK PARA CERRAR")
+                .title(GOLD + "" + BOLD + UNDERLINE + "CERRAR POSICION")
                 .lore(lore)
                 .build();
     }

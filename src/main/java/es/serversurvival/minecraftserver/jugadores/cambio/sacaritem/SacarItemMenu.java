@@ -5,6 +5,7 @@ import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
+import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.jugadores.cambiar.TipoCambioPixelcoins;
 import es.serversurvival.pixelcoins.jugadores.cambiar.sacarItem.SacarItemParametros;
@@ -96,7 +97,7 @@ public final class SacarItemMenu extends Menu {
     public ItemStack buildItem (UUID jugadorId, String itemACambiar, double cambio, Material itemMaterial) {
         double pilxelcoinsJugaodor = transaccionesService.getBalancePixelcions(jugadorId);
 
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "CLICK PARA SACAR UN " + itemACambiar;
+        String displayName = MenuItems.CLICKEABLE + "SACAR UN " + itemACambiar;
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.AQUA + "1 "+itemACambiar+" -> " + ChatColor.GREEN + cambio);
         lore.add("   ");

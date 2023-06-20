@@ -5,6 +5,7 @@ import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.jugadores.perfil.PerfilMenu;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBolsaUltimosPreciosService;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
@@ -21,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static es.serversurvival.minecraftserver._shared.menus.MenuItems.CLICKEABLE;
 import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
@@ -50,7 +52,7 @@ public final class VerPosicionesCerradasMenu extends Menu<VerPosicionesCerradasM
                 .item(1, buildItemInfo())
                 .item(5, buidItemCambiarOrden(), this::cambiarOrden)
                 .items(2, this::buildItemPosicionesCerradas)
-                .breakpoint(7, buildItemGoBackToProfileMenu(), (p, e) -> menuService.open(p, PerfilMenu.class))
+                .breakpoint(7, MenuItems.GO_BACK_PERFIL, (p, e) -> menuService.open(p, PerfilMenu.class))
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
                         .forward(9, Material.GREEN_WOOL)
@@ -62,10 +64,6 @@ public final class VerPosicionesCerradasMenu extends Menu<VerPosicionesCerradasM
         Orden nuevoOrden = getState() == Orden.RENTABILIDAD ? Orden.FECHA : Orden.RENTABILIDAD;
 
         this.menuService.open(player, VerPosicionesCerradasMenu.class, nuevoOrden);
-    }
-
-    private ItemStack buildItemGoBackToProfileMenu() {
-        return ItemBuilder.of(Material.RED_BANNER).title(ChatColor.RED + "Ir a perfil").build();
     }
 
     private List<ItemStack> buildItemPosicionesCerradas(Player player) {
@@ -93,7 +91,7 @@ public final class VerPosicionesCerradasMenu extends Menu<VerPosicionesCerradasM
 
     private ItemStack buidItemCambiarOrden() {
         return ItemBuilder.of(Material.HOPPER)
-                .title(GOLD + "" + BOLD + "CLIK PARA ORDENDOR POR" + (getState() == Orden.RENTABILIDAD ? "RENTABILIDAD" : "FECHA"))
+                .title(CLICKEABLE + "ORDENAR POR " + (getState() == Orden.RENTABILIDAD ? "RENTABILIDAD" : "FECHA"))
                 .build();
     }
 

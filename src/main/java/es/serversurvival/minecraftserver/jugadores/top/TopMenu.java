@@ -5,6 +5,7 @@ import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.jugadores.perfil.PerfilMenu;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.Posicion;
@@ -44,7 +45,7 @@ public final class TopMenu extends Menu {
                 {0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 4, 0, 0, 5, 0, 0, 6, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 7, 0, 0, 0, 0, 0, 8, 9}
+                {0, 0, 7, 0, 0, 0, 8, 0, 9}
         };
     }
 
@@ -61,12 +62,8 @@ public final class TopMenu extends Menu {
                 .item(6, buildTopMorososJugadoresItem())
                 .item(7, buildItemPeoresOperacioensBolsa())
                 .item(8, buildItemTopActivosBolsa())
-                .item(9, buildItemGoBackToProfile(), (p,e) -> this.menuService.open(p, PerfilMenu.class))
+                .item(9, MenuItems.GO_BACK_PERFIL, (p, e) -> this.menuService.open(p, PerfilMenu.class))
                 .build();
-    }
-
-    private ItemStack buildItemGoBackToProfile() {
-        return ItemBuilder.of(Material.RED_BANNER).title(RED + "<-").build();
     }
 
     private ItemStack buildItemTopActivosBolsa() {

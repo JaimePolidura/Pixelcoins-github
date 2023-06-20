@@ -6,7 +6,10 @@ import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
+import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.empresas.mercado.MercadoAccionesEmpresasMenu;
+import es.serversurvival.minecraftserver.empresas.vertodas.TodasEmpresasMenu;
+import es.serversurvival.minecraftserver.jugadores.perfil.PerfilMenu;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.domain.AccionistaEmpresa;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.AccionistasEmpresasService;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
@@ -29,7 +32,7 @@ import java.util.stream.Collectors;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
-public final class MisAccionesMenu extends Menu {
+public final class MisEmpresasMenu extends Menu {
     private final AccionistasEmpresasService accionistasEmpresasService;
     private final EmpresasService empresasService;
     private final OfertasService ofertasService;
@@ -38,8 +41,8 @@ public final class MisAccionesMenu extends Menu {
     @Override
     public int[][] items() {
         return new int[][] {
-                {1, 2, 0, 0, 0, 0, 0, 0, 0},
-                {3, 0, 0, 0, 0, 0, 0, 0, 0},
+                {1, 2, 3, 0, 0, 0, 0, 0, 0},
+                {6, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -50,17 +53,22 @@ public final class MisAccionesMenu extends Menu {
     @Override
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
-                .title(DARK_RED + "" + BOLD + "   TUS ACCIONES SERVER")
+                .title(DARK_RED + "" + BOLD + "      TUS EMPRESAS")
                 .fixedItems()
                 .item(1, buildItemInfo())
-                .item(2, buildItemMercado(), (p, e) -> menuService.open(p, MercadoAccionesEmpresasMenu.class))
-                .items(3, this::buildItemAcciones, this::venderAccion)
-                .breakpoint(7, Material.RED_BANNER)
+                .item(2, buildItemTodasLasEmpresas(), (p, e) -> menuService.open(p, TodasEmpresasMenu.class))
+                .item(3, buildItemMercado(), (p, e) -> menuService.open(p, MercadoAccionesEmpresasMenu.class))
+                .items(6, this::buildItemAcciones, this::venderAccion)
+                .breakpoint(7, MenuItems.GO_BACK_PERFIL, (p, e) -> menuService.open(p, PerfilMenu.class))
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
                         .forward(9, Material.GREEN_WOOL)
                         .build())
                 .build();
+    }
+
+    private ItemStack buildItemTodasLasEmpresas() {
+        return ItemBuilder.of(Material.NETHERITE_SCRAP).title(MenuItems.CLICKEABLE + "VER TODAS LAS EMPRESAS").build();
     }
 
     private void venderAccion(Player player, InventoryClickEvent event) {
@@ -95,7 +103,7 @@ public final class MisAccionesMenu extends Menu {
 
     private ItemStack buildItemMercado() {
         return ItemBuilder.of(Material.CHEST)
-                .title(GOLD + "" + BOLD + "" + UNDERLINE + "VER MERCADO")
+                .title(GOLD + "" + BOLD + "" + UNDERLINE + "VER MERCADO DE EMPRESAS SERVER")
                 .build();
     }
 
@@ -107,7 +115,7 @@ public final class MisAccionesMenu extends Menu {
 
     private ItemStack buildItemAccionista(AccionistaEmpresa accion) {
         return ItemBuilder.of(Material.RED_BANNER)
-                .title(GOLD + "" + BOLD + "CLICK PARA VENDER")
+                .title(MenuItems.CLICKEABLE + "VENDER")
                 .lore(List.of(
                         GOLD + "Empresa: " + empresasService.getById(accion.getEmpresaId()).getNombre(),
                         GOLD + "Acciones: " + accion.getNAcciones(),

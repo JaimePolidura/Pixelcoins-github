@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @MySQLRepository
 public final class MySQLMercadoOfertasRepository extends Repository<Oferta, UUID, TipoOferta> implements MercadoOfertasRepository {
-    private static final String TABLE_NAME = "mercados";
+    private static final String TABLE_NAME = "mercado_ofertas";
     private static final String FIELD_ID = "ofertaId";
 
     public MySQLMercadoOfertasRepository(ConnectionManager connectionManager) {

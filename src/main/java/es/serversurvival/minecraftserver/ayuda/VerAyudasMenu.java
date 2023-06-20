@@ -8,6 +8,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import static org.bukkit.ChatColor.*;
+
 public final class VerAyudasMenu extends Menu {
     @Override
     public int[][] items() {
@@ -23,7 +25,7 @@ public final class VerAyudasMenu extends Menu {
         return MenuConfiguration.builder()
                 .fixedItems()
                 .staticMenu()
-                .title(ChatColor.DARK_RED + "" + ChatColor.BOLD + "CLICK para ver las ayudas")
+                .title(DARK_RED + "" + BOLD + "        AYUDAS")
                 .item(1, buildItemAyuda("BOLSA"), (player, e) -> this.onItemAyudaClicked(player, "bolsa help"))
                 .item(2, buildItemAyuda("JUGAR"), (player, e) -> this.onItemAyudaClicked(player, "jugar"))
                 .item(3, buildItemAyuda("PIXELCOINS"), (player, e) -> this.onItemAyudaClicked(player, "ayuda"))
@@ -41,6 +43,6 @@ public final class VerAyudasMenu extends Menu {
     }
 
     private ItemStack buildItemAyuda (String tiposAyuda) {
-        return ItemBuilder.of(Material.WRITABLE_BOOK).title(ChatColor.GOLD + "" + ChatColor.BOLD + tiposAyuda).build();
+        return ItemBuilder.of(Material.WRITABLE_BOOK).title(GOLD + "" + BOLD + tiposAyuda).build();
     }
 }

@@ -8,6 +8,7 @@ import es.bukkitbettermenus.modules.sync.SyncMenuConfiguration;
 import es.bukkitbettermenus.modules.sync.SyncMenuService;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
+import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
@@ -34,8 +35,8 @@ import static org.bukkit.ChatColor.BOLD;
 
 @RequiredArgsConstructor
 public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
-    public final static String PROPIETARIO_OFERTA_ITEM_DISPLAYNAME = RED + "" + BOLD + UNDERLINE + "CLICK PARA RETIRAR";
-    public final static String NO_PROPIETARIO_OFERTA_DISPLAYNAME = AQUA + "" + BOLD + UNDERLINE + "CLICK PARA COMPRAR";
+    public final static String PROPIETARIO_OFERTA_ITEM_DISPLAYNAME = RED + "" + BOLD + UNDERLINE + "RETIRAR";
+    public final static String NO_PROPIETARIO_OFERTA_DISPLAYNAME = AQUA + "" + BOLD + UNDERLINE + "COMPRAR";
 
     private final SyncMenuService syncMenuService;
     private final OfertasService ofertasService;
@@ -61,7 +62,7 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
                 .fixedItems()
                 .item(1, buildItemInfo())
                 .items(2, buildItemsOfertas(), this::onItemTiendaOfertaClicked)
-                .breakpoint(7, Material.GREEN_BANNER, (p, e) -> menuService.open(p, PerfilMenu.class))
+                .breakpoint(7, MenuItems.GO_BACK_PERFIL, (p, e) -> menuService.open(p, PerfilMenu.class))
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
                         .forward(9, Material.GREEN_WOOL)

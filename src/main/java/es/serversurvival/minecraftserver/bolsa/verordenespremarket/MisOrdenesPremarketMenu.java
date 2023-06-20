@@ -5,13 +5,13 @@ import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
+import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
 import es.serversurvival.pixelcoins.bolsa._shared.premarket.application.OrdenesPremarketService;
 import es.serversurvival.pixelcoins.bolsa._shared.premarket.domain.OrdenPremarket;
 import es.serversurvival.pixelcoins.bolsa.cancelarordenpremarket.CancelarOrdenPremarketParametros;
-import es.serversurvival.pixelcoins.bolsa.cancelarordenpremarket.CancelarOrdenPremarketUseCase;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -24,7 +24,7 @@ import java.util.UUID;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
-public final class BolsaVerOrdernesMenu extends Menu {
+public final class MisOrdenesPremarketMenu extends Menu {
     private final OrdenesPremarketService ordenesPremarketService;
     private final ActivosBolsaService activosBolsaService;
     private final UseCaseBus useCaseBus;
@@ -74,7 +74,7 @@ public final class BolsaVerOrdernesMenu extends Menu {
         ActivoBolsa activoBolsa = activosBolsaService.getById(orden.getActivoBolsaId());
 
         return ItemBuilder.of(Material.NAME_TAG)
-                .title(GOLD + "" + BOLD + "" + UNDERLINE + "CLICK PARA CANCELAR")
+                .title(MenuItems.CLICKEABLE + "CANCELAR")
                 .lore(List.of(
                         "  ",
                         GOLD + "Nombre: " + activoBolsa.getNombreLargo(),

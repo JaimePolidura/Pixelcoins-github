@@ -5,10 +5,10 @@ import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.dependencyinjector.dependencies.DependenciesRepository;
-import es.serversurvival.minecraftserver.bolsa.vercartera.VerBolsaCarteraMenu;
-import es.serversurvival.minecraftserver.deudas.verdeudas.VerMisDeudasMenu;
-import es.serversurvival.minecraftserver.empresas.misempleos.VerMisEmpleosMenu;
-import es.serversurvival.minecraftserver.empresas.vertodas.VerTodasEmpresasMenu;
+import es.serversurvival.minecraftserver.bolsa.vercartera.MiCarteraBolsaMenu;
+import es.serversurvival.minecraftserver.deudas.verdeudas.MisDeudasMenu;
+import es.serversurvival.minecraftserver.empresas.misacciones.MisEmpresasMenu;
+import es.serversurvival.minecraftserver.empresas.misempleos.MisEmpleosMenu;
 import es.serversurvival.minecraftserver.tienda.vertienda.TiendaMenu;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
 import es.serversurvival.pixelcoins.jugadores.patrimonio.CalculadorPatrimonioService;
@@ -24,7 +24,6 @@ import es.serversurvival.pixelcoins.empresas._shared.empleados.application.Emple
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import lombok.AllArgsConstructor;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -32,6 +31,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.*;
 
 import static es.serversurvival._shared.utils.Funciones.*;
+import static es.serversurvival.minecraftserver._shared.menus.MenuItems.*;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
@@ -51,8 +51,8 @@ public final class PerfilMenu extends Menu {
         return new int[][] {
                 {1, 1, 1, 1, 1, 1, 1, 1, 1},
                 {1, 3, 0, 0, 0, 0, 0, 4, 1},
-                {1, 0, 0, 0, 0, 0, 0, 0, 1},
-                {1, 0, 5, 0, 6, 0, 7, 0, 1},
+                {1, 0, 0, 0, 6, 0, 0, 0, 1},
+                {1, 0, 5, 0, 0, 0, 7, 0, 1},
                 {1, 0, 0, 0, 8, 0, 0, 0, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1}
         };
@@ -66,15 +66,15 @@ public final class PerfilMenu extends Menu {
                 .item(1, Material.BLACK_STAINED_GLASS_PANE)
                 .item(3, buildItemStats(), (p, e) -> this.menuService.open(p, TopMenu.class))
                 .item(4, buildItemTienda(), (p, e) -> this.menuService.open(p, TiendaMenu.class))
-                .item(5, buildItemDeudas(), (p, e) -> this.menuService.open(p, VerMisDeudasMenu.class))
-                .item(6, buildItemBolsa(), (p, e) -> this.menuService.open(p, VerBolsaCarteraMenu.class))
-                .item(7, buildItemEmpresa(), (p, e) -> this.menuService.open(p, VerTodasEmpresasMenu.class))
-                .item(8, buildItemEmpleos(), (p, e) -> this.menuService.open(p, VerMisEmpleosMenu.class))
+                .item(5, buildItemDeudas(), (p, e) -> this.menuService.open(p, MisDeudasMenu.class))
+                .item(6, buildItemBolsa(), (p, e) -> this.menuService.open(p, MiCarteraBolsaMenu.class))
+                .item(7, buildItemMisEmpresas(), (p, e) -> this.menuService.open(p, MisEmpresasMenu.class))
+                .item(8, buildItemEmpleos(), (p, e) -> this.menuService.open(p, MisEmpleosMenu.class))
                 .build();
     }
 
     private ItemStack buildItemEmpleos () {
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TUS EMPLEOS";
+        String displayName = CLICKEABLE + "VER TUS EMPLEOS";
 
         List<String> lore = new ArrayList<>();
         lore.add("  ");
@@ -82,15 +82,15 @@ public final class PerfilMenu extends Menu {
         empleos.forEach( (emp) -> {
             Empresa empresa = empresasService.getById(emp.getEmpresaId());
 
-            lore.add(ChatColor.GOLD + "" + empresa.getNombre() + " " + ChatColor.GREEN + FORMATEA.format(emp.getSueldo()) +
-                    " PC " + ChatColor.GOLD + "/ " + emp.periodoSueldoToDias() + " dias");
+            lore.add(GOLD + "" + empresa.getNombre() + " " + GREEN + FORMATEA.format(emp.getSueldo()) +
+                    " PC " + GOLD + "/ " + emp.periodoSueldoToDias() + " dias");
         });
 
         return ItemBuilder.of(Material.GOLDEN_APPLE).title(displayName).lore(lore).build();
     }
 
-    private ItemStack buildItemEmpresa() {
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TUS EMPRESAS";
+    private ItemStack buildItemMisEmpresas() {
+        String displayName = CLICKEABLE + "VER TUS EMPRESAS";
         List<String> lore = new ArrayList<>();
         lore.add("  ");
 
@@ -108,20 +108,20 @@ public final class PerfilMenu extends Menu {
     }
 
     private ItemStack buildItemBolsa () {
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK VER TUS ACCIONES";
+        String displayName = CLICKEABLE + "VER TUS ACCIONES EN BOLSA";
 
         List<Posicion> posicionCerradas = posicionesService.findPosicionesCerradasByJugadorId(getPlayer().getUniqueId()).stream()
                 .limit(7).toList();
         List<String> lore = new ArrayList<>();
         lore.add("   ");
-        lore.add(ChatColor.GOLD + "Tus posiciones cerradas:");
+        lore.add(GOLD + "Tus posiciones cerradas:");
 
         for (Posicion pos : posicionCerradas) {
             String nombreActivo = activosBolsaService.getById(pos.getActivoBolsaId()).getNombreLargo();
             double rentabilidad = dependenciesRepository.get(pos.getTipoApuesta().getTipoApuestaService())
                     .calcularRentabilidad(pos.getPrecioApertura(), pos.getPrecioCierre()) * 100;
 
-            lore.add(ChatColor.GOLD + "" + nombreActivo + " -> " + (rentabilidad >= 0 ? GREEN : RED) +
+            lore.add(GOLD + "" + nombreActivo + " -> " + (rentabilidad >= 0 ? GREEN : RED) +
                     redondeoDecimales(rentabilidad, 2) + "% : " + redondeoDecimales((int) ((pos.getCantidad() *
                     pos.getPrecioApertura()) - pos.getCantidad() * pos.getPrecioCierre()), 2) + " PC");
         }
@@ -130,22 +130,22 @@ public final class PerfilMenu extends Menu {
     }
 
     private ItemStack buildItemDeudas () {
-        String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "" + ChatColor.UNDERLINE + "CLICK PARA VER TUS DEUDAS";
+        String displayName = CLICKEABLE + "VER TUS DEUDAS";
 
         double totalQueLeDeben = calculadorPatrimonioService.calcularCuenta(TipoCuentaPatrimonio.DEUDA_ACREDOR, getPlayer().getUniqueId());
         double totalQueDebe = calculadorPatrimonioService.calcularCuenta(TipoCuentaPatrimonio.DEUDA_DEUDOR, getPlayer().getUniqueId());
 
         List<String> lore = new ArrayList<>() {{
             add("    ");
-            add(ChatColor.GOLD + "Total que debes: " + ChatColor.GREEN + totalQueDebe + " PC");
-            add(ChatColor.GOLD + "Total que te deben: " + ChatColor.GREEN + totalQueLeDeben + " PC");
+            add(GOLD + "Total que debes: " + GREEN + totalQueDebe + " PC");
+            add(GOLD + "Total que te deben: " + GREEN + totalQueLeDeben + " PC");
         }};
 
         return ItemBuilder.of(Material.DIAMOND_SWORD).title(displayName).lore(lore).build();
     }
 
     private ItemStack buildItemTienda () {
-        return ItemBuilder.of(Material.CHEST).title(GOLD + "" + BOLD + "" + UNDERLINE + "CLICK PARA VER LA TIENDA").build();
+        return ItemBuilder.of(Material.CHEST).title(CLICKEABLE + "VER LA TIENDA").build();
     }
 
     private ItemStack buildItemStats() {
@@ -153,7 +153,7 @@ public final class PerfilMenu extends Menu {
 
         SkullMeta metaStats = (SkullMeta) stats.getItemMeta();
         metaStats.setOwningPlayer(getPlayer());
-        metaStats.setDisplayName(GOLD + "" + BOLD + "" + UNDERLINE + "CLICK PARA VER EL TOP JUGADORES");
+        metaStats.setDisplayName(CLICKEABLE + "VER EL TOP JUGADORES");
 
         if(getPlayer() == null) return stats;
 

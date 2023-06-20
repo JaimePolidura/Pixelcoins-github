@@ -5,6 +5,7 @@ import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.empresas.miempresa.MiEmpresaMenu;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver.empresas.votaciones.lorevotacionitem.VotacionItemLoreBuilderService;
@@ -98,7 +99,7 @@ public final class VerVotacionesEmpresaMenu extends Menu<Empresa> {
                 if(voto.isPresent())
                     yield GOLD + "" + BOLD + "HAS VOTADO " + (voto.get().isAfavor() ? "A FAVOR" : "EN CONTRA");
                 else
-                    yield GOLD + "" + BOLD + UNDERLINE + "CLICK PARA VOTAR";
+                    yield MenuItems.CLICKEABLE + "VOTAR";
             }
         };
     }

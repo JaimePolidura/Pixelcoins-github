@@ -7,6 +7,7 @@ import es.bukkitbettermenus.menustate.AfterShow;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
+import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.empresas.repatirdividendos.RepartirDividendosConfirmacionMenu;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
@@ -111,7 +112,7 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
         boolean hayVotacionesPendienets = numeroVotacionesPendientes > 0;
 
         return ItemBuilder.of(Material.WHITE_BANNER)
-                .title(hayVotacionesPendienets ? GOLD + "" + BOLD + UNDERLINE + "CLICK PARA VER LAS VOTACIONES" : GOLD + "" + BOLD + "VOTACIONES")
+                .title(hayVotacionesPendienets ? MenuItems.CLICKEABLE + "VER LAS VOTACIONES" : GOLD + "" + BOLD + "VOTACIONES")
                 .lore(hayVotacionesPendienets ? RED + "Hay votaciones pendientes" : GOLD + "No hay votaciones pendientes")
                 .addEnchantment(hayVotacionesPendienets ? Enchantment.ARROW_FIRE : null, hayVotacionesPendienets ? 1 : 0)
                 .build();
@@ -125,7 +126,7 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
 
     private ItemStack buildEmpleadoItem(Empleado empleado) {
         return ItemBuilder.of(Material.PLAYER_HEAD)
-                .title(GREEN + "" + BOLD + "" + UNDERLINE + "CLICK PARA VER OPCCIONES")
+                .title(MenuItems.CLICKEABLE + "VER OPCCIONES")
                 .lore(List.of(
                         "   ",
                         GOLD + "Empleado: " + jugadoresService.getNombreById(empleado.getEmpleadoJugadorId()),
@@ -141,7 +142,7 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
 
     private ItemStack buildItemCerrarEmpresa() {
         return !getState().isEsCotizada() ?
-                ItemBuilder.of(Material.BARRIER).title(RED + "" + BOLD + "" + UNDERLINE + "CLICK PARA CERRAR LA EMPRESA").build() :
+                ItemBuilder.of(Material.BARRIER).title(MenuItems.CLICKEABLE + "CERRAR LA EMPRESA").build() :
                 ItemBuilder.of(Material.AIR).build();
     }
 

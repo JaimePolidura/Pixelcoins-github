@@ -16,6 +16,6 @@ public final class VerMisDeudasCommandRunner implements CommandRunnerNonArgs {
 
     @Override
     public void execute(Player sender) {
-        menuService.open(sender, VerMisDeudasMenu.class);
+        menuService.open(sender, MisDeudasMenu.class);
     }
 }
