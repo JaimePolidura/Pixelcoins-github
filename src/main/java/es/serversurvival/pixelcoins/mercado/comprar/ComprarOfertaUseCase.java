@@ -40,7 +40,7 @@ public final class ComprarOfertaUseCase implements UseCaseHandler<ComprarOfertaP
     }
 
     private void decrementarCantidadOBorrar(Oferta ofertaAComprar) {
-        if(ofertaAComprar.getCantidad() == 1)
+        if(ofertaAComprar.getCantidad() == 0)
             ofertasService.deleteById(ofertaAComprar.getOfertaId());
         else
             ofertasService.save(ofertaAComprar);

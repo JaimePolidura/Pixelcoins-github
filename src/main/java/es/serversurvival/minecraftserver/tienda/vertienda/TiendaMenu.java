@@ -2,8 +2,11 @@ package es.serversurvival.minecraftserver.tienda.vertienda;
 
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.modules.sync.SyncMenuService;
+import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.VerOfertasMercadoMenu;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
+import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival.pixelcoins.tienda._shared.OfertaTiendaItemMinecraft;
@@ -16,8 +19,12 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 public final class TiendaMenu extends VerOfertasMercadoMenu<OfertaTiendaItemMinecraft> {
-    public TiendaMenu(SyncMenuService syncMenuService, OfertasService ofertasService, MenuService menuService, UseCaseBus useCaseBus) {
+    private final JugadoresService jugadoresService;
+
+    public TiendaMenu(SyncMenuService syncMenuService, OfertasService ofertasService, MenuService menuService,
+                      UseCaseBus useCaseBus, JugadoresService jugadoresService) {
         super(syncMenuService, ofertasService, menuService, useCaseBus);
+        this.jugadoresService = jugadoresService;
     }
 
     @Override
@@ -48,7 +55,11 @@ public final class TiendaMenu extends VerOfertasMercadoMenu<OfertaTiendaItemMine
 
     @Override
     public ItemStack buildItemFromOferta(OfertaTiendaItemMinecraft oferta) {
-        return oferta.toItemStack();
+        return MinecraftUtils.setLore(oferta.toItemStack(), List.of(
+                GOLD + "Vendedor: " + jugadoresService.getNombreById(oferta.getVendedorId()),
+                GOLD + "Precio: " + GREEN + FORMATEA.format(oferta.getPrecio()) + " PC / Unidad",
+                GOLD + "Fecha subida: " + Funciones.toString(oferta.getFechaSubida())
+        ));
     }
 
     @Override

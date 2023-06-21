@@ -86,8 +86,8 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
 
     private void onItemTiendaOfertaClicked(Player player, InventoryClickEvent event) {
         ItemStack item = event.getCurrentItem();
-        boolean propietario = player.getUniqueId().equals(MinecraftUtils.getLastLineOfLore(item, 1));
         T oferta = ofertasService.getById(MinecraftUtils.getLastLineOfLore(item, 0), ofertaClass());
+        boolean propietario = player.getUniqueId().equals(oferta.getVendedorId());
 
         if(propietario) {
             retirarOferta(oferta);
@@ -96,7 +96,7 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
         }else{
             comprarOferta(oferta, event.getCurrentItem());
 
-            event.getWhoClicked().sendMessage(mensajeCompraExsitosaAlComprador(oferta, item));
+            enviarMensajeYSonido(player.getUniqueId(), mensajeCompraExsitosaAlComprador(oferta, item), Sound.ENTITY_EXPERIENCE_ORB_PICKUP);
             enviarMensajeYSonido(oferta.getVendedorId(), mensajeCompraExsitosaAlVendedor(oferta, item, player.getName()), Sound.ENTITY_PLAYER_LEVELUP);
         }
     }
@@ -136,7 +136,7 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
                 PROPIETARIO_OFERTA_ITEM_DISPLAYNAME : NO_PROPIETARIO_OFERTA_DISPLAYNAME);
         List<String> lore = getLore(item);
         lore.add("  ");
-        lore.add(getPlayer().getUniqueId().toString());
+        lore.add(oferta.getVendedorId().toString());
         lore.add(oferta.getOfertaId().toString());
         MinecraftUtils.setLore(item, lore);
 
@@ -154,7 +154,7 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
     }
 
     private ItemStack cambiarDisplayNameItem(ItemStack item) {
-        boolean propietarioItem = MinecraftUtils.getLastLineOfLore(item, 2).equals(getPlayer().getUniqueId());
+        boolean propietarioItem = MinecraftUtils.getLastLineOfLore(item, 1).equals(getPlayer().getUniqueId());
 
         return ItemUtils.setDisplayname(item, propietarioItem ? PROPIETARIO_OFERTA_ITEM_DISPLAYNAME : NO_PROPIETARIO_OFERTA_DISPLAYNAME);
     }

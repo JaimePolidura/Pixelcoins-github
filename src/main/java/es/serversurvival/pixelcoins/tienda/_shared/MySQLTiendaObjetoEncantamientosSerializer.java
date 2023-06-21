@@ -11,7 +11,7 @@ public final class MySQLTiendaObjetoEncantamientosSerializer implements Database
     @SneakyThrows
     public String serialize(TiendaItemMinecraftEncantamientos encantamientos) {
         return !encantamientos.getEncantamientos().isEmpty() ?
-                objectMapper.writeValueAsString(encantamientos.getEncantamientos()) :
+                String.format("'%s'", objectMapper.writeValueAsString(encantamientos.getEncantamientos())) :
                 "'[]'";
     }
 }

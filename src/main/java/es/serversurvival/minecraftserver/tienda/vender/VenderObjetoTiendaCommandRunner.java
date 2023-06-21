@@ -48,7 +48,7 @@ public final class VenderObjetoTiendaCommandRunner implements CommandRunnerArgs<
         player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
         player.getInventory().clear(player.getInventory().getHeldItemSlot());
 
-        Bukkit.broadcastMessage(GOLD + player.getName() + "ha subido a la tienda " + itemASubirTienda.getAmount() + " de " + itemASubirTienda.getType()
+        Bukkit.broadcastMessage(GOLD + player.getName() + " ha subido a la tienda " + itemASubirTienda.getAmount() + " de " + itemASubirTienda.getType()
                 + " por " + GREEN + FORMATEA.format(comando.getPrecio()) + " PC ");
     }
 

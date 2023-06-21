@@ -19,6 +19,7 @@ public final class ComprarTiendaItemMinecraftListener implements OfertaCompradaL
     @Override
     public void on(OfertaTiendaItemMinecraft ofertaComprada, UUID compradorId) {
         ItemStack item = ofertaComprada.toItemStack();
+        item.setAmount(1);
 
         Player player = Bukkit.getPlayer(compradorId);
         if(player != null){

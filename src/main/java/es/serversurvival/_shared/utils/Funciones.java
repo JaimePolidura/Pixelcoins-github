@@ -154,6 +154,10 @@ public final class Funciones {
         return DATE_FORMATER_LEGACY.format(new Date());
     }
 
+    public static String toString(LocalDateTime localDateTime) {
+        return localDateTime.toString().split("T")[0];
+    }
+
     public static String quitarPalabrasEntreEspacios (String palabra, String... palabrasAQuitar) {
         String[] palabraDivididaEspacios = palabra.split(" ");
         StringBuilder stringBuilder = new StringBuilder();

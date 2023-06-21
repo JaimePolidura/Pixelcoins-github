@@ -32,10 +32,12 @@ public final class MinecraftUtils {
         player.playSound(player.getLocation(), sound, 10, 1);
     }
 
-    public static void setLore (ItemStack itemStack, List<String> lore) {
+    public static ItemStack setLore (ItemStack itemStack, List<String> lore) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
+
+        return itemStack;
     }
 
     public static UUID getLastLineOfLore(ItemStack itemStack, int indexStaringFromLast) {
