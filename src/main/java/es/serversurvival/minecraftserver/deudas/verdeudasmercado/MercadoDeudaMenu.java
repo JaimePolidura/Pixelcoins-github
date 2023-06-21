@@ -76,6 +76,12 @@ public final class MercadoDeudaMenu extends VerOfertasMercadoMenu<OfertaDeudaMer
         return GOLD + comprador + " ha comprado la deuda por " + GREEN + FORMATEA.format(oferta.getPrecio()) +  "PC";
     }
 
+    @Override
+    public String mensajeRetiradoExistoso(OfertaDeudaMercado oferta, ItemStack item) {
+        //TODO
+        return null;
+    }
+
     //TODO Quitar codigo dueplicado
     private ItemStack buildItemMercadoSecundario(OfertaDeudaMercadoSecundario oferta) {
         ItemStack itemStack = ItemBuilder.of(Material.WRITTEN_BOOK).build();

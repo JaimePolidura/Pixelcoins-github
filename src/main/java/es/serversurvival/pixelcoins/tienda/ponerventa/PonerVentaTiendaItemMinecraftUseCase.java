@@ -21,14 +21,16 @@ public final class PonerVentaTiendaItemMinecraftUseCase implements UseCaseHandle
         validator.itemNoBaneado(parametros.getItem());
         validator.precio(parametros.getPrecio());
 
-        ofertasService.save(OfertaTiendaItemMinecraft.builder()
+        OfertaTiendaItemMinecraft build = OfertaTiendaItemMinecraft.builder()
                 .vendedorId(parametros.getJugadorId())
                 .precio(parametros.getPrecio())
                 .cantidad(parametros.getItem().getAmount())
                 .objeto(parametros.getItem().getType().toString())
                 .item(parametros.getItem())
                 .tipoOferta(TipoOferta.TIENDA_ITEM_MINECRAFT)
-                .build());
+                .build();
+
+        ofertasService.save(build);
 
         eventBus.publish(new TiendaItemMinecrafPuestoEnVenta(parametros.getItem(), parametros.getPrecio(), parametros.getJugadorId()));
     }

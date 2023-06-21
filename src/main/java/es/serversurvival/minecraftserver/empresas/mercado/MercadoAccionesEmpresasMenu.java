@@ -94,6 +94,12 @@ public final class MercadoAccionesEmpresasMenu extends VerOfertasMercadoMenu<Ofe
     }
 
     @Override
+    public String mensajeRetiradoExistoso(OfertaAccionMercado oferta, ItemStack item) {
+        //TODO
+        return "";
+    }
+
+    @Override
     public List<String> loreItemInfo() {
         return Collections.EMPTY_LIST;
     }

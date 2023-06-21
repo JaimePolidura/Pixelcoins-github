@@ -1,5 +1,6 @@
 package es.serversurvival.pixelcoins.jugadores.cambiar.sacarItem;
 
+import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.Validador;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
@@ -9,6 +10,7 @@ import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import lombok.AllArgsConstructor;
 
+@UseCase
 @AllArgsConstructor
 public final class SacarItemUseCase implements UseCaseHandler<SacarItemParametros> {
     private final TransaccionesService transaccionesService;

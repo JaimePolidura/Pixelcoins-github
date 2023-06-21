@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.GOLD;
@@ -28,8 +29,14 @@ public final class IngresadorItem {
     public void ingresarItemInMano(Player player, TipoCambioPixelcoins... tipoCambioPixelcoinsPermitidos) {
         ItemStack itemEnMano = player.getInventory().getItemInMainHand();
 
-        if(itemEnMano == null || !elTipoDeCambioDelItemEnLaManoEstaPermitido(itemEnMano.getType(), tipoCambioPixelcoinsPermitidos)){
+        if(itemEnMano == null){
             player.sendMessage(ChatColor.DARK_RED + "Debes de tener un bloque en la mano para intecambiarlo con pixelcoins");
+            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
+            return;
+        }
+        if(!elTipoDeCambioDelItemEnLaManoEstaPermitido(itemEnMano.getType(), tipoCambioPixelcoinsPermitidos)){
+            player.sendMessage(ChatColor.DARK_RED + "Debes de tener un bloque de " + Arrays.stream(tipoCambioPixelcoinsPermitidos)
+                    .map(TipoCambioPixelcoins::getNombre).collect(Collectors.joining(", ")) + " para intercambiarlo por pixelcoins");
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
             return;
         }
@@ -47,7 +54,7 @@ public final class IngresadorItem {
         double pixelcoinsAnadidas = tipoCambio.cambio * itemEnMano.getAmount();
         double pixelcoinsJugador = transaccionesService.getBalancePixelcoins(player.getUniqueId());
         MinecraftUtils.enviarMensajeYSonido(player, GOLD + "Se ha añadido: " + GREEN + FORMATEA.format(pixelcoinsAnadidas)
-                + GOLD + " Tienes " + FORMATEA.format(pixelcoinsJugador) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
+                + GOLD + " Tienes " + GREEN + FORMATEA.format(pixelcoinsJugador) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
     }
 
     private boolean elTipoDeCambioDelItemEnLaManoEstaPermitido(Material materialItemEnLaMano, TipoCambioPixelcoins[] tipoCambioPixelcoinsPermitidos) {

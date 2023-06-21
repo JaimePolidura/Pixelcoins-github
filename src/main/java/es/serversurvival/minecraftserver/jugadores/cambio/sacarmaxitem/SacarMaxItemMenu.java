@@ -59,6 +59,7 @@ public final class SacarMaxItemMenu extends Menu {
         }
 
         useCaseBus.handle(SacarMaxItemParametros.of(player.getUniqueId(), tipoCambio));
+        player.closeInventory();
     }
 
     private ItemStack buildItemInfo() {

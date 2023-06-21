@@ -26,6 +26,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,6 +82,7 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
     public abstract ItemStack buildItemFromOferta(T oferta);
     public abstract String mensajeCompraExsitosaAlComprador(T oferta, ItemStack item);
     public abstract String mensajeCompraExsitosaAlVendedor(T oferta, ItemStack item, String comprador);
+    public abstract String mensajeRetiradoExistoso(T oferta, ItemStack item);
 
     private void onItemTiendaOfertaClicked(Player player, InventoryClickEvent event) {
         ItemStack item = event.getCurrentItem();
@@ -89,12 +91,14 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
 
         if(propietario) {
             retirarOferta(oferta);
+
+            event.getWhoClicked().sendMessage(mensajeRetiradoExistoso(oferta, item));
         }else{
             comprarOferta(oferta, event.getCurrentItem());
-        }
 
-        event.getWhoClicked().sendMessage(mensajeCompraExsitosaAlComprador(oferta, item));
-        enviarMensajeYSonido(oferta.getVendedorId(), mensajeCompraExsitosaAlVendedor(oferta, item, player.getName()), Sound.ENTITY_PLAYER_LEVELUP);
+            event.getWhoClicked().sendMessage(mensajeCompraExsitosaAlComprador(oferta, item));
+            enviarMensajeYSonido(oferta.getVendedorId(), mensajeCompraExsitosaAlVendedor(oferta, item, player.getName()), Sound.ENTITY_PLAYER_LEVELUP);
+        }
     }
 
     private void comprarOferta(Oferta oferta, ItemStack itemOfertaComprado) {
@@ -130,13 +134,17 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
 
         ItemUtils.setDisplayname(item, oferta.getVendedorId().equals(getPlayer().getUniqueId()) ?
                 PROPIETARIO_OFERTA_ITEM_DISPLAYNAME : NO_PROPIETARIO_OFERTA_DISPLAYNAME);
-        List<String> lore = item.getItemMeta().getLore();
+        List<String> lore = getLore(item);
         lore.add("  ");
         lore.add(getPlayer().getUniqueId().toString());
         lore.add(oferta.getOfertaId().toString());
         MinecraftUtils.setLore(item, lore);
 
         return item;
+    }
+
+    private List<String> getLore(ItemStack item) {
+        return item.getItemMeta().getLore() != null ? item.getItemMeta().getLore() : new ArrayList<>();
     }
 
     private ItemStack mapSyncedOfertaItem(ItemStack item, Integer itemNum) {

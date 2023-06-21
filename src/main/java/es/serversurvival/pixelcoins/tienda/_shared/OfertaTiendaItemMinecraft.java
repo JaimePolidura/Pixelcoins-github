@@ -18,13 +18,13 @@ import java.util.UUID;
 
 @NoArgsConstructor
 public final class OfertaTiendaItemMinecraft extends Oferta {
-    @Getter private List<TiendaItemMinecraftEncantamientos> encantamientos;
+    @Getter private TiendaItemMinecraftEncantamientos encantamientos;
     @Getter private short durabilidad;
     @Getter private boolean tieneNombre;
     @Getter private String nombre;
 
     public OfertaTiendaItemMinecraft(UUID ofertaId, UUID vendedorId, LocalDateTime fechaSubida, int cantidad, double precio, String objeto,
-                                     TipoOferta tipoOferta, List<TiendaItemMinecraftEncantamientos> encantamientos, short durabilidad, boolean tieneNombre,
+                                     TipoOferta tipoOferta, TiendaItemMinecraftEncantamientos encantamientos, short durabilidad, boolean tieneNombre,
                                      String nombre) {
         super(ofertaId, vendedorId, fechaSubida, cantidad, precio, objeto, tipoOferta);
         this.encantamientos = encantamientos;
@@ -57,7 +57,7 @@ public final class OfertaTiendaItemMinecraft extends Oferta {
     private void rellenarEncantamientoLibro (ItemStack itemToConvert, CuatriConsumer<ItemStack, ItemMeta, Enchantment, Integer> enchantmentAdder) {
         ItemMeta meta = itemToConvert.getItemMeta();
 
-        for(TiendaItemMinecraftEncantamientos encantamiento : encantamientos){
+        for(TiendaItemMinecraftEncantamiento encantamiento : encantamientos.getEncantamientos()){
             Enchantment enchantMentToPut = Enchantment.getByName(encantamiento.getNombre());
             int level = encantamiento.getNivel();
 
@@ -72,7 +72,7 @@ public final class OfertaTiendaItemMinecraft extends Oferta {
     }
 
     public static class OfertaItemTiendaMercadoBuilder extends Oferta.AbstractOfertaBuilder<OfertaItemTiendaMercadoBuilder> {
-        private List<TiendaItemMinecraftEncantamientos> encantamientos;
+        private TiendaItemMinecraftEncantamientos encantamientos;
         private boolean tieneNombre;
         private short durabilidad;
         private String nombre;
@@ -92,14 +92,14 @@ public final class OfertaTiendaItemMinecraft extends Oferta {
             return this;
         }
 
-        private List<TiendaItemMinecraftEncantamientos> getEncantamientosDeItem (ItemStack item) {
+        private TiendaItemMinecraftEncantamientos getEncantamientosDeItem (ItemStack item) {
             Map<Enchantment, Integer> enchantmentsBukkitTypes = item.getType() == Material.ENCHANTED_BOOK ?
                     ((EnchantmentStorageMeta) item.getItemMeta()).getStoredEnchants() :
                     item.getEnchantments();
 
-            return enchantmentsBukkitTypes.keySet().stream()
-                    .map(e -> new TiendaItemMinecraftEncantamientos(e.getName(), enchantmentsBukkitTypes.get(e)))
-                    .toList();
+            return new TiendaItemMinecraftEncantamientos(enchantmentsBukkitTypes.keySet().stream()
+                    .map(e -> new TiendaItemMinecraftEncantamiento(e.getName(), enchantmentsBukkitTypes.get(e)))
+                    .toList());
         }
 
         @Override

@@ -24,6 +24,7 @@ import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.dependencyinjector.dependencies.InMemoryDependenciesRepository;
 import es.jaime.EventBus;
 import es.jaime.EventListenerDependencyProvider;
+import es.jaime.ORMJava;
 import es.jaime.connection.DatabaseTransactionManager;
 import es.jaime.impl.EventBusSync;
 import es.jaime.javaddd.domain.database.TransactionManager;
@@ -33,6 +34,9 @@ import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival.minecraftserver.scoreboards.ScoreboardCreator;
 import es.serversurvival.minecraftserver.webaction.server.WebAcionHttpServer;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
+import es.serversurvival.pixelcoins.tienda._shared.MySQLTiendaObjetoEncantamientosDeserializer;
+import es.serversurvival.pixelcoins.tienda._shared.MySQLTiendaObjetoEncantamientosSerializer;
+import es.serversurvival.pixelcoins.tienda._shared.TiendaItemMinecraftEncantamientos;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
@@ -87,6 +91,9 @@ public final class Pixelcoin extends JavaPlugin {
         dependenciesRepository.add(ObjectMapper.class, new ObjectMapper());
         abstractionsRepository.add(EventBus.class, EventBusSync.class);
         abstractionsRepository.add(TransactionManager.class, DatabaseTransactionManager.class);
+
+        ORMJava.addCustomDeserializer(TiendaItemMinecraftEncantamientos.class, new MySQLTiendaObjetoEncantamientosDeserializer());
+        ORMJava.addCustomSerializer(TiendaItemMinecraftEncantamientos.class, new MySQLTiendaObjetoEncantamientosSerializer());
 
         DependencyInjectorBootstrapper.init(DependencyInjectorConfiguration.builder()
                 .singleThreadedScan()

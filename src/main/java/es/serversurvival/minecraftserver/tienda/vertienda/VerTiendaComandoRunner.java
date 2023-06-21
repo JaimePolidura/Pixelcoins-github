@@ -17,5 +17,6 @@ public final class VerTiendaComandoRunner implements CommandRunnerNonArgs {
 
     @Override
     public void execute(Player player) {
+        this.menuService.open(player, TiendaMenu.class);
     }
 }

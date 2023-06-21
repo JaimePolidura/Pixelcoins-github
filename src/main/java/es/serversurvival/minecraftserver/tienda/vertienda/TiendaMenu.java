@@ -40,7 +40,9 @@ public final class TiendaMenu extends VerOfertasMercadoMenu<OfertaTiendaItemMine
         return List.of(
                 "Para vender un item: 1) selecciona",
                 "el item con la mano y 2) pon el comando:",
-                "/tienda vender <precio>"
+                "/tienda vender <precio>",
+                "",
+                "Para mas ayuda /tienda ayuda"
         );
     }
 
@@ -59,5 +61,10 @@ public final class TiendaMenu extends VerOfertasMercadoMenu<OfertaTiendaItemMine
     public String mensajeCompraExsitosaAlVendedor(OfertaTiendaItemMinecraft oferta, ItemStack item, String comprador) {
         return GOLD + comprador + " te ha comprado 1 de " + item.getType() +
                 " por " + GREEN + FORMATEA.format(oferta.getPrecio()) + " PC";
+    }
+
+    @Override
+    public String mensajeRetiradoExistoso(OfertaTiendaItemMinecraft oferta, ItemStack item) {
+        return GOLD + "Has retirado " + item.getAmount() + " de " + item.getType().name();
     }
 }

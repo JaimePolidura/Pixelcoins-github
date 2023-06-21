@@ -3,6 +3,7 @@ package es.serversurvival.minecraftserver.jugadores.cambio.sacaritem;
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitclassmapper._shared.utils.ItemUtils;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
@@ -81,6 +82,18 @@ public final class SacarItemMenu extends Menu {
         MinecraftUtils.enviarMensajeYSonido(player, GOLD + "Has convertido las pixelcoins: " + RED + "-" + Funciones.FORMATEA.format(cambioPixelcoins) + " PC " + GOLD +
                 "Quedan " + GREEN + Funciones.FORMATEA.format(pixelcoinsJugador - cambioPixelcoins) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
 
+
+        updateItemLore(2, pixelcoinsJugador, cambioPixelcoins);
+        updateItemLore(3, pixelcoinsJugador, cambioPixelcoins);
+        updateItemLore(4, pixelcoinsJugador, cambioPixelcoins);
+        updateItemLore(5, pixelcoinsJugador, cambioPixelcoins);
+        updateItemLore(6, pixelcoinsJugador, cambioPixelcoins);
+    }
+
+    private void updateItemLore(int itemNum, double pixelcoinsJugador, double cambioPixelcoins) {
+        ItemUtils.setLore(
+                (ItemStack) super.getItemsByItemNum(itemNum).get(0), 2, GOLD + "Tus pixelcoins disponibles: " + ChatColor.GREEN + Funciones.FORMATEA.format(pixelcoinsJugador - cambioPixelcoins)
+        );
     }
 
     private ItemStack buildItemInfo() {
@@ -101,7 +114,7 @@ public final class SacarItemMenu extends Menu {
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.AQUA + "1 "+itemACambiar+" -> " + ChatColor.GREEN + cambio);
         lore.add("   ");
-        lore.add(GOLD + "Tus pixelcoins disponibles: " + ChatColor.GREEN + Funciones.FORMATEA.format(pilxelcoinsJugaodor));
+        lore.add(GOLD + "Tus pixelcoins disponibles: " + ChatColor.GREEN + Funciones.FORMATEA.format(pilxelcoinsJugaodor) + " PC");
 
         return ItemBuilder.of(itemMaterial).title(displayName).lore(lore).build();
     }
