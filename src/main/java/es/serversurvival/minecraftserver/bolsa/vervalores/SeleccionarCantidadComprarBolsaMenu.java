@@ -75,7 +75,7 @@ public final class SeleccionarCantidadComprarBolsaMenu extends NumberSelectorMen
         @Getter private final double pixelcoinsJugador;
 
         public String getNombreUnidadTipoActivo() {
-            return activoBolsa.getTipoActivo().getNombreUnidad();
+            return activoBolsa.getTipoActivo().getNombreUnidadPlural();
         }
     }
 }

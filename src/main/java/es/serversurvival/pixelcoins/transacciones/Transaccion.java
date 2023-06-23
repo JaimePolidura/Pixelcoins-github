@@ -39,6 +39,7 @@ public final class Transaccion {
             this.fecha = LocalDateTime.now();
             this.pagadoId = Funciones.NULL_ID;
             this.pagadorId = Funciones.NULL_ID;
+            this.objeto = "";
         }
 
         public TransaccionBuilder tipo(TipoTransaccion tipo) {

@@ -5,12 +5,18 @@ import es.dependencyinjector.providers.Provider;
 
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
 @Configuration
 public final class CommonObjectsProvider {
     @Provider
     public ExecutorService executorService() {
+        return Funciones.POOL;
+    }
+
+    @Provider
+    public Executor executor() {
         return Funciones.POOL;
     }
 

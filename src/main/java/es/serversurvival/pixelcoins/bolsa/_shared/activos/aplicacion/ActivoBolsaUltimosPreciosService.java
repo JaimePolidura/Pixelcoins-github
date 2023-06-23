@@ -1,8 +1,5 @@
 package es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion;
 
-import es.bukkitclassmapper.task.BukkitTimeUnit;
-import es.bukkitclassmapper.task.Task;
-import es.bukkitclassmapper.task.TaskRunner;
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
@@ -10,104 +7,87 @@ import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsaInf
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.TipoActivoBolsa;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import static es.jaime.javaddd.application.utils.ConcurrencyUtils.*;
+import static es.serversurvival._shared.ConfigurationVariables.BOLSA_PRECIOS_CACHE_N_VECES_LECTURA_SIN_ACTUALIZAR;
+import static es.serversurvival._shared.ConfigurationVariables.BOLSA_PRECIOS_CACHE_TIEMPO_MS_VALIDOS;
 
 @Service
 public final class ActivoBolsaUltimosPreciosService {
-    private final Map<UUID, Double> cacheByActivoBolsaId;
-    private final Map<String, Double> cacheByNombreCorto;
+    private final Map<UUID, ActivoBolsaPrecioCache> cacheByActivoBolsaId;
 
     private final DependenciesRepository dependencies;
     private final ActivosBolsaService activosBolsaService;
-    private final Lock updateCacheLock;
 
     public ActivoBolsaUltimosPreciosService(DependenciesRepository dependenciesRepository, ActivosBolsaService activosBolsaService) {
         this.dependencies = dependenciesRepository;
         this.activosBolsaService = activosBolsaService;
         this.cacheByActivoBolsaId = new ConcurrentHashMap<>();
-        this.cacheByNombreCorto = new ConcurrentHashMap<>();
-        this.updateCacheLock = new ReentrantLock();
     }
-
-    public double getUltimoPrecio(String nombreCorto, TipoActivoBolsa tipoActivo) {
-        if(cacheByNombreCorto.containsKey(nombreCorto)){
-            return cacheByNombreCorto.get(nombreCorto);
-        }
-
-        ActivoBolsa activoBolsa = getActivoBolsaFromRepository(nombreCorto, tipoActivo);
-
-        actualizarUltimoPrecioEnCache(activoBolsa);
-
-        return cacheByNombreCorto.get(nombreCorto);
-    }
-
 
     public double getUltimoPrecio(UUID activoBolsaId) {
-        if(cacheByActivoBolsaId.containsKey(activoBolsaId)){
-            return cacheByActivoBolsaId.get(activoBolsaId);
+        if(cacheValida(activoBolsaId)){
+            return cacheByActivoBolsaId.get(activoBolsaId).getUltimoPrecio();
         }
 
         ActivoBolsa activoBolsa = activosBolsaService.getById(activoBolsaId);
         actualizarUltimoPrecioEnCache(activoBolsa);
 
-        return cacheByActivoBolsaId.get(activoBolsaId);
+        return cacheByActivoBolsaId.get(activoBolsaId).getUltimoPrecio();
     }
 
-    private void crearActivoBolsaRepositorio(String nombreCorto, TipoActivoBolsa tipoActivo) {
-        String nombreLargo = getNombreLargoDesdeAPI(nombreCorto, tipoActivo);
-
-        this.activosBolsaService.save(ActivoBolsa.builder()
-                        .tipoActivoBolsa(tipoActivo)
-                        .nomnbreCorto(nombreCorto)
-                        .nombreLargo(nombreLargo)
-                .build());
+    private boolean cacheValida(UUID activoBolsaId) {
+        return cacheByActivoBolsaId.containsKey(activoBolsaId) &&
+                cacheByActivoBolsaId.get(activoBolsaId).getNumeroLectuasSinActualizar() <= BOLSA_PRECIOS_CACHE_N_VECES_LECTURA_SIN_ACTUALIZAR &&
+                cacheByActivoBolsaId.get(activoBolsaId).getUltimaVezActualizdoMs() + BOLSA_PRECIOS_CACHE_TIEMPO_MS_VALIDOS >= System.currentTimeMillis();
     }
 
-    private String getNombreLargoDesdeAPI(String nombreCorto, TipoActivoBolsa tipoActivo) {
-        ActivoBolsaInformationAPIService activoInfoServiceClass = dependencies.get(tipoActivo.getActivoInfoService());
-        return activoInfoServiceClass.getNombreLargo(nombreCorto);
-    }
+    private void actualizarUltimoPrecioEnCache(ActivoBolsa activoBolsa) {
+        double ultimoPrecioDesdeAPI = getUltimoPrecioDesdeAPI(activoBolsa.getNombreCorto(), activoBolsa.getTipoActivo());
 
-    private ActivoBolsa getActivoBolsaFromRepository(String nombreCorto, TipoActivoBolsa tipoActivo) {
-        Optional<ActivoBolsa> activoFromRepositoryOpt = activosBolsaService.findByNombreCortoAndTipoActivo(nombreCorto, tipoActivo);
-        ActivoBolsa activoBolsa;
-        if(activoFromRepositoryOpt.isEmpty()){
-            crearActivoBolsaRepositorio(nombreCorto, tipoActivo);
-            activoBolsa = activosBolsaService.getByNombreCortoAndTipoActivo(nombreCorto, tipoActivo);
-        }else{
-            activoBolsa = activoFromRepositoryOpt.get();
+        if(cacheByActivoBolsaId.containsKey(activoBolsa.getActivoBolsaId())){
+            cacheByActivoBolsaId.get(activoBolsa.getActivoBolsaId())
+                    .actualizar(ultimoPrecioDesdeAPI);
+        } else {
+            cacheByActivoBolsaId.put(activoBolsa.getActivoBolsaId(), new ActivoBolsaPrecioCache(ultimoPrecioDesdeAPI));
         }
-
-        return activoBolsa;
     }
 
     private double getUltimoPrecioDesdeAPI(String nombreCorto, TipoActivoBolsa tipoActivo) {
         ActivoBolsaInformationAPIService activoInfoServiceClass = dependencies.get(tipoActivo.getActivoInfoService());
+
         return activoInfoServiceClass.getUltimoPrecio(nombreCorto);
     }
 
-    private void actualizarUltimoPrecioEnCache(ActivoBolsa activoBolsa) {
-        tryLockOnce(updateCacheLock, () -> {
-            double ultimoPrecioDesdeAPI = getUltimoPrecioDesdeAPI(activoBolsa.getNombreCorto(), activoBolsa.getTipoActivo());
+    private static class ActivoBolsaPrecioCache {
+        private AtomicInteger numeroLectuasSinActualizar;
+        private long ultimaVezActualizdoMs;
+        private double ultimoPrecio;
 
-            cacheByNombreCorto.put(activoBolsa.getNombreCorto(), ultimoPrecioDesdeAPI);
-            cacheByActivoBolsaId.put(activoBolsa.getActivoBolsaId(), ultimoPrecioDesdeAPI);
-        });
-    }
+        public ActivoBolsaPrecioCache(double ultimoPrecio) {
+            this.ultimoPrecio = ultimoPrecio;
+            this.numeroLectuasSinActualizar = new AtomicInteger(0);
+            this.ultimaVezActualizdoMs = System.currentTimeMillis();
+        }
 
-    @Task(BukkitTimeUnit.MINUTE * 5)
-    public class ActualizadorPreciosTask implements TaskRunner {
-        @Override
-        public void run() {
-            activosBolsaService.findAllNReferenciasMayorQue0().stream()
-                    .parallel()
-                    .forEach(ActivoBolsaUltimosPreciosService.this::actualizarUltimoPrecioEnCache);
+        public void actualizar(double nuevoPrecio) {
+            this.numeroLectuasSinActualizar.set(0);
+            this.ultimoPrecio = nuevoPrecio;
+        }
+
+        public double getUltimoPrecio() {
+            this.numeroLectuasSinActualizar.getAndIncrement();
+            return this.ultimoPrecio;
+        }
+
+        public long getUltimaVezActualizdoMs() {
+            return this.ultimaVezActualizdoMs;
+        }
+
+        public int getNumeroLectuasSinActualizar() {
+            return this.numeroLectuasSinActualizar.get();
         }
     }
 }

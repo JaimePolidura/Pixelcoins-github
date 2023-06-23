@@ -8,7 +8,6 @@ import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
-import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.bolsa.verordenespremarket.MisOrdenesPremarketMenu;
 import es.serversurvival.minecraftserver.bolsa.verposicionescerradas.VerPosicionesCerradasMenu;
 import es.serversurvival.minecraftserver.bolsa.vervalores.ElegirTipoActivoDisponibleMenu;
@@ -125,7 +124,7 @@ public final class MiCarteraBolsaMenu extends Menu implements AfterShow {
         lore.add(GOLD + "Empresa " + activoBolsa.getNombreLargo());
         lore.add(GOLD + "Ticker " + activoBolsa.getNombreCorto());
         lore.add("   ");
-        lore.add(GOLD + "Cantidad: " + FORMATEA.format(posicion.getCantidad()) + " " + activoBolsa.getTipoActivo().getNombreUnidad());
+        lore.add(GOLD + "Cantidad: " + FORMATEA.format(posicion.getCantidad()) + " " + activoBolsa.getTipoActivo().getNombreUnidadPlural());
         lore.add(GOLD + "Precio apertura: " + GREEN + FORMATEA.format(posicion.getPrecioApertura()) + " PC");
         lore.add(GOLD + "Precio actual: " + GREEN + FORMATEA.format(ultimoPrecio) + " PC");
         lore.add(GOLD + "Rentabilidad: " + (rentabilidad >= 0 ? GREEN + "+" + rentabilidad : RED + "" +rentabilidad) + "%");

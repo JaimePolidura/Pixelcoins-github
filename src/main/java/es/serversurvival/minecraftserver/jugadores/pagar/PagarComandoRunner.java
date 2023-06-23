@@ -32,7 +32,7 @@ public class PagarComandoRunner implements CommandRunnerArgs<PagarComando> {
     }
 
     private void sendMessage (Player pagador, Player pagado, double pixelcoins) {
-        pagador.sendMessage(GOLD + "Has pagado: " + GREEN + Funciones.FORMATEA.format(pixelcoins) + " PC " + GOLD + "a " + pagado);
+        pagador.sendMessage(GOLD + "Has pagado: " + GREEN + Funciones.FORMATEA.format(pixelcoins) + " PC " + GOLD + "a " + pagado.getName());
 
         MinecraftUtils.enviarMensajeYSonido(pagado.getUniqueId(),GOLD + pagador.getName() + " te ha pagado " + GREEN + Funciones.FORMATEA.format(pixelcoins) + "PC!",
                 Sound.ENTITY_PLAYER_LEVELUP);

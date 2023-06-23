@@ -3,10 +3,11 @@ package es.serversurvival.minecraftserver.bolsa.vervalores;
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
-import es.bukkitbettermenus.menustate.BeforeShow;
+import es.bukkitbettermenus.menustate.AfterShow;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
+import es.jaime.javaddd.application.utils.ExceptionUtils;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBolsaUltimosPreciosService;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
@@ -26,23 +27,22 @@ import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
+import static es.jaime.javaddd.application.utils.ExceptionUtils.*;
 import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
-public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> implements BeforeShow {
+public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> implements AfterShow {
     private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;
     private final TransaccionesService transaccionesService;
     private final ActivosBolsaService activosBolsaService;
     private final MenuService menuService;
     private final Executor executor;
 
-    private List<ItemStack> itemsActivosMostrados;
-
     @Override
     public int[][] items() {
         return new int[][] {
-                {1, 2, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {1, 0, 0, 0, 0, 0, 0, 0, 0},
+                {2, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -85,7 +85,6 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
     private List<ItemStack> itemValoresDisponibles() {
         return activosBolsaService.findByTipo(getState()).stream()
                 .map(this::buildItemFromActiboBolsa)
-                .peek(itemsActivosMostrados::add)
                 .collect(Collectors.toList());
     }
 
@@ -95,7 +94,8 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
                 .lore(List.of(
                         GOLD + "Ticker: " + activoBolsa.getNombreCorto(),
                         GOLD + "Precio: " + RED + "Cargando...",
-                        GOLD + "" + activoBolsa.getNReferencias() + " veces se ha comprado",
+                        GOLD + "" + (activoBolsa.getNReferencias() > 0 ? activoBolsa.getNReferencias() + " veces aparece en la cartera de los jugadores "
+                                : "Ningun jugador la tiene"),
                         "",
                         activoBolsa.getActivoBolsaId().toString()
                 ))
@@ -103,14 +103,16 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
     }
 
     @Override
-    public void beforeShow(Player player) {
+    public void afterShow(Player player) {
         executor.execute(() -> {
-            for (ItemStack itemActivo : itemsActivosMostrados) {
-                UUID activoId = MinecraftUtils.getLastLineOfLore(itemActivo, 0);
-                double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(activoId);
+            for (ItemStack itemActivo : super.getItemsByItemNum(2)) {
+//                ignoreException(() -> {
+                    UUID activoId = MinecraftUtils.getLastLineOfLore(itemActivo, 0);
+                    double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(activoId);
 
-                ItemUtils.setLore(itemActivo, 1, GOLD + "Precio: " + GREEN + Funciones.FORMATEA.format(ultimoPrecio)
-                        + " PC / " + getState().getNombreUnidad());
+                    ItemUtils.setLore(itemActivo, 1, GOLD + "Precio: " + GREEN + Funciones.FORMATEA.format(ultimoPrecio)
+                            + " PC" + GOLD + " / " + getState().getNombreUnidadSingular());
+//                });
             }
         });
     }

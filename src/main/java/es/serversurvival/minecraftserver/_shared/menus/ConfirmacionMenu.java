@@ -14,7 +14,7 @@ import static org.bukkit.ChatColor.*;
 public abstract class ConfirmacionMenu<T> extends Menu<T> {
     @Override
     public final int[][] items() {
-        return new int[][]{{1, 0, 0, 0, 2}};
+        return new int[][]{{1, 0, 3, 0, 2}};
     }
 
     @Override
@@ -22,12 +22,17 @@ public abstract class ConfirmacionMenu<T> extends Menu<T> {
         return MenuConfiguration.builder()
                 .title(titulo())
                 .fixedItems()
+                .item(3, buildItemOptional())
                 .confirmation(ConfirmationConfiguration.builder()
                         .closeOnAction(true)
                         .cancel(1, cancelarItem(), this::onCancelar)
                         .accept(2, aceptarItem(), (player, event) -> onAceptar(player, event, getState()))
                         .build())
                 .build();
+    }
+
+    protected ItemStack buildItemOptional() {
+        return new ItemStack(Material.AIR);
     }
 
     public ItemStack cancelarItem() {

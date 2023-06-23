@@ -42,6 +42,7 @@ import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.reflections.Reflections;
+import org.reflections.scanners.MethodAnnotationsScanner;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
@@ -77,7 +78,7 @@ public final class Pixelcoin extends JavaPlugin {
 
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setUrls(ClasspathHelper.forPackage(COMMON_PACKAGE))
-                .setScanners(new TypeAnnotationsScanner(), new SubTypesScanner()));
+                .setScanners(new TypeAnnotationsScanner(), new SubTypesScanner(), new MethodAnnotationsScanner()));
 
         DependenciesRepository dependenciesRepository = new InMemoryDependenciesRepository();
         AbstractionsRepository abstractionsRepository = new InMemoryAbstractionsRepository();

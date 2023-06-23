@@ -17,7 +17,7 @@ public final class ElegirTipoActivoDisponibleMenu extends Menu {
 
     @Override
     public int[][] items() {
-        return new int[][]{{1, 0, 2, 0, 3}};
+        return new int[][]{{1, 0, 0, 0, 2}};
     }
 
     @Override
@@ -28,16 +28,11 @@ public final class ElegirTipoActivoDisponibleMenu extends Menu {
                 .staticMenu()
                 .item(1, itemAcciones(), (p, e) -> abrirMenuVerValoresDisponibles(p, TipoActivoBolsa.ACCION))
                 .item(2, itemCriptomonedas(), (p, e) -> abrirMenuVerValoresDisponibles(p, TipoActivoBolsa.CRIPTOMONEDAS))
-                .item(3, itemMateriasPrimas(), (p, e) -> abrirMenuVerValoresDisponibles(p, TipoActivoBolsa.MATERIA_PRIMA))
                 .build();
     }
 
     private void abrirMenuVerValoresDisponibles(Player player, TipoActivoBolsa tipoActivo) {
         menuService.open(player, VerActivosDisponiblesMenu.class, tipoActivo);
-    }
-
-    private ItemStack itemMateriasPrimas() {
-        return ItemBuilder.of(TipoActivoBolsa.MATERIA_PRIMA.getMaterial()).title(GOLD + "" + BOLD + "Materias primas").build();
     }
 
     private ItemStack itemCriptomonedas() {

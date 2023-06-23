@@ -1,7 +1,9 @@
 package es.serversurvival.minecraftserver.jugadores.venderjugador;
 
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitclassmapper._shared.utils.ItemUtils;
 import es.jaime.EventBus;
+import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.menus.ConfirmacionMenu;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.jugadores.pagar.HacerPagarParametros;
@@ -26,32 +28,39 @@ public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu<Vender
 
     @Override
     public void onAceptar(Player destinatario, InventoryClickEvent event, VenderJugadorConfirmacionMenuState state) {
-        var jugadorVendedor = state.jugadorVendedor();
-        var jugadorComprador = state.jugadorComprador();
+        var vendedor = state.jugadorVendedor();
+        var comprador = state.jugadorComprador();
         var itemAVender = state.itemAVender();
         var precio = state.precio();
         var slotItemVender = state.slotItemVender();
 
-        var itemToVenderIsIntVendedorInventory = this.isItemInInventory(jugadorVendedor, itemAVender, slotItemVender);
-        if(!itemToVenderIsIntVendedorInventory){
-            jugadorVendedor.sendMessage(DARK_RED + "casi maquina");
-            jugadorComprador.sendMessage(DARK_RED + "No se ha podido completar el pago, por que el nombreAccionista ha movido el objeto a venderte");
+        if(!isItemInInventory(vendedor, itemAVender, slotItemVender)){
+            vendedor.sendMessage(DARK_RED + "casi maquina");
+            comprador.sendMessage(DARK_RED + "No se ha podido completar el pago, por que el " + getState().jugadorVendedor().getName() + " ha movido el objeto a venderte");
+            return;
+        }
+        if(!state.jugadorVendedor().isOnline()){
+            comprador.sendMessage(DARK_RED + "No se ha podido completar el pago, por que el " + getState().jugadorVendedor().getName() + " no esta online");
+            return;
+        }
+        if(!state.jugadorComprador().isOnline()){
+            vendedor.sendMessage(DARK_RED + "No se ha podido completar el pago, por que el " + getState().jugadorComprador().getName() + " no esta online");
             return;
         }
 
-        useCaseBus.handle(HacerPagarParametros.of(jugadorComprador.getUniqueId(), jugadorVendedor.getUniqueId(), precio));
+        useCaseBus.handle(HacerPagarParametros.of(comprador.getUniqueId(), vendedor.getUniqueId(), precio));
 
-        jugadorComprador.getInventory().addItem(itemAVender);
-        jugadorVendedor.getInventory().clear(slotItemVender);
+        comprador.getInventory().addItem(itemAVender);
+        vendedor.getInventory().clear(slotItemVender);
 
-        jugadorVendedor.sendMessage(ChatColor.GOLD + jugadorComprador.getName() + " te ha compradoo " + itemAVender.getType() +
+        vendedor.sendMessage(ChatColor.GOLD + comprador.getName() + " te ha compradoo " + itemAVender.getType() +
                 " al precio de " + ChatColor.GREEN + Funciones.FORMATEA.format(precio) + " PC");
-        jugadorVendedor.playSound(jugadorVendedor.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        vendedor.playSound(vendedor.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
-        jugadorComprador.sendMessage(ChatColor.GOLD + "Has comprado el item");
-        jugadorComprador.playSound(jugadorComprador.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
+        comprador.sendMessage(ChatColor.GOLD + "Has comprado el item");
+        comprador.playSound(comprador.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
-        this.eventBus.publish(new ItemVendidoJugadorEvento(jugadorComprador.getUniqueId(), jugadorVendedor.getUniqueId(), precio, itemAVender.getType().toString()));
+        this.eventBus.publish(new ItemVendidoJugadorEvento(comprador.getUniqueId(), vendedor.getUniqueId(), precio, itemAVender.getType().toString()));
     }
 
     private boolean isItemInInventory(Player jugadorVendedor, ItemStack itemAVender, int slotItemVender) {
@@ -60,10 +69,14 @@ public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu<Vender
         return itemAVenderEnInventario != null && itemAVenderEnInventario.equals(itemAVender);
     }
 
+    @Override
+    protected ItemStack buildItemOptional() {
+        return ItemUtils.setDisplayname(getState().itemAVender().clone(), GOLD + "" + BOLD + "ITEM A COMPRAR");
+    }
 
     @Override
     public String titulo() {
-        return DARK_RED + "" + BOLD + "   OFERTA DE COMPRA";
+        return DARK_RED + "" + BOLD + "      OFERTA DE VENTA";
     }
 
     @Override
@@ -72,7 +85,7 @@ public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu<Vender
                 .title(ChatColor.GREEN + "" + ChatColor.BOLD + "COMPRAR")
                 .lore(List.of(
                         GOLD + "Aceptar la oferta de " + this.getState().jugadorVendedor().getName(),
-                        GOLD + "Precio: " + GREEN + Funciones.FORMATEA.format(this.getState().precio()) + "PC"
+                        GOLD + "Por: " + GREEN + Funciones.FORMATEA.format(this.getState().precio()) + " PC"
                 ))
                 .build();
     }

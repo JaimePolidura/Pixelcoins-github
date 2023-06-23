@@ -37,7 +37,7 @@ public final class ActivoBolsa {
             return this;
         }
 
-        public ActivoBolsaBuilder nomnbreCorto(String nomnbreCorto) {
+        public ActivoBolsaBuilder nombreCorto(String nomnbreCorto) {
             this.nomnbreCorto = nomnbreCorto;
             return this;
         }
