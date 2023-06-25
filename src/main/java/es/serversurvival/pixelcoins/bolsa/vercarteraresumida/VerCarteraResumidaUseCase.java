@@ -28,7 +28,7 @@ public final class VerCarteraResumidaUseCase {
 
         for (Posicion it : posiciones) {
             CarteraResumidaItemIdentificacdor identificadorIt = CarteraResumidaItemIdentificacdor.fromPosicion(it);
-            double precioActual = activoBolsaUltimosPreciosService.getUltimoPrecio(it.getActivoBolsaId());
+            double precioActual = activoBolsaUltimosPreciosService.getUltimoPrecio(it.getActivoBolsaId(), it.getJugadorId());
             double valorPosicion = getValorPosicion(it, precioActual);
             valorTotalCartera.set(valorTotalCartera.get() + valorPosicion);
 
@@ -52,6 +52,8 @@ public final class VerCarteraResumidaUseCase {
     }
 
     private CarteraResumidaItemBuilder actualizarPesoEnCartera(CarteraResumidaItemBuilder carteraItemBuilder, double valorTotalCartera) {
+
+
         return carteraItemBuilder.withPeso(carteraItemBuilder.getValorPosicion() / valorTotalCartera);
     }
 

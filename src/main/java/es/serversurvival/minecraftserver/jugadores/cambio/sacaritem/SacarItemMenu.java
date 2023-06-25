@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static es.serversurvival._shared.utils.Funciones.*;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
@@ -42,7 +43,7 @@ public final class SacarItemMenu extends Menu {
     @Override
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
-                .title(ChatColor.DARK_RED + "" + ChatColor.BOLD + "   ELIGE ITEM PARA SACAR")
+                .title(DARK_RED + "" + BOLD + "   ELIGE ITEM PARA SACAR")
                 .fixedItems()
                 .item(1, buildItemInfo())
                 .item(2, player -> buildItem(player.getUniqueId(), "DIAMANTE", TipoCambioPixelcoins.DIAMANTE, Material.DIAMOND), this::onClick)
@@ -57,12 +58,12 @@ public final class SacarItemMenu extends Menu {
         double pixelcoinsJugador = transaccionesService.getBalancePixelcoins(player.getUniqueId());
 
         ItemStack itemClickeado = event.getCurrentItem();
-        int espacios = Funciones.getEspaciosOcupados(player.getInventory());
-        boolean inventarioLleno = espacios == 36 || (Funciones.esDeTipoItem(itemClickeado, "DIAMOND", "DIAMOND_BLOCK", "QUARTZ_BLOCK",
+        int espacios = getEspaciosOcupados(player.getInventory());
+        boolean inventarioLleno = espacios == 36 || (esDeTipoItem(itemClickeado, "DIAMOND", "DIAMOND_BLOCK", "QUARTZ_BLOCK",
                 "LAPIS_LAZULI", "LAPIS_BLOCK") && itemClickeado.getAmount() == 64);
 
         if(inventarioLleno){
-            player.sendMessage(ChatColor.DARK_RED + "Necesitas tener el inventario con espacios libres");
+            player.sendMessage(DARK_RED + "Necesitas tener el inventario con espacios libres");
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 10, 1);
             return;
         }
@@ -79,8 +80,8 @@ public final class SacarItemMenu extends Menu {
 
         player.getInventory().addItem(new ItemStack(Material.getMaterial(tipoItemClickeado), 1));
 
-        MinecraftUtils.enviarMensajeYSonido(player, GOLD + "Has convertido las pixelcoins: " + RED + "-" + Funciones.FORMATEA.format(cambioPixelcoins) + " PC " + GOLD +
-                "Quedan " + GREEN + Funciones.FORMATEA.format(pixelcoinsJugador - cambioPixelcoins) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
+        MinecraftUtils.enviarMensajeYSonido(player, GOLD + "Has convertido las pixelcoins: " + RED + "-" + FORMATEA.format(cambioPixelcoins) + " PC " + GOLD +
+                "Quedan " + GREEN + FORMATEA.format(pixelcoinsJugador - cambioPixelcoins) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
 
 
         updateItemLore(2, pixelcoinsJugador, cambioPixelcoins);
@@ -92,13 +93,14 @@ public final class SacarItemMenu extends Menu {
 
     private void updateItemLore(int itemNum, double pixelcoinsJugador, double cambioPixelcoins) {
         ItemUtils.setLore(
-                (ItemStack) super.getItemsByItemNum(itemNum).get(0), 2, GOLD + "Tus pixelcoins disponibles: " + ChatColor.GREEN + Funciones.FORMATEA.format(pixelcoinsJugador - cambioPixelcoins)
+                (ItemStack) super.getActualItemsByItemNum(itemNum).get(0), 2,
+                GOLD + "Tus pixelcoins disponibles: " + GREEN + formatNumero(pixelcoinsJugador - cambioPixelcoins)
         );
     }
 
     private ItemStack buildItemInfo() {
         return ItemBuilder.of(Material.PAPER)
-                .title(ChatColor.GOLD + "INFO")
+                .title(GOLD + "INFO")
                 .lore(List.of(
                         "Una vez que tengas pixelcoins",
                         "puedes intercambiarlas por estos",
@@ -112,9 +114,9 @@ public final class SacarItemMenu extends Menu {
 
         String displayName = MenuItems.CLICKEABLE + "SACAR UN " + itemACambiar;
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.AQUA + "1 "+itemACambiar+" -> " + ChatColor.GREEN + cambio);
+        lore.add(AQUA + "1 "+itemACambiar+" -> " + GREEN + cambio);
         lore.add("   ");
-        lore.add(GOLD + "Tus pixelcoins disponibles: " + ChatColor.GREEN + Funciones.FORMATEA.format(pilxelcoinsJugaodor) + " PC");
+        lore.add(GOLD + "Tus pixelcoins disponibles: " + GREEN + FORMATEA.format(pilxelcoinsJugaodor) + " PC");
 
         return ItemBuilder.of(itemMaterial).title(displayName).lore(lore).build();
     }

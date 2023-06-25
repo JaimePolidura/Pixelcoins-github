@@ -12,6 +12,4 @@ public interface ActivoBolsaRepository {
     Optional<ActivoBolsa> findByNombreCortoAndTipoActivo(String nombreCorto, TipoActivoBolsa tipoActivo);
 
     List<ActivoBolsa> findByTipo(TipoActivoBolsa tipoActivoBolsa);
-
-    List<ActivoBolsa> findAllNReferenciasMayorQue0();
 }

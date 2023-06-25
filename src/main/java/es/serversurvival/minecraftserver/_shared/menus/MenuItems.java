@@ -1,7 +1,6 @@
 package es.serversurvival.minecraftserver._shared.menus;
 
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -13,4 +12,5 @@ public final class MenuItems {
             .build();
 
     public static final String CLICKEABLE = GOLD + "" + BOLD + UNDERLINE;
+    public static final String CARGANDO = RED + "Cargando...";
 }

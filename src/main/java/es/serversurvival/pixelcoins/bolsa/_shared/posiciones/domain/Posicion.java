@@ -38,7 +38,7 @@ public final class Posicion {
     }
 
     public Posicion cerrar(int cantidadACerrar, double precioCierre, double rentabilidad) {
-        return new Posicion(posicionId, activoBolsaId, jugadorId, cantidadACerrar, tipoApuesta, TipoPosicion.CERRADO,
+        return new Posicion(UUID.randomUUID(), activoBolsaId, jugadorId, cantidadACerrar, tipoApuesta, TipoPosicion.CERRADO,
                 precioApertura, fechaApertura, precioCierre, LocalDateTime.now(), rentabilidad);
     }
 

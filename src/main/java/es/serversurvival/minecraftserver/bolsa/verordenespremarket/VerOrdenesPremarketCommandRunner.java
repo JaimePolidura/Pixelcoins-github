@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 
 @Command(
-        value = "bolsa ordenespremarket",
+        value = "bolsa premarket",
         explanation = "Ver todas las ordenes pendientes en bolsa cuando el mercado esta cerrado"
 )
 @RequiredArgsConstructor

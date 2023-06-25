@@ -87,7 +87,7 @@ public final class Pixelcoin extends JavaPlugin {
 
         InstanceProviderDependencyInjector instanceProvider = new InstanceProviderDependencyInjector(dependenciesRepository, excludedDependeies);
         EventBus eventBus = new EventBusSync(COMMON_PACKAGE, instanceProvider);
-        dependenciesRepository.add(EventBus.class, eventBus);
+        dependenciesRepository.add(EventBusSync.class, eventBus);
         dependenciesRepository.add(DependenciesRepository.class, dependenciesRepository);
         dependenciesRepository.add(ObjectMapper.class, new ObjectMapper());
         abstractionsRepository.add(EventBus.class, EventBusSync.class);
@@ -122,6 +122,7 @@ public final class Pixelcoin extends JavaPlugin {
                 .commandMapper(ON_WRONG_PERMISSION, ON_WRONG_COMMAND)
                 .taskMapper()
                 .mobMapper()
+                .printExceptions(true)
                 .eventListenerMapper()
                 .waitUntilCompletion()
                 .build()

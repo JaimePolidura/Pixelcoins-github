@@ -224,7 +224,7 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
 
     @Override
     public void afterShow(Player player) {
-        for (ItemStack itemEmpleado : super.getItemsByItemNum(6)) {
+        for (ItemStack itemEmpleado : super.getAllItemsByItemNum(6)) {
             SkullMeta currentItemMeta = (SkullMeta) itemEmpleado.getItemMeta();
             String empleadoNombre = ItemUtils.getLore(itemEmpleado, 1).split(" ")[1];
             currentItemMeta.setOwningPlayer(Bukkit.getOfflinePlayer(empleadoNombre));

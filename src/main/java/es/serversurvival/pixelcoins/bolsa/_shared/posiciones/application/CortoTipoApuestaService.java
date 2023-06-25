@@ -17,14 +17,14 @@ public final class CortoTipoApuestaService implements TipoApuestaService {
     private final PosicionesService posicionesService;
 
     @Override
-    public double getPixelcoinsAbrirPosicion(UUID activoBolsaId, int cantidad) {
-        return activoBolsaUltimosPreciosService.getUltimoPrecio(activoBolsaId) * cantidad * COMISION_ABRIR_CORTO;
+    public double getPixelcoinsAbrirPosicion(UUID activoBolsaId, UUID jugadorId, int cantidad) {
+        return activoBolsaUltimosPreciosService.getUltimoPrecio(activoBolsaId, jugadorId) * cantidad * COMISION_ABRIR_CORTO;
     }
 
     @Override
-    public double getPixelcoinsCerrarPosicion(UUID posicionId, int cantidad) {
+    public double getPixelcoinsCerrarPosicion(UUID posicionId, UUID jugadorId, int cantidad) {
         Posicion posicion = posicionesService.getById(posicionId);
-        double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(posicion.getActivoBolsaId());
+        double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(posicion.getActivoBolsaId(), jugadorId);
 
         return (posicion.getPrecioApertura() - ultimoPrecio) * cantidad;
     }

@@ -1,5 +1,7 @@
 package es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain;
 
+import es.serversurvival._shared.utils.Funciones;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -26,12 +28,7 @@ public final class PosicionAbiertaBuilder {
 
     public Posicion build() {
         return new Posicion(posicionId, activoBolsaId, jugadorId, cantidad, tipoApuesta, tipoPosicion, precioApertura,
-                fechaApertura, 0, null, rentabilidad);
-    }
-
-    public PosicionAbiertaBuilder rentabilidad(double rentabilidad) {
-        this.rentabilidad = rentabilidad;
-        return this;
+                fechaApertura, 0, Funciones.NULL_LOCALDATETIME, rentabilidad);
     }
 
     public PosicionAbiertaBuilder precioApertura(double precioApertura) {
@@ -49,7 +46,7 @@ public final class PosicionAbiertaBuilder {
         return this;
     }
 
-    public PosicionAbiertaBuilder cantidad(int activoBolsaId) {
+    public PosicionAbiertaBuilder cantidad(int cantidad) {
         this.cantidad = cantidad;
         return this;
     }

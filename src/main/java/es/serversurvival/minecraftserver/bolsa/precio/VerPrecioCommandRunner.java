@@ -25,8 +25,8 @@ public final class VerPrecioCommandRunner implements CommandRunnerArgs<VerPrecio
     @Override
     public void execute(VerPrecioComando comando, Player player) {
         ActivoBolsa activoBolsa = activosBolsaService.getByNombreCortoAndTipoActivo(comando.getTicker(), TipoActivoBolsa.ACCION);
-        double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(activoBolsa.getActivoBolsaId());
+        double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(activoBolsa.getActivoBolsaId(), player.getUniqueId());
 
-        player.sendMessage(GOLD + "El precio de " + activoBolsa.getNombreLargo() + " es " + GREEN + Funciones.FORMATEA.format(ultimoPrecio) + "PC / Accion");
+        player.sendMessage(GOLD + "El precio de " + activoBolsa.getNombreLargo() + " es " + GREEN + Funciones.FORMATEA.format(ultimoPrecio) + " PC / Accion");
     }
 }

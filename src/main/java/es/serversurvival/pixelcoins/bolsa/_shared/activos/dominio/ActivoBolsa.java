@@ -13,15 +13,6 @@ public final class ActivoBolsa {
     @Getter private TipoActivoBolsa tipoActivo;
     @Getter private String nombreCorto;
     @Getter private String nombreLargo;
-    @Getter private int nReferencias;
-
-    public ActivoBolsa decrementarNReferencias() {
-        return new ActivoBolsa(activoBolsaId, tipoActivo, nombreCorto, nombreLargo, nReferencias - 1);
-    }
-
-    public ActivoBolsa incrementarNReferencias() {
-        return new ActivoBolsa(activoBolsaId, tipoActivo, nombreCorto, nombreLargo, nReferencias + 1);
-    }
 
     public static ActivoBolsaBuilder builder() {
         return new ActivoBolsaBuilder();
@@ -48,7 +39,7 @@ public final class ActivoBolsa {
         }
 
         public ActivoBolsa build() {
-            return new ActivoBolsa(UUID.randomUUID(), tipoActivoBolsa, nomnbreCorto, nombreLargo, 0);
+            return new ActivoBolsa(UUID.randomUUID(), tipoActivoBolsa, nomnbreCorto, nombreLargo);
         }
     }
 }

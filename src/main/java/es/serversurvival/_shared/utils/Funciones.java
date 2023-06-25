@@ -30,6 +30,7 @@ public final class Funciones {
     public static final DateTimeFormatter DATE_FORMATER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final ExecutorService POOL = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     public static final ObjectMapper MAPPER = new ObjectMapper();
+    public static final LocalDateTime NULL_LOCALDATETIME = LocalDateTime.of(0, 1, 1, 0, 0, 0);
 
     public static int getEspaciosOcupados(Inventory inventory) {
         int espaciosLibres = 36;
@@ -42,6 +43,14 @@ public final class Funciones {
         }
         
         return espaciosLibres;
+    }
+
+    public static String formatNumero(double numero) {
+        return Funciones.FORMATEA.format(Funciones.redondeoDecimales(numero, 2));
+    }
+
+    public static String formatPorcentaje(double porcentaje) {
+        return Funciones.FORMATEA.format(Funciones.redondeoDecimales(porcentaje, 1));
     }
 
     public static long toMillis(LocalDateTime localDateTime) {

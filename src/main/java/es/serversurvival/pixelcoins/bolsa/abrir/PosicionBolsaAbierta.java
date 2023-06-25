@@ -1,12 +1,36 @@
 package es.serversurvival.pixelcoins.bolsa.abrir;
 
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
+import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
+import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
+import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.TipoActivoBolsa;
+import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.TipoBolsaApuesta;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.UUID;
 
-@AllArgsConstructor
 public final class PosicionBolsaAbierta extends PixelcoinsEvento {
-    @Getter private final UUID jugadorId;
+    @Getter private UUID jugadorId;
+    @Getter private int cantidad;
+    @Getter private boolean premarket;
+    @Getter private ActivoBolsa activoBolsa;
+    @Getter private double precioPorUnidad;
+    @Getter private TipoBolsaApuesta tipoApuesta;
+    @Getter private double costeTotal;
+
+    public PosicionBolsaAbierta(UUID jugadorId, boolean premarket) {
+        this.jugadorId = jugadorId;
+        this.premarket = premarket;
+    }
+
+    public PosicionBolsaAbierta(UUID jugadorId, int cantidad, boolean premarket, ActivoBolsa activoBolsa, double precioPorUnidad, TipoBolsaApuesta tipoApuesta, double costeTotal) {
+        this.jugadorId = jugadorId;
+        this.cantidad = cantidad;
+        this.premarket = premarket;
+        this.activoBolsa = activoBolsa;
+        this.precioPorUnidad = precioPorUnidad;
+        this.tipoApuesta = tipoApuesta;
+        this.costeTotal = costeTotal;
+    }
 }

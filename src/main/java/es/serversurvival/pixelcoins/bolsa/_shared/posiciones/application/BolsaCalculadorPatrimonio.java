@@ -26,7 +26,7 @@ public final class BolsaCalculadorPatrimonio implements CalculadorPatrimonio {
             Class<? extends TipoApuestaService> tipoApuestaServiceClass = posicionesAbierta.getTipoApuesta().getTipoApuestaService();
             TipoApuestaService tipoApuestaService = dependenciesRepository.get(tipoApuestaServiceClass);
 
-            valorTotal += tipoApuestaService.getPixelcoinsCerrarPosicion(posicionesAbierta.getPosicionId(), posicionesAbierta.getCantidad());
+            valorTotal += tipoApuestaService.getPixelcoinsCerrarPosicion(posicionesAbierta.getPosicionId(), jugadorId, posicionesAbierta.getCantidad());
         }
 
         return valorTotal;

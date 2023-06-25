@@ -1,23 +1,17 @@
 package es.serversurvival.pixelcoins.bolsa._shared.activos.infrastructure;
 
 import es.dependencyinjector.dependencies.annotations.Service;
-import es.jaime.javaddd.application.utils.ExceptionUtils;
-import es.serversurvival._shared.ConcurrencyUtils;
-import es.serversurvival._shared.ConfigurationVariables;
 import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsaInformationAPIService;
+import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.TipoActivoBolsaService;
 import lombok.SneakyThrows;
 import org.json.simple.JSONObject;
-
-import java.net.URI;
-import java.net.http.HttpRequest;
 
 import static es.jaime.javaddd.application.utils.ExceptionUtils.*;
 import static es.serversurvival._shared.ConfigurationVariables.*;
 import static es.serversurvival._shared.utils.Funciones.*;
 
 @Service
-public final class AccionesBolsaInformationAPIService implements ActivoBolsaInformationAPIService {
+public final class AccionesBolsaInformationAPIService implements TipoActivoBolsaService {
     @Override
     public double getUltimoPrecio(String nombreCorto) {
         try{

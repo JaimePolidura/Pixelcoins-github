@@ -21,7 +21,8 @@ public final class AbridorOrdenesPremarket {
     private final EventBus eventBus;
 
     public boolean estaElMercadoAbierto() {
-        return !Funciones.esHoyDiaSemana(7, 1) && Funciones.esHoyHora(15, 30, 22, 30);
+//        return !Funciones.esHoyDiaSemana(7, 1) && Funciones.esHoyHora(15, 30, 22, 30);
+        return true;
     }
 
     public void abrirOrdenCerrar(AbrirOrdenPremarketCerrarParametros parametros) {

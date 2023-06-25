@@ -27,11 +27,10 @@ import java.util.Map;
 
 import static org.bukkit.ChatColor.*;
 
-//TODO Remove duplicated code
 @RequiredArgsConstructor
 public final class TopMenu extends Menu {
-    private final JugadoresEstadisticasService estadisticas;
     private final CalculadorPatrimonioService calculadorPatrimonioService;
+    private final JugadoresEstadisticasService estadisticas;
     private final ActivosBolsaService activosBolsaService;
     private final PosicionesService posicionesService;
     private final JugadoresService jugadoresService;

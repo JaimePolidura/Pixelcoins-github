@@ -3,8 +3,10 @@ package es.serversurvival.minecraftserver.bolsa.verposicionescerradas;
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
+import es.bukkitbettermenus.menustate.AfterShow;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.jugadores.perfil.PerfilMenu;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBolsaUltimosPreciosService;
@@ -13,24 +15,29 @@ import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.Posicion;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.application.PosicionesService;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
+import static es.serversurvival.minecraftserver._shared.menus.MenuItems.CARGANDO;
 import static es.serversurvival.minecraftserver._shared.menus.MenuItems.CLICKEABLE;
 import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
-public final class VerPosicionesCerradasMenu extends Menu<VerPosicionesCerradasMenu.Orden> {
+public final class VerPosicionesCerradasMenu extends Menu<VerPosicionesCerradasMenu.Orden> implements AfterShow {
     private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;
     private final ActivosBolsaService activosBolsaService;
     private final PosicionesService posicionesService;
     private final MenuService menuService;
+    private final Executor executor;
+
+    private Map<UUID, Posicion> posicionesCerradasJugadorById = new HashMap<>();
+    private Set<UUID> activosIdYaVistos = new HashSet<>();
 
     @Override
     public int[][] items() {
@@ -74,17 +81,21 @@ public final class VerPosicionesCerradasMenu extends Menu<VerPosicionesCerradasM
     }
 
     private ItemStack buildItemFromPosicionCerrada(Posicion posicion) {
+        posicionesCerradasJugadorById.put(posicion.getPosicionId(), posicion);
+
         return ItemBuilder.of(posicion.getTipoApuesta().getMaterial())
-                .title(activosBolsaService.getById(posicion.getActivoBolsaId()).getNombreLargo())
+                .title(GOLD + "" + BOLD + activosBolsaService.getById(posicion.getActivoBolsaId()).getNombreLargo())
                 .lore(List.of(
-                        "Tipo apuesta: " + posicion.getTipoApuesta().toString().toLowerCase(),
-                        "Precio apertura: " + GREEN + Funciones.FORMATEA.format(posicion.getPrecioApertura()) + " PC",
-                        "Precio cierre: " + GREEN + Funciones.FORMATEA.format(posicion.getPrecioCierre()) + " PC",
-                        "Rentabilidad: " + (posicion.getRentabilidad() >= 0 ? GREEN + "+" : RED) + posicion.getRentabilidad() + "%",
-                        "Cantidad: " + posicion.getCantidad(),
-                        "Precio actual: " + GREEN + Funciones.FORMATEA.format(activoBolsaUltimosPreciosService.getUltimoPrecio(posicion.getActivoBolsaId())) + " PC",
-                        "Fecha apertura: " + posicion.getFechaApertura(),
-                        "Fecha cierre: " + posicion.getFechaCierre()
+                        GOLD + "Tipo apuesta: " + posicion.getTipoApuesta().toString().toLowerCase(),
+                        GOLD + "Precio apertura: " + GREEN + Funciones.formatNumero(posicion.getPrecioApertura()) + " PC",
+                        GOLD + "Precio cierre: " + GREEN + Funciones.formatNumero(posicion.getPrecioCierre()) + " PC",
+                        GOLD + "Rentabilidad: " + (posicion.getRentabilidad() >= 0 ? GREEN + "+" : RED) + Funciones.formatPorcentaje(posicion.getRentabilidad()) + "%",
+                        GOLD + "Cantidad: " + posicion.getCantidad(),
+                        GOLD + "Precio actual: " + CARGANDO,
+                        GOLD + "Fecha apertura: " + posicion.getFechaApertura(),
+                        GOLD + "Fecha cierre: " + posicion.getFechaCierre(),
+                        "",
+                        posicion.getPosicionId().toString()
                 ))
                 .build();
     }
@@ -97,6 +108,25 @@ public final class VerPosicionesCerradasMenu extends Menu<VerPosicionesCerradasM
 
     private ItemStack buildItemInfo() {
         return ItemBuilder.of(Material.PAPER).build();
+    }
+
+    @Override
+    public void afterShow(Player player) {
+        executor.execute(() -> {
+            List<ItemStack> actualItemsByItemNum = super.getActualItemsByItemNum(2);
+
+            for (int i = 0; i < actualItemsByItemNum.size(); i++) {
+                ItemStack itemPosicion = actualItemsByItemNum.get(i);
+
+                UUID posicionId = MinecraftUtils.getLastLineOfLore(itemPosicion, 0);
+                Posicion posicion = posicionesCerradasJugadorById.get(posicionId);
+                boolean activoIdYaVisto = activosIdYaVistos.contains(posicion.getActivoBolsaId());
+
+                double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(posicion.getActivoBolsaId(), activoIdYaVisto ? null : posicion.getJugadorId());
+
+                super.setItemLore(i + 9, 5, GOLD + "Precio actual: " + GREEN + Funciones.formatNumero(ultimoPrecio) + " PC");
+            }
+        });
     }
 
     public enum Orden {

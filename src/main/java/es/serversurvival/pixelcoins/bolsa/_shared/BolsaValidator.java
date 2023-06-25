@@ -52,7 +52,7 @@ public final class BolsaValidator {
 
     public void suficientesPixelcoinsAbrir(AbrirPosicoinBolsaParametros parametros) {
         double precioBolsaTotal = getPixelcoinsAbrirPosicion(parametros.getActivoBolsaId(), parametros.getCantidad(),
-                parametros.getTipoApuesta());
+                parametros.getTipoApuesta(), parametros.getJugadorId());
         double pixelcoinsJugador = transaccionesService.getBalancePixelcoins(parametros.getJugadorId());
 
         if(precioBolsaTotal > pixelcoinsJugador){
@@ -68,9 +68,9 @@ public final class BolsaValidator {
         activosBolsaService.getById(activoBolsaId);
     }
 
-    public double getPixelcoinsAbrirPosicion(UUID activoBolsaId, int cantidad, TipoBolsaApuesta tipoBolsaApuesta) {
+    public double getPixelcoinsAbrirPosicion(UUID activoBolsaId, int cantidad, TipoBolsaApuesta tipoBolsaApuesta, UUID jugadorId) {
         TipoApuestaService tipoApuestaService = dependenciesRepository.get(tipoBolsaApuesta.getTipoApuestaService());
-        return tipoApuestaService.getPixelcoinsAbrirPosicion(activoBolsaId, cantidad);
+        return tipoApuestaService.getPixelcoinsAbrirPosicion(activoBolsaId, jugadorId, cantidad);
     }
 
     public void jugadorTieneOrden(UUID ordenPremarketId, UUID jugadorId) {

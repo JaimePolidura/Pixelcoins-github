@@ -7,6 +7,7 @@ import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.bolsa._shared.BolsaValidator;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBolsaUltimosPreciosService;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
+import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
 import es.serversurvival.pixelcoins.bolsa._shared.premarket.application.AbridorOrdenesPremarket;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.Posicion;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.application.PosicionesService;
@@ -36,11 +37,13 @@ public final class CerrarPosicionUseCase implements UseCaseHandler<CerrarPosicio
 
         if(!abridorOrdenesPremarket.estaElMercadoAbierto()){
             abridorOrdenesPremarket.abrirOrdenCerrar(parametros.toAbrirOrdenPremarketCerrarParametros());
+            eventBus.publish(new PosicionBolsaCerrada(parametros.getJugadorId()));
             return;
         }
 
         Posicion posicionAbierta = posicionesService.getById(parametros.getPosicionAbiertaId());
-        double precioPorUnidad = activoBolsaUltimosPreciosService.getUltimoPrecio(posicionAbierta.getActivoBolsaId());
+        ActivoBolsa activo = activosBolsaService.getById(posicionAbierta.getActivoBolsaId());
+        double precioPorUnidad = activoBolsaUltimosPreciosService.getUltimoPrecio(posicionAbierta.getActivoBolsaId(), null);
         double valorPosicion = getValorPosicion(parametros, posicionAbierta);
         double rentabilidad = calcularRentabilidad(posicionAbierta);
 
@@ -49,7 +52,6 @@ public final class CerrarPosicionUseCase implements UseCaseHandler<CerrarPosicio
 
         posicionesService.savePosicionAbiertaConNuevaCantidad(posicionAbierta);
         posicionesService.save(posicionCerrada);
-        activosBolsaService.decrementarNReferencias(posicionCerrada.getActivoBolsaId());
         ordenesPremarketService.deletebyPosicionAbiertId(posicionAbierta.getPosicionId());
         transaccionesService.save(Transaccion.builder()
                 .pagadoId(parametros.getJugadorId())
@@ -58,7 +60,8 @@ public final class CerrarPosicionUseCase implements UseCaseHandler<CerrarPosicio
                 .objeto(posicionCerrada.getActivoBolsaId())
                 .build());
 
-        eventBus.publish(new PosicionBolsaCerrada(posicionCerrada.getJugadorId(), posicionCerrada.getPosicionId()));
+        eventBus.publish(new PosicionBolsaCerrada(parametros.getJugadorId(), parametros.getCantidad(), posicionAbierta.getPrecioApertura(),
+                precioPorUnidad, rentabilidad, activo, posicionAbierta.getTipoApuesta(), valorPosicion));
     }
 
     private double calcularRentabilidad(Posicion posicionAbierta) {
@@ -68,6 +71,6 @@ public final class CerrarPosicionUseCase implements UseCaseHandler<CerrarPosicio
 
     private double getValorPosicion(CerrarPosicionParametros parametros, Posicion posicion) {
         return dependenciesRepository.get(posicion.getTipoApuesta().getTipoApuestaService())
-                .getPixelcoinsCerrarPosicion(posicion.getPosicionId(), parametros.getCantidad());
+                .getPixelcoinsCerrarPosicion(posicion.getPosicionId(), parametros.getJugadorId(), parametros.getCantidad());
     }
 }

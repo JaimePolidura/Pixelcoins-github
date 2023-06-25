@@ -6,26 +6,32 @@ import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.menus.NumberSelectorMenu;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
+import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBolsaUltimosPreciosService;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.TipoApuestaService;
 import es.serversurvival.pixelcoins.bolsa.cerrar.CerrarPosicionParametros;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.Posicion;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.*;
+import static es.serversurvival._shared.utils.Funciones.formatNumero;
 import static org.bukkit.ChatColor.*;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public final class BolsaCerrarPosicionMenu extends NumberSelectorMenu<Posicion> implements BeforeShow {
-    private final UseCaseBus useCaseBus;
-
+    private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;
     private final DependenciesRepository dependenciesRepository;
     private final MenuService menuService;
+    private final UseCaseBus useCaseBus;
 
     private double valorTotalPorAccion;
     private double resultadoPorAccion;
+    private double precioPorAccionActual;
+    private double rentabilidad;
 
     @Override
     public void onAccept(Player player, double cantidad, InventoryClickEvent event) {
@@ -34,6 +40,11 @@ public final class BolsaCerrarPosicionMenu extends NumberSelectorMenu<Posicion> 
                 .cantidad((int) cantidad)
                 .jugadorId(player.getUniqueId())
                 .build());
+    }
+
+    @Override
+    protected String titulo() {
+        return DARK_RED + "" + BOLD  + "   SELECCIONA CANTIDAD";
     }
 
     @Override
@@ -54,11 +65,16 @@ public final class BolsaCerrarPosicionMenu extends NumberSelectorMenu<Posicion> 
     @Override
     public List<String> loreItemAceptar(double cantidad) {
         return List.of(
-                GOLD + "Cantidad: " + Funciones.FORMATEA.format(cantidad),
-                GOLD + "Valor total: " + GREEN + Funciones.FORMATEA.format(Funciones.redondeoDecimales(valorTotalPorAccion * cantidad, 2)) + " PC",
+                GOLD + "Cantidad: " + formatNumero(cantidad),
+                GOLD + "Precio apertura: " + GREEN + formatNumero(getState().getPrecioApertura()) + " PC",
+                GOLD + "Precio actual: " + GREEN + formatNumero(precioPorAccionActual) + " PC",
+                GOLD + "Valor total: " + GREEN + formatNumero(valorTotalPorAccion * cantidad) + " PC",
                 resultadoPorAccion >= 0?
-                        GOLD + "Resultado: " + GREEN + "+" + Funciones.FORMATEA.format(Funciones.redondeoDecimales(resultadoPorAccion * cantidad, 2)) + "PC" :
-                        GOLD + "Resultado: " + RED + Funciones.FORMATEA.format(Funciones.redondeoDecimales(resultadoPorAccion * cantidad, 2)) + "PC"
+                        GOLD + "Resultado: " + GREEN + "+" + formatNumero(resultadoPorAccion) + " PC" :
+                        GOLD + "Resultado: " + RED + formatNumero(resultadoPorAccion) + " PC",
+                rentabilidad >= 0 ?
+                        GOLD + "Rentabilidad: " + GREEN + "+" + formatPorcentaje(rentabilidad) + "%" :
+                        GOLD + "Rentabilidad: " + RED  + formatPorcentaje(rentabilidad) + "%"
         );
     }
 
@@ -66,7 +82,9 @@ public final class BolsaCerrarPosicionMenu extends NumberSelectorMenu<Posicion> 
     public void beforeShow(Player player) {
         TipoApuestaService tipoApuestaService = dependenciesRepository.get(getState().getTipoApuesta().getTipoApuestaService());
 
-        this.valorTotalPorAccion = tipoApuestaService.getPixelcoinsCerrarPosicion(getState().getPosicionId(), 1);
-        this.resultadoPorAccion = tipoApuestaService.calcularBeneficiosOPerdidas(getState().getPrecioApertura(), getState().getPrecioCierre(), 1);
+        this.precioPorAccionActual = activoBolsaUltimosPreciosService.getUltimoPrecio(getState().getActivoBolsaId(), null);
+        this.valorTotalPorAccion = tipoApuestaService.getPixelcoinsCerrarPosicion(getState().getPosicionId(), player.getUniqueId(), 1);
+        this.resultadoPorAccion = tipoApuestaService.calcularBeneficiosOPerdidas(getState().getPrecioApertura(), precioPorAccionActual, 1);
+        this.rentabilidad = tipoApuestaService.calcularRentabilidad(getState().getPrecioApertura(), precioPorAccionActual);
     }
 }

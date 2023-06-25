@@ -24,18 +24,6 @@ public final class ActivosBolsaService {
         return repository.findByTipo(tipo);
     }
 
-    public void incrementarNReferencias(UUID activoBolsaId){
-        repository.save(getById(activoBolsaId).incrementarNReferencias());
-    }
-
-    public void decrementarNReferencias(UUID activoBolsaId){
-        repository.save(getById(activoBolsaId).decrementarNReferencias());
-    }
-
-    public List<ActivoBolsa> findAllNReferenciasMayorQue0() {
-        return repository.findAllNReferenciasMayorQue0();
-    }
-
     public Optional<ActivoBolsa> findById(UUID activoInfoId) {
         return repository.findById(activoInfoId);
     }

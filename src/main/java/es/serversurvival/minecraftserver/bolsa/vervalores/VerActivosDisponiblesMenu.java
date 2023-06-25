@@ -2,6 +2,7 @@ package es.serversurvival.minecraftserver.bolsa.vervalores;
 
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.Page;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.menustate.AfterShow;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
@@ -9,6 +10,7 @@ import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
 import es.jaime.javaddd.application.utils.ExceptionUtils;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
+import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBolsaUltimosPreciosService;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
@@ -16,18 +18,21 @@ import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.TipoActivoBols
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 import static es.jaime.javaddd.application.utils.ExceptionUtils.*;
+import static es.serversurvival._shared.utils.Funciones.*;
+import static es.serversurvival.minecraftserver._shared.menus.MenuItems.CARGANDO;
 import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
@@ -36,7 +41,8 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
     private final TransaccionesService transaccionesService;
     private final ActivosBolsaService activosBolsaService;
     private final MenuService menuService;
-    private final Executor executor;
+
+    private List<Thread> cargadorPreciosThreadByPageId = new LinkedList<>();
 
     @Override
     public int[][] items() {
@@ -58,6 +64,8 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
                 .item(1, itemInfo())
                 .items(2, itemValoresDisponibles(), this::onValorSeleccionado)
                 .breakpoint(7)
+                .onPageChanged(this::onPageChanged)
+                .onClose(this::onClose)
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, itemBackPage())
                         .forward(9, itemNextPage())
@@ -69,7 +77,7 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
         ItemStack itemClicked = event.getCurrentItem();
         UUID activoBolsaId = MinecraftUtils.getLastLineOfLore(itemClicked, 0);
         ActivoBolsa activoBolsa = activosBolsaService.getById(activoBolsaId);
-        double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(activoBolsaId);
+        double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(activoBolsaId, null);
         double pixelcoinsJugador = transaccionesService.getBalancePixelcoins(player.getUniqueId());
 
         if(pixelcoinsJugador < ultimoPrecio){
@@ -93,9 +101,7 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
                 .title(GOLD + "" + BOLD +  activoBolsa.getNombreLargo())
                 .lore(List.of(
                         GOLD + "Ticker: " + activoBolsa.getNombreCorto(),
-                        GOLD + "Precio: " + RED + "Cargando...",
-                        GOLD + "" + (activoBolsa.getNReferencias() > 0 ? activoBolsa.getNReferencias() + " veces aparece en la cartera de los jugadores "
-                                : "Ningun jugador la tiene"),
+                        GOLD + "Precio: " + CARGANDO,
                         "",
                         activoBolsa.getActivoBolsaId().toString()
                 ))
@@ -104,17 +110,48 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
 
     @Override
     public void afterShow(Player player) {
-        executor.execute(() -> {
-            for (ItemStack itemActivo : super.getItemsByItemNum(2)) {
-//                ignoreException(() -> {
-                    UUID activoId = MinecraftUtils.getLastLineOfLore(itemActivo, 0);
-                    double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(activoId);
+        cargarPreciosActualesEnPaginaActual(getActualPage());
+    }
 
-                    ItemUtils.setLore(itemActivo, 1, GOLD + "Precio: " + GREEN + Funciones.FORMATEA.format(ultimoPrecio)
-                            + " PC" + GOLD + " / " + getState().getNombreUnidadSingular());
-//                });
+    private void onClose(InventoryCloseEvent inventoryCloseEvent) {
+        inventoryCloseEvent.getPlayer().sendMessage(LIGHT_PURPLE + "Se ha cerrado el menu");
+        cargadorPreciosThreadByPageId.forEach(Thread::interrupt);
+    }
+
+    private void onPageChanged(Page page) {
+        if(!page.isAlreadyVisited()){
+            cargarPreciosActualesEnPaginaActual(page);
+        }
+    }
+
+    private void cargarPreciosActualesEnPaginaActual(Page page) {
+        Thread thread = new Thread(() -> {
+            List<ItemStack> items = page.getItemsByItemNum(2);
+
+            for (int i = 0; i < items.size(); i++) {
+                if(Thread.interrupted()){
+                    break;
+                }
+
+                ItemStack item = items.get(i);
+                UUID activoId = MinecraftUtils.getLastLineOfLore(items.get(i), 0);
+                double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(activoId, getPlayer().getUniqueId());
+                String nuevoLore = GOLD + "Precio: " + GREEN + formatNumero(ultimoPrecio)
+                        + " PC" + GOLD + " / " + getState().getNombreUnidadSingular();
+
+                item = ItemUtils.setLore(item,  1, nuevoLore);
+
+                if(getActualPage().getPageId() == page.getPageId()){
+                    super.setItemLore(i + 9, 1, nuevoLore);
+                }
+
+                super.getActualPage().getItems().set(i + 9, item);
             }
         });
+
+        cargadorPreciosThreadByPageId.add(thread);
+
+        thread.start();
     }
 
     private ItemStack itemInfo() {

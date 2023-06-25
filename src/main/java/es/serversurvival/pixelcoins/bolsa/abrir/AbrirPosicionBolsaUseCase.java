@@ -6,6 +6,7 @@ import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.bolsa._shared.BolsaValidator;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBolsaUltimosPreciosService;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
+import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.PosicionAbiertaBuilder;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.application.PosicionesService;
 import es.serversurvival.pixelcoins.bolsa._shared.premarket.application.AbridorOrdenesPremarket;
@@ -34,15 +35,15 @@ public final class AbrirPosicionBolsaUseCase implements UseCaseHandler<AbrirPosi
 
         if(!abridorOrdenesPremarket.estaElMercadoAbierto()){
             abridorOrdenesPremarket.abrirOrdenAbrir(parametros.toAbrirOrdenPremarketAbrirParametros());
+            eventBus.publish(new PosicionBolsaAbierta(parametros.getJugadorId(), true));
             return;
         }
 
         UUID posicionAAbrirId = UUID.randomUUID();
-        double precioApertura = activoBolsaUltimosPreciosService.getUltimoPrecio(parametros.getActivoBolsaId());
+        ActivoBolsa activoBolsa = activosBolsaService.getById(parametros.getActivoBolsaId());
+        double precioApertura = activoBolsaUltimosPreciosService.getUltimoPrecio(parametros.getActivoBolsaId(), null);
         double totalPixelcoins = validator.getPixelcoinsAbrirPosicion(parametros.getActivoBolsaId(), parametros.getCantidad(),
-                parametros.getTipoApuesta());
-
-        activosBolsaService.incrementarNReferencias(parametros.getActivoBolsaId());
+                parametros.getTipoApuesta(), parametros.getJugadorId());
 
         transaccionesService.save(Transaccion.builder()
                 .pagadorId(parametros.getJugadorId())
@@ -60,6 +61,7 @@ public final class AbrirPosicionBolsaUseCase implements UseCaseHandler<AbrirPosi
                 .jugadorId(parametros.getJugadorId())
                 .build());
 
-        eventBus.publish(new PosicionBolsaAbierta(posicionAAbrirId));
+        eventBus.publish(new PosicionBolsaAbierta(parametros.getJugadorId(), parametros.getCantidad(), false,
+                activoBolsa, precioApertura, parametros.getTipoApuesta(), totalPixelcoins));
     }
 }

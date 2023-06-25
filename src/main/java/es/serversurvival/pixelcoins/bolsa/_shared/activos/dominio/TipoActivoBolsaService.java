@@ -1,6 +1,6 @@
 package es.serversurvival.pixelcoins.bolsa._shared.activos.dominio;
 
-public interface ActivoBolsaInformationAPIService {
+public interface TipoActivoBolsaService {
     double getUltimoPrecio(String nombreCorto);
     String getNombreLargo(String nombreCorto);
 }

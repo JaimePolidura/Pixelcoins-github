@@ -2,12 +2,12 @@ package es.serversurvival.pixelcoins.bolsa._shared.activos.infrastructure;
 
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsaInformationAPIService;
+import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.TipoActivoBolsaService;
 import lombok.SneakyThrows;
 import org.json.simple.JSONObject;
 
 @Service
-public final class CriptoMonedasBolsaInformationAPIService implements ActivoBolsaInformationAPIService {
+public final class CriptoMonedasBolsaInformationAPIService implements TipoActivoBolsaService {
     @Override
     @SneakyThrows
     public double getUltimoPrecio(String nombreCorto) {

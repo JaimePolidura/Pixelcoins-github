@@ -45,11 +45,6 @@ public final class MySQLActivoBolsaRepository extends Repository<ActivoBolsa, UU
     }
 
     @Override
-    public List<ActivoBolsa> findAllNReferenciasMayorQue0() {
-        return super.buildListFromQuery(Select.from(TABLE_NAME).where("nReferencias").bigger(0));
-    }
-
-    @Override
     public EntityMapper<ActivoBolsa, Object> entityMapper() {
         return EntityMapper.builder()
                 .classesToMap(ActivoBolsa.class)

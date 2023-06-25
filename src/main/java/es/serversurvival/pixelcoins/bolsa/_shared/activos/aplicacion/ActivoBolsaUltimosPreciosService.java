@@ -3,7 +3,7 @@ package es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion;
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
-import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsaInformationAPIService;
+import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.TipoActivoBolsaService;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.TipoActivoBolsa;
 
 import java.util.Map;
@@ -27,21 +27,24 @@ public final class ActivoBolsaUltimosPreciosService {
         this.cacheByActivoBolsaId = new ConcurrentHashMap<>();
     }
 
-    public double getUltimoPrecio(UUID activoBolsaId) {
-        if(cacheValida(activoBolsaId)){
-            return cacheByActivoBolsaId.get(activoBolsaId).getUltimoPrecio();
+    public double getUltimoPrecio(UUID activoBolsaId, UUID lectorId) {
+        if(cacheValida(activoBolsaId, lectorId)){
+            return cacheByActivoBolsaId.get(activoBolsaId).getUltimoPrecio(lectorId);
         }
 
         ActivoBolsa activoBolsa = activosBolsaService.getById(activoBolsaId);
         actualizarUltimoPrecioEnCache(activoBolsa);
 
-        return cacheByActivoBolsaId.get(activoBolsaId).getUltimoPrecio();
+        return cacheByActivoBolsaId.get(activoBolsaId).getUltimoPrecio(lectorId);
     }
 
-    private boolean cacheValida(UUID activoBolsaId) {
+    private boolean cacheValida(UUID activoBolsaId, UUID lectorId) {
+        boolean notCacheInvalidation = lectorId == null;
+
         return cacheByActivoBolsaId.containsKey(activoBolsaId) &&
-                cacheByActivoBolsaId.get(activoBolsaId).getNumeroLectuasSinActualizar() <= BOLSA_PRECIOS_CACHE_N_VECES_LECTURA_SIN_ACTUALIZAR &&
-                cacheByActivoBolsaId.get(activoBolsaId).getUltimaVezActualizdoMs() + BOLSA_PRECIOS_CACHE_TIEMPO_MS_VALIDOS >= System.currentTimeMillis();
+                (notCacheInvalidation ||
+                    (cacheByActivoBolsaId.get(activoBolsaId).getNumeroLectuasSinActualizar(lectorId) <= BOLSA_PRECIOS_CACHE_N_VECES_LECTURA_SIN_ACTUALIZAR &&
+                    cacheByActivoBolsaId.get(activoBolsaId).getUltimaVezActualizdoMs() + BOLSA_PRECIOS_CACHE_TIEMPO_MS_VALIDOS >= System.currentTimeMillis()));
     }
 
     private void actualizarUltimoPrecioEnCache(ActivoBolsa activoBolsa) {
@@ -56,29 +59,35 @@ public final class ActivoBolsaUltimosPreciosService {
     }
 
     private double getUltimoPrecioDesdeAPI(String nombreCorto, TipoActivoBolsa tipoActivo) {
-        ActivoBolsaInformationAPIService activoInfoServiceClass = dependencies.get(tipoActivo.getActivoInfoService());
+        TipoActivoBolsaService activoInfoServiceClass = dependencies.get(tipoActivo.getActivoInfoService());
 
         return activoInfoServiceClass.getUltimoPrecio(nombreCorto);
     }
 
     private static class ActivoBolsaPrecioCache {
-        private AtomicInteger numeroLectuasSinActualizar;
+        private final Map<UUID, AtomicInteger> lectoresNumeroLectuasSinActualizar;
         private long ultimaVezActualizdoMs;
         private double ultimoPrecio;
 
         public ActivoBolsaPrecioCache(double ultimoPrecio) {
-            this.ultimoPrecio = ultimoPrecio;
-            this.numeroLectuasSinActualizar = new AtomicInteger(0);
+            this.lectoresNumeroLectuasSinActualizar = new ConcurrentHashMap<>();
             this.ultimaVezActualizdoMs = System.currentTimeMillis();
+            this.ultimoPrecio = ultimoPrecio;
         }
 
         public void actualizar(double nuevoPrecio) {
-            this.numeroLectuasSinActualizar.set(0);
+            this.lectoresNumeroLectuasSinActualizar.keySet()
+                    .forEach(key -> lectoresNumeroLectuasSinActualizar.get(key).set(0));
             this.ultimoPrecio = nuevoPrecio;
+            this.ultimaVezActualizdoMs = System.currentTimeMillis();
         }
 
-        public double getUltimoPrecio() {
-            this.numeroLectuasSinActualizar.getAndIncrement();
+        public double getUltimoPrecio(UUID lectorId) {
+            if(lectorId != null){
+                lectoresNumeroLectuasSinActualizar.putIfAbsent(lectorId, new AtomicInteger(0));
+                lectoresNumeroLectuasSinActualizar.get(lectorId).getAndIncrement();
+            }
+
             return this.ultimoPrecio;
         }
 
@@ -86,8 +95,9 @@ public final class ActivoBolsaUltimosPreciosService {
             return this.ultimaVezActualizdoMs;
         }
 
-        public int getNumeroLectuasSinActualizar() {
-            return this.numeroLectuasSinActualizar.get();
+        public int getNumeroLectuasSinActualizar(UUID lectorId) {
+            return lectoresNumeroLectuasSinActualizar.getOrDefault(lectorId, new AtomicInteger(0))
+                    .get();
         }
     }
 }

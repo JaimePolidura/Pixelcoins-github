@@ -75,7 +75,7 @@ public abstract class NumberSelectorMenu<T> extends Menu<T> {
     public int minValue() {
         return 1;
     }
-
+    
     public final void onCantidadChanged(double cantidad){
         super.setItemLoreActualPage(14, loreItemAceptar(cantidad));
     }

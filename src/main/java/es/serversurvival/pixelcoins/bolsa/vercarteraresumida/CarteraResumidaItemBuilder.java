@@ -4,11 +4,13 @@ import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.Posicion;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.TipoBolsaApuesta;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.With;
 
 import java.util.Objects;
 import java.util.UUID;
 
+@ToString
 @AllArgsConstructor
 public final class CarteraResumidaItemBuilder {
     @Getter       private UUID activoBolsaId;

@@ -18,6 +18,12 @@ import java.util.UUID;
 public final class MinecraftUtils {
     private MinecraftUtils() {}
 
+    public static void broadcastExcept(Player playerException, String mensaje) {
+        Bukkit.getOnlinePlayers().stream()
+                .filter(player -> !player.equals(playerException))
+                .forEach(player -> player.sendMessage(mensaje));
+    }
+
     public static void enviarMensajeYSonido(UUID jugadorId, String mensaje, Sound sound) {
         Player player = Bukkit.getPlayer(jugadorId);
 
