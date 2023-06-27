@@ -3,7 +3,7 @@ package es.serversurvival.minecraftserver.deudas.prestar;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.menus.ConfirmacionMenu;
-import es.serversurvival.minecraftserver.deudas._shared.DeudaItemMercadoLore;
+import es.serversurvival.minecraftserver.deudas._shared.DeudaItemLore;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.deudas.prestar.PrestarDeudaParametros;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
@@ -22,7 +22,7 @@ import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
 public final class PrestarConfirmacionMenu extends ConfirmacionMenu<PrestarConfirmacionMenu.PrestarConfirmacionMenuState> {
-    private final DeudaItemMercadoLore deudaItemMercadoLore;
+    private final DeudaItemLore deudaItemMercadoLore;
     private final JugadoresService jugadoresService;
     private final UseCaseBus useCaseBus;
 

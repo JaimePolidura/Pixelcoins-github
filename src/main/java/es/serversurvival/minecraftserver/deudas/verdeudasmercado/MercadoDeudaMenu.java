@@ -11,7 +11,7 @@ import es.serversurvival.pixelcoins.deudas._shared.application.DeudasService;
 import es.serversurvival.pixelcoins.deudas._shared.domain.Deuda;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
-import es.serversurvival.minecraftserver.deudas._shared.DeudaItemMercadoLore;
+import es.serversurvival.minecraftserver.deudas._shared.DeudaItemLore;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -23,12 +23,12 @@ import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
 public final class MercadoDeudaMenu extends VerOfertasMercadoMenu<OfertaDeudaMercado> {
-    private final DeudaItemMercadoLore deudaItemMercadoLore;
+    private final DeudaItemLore deudaItemMercadoLore;
     private final JugadoresService jugadoresService;
     private final DeudasService deudasService;
 
     public MercadoDeudaMenu(SyncMenuService syncMenuService, OfertasService ofertasService, MenuService menuService,
-                            UseCaseBus useCaseBus, DeudaItemMercadoLore deudaItemMercadoLore, JugadoresService jugadoresService,
+                            UseCaseBus useCaseBus, DeudaItemLore deudaItemMercadoLore, JugadoresService jugadoresService,
                             DeudasService deudasService) {
         super(syncMenuService, ofertasService, menuService, useCaseBus);
         this.deudaItemMercadoLore = deudaItemMercadoLore;
@@ -59,53 +59,48 @@ public final class MercadoDeudaMenu extends VerOfertasMercadoMenu<OfertaDeudaMer
 
     @Override
     public ItemStack buildItemFromOferta(OfertaDeudaMercado oferta) {
-        return oferta.esMercadoPrimario() ?
-                buildItemMercadoPrimario((OfertaDeudaMercadoPrimario) oferta) :
-                buildItemMercadoSecundario((OfertaDeudaMercadoSecundario) oferta);
+        ItemStack itemStack = ItemBuilder.of(oferta.getVendedorId().equals(getPlayer().getUniqueId()) ?
+                        Material.GREEN_BANNER :
+                        Material.BLUE_BANNER)
+                .build();
+        String vendedor = jugadoresService.getNombreById(oferta.getVendedorId());
+        List<String> lore =  oferta.esMercadoPrimario() ?
+                buildLoreMercadoPrimario(vendedor, (OfertaDeudaMercadoPrimario) oferta) :
+                buildLoreMercadoSecundario(vendedor, (OfertaDeudaMercadoSecundario) oferta);
+        MinecraftUtils.setLore(itemStack, lore);
+
+        return itemStack;
+    }
+
+    private List<String> buildLoreMercadoSecundario(String vendedor, OfertaDeudaMercadoSecundario oferta) {
+        Deuda deuda = deudasService.getById(oferta.getObjetoToUUID());
+        return deudaItemMercadoLore.buildOfertaDeudaMercado(oferta.getPrecio(), vendedor, deuda.getInteres(), deuda.getNominal(), deuda.getPeriodoPagoCuotaMs(),
+                deuda.getNCuotasTotales() - deuda.getNCuotasPagadas(), deuda.getNCuotasImpagadas(), deuda.getPixelcoinsRestantesDePagar(), false,
+                jugadoresService.getNombreById(deuda.getDeudorJugadorId()));
+    }
+
+    private List<String> buildLoreMercadoPrimario(String vendedor, OfertaDeudaMercadoPrimario oferta) {
+        double cuota = oferta.getInteres() * oferta.getPrecio();
+
+        return deudaItemMercadoLore.buildOfertaDeudaMercado(oferta.getPrecio(), vendedor, oferta.getInteres(), oferta.getPrecio(), oferta.getPeriodoPagoCuotaMs(),
+                oferta.getNCuotasTotales(), 0, oferta.getNCuotasTotales() * cuota + oferta.getPrecio(), true,
+                vendedor);
     }
 
     @Override
     public String mensajeCompraExsitosaAlComprador(OfertaDeudaMercado oferta, ItemStack item) {
         String vendedor = jugadoresService.getNombreById(oferta.getVendedorId());
 
-        return GOLD + "Has comprado la deuda de " + vendedor + " por " + GREEN + FORMATEA.format(oferta.getPrecio()) +  "PC";
+        return GOLD + "Has comprado la deuda de " + vendedor + " por " + GREEN + FORMATEA.format(oferta.getPrecio()) + " PC";
     }
 
     @Override
     public String mensajeCompraExsitosaAlVendedor(OfertaDeudaMercado oferta, ItemStack item, String comprador) {
-        return GOLD + comprador + " ha comprado la deuda por " + GREEN + FORMATEA.format(oferta.getPrecio()) +  "PC";
+        return GOLD + comprador + " ha comprado la deuda por " + GREEN + FORMATEA.format(oferta.getPrecio()) + " PC";
     }
 
     @Override
     public String mensajeRetiradoExistoso(OfertaDeudaMercado oferta, ItemStack item) {
-        //TODO
-        return null;
-    }
-
-    //TODO Quitar codigo dueplicado
-    private ItemStack buildItemMercadoSecundario(OfertaDeudaMercadoSecundario oferta) {
-        ItemStack itemStack = ItemBuilder.of(Material.WRITTEN_BOOK).build();
-        String vendedor = jugadoresService.getNombreById(oferta.getVendedorId());
-        Deuda deuda = deudasService.getById(oferta.getObjetoToUUID());
-
-        List<String> lore =  deudaItemMercadoLore.buildOfertaDeudaMercado(oferta.getPrecio(), vendedor, deuda.getInteres(), deuda.getNominal(), deuda.getPeriodoPagoCuotaMs(),
-                deuda.getNCuotasTotales() - deuda.getNCuotasPagadas(), deuda.getNCuotasImpagadas(), deuda.getPixelcoinsRestantesDePagar());
-
-        MinecraftUtils.setLore(itemStack, lore);
-
-        return itemStack;
-    }
-
-    private ItemStack buildItemMercadoPrimario(OfertaDeudaMercadoPrimario oferta) {
-        ItemStack itemStack = ItemBuilder.of(Material.WRITTEN_BOOK).build();
-        String vendedor = jugadoresService.getNombreById(oferta.getVendedorId());
-        double cuota = oferta.getInteres() * oferta.getPrecio();
-
-        List<String> lore = deudaItemMercadoLore.buildOfertaDeudaMercado(oferta.getPrecio(), vendedor, oferta.getInteres(), oferta.getPrecio(), oferta.getPeriodoPagoCuotaMs(),
-                oferta.getNCuotasTotales(), 0, oferta.getNCuotasTotales() * cuota + oferta.getPrecio());
-
-        MinecraftUtils.setLore(itemStack, lore);
-
-        return itemStack;
+        return GOLD + "Has retirado la deuda del mercado";
     }
 }

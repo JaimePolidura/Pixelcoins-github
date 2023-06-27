@@ -2,7 +2,7 @@ package es.serversurvival.pixelcoins.mercado.comprar;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
-import es.serversurvival.pixelcoins.mercado._shared.accion.OfertaAccionCaller;
+import es.serversurvival.pixelcoins.mercado._shared.accion.OfertaCustomCaller;
 import es.serversurvival.pixelcoins.mercado._shared.accion.OfertaCompradaListener;
 import es.serversurvival.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
@@ -14,8 +14,8 @@ import lombok.AllArgsConstructor;
 @UseCase
 @AllArgsConstructor
 public final class ComprarOfertaUseCase implements UseCaseHandler<ComprarOfertaParametros> {
-    private final OfertaAccionCaller ofertaAccionCaller;
     private final TransaccionesService transaccionesService;
+    private final OfertaCustomCaller ofertaAccionCaller;
     private final OfertasValidator ofertasValidator;
     private final OfertasService ofertasService;
 
@@ -23,9 +23,10 @@ public final class ComprarOfertaUseCase implements UseCaseHandler<ComprarOfertaP
     public void handle(ComprarOfertaParametros parametros) {
         ofertasValidator.tienePixelcoinsSuficientes(parametros.getOfertaId(), parametros.getJugadorId());
         ofertasValidator.noEsVendedor(parametros.getOfertaId(), parametros.getJugadorId());
+        Oferta ofertaAComprar = ofertasService.getById(parametros.getOfertaId());
+        ofertaAccionCaller.callCustomComprarValidator(ofertaAComprar, parametros.getJugadorId());
 
-        Oferta ofertaAComprar = ofertasService.getById(parametros.getOfertaId())
-                .decrementarCantidad();
+        ofertaAComprar = ofertaAComprar.decrementarCantidad();
 
         decrementarCantidadOBorrar(ofertaAComprar);
         transaccionesService.save(Transaccion.builder()
@@ -36,7 +37,7 @@ public final class ComprarOfertaUseCase implements UseCaseHandler<ComprarOfertaP
                 .tipo(ofertaAComprar.getTipo().getTipoTransaccion())
                 .build());
 
-        ofertaAccionCaller.call(OfertaCompradaListener.class, ofertaAComprar, parametros.getJugadorId());
+        ofertaAccionCaller.callAccion(OfertaCompradaListener.class, ofertaAComprar, parametros.getJugadorId());
     }
 
     private void decrementarCantidadOBorrar(Oferta ofertaAComprar) {

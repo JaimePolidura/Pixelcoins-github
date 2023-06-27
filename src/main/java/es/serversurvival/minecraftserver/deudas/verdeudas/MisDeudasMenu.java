@@ -7,7 +7,7 @@ import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
-import es.serversurvival.minecraftserver.deudas._shared.DeudaItemMercadoLore;
+import es.serversurvival.minecraftserver.deudas._shared.DeudaItemLore;
 import es.serversurvival.minecraftserver.deudas.verdeudasmercado.MercadoDeudaMenu;
 import es.serversurvival.minecraftserver.jugadores.perfil.PerfilMenu;
 import es.serversurvival.pixelcoins.deudas._shared.domain.Deuda;
@@ -26,7 +26,7 @@ import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
 public final class MisDeudasMenu extends Menu {
-    private final DeudaItemMercadoLore deudaItemMercadoLore;
+    private final DeudaItemLore deudaItemMercadoLore;
     private final DeudasService deudasService;
     private final MenuService menuService;
 
@@ -80,8 +80,8 @@ public final class MisDeudasMenu extends Menu {
         boolean esAcredor = deuda.getAcredorJugadorId().equals(getPlayer().getUniqueId());
 
         return ItemBuilder.of(esAcredor ? Material.GREEN_BANNER : Material.RED_BANNER)
-                .title(CLICKEABLE + (esAcredor ? "CANCELAR" : "PAGAR"))
-                .lore(deudaItemMercadoLore.build(deuda))
+                .title(CLICKEABLE + "VER")
+                .lore(deudaItemMercadoLore.buildDescDeuda(deuda))
                 .build();
     }
 

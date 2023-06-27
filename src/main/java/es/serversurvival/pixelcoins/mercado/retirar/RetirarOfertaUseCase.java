@@ -5,14 +5,14 @@ import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasValidator;
-import es.serversurvival.pixelcoins.mercado._shared.accion.OfertaAccionCaller;
+import es.serversurvival.pixelcoins.mercado._shared.accion.OfertaCustomCaller;
 import es.serversurvival.pixelcoins.mercado._shared.accion.OfertaRetiradaListener;
 import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
 public final class RetirarOfertaUseCase implements UseCaseHandler<RetirarOfertaParametros> {
-    private final OfertaAccionCaller ofertaAccionCaller;
+    private final OfertaCustomCaller ofertaAccionCaller;
     private final OfertasValidator ofertasValidator;
     private final OfertasService ofertasService;
 
@@ -23,6 +23,6 @@ public final class RetirarOfertaUseCase implements UseCaseHandler<RetirarOfertaP
         Oferta ofertaRetirada = ofertasService.getById(parametros.getOfertaId());
         ofertasService.deleteById(ofertaRetirada.getOfertaId());
 
-        ofertaAccionCaller.call(OfertaRetiradaListener.class, ofertaRetirada, parametros.getRetiradorId());
+        ofertaAccionCaller.callAccion(OfertaRetiradaListener.class, ofertaRetirada, parametros.getRetiradorId());
     }
 }

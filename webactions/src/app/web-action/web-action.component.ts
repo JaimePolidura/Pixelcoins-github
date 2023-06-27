@@ -2,11 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {
   WebActionApiService,
-  WebActionFormCampo,
+  WebActionFormParam,
   WebActionFormResponse
 } from "../_shared/web-action-api.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, map, tap} from "rxjs";
 
 @Component({
   selector: 'app-web-action',
@@ -20,8 +20,10 @@ export class WebActionComponent implements OnInit {
 
   $loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   $error: BehaviorSubject<string> = new BehaviorSubject<string>("");
+  numeroErroresConsecutivos: number = 0;
 
-  camposByNombre: Map<string, WebActionFormCampo> = new Map<string, WebActionFormCampo>();
+  camposByNombre: Map<string, WebActionFormParam> = new Map<string, WebActionFormParam>();
+  paramsFormulario: string[] = [];
 
   constructor(
     private webActionBackend: WebActionApiService,
@@ -36,9 +38,21 @@ export class WebActionComponent implements OnInit {
     this.activeRoute.queryParams.subscribe((params: Params): void => {
       this.token = params["token"];
 
-      this.webActionBackend.getWebActionFormData(this.token).subscribe((formulario: WebActionFormResponse): void => {
-        this.setupFormulario(formulario);
-      });
+      this.webActionBackend.getWebActionFormData(this.token)
+          .pipe(map((res: WebActionFormResponse): WebActionFormResponse => {
+            return {
+              ...res,
+              params: res.params.sort((a: WebActionFormParam, b: WebActionFormParam) => b.showPriority - a.showPriority)
+            };
+          }))
+          .pipe(tap((res: WebActionFormResponse): void => {
+            res.params.forEach((param: WebActionFormParam) => this.paramsFormulario.push(param.name))
+          }))
+          .subscribe((formulario: WebActionFormResponse): void => {
+            this.setupFormulario(formulario);
+          }, err => {
+            this.router.navigateByUrl("/error")
+          });
     });
   }
 
@@ -52,18 +66,29 @@ export class WebActionComponent implements OnInit {
       this.router.navigateByUrl("/success");
       this.$loading.next(false);
     }, err => {
-      this.$error.next(err.error ?? "Error hablar con Jaime");
-      console.error(err);
+      this.numeroErroresConsecutivos++;
       this.$loading.next(false);
+
+      this.mostrarError(err);
     });
   }
 
-  setupFormulario(formulario: WebActionFormResponse): void {
-    this.nombre = formulario.nombre;
+  private mostrarError(err: any): void {
+    const muchosErroresMensaje: string = this.numeroErroresConsecutivos > 2 ? 'Si crees que no deberia ser un error, genera de nuevo el link en el servidor de minecraft' : '';
 
-    formulario.parametros.forEach((campo: WebActionFormCampo): void => {
-      this.camposByNombre.set(campo.nombre, campo);
-      this.formulario.addControl(campo.nombre, this.formBuilder.control("", Validators.required));
+    if(err != undefined){
+      this.$error.next(`${err.error} ${muchosErroresMensaje}`);
+    }else{
+      this.$error.next(`Error hablar con Jaime ${muchosErroresMensaje}`);
+    }
+  }
+
+  setupFormulario(formulario: WebActionFormResponse): void {
+    this.nombre = formulario.name;
+
+    formulario.params.forEach((campo: WebActionFormParam): void => {
+      this.camposByNombre.set(campo.name, campo);
+      this.formulario.addControl(campo.name, this.formBuilder.control("", Validators.required));
     });
   }
 

@@ -2,6 +2,7 @@ package es.serversurvival.minecraftserver.deudas.emitir;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
+import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver.webaction.WebActionType;
 import es.serversurvival.minecraftserver.webaction.WebActionUrlGenerator;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public final class EmitirDeudaCommandRunner implements CommandRunnerNonArgs {
     @Override
     public void execute(Player player) {
         String url = webActionUrlGenerator.generate(WebActionType.DEUDAS_EMITIR, player.getUniqueId());
-        player.sendMessage(GOLD + "Para emitir deuda: " + AQUA + url);
+
+        MinecraftUtils.enviarUrl(player, url, "Haz click aqui para emitir deuda");
     }
 }

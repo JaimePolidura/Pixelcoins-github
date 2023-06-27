@@ -1,5 +1,8 @@
 package es.serversurvival.minecraftserver._shared;
 
+import es.serversurvival.minecraftserver._shared.menus.MenuItems;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -18,11 +21,20 @@ import java.util.UUID;
 public final class MinecraftUtils {
     private MinecraftUtils() {}
 
-    public static void enviarUrl(Player player, String mensaje, String link) {
-        String comando = String.format("/tellraw @p {\"text\":\"%s\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"%s\"}}", mensaje, link);
-        System.out.println(comando);
+    public static void enviarUrl(Player player, String url, String mensaje) {
+        TextComponent message = new TextComponent(MenuItems.CLICKEABLE + mensaje);
+        message.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url));
+        player.spigot().sendMessage(message);
+    }
 
-        player.performCommand(comando);
+    public static void broadcastExcept(UUID playerId, String mensaje) {
+        Player player = Bukkit.getPlayer(playerId);
+
+        if(player == null){
+            Bukkit.broadcastMessage(mensaje);
+        }
+
+        broadcastExcept(player, mensaje);
     }
 
     public static void broadcastExcept(Player playerException, String mensaje) {

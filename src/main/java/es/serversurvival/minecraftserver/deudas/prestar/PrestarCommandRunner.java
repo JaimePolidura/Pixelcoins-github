@@ -25,8 +25,6 @@ public final class PrestarCommandRunner implements CommandRunnerNonArgs {
     public void execute(Player player) {
         String url = webActionUrlGenerator.generate(WebActionType.DEUDAS_PRESTAR , player.getUniqueId());
 
-        TextComponent message = new TextComponent(MenuItems.CLICKEABLE +"Haz click aqui para prestar dinero");
-        message.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url));
-        player.spigot().sendMessage(message);
+        MinecraftUtils.enviarUrl(player, url, "Haz click aqui para prestar dinero");
     }
 }

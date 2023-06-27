@@ -7,13 +7,16 @@
       <span style="text-align: center; color: red"><h4>× {{$error | async}} ×</h4></span>
       <br>
     </div>
-    
-    <div *ngFor="let campoFormulario of formulario.controls | keyvalue; let i = index">
-      <input type="{{camposByNombre.get(campoFormulario.key)?.tipo == 'TEXT' ? 'text' : 'number'}}"
+
+    <div *ngFor="let campoFormulario of paramsFormulario; let i = index">
+      <div *ngIf="camposByNombre.get(campoFormulario)?.desc != ''">
+        <label>{{camposByNombre.get(campoFormulario)?.desc}}:</label>
+      </div>
+      <input type="{{camposByNombre.get(campoFormulario)?.type == 'TEXT' ? 'text' : 'number'}}"
              class="form-control"
-             [formControlName]="campoFormulario.key"
+             [formControlName]="campoFormulario"
              [ngClass]="{'form-control-disabled': ($loading | async) == true}"
-             placeholder="{{splitNombreCamelCaseEnEspacios(campoFormulario.key)}}"
+             placeholder="{{splitNombreCamelCaseEnEspacios(campoFormulario)}}"
              autofocus>
       <br>
     </div>

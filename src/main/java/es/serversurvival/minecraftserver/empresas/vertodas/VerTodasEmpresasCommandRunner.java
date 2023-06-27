@@ -13,6 +13,6 @@ public final class VerTodasEmpresasCommandRunner implements CommandRunnerNonArgs
 
     @Override
     public void execute(Player player) {
-
+        menuService.open(player, TodasEmpresasMenu.class);
     }
 }

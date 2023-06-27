@@ -22,11 +22,13 @@ export class WebActionApiService {
 }
 
 export interface WebActionFormResponse {
-  parametros: WebActionFormCampo[];
-  nombre: string;
+  params: WebActionFormParam[];
+  name: string;
 }
 
-export interface WebActionFormCampo {
-  nombre: string;
-  tipo: 'TEXT' | 'NUMERO';
+export interface WebActionFormParam {
+  name: string;
+  type: 'TEXT' | 'NUMERO';
+  desc: string;
+  showPriority: number;
 }

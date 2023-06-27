@@ -8,7 +8,7 @@ import static org.bukkit.ChatColor.*;
 
 public final class MenuItems {
     public static final ItemStack GO_BACK_PERFIL = ItemBuilder.of(Material.RED_BANNER)
-            .title(RED + "<- Perfil")
+            .title(RED + "<-")
             .build();
 
     public static final String CLICKEABLE = GOLD + "" + BOLD + UNDERLINE;

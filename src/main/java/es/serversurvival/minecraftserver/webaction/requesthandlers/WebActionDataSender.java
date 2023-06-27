@@ -3,8 +3,7 @@ package es.serversurvival.minecraftserver.webaction.requesthandlers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import es.dependencyinjector.dependencies.annotations.Service;
-import es.serversurvival.minecraftserver.webaction.WebActionException;
-import es.serversurvival.minecraftserver.webaction.WebActionGetDataResponse;
+import es.serversurvival.minecraftserver.webaction.messages.WebActionGetDataResponse;
 import es.serversurvival.minecraftserver.webaction.WebActionType;
 import lombok.AllArgsConstructor;
 

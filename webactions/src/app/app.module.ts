@@ -8,12 +8,14 @@ import { WebActionComponent } from './web-action/web-action.component';
 import {HttpClientModule} from "@angular/common/http";
 import {ReactiveFormsModule} from "@angular/forms";
 import { WebActionSuccessComponent } from './web-action-success/web-action-success.component';
+import { WebActionErrorComponent } from './web-action-error/web-action-error.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     WebActionComponent,
-    WebActionSuccessComponent
+    WebActionSuccessComponent,
+    WebActionErrorComponent
   ],
   imports: [
     RouterModule.forRoot(routes),

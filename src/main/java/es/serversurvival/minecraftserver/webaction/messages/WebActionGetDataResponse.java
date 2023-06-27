@@ -1,5 +1,6 @@
-package es.serversurvival.minecraftserver.webaction;
+package es.serversurvival.minecraftserver.webaction.messages;
 
+import es.serversurvival.minecraftserver.webaction.WebActionType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -10,25 +11,31 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public final class WebActionGetDataResponse {
-    @Getter private final List<FormField> parametros;
-    @Getter private final String nombre;
+    @Getter private final List<FormParam> params;
+    @Getter private final String name;
     
     public static WebActionGetDataResponse fromWebAction(WebActionType webActionType) {
         return new WebActionGetDataResponse(
                 Arrays.stream(webActionType.getRequestBodyClass().getDeclaredFields())
-                        .map(WebActionGetDataResponse.FormField::fromJavaClassField)
+                        .map(FormParam::fromJavaClassField)
                         .collect(Collectors.toList()),
                 webActionType.getNombre()
         );
     }
 
     @AllArgsConstructor
-    public static class FormField {
-        @Getter private final String nombre;
-        @Getter private final FormFieldType tipo;
+    public static class FormParam {
+        @Getter private final String name;
+        @Getter private final FormFieldType type;
+        @Getter private final String desc;
+        @Getter private final int showPriority;
 
-        public static FormField fromJavaClassField(Field field) {
-            return new FormField(field.getName(), FormFieldType.fromClass(field.getType()));
+        public static FormParam fromJavaClassField(Field field) {
+            WebActionFormParam annotation = field.getAnnotation(WebActionFormParam.class);
+            int showPriority = annotation != null ? annotation.showPriory() : 0;
+            String desc = annotation != null ? annotation.desc() : "";
+
+            return new FormParam(field.getName(), FormFieldType.fromClass(field.getType()), desc, showPriority);
         }
     }
 

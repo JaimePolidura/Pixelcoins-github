@@ -70,7 +70,6 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
                         .build())
                 .sync(SyncMenuConfiguration.builder()
                         .mapper(this::mapSyncedOfertaItem)
-                        .lockOnSync(true)
                         .build())
                 .build();
     }
@@ -99,6 +98,10 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
             enviarMensajeYSonido(player.getUniqueId(), mensajeCompraExsitosaAlComprador(oferta, item), Sound.ENTITY_EXPERIENCE_ORB_PICKUP);
             enviarMensajeYSonido(oferta.getVendedorId(), mensajeCompraExsitosaAlVendedor(oferta, item, player.getName()), Sound.ENTITY_PLAYER_LEVELUP);
         }
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Hol");
     }
 
     private void comprarOferta(Oferta oferta, ItemStack itemOfertaComprado) {

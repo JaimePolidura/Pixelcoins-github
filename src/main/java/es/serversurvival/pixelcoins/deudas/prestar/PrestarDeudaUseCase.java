@@ -38,7 +38,7 @@ public final class PrestarDeudaUseCase implements UseCaseHandler<PrestarDeudaPar
 
         eventBus.publish(new PixelcoinsPrestadasEvento(deuda));
     }
-    
+
     public void validar(PrestarDeudaParametros parametros) {
         validador.notEqual(parametros.getAcredorJugadorId(), parametros.getDeudorJugadorId(), "No te puedes prestar a ti mismo");
         deudasValidador.nominalCorrecto(parametros.getNominal());
