@@ -27,7 +27,7 @@ public final class ContratarEmpleadoWebActionHandler implements WebActionHandler
     @Override
     public void handle(UUID jugadorId, ContratarEmpleadoWebActionRequestBody body) throws WebActionException {
         Empresa empresa = empresasService.getByNombre(body.getNombreDeLaEmpresa());
-        UUID jugadorIdAContratar = jugadoresService.getByNombre(body.getNombreJugadorAContratar())
+        UUID jugadorIdAContratar = jugadoresService.getByNombre(body.getNombreJugadoraContratar())
                 .getJugadorId();
 
         useCaseBus.handle(ContratarEmpleadoParametros.builder()
@@ -39,7 +39,7 @@ public final class ContratarEmpleadoWebActionHandler implements WebActionHandler
                 .sueldo(body.getSueldo())
                 .build());
 
-        enviarMensajeYSonido(jugadorId, GOLD + "Has contratado a " + body.getNombreJugadorAContratar() +
+        enviarMensajeYSonido(jugadorId, GOLD + "Has contratado a " + body.getNombreJugadoraContratar() +
                 " en la empresa " + body.getNombreDeLaEmpresa(), ENTITY_PLAYER_LEVELUP) ;
         enviarMensajeYSonido(jugadorIdAContratar, GOLD + "Has sido contratado en " + body.getNombreDeLaEmpresa() + "con el cargo " +
                 body.getDescripccion() + " con un sueldo de " + GREEN + FORMATEA.format(body.getSueldo()) + " PC / " +

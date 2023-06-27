@@ -6,7 +6,6 @@ import es.serversurvival.minecraftserver._shared.menus.ConfirmacionMenu;
 import es.serversurvival.minecraftserver.deudas._shared.DeudaItemMercadoLore;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.deudas.prestar.PrestarDeudaParametros;
-import es.serversurvival.pixelcoins.deudas.prestar.PrestarDeudaUseCase;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,14 +28,14 @@ public final class PrestarConfirmacionMenu extends ConfirmacionMenu<PrestarConfi
 
     @Override
     public String titulo() {
-        return DARK_RED + "" + BOLD + "SOLICITUD PRESTAMO DE " + jugadoresService.getNombreById(getState().acredorJugadorId);
+        return DARK_RED + "" + BOLD + "   SOLICITUD PRESTAMO";
     }
 
     @Override
     public void onAceptar(Player destinatario, InventoryClickEvent event, PrestarConfirmacionMenuState state) {
         useCaseBus.handle(PrestarDeudaParametros.builder()
                 .numeroCuotasTotales(state.getNumeroCuotasTotales())
-                .periodoPagoCuita(state.getPeriodoPagoCuotasMs())
+                .periodoPagoCuota(state.getPeriodoPagoCuotasMs())
                 .nominal(state.getNominal())
                 .interes(state.getInteres())
                 .deudorJugadorId(getPlayer().getUniqueId())
@@ -55,7 +54,7 @@ public final class PrestarConfirmacionMenu extends ConfirmacionMenu<PrestarConfi
         return ItemBuilder.of(Material.GREEN_WOOL)
                 .title(GREEN + "" + BOLD + "Aceptar")
                 .lore(deudaItemMercadoLore.buildNuevoPrestamoInfo(getState().getAcredorJugadorId(), getState().getNominal(),
-                        getState().getNominal(), getState().getPeriodoPagoCuotasMs(), getState().getNumeroCuotasTotales()))
+                        getState().getInteres(), getState().getPeriodoPagoCuotasMs(), getState().getNumeroCuotasTotales()))
                 .build();
     }
 

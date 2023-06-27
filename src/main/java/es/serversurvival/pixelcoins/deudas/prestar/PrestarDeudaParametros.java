@@ -16,7 +16,7 @@ public final class PrestarDeudaParametros implements ParametrosUseCase {
     @Getter private final double nominal;
     @Getter private final double interes;
     @Getter private final int numeroCuotasTotales;
-    @Getter private final long periodoPagoCuita;
+    @Getter private final long periodoPagoCuota;
     
     public static PrestarDeudaParametros fromOfertaDeudaMercadoPrimario(OfertaDeudaMercadoPrimario oferta, UUID compradorId) {
         return new PrestarDeudaParametros(

@@ -32,7 +32,7 @@ public final class WebActionExecutor {
                 actionType.getRequestBodyClass());
 
         if(webActionHandler.isEmpty())
-            throw new WebActionException("Operacion no encontrada");
+            throw new WebActionException(String.format("Operacion %s no encontrada, hablar con Jaime", actionType.name()));
 
         return webActionHandler.get();
     }

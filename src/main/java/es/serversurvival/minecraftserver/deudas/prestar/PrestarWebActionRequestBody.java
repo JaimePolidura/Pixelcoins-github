@@ -1,20 +1,21 @@
 package es.serversurvival.minecraftserver.deudas.prestar;
 
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver.webaction.messages.WebActionRequestBody;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@AllArgsConstructor
+@NoArgsConstructor
 public final class PrestarWebActionRequestBody extends WebActionRequestBody {
-    @Getter private final String nombreDelJugadorAPrestar;
-    @Getter private final double pixelcoins;
-    @Getter private final double interes;
-    @Getter private final int numeroCuotasTotales;
-    @Getter private final long periodoPagoCuotaEnDias;
+    @Getter private String nombreDelJugadorPrestar;
+    @Getter private int periodoPagoCuotaEnDias;
+    @Getter private int numeroCuotasTotales;
+    @Getter private double pixelcoins;
+    @Getter private double interes;
 
     public PrestarConfirmacionMenu.PrestarConfirmacionMenuState toPrestarConfirmacionMenuState(UUID acredorJugadorId) {
-        return new PrestarConfirmacionMenu.PrestarConfirmacionMenuState(acredorJugadorId, pixelcoins, interes, numeroCuotasTotales, periodoPagoCuotaEnDias * 24 * 60 * 60 * 1000);
+        return new PrestarConfirmacionMenu.PrestarConfirmacionMenuState(acredorJugadorId, pixelcoins, interes / 100, numeroCuotasTotales, Funciones.diasToMillis(periodoPagoCuotaEnDias));
     }
 }

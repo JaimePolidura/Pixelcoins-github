@@ -16,9 +16,11 @@ import java.io.OutputStream;
 public final class WebActionDataSender {
     private final ObjectMapper objectMapper;
 
-    public void sendWebActionData(HttpExchange client, WebActionType webActionType) throws IOException, WebActionException {
+    public void sendWebActionData(HttpExchange client, WebActionType webActionType) throws IOException {
         WebActionGetDataResponse response = WebActionGetDataResponse.fromWebAction(webActionType);
         String jsonResponse = objectMapper.writeValueAsString(response);
+
+        client.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
 
         client.sendResponseHeaders(200, jsonResponse.length());
         OutputStream outputStream =  client.getResponseBody();

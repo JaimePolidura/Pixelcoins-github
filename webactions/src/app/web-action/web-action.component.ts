@@ -43,6 +43,8 @@ export class WebActionComponent implements OnInit {
   }
 
   onSubmit($event: any): void {
+    this.$error.next("");
+
     const formData: any = JSON.stringify(this.formulario.value);
     this.$loading.next(true);
 
@@ -50,7 +52,7 @@ export class WebActionComponent implements OnInit {
       this.router.navigateByUrl("/success");
       this.$loading.next(false);
     }, err => {
-      this.$error.next(err.error.error ?? "Error hablar con Jaime");
+      this.$error.next(err.error ?? "Error hablar con Jaime");
       console.error(err);
       this.$loading.next(false);
     });
@@ -59,7 +61,7 @@ export class WebActionComponent implements OnInit {
   setupFormulario(formulario: WebActionFormResponse): void {
     this.nombre = formulario.nombre;
 
-    formulario.campos.forEach((campo: WebActionFormCampo): void => {
+    formulario.parametros.forEach((campo: WebActionFormCampo): void => {
       this.camposByNombre.set(campo.nombre, campo);
       this.formulario.addControl(campo.nombre, this.formBuilder.control("", Validators.required));
     });

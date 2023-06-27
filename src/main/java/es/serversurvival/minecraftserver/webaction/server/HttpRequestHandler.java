@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.DomainException;
+import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import es.serversurvival.minecraftserver.webaction.*;
 import es.serversurvival.minecraftserver.webaction.requesthandlers.WebActionExecutor;
 import es.serversurvival.minecraftserver.webaction.requesthandlers.WebActionDataSender;
@@ -37,17 +38,17 @@ public final class HttpRequestHandler implements HttpHandler {
     }
 
     private void tryHandleWebActionRequest(HttpExchange client) throws IOException, WebActionException {
-        verboHttpEsPost(client);
-
-        String token = client.getRequestHeaders().get("token").get(0);
+        String token = HttpUtils.getQueryParam(client, "token")
+                .orElseThrow(() -> new ResourceNotFound("Formato invalido"));
         tokenEsValido(token);
 
-        WebActionType actionType = webActionTokenService.getWebActionTypeFromToken(token);
+        WebActionType actionType = webActionTokenService.getWebActionTypeFromToken(token);;
         UUID jugadorId = webActionTokenService.getJugadorIdFromToken(token);
         elJugadorExisteYActionTypeTambien(actionType, jugadorId);
 
         if(client.getRequestMethod().equals("POST")){
             webActionExecutor.execute(jugadorId, actionType, client);
+            send(client, "", 200);
         }else{
             webActionDataSender.sendWebActionData(client, actionType);
         }
@@ -59,19 +60,16 @@ public final class HttpRequestHandler implements HttpHandler {
     }
 
     private void tokenEsValido(String token) throws WebActionException {
-        if(webActionTokenService.isValid(token))
+        if(webActionTokenService.isNotExpired(token))
             throw new WebActionException("Sesion expirada, pruebe de nuevo a generar el link");
     }
 
-    private static void verboHttpEsPost(HttpExchange client) throws WebActionException {
-        if(!client.getRequestMethod().equals("POST"))
-            throw new WebActionException("Method not allowed");
-    }
-
     private void send(HttpExchange client, String response, int statusCode) throws IOException {
+        client.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
         client.sendResponseHeaders(statusCode, response.length());
         OutputStream outputStream = client.getResponseBody();
         outputStream.write(response.getBytes());
+        outputStream.flush();
         outputStream.close();
     }
 }

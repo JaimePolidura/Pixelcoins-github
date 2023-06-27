@@ -19,6 +19,8 @@ public final class DeudaItemMercadoLore {
 
     public List<String> buildNuevoPrestamoInfo(UUID acredorJugadorId, double nominal, double interes, long periodoPagoCuotasMs,
                                                int nCuotasTotales) {
+        System.out.println(interes);
+
         return List.of(
                 GOLD + "Acredor: " + jugadoresService.getNombreById(acredorJugadorId),
                 GOLD + "Pagos/Cuotas: " + GREEN + FORMATEA.format(nominal * interes) + " PC " + GOLD + " / " + Funciones.millisToDias(periodoPagoCuotasMs) + " dias",

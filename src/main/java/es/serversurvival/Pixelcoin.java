@@ -40,6 +40,7 @@ import es.serversurvival.pixelcoins.tienda._shared.TiendaItemMinecraftEncantamie
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
@@ -70,9 +71,13 @@ public final class Pixelcoin extends JavaPlugin {
 
     private static DependenciesRepository DEPENDENCIES_REPOSTIORY;
 
+    public static Plugin INSTANCE = null;
+
     @SneakyThrows
     @Override
     public void onEnable() {
+        INSTANCE = this;
+
         getLogger().info("------------Iniciando Pixelcoins -------------");
         getServer().getConsoleSender().sendMessage(GREEN + "------------------------------");
 

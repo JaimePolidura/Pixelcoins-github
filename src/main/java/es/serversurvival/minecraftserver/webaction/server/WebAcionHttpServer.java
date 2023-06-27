@@ -18,7 +18,7 @@ public final class WebAcionHttpServer {
     public void iniciar() throws IOException {
         new Thread(() -> {
             try {
-                httpServer = HttpServer.create(new InetSocketAddress(ConfigurationVariables.WEB_ACTIONS_SERVER_IP, ConfigurationVariables.WEB_ACTIONS_SERVER_PORT), 0);
+                httpServer = HttpServer.create(new InetSocketAddress(ConfigurationVariables.WEB_ACTIONS_SERVER_IP, ConfigurationVariables.WEB_ACTIONS_BACKEND_SERVER_PORT), 0);
                 httpServer.createContext("/webaction", webAcionRequestHandler);
 
                 httpServer.start();

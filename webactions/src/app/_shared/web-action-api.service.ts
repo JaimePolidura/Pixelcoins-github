@@ -22,11 +22,11 @@ export class WebActionApiService {
 }
 
 export interface WebActionFormResponse {
+  parametros: WebActionFormCampo[];
   nombre: string;
-  campos: WebActionFormCampo[];
 }
 
 export interface WebActionFormCampo {
   nombre: string;
-  tipo: 'TEXTO' | 'NUMERO';
+  tipo: 'TEXT' | 'NUMERO';
 }

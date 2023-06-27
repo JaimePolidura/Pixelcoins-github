@@ -1,47 +1,48 @@
 package es.serversurvival.minecraftserver.webaction.token;
 
 import es.dependencyinjector.dependencies.annotations.Service;
+import es.serversurvival._shared.ConfigurationVariables;
 import es.serversurvival.minecraftserver.webaction.WebActionType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.vavr.control.Try;
 
 import java.time.ZonedDateTime;
-import java.util.Date;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public final class WebActionTokenService {
-    private static final String SECRET_KEY = "7B9R6rb6157rb761";
-
     public String generate(WebActionType actionType, UUID jugadorId) {
         return Jwts.builder()
-                .setClaims(Map.of(
-                        "actionType", actionType.toString(),
+                .setClaims(new HashMap<>(Map.of(
+                        "actionType", actionType.name(),
                         "jugadorId", jugadorId.toString()
-                ))
+                )))
+                .setSubject(jugadorId.toString())
                 .setIssuedAt(new Date())
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS256, ConfigurationVariables.WEB_ACTIONS_SECRET_KEY)
                 .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(5).toInstant()))
                 .compact();
     }
 
-    public boolean isValid(String token) {
-        return this.getClaims(token).getExpiration().before(new Date());
-    }
+    public boolean isNotExpired(String token) {
+        Try<Boolean> result = Try.of(() -> getClaims(token).getExpiration().before(new Date(System.currentTimeMillis())));
 
-    public UUID getJugadorIdFromToken(String token) {
-        return UUID.fromString(getClaims(token).get("jugadorid").toString());
+        return result.isSuccess() && result.get();
     }
 
     public WebActionType getWebActionTypeFromToken(String token) {
         return WebActionType.valueOf(getClaims(token).get("actionType").toString());
     }
 
+    public UUID getJugadorIdFromToken(String token) {
+        return UUID.fromString(getClaims(token).get("jugadorId").toString());
+    }
+
     private Claims getClaims (String token){
         return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
+                .setSigningKey(ConfigurationVariables.WEB_ACTIONS_SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody();
     }

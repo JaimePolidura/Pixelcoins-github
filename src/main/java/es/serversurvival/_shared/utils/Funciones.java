@@ -214,6 +214,10 @@ public final class Funciones {
                 .anyMatch( (name) -> name.equalsIgnoreCase(nombre));
     }
 
+    public static long diasToMillis(int dias) {
+        return (long) dias * 24 * 60 * 60 * 1000;
+    }
+
     public static int millisToDias(long millis) {
         return (int) (millis / (24 * 60 * 60 * 1000));
     }

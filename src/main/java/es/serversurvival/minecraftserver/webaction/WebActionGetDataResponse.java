@@ -12,10 +12,10 @@ import java.util.stream.Collectors;
 public final class WebActionGetDataResponse {
     @Getter private final List<FormField> parametros;
     @Getter private final String nombre;
-
+    
     public static WebActionGetDataResponse fromWebAction(WebActionType webActionType) {
         return new WebActionGetDataResponse(
-                Arrays.stream(webActionType.getRequestBodyClass().getFields())
+                Arrays.stream(webActionType.getRequestBodyClass().getDeclaredFields())
                         .map(WebActionGetDataResponse.FormField::fromJavaClassField)
                         .collect(Collectors.toList()),
                 webActionType.getNombre()

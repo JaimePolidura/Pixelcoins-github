@@ -2,7 +2,10 @@ package es.serversurvival._shared;
 
 public final class ConfigurationVariables {
     public static final String  WEB_ACTIONS_SERVER_IP = "localhost";
-    public static final int     WEB_ACTIONS_SERVER_PORT= 8080;
+    public static final int WEB_ACTIONS_FRONTEND_SERVER_PORT = 80;
+    public static final int WEB_ACTIONS_BACKEND_SERVER_PORT = 8080;
+    public static final String  WEB_ACTIONS_SECRET_KEY = "8976121iuy2o1";
+
     public static final String  DB_NAME = "pixelcoins_test";
     public static final String  DB_USER = "root";
     public static final String  DB_PASSWORD = "";

@@ -18,6 +18,13 @@ import java.util.UUID;
 public final class MinecraftUtils {
     private MinecraftUtils() {}
 
+    public static void enviarUrl(Player player, String mensaje, String link) {
+        String comando = String.format("/tellraw @p {\"text\":\"%s\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"%s\"}}", mensaje, link);
+        System.out.println(comando);
+
+        player.performCommand(comando);
+    }
+
     public static void broadcastExcept(Player playerException, String mensaje) {
         Bukkit.getOnlinePlayers().stream()
                 .filter(player -> !player.equals(playerException))

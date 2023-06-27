@@ -91,7 +91,7 @@ public final class Deuda {
                 0,
                 fechaHoy,
                 fechaHoy,
-                parametros.getPeriodoPagoCuita(),
+                parametros.getPeriodoPagoCuota(),
                 EstadoDeuda.PENDIENTE
         );
     }

@@ -23,11 +23,7 @@ public final class PrestarDeudaUseCase implements UseCaseHandler<PrestarDeudaPar
 
     @Override
     public void handle(PrestarDeudaParametros parametros) {
-        deudasValidador.nominalCorrecto(parametros.getNominal());
-        deudasValidador.interesCorreto(parametros.getInteres());
-        deudasValidador.numeroCuotasCorrecto(parametros.getNumeroCuotasTotales());
-        deudasValidador.periodoPagoCuotasCorrecto(parametros.getPeriodoPagoCuita());
-        validador.jugadorTienePixelcoins(parametros.getAcredorJugadorId(), parametros.getNominal());
+        validar(parametros);
 
         Deuda deuda = Deuda.fromParametrosUseCase(parametros);
 
@@ -41,5 +37,14 @@ public final class PrestarDeudaUseCase implements UseCaseHandler<PrestarDeudaPar
                 .build());
 
         eventBus.publish(new PixelcoinsPrestadasEvento(deuda));
+    }
+    
+    public void validar(PrestarDeudaParametros parametros) {
+        validador.notEqual(parametros.getAcredorJugadorId(), parametros.getDeudorJugadorId(), "No te puedes prestar a ti mismo");
+        deudasValidador.nominalCorrecto(parametros.getNominal());
+        deudasValidador.interesCorreto(parametros.getInteres());
+        deudasValidador.numeroCuotasCorrecto(parametros.getNumeroCuotasTotales());
+        deudasValidador.periodoPagoCuotasCorrecto(parametros.getPeriodoPagoCuota());
+        validador.jugadorTienePixelcoins(parametros.getAcredorJugadorId(), parametros.getNominal());
     }
 }

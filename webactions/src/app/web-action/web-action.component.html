@@ -9,8 +9,9 @@
     </div>
     
     <div *ngFor="let campoFormulario of formulario.controls | keyvalue; let i = index">
-      <input type="{{camposByNombre.get(campoFormulario.key)?.tipo == 'TEXTO' ? 'text' : 'number'}}"
+      <input type="{{camposByNombre.get(campoFormulario.key)?.tipo == 'TEXT' ? 'text' : 'number'}}"
              class="form-control"
+             [formControlName]="campoFormulario.key"
              [ngClass]="{'form-control-disabled': ($loading | async) == true}"
              placeholder="{{splitNombreCamelCaseEnEspacios(campoFormulario.key)}}"
              autofocus>

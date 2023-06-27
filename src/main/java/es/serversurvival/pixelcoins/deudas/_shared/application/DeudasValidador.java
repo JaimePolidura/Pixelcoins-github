@@ -34,18 +34,18 @@ public final class DeudasValidador {
     }
 
     public void numeroCuotasCorrecto(int numeroCuotas) {
-        validador.numeroMayorQueCero(numeroCuotas, "Numero de cuotas");
+        validador.numeroMayorQueCero(numeroCuotas, "El numero de cuotas");
     }
 
     public void interesCorreto(double interes) {
-        validador.numeroMayorQueCero(interes, "Interes");
+        validador.numeroMayorQueCero(interes, "El interes");
     }
 
     public void nominalCorrecto(double nominal) {
-        validador.numeroMayorQueCero(nominal, "Nominal");
+        validador.numeroMayorQueCero(nominal, "El nominal");
     }
 
     public void periodoPagoCuotasCorrecto(long periodoPagoCuotas) {
-        validador.numeroMayorQueCero(periodoPagoCuotas, "Periodo pago cuotas");
+        validador.numeroMayorQueCero(periodoPagoCuotas, "El eriodo de pago de las cuotas");
     }
 }
