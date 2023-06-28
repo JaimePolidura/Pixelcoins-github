@@ -2,9 +2,10 @@ package es.serversurvival.minecraftserver.empresas.comprarservicio;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
+@NoArgsConstructor
 public final class EmpresaComprarServicioComando {
-    @Getter private final String empresa;
-    @Getter private final double precio;
+    @Getter private String empresa;
+    @Getter private double precio;
 }

@@ -17,12 +17,15 @@ import es.serversurvival.pixelcoins.empresas._shared.empresas.application.Empres
 import es.serversurvival.pixelcoins.empresas.irseempleo.DejarEmpleoParametros;
 import es.serversurvival.pixelcoins.empresas.irseempleo.DejarEmpleoUseCase;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
@@ -30,11 +33,12 @@ import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
 public final class MisEmpleosMenu extends Menu {
-    private final DejarEmpleoUseCase dearEmpleoUseCase;
     private final EmpleadosService empleadosService;
     private final EmpresasService empresasService;
     private final MenuService menuService;
     private final UseCaseBus useCaseBus;
+
+    private Set<UUID> empleosIdDondeEsDirector = new HashSet<>();
 
     @Override
     public int[][] items() {
@@ -55,7 +59,7 @@ public final class MisEmpleosMenu extends Menu {
                 .title(DARK_RED + "" + BOLD + "        TUS EMPLEOS")
                 .item(1, buildItemInfo())
                 .items(2, this::buildItemsEmpleos, this::dejarEmpleo)
-                .breakpoint(7, MenuItems.GO_BACK_PERFIL, (p, e) -> menuService.open(p, PerfilMenu.class))
+                .breakpoint(7, MenuItems.GO_BACK, (p, e) -> menuService.open(p, PerfilMenu.class))
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
                         .forward(9, Material.GREEN_WOOL)
@@ -64,17 +68,23 @@ public final class MisEmpleosMenu extends Menu {
     }
 
     private void dejarEmpleo(Player player, InventoryClickEvent event) {
-        UUID empresaId = MinecraftUtils.getLastLineOfLore(event.getCurrentItem(), 0);
+        UUID empleadoId = MinecraftUtils.getLastLineOfLore(event.getCurrentItem(), 0);
+        UUID empresaId = MinecraftUtils.getLastLineOfLore(event.getCurrentItem(), 1);
+
+        if(empleosIdDondeEsDirector.contains(empleadoId)){
+            return;
+        }
 
         useCaseBus.handle(new DejarEmpleoParametros(player.getUniqueId(), empresaId));
 
-        this.menuService.close(player);
+        menuService.close(player);
 
         player.sendMessage(GOLD + "Te has ido del trabajo");
     }
 
     private List<ItemStack> buildItemsEmpleos(Player player) {
         return this.empleadosService.findByEmpleadoJugadorId(player.getUniqueId()).stream()
+                .filter(Empleado::isEstaContratado)
                 .map(this::buildItemEmpleo)
                 .toList();
     }
@@ -82,31 +92,34 @@ public final class MisEmpleosMenu extends Menu {
     private ItemStack buildItemEmpleo(Empleado empleado) {
         Empresa empresaTrabajo = this.empresasService.getById(empleado.getEmpresaId());
         Material materialIcono = Material.getMaterial(empresaTrabajo.getLogotipo());
-        String displayName = MenuItems.CLICKEABLE + "DEJAR EMPLEO";
+        boolean esDirector = empresaTrabajo.getDirectorJugadorId().equals(empleado.getEmpleadoJugadorId());
+
+        if(esDirector){
+            empleosIdDondeEsDirector.add(empleado.getEmpleadoId());
+        }
 
         return ItemBuilder.of(materialIcono)
-                .title(displayName)
+                .title(esDirector ?
+                        DARK_RED + "" +BOLD + "ERES EL DIRECTOR" :
+                        MenuItems.CLICKEABLE + "DEJAR EMPLEO")
                 .lore(List.of(
-                        "   ",
                         GOLD + "Empresa: " + empresaTrabajo.getNombre(),
                         GOLD + "Cargo: " + empleado.getDescripccion(),
-                        GOLD + "Sueldo: " + GREEN + FORMATEA.format(empleado.getSueldo()) + "PC" + " / " + Funciones.millisToDias(empleado.getPeriodoPagoMs()) + " dias",
-                        GOLD + "Ultima vez que te pagaron: " + empleado.getFechaUltimoPago().toString(),
+                        GOLD + "Sueldo: " + GREEN + FORMATEA.format(empleado.getSueldo()) + "PC" + GOLD + " / " + Funciones.millisToDias(empleado.getPeriodoPagoMs()) + " dias",
+                        GOLD + "Ultima vez que te pagaron: " + Funciones.toString(empleado.getFechaUltimoPago()),
                         "   ",
-                        GOLD + "ID: " + empleado.getEmpleadoId()
+                        empresaTrabajo.getEmpresaId().toString(),
+                        empleado.getEmpleadoId().toString()
                 ))
                 .build();
     }
 
+    //TODO
     private ItemStack buildItemInfo() {
         return ItemBuilder.of(Material.PAPER)
                 .title(GOLD + "" + BOLD + "INFO")
                 .lore(List.of(
-                        "Puedes estar contratado en",
-                        "una empresa y ganar dinero.",
-                        "Mas info en /ayuda empleo o en:",
-                        "http://serversurvival.ddns.net"
-
+                        ""
                 ))
                 .build();
     }

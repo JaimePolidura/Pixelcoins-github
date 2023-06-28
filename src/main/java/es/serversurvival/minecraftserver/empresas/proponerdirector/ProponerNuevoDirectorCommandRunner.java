@@ -2,6 +2,7 @@ package es.serversurvival.minecraftserver.empresas.proponerdirector;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
+import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver.webaction.WebActionType;
 import es.serversurvival.minecraftserver.webaction.WebActionUrlGenerator;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,6 @@ public final class ProponerNuevoDirectorCommandRunner implements CommandRunnerNo
     @Override
     public void execute(Player player) {
         String url = webActionUrlGenerator.generate(WebActionType.EMPRESAS_PROPONER_DIRECTOR, player.getUniqueId());
-        player.sendMessage(ChatColor.GOLD + "Para proponer un nuevo director: " + url);
+        MinecraftUtils.enviarUrl(player, url, "Haz click aqui para proponer un nuevo director");
     }
 }

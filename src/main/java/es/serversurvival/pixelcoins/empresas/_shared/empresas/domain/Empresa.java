@@ -1,5 +1,7 @@
 package es.serversurvival.pixelcoins.empresas._shared.empresas.domain;
 
+import es.serversurvival._shared.ConfigurationVariables;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.pixelcoins.empresas.editarempresa.EditarEmpresaParametros;
 import es.serversurvival.pixelcoins.empresas.crear.CrearEmpresaParametros;
 import lombok.AllArgsConstructor;
@@ -14,8 +16,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public final class Empresa {
-    public static final int N_ACCIONES_INICIAL = 1000;
-
     @Getter private UUID empresaId;
     @Getter private String nombre;
     @Getter private UUID fundadorJugadorId;
@@ -57,15 +57,15 @@ public final class Empresa {
         return Empresa.builder()
                 .empresaId(UUID.randomUUID())
                 .nombre(comando.getNombre())
+                .fechaCerrado(Funciones.NULL_LOCALDATETIME)
                 .fundadorJugadorId(comando.getJugadorCreadorId())
                 .directorJugadorId(comando.getJugadorCreadorId())
                 .descripcion(comando.getDescripccion())
                 .logotipo(comando.getIcono())
-                .nTotalAcciones(N_ACCIONES_INICIAL)
+                .nTotalAcciones(ConfigurationVariables.EMPRESAS_N_ACCIONES_INICIAL)
                 .fechaCreacion(LocalDateTime.now())
                 .esCotizada(false)
                 .estaCerrado(false)
-                .fechaCerrado(null)
                 .build();
     }
 }

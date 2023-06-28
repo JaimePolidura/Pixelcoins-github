@@ -17,14 +17,14 @@ public final class EditarEmpleadoUseCase implements UseCaseHandler<EditarEmplead
 
     @Override
     public void handle(EditarEmpleadoParametros parametros) {
+        Empleado empleado = empleadosService.getById(parametros.getEmpleadoIdEdtiar());
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
-        empresasValidador.empleadoEmpresaActivo(parametros.getEmpresaId(), parametros.getEmpleadoIdEdtiar());
+        empresasValidador.empleadoJugadorEmpresaActivo(parametros.getEmpresaId(), empleado.getEmpleadoJugadorId());
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
         empresasValidador.sueldoCorrecto(parametros.getNuevoSueldo());
         empresasValidador.periodoPagoCorrecto(parametros.getNuevoPeriodoPago());
         empresasValidador.descripccionCorrecta(parametros.getNuevaDescripccion());
 
-        Empleado empleado = empleadosService.getById(parametros.getEmpleadoIdEdtiar());
         empleadosService.save(empleado.editar(parametros));
 
         eventBus.publish(new EmpleadoEditado(parametros.getEmpleadoIdEdtiar()));

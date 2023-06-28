@@ -1,11 +1,9 @@
 package es.serversurvival.minecraftserver.empresas.editarempresa;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 public final class EditarEmpresaComando {
-    @Getter private final String empresa;
-    @Getter private final String queSeEdita;
-    @Getter private final String nuevoValor;
+    @Getter private String empresa;
+    @Getter private String queSeEdita;
+    @Getter private String nuevoValor;
 }

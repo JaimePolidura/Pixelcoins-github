@@ -55,10 +55,10 @@ public final class VerVotacionesEmpresaMenu extends Menu<Empresa> {
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
                 .fixedItems()
-                .title(DARK_RED + "" + BOLD + "VOTACIONES " + getState().getNombre())
+                .title(DARK_RED + "" + BOLD + "    VOTACIONES " + getState().getNombre())
                 .item(1, buildItemInfo())
                 .items(2, buildItemVotaciones(), this::abrirVotarMenu)
-                .breakpoint(7, Material.GREEN_BANNER, this::irAMiEmpresaMenu)
+                .breakpoint(7, MenuItems.GO_BACK, this::irAMiEmpresaMenu)
                 .paginated(PaginationConfiguration.builder()
                         .forward(9, Material.GREEN_WOOL)
                         .backward(8, Material.RED_WOOL)

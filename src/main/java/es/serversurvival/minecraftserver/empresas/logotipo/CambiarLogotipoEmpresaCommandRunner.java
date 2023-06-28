@@ -12,6 +12,6 @@ import org.bukkit.entity.Player;
 public final class CambiarLogotipoEmpresaCommandRunner implements CommandRunnerArgs<CambiarLogotipoEmpresaComando> {
     @Override
     public void execute(CambiarLogotipoEmpresaComando comando, Player player) {
-        player.performCommand(String.format("empresas editar %s logitipo", comando.getEmpresa()));
+        player.performCommand(String.format("empresas editar %s logotipo", comando.getEmpresa()));
     }
 }

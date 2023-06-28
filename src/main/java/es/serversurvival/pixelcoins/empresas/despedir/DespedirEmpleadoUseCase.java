@@ -22,10 +22,9 @@ public final class DespedirEmpleadoUseCase implements UseCaseHandler<DespedirEmp
         validador.stringLongitudEntre(parametros.getCausa(), 1, 16, "causa de despido");
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
-        empresasValidador.empleadoEmpresaActivo(parametros.getEmpresaId(), parametros.getEmpleadoIdADespedir());
-        empresasValidador.empleadoNoEsDirector(parametros.getEmpresaId(), parametros.getEmpleadoIdADespedir());
-
         Empleado empleado = this.empleadosService.getById(parametros.getEmpleadoIdADespedir());
+        empresasValidador.empleadoJugadorEmpresaActivo(parametros.getEmpresaId(), empleado.getEmpleadoJugadorId());
+        empresasValidador.empleadoNoEsDirector(parametros.getEmpresaId(), empleado.getEmpleadoJugadorId());
 
         empleadosService.save(empleado.despedir(parametros.getCausa()));
 

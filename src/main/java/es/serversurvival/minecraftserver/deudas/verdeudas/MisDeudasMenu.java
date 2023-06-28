@@ -50,7 +50,7 @@ public final class MisDeudasMenu extends Menu {
                 .item(1, buildItemInfo())
                 .item(2, buildItemMercado(), (p, e) -> menuService.open(p, MercadoDeudaMenu.class))
                 .items(3, this::buildItemsDeudas, this::onDeudaItemClicked)
-                .breakpoint(7, MenuItems.GO_BACK_PERFIL, (p, e) -> menuService.open(p, PerfilMenu.class))
+                .breakpoint(7, MenuItems.GO_BACK, (p, e) -> menuService.open(p, PerfilMenu.class))
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
                         .forward(9, Material.GREEN_WOOL)

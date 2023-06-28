@@ -14,9 +14,7 @@ import es.serversurvival.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival.pixelcoins.mercado.comprar.ComprarOfertaParametros;
-import es.serversurvival.pixelcoins.mercado.comprar.ComprarOfertaUseCase;
 import es.serversurvival.pixelcoins.mercado.retirar.RetirarOfertaParametros;
-import es.serversurvival.pixelcoins.mercado.retirar.RetirarOfertaUseCase;
 import es.serversurvival.minecraftserver.jugadores.perfil.PerfilMenu;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
@@ -63,7 +61,7 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
                 .fixedItems()
                 .item(1, buildItemInfo())
                 .items(2, buildItemsOfertas(), this::onItemTiendaOfertaClicked)
-                .breakpoint(7, MenuItems.GO_BACK_PERFIL, (p, e) -> menuService.open(p, PerfilMenu.class))
+                .breakpoint(7, MenuItems.GO_BACK, (p, e) -> menuService.open(p, PerfilMenu.class))
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
                         .forward(9, Material.GREEN_WOOL)

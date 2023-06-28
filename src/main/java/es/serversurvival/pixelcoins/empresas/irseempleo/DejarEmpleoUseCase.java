@@ -18,8 +18,8 @@ public final class DejarEmpleoUseCase implements UseCaseHandler<DejarEmpleoParam
     @Override
     public void handle(DejarEmpleoParametros parametros) {
         empresasValidador.empleadoEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
-
         Empleado empleado = empleadosService.getEmpleoActivoByEmpresaIdAndEmpleadoJugadorId(parametros.getEmpresaId(), parametros.getJugadorId());
+        empresasValidador.empleadoNoEsDirector(parametros.getEmpresaId(), empleado.getEmpleadoJugadorId());
 
         empleadosService.deleteById(empleado.getEmpleadoId());
 

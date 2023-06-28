@@ -2,6 +2,7 @@ package es.serversurvival.minecraftserver.empresas.contratar;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerNonArgs;
+import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver.webaction.WebActionType;
 import es.serversurvival.minecraftserver.webaction.WebActionUrlGenerator;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,6 @@ public final class ContratarEmpeladoCommandRunner implements CommandRunnerNonArg
     @Override
     public void execute(Player player) {
         String url = webActionUrlGenerator.generate(WebActionType.EMPRESAS_CONTRATAR, player.getUniqueId());
-        player.sendMessage(GOLD + "Para contratar: " + AQUA + url);
+        MinecraftUtils.enviarUrl(player, url, "Haz click aqui para contratar");
     }
 }

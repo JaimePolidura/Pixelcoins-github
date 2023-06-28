@@ -17,15 +17,19 @@ public final class ContratarEmpleadoUseCase implements UseCaseHandler<ContratarE
 
     @Override
     public void handle(ContratarEmpleadoParametros parametros) {
+        validar(parametros);
+
+        empleadosService.save(Empleado.fromContratarParametros(parametros));
+
+        eventBus.publish(new JugadorContratado(parametros.getJugadorIdAContratar()));
+    }
+
+    public void validar(ContratarEmpleadoParametros parametros) {
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.noEmpleadoEmpresa(parametros.getEmpresaId(), parametros.getJugadorIdAContratar());
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorIdContrador());
         empresasValidador.sueldoCorrecto(parametros.getSueldo());
         empresasValidador.periodoPagoCorrecto(parametros.getPeriodoPagoMs());
         empresasValidador.descripccionCorrecta(parametros.getDescripccion());
-
-        empleadosService.save(Empleado.fromContratarParametros(parametros));
-
-        eventBus.publish(new JugadorContratado(parametros.getJugadorIdAContratar()));
     }
 }

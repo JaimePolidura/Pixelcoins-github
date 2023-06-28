@@ -109,11 +109,11 @@ public final class EmpresasValidador {
 
     public void empleadoNoEsDirector(UUID empresaId, UUID empleadoJugadorId) {
         if(empresasService.getById(empresaId).getDirectorJugadorId().equals(empleadoJugadorId)){
-            throw new IllegalState("El jugador es el director de la empresa");
+            throw new IllegalState("Es el director de la empresa");
         }
     }
 
-    public void empleadoEmpresaActivo(UUID empresaId, UUID empleadoJugadorId) {
+    public void empleadoJugadorEmpresaActivo(UUID empresaId, UUID empleadoJugadorId) {
         Optional<Empleado> empleado = empleadosService.findEmpleoActivoByEmpresaIdAndEmpleadoJugadorId(empresaId, empleadoJugadorId);
         if(empleado.isEmpty()){
             throw new NotTheOwner("El jugador no esta empleado");
@@ -130,7 +130,14 @@ public final class EmpresasValidador {
     public void noEmpleadoEmpresa(UUID empresaId, UUID jugadorId) {
         Optional<Empleado> empleado = empleadosService.findEmpleoActivoByEmpresaIdAndEmpleadoJugadorId(empresaId, jugadorId);
         if(empleado.isPresent()){
-            throw new NotTheOwner("El jugador ya esta empleado");
+            throw new AlreadyExists("El jugador ya esta empleado");
+        }
+    }
+
+    public void noEmpleadoEmpresa(UUID empresaId, UUID jugadorId, String mensaje) {
+        Optional<Empleado> empleado = empleadosService.findEmpleoActivoByEmpresaIdAndEmpleadoJugadorId(empresaId, jugadorId);
+        if(empleado.isPresent()){
+            throw new AlreadyExists(mensaje);
         }
     }
 

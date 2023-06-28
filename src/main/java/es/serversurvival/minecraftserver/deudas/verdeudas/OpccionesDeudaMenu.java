@@ -41,7 +41,7 @@ public final class OpccionesDeudaMenu extends Menu<Deuda> {
                 .item(1, this::buildPagarOCancelarDeuda, this::pagarOCancelarDeuda)
                 .item(2, this::buildVenderDeudaMeradoItem, this::venderDeudaMercado)
                 .item(4, this::buildItemInfo)
-                .item(5, MenuItems.GO_BACK_PERFIL, (p, e) -> menuService.open(p, MisDeudasMenu.class))
+                .item(5, MenuItems.GO_BACK, (p, e) -> menuService.open(p, MisDeudasMenu.class))
                 .build();
     }
 

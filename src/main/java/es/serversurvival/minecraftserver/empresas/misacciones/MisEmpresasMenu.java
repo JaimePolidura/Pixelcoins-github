@@ -59,7 +59,7 @@ public final class MisEmpresasMenu extends Menu {
                 .item(2, buildItemTodasLasEmpresas(), (p, e) -> menuService.open(p, TodasEmpresasMenu.class))
                 .item(3, buildItemMercado(), (p, e) -> menuService.open(p, MercadoAccionesEmpresasMenu.class))
                 .items(6, this::buildItemAcciones, this::venderAccion)
-                .breakpoint(7, MenuItems.GO_BACK_PERFIL, (p, e) -> menuService.open(p, PerfilMenu.class))
+                .breakpoint(7, MenuItems.GO_BACK, (p, e) -> menuService.open(p, PerfilMenu.class))
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
                         .forward(9, Material.GREEN_WOOL)

@@ -6,6 +6,7 @@ import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.menustate.BeforeShow;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.domain.Empleado;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
@@ -37,16 +38,16 @@ public final class OpccionesEmpleadoMenu extends Menu<Empleado> implements Befor
     @Override
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
-                .title(DARK_RED + "" + BOLD + "     " + jugadoresService.getNombreById(getState().getEmpleadoId()))
+                .title(DARK_RED + "" + BOLD + "          " + jugadoresService.getNombreById(getState().getEmpleadoJugadorId()))
                 .fixedItems()
-                .item(5, Material.GREEN_BANNER, (p, e) -> menuService.open(p, MiEmpresaMenu.class, empresasService.getById(getState().getEmpresaId())))
+                .item(5, MenuItems.GO_BACK, (p, e) -> menuService.open(p, MiEmpresaMenu.class, empresasService.getById(getState().getEmpresaId())))
                 .item(1, this::buildItemEditar, this::editarEmpleado)
                 .item(2, this::buildItemDespedir, this::despedirEmpleado)
                 .build();
     }
 
     private ItemStack buildItemDespedir(Player player) {
-        return ItemBuilder.of(Material.BARREL)
+        return ItemBuilder.of(Material.BARRIER)
                 .title(GREEN + "" + BOLD + UNDERLINE + "DESPEDIR")
                 .build();
     }
@@ -60,6 +61,8 @@ public final class OpccionesEmpleadoMenu extends Menu<Empleado> implements Befor
                 .build());
 
         getPlayer().sendMessage(GOLD + "Has despedido a " + nombreEmpleado + " de la empresa " + nombreEmpresa);
+
+        player.closeInventory();
     }
 
     private ItemStack buildItemEditar(Player player) {

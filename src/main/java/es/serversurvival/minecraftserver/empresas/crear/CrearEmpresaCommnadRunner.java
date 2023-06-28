@@ -34,6 +34,7 @@ public final class CrearEmpresaCommnadRunner implements CommandRunnerArgs<CrearE
 
         enviarMensajeYSonido(player, GOLD + "Has creado la empresa " + comando.getEmpresa() + " Comandos utiles: " +
                 AQUA + "/empresas depositar, /empresas contratar, /empresas logotipo, /empresas vertodas, /empresas miempresa "+comando.getEmpresa()+" /empresas editar", Sound.ENTITY_PLAYER_LEVELUP);
-        Bukkit.getServer().broadcastMessage(GOLD + player.getName() + " ha creado una nueva empresa: " + DARK_AQUA + comando.getEmpresa());
+
+        broadcastExcept(player, GOLD + player.getName() + " ha creado una nueva empresa: " + DARK_AQUA + comando.getEmpresa());
     }
 }

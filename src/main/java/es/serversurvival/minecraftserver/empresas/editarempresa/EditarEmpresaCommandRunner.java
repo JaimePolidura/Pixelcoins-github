@@ -37,8 +37,9 @@ public final class EditarEmpresaCommandRunner implements CommandRunnerArgs<Edita
 
         switch (comando.getQueSeEdita().toLowerCase()) {
             case "nombre", "n" -> useCaseBus.handle(parametrosBuilder.nuevoNombre(comando.getNuevoValor()).build());
-            case "descipccion", "desc", "d" -> useCaseBus.handle(parametrosBuilder.nuevaDescripccion(comando.getNuevoValor()).build());
+            case "descripccion", "desc", "d" -> useCaseBus.handle(parametrosBuilder.nuevaDescripccion(comando.getNuevoValor()).build());
             case "logotipo", "l" -> useCaseBus.handle(parametrosBuilder.nuevoIcono(itemPlayerHand.getType().toString()).build());
+            default -> throw new IllegalArgumentException(String.format("%s no encontrado. Valores disponibles: nombre, descripccion, logitpo", comando.getQueSeEdita().toLowerCase()));
         }
 
         player.sendMessage(ChatColor.GOLD + "Has editado la empresa");

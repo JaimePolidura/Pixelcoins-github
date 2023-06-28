@@ -9,6 +9,8 @@ import es.serversurvival.pixelcoins.empresas.irseempleo.DejarEmpleoParametros;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 
+import static org.bukkit.ChatColor.GOLD;
+
 @Command(
         value = "empresas dejarempleo",
         args = {"empresa"}
@@ -23,5 +25,7 @@ public final class DejarEmpleoCommandRunner implements CommandRunnerArgs<DejarEm
         Empresa empresa = empresasService.getByNombre(comando.getEmpresa());
 
         useCaseBus.handle(new DejarEmpleoParametros(player.getUniqueId(), empresa.getEmpresaId()));
+
+        player.sendMessage(GOLD + "Te has ido del trabajo");
     }
 }

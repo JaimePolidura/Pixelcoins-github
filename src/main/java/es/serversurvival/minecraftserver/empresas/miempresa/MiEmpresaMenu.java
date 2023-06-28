@@ -66,7 +66,7 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
                 .fixedItems()
-                .title(format(DARK_RED + "" + BOLD + "        Tu empresa %s", this.getState().getNombre()))
+                .title(format(DARK_RED + "" + BOLD + "      %s", this.getState().getNombre()))
                 .item(1, buildItemInfo())
                 .item(2, buildItemEmpresaStats())
                 .item(3, buildItemAccionistas())
@@ -74,7 +74,7 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
                 .item(10, buildItemVotaciones(), this::openMenuVotaciones)
                 .item(5, buildItemCerrarEmpresa(), this::abrirCerrarEmpresaConfirmacion)
                 .items(6, buildItemsEmpleados(), this::abrirMenuOpccionesEmpleado)
-                .breakpoint(7, Material.GREEN_BANNER, this::goBackToProfileMenu)
+                .breakpoint(7, MenuItems.GO_BACK, this::goBackToProfileMenu)
                 .paginated(PaginationConfiguration.builder()
                         .forward(9, Material.GREEN_WOOL)
                         .backward(8, Material.RED_WOOL)
@@ -96,6 +96,12 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
 
     private void abrirMenuOpccionesEmpleado(Player player, InventoryClickEvent event) {
         UUID empleadoId = MinecraftUtils.getLastLineOfLore(event.getCurrentItem(), 0);
+        UUID jugadorId = MinecraftUtils.getLastLineOfLore(event.getCurrentItem(), 1);
+
+        if(jugadorId.equals(getState().getDirectorJugadorId())){
+            return;
+        }
+
         Empleado empleado = empleadosService.getById(empleadoId);
 
         menuService.open(player, OpccionesEmpleadoMenu.class, empleado);
@@ -111,30 +117,38 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
                 .count();
         boolean hayVotacionesPendienets = numeroVotacionesPendientes > 0;
 
-        return ItemBuilder.of(Material.WHITE_BANNER)
+        ItemBuilder itemBuilder =  ItemBuilder.of(Material.WHITE_BANNER)
                 .title(hayVotacionesPendienets ? MenuItems.CLICKEABLE + "VER LAS VOTACIONES" : GOLD + "" + BOLD + "VOTACIONES")
-                .lore(hayVotacionesPendienets ? RED + "Hay votaciones pendientes" : GOLD + "No hay votaciones pendientes")
-                .addEnchantment(hayVotacionesPendienets ? Enchantment.ARROW_FIRE : null, hayVotacionesPendienets ? 1 : 0)
-                .build();
+                .lore(hayVotacionesPendienets ? RED + "Hay votaciones pendientes" : GOLD + "No hay votaciones pendientes");
+
+        if(hayVotacionesPendienets){
+            itemBuilder = itemBuilder.addEnchantment(Enchantment.ARROW_FIRE, numeroVotacionesPendientes);
+        }
+
+        return itemBuilder.build();
     }
 
     private List<ItemStack> buildItemsEmpleados() {
-        return this.empleadosService.findByEmpleadoJugadorId(this.getState().getEmpresaId()).stream()
+        return this.empleadosService.findEmpleoActivoByEmpresaId(this.getState().getEmpresaId()).stream()
                 .map(this::buildEmpleadoItem)
                 .toList();
     }
 
     private ItemStack buildEmpleadoItem(Empleado empleado) {
         return ItemBuilder.of(Material.PLAYER_HEAD)
-                .title(MenuItems.CLICKEABLE + "VER OPCCIONES")
+                .title(empleado.getEmpleadoJugadorId().equals(getState().getDirectorJugadorId()) ?
+                                DARK_RED + "" + BOLD  + "DIRECTOR DE LA EMPRESA" :
+                                MenuItems.CLICKEABLE + "VER OPCCIONES")
                 .lore(List.of(
                         "   ",
                         GOLD + "Empleado: " + jugadoresService.getNombreById(empleado.getEmpleadoJugadorId()),
                         GOLD + "Cargo: " + empleado.getDescripccion(),
-                        GOLD + "Sueldo: " + GREEN + FORMATEA.format(empleado.getSueldo()) + " PC / " + Funciones.millisToDias(empleado.getPeriodoPagoMs()) + " dias",
+                        GOLD + "Sueldo: " + GREEN + formatNumero(empleado.getSueldo()) + " PC / " + GOLD + millisToDias(empleado.getPeriodoPagoMs()) + " dias",
+                        GOLD + "Ultima fecha paga: " + Funciones.toString(empleado.getFechaUltimoPago()),
                         "   ",
                         "/empresas editarempleado " + getState().getNombre() + " " + jugadoresService.getNombreById(empleado.getEmpleadoJugadorId()),
                         " ",
+                        empleado.getEmpleadoJugadorId().toString(),
                         empleado.getEmpleadoId().toString()
                 ))
                 .build();
@@ -200,24 +214,12 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
                 .build();
     }
 
+    //TODO
     private ItemStack buildItemInfo() {
         return ItemBuilder.of(Material.PAPER)
                 .title(GOLD + "" + BOLD + "INFO")
                 .lore(List.of(
-                        "Puedes contratar empleados, ",
-                        "despedirlos etc. Comandos:",
-                        "                              ",
-                        "/empresas contratar <nombreAccionista>",
-                        " <empresa> <sueldo> <tipo sueldo>",
-                        "El tipo sueldo es la frequencia con",
-                        "la que el sueldo se va a pagar: ",
-                        "  d: cada dia",
-                        "  s: cada semana",
-                        "  2s cada dos semanas",
-                        "  m: cada mes",
-                        "   ",
-                        "Para mas info: /ayuda empresario o",
-                        "http://serversurvival.ddns.net/perfil"
+                        "TOOD"
                 ))
                 .build();
     }

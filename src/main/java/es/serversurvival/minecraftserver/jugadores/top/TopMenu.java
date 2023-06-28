@@ -61,7 +61,7 @@ public final class TopMenu extends Menu {
                 .item(6, buildTopMorososJugadoresItem())
                 .item(7, buildItemPeoresOperacioensBolsa())
                 .item(8, buildItemTopActivosBolsa())
-                .item(9, MenuItems.GO_BACK_PERFIL, (p, e) -> this.menuService.open(p, PerfilMenu.class))
+                .item(9, MenuItems.GO_BACK, (p, e) -> this.menuService.open(p, PerfilMenu.class))
                 .build();
     }
 

@@ -52,7 +52,7 @@ public final class TodasEmpresasMenu extends Menu {
                 .title(DARK_RED + "" + BOLD + "           EMPRESAS")
                 .item(1, buildItemInfo())
                 .items(2, this::buildItemsEmpresas, this::onItemEmpresaClicked)
-                .breakpoint(7, MenuItems.GO_BACK_PERFIL, this::goBackToProfileMenu)
+                .breakpoint(7, MenuItems.GO_BACK, this::goBackToProfileMenu)
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
                         .forward(9, Material.GREEN_WOOL)

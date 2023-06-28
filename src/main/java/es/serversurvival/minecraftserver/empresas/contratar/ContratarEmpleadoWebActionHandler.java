@@ -1,14 +1,21 @@
 package es.serversurvival.minecraftserver.empresas.contratar;
 
+import es.bukkitbettermenus.MenuService;
 import es.dependencyinjector.dependencies.annotations.Service;
+import es.serversurvival.Pixelcoin;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver.webaction.WebActionException;
 import es.serversurvival.minecraftserver.webaction.WebActionHandler;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import es.serversurvival.pixelcoins.empresas.contratar.ContratarEmpleadoParametros;
+import es.serversurvival.pixelcoins.empresas.contratar.ContratarEmpleadoUseCase;
+import es.serversurvival.pixelcoins.jugadores._shared.jugadores.Jugador;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import lombok.AllArgsConstructor;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -20,29 +27,33 @@ import static org.bukkit.Sound.*;
 @Service
 @AllArgsConstructor
 public final class ContratarEmpleadoWebActionHandler implements WebActionHandler<ContratarEmpleadoWebActionRequestBody> {
+    private final ContratarEmpleadoUseCase contratarEmpleadoUseCase;
     private final JugadoresService jugadoresService;
     private final EmpresasService empresasService;
-    private final UseCaseBus useCaseBus;
+    private final MenuService menuService;
 
     @Override
-    public void handle(UUID jugadorId, ContratarEmpleadoWebActionRequestBody body) throws WebActionException {
-        Empresa empresa = empresasService.getByNombre(body.getNombreDeLaEmpresa());
-        UUID jugadorIdAContratar = jugadoresService.getByNombre(body.getNombreJugadoraContratar())
-                .getJugadorId();
+    public void handle(UUID jugadorIdContratador, ContratarEmpleadoWebActionRequestBody body) throws WebActionException {
+        Player playerAContratar = Bukkit.getPlayer(body.getNombreJugadorContratar());
+        if(playerAContratar == null){
+            throw new WebActionException(String.format("%s no esta en online", body.getNombreJugadorContratar()));
+        }
 
-        useCaseBus.handle(ContratarEmpleadoParametros.builder()
-                .jugadorIdAContratar(jugadorIdAContratar)
+        Empresa empresa = empresasService.getByNombre(body.getNombreDeLaEmpresa());
+        Jugador jugadorAContratar = jugadoresService.getByNombre(body.getNombreJugadorContratar());
+
+        contratarEmpleadoUseCase.validar(ContratarEmpleadoParametros.builder()
+                .jugadorIdAContratar(jugadorAContratar.getJugadorId())
                 .descripccion(body.getDescripccion())
                 .empresaId(empresa.getEmpresaId())
-                .jugadorIdContrador(jugadorId)
-                .periodoPagoMs(body.getPeriodoPagoEnDias() * 24 * 60 * 60 * 1000)
+                .jugadorIdContrador(jugadorIdContratador)
+                .periodoPagoMs(diasToMillis(body.getPeriodoPagoEnDias()))
                 .sueldo(body.getSueldo())
                 .build());
 
-        enviarMensajeYSonido(jugadorId, GOLD + "Has contratado a " + body.getNombreJugadoraContratar() +
-                " en la empresa " + body.getNombreDeLaEmpresa(), ENTITY_PLAYER_LEVELUP) ;
-        enviarMensajeYSonido(jugadorIdAContratar, GOLD + "Has sido contratado en " + body.getNombreDeLaEmpresa() + "con el cargo " +
-                body.getDescripccion() + " con un sueldo de " + GREEN + FORMATEA.format(body.getSueldo()) + " PC / " +
-                millisToDias(body.getPeriodoPagoEnDias()) + " dias", ENTITY_PLAYER_LEVELUP);
+        Bukkit.getScheduler().runTask(Pixelcoin.INSTANCE, () -> {
+            menuService.open(playerAContratar, ConfirmarOfertaContratacionMenu.class, new ConfirmarOfertaContratacionMenu.State(
+                    jugadorIdContratador, empresa, body.getSueldo(), diasToMillis(body.getPeriodoPagoEnDias()), body.getDescripccion()));
+        });
     }
 }

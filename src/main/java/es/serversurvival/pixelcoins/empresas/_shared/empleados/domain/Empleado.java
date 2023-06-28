@@ -1,5 +1,6 @@
 package es.serversurvival.pixelcoins.empresas._shared.empleados.domain;
 
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.pixelcoins.empresas.cambiardirector.CambiarDirectorVotacion;
 import es.serversurvival.pixelcoins.empresas.contratar.ContratarEmpleadoParametros;
 import es.serversurvival.pixelcoins.empresas.editarempleado.EditarEmpleadoParametros;
@@ -63,6 +64,7 @@ public final class Empleado {
                 .fechaUltimoPago(fechaAhora)
                 .fechaContratacion(fechaAhora)
                 .estaContratado(true)
+                .fechaDespido(Funciones.NULL_LOCALDATETIME)
                 .build();
     }
 
@@ -79,6 +81,7 @@ public final class Empleado {
                 .fechaUltimoPago(fechaAhora)
                 .fechaContratacion(fechaAhora)
                 .estaContratado(true)
+                .fechaDespido(Funciones.NULL_LOCALDATETIME)
                 .build();
     }
 
@@ -90,6 +93,7 @@ public final class Empleado {
                 .descripccion("Director")
                 .fechaContratacion(empresa.getFechaCreacion())
                 .fechaUltimoPago(empresa.getFechaCreacion())
+                .fechaDespido(Funciones.NULL_LOCALDATETIME)
                 .estaContratado(true)
                 .build();
     }

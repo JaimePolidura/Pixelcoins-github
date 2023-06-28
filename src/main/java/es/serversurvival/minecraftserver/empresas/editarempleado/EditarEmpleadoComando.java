@@ -1,9 +1,7 @@
 package es.serversurvival.minecraftserver.empresas.editarempleado;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 public final class EditarEmpleadoComando {
     @Getter private String empresa;
     @Getter private String empleado;

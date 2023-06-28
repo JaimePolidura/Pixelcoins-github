@@ -22,7 +22,7 @@ public final class ComprarServicioUseCase implements UseCaseHandler<ComprarServi
     public void handle(ComprarServicioParametros parametros) {
         validador.numeroMayorQueCero(parametros.getPixelcoins(), "Pixelcoins");
         validador.jugadorTienePixelcoins(parametros.getJugadorId(), parametros.getPixelcoins());
-        empresasValidador.noEmpleadoEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
+        empresasValidador.noEmpleadoEmpresa(parametros.getEmpresaId(), parametros.getJugadorId(), "Eres empleado de la empresa, no puedes pagarla`");
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
 
         this.transaccionesService.save(Transaccion.builder()

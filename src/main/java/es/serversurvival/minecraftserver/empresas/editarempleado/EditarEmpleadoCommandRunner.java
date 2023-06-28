@@ -32,7 +32,6 @@ public final class EditarEmpleadoCommandRunner implements CommandRunnerArgs<Edit
     public void execute(EditarEmpleadoComando comando, Player player) {
         Empresa empresa = empresasService.getByNombre(comando.getEmpresa());
         Jugador jugador = jugadoresService.getByNombre(comando.getEmpleado());
-
         Empleado empleado = empleadosService.getEmpleoActivoByEmpresaIdAndEmpleadoJugadorId(empresa.getEmpresaId(), jugador.getJugadorId());
 
         EditarEmpleadoParametros.EditarEmpleadoParametrosBuilder editarEmpleadoBuilder = EditarEmpleadoParametros.builder()
