@@ -25,9 +25,7 @@ public final class PonerVentaTiendaItemMinecraftUseCase implements UseCaseHandle
                 .vendedorId(parametros.getJugadorId())
                 .precio(parametros.getPrecio())
                 .cantidad(parametros.getItem().getAmount())
-                .objeto(parametros.getItem().getType().toString())
                 .item(parametros.getItem())
-                .tipoOferta(TipoOferta.TIENDA_ITEM_MINECRAFT)
                 .build();
 
         ofertasService.save(build);

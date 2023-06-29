@@ -11,6 +11,7 @@ import es.serversurvival.pixelcoins.deudas._shared.OfertaDeudaMercadoPrimario;
 import es.serversurvival.pixelcoins.deudas._shared.OfertaDeudaMercadoSecundario;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.OfertaAccionMercadoEmision;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.OfertaAccionMercadoJugador;
+import es.serversurvival.pixelcoins.empresas.ipo.OfertaAccionMercadoIPO;
 import es.serversurvival.pixelcoins.tienda._shared.OfertaTiendaItemMinecraft;
 
 import java.util.*;
@@ -74,7 +75,8 @@ public final class MySQLMercadoOfertasRepository extends Repository<Oferta, UUID
                                 TipoOferta.ACCIONES_SERVER_EMISION, OfertaAccionMercadoEmision.class,
                                 TipoOferta.ACCIONES_SERVER_JUGADOR, OfertaAccionMercadoJugador.class,
                                 TipoOferta.DEUDA_MERCADO_PRIMARIO, OfertaDeudaMercadoPrimario.class,
-                                TipoOferta.TIENDA_ITEM_MINECRAFT, OfertaTiendaItemMinecraft.class
+                                TipoOferta.TIENDA_ITEM_MINECRAFT, OfertaTiendaItemMinecraft.class,
+                                TipoOferta.ACCIONES_SERVER_IPO, OfertaAccionMercadoIPO.class
                         ))
                         .build())
                 .build();

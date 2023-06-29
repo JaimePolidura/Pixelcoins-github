@@ -51,7 +51,7 @@ public final class CambiarDirectorVotacion extends Votacion {
         @Override
         public CambiarDirectorVotacion build() {
             return new CambiarDirectorVotacion(votacionId, empresaId, tipo, estado, iniciadoPorJugadorId, fechaFinalizacion,
-                    descripccion, fechaInicio, nuevoDirectorJugadorId, sueldo, periodoPagoMs);
+                    descripcion, fechaInicio, nuevoDirectorJugadorId, sueldo, periodoPagoMs);
         }
     }
 }

@@ -17,10 +17,17 @@ public final class OfertaDeudaMercadoSecundario extends OfertaDeudaMercado {
         return new OfertaDeudaMercadoSecundarioBuilder();
     }
 
-    public static class OfertaDeudaMercadoSecundarioBuilder extends AbstractOfertaBuilder {
+    public static class OfertaDeudaMercadoSecundarioBuilder extends AbstractOfertaBuilder<OfertaDeudaMercadoSecundarioBuilder> {
+        private UUID deudaId;
+
+        public OfertaDeudaMercadoSecundarioBuilder deudaId(UUID deudaId) {
+            this.deudaId = deudaId;
+            return this;
+        }
+
         @Override
         public Oferta build() {
-            return new OfertaDeudaMercadoSecundario(ofertaId, vendedorId, fechaSubida, cantidad, precio, objeto, tipoOferta);
+            return new OfertaDeudaMercadoSecundario(ofertaId, vendedorId, fechaSubida, cantidad, precio, deudaId.toString(), TipoOferta.DEUDA_MERCADO_SECUNDARIO);
         }
     }
 }

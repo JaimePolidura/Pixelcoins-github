@@ -2,6 +2,7 @@ package es.serversurvival.minecraftserver.empresas.votaciones;
 
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival.minecraftserver._shared.menus.ConfirmacionMenu;
+import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.Votacion;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones.votar.VotarVotacionParametros;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones.votar.VotarVotacionUseCase;
@@ -15,7 +16,7 @@ import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
 public final class VotarMenu extends ConfirmacionMenu<Votacion> {
-    private final VotarVotacionUseCase votarVotacionUseCase;
+    private final UseCaseBus useCaseBus;
 
     @Override
     public void onAceptar(Player player, InventoryClickEvent event, Votacion state) {
@@ -32,7 +33,7 @@ public final class VotarMenu extends ConfirmacionMenu<Votacion> {
     }
 
     private void votar(boolean aFavor) {
-        votarVotacionUseCase.votar(VotarVotacionParametros.builder()
+        useCaseBus.handle(VotarVotacionParametros.builder()
                 .aFavor(aFavor)
                 .empresaId(getState().getEmpresaId())
                 .votacionId(getState().getVotacionId())
@@ -42,7 +43,7 @@ public final class VotarMenu extends ConfirmacionMenu<Votacion> {
 
     @Override
     public String titulo() {
-        return DARK_RED + "" + BOLD + "          VOTAR";
+        return DARK_RED + "" + BOLD + "            VOTAR";
     }
 
     @Override
@@ -52,6 +53,6 @@ public final class VotarMenu extends ConfirmacionMenu<Votacion> {
 
     @Override
     public ItemStack aceptarItem() {
-        return ItemBuilder.of(Material.GREEN_WOOL).title(RED + "" + BOLD + "VOTAR A FAVOR").build();
+        return ItemBuilder.of(Material.GREEN_WOOL).title(GREEN + "" + BOLD + "VOTAR A FAVOR").build();
     }
 }

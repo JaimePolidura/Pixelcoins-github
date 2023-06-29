@@ -10,6 +10,7 @@ import es.serversurvival.minecraftserver.webaction.requesthandlers.WebActionExec
 import es.serversurvival.minecraftserver.webaction.requesthandlers.WebActionDataSender;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import es.serversurvival.minecraftserver.webaction.token.WebActionTokenService;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
@@ -31,6 +32,8 @@ public final class HttpRequestHandler implements HttpHandler {
             tryHandleWebActionRequest(client);
         }catch (WebActionException | DomainException e) {
             send(client, e.getMessage(), 400);
+        }catch (ExpiredJwtException e) {
+            send(client, "Vuelva a generar el link", 400);
         }catch (Exception e) {
             send(client, e.getMessage(), 500);
             e.printStackTrace();

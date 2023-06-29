@@ -28,8 +28,7 @@ public final class PonerVentaDeudaUseCase implements UseCaseHandler<PonerVentaDe
         ofrecerOfertaUseCase.handle(OfrecerOfertaParametros.of(OfertaDeudaMercadoSecundario.builder()
                 .vendedorId(parametros.getJugadorId())
                 .precio(parametros.getPrecio())
-                .tipoOferta(TipoOferta.DEUDA_MERCADO_SECUNDARIO)
-                .objeto(parametros.getDeudaId())
+                .deudaId(parametros.getDeudaId())
                 .build()));
 
         eventBus.publish(new DeudaPuestaVenta(parametros));

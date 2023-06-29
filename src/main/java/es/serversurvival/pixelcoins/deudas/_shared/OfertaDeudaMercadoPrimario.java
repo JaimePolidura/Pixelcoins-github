@@ -56,7 +56,7 @@ public final class OfertaDeudaMercadoPrimario extends OfertaDeudaMercado {
 
         @Override
         public OfertaDeudaMercadoPrimario build() {
-            return new OfertaDeudaMercadoPrimario(ofertaId, vendedorId, fechaSubida, cantidad, precio, objeto, tipoOferta,
+            return new OfertaDeudaMercadoPrimario(ofertaId, vendedorId, fechaSubida, cantidad, precio, objeto, TipoOferta.DEUDA_MERCADO_PRIMARIO,
                     interes, numeroCuotasTotales, periodoPagoCuota);
         }
     }

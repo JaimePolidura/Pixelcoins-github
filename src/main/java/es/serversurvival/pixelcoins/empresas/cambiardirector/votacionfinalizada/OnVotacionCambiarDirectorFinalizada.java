@@ -29,7 +29,7 @@ public final class OnVotacionCambiarDirectorFinalizada implements VotacionFinali
                 empresa.getDirectorJugadorId());
 
         empresasService.save(empresa.nuevoDirector(nuevoDirector.getEmpleadoJugadorId()));
-        empleadosService.save(antiguoDirector.despedir(votacion.getDescripccion()));
+        empleadosService.save(antiguoDirector.despedir(votacion.getDescripcion()));
         empleadosService.save(nuevoDirector);
 
         eventBus.publish(new DirectorCambiado(empresa.getEmpresaId(), antiguoDirector.getEmpleadoJugadorId(), nuevoDirector.getEmpleadoJugadorId()));

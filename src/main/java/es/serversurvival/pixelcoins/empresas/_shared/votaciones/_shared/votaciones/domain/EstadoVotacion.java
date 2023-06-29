@@ -3,14 +3,16 @@ package es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votacio
 import lombok.Getter;
 
 public enum EstadoVotacion {
-    ABIERTA(2),
-    EMPATE(1),
-    RECHAZADO(1),
-    ACEPTADO(1);
+    ABIERTA(2, "Abierta"),
+    EMPATE(1, "Empate"),
+    RECHAZADO(1, "Rechazado"),
+    ACEPTADO(1, "Aceptado");
 
     @Getter private final int showPriority;
+    @Getter private final String nombre;
 
-    EstadoVotacion(int showPriority) {
+    EstadoVotacion(int showPriority, String nombre) {
         this.showPriority = showPriority;
+        this.nombre = nombre;
     }
 }

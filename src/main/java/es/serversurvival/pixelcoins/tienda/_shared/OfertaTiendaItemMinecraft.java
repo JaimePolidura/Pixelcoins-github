@@ -76,6 +76,7 @@ public final class OfertaTiendaItemMinecraft extends Oferta {
         private boolean tieneNombre;
         private short durabilidad;
         private String nombre;
+        private String objetoMinecraft;
 
         public OfertaItemTiendaMercadoBuilder() {
             this.tipoOferta = TipoOferta.TIENDA_ITEM_MINECRAFT;
@@ -88,6 +89,7 @@ public final class OfertaTiendaItemMinecraft extends Oferta {
             this.encantamientos = getEncantamientosDeItem(itemStack);
             this.objeto = itemStack.getType().toString();
             this.cantidad = itemStack.getAmount();
+            this.objetoMinecraft = itemStack.getType().toString();
 
             return this;
         }
@@ -104,7 +106,7 @@ public final class OfertaTiendaItemMinecraft extends Oferta {
 
         @Override
         public OfertaTiendaItemMinecraft build() {
-            return new OfertaTiendaItemMinecraft(ofertaId, vendedorId, fechaSubida, cantidad, precio, objeto, tipoOferta,
+            return new OfertaTiendaItemMinecraft(ofertaId, vendedorId, fechaSubida, cantidad, precio, objeto, TipoOferta.TIENDA_ITEM_MINECRAFT,
                     encantamientos, durabilidad, tieneNombre, nombre);
         }
     }

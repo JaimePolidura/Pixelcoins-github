@@ -4,6 +4,8 @@ import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.domain.AccionistaEmpresa;
@@ -15,6 +17,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public final class PonerVentaAccionesUseCase implements UseCaseHandler<PonerVentaAccionesParametros> {
     private final AccionistasEmpresasService accionistasEmpresasService;
+    private final EmpresasService empresasService;
     private final OfertasService ofertasService;
     private final EmpresasValidador validador;
     private final EventBus eventBus;
@@ -28,15 +31,16 @@ public final class PonerVentaAccionesUseCase implements UseCaseHandler<PonerVent
         validador.precioPorAccion(parametros.getPrecioPorAccion());
         validador.jugadorTieneAcciones(parametros.getEmpresaId(), parametros.getJugadorId(), parametros.getCantidadAcciones());
         AccionistaEmpresa acciones = accionistasEmpresasService.getByEmpresaIdAndJugadorId(parametros.getEmpresaId(), parametros.getJugadorId());
-        validador.accionesNoEstanYaALaVenta(acciones.getAccionistaId(), parametros.getCantidadAcciones());
+        Empresa empresa = empresasService.getById(parametros.getEmpresaId());
+        boolean esFundador = empresa.getFundadorJugadorId().equals(parametros.getJugadorId());
+        validador.accionesNoEstanYaALaVenta(acciones.getAccionistaId(), parametros.getCantidadAcciones(), esFundador);
 
         ofertasService.save(OfertaAccionMercadoJugador.builder()
                 .vendedorId(parametros.getJugadorId())
-                .tipoOferta(TipoOferta.ACCIONES_SERVER_JUGADOR)
                 .cantidad(parametros.getCantidadAcciones())
                 .precio(parametros.getPrecioPorAccion())
                 .empresaId(parametros.getEmpresaId())
-                .objeto(acciones.getAccionistaId())
+                .vendedorAccionesId(acciones.getAccionistaId())
                 .build());
 
         eventBus.publish(new AccionPuestaVenta(parametros));

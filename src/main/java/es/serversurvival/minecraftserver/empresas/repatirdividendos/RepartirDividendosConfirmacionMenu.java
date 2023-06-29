@@ -8,6 +8,7 @@ import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas.repartirdividendos.RepartirDividendosParametros;
 import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -18,7 +19,7 @@ import static es.serversurvival.minecraftserver._shared.MinecraftUtils.*;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.BOLD;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public final class RepartirDividendosConfirmacionMenu extends NumberSelectorMenu<Empresa> implements BeforeShow {
     private final TransaccionesService transaccionesService;
     private final UseCaseBus useCaseBus;
@@ -54,9 +55,9 @@ public final class RepartirDividendosConfirmacionMenu extends NumberSelectorMenu
     @Override
     public List<String> loreItemAceptar(double cantidad) {
         return List.of(
-                GOLD + "Dividendo/Accion: " + GREEN + Funciones.FORMATEA.format(cantidad),
-                GOLD + "Total a pagar: " + GREEN + Funciones.FORMATEA.format(cantidad * this.getState().getNTotalAcciones()),
-                GOLD + "Pixelcoins empresa: " + GREEN + Funciones.FORMATEA.format(pixelcoinsEmpresa)
+                GOLD + "Dividendo/Accion: " + GREEN + Funciones.formatNumero(cantidad) + " PC",
+                GOLD + "Total a pagar: " + GREEN + Funciones.formatNumero(cantidad * this.getState().getNTotalAcciones()) + " PC",
+                GOLD + "Pixelcoins empresa: " + GREEN + Funciones.formatNumero(pixelcoinsEmpresa) + " PC"
         );
     }
 

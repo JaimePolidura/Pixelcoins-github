@@ -37,7 +37,7 @@ public final class ProponerNuevoDirectorUseCase implements UseCaseHandler<Propon
                 .sueldo(parametros.getSueldo())
                 .build());
 
-        votarVotacionUseCase.votar(VotarVotacionParametros.builder()
+        votarVotacionUseCase.handle(VotarVotacionParametros.builder()
                 .aFavor(true)
                 .votacionId(votacionId)
                 .jugadorId(parametros.getJugadorId())

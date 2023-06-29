@@ -5,6 +5,8 @@ import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.serversurvival._shared.ConfigurationVariables;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.empresas.miempresa.MiEmpresaMenu;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
@@ -55,7 +57,7 @@ public final class VerVotacionesEmpresaMenu extends Menu<Empresa> {
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
                 .fixedItems()
-                .title(DARK_RED + "" + BOLD + "    VOTACIONES " + getState().getNombre())
+                .title(DARK_RED + "" + BOLD + "Votaciones: " + getState().getNombre())
                 .item(1, buildItemInfo())
                 .items(2, buildItemVotaciones(), this::abrirVotarMenu)
                 .breakpoint(7, MenuItems.GO_BACK, this::irAMiEmpresaMenu)
@@ -84,7 +86,7 @@ public final class VerVotacionesEmpresaMenu extends Menu<Empresa> {
     private ItemStack buildItemFromVotacion(Votacion votacion) {
         return ItemBuilder.of(getMaterialFromVotacion(votacion))
                 .title(getTituloFromVotacion(votacion))
-                .lore(buildLoreForVotacio(votacion))
+                .lore(buildLoreForVotacion(votacion))
                 .build();
     }
 
@@ -113,17 +115,17 @@ public final class VerVotacionesEmpresaMenu extends Menu<Empresa> {
         };
     }
 
-    private List<String> buildLoreForVotacio(Votacion votacion) {
+    private List<String> buildLoreForVotacion(Votacion votacion) {
         List<String> lore = new ArrayList<>(){{
             add(GOLD + "Tipo: " + votacion.getTipo().getNombre());
-            add(GOLD + "Estado: " + votacion.getEstado().toString().toLowerCase());
+            add(GOLD + "Estado: " + votacion.getEstado().getNombre());
             add(GOLD + "Iniciado por: " + jugadoresService.getNombreById(votacion.getIniciadoPorJugadorId()));
-            add(GOLD + "Fecha inicio: " + votacion.getFechaInicio().toString());
+            add(GOLD + "Fecha inicio: " + Funciones.toString(votacion.getFechaInicio()));
             add(GOLD + "Fecha fin: " + (votacion.estaAbierta() ? "N/A" : votacion.getFechaFinalizacion()));
             add(GOLD + "Numero votos a favor: " + GREEN + votosService.getVotosFavor(votacion.getVotacionId()));
-            add(GOLD + "Votos en contra: " + RED + votosService.getVotosContra(votacion.getVotacionId()));
-            add(GOLD + "% Nº totla acciones votadas para finalizar: " + Votacion.DEFAULT_PORCENTAJE_ACCIONES_TOTALES_VOTACION * 100 + "%");
+            add(GOLD + "Numero votos en contra: " + RED + votosService.getVotosContra(votacion.getVotacionId()));
             add(GOLD + "Nº Total acciones empresa: " + getState().getNTotalAcciones());
+            add(GOLD + "% Nº Total acciones votadas necesarias para finalizar: " + ConfigurationVariables.EMPRESAS_PORCENTAJE_ACCIONES_TOTALES_VOTACION * 100 + "%");
             add("  ");
         }};
 

@@ -69,16 +69,17 @@ public final class EmpresasValidador {
         }
     }
 
-    public void accionesNoEstanYaALaVenta(UUID accionistaId, int nuevasAccionesALaVenta) {
+    public void accionesNoEstanYaALaVenta(UUID accionistaId, int nuevasAccionesALaVenta, boolean esFundador) {
         AccionistaEmpresa accionistaEmpresa = accionistasEmpresasService.getById(accionistaId);
-        Optional<Oferta> ofertaAccionesOptional = ofertasService.findByObjetoAndTipo(accionistaId.toString(), TipoOferta.ACCIONES_SERVER_JUGADOR);
 
-        if(ofertaAccionesOptional.isEmpty()){
-            return;
-        }
+        int nAccionesALaVentaJugador = ofertasService.findByObjetoAndTipo(accionistaId.toString(), TipoOferta.ACCIONES_SERVER_JUGADOR)
+                .map(Oferta::getCantidad)
+                .orElse(0);
+        int nAccionesALaVentaIPO = esFundador ? ofertasService.findByObjetoAndTipo(accionistaId.toString(), TipoOferta.ACCIONES_SERVER_IPO)
+                .map(Oferta::getCantidad)
+                .orElse(0) : 0;
 
-        Oferta ofertaAcciones = ofertaAccionesOptional.get();
-        if(ofertaAcciones.getCantidad() + nuevasAccionesALaVenta > accionistaEmpresa.getNAcciones()){
+        if((nAccionesALaVentaJugador + nAccionesALaVentaIPO + nuevasAccionesALaVenta) > accionistaEmpresa.getNAcciones()){
             throw new IllegalQuantity("No puedes poner mas acciones de las que tienes a la venta");
         }
     }
@@ -152,7 +153,6 @@ public final class EmpresasValidador {
             throw new IllegalQuantity("El numero de acciones tiene que ser negativo ni cero");
         }
     }
-
 
     public void jugadorTieneAcciones(UUID empresaId, UUID jugadorId, int supuestoNumeroAccionesTiene) {
         Optional<AccionistaEmpresa> accionistaEmpresa = accionistasEmpresasService.findByEmpresaIdAndJugadorId(empresaId, jugadorId);

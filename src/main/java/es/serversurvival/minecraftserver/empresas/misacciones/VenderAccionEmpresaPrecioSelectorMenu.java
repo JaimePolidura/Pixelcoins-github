@@ -42,7 +42,7 @@ public final class VenderAccionEmpresaPrecioSelectorMenu extends NumberSelectorM
                         "la oferta de venta en el mercado de cantidad. Para consultar el mercado: " + AQUA + "/empresas mercado",
                 Sound.ENTITY_PLAYER_LEVELUP);
 
-        Bukkit.broadcastMessage(GOLD + player.getName() + " ha subido cantidad de la empresa del servidor: " +
+        broadcastExcept(player, GOLD + player.getName() + " ha subido cantidad de la empresa del servidor: " +
                 this.getState().empresa.getNombre() + AQUA + " /empresas mercado");
     }
 

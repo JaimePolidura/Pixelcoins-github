@@ -19,15 +19,20 @@ public final class DecrementorPosicionesAccionesJugador {
     private final VotosService votosService;
 
     public void decrementarEnUno(UUID jugadorId, UUID empresaId) {
-        AccionistaEmpresa accionistaServer = accionistasEmpresasService.getByEmpresaIdAndJugadorId(empresaId, jugadorId)
-                .decrementarNAccionesPorUno();
+        AccionistaEmpresa accionistaServer = accionistasEmpresasService.getByEmpresaIdAndJugadorId(empresaId, jugadorId);
+
+        decrementarEnUno(accionistaServer);
+    }
+
+    public void decrementarEnUno(AccionistaEmpresa accionistaServer) {
+        accionistaServer = accionistaServer.decrementarNAccionesPorUno();
 
         if(accionistaServer.noTieneMasAcciones()){
             accionistasEmpresasService.deleteById(accionistaServer.getAccionistaId());
-            borrarVotos(jugadorId, empresaId);
+            borrarVotos(accionistaServer.getAccionisaJugadorId(), accionistaServer.getEmpresaId());
         }else{
             accionistasEmpresasService.save(accionistaServer);
-            decrementarVotosEnUno(jugadorId, empresaId);
+            decrementarVotosEnUno(accionistaServer.getAccionisaJugadorId(), accionistaServer.getEmpresaId());
         }
     }
 

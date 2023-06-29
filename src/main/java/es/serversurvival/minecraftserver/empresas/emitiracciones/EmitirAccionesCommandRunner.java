@@ -2,6 +2,7 @@ package es.serversurvival.minecraftserver.empresas.emitiracciones;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
+import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
@@ -35,7 +36,7 @@ public final class EmitirAccionesCommandRunner implements CommandRunnerArgs<Emit
 
         player.sendMessage(GOLD + "Has emitido " + command.getNumeroNuevasAcciones() + " por " + GREEN +
                 FORMATEA.format(command.getPrecioPorAccion()) + " PC " + GOLD + "Para ver las acciones " + AQUA + "/empresas mercado");
-        Bukkit.broadcastMessage(GOLD + command.getEmpresa() + " ha emitodo " + command.getNumeroNuevasAcciones() + " por " + GREEN +
+        MinecraftUtils.broadcastExcept(player, GOLD + command.getEmpresa() + " ha emitodo " + command.getNumeroNuevasAcciones() + " por " + GREEN +
                 FORMATEA.format(command.getPrecioPorAccion()) + " PC " + GOLD + "Para ver las acciones " + AQUA + "/empresas mercado");
     }
 }

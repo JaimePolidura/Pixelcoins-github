@@ -28,7 +28,7 @@ public final class OfertaAccionMercadoEmision extends OfertaAccionMercado {
 
         @Override
         public Oferta build() {
-            return new OfertaAccionMercadoEmision(ofertaId, vendedorId, fechaSubida, cantidad, precio, objeto, tipoOferta, empresaId);
+            return new OfertaAccionMercadoEmision(ofertaId, vendedorId, fechaSubida, cantidad, precio, empresaId.toString(), TipoOferta.ACCIONES_SERVER_EMISION, empresaId);
         }
     }
 }

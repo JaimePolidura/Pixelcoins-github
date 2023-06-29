@@ -4,7 +4,7 @@ import es.serversurvival.pixelcoins.empresas.cambiardirector.CambiarDirectorVota
 import lombok.Getter;
 
 public enum TipoVotacion {
-    CAMBIAR_DIRECTOR(CambiarDirectorVotacion.class, "cambiar director");
+    CAMBIAR_DIRECTOR(CambiarDirectorVotacion.class, "Cambiar director");
 
     @Getter private final Class<? extends CambiarDirectorVotacion> votacionTypeClass;
     @Getter private final String nombre;

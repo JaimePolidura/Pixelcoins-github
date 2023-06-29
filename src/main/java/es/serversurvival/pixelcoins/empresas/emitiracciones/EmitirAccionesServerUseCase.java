@@ -29,8 +29,6 @@ public final class EmitirAccionesServerUseCase implements UseCaseHandler<EmitirA
                 .precio(parametros.getPrecioPorAccion())
                 .cantidad(parametros.getNumeroNuevasAcciones())
                 .empresaId(parametros.getEmpresaId())
-                .objeto(parametros.getEmpresaId())
-                .tipoOferta(TipoOferta.ACCIONES_SERVER_EMISION)
                 .build());
 
         eventBus.publish(new AccionesEmitidasEmpresa(parametros));

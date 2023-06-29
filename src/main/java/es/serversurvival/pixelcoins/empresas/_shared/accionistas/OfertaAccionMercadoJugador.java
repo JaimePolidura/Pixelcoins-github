@@ -19,7 +19,13 @@ public final class OfertaAccionMercadoJugador extends OfertaAccionMercado {
     }
 
     public static class OfertaAccionMercadoJugadorBuiler extends Oferta.AbstractOfertaBuilder<OfertaAccionMercadoJugadorBuiler> {
+        private UUID vendedorAccionesId;
         private UUID empresaId;
+
+        public OfertaAccionMercadoJugadorBuiler vendedorAccionesId(UUID vendedorAccionesId) {
+            this.vendedorAccionesId = vendedorAccionesId;
+            return this;
+        }
 
         public OfertaAccionMercadoJugadorBuiler empresaId(UUID empresaId) {
             this.empresaId = empresaId;
@@ -28,7 +34,7 @@ public final class OfertaAccionMercadoJugador extends OfertaAccionMercado {
 
         @Override
         public Oferta build() {
-            return new OfertaAccionMercadoJugador(ofertaId, vendedorId, fechaSubida, cantidad, precio, objeto, tipoOferta, empresaId);
+            return new OfertaAccionMercadoJugador(ofertaId, vendedorId, fechaSubida, cantidad, precio, vendedorAccionesId.toString(), TipoOferta.ACCIONES_SERVER_JUGADOR, empresaId);
         }
     }
 }

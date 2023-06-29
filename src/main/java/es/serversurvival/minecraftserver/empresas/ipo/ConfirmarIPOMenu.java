@@ -1,6 +1,7 @@
 package es.serversurvival.minecraftserver.empresas.ipo;
 
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.menus.ConfirmacionMenu;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
@@ -32,10 +33,10 @@ public final class ConfirmarIPOMenu extends ConfirmacionMenu<ConfirmarIPOMenu.Co
                 .empresaId(state.getEmpresa().getEmpresaId())
                 .build());
 
-        player.sendMessage(GOLD + "Has sacado a bolsa la empresa " + state.getEmpresa().getNombre() + AQUA + "/empresas mercado");
+        player.sendMessage(GOLD + "Has sacado a bolsa la empresa " + state.getEmpresa().getNombre() + AQUA + " /empresas mercado");
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
-        Bukkit.broadcastMessage(GOLD + player.getName() + " ha sacado a bolsa " + state.getEmpresa().getNombre() + " " + AQUA + "/empresas mercado");
+        MinecraftUtils.broadcastExcept(player, GOLD + player.getName() + " ha sacado a bolsa " + state.getEmpresa().getNombre() + " " + AQUA + "/empresas mercado");
     }
 
     @Override

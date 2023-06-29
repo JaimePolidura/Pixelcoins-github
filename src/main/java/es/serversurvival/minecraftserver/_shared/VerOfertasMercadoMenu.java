@@ -98,10 +98,6 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println("Hol");
-    }
-
     private void comprarOferta(Oferta oferta, ItemStack itemOfertaComprado) {
         int cantidadItem = itemOfertaComprado.getAmount();
 

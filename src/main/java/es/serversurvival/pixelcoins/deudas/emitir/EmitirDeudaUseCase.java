@@ -27,7 +27,6 @@ public final class EmitirDeudaUseCase implements UseCaseHandler<EmitirDeudaParam
         ofrecerOfertaUseCase.handle(OfrecerOfertaParametros.of(OfertaDeudaMercadoPrimario.builder()
                 .vendedorId(parametros.getJugadorId())
                 .precio(parametros.getNominal())
-                .tipoOferta(TipoOferta.DEUDA_MERCADO_PRIMARIO)
                 .interes(parametros.getInteres())
                 .numeroCuotasTotales(parametros.getNumeroCuotasTotales())
                 .periodoPagoCuota(parametros.getPeriodoPagoCuota())

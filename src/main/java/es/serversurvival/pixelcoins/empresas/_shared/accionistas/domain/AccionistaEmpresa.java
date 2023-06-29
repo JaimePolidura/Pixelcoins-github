@@ -19,11 +19,11 @@ public final class AccionistaEmpresa {
     @Getter private int nAcciones;
 
     public AccionistaEmpresa decrementarNAccionesPorUno() {
-        return new AccionistaEmpresa(accionistaId, empresaId, accionistaId, nAcciones - 1);
+        return new AccionistaEmpresa(accionistaId, empresaId, accionisaJugadorId, nAcciones - 1);
     }
 
     public AccionistaEmpresa incrementarNAccionesEnUno() {
-        return new AccionistaEmpresa(accionistaId, empresaId, accionistaId, nAcciones + 1);
+        return new AccionistaEmpresa(accionistaId, empresaId, accionisaJugadorId, nAcciones + 1);
     }
 
     public boolean noTieneMasAcciones() {

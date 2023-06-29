@@ -9,29 +9,34 @@ import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.empresas.miempresa.MiEmpresaMenu;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver.jugadores.perfil.PerfilMenu;
+import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.AccionistasEmpresasService;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.application.EmpleadosService;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.List;
+import java.util.*;
 
 import static es.serversurvival._shared.utils.Funciones.FORMATEA;
 import static org.bukkit.ChatColor.*;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public final class TodasEmpresasMenu extends Menu {
+    private final AccionistasEmpresasService accionistasEmpresasService;
     private final TransaccionesService transaccionesService;
     private final EmpleadosService empleadosService;
     private final JugadoresService jugadoresService;
     private final EmpresasService empresasService;
     private final MenuService menuService;
+
+    private Set<UUID> empresasIdDondeElJugadorEsAccionista = new HashSet<>();
 
     @Override
     public int[][] items() {
@@ -67,8 +72,8 @@ public final class TodasEmpresasMenu extends Menu {
     private void onItemEmpresaClicked(Player player, InventoryClickEvent event) {
         Empresa empresa = this.empresasService.getById(MinecraftUtils.getLastLineOfLore(event.getCurrentItem(), 0));
 
-        if(empresa.getDirectorJugadorId().equals(player.getUniqueId())) {
-            this.menuService.open(player, MiEmpresaMenu.class, empresa);
+        if(empresasIdDondeElJugadorEsAccionista.contains(empresa.getEmpresaId())) {
+            menuService.open(player, MiEmpresaMenu.class, empresa);
         }
     }
 
@@ -79,13 +84,17 @@ public final class TodasEmpresasMenu extends Menu {
     }
 
     private ItemStack buildItemEmpresa(Empresa empresa, Player player) {
-        boolean jugadorMenuOwnerEmpresa = empresa.getDirectorJugadorId().equals(player.getUniqueId());
+        boolean esAccionista = accionistasEmpresasService.findByEmpresaIdAndJugadorId(empresa.getEmpresaId(), player.getUniqueId()).isPresent();
         List<String> empleadosNombres = this.empleadosService.findEmpleoActivoByEmpresaId(empresa.getEmpresaId()).stream()
                 .map(empleado -> jugadoresService.getNombreById(empleado.getEmpleadoJugadorId()))
                 .toList();
 
+        if(esAccionista){
+            empresasIdDondeElJugadorEsAccionista.add(empresa.getEmpresaId());
+        }
+
         return ItemBuilder.of(Material.getMaterial(empresa.getLogotipo()))
-                .title(jugadorMenuOwnerEmpresa ?
+                .title(esAccionista ?
                         MenuItems.CLICKEABLE + "VER TU EMPRESA" :
                         GOLD + "" + BOLD + "" + empresa.getNombre())
                 .lore(List.of(

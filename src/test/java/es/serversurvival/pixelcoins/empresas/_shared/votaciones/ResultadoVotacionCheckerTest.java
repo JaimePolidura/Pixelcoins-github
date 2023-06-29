@@ -1,5 +1,6 @@
 package es.serversurvival.pixelcoins.empresas._shared.votaciones;
 
+import es.serversurvival._shared.ConfigurationVariables;
 import es.serversurvival._shared.TiempoService;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
@@ -46,7 +47,7 @@ public class ResultadoVotacionCheckerTest {
         when(tiempoService.toMillis(votacion.getFechaInicio())).thenReturn(localDateTimeToMillis(votacion.getFechaInicio()));
         when(tiempoService.millis()).thenReturn(System.currentTimeMillis());
         when(empresasService.getById(empresa.getEmpresaId())).thenReturn(empresa);
-        when(votosService.getNAccionesVotadas(votacion.getVotacionId())).thenReturn((int) (Votacion.DEFAULT_PORCENTAJE_ACCIONES_TOTALES_VOTACION * empresa.getNTotalAcciones() + 1));
+        when(votosService.getNAccionesVotadas(votacion.getVotacionId())).thenReturn((int) (ConfigurationVariables.EMPRESAS_PORCENTAJE_ACCIONES_TOTALES_VOTACION * empresa.getNTotalAcciones() + 1));
 
         resultadoVotacionChecker.check(votacion);
 
@@ -57,7 +58,7 @@ public class ResultadoVotacionCheckerTest {
     public void timeout() {
         Votacion votacion = CambiarDirectorVotacion.builder().build();
 
-        when(tiempoService.toMillis(votacion.getFechaInicio())).thenReturn(localDateTimeToMillis(votacion.getFechaInicio()) - Votacion.DEFAULT_VOTACION_TIME_OUT);
+        when(tiempoService.toMillis(votacion.getFechaInicio())).thenReturn(localDateTimeToMillis(votacion.getFechaInicio()) - ConfigurationVariables.EMPRESAS_VOTACION_TIME_OUT);
         when(tiempoService.millis()).thenReturn(System.currentTimeMillis());
 
         resultadoVotacionChecker.check(votacion);

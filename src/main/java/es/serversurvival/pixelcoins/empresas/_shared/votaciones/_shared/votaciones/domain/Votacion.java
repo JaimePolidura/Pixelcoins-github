@@ -1,5 +1,6 @@
 package es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain;
 
+import es.serversurvival._shared.utils.Funciones;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,16 +12,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class Votacion {
-    public static final long DEFAULT_VOTACION_TIME_OUT = 24 * 60 * 60 * 1000;
-    public static final double DEFAULT_PORCENTAJE_ACCIONES_TOTALES_VOTACION = 0.8;
-
     @Getter private UUID votacionId;
     @Getter private UUID empresaId;
     @Getter private TipoVotacion tipo;
     @Getter private EstadoVotacion estado;
     @Getter private UUID iniciadoPorJugadorId;
     @Getter private LocalDateTime fechaFinalizacion;
-    @Getter private String descripccion;
+    @Getter private String descripcion;
     @Getter private LocalDateTime fechaInicio;
 
     public Votacion finalizar(EstadoVotacion resultado) {
@@ -36,7 +34,8 @@ public abstract class Votacion {
 
     public static Comparator<Votacion> sortByPrioridad() {
         return Comparator.<Votacion>comparingInt(a -> a.getEstado().getShowPriority())
-                .thenComparing(Votacion::getFechaInicio);
+                .thenComparing(Votacion::getFechaInicio)
+                .reversed();
     }
 
     public static abstract class AbstractVotacionBuilder<T extends AbstractVotacionBuilder> {
@@ -45,7 +44,7 @@ public abstract class Votacion {
         protected TipoVotacion tipo;
         protected EstadoVotacion estado;
         protected LocalDateTime fechaFinalizacion;
-        protected String descripccion;
+        protected String descripcion;
         protected LocalDateTime fechaInicio;
         protected UUID iniciadoPorJugadorId;
 
@@ -53,13 +52,14 @@ public abstract class Votacion {
             this.votacionId = UUID.randomUUID();
             this.fechaInicio = LocalDateTime.now();
             this.estado = EstadoVotacion.ABIERTA;
-            this.descripccion = "";
+            this.descripcion = "";
+            this.fechaFinalizacion = Funciones.NULL_LOCALDATETIME;
         }
 
         public abstract Votacion build();
 
         public T descripccion(String descripccion){
-            this.descripccion = descripccion;
+            this.descripcion = descripccion;
             return (T) this;
         }
 

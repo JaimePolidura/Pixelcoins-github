@@ -8,6 +8,7 @@ import es.serversurvival.pixelcoins.empresas._shared.accionistas.domain.Accionis
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.AccionistasEmpresasService;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.OfertaAccionMercadoJugador;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
+import es.serversurvival.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival.pixelcoins.mercado.ofrecer.OfrecerOfertaParametros;
 import es.serversurvival.pixelcoins.mercado.ofrecer.OfrecerOfertaUseCase;
@@ -28,14 +29,12 @@ public final class EmpresasIPOUseCase implements UseCaseHandler<EmpresaIPOParame
 
         AccionistaEmpresa acciones = accionistasEmpresasService.getByEmpresaIdAndJugadorId(parametros.getEmpresaId(), parametros.getJugadorId());
 
-        ofrecerOfertaUseCase.handle(OfrecerOfertaParametros.of(OfertaAccionMercadoJugador.builder()
-                .vendedorId(parametros.getEmpresaId())
-                .precio(parametros.getPrecioPorAccion())
+        ofrecerOfertaUseCase.handle(OfrecerOfertaParametros.of(OfertaAccionMercadoIPO.builder()
+                .accionesFundadorId(acciones.getAccionistaId())
+                .empresaId(parametros.getEmpresaId())
                 .cantidad(parametros.getNumeroAccionesVender())
-                .empresaId(parametros.getEmpresaId())
-                .tipoOferta(TipoOferta.ACCIONES_SERVER_JUGADOR)
-                .empresaId(parametros.getEmpresaId())
-                .objeto(acciones.getAccionistaId())
+                .precio(parametros.getPrecioPorAccion())
+                .vendedorId(acciones.getEmpresaId())
                 .build()));
 
         empresasService.save(empresasService.getById(parametros.getEmpresaId()).marcarComoCotizada());

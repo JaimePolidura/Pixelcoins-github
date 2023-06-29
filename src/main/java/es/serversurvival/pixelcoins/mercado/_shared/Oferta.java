@@ -44,21 +44,6 @@ public abstract class Oferta {
 
         public abstract Oferta build();
 
-        public T tipoOferta(TipoOferta tipoOferta) {
-            this.tipoOferta = tipoOferta;
-            return (T) this;
-        }
-
-        public T objeto(UUID objeto) {
-            this.objeto = objeto.toString();
-            return (T) this;
-        }
-
-        public T objeto(String objeto) {
-            this.objeto = objeto;
-            return (T) this;
-        }
-
         public T precio(double precio) {
             this.precio = precio;
             return (T) this;

@@ -53,12 +53,12 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
     @Override
     public int[][] items() {
         return new int[][] {
-                {1, 2, 0, 0, 0, 0, 0, 10, 5},
-                {6, 0, 0, 0, 0, 0, 0,  0,  0},
-                {0, 0, 0, 0, 0, 0, 0,  0,  0},
-                {0, 0, 0, 0, 0, 0, 0,  0,  0},
-                {0, 0, 0, 0, 0, 0, 0,  0,  0},
-                {0, 0, 0, 0, 0, 0, 7,  8,  9}
+                {1, 2, 5, 0, 0, 0, 0,  10, 3},
+                {6, 0, 0, 0, 0, 0, 0,   0, 0},
+                {0, 0, 0, 0, 0, 0, 0,   0, 0},
+                {0, 0, 0, 0, 0, 0, 0,   0, 0},
+                {0, 0, 0, 0, 0, 0, 0,   0, 0},
+                {0, 0, 0, 0, 0, 0, 7,   8, 9}
         };
     }
 
@@ -66,7 +66,7 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
                 .fixedItems()
-                .title(format(DARK_RED + "" + BOLD + "      %s", this.getState().getNombre()))
+                .title(format(DARK_RED + "" + BOLD + "Empresa: %s", this.getState().getNombre()))
                 .item(1, buildItemInfo())
                 .item(2, buildItemEmpresaStats())
                 .item(3, buildItemAccionistas())
@@ -98,9 +98,10 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
         UUID empleadoId = MinecraftUtils.getLastLineOfLore(event.getCurrentItem(), 0);
         UUID jugadorId = MinecraftUtils.getLastLineOfLore(event.getCurrentItem(), 1);
 
-        if(jugadorId.equals(getState().getDirectorJugadorId())){
+        if(!getState().getDirectorJugadorId().equals(getPlayer().getUniqueId()))
             return;
-        }
+        if(jugadorId.equals(getState().getDirectorJugadorId()))
+            return;
 
         Empleado empleado = empleadosService.getById(empleadoId);
 
@@ -117,15 +118,9 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
                 .count();
         boolean hayVotacionesPendienets = numeroVotacionesPendientes > 0;
 
-        ItemBuilder itemBuilder =  ItemBuilder.of(Material.WHITE_BANNER)
+        return ItemBuilder.of(Material.WHITE_BANNER)
                 .title(hayVotacionesPendienets ? MenuItems.CLICKEABLE + "VER LAS VOTACIONES" : GOLD + "" + BOLD + "VOTACIONES")
-                .lore(hayVotacionesPendienets ? RED + "Hay votaciones pendientes" : GOLD + "No hay votaciones pendientes");
-
-        if(hayVotacionesPendienets){
-            itemBuilder = itemBuilder.addEnchantment(Enchantment.ARROW_FIRE, numeroVotacionesPendientes);
-        }
-
-        return itemBuilder.build();
+                .lore(hayVotacionesPendienets ? RED + "Hay "+numeroVotacionesPendientes+" votaciones pendientes" : GOLD + "No hay votaciones pendientes").build();
     }
 
     private List<ItemStack> buildItemsEmpleados() {
@@ -135,10 +130,11 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
     }
 
     private ItemStack buildEmpleadoItem(Empleado empleado) {
+        boolean esDirector = getState().getDirectorJugadorId().equals(getPlayer().getUniqueId());
         return ItemBuilder.of(Material.PLAYER_HEAD)
                 .title(empleado.getEmpleadoJugadorId().equals(getState().getDirectorJugadorId()) ?
                                 DARK_RED + "" + BOLD  + "DIRECTOR DE LA EMPRESA" :
-                                MenuItems.CLICKEABLE + "VER OPCCIONES")
+                                (esDirector ? MenuItems.CLICKEABLE + "VER OPCCIONES" : GOLD + "Empleado"))
                 .lore(List.of(
                         "   ",
                         GOLD + "Empleado: " + jugadoresService.getNombreById(empleado.getEmpleadoJugadorId()),
@@ -177,6 +173,9 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
                 .map(this::getLoreAccionista)
                 .collect(Collectors.toList());
 
+        loreAccionistas.add(0, GOLD + "Nº Total acciones: " + getState().getNTotalAcciones());
+        loreAccionistas.add(1, "");
+
         return ItemBuilder.of(Material.NETHERITE_SCRAP)
                 .title(GOLD + "" + BOLD + "ACCIONISTAS")
                 .lore(loreAccionistas)
@@ -186,9 +185,9 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
     private record Accionista(String nombreAccionista, int nAcciones, double porcentajeNTotalAcciones) {}
 
     private String getLoreAccionista(Accionista accionista) {
-        double percentajeOwnership = redondeoDecimales(accionista.nAcciones * 100, 1);
+        String percentajeOwnership = Funciones.formatPorcentaje(accionista.porcentajeNTotalAcciones * 100);
 
-        return GOLD + accionista.nombreAccionista() + ": " + GREEN + FORMATEA.format(percentajeOwnership) + "%";
+        return GOLD + accionista.nombreAccionista() + ": " + GREEN + percentajeOwnership + "%";
     }
 
     private ItemStack buildItemEmpresaStats() {

@@ -13,6 +13,7 @@ import es.serversurvival.pixelcoins.empresas._shared.empresas.application.Empres
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.Jugador;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -36,7 +37,7 @@ public final class MercadoAccionesEmpresasMenu extends VerOfertasMercadoMenu<Ofe
 
     @Override
     public TipoOferta[] tipoOfertas() {
-        return new TipoOferta[]{TipoOferta.ACCIONES_SERVER_JUGADOR, TipoOferta.ACCIONES_SERVER_EMISION};
+        return new TipoOferta[]{TipoOferta.ACCIONES_SERVER_JUGADOR, TipoOferta.ACCIONES_SERVER_EMISION, TipoOferta.ACCIONES_SERVER_IPO};
     }
 
     @Override
@@ -51,7 +52,7 @@ public final class MercadoAccionesEmpresasMenu extends VerOfertasMercadoMenu<Ofe
 
     @Override
     public ItemStack buildItemFromOferta(OfertaAccionMercado oferta) {
-        return ItemBuilder.of(Material.KNOWLEDGE_BOOK)
+        return ItemBuilder.of(Material.CREEPER_BANNER_PATTERN)
                 .title(buildItemOfertaTitle(oferta))
                 .lore(buildItemOfertaLore(oferta))
                 .build();
@@ -95,8 +96,7 @@ public final class MercadoAccionesEmpresasMenu extends VerOfertasMercadoMenu<Ofe
 
     @Override
     public String mensajeRetiradoExistoso(OfertaAccionMercado oferta, ItemStack item) {
-        //TODO
-        return "";
+        return GOLD + "Lo has retirado del mercado";
     }
 
     @Override
