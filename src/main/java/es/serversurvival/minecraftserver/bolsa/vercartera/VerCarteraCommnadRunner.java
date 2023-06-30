@@ -47,15 +47,14 @@ public final class VerCarteraCommnadRunner implements CommandRunnerArgs<VerCarte
 
         CarteraBolsaResumida carteraBolsaResumida = verCarteraResumidaUseCase.ver(jugadorId);
 
-        player.sendMessage(GOLD + "Cartera de " + jugadorVerCartera + " ~ " + GREEN + FORMATEA.format(carteraBolsaResumida.getValorTotalCartera()) + " PC: ");
+        player.sendMessage(GOLD + "Cartera de " + jugadorVerCartera + " ~ " + formatPixelcoins(carteraBolsaResumida.getValorTotalCartera()) + " :");
 
         for (CarteraResumidaItem itemCartera : carteraBolsaResumida.getItems()) {
             String nombreActivo = activosBolsaService.getById(itemCartera.getActivoBolsaId())
                     .getNombreLargo();
 
-            player.sendMessage(GOLD + " - " + formatPorcentaje(itemCartera.getPeso() * 100) + "% " + nombreActivo + " " + itemCartera.getTipoBolsaApuesta().toString()
-                    + " Precio medio: " + GREEN + formatNumero(itemCartera.getPrecioMedio()) + " PC " + GOLD + "Precio actual: "
-                    + GREEN + formatNumero(itemCartera.getPrecioActual()) + " PC");
+            player.sendMessage(GOLD + " - " + formatPorcentaje(itemCartera.getPeso()) + nombreActivo + " " + itemCartera.getTipoBolsaApuesta().toString()
+                    + " Precio medio: " + formatRentabilidad(itemCartera.getPrecioMedio()) + GOLD + "Precio actual: " + formatPixelcoins(itemCartera.getPrecioActual()));
         }
     }
 }

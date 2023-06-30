@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
+import static es.serversurvival._shared.utils.Funciones.*;
 import static es.serversurvival.minecraftserver._shared.menus.MenuItems.CARGANDO;
 import static es.serversurvival.minecraftserver._shared.menus.MenuItems.CLICKEABLE;
 import static org.bukkit.ChatColor.*;
@@ -87,9 +88,9 @@ public final class VerPosicionesCerradasMenu extends Menu<VerPosicionesCerradasM
                 .title(GOLD + "" + BOLD + activosBolsaService.getById(posicion.getActivoBolsaId()).getNombreLargo())
                 .lore(List.of(
                         GOLD + "Tipo apuesta: " + posicion.getTipoApuesta().toString().toLowerCase(),
-                        GOLD + "Precio apertura: " + GREEN + Funciones.formatNumero(posicion.getPrecioApertura()) + " PC",
-                        GOLD + "Precio cierre: " + GREEN + Funciones.formatNumero(posicion.getPrecioCierre()) + " PC",
-                        GOLD + "Rentabilidad: " + (posicion.getRentabilidad() >= 0 ? GREEN + "+" : RED) + Funciones.formatPorcentaje(posicion.getRentabilidad()) + "%",
+                        GOLD + "Precio apertura: " + formatPixelcoins(posicion.getPrecioApertura()),
+                        GOLD + "Precio cierre: " + formatPixelcoins(posicion.getPrecioCierre()),
+                        GOLD + "Rentabilidad: " + formatRentabilidad(posicion.getRentabilidad()),
                         GOLD + "Cantidad: " + posicion.getCantidad(),
                         GOLD + "Precio actual: " + CARGANDO,
                         GOLD + "Fecha apertura: " + posicion.getFechaApertura(),
@@ -124,7 +125,7 @@ public final class VerPosicionesCerradasMenu extends Menu<VerPosicionesCerradasM
 
                 double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(posicion.getActivoBolsaId(), activoIdYaVisto ? null : posicion.getJugadorId());
 
-                super.setItemLore(i + 9, 5, GOLD + "Precio actual: " + GREEN + Funciones.formatNumero(ultimoPrecio) + " PC");
+                super.setItemLore(i + 9, 5, GOLD + "Precio actual: " + formatPixelcoins(ultimoPrecio));
             }
         });
     }

@@ -21,7 +21,7 @@ public final class CambiarDirectorLoreBuilder implements VotacionItemLoreBuilder
     public List<String> build(CambiarDirectorVotacion votacion) {
         return List.of(
                 GOLD + "Nuevo director: " + jugadoresService.getNombreById(votacion.getNuevoDirectorJugadorId()),
-                GOLD + "Sueldo: " + GREEN + formatNumero(votacion.getSueldo()) + " PC" + GOLD + " / " + millisToDias(votacion.getPeriodoPagoMs()) + " dias",
+                GOLD + "Sueldo: " + formatPixelcoins(votacion.getSueldo()) + "/ " + millisToDias(votacion.getPeriodoPagoMs()) + " dias",
                 GOLD + "Razon cambio: " + votacion.getDescripcion()
         );
     }

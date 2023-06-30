@@ -15,7 +15,6 @@ import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -24,7 +23,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
-import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+import static es.serversurvival._shared.utils.Funciones.formatPixelcoins;
 import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
@@ -104,7 +103,7 @@ public final class TodasEmpresasMenu extends Menu {
                         GOLD + "Descripccion: " + empresa.getDescripcion(),
                         empresa.isEsCotizada() ? GOLD + "Cotiza en bolsa" : GOLD + "No cotiza en bolsa",
                         "     ",
-                        GOLD + "Pixelcoins: " + GREEN + FORMATEA.format(transaccionesService.getBalancePixelcoins(empresa.getEmpresaId())) + " PC",
+                        GOLD + "Pixelcoins: " + formatPixelcoins(transaccionesService.getBalancePixelcoins(empresa.getEmpresaId())),
                         GOLD + "Nº Total acciones: " + empresa.getNTotalAcciones(),
                         "      ",
                         GOLD + (empleadosNombres.isEmpty() ? "Sin trabajadores" : GOLD + "Empleados: " + empleadosNombres),

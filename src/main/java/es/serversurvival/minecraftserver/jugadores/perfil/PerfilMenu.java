@@ -3,8 +3,13 @@ package es.serversurvival.minecraftserver.jugadores.perfil;
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
+import es.bukkitbettermenus.menustate.AfterShow;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.dependencyinjector.dependencies.DependenciesRepository;
+import es.serversurvival.Pixelcoin;
+import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.minecraftserver._shared.MinecraftUtils;
+import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.bolsa.vercartera.MiCarteraBolsaMenu;
 import es.serversurvival.minecraftserver.deudas.verdeudas.MisDeudasMenu;
 import es.serversurvival.minecraftserver.empresas.misacciones.MisEmpresasMenu;
@@ -24,18 +29,22 @@ import es.serversurvival.pixelcoins.empresas._shared.empleados.application.Emple
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import lombok.AllArgsConstructor;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.*;
+import java.util.concurrent.Executor;
 
 import static es.serversurvival._shared.utils.Funciones.*;
+import static es.serversurvival._shared.utils.Funciones.formatPixelcoins;
 import static es.serversurvival.minecraftserver._shared.menus.MenuItems.*;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
-public final class PerfilMenu extends Menu {
+public final class PerfilMenu extends Menu implements AfterShow {
     private final CalculadorPatrimonioService calculadorPatrimonioService;
     private final AccionistasEmpresasService accionistasEmpresasService;
     private final DependenciesRepository dependenciesRepository;
@@ -45,6 +54,7 @@ public final class PerfilMenu extends Menu {
     private final EmpleadosService empleadosService;
     private final EmpresasService empresasService;
     private final MenuService menuService;
+    private final Executor executor;
 
     @Override
     public int[][] items() {
@@ -82,8 +92,8 @@ public final class PerfilMenu extends Menu {
         empleos.forEach( (emp) -> {
             Empresa empresa = empresasService.getById(emp.getEmpresaId());
 
-            lore.add(GOLD + "" + empresa.getNombre() + " " + GREEN + FORMATEA.format(emp.getSueldo()) +
-                    " PC " + GOLD + "/ " + emp.periodoSueldoToDias() + " dias");
+            lore.add(GOLD + "" + empresa.getNombre() + " " + Funciones.formatPixelcoins(emp.getSueldo()) +
+                    GOLD + "/ " + emp.periodoSueldoToDias() + " dias");
         });
 
         return ItemBuilder.of(Material.GOLDEN_APPLE).title(displayName).lore(lore).build();
@@ -100,8 +110,8 @@ public final class PerfilMenu extends Menu {
             double porcentajeEmpresa = (double) accion.getNAcciones() / empresa.getNTotalAcciones();
             double pixelcoinsCorrespondientes = porcentajeEmpresa * transaccionesService.getBalancePixelcoins(empresa.getEmpresaId());
 
-            lore.add(GOLD + "- " + empresa.getNombre() + " " + FORMATEA.format(porcentajeEmpresa * 100)
-                    + "% Pixelcoins: " + GREEN + FORMATEA.format(pixelcoinsCorrespondientes) + " PC");
+            lore.add(GOLD + "- " + empresa.getNombre() + " " + formatPorcentaje(porcentajeEmpresa)
+                    + "Pixelcoins: " + formatPixelcoins(pixelcoinsCorrespondientes));
         }
 
         return ItemBuilder.of(Material.BOOK).title(displayName).lore(lore).build();
@@ -126,7 +136,7 @@ public final class PerfilMenu extends Menu {
                     pos.getPrecioApertura()) - pos.getCantidad() * pos.getPrecioCierre()), 2) + " PC");
         }
 
-        return ItemBuilder.of(Material.BOOK).title(displayName).lore(lore).build();
+        return ItemBuilder.of(Material.NAME_TAG).title(displayName).lore(lore).build();
     }
 
     private ItemStack buildItemDeudas () {
@@ -137,8 +147,8 @@ public final class PerfilMenu extends Menu {
 
         List<String> lore = new ArrayList<>() {{
             add("    ");
-            add(GOLD + "Total que debes: " + GREEN + totalQueDebe + " PC");
-            add(GOLD + "Total que te deben: " + GREEN + totalQueLeDeben + " PC");
+            add(GOLD + "Total que te deben: " + formatPixelcoins(totalQueLeDeben));
+            add(GOLD + "Total que debes: " + formatPixelcoins(totalQueDebe));
         }};
 
         return ItemBuilder.of(Material.DIAMOND_SWORD).title(displayName).lore(lore).build();
@@ -155,35 +165,39 @@ public final class PerfilMenu extends Menu {
         metaStats.setOwningPlayer(getPlayer());
         metaStats.setDisplayName(CLICKEABLE + "VER EL TOP JUGADORES");
 
-        if(getPlayer() == null) return stats;
-
-        Map<TipoCuentaPatrimonio, Double> patrimonioDesglosado = calculadorPatrimonioService.calcularDesglosadoPorCuentas(getPlayer().getUniqueId());
-
-        double totalEfectivo = patrimonioDesglosado.get(TipoCuentaPatrimonio.EFECTIVO);
-        double totalDeudasDeudor = patrimonioDesglosado.get(TipoCuentaPatrimonio.DEUDA_DEUDOR);
-        double totalDeudasAcredor = patrimonioDesglosado.get(TipoCuentaPatrimonio.DEUDA_ACREDOR);
-        double totalBolsa = patrimonioDesglosado.get(TipoCuentaPatrimonio.BOLSA);
-        double totalAccionesEmpresas = patrimonioDesglosado.get(TipoCuentaPatrimonio.EMPRESAS_ACCIONES);
-        double patrimonioNeto = totalEfectivo + totalDeudasAcredor + totalBolsa + totalAccionesEmpresas + totalDeudasDeudor;
-
-        int posTopRicps = calculadorPatrimonioService.getPosicionTopRicos(getPlayer().getName());
-
         List<String> lore = new ArrayList<>();
-        lore.add("  ");
-        lore.add(GOLD + "" + BOLD + "       TUS ESTADISTICAS");
-        lore.add("   ");
-        lore.add(GOLD + "Liquidez (ahorrado): " + GREEN + FORMATEA.format(totalEfectivo) + " PC");
-        lore.add(GOLD + "Total en empresas: " + GREEN + FORMATEA.format(totalAccionesEmpresas) + " PC");
-        lore.add(GOLD + "Total en cantidad: " + GREEN + FORMATEA.format(totalBolsa) + " PC");
-        lore.add(GOLD + "Total que te deben: " + GREEN + FORMATEA.format(totalDeudasAcredor) + " PC");
-        lore.add(GOLD + "Total que debes: " + RED + FORMATEA.format(totalDeudasDeudor) + " PC");
-        lore.add(GOLD + "" + BOLD + "Patrimonio neto: " + (patrimonioNeto >= 0 ? GREEN + FORMATEA.format(patrimonioNeto) : RED + "-" + FORMATEA.format(patrimonioNeto)) + " PC");
-        lore.add(GOLD + "Posicion top ricos: " + posTopRicps);
-        lore.add("    ");
+        lore.add(CARGANDO);
 
         metaStats.setLore(lore);
         stats.setItemMeta(metaStats);
 
         return stats;
+    }
+
+    @Override
+    public void afterShow(Player player) {
+        executor.execute(() -> {
+            Map<TipoCuentaPatrimonio, Double> patrimonioDesglosado = calculadorPatrimonioService.calcularDesglosadoPorCuentas(getPlayer().getUniqueId());
+
+            double totalEfectivo = patrimonioDesglosado.get(TipoCuentaPatrimonio.EFECTIVO);
+            double totalDeudasDeudor = patrimonioDesglosado.get(TipoCuentaPatrimonio.DEUDA_DEUDOR);
+            double totalDeudasAcredor = patrimonioDesglosado.get(TipoCuentaPatrimonio.DEUDA_ACREDOR);
+            double totalBolsa = patrimonioDesglosado.get(TipoCuentaPatrimonio.BOLSA);
+            double totalAccionesEmpresas = patrimonioDesglosado.get(TipoCuentaPatrimonio.EMPRESAS_ACCIONES);
+            double patrimonioNeto = totalEfectivo + totalDeudasAcredor + totalBolsa + totalAccionesEmpresas + totalDeudasDeudor;
+
+            Bukkit.getScheduler().runTask(Pixelcoin.INSTANCE, () -> {
+                super.setItemLoreActualPage(10, List.of(
+                        "   ",
+                        GOLD + "Efectivo: " + formatPixelcoins(totalEfectivo),
+                        GOLD + "Bolsa: " + formatPixelcoins(totalBolsa),
+                        GOLD + "Empresas: " + formatPixelcoins(totalAccionesEmpresas),
+                        GOLD + "Total que te deben: " + formatPixelcoins(totalDeudasAcredor),
+                        GOLD + "Total que debes: " + formatPixelcoins(totalDeudasDeudor),
+                        "   ",
+                        GOLD + "" + BOLD + "Patrimonio neto: " + formatPixelcoins(patrimonioNeto)
+                ));
+            });
+        });
     }
 }

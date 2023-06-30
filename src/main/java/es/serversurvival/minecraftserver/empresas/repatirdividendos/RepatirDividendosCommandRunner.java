@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 
 @Command(
-        value = "empresas repatirdividendos",
+        value = "empresas repartirdividendos",
         args = {"empresa"},
         explanation = "Repatir dividendos entre los accionistas de la empresa"
 )

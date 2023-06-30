@@ -3,6 +3,7 @@ package es.serversurvival.minecraftserver.deudas.verdeudasmercado;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.modules.sync.SyncMenuService;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.VerOfertasMercadoMenu;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
@@ -19,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
-import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+import static es.serversurvival._shared.utils.Funciones.*;
 import static org.bukkit.ChatColor.*;
 
 public final class MercadoDeudaMenu extends VerOfertasMercadoMenu<OfertaDeudaMercado> {
@@ -91,12 +92,12 @@ public final class MercadoDeudaMenu extends VerOfertasMercadoMenu<OfertaDeudaMer
     public String mensajeCompraExsitosaAlComprador(OfertaDeudaMercado oferta, ItemStack item) {
         String vendedor = jugadoresService.getNombreById(oferta.getVendedorId());
 
-        return GOLD + "Has comprado la deuda de " + vendedor + " por " + GREEN + FORMATEA.format(oferta.getPrecio()) + " PC";
+        return GOLD + "Has comprado la deuda de " + vendedor + " por " + formatPixelcoins(oferta.getPrecio());
     }
 
     @Override
     public String mensajeCompraExsitosaAlVendedor(OfertaDeudaMercado oferta, ItemStack item, String comprador) {
-        return GOLD + comprador + " ha comprado la deuda por " + GREEN + FORMATEA.format(oferta.getPrecio()) + " PC";
+        return GOLD + comprador + " ha comprado la deuda por " + formatPixelcoins(oferta.getPrecio());
     }
 
     @Override

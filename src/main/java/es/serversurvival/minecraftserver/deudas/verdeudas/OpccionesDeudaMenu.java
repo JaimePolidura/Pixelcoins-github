@@ -19,7 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+import static es.serversurvival._shared.utils.Funciones.formatPixelcoins;
 import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
@@ -82,22 +82,21 @@ public final class OpccionesDeudaMenu extends Menu<Deuda> {
     private void cancelarDeuda(Player player) {
         useCaseBus.handle(CancelarDeudaParametros.of(player.getUniqueId(), getState().getDeudaId()));
 
-        String pixelcoinsDeuda = FORMATEA.format(getState().getPixelcoinsRestantesDePagar());
+        String pixelcoinsDeuda = formatPixelcoins(getState().getPixelcoinsRestantesDePagar());
         player.sendMessage(GOLD + "Has cancelado la deuda");
         player.closeInventory();
         MinecraftUtils.enviarMensajeYSonido(getState().getDeudorJugadorId(),
-                player.getName() + " te ha cancelado la deuda que tenia contigo por " + GREEN + pixelcoinsDeuda + " PC",
+                player.getName() + " te ha cancelado la deuda que tenia contigo por " + pixelcoinsDeuda,
                 Sound.ENTITY_PLAYER_LEVELUP);
     }
 
     private void pagarDeuda(Player player) {
         useCaseBus.handle(PagarTodaLaDeudaParametros.of(getState().getDeudaId(), player.getUniqueId()));
 
-        String pixelcoinsPagadasFormateadas = FORMATEA.format(getState().getPixelcoinsRestantesDePagar());
-        player.sendMessage(GOLD + "Has pagado toda la deuda. En total han sido " + RED + "-" + pixelcoinsPagadasFormateadas + " PC");
+        player.sendMessage(GOLD + "Has pagado toda la deuda. En total han sido " + formatPixelcoins(- getState().getPixelcoinsRestantesDePagar()));
         player.closeInventory();
         MinecraftUtils.enviarMensajeYSonido(getState().getAcredorJugadorId(),
-                GOLD + player.getName() + " te ha pagada una deuda por " + GREEN + pixelcoinsPagadasFormateadas + " PC",
+                GOLD + player.getName() + " te ha pagada una deuda por " + formatPixelcoins(getState().getPixelcoinsRestantesDePagar()),
                 Sound.ENTITY_PLAYER_LEVELUP);
     }
 

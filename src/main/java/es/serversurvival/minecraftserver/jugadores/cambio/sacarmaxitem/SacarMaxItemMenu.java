@@ -76,10 +76,10 @@ public final class SacarMaxItemMenu extends Menu {
         double pixelcoinsJugador = transaccionesService.getBalancePixelcoins(jugaodrId);
 
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "SACAR MAXIMO DE " + item;
-        List<String> lore = new ArrayList<String>() {{
-            add(ChatColor.BLUE + "1 DE "+item+" -> " + ChatColor.GREEN + cambioPixelcoins + " PC");
+        List<String> lore = new ArrayList<>() {{
+            add(ChatColor.BLUE + "1 DE " + item + " -> " + ChatColor.GREEN + cambioPixelcoins + " PC");
             add("    ");
-            add("Tus pixelcoins disponibles: " + ChatColor.GREEN + Funciones.FORMATEA.format(pixelcoinsJugador));
+            add("Tus pixelcoins disponibles: " + Funciones.formatPixelcoins(pixelcoinsJugador));
         }};
 
         return ItemBuilder.of(material).title(displayName).lore(lore).build();

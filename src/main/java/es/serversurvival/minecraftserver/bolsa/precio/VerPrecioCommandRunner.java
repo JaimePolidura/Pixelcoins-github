@@ -10,6 +10,7 @@ import es.serversurvival._shared.utils.Funciones;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 
+import static es.serversurvival._shared.utils.Funciones.*;
 import static org.bukkit.ChatColor.*;
 
 @Command(
@@ -27,6 +28,6 @@ public final class VerPrecioCommandRunner implements CommandRunnerArgs<VerPrecio
         ActivoBolsa activoBolsa = activosBolsaService.getByNombreCortoAndTipoActivo(comando.getTicker(), TipoActivoBolsa.ACCION);
         double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(activoBolsa.getActivoBolsaId(), player.getUniqueId());
 
-        player.sendMessage(GOLD + "El precio de " + activoBolsa.getNombreLargo() + " es " + GREEN + Funciones.FORMATEA.format(ultimoPrecio) + " PC / Accion");
+        player.sendMessage(GOLD + "El precio de " + activoBolsa.getNombreLargo() + " es " + formatPixelcoins(ultimoPrecio) + "/ Accion");
     }
 }

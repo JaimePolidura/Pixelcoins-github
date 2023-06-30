@@ -8,6 +8,7 @@ import es.serversurvival.pixelcoins.bolsa.abrir.PosicionBolsaAbierta;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import static es.serversurvival._shared.utils.Funciones.*;
 import static es.serversurvival.minecraftserver._shared.MinecraftUtils.*;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.Sound.ENTITY_PLAYER_LEVELUP;
@@ -29,20 +30,18 @@ public final class OnPosicionAbierta {
 
         if(evento.getTipoApuesta() == TipoBolsaApuesta.LARGO){
             broadcastExcept(player, GOLD + player.getName() + " ha comprado " + evento.getCantidad() + " " + evento.getActivoBolsa().getTipoActivo().getNombreUnidadPlural() + " de "
-                    + evento.getActivoBolsa().getNombreLargo() + " a " + GREEN + Funciones.FORMATEA.format(evento.getPrecioPorUnidad()) + "PC ");
+                    + evento.getActivoBolsa().getNombreLargo() + " a " + formatPixelcoins(evento.getPrecioPorUnidad()));
 
-            enviarMensajeYSonido(player, GOLD + "Has comprado " + Funciones.FORMATEA.format(evento.getCantidad())
-                    + " cantidad a " + GREEN + Funciones.FORMATEA.format(evento.getPrecioPorUnidad()) + " PC" + GOLD + " que es un total de " + RED +
-                    "-" + Funciones.FORMATEA.format(evento.getCosteTotal()) + " PC " + GOLD + " comandos: " +
-                    AQUA + "/bolsa cartera", ENTITY_PLAYER_LEVELUP);
+            enviarMensajeYSonido(player, GOLD + "Has comprado " + formatNumero(evento.getCantidad())
+                    + " cantidad a " + formatPixelcoins(evento.getPrecioPorUnidad()) + " que es un total de " +
+                    formatPixelcoins(- evento.getCosteTotal()) + "Comandos: " +  AQUA + "/bolsa cartera", ENTITY_PLAYER_LEVELUP);
         }
         if(evento.getTipoApuesta() == TipoBolsaApuesta.CORTO){
             broadcastExcept(player, GOLD + player.getName() + " has vendido en corto " + evento.getCantidad() + " " + evento.getActivoBolsa().getTipoActivo().getNombreUnidadPlural() + " de "
-                    + evento.getActivoBolsa().getNombreLargo() + " a " + GREEN + Funciones.FORMATEA.format(evento.getPrecioPorUnidad()) + "PC");
+                    + evento.getActivoBolsa().getNombreLargo() + " a " + formatPixelcoins(evento.getPrecioPorUnidad()));
 
-            enviarMensajeYSonido(player, GOLD + "Has vendido en corto " + Funciones.FORMATEA.format(evento.getCantidad())
-                    + " cantidad a " + GREEN + Funciones.FORMATEA.format(evento.getPrecioPorUnidad()) + " PC" + GOLD + " que es un total de " + GREEN +
-                    Funciones.FORMATEA.format(evento.getCosteTotal()) + " PC " + GOLD + " comandos: " + AQUA + "/bolsa cartera", ENTITY_PLAYER_LEVELUP);
+            enviarMensajeYSonido(player, GOLD + "Has vendido en corto " + formatNumero(evento.getCantidad())
+                    + " cantidad a " + formatPixelcoins(evento.getPrecioPorUnidad()) + "que es un total de " + formatPixelcoins(- evento.getCosteTotal()) + GOLD + "Comandos: " + AQUA + "/bolsa cartera", ENTITY_PLAYER_LEVELUP);
         }
 
     }

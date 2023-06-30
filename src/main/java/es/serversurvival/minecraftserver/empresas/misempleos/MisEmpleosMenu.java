@@ -15,9 +15,7 @@ import es.serversurvival.pixelcoins.empresas._shared.empleados.application.Emple
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import es.serversurvival.pixelcoins.empresas.irseempleo.DejarEmpleoParametros;
-import es.serversurvival.pixelcoins.empresas.irseempleo.DejarEmpleoUseCase;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -28,7 +26,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+import static es.serversurvival._shared.utils.Funciones.formatPixelcoins;
 import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
@@ -105,7 +103,7 @@ public final class MisEmpleosMenu extends Menu {
                 .lore(List.of(
                         GOLD + "Empresa: " + empresaTrabajo.getNombre(),
                         GOLD + "Cargo: " + empleado.getDescripccion(),
-                        GOLD + "Sueldo: " + GREEN + FORMATEA.format(empleado.getSueldo()) + "PC" + GOLD + " / " + Funciones.millisToDias(empleado.getPeriodoPagoMs()) + " dias",
+                        GOLD + "Sueldo: " + formatPixelcoins(empleado.getSueldo()) + "/ " + Funciones.millisToDias(empleado.getPeriodoPagoMs()) + " dias",
                         GOLD + "Ultima vez que te pagaron: " + Funciones.toString(empleado.getFechaUltimoPago()),
                         "   ",
                         empresaTrabajo.getEmpresaId().toString(),

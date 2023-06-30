@@ -4,7 +4,6 @@ import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
-import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
@@ -12,7 +11,6 @@ import es.serversurvival.pixelcoins.jugadores.cambiar.TipoCambioPixelcoins;
 import es.serversurvival.pixelcoins.jugadores.cambiar.sacarItem.SacarItemParametros;
 import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
 import lombok.AllArgsConstructor;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -80,8 +78,8 @@ public final class SacarItemMenu extends Menu {
 
         player.getInventory().addItem(new ItemStack(Material.getMaterial(tipoItemClickeado), 1));
 
-        MinecraftUtils.enviarMensajeYSonido(player, GOLD + "Has convertido las pixelcoins: " + RED + "-" + FORMATEA.format(cambioPixelcoins) + " PC " + GOLD +
-                "Quedan " + GREEN + FORMATEA.format(pixelcoinsJugador - cambioPixelcoins) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
+        MinecraftUtils.enviarMensajeYSonido(player, GOLD + "Has convertido las pixelcoins: " + formatPixelcoins(-cambioPixelcoins) +
+                "Quedan " + formatPixelcoins(pixelcoinsJugador - cambioPixelcoins), Sound.ENTITY_PLAYER_LEVELUP);
 
 
         updateItemLore(2, pixelcoinsJugador, cambioPixelcoins);
@@ -94,7 +92,7 @@ public final class SacarItemMenu extends Menu {
     private void updateItemLore(int itemNum, double pixelcoinsJugador, double cambioPixelcoins) {
         ItemUtils.setLore(
                 (ItemStack) super.getActualItemsByItemNum(itemNum).get(0), 2,
-                GOLD + "Tus pixelcoins disponibles: " + GREEN + formatNumero(pixelcoinsJugador - cambioPixelcoins)
+                GOLD + "Tus pixelcoins disponibles: " + formatPixelcoins(pixelcoinsJugador - cambioPixelcoins)
         );
     }
 
@@ -116,7 +114,7 @@ public final class SacarItemMenu extends Menu {
         List<String> lore = new ArrayList<>();
         lore.add(AQUA + "1 "+itemACambiar+" -> " + GREEN + cambio);
         lore.add("   ");
-        lore.add(GOLD + "Tus pixelcoins disponibles: " + GREEN + FORMATEA.format(pilxelcoinsJugaodor) + " PC");
+        lore.add(GOLD + "Tus pixelcoins disponibles: " + formatPixelcoins(pilxelcoinsJugaodor));
 
         return ItemBuilder.of(itemMaterial).title(displayName).lore(lore).build();
     }

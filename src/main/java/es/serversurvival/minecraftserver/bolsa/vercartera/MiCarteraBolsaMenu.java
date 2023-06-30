@@ -120,8 +120,8 @@ public final class MiCarteraBolsaMenu extends Menu implements AfterShow {
         lore.add(GOLD + "Empresa " + activoBolsa.getNombreLargo());
         lore.add(GOLD + "Ticker " + activoBolsa.getNombreCorto());
         lore.add("   ");
-        lore.add(GOLD + "Cantidad: " + FORMATEA.format(posicion.getCantidad()) + " " + activoBolsa.getTipoActivo().getNombreUnidadPlural());
-        lore.add(GOLD + "Precio apertura: " + GREEN + FORMATEA.format(posicion.getPrecioApertura()) + " PC");
+        lore.add(GOLD + "Cantidad: " + formatNumero(posicion.getCantidad()) + " " + activoBolsa.getTipoActivo().getNombreUnidadPlural());
+        lore.add(GOLD + "Precio apertura: " + formatPixelcoins(posicion.getPrecioApertura()));
         lore.add(GOLD + "Precio actual: " + CARGANDO);
         lore.add(GOLD + "Rentabilidad: " + CARGANDO);
 
@@ -197,21 +197,17 @@ public final class MiCarteraBolsaMenu extends Menu implements AfterShow {
                 beneficiosOPerdidasTotalCartera += beneficiosOPerdidasPosicion;
                 valorTotalCartera += valorTotalPosicion;
 
-                super.setItemLore(slot, 6, GOLD + "Precio actual: " + GREEN + FORMATEA.format(ultimoPrecio) + " PC");
-                super.setItemLore(slot, 7, GOLD + "Rentabilidad: " + (rentabilidad >= 0 ?
-                        GREEN + "+" + formatPorcentaje(rentabilidad) :
-                        RED + "" + formatPorcentaje(rentabilidad) + "%"));
-                super.setItemLore(slot, 8, beneficiosOPerdidasPosicion >= 0 ?
-                        GOLD + "Beneficios: " + GREEN + "+" + formatNumero(beneficiosOPerdidasPosicion) + " PC" :
-                        GOLD + "Perdidas: " + RED + formatNumero(beneficiosOPerdidasPosicion) + " PC");
-                super.setItemLore(slot, 9, GOLD + "Valor total: " + GREEN + FORMATEA.format(valorTotalPosicion) + " PC");
+                super.setItemLore(slot, 6, GOLD + "Precio actual: " + formatPixelcoins(ultimoPrecio));
+                super.setItemLore(slot, 7, GOLD + "Rentabilidad: " + formatRentabilidad(rentabilidad));
+                super.setItemLore(slot, 8, GOLD + (beneficiosOPerdidasPosicion >= 0 ? "Beneficios: " : "Perdidas: ") + formatPixelcoins(beneficiosOPerdidasPosicion));
+                super.setItemLore(slot, 9, GOLD + "Valor total: " + formatPixelcoins(valorTotalPosicion));
             }
 
             super.setItemLoreActualPage(8, List.of(
-                    GOLD + "Valor total: " + GREEN + formatNumero(valorTotalCartera) + "PC",
-                    GOLD + "Resultado: " + (beneficiosOPerdidasTotalCartera >= 0 ? GREEN : RED) + formatNumero(beneficiosOPerdidasTotalCartera) + "PC",
-                    GOLD + "Rentabilidad: " + (valorTotalCartera == 0 ? 0 : Funciones.formatPorcentaje(beneficiosOPerdidasTotalCartera / valorInicialInvertidoTotalCartera) + "%"
-            )));
+                    GOLD + "Valor total: " + formatPixelcoins(valorTotalCartera),
+                    GOLD + "Resultado: " + formatPixelcoins(beneficiosOPerdidasTotalCartera),
+                    GOLD + "Rentabilidad: " + formatRentabilidad(valorTotalCartera == 0 ? 0 : beneficiosOPerdidasTotalCartera / valorInicialInvertidoTotalCartera)
+            ));
         });
     }
 }

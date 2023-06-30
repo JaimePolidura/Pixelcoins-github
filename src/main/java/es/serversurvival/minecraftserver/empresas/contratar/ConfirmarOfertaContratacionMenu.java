@@ -43,7 +43,7 @@ public final class ConfirmarOfertaContratacionMenu extends ConfirmacionMenu<Conf
         enviarMensajeYSonido(jugadorIdContratador, GOLD + "Has contratado a " + getPlayer().getName() +
                 " en la empresa " + state.getEmpresa().getNombre(), ENTITY_PLAYER_LEVELUP) ;
         enviarMensajeYSonido(jugadorIdAContratar, GOLD + "Has sido contratado en " + state.getEmpresa().getNombre() + "con el cargo " +
-                state.getDescripccion() + " con un sueldo de " + GREEN + FORMATEA.format(state.getSueldo()) + " PC / " +
+                state.getDescripccion() + " con un sueldo de " + formatPixelcoins(state.getSueldo()) + "/ " +
                 millisToDias(state.getPeriodoPagoSueldoMs()) + " dias", ENTITY_PLAYER_LEVELUP);
     }
 
@@ -53,7 +53,7 @@ public final class ConfirmarOfertaContratacionMenu extends ConfirmacionMenu<Conf
                 .title(BOLD + "" + GREEN + "ACEPTAR")
                 .lore(List.of(
                         GOLD + "Empresa: " + getState().getEmpresa().getNombre(),
-                        GOLD + "Sueldo: " + GREEN + Funciones.formatNumero(getState().getSueldo()) + " PC" + GOLD + " / " + millisToDias(getState().getPeriodoPagoSueldoMs()) + " dias",
+                        GOLD + "Sueldo: " + formatPixelcoins(getState().getSueldo()) + "/ " + millisToDias(getState().getPeriodoPagoSueldoMs()) + " dias",
                         GOLD + "Cargo: " + getState().getDescripccion()
                 ))
                 .build();

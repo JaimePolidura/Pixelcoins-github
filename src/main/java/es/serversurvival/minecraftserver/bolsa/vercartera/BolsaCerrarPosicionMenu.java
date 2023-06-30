@@ -66,15 +66,11 @@ public final class BolsaCerrarPosicionMenu extends NumberSelectorMenu<Posicion> 
     public List<String> loreItemAceptar(double cantidad) {
         return List.of(
                 GOLD + "Cantidad: " + formatNumero(cantidad),
-                GOLD + "Precio apertura: " + GREEN + formatNumero(getState().getPrecioApertura()) + " PC",
-                GOLD + "Precio actual: " + GREEN + formatNumero(precioPorAccionActual) + " PC",
-                GOLD + "Valor total: " + GREEN + formatNumero(valorTotalPorAccion * cantidad) + " PC",
-                resultadoPorAccion >= 0?
-                        GOLD + "Resultado: " + GREEN + "+" + formatNumero(resultadoPorAccion) + " PC" :
-                        GOLD + "Resultado: " + RED + formatNumero(resultadoPorAccion) + " PC",
-                rentabilidad >= 0 ?
-                        GOLD + "Rentabilidad: " + GREEN + "+" + formatPorcentaje(rentabilidad) + "%" :
-                        GOLD + "Rentabilidad: " + RED  + formatPorcentaje(rentabilidad) + "%"
+                GOLD + "Precio apertura: " + formatPixelcoins(getState().getPrecioApertura()),
+                GOLD + "Precio actual: " + formatPixelcoins(precioPorAccionActual),
+                GOLD + "Valor total: " + formatPixelcoins(valorTotalPorAccion * cantidad),
+                GOLD + "Resultado: " + formatPixelcoins(resultadoPorAccion),
+                GOLD + "Rentabilidad: " + formatRentabilidad(rentabilidad)
         );
     }
 

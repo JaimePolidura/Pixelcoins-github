@@ -29,24 +29,21 @@ public final class OnPosicionCerrada {
 
         if(evento.getTipoApuesta() == TipoBolsaApuesta.LARGO){
             enviarMensajeYSonido(player, GOLD + "Has vendido " + evento.getCantidad() + " " + evento.getActivoBolsa().getTipoActivo().getNombreUnidadPlural()
-                    + " de " + evento.getActivoBolsa().getNombreLargo() + " por " + GREEN + formatNumero(evento.getPrecioCierre()) + " PC / " + evento.getActivoBolsa().getTipoActivo().getNombreUnidadSingular().toLowerCase()
-                    + GOLD + " Has obtenido " + GREEN + formatNumero(evento.getPixelcoinsTotales()) + " PC " + GOLD + "con una rentabilidad del " +
-                    (evento.getRentabilidad() >= 0 ? "+" + GREEN + formatPorcentaje(evento.getRentabilidad()) : RED + formatPorcentaje(evento.getRentabilidad())) + "%", Sound.ENTITY_PLAYER_LEVELUP);
+                    + " de " + evento.getActivoBolsa().getNombreLargo() + " por " + formatPixelcoins(evento.getPrecioCierre()) + "/ " + evento.getActivoBolsa().getTipoActivo().getNombreUnidadSingular().toLowerCase()
+                    + GOLD + "Has obtenido " + formatPixelcoins(evento.getPixelcoinsTotales()) + "con una rentabilidad del " + formatRentabilidad(evento.getRentabilidad()), Sound.ENTITY_PLAYER_LEVELUP);
 
-            broadcastExcept(player, GOLD + player.getName() + " ha obtenido una rentabilidad del " + (evento.getRentabilidad() >= 0 ? "+" + formatPorcentaje(evento.getRentabilidad()) :
-                    formatPorcentaje(evento.getRentabilidad())) + "%" + GOLD + " vendiendo " + evento.getCantidad() + " " +
+            broadcastExcept(player, GOLD + player.getName() + " ha obtenido una rentabilidad del " + formatRentabilidad(evento.getRentabilidad()) + GOLD + " vendiendo " + evento.getCantidad() + " " +
                     evento.getActivoBolsa().getTipoActivo().getNombreUnidadPlural() + " de " + evento.getActivoBolsa().getNombreLargo()
-                    + " por " + GREEN + formatNumero(evento.getPrecioCierre()) + " PC / " + evento.getActivoBolsa().getTipoActivo().getNombreUnidadSingular().toLowerCase());
+                    + " por " + formatPixelcoins(evento.getPrecioCierre())  + "/ " + evento.getActivoBolsa().getTipoActivo().getNombreUnidadSingular().toLowerCase());
         }else{
             enviarMensajeYSonido(player, GOLD + "Has cerrado la posicion en corto de " + evento.getCantidad() + " " + evento.getActivoBolsa().getTipoActivo().getNombreUnidadPlural()
-                    + " de " + evento.getActivoBolsa().getNombreLargo() + " por " + GREEN + formatNumero(evento.getPrecioCierre()) + " PC / " + evento.getActivoBolsa().getTipoActivo().getNombreUnidadSingular().toLowerCase()
-                    + GOLD + " Has obtenido " + GREEN + formatNumero(evento.getPixelcoinsTotales()) + " PC " + GOLD + "con una rentabilidad de " +
-                    (evento.getRentabilidad() >= 0 ? "+" + GREEN + formatPorcentaje(evento.getRentabilidad()) : RED + formatPorcentaje(evento.getRentabilidad())) + "%", Sound.ENTITY_PLAYER_LEVELUP);
+                    + " de " + evento.getActivoBolsa().getNombreLargo() + " por " + formatPixelcoins(evento.getPrecioCierre()) + "/ " + evento.getActivoBolsa().getTipoActivo().getNombreUnidadSingular().toLowerCase()
+                    + GOLD + " Has obtenido " + formatRentabilidad(evento.getPixelcoinsTotales()) + GOLD + "con una rentabilidad de " +
+                    formatRentabilidad(evento.getRentabilidad()), Sound.ENTITY_PLAYER_LEVELUP);
 
-            broadcastExcept(player, player.getName() + " ha obtenido rentabilidad del " + (evento.getRentabilidad() >= 0 ? "+" + formatPorcentaje(evento.getRentabilidad()) :
-                    formatPorcentaje(evento.getRentabilidad())) + "%" + GOLD + " comprando en corto " + evento.getCantidad() + " " +
+            broadcastExcept(player, player.getName() + " ha obtenido rentabilidad del " + formatRentabilidad(evento.getRentabilidad()) + GOLD + "comprando en corto " + evento.getCantidad() + " " +
                     evento.getActivoBolsa().getTipoActivo().getNombreUnidadPlural() + " de " + evento.getActivoBolsa().getNombreLargo()
-                    + " por " + GREEN + formatNumero(evento.getPrecioCierre()) + " PC / " + evento.getActivoBolsa().getTipoActivo().getNombreUnidadSingular().toLowerCase());
+                    + " por " + formatPixelcoins(evento.getPrecioCierre()) + "/ " + evento.getActivoBolsa().getTipoActivo().getNombreUnidadSingular().toLowerCase());
         }
     }
 }

@@ -7,17 +7,12 @@ import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.bukkit.Material;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -25,84 +20,48 @@ import org.json.simple.parser.JSONParser;
 
 public final class Funciones {
     public static final UUID NULL_ID = new UUID(0L, 0L);
-    public static final DecimalFormat FORMATEA = new DecimalFormat("###,###.##");
-    public static final SimpleDateFormat DATE_FORMATER_LEGACY = new SimpleDateFormat("yyyy-MM-dd");
-    public static final DateTimeFormatter DATE_FORMATER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    public static final ExecutorService POOL = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     public static final ObjectMapper MAPPER = new ObjectMapper();
     public static final LocalDateTime NULL_LOCALDATETIME = LocalDateTime.of(0, 1, 1, 0, 0, 0);
+
+    private static final DecimalFormat FORMATEA = new DecimalFormat("###,###.##");
 
     public static int getEspaciosOcupados(Inventory inventory) {
         int espaciosLibres = 36;
         ItemStack[] items = inventory.getContents();
-        
+
         for(int i = 0; i < 36; i++){
             if(items[i] == null || esDeTipoItem(items[i], "AIR")) {
                 espaciosLibres--;
             }
         }
-        
+
         return espaciosLibres;
+    }
+
+    public static String formatPixelcoins(double pixelcoins) {
+        return pixelcoins >= 0 ?
+                ChatColor.GREEN + formatNumero(pixelcoins) + " PC " + ChatColor.GOLD :
+                ChatColor.RED +   formatNumero(pixelcoins) + " PC " + ChatColor.GOLD;
     }
 
     public static String formatNumero(double numero) {
         return Funciones.FORMATEA.format(Funciones.redondeoDecimales(numero, 2));
     }
 
+    public static String formatRentabilidad(double rentabilidad) {
+        String rentabildiadString = formatPorcentaje(rentabilidad);
+
+        return (rentabilidad >= 0) ?
+                (ChatColor.GREEN + "+" + rentabildiadString + " % " + ChatColor.RESET) :
+                (ChatColor.RED + rentabildiadString + " % " + ChatColor.RESET);
+    }
+
     public static String formatPorcentaje(double porcentaje) {
-        return Funciones.FORMATEA.format(Funciones.redondeoDecimales(porcentaje, 1));
-    }
-
-    public static long toMillis(LocalDateTime localDateTime) {
-        ZoneId zoneId = ZoneId.systemDefault();
-        ZonedDateTime zonedDateTime = localDateTime.atZone(zoneId);
-
-        return zonedDateTime.toInstant().toEpochMilli();
-    }
-
-    public static int aumentarPorcentaje(double num, double porcentaje) {
-        return (int) (num + Math.round((num / 100) * porcentaje));
-    }
-
-    public static int reducirPorcentaje (double numero, double porcentaje) {
-        return aumentarPorcentaje(numero, -porcentaje);
-    }
-
-    public static List<String> dividirDesc (String sentence, Integer k){
-        int totalLines = (sentence.length() / k);
-        if(sentence.length() % k != 0){
-            totalLines++;
-        }
-
-        int beginIndex = 0;
-        int endIndex = k;
-        List<String> toReturn = new ArrayList<>();
-
-        for(int i = 0; i < totalLines; i++){
-            if((i + 1) == totalLines){
-                endIndex = sentence.substring(beginIndex).length() + beginIndex;
-            }
-            toReturn.add(sentence.substring(beginIndex, endIndex));
-
-            beginIndex+=k;
-            endIndex+=k;
-        }
-
-        return toReturn;
-    }
-
-    public static long diferenciaDias(Date d1, Date d2) {
-        long difMil = Math.abs(d1.getTime() - d2.getTime());
-
-        return TimeUnit.DAYS.convert(difMil, TimeUnit.MILLISECONDS);
+        return Funciones.FORMATEA.format(Funciones.redondeoDecimales(porcentaje * 100, 1));
     }
 
     public static double rentabilidad(double ingresos, double beneficios) {
         return Math.round((beneficios / ingresos) * 100);
-    }
-
-    public static double diferenciaPorcntual(double cInicial, double cFinal){
-        return (cFinal / cInicial) * 100 - 100;
     }
 
     public static double redondeoDecimales(double numero, int numeroDecimales) {
@@ -124,11 +83,6 @@ public final class Funciones {
         }
 
         return parser.parse(response.toString());
-    }
-
-    public static boolean esDeTipo (ItemStack item, Material... tipos) {
-        return Arrays.stream(tipos)
-                .anyMatch(mat -> mat == item.getType());
     }
 
     public static boolean esDeTipoItem(ItemStack item, String...tipos) {
@@ -157,10 +111,6 @@ public final class Funciones {
             }
         }
         return stringBuilder.toString();
-    }
-
-    public static String hoy(){
-        return DATE_FORMATER_LEGACY.format(new Date());
     }
 
     public static String toString(LocalDateTime localDateTime) {
@@ -201,10 +151,6 @@ public final class Funciones {
 
         return ahora.getHour() > horaMin && ahora.getHour() < horaMax || ahora.getHour() == horaMin &&
                 ahora.getMinute() >= minMin || (ahora.getHour() == horaMax && ahora.getMinute() <= minMax);
-    }
-
-    public static boolean mercadoEstaAbierto() {
-        return !Funciones.esHoyDiaSemana(7, 1) && Funciones.esHoyHora(15, 30, 22, 30);
     }
 
     public static boolean cuincideNombre (String nombre, String... items){

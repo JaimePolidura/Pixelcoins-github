@@ -8,7 +8,6 @@ import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas.ipo.EmpresaIPOParametros;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -17,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+import static es.serversurvival._shared.utils.Funciones.*;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
@@ -45,19 +44,19 @@ public final class ConfirmarIPOMenu extends ConfirmacionMenu<ConfirmarIPOMenu.Co
         double precioPorAccion = getState().getPrecioPorAccion();
         int accionesTotalesEmpresa = getState().getEmpresa().getNTotalAcciones();
 
-        String valorAccionesAvender = FORMATEA.format(numeroAccionesAVender * precioPorAccion);
-        String valorAccionesOwner = FORMATEA.format((accionesTotalesEmpresa - numeroAccionesAVender) * precioPorAccion);
-        String valorTotalAcciones = FORMATEA.format(accionesTotalesEmpresa * precioPorAccion);
+        String valorAccionesAvender = formatPixelcoins(numeroAccionesAVender * precioPorAccion);
+        String valorAccionesOwner = formatPixelcoins((accionesTotalesEmpresa - numeroAccionesAVender) * precioPorAccion);
+        String valorTotalAcciones = formatPixelcoins(accionesTotalesEmpresa * precioPorAccion);
 
         return ItemBuilder.of(Material.GREEN_WOOL)
                 .title(GOLD + "" + BOLD + "Confirmar")
                 .lore(List.of(
                         GOLD + "¿Seguro que quieres sacar a bolsa " + getState().getEmpresa().getNombre() + "?",
-                        GOLD + "Precio/Accion: " + GREEN + "" + FORMATEA.format(precioPorAccion) + "PC",
-                        GOLD + "Nº Acciones a vender: " + FORMATEA.format(numeroAccionesAVender) + GREEN + " ~ " + valorAccionesAvender + "PC",
+                        GOLD + "Precio/Accion: " + formatPixelcoins(precioPorAccion),
+                        GOLD + "Nº Acciones a vender: " + formatNumero(numeroAccionesAVender) + " " + valorAccionesAvender,
                         "  ",
-                        GOLD + "Acciones tuyas: " + FORMATEA.format(accionesTotalesEmpresa - numeroAccionesAVender) + GREEN + " ~ " + valorAccionesOwner + "PC",
-                        GOLD + "Valor total empresa: " + GREEN + valorTotalAcciones + " PC"
+                        GOLD + "Acciones tuyas: " + formatNumero(accionesTotalesEmpresa - numeroAccionesAVender) + " " + valorAccionesOwner,
+                        GOLD + "Valor total empresa: " + valorTotalAcciones
                 ))
                 .build();
     }

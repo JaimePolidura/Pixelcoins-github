@@ -7,7 +7,7 @@ import org.bukkit.Material;
 
 public enum TipoActivoBolsa {
     CRIPTOMONEDAS(CriptoMonedasBolsaInformationAPIService.class, "criptomonedas", "Moneda", Material.GOLD_INGOT),
-    ACCION(AccionesBolsaInformationAPIService.class, "acciones", "Accion", Material.BOOK);
+    ACCION(AccionesBolsaInformationAPIService.class, "acciones", "Accion", Material.NAME_TAG);
 
     @Getter private final Class<? extends TipoActivoBolsaService> activoInfoService;
     @Getter private final String nombreUnidadPlural;

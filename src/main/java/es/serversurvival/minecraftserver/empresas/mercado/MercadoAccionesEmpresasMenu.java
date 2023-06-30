@@ -5,7 +5,6 @@ import es.bukkitbettermenus.modules.sync.SyncMenuService;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
-import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.VerOfertasMercadoMenu;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.OfertaAccionMercado;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
@@ -13,15 +12,14 @@ import es.serversurvival.pixelcoins.empresas._shared.empresas.application.Empres
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.Jugador;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static es.serversurvival._shared.utils.Funciones.formatPixelcoins;
 import static org.bukkit.ChatColor.*;
 
 public final class MercadoAccionesEmpresasMenu extends VerOfertasMercadoMenu<OfertaAccionMercado> {
@@ -61,7 +59,7 @@ public final class MercadoAccionesEmpresasMenu extends VerOfertasMercadoMenu<Ofe
     private List<String> buildItemOfertaLore(OfertaAccionMercado oferta) {
         return List.of(
                 GOLD + "Empresa: " + empresasService.getById(oferta.getEmpresaId()).getNombre(),
-                GOLD + "Precio: " + GREEN + Funciones.FORMATEA.format(oferta.getPrecio()) + " PC",
+                GOLD + "Precio: " + formatPixelcoins(oferta.getPrecio()),
                 GOLD + "Cantidad: " + oferta.getCantidad(),
                 GOLD + "Vendedor: " + getVendedorNombre(oferta)
         );
@@ -85,13 +83,13 @@ public final class MercadoAccionesEmpresasMenu extends VerOfertasMercadoMenu<Ofe
     @Override
     public String mensajeCompraExsitosaAlComprador(OfertaAccionMercado oferta, ItemStack item) {
         return GOLD + "Has comprado 1 accion de " + empresasService.getById(oferta.getEmpresaId()).getNombre() + " por " +
-                GREEN + Funciones.FORMATEA.format(oferta.getPrecio()) + " PC";
+                formatPixelcoins(oferta.getPrecio());
     }
 
     @Override
     public String mensajeCompraExsitosaAlVendedor(OfertaAccionMercado oferta, ItemStack item, String comprador) {
         return GOLD + comprador + " te ha comprado 1 accion de " + empresasService.getById(oferta.getEmpresaId()).getNombre() + " por " +
-                GREEN + Funciones.FORMATEA.format(oferta.getPrecio()) + " PC";
+                formatPixelcoins(oferta.getPrecio());
     }
 
     @Override

@@ -34,8 +34,6 @@ public final class EmpresaComprarServicioCommandRunner implements CommandRunnerA
                 .empresaId(empresaId)
                 .pixelcoins(comando.getPrecio())
                 .build());
-
-        player.sendMessage(GOLD + "Has pagado a la empresa " + comando.getEmpresa() + " " + GREEN +
-                FORMATEA.format(comando.getPrecio()) + " PC");
+        player.sendMessage(GOLD + "Has pagado a la empresa " + comando.getEmpresa() + " " + formatPixelcoins(comando.getPrecio()));
     }
 }

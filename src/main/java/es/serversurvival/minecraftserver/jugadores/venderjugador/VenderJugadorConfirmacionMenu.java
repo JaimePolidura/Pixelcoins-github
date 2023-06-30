@@ -19,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.*;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
@@ -53,11 +54,11 @@ public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu<Vender
         comprador.getInventory().addItem(itemAVender);
         vendedor.getInventory().clear(slotItemVender);
 
-        vendedor.sendMessage(ChatColor.GOLD + comprador.getName() + " te ha compradoo " + itemAVender.getType() +
-                " al precio de " + ChatColor.GREEN + Funciones.FORMATEA.format(precio) + " PC");
+        vendedor.sendMessage(GOLD + comprador.getName() + " te ha compradoo " + itemAVender.getType() +
+                " al precio de " + formatPixelcoins(precio));
         vendedor.playSound(vendedor.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
-        comprador.sendMessage(ChatColor.GOLD + "Has comprado el item");
+        comprador.sendMessage(GOLD + "Has comprado el item");
         comprador.playSound(comprador.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
 
         this.eventBus.publish(new ItemVendidoJugadorEvento(comprador.getUniqueId(), vendedor.getUniqueId(), precio, itemAVender.getType().toString()));
@@ -82,10 +83,10 @@ public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu<Vender
     @Override
     public ItemStack aceptarItem() {
         return ItemBuilder.of(Material.GREEN_WOOL)
-                .title(ChatColor.GREEN + "" + ChatColor.BOLD + "COMPRAR")
+                .title(GREEN + "" + BOLD + "COMPRAR")
                 .lore(List.of(
                         GOLD + "Aceptar la oferta de " + this.getState().jugadorVendedor().getName(),
-                        GOLD + "Por: " + GREEN + Funciones.FORMATEA.format(this.getState().precio()) + " PC"
+                        GOLD + "Por: " + formatPixelcoins(getState().precio())
                 ))
                 .build();
     }

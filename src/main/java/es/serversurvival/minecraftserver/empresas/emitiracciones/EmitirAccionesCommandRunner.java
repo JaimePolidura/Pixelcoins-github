@@ -34,9 +34,9 @@ public final class EmitirAccionesCommandRunner implements CommandRunnerArgs<Emit
                 .empresaId(empresa.getEmpresaId())
                 .build());
 
-        player.sendMessage(GOLD + "Has emitido " + command.getNumeroNuevasAcciones() + " por " + GREEN +
-                FORMATEA.format(command.getPrecioPorAccion()) + " PC " + GOLD + "Para ver las acciones " + AQUA + "/empresas mercado");
-        MinecraftUtils.broadcastExcept(player, GOLD + command.getEmpresa() + " ha emitodo " + command.getNumeroNuevasAcciones() + " por " + GREEN +
-                FORMATEA.format(command.getPrecioPorAccion()) + " PC " + GOLD + "Para ver las acciones " + AQUA + "/empresas mercado");
+        player.sendMessage(GOLD + "Has emitido " + command.getNumeroNuevasAcciones() + " por " +
+                formatPixelcoins(command.getPrecioPorAccion()) + "Para ver las acciones " + AQUA + "/empresas mercado");
+        MinecraftUtils.broadcastExcept(player, GOLD + command.getEmpresa() + " ha emitodo " + command.getNumeroNuevasAcciones() + " por " +
+                formatPixelcoins(command.getPrecioPorAccion()) + "Para ver las acciones " + AQUA + "/empresas mercado");
     }
 }

@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static es.serversurvival._shared.utils.Funciones.*;
 import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
@@ -76,8 +77,7 @@ public final class TopMenu extends Menu {
             JugadorEstadisticas estadistica = topJugadores.get(i);
             String jugadorNombre = jugadoresService.getById(estadistica.getJugadorId()).getNombre();
 
-            lore.add(GOLD + "" + (i + 1) + "º " + jugadorNombre + ": " + GREEN + Funciones.FORMATEA.format(estadistica.getNCompraVentasBolsa()) +
-                    " nº operaciones bolsa");
+            lore.add(GOLD + "" + (i + 1) + "º " + jugadorNombre + ": " + formatPixelcoins(estadistica.getNCompraVentasBolsa()) + "nº operaciones bolsa");
         }
 
         return ItemBuilder.of(Material.COPPER_INGOT).title(displayName).lore(lore).build();
@@ -93,11 +93,11 @@ public final class TopMenu extends Menu {
             if(i == 5) break;
 
             Posicion posicion = allPosicionesCerradas.get(i);
-            double rentabilidad = Funciones.redondeoDecimales(posicion.getRentabilidad(), 1);
+            double rentabilidad = redondeoDecimales(posicion.getRentabilidad(), 1);
             String nombreActivo = activosBolsaService.getById(posicion.getActivoBolsaId()).getNombreLargo();
             Jugador jugador = jugadoresService.getById(posicion.getJugadorId());
 
-            if(rentabilidad > 0) break;
+            if(rentabilidad >= 0) break;
 
             lore.add("" + GOLD + (i + 1)  + "º "+(posicion.getTipoApuesta() == TipoBolsaApuesta.CORTO ? "(CORTO) " : "") + jugador.getNombre() + ": " +
                     nombreActivo + RED + " " + rentabilidad + "%");
@@ -118,7 +118,7 @@ public final class TopMenu extends Menu {
             JugadorEstadisticas jugadorEstadisticas = topMorosos.get(i);
             Jugador jugador = jugadoresService.getById(jugadorEstadisticas.getJugadorId());
 
-            lore.add(GOLD + "" + (i + 1)  + "º " + jugador.getNombre() + ": " + GREEN + Funciones.FORMATEA.format(jugadorEstadisticas.getNDeudaInpagos()));
+            lore.add(GOLD + "" + (i + 1)  + "º " + jugador.getNombre() + ": " + formatPixelcoins(jugadorEstadisticas.getNDeudaInpagos()));
         }
 
         return ItemBuilder.of(Material.RED_WOOL).title(displayName).lore(lore).build();
@@ -135,14 +135,14 @@ public final class TopMenu extends Menu {
             if(i == 5) break;
 
             Posicion posicion = allPosicionesCerradas.get(i);
-            double rentabilidad = Funciones.redondeoDecimales(posicion.getRentabilidad(), 1);
+            double rentabilidad = redondeoDecimales(posicion.getRentabilidad(), 1);
             String nombreActivo = activosBolsaService.getById(posicion.getActivoBolsaId()).getNombreLargo();
             String jugador = jugadoresService.getById(posicion.getJugadorId()).getNombre();
 
             if(rentabilidad < 0) break;
 
             lore.add("" + GOLD + (i + 1)  + "º " + (posicion.getTipoApuesta() == TipoBolsaApuesta.CORTO ? "(CORTO)" : "") + jugador + ": "
-                    + posicion + GREEN + " +" + rentabilidad + "% " + nombreActivo);
+                     + GREEN + " +" + rentabilidad + "% " + nombreActivo);
         }
 
         return ItemBuilder.of(Material.DIAMOND_BLOCK).title(displayName).lore(lore).build();
@@ -158,7 +158,7 @@ public final class TopMenu extends Menu {
             if(pos == 6) break;
             if(entry.getValue() == 0) continue;
 
-            lore.add(GOLD + "" + pos + "º " + entry.getKey() + ": " + GREEN + Funciones.FORMATEA.format(entry.getValue()) + " PC");
+            lore.add(GOLD + "" + pos + "º " + entry.getKey() + ": " + formatPixelcoins(entry.getValue()));
             pos++;
         }
 
@@ -174,8 +174,8 @@ public final class TopMenu extends Menu {
             JugadorEstadisticas estadisticaJugador = listaCompradores.get(i);
             String nombre = jugadoresService.getById(estadisticaJugador.getJugadorId()).getNombre();
 
-            lore.add(GOLD + "" + (i + 1) + "º " + nombre + ": " + GREEN + Funciones.FORMATEA.format(estadisticaJugador.getValorPixelcoinsComprasTienda()) +
-                    " PC " + GOLD + "nº comrpas: " + estadisticaJugador.getNComprasTineda());
+            lore.add(GOLD + "" + (i + 1) + "º " + nombre + ": " + formatPixelcoins(estadisticaJugador.getValorPixelcoinsComprasTienda()) +
+                    "nº comrpas: " + estadisticaJugador.getNComprasTineda());
         }
 
         return ItemBuilder.of(Material.COPPER_INGOT).title(displayName).lore(lore).build();
@@ -191,8 +191,8 @@ public final class TopMenu extends Menu {
             JugadorEstadisticas estadisticaJugador = listaVendedores.get(i);
             String nombre = jugadoresService.getById(estadisticaJugador.getJugadorId()).getNombre();
 
-            lore.add(GOLD + "" + (i + 1) + "º " + nombre + ": " + GREEN + Funciones.FORMATEA.format(estadisticaJugador.getValorPixelcoinsVentasTienda()) +
-                    " PC " + GOLD + "nº ventas: " + estadisticaJugador.getNVentasTienda());
+            lore.add(GOLD + "" + (i + 1) + "º " + nombre + ": " + formatPixelcoins(estadisticaJugador.getValorPixelcoinsVentasTienda()) +
+                    "nº ventas: " + estadisticaJugador.getNVentasTienda());
         }
 
         return ItemBuilder.of(Material.GOLD_INGOT).title(displayName).lore(lore).build();
@@ -207,7 +207,7 @@ public final class TopMenu extends Menu {
         for(Map.Entry<String, Double> entry : listaRicos.entrySet()){
             if(pos == 6) break;
 
-            lore.add(GOLD + "" + pos + "º " + entry.getKey() + ": " + GREEN + Funciones.FORMATEA.format(entry.getValue()) + " PC");
+            lore.add(GOLD + "" + pos + "º " + entry.getKey() + ": " + formatPixelcoins(entry.getValue()));
             pos++;
         }
 

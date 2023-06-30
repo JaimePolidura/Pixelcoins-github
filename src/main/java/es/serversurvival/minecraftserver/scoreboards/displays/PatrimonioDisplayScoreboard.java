@@ -11,7 +11,7 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.Map;
 
-import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+import static es.serversurvival._shared.utils.Funciones.formatPixelcoins;
 import static es.serversurvival.minecraftserver._shared.MinecraftUtils.*;
 import static org.bukkit.ChatColor.*;
 
@@ -28,14 +28,14 @@ public class PatrimonioDisplayScoreboard implements ServerScoreboardCreator {
         Map<TipoCuentaPatrimonio, Double> patrimonioDesglosado = calculadorPatrimonioService.calcularDesglosadoPorCuentas(player.getUniqueId());
         double patriominioTotal = patrimonioDesglosado.values().stream().mapToDouble(a -> a).sum();
 
-        addLineToScoreboard(objective, GOLD + "Tu patrimonio total: " + GREEN + FORMATEA.format(Math.round(patriominioTotal)) + " PC", 1);
+        addLineToScoreboard(objective, GOLD + "Tu patrimonio total: " + formatPixelcoins(Math.round(patriominioTotal)), 1);
         addLineToScoreboard(objective, GOLD + "----------------", 2);
         int scoreBoardLine = 3 + patrimonioDesglosado.size();
 
         for (TipoCuentaPatrimonio cuenta : patrimonioDesglosado.keySet()) {
             double patriomnioCuenta = patrimonioDesglosado.get(cuenta);
 
-            addLineToScoreboard(objective, GOLD + cuenta.getAlias() + ": " + GREEN + FORMATEA.format(Math.round(patriomnioCuenta)) + " PC", scoreBoardLine);
+            addLineToScoreboard(objective, GOLD + cuenta.getAlias() + ": " + formatPixelcoins(Math.round(patriomnioCuenta)), scoreBoardLine);
 
             scoreBoardLine--;
         }

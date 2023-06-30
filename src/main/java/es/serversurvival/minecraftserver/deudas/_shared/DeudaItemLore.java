@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.BinaryOperator;
 
-import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+import static es.serversurvival._shared.utils.Funciones.*;
 import static org.bukkit.ChatColor.*;
 
 @Service
@@ -23,11 +23,11 @@ public final class DeudaItemLore {
                                                int nCuotasTotales) {
         return List.of(
                 GOLD + "Acredor: " + jugadoresService.getNombreById(acredorJugadorId),
-                GOLD + "Nominal/Pixelcoins: " + GREEN + Funciones.formatNumero(nominal) + " PC",
-                GOLD + "Interes: " + FORMATEA.format(interes * 100) + "%",
-                GOLD + "Cuotas: " + GREEN + FORMATEA.format(nominal * interes) + " PC " + GOLD + " / " + Funciones.millisToDias(periodoPagoCuotasMs) + " dias",
+                GOLD + "Nominal/Pixelcoins: " + formatPixelcoins(nominal),
+                GOLD + "Interes: " + formatPorcentaje(interes),
+                GOLD + "Cuotas: " + formatPixelcoins(nominal * interes) + " / " + Funciones.millisToDias(periodoPagoCuotasMs) + " dias",
                 GOLD + "Nº Cuotas totales: " + nCuotasTotales,
-                GOLD + "Pixelcoins totales a devolver: " + GREEN + FORMATEA.format(nominal * interes * nCuotasTotales + nominal) + " PC"
+                GOLD + "Pixelcoins totales a devolver: " + formatPixelcoins(nominal * interes * nCuotasTotales + nominal)
         );
     }
 
@@ -35,16 +35,16 @@ public final class DeudaItemLore {
                                                 int nCuotasRestantes, int nCuotasImpagados, double pixelcoinsTotalesDevolver, boolean esMercadoPrimario,
                                                 String deudorNombre) {
         List<String> lore = new ArrayList<>(List.of(
-                GOLD + "Precio: " + GREEN + FORMATEA.format(precio) + " PC",
+                GOLD + "Precio: " + formatPixelcoins(precio),
                 GOLD + "Vendedor: " + vendedorNombre,
                 GOLD + "Deudor: " + deudorNombre,
                 GOLD + " ",
-                GOLD + "Nominal/Pixelcoins: " + GREEN + FORMATEA.format(nominal) + " PC",
-                GOLD + "Pagos/Cuotas: " + GREEN + FORMATEA.format(interes * nominal) + " PC / " + GOLD + Funciones.millisToDias(periodoPagoCuotasMs) + " dias",
-                GOLD + "Interes: " + FORMATEA.format(interes * 100) + "%",
+                GOLD + "Nominal/Pixelcoins: " + formatPixelcoins(nominal),
+                GOLD + "Pagos/Cuotas: " + formatPixelcoins(interes * nominal) + "/ " + Funciones.millisToDias(periodoPagoCuotasMs) + " dias",
+                GOLD + "Interes: " + formatPorcentaje(interes),
                 GOLD + "Nº Pagos restantes: " + nCuotasRestantes,
                 GOLD + "Nº Pagos impagados: " + (nCuotasImpagados > 0 ? RED : GOLD) + " " + nCuotasImpagados,
-                GOLD + "Total pixelcoins a devolver: " + GREEN + FORMATEA.format(pixelcoinsTotalesDevolver) + " PC"
+                GOLD + "Total pixelcoins a devolver: " + formatPixelcoins(pixelcoinsTotalesDevolver)
         ));
         if(esMercadoPrimario){
             lore.add(GOLD + "Mercado primario");
@@ -57,10 +57,10 @@ public final class DeudaItemLore {
         return List.of(
                 GOLD + "Acredor: " + jugadoresService.getNombreById(deuda.getAcredorJugadorId()),
                 GOLD + "Deudor: " + jugadoresService.getNombreById(deuda.getDeudorJugadorId()),
-                GOLD + "Nomimal/Pixelcoins: " + GREEN + FORMATEA.format(deuda.getNominal()) + " PC",
-                GOLD + "Interes: " + FORMATEA.format(deuda.getInteres() * 100) + "%",
-                GOLD + "Cuotas: " + GREEN + FORMATEA.format(deuda.getCuota()) + " PC " + GOLD + " / " + Funciones.millisToDias(deuda.getPeriodoPagoCuotaMs()) + " dias",
-                GOLD + "Pixelcoins restantes: " + GREEN + FORMATEA.format(deuda.getPixelcoinsRestantesDePagar()) + " PC",
+                GOLD + "Nomimal/Pixelcoins: " + formatPixelcoins(deuda.getNominal()),
+                GOLD + "Interes: " + formatPorcentaje(deuda.getInteres()),
+                GOLD + "Cuotas: " + formatPixelcoins(deuda.getCuota()) + "/ " + Funciones.millisToDias(deuda.getPeriodoPagoCuotaMs()) + " dias",
+                GOLD + "Pixelcoins restantes: " + formatPixelcoins(deuda.getPixelcoinsRestantesDePagar()),
                 " ",
                 GOLD + "Nº Cuotas restantes: " + (deuda.getNCuotasTotales() - deuda.getNCuotasPagadas()),
                 GOLD + "Nº Cuotas pagadas: " + deuda.getNCuotasPagadas(),

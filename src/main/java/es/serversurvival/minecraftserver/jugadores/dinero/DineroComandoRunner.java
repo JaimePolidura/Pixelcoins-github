@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import java.util.Map;
 import java.util.UUID;
 
-import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+import static es.serversurvival._shared.utils.Funciones.formatPixelcoins;
 import static org.bukkit.ChatColor.*;
 
 @Command(
@@ -36,7 +36,7 @@ public class DineroComandoRunner implements CommandRunnerArgs<DineroComando> {
             TipoCuentaPatrimonio tipoCuenta = entry.getKey();
             double pixelcoins = entry.getValue();
 
-            player.sendMessage(GOLD + "   " + tipoCuenta.getAlias() + ": " + (pixelcoins < 0 ? RED : GREEN) + FORMATEA.format(pixelcoins) + " PC");
+            player.sendMessage(GOLD + "   " + tipoCuenta.getAlias() + ": " + formatPixelcoins(pixelcoins));
         }
     }
 
@@ -46,9 +46,9 @@ public class DineroComandoRunner implements CommandRunnerArgs<DineroComando> {
                 .sum();
 
         if(comando.getJugador() == null || comando.getJugador().equalsIgnoreCase("")){
-            sender.sendMessage(GOLD + "Tu dinero total: " + GREEN + FORMATEA.format(suma) + " PC " + GOLD + "Esta formado por:");
+            sender.sendMessage(GOLD + "Tu dinero total: " + formatPixelcoins(suma) + "Esta formado por:");
         }else{
-            sender.sendMessage(GOLD + "El dinero total de "+comando.getJugador()+" : " + GREEN + FORMATEA.format(suma) + " PC " + GOLD + "Esta formado por:");
+            sender.sendMessage(GOLD + "El dinero total de "+comando.getJugador()+" : " + formatPixelcoins(suma) + "Esta formado por:");
         }
     }
 

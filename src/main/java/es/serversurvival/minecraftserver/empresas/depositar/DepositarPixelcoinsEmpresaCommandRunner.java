@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+import static es.serversurvival._shared.utils.Funciones.formatPixelcoins;
 import static es.serversurvival.minecraftserver._shared.MinecraftUtils.enviarMensajeYSonido;
 import static org.bukkit.ChatColor.*;
 
@@ -34,7 +34,7 @@ public final class DepositarPixelcoinsEmpresaCommandRunner implements CommandRun
                 .pixelcoins(comando.getPixelcoins())
                 .build());
 
-        enviarMensajeYSonido(player, GOLD + "Has depositado " + GREEN + FORMATEA.format(comando.getPixelcoins()) + " PC" + GOLD
+        enviarMensajeYSonido(player, GOLD + "Has depositado " + formatPixelcoins(comando.getPixelcoins())
                 + " en tu empresa: " + DARK_AQUA + comando.getEmpresa(), Sound.ENTITY_PLAYER_LEVELUP);
     }
 }

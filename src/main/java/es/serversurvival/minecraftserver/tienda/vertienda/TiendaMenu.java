@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+import static es.serversurvival._shared.utils.Funciones.formatPixelcoins;
 import static org.bukkit.ChatColor.*;
 
 public final class TiendaMenu extends VerOfertasMercadoMenu<OfertaTiendaItemMinecraft> {
@@ -57,21 +57,19 @@ public final class TiendaMenu extends VerOfertasMercadoMenu<OfertaTiendaItemMine
     public ItemStack buildItemFromOferta(OfertaTiendaItemMinecraft oferta) {
         return MinecraftUtils.setLore(oferta.toItemStack(), List.of(
                 GOLD + "Vendedor: " + jugadoresService.getNombreById(oferta.getVendedorId()),
-                GOLD + "Precio: " + GREEN + FORMATEA.format(oferta.getPrecio()) + " PC / Unidad",
+                GOLD + "Precio: " + formatPixelcoins(oferta.getPrecio()) + "/ Unidad",
                 GOLD + "Fecha subida: " + Funciones.toString(oferta.getFechaSubida())
         ));
     }
 
     @Override
     public String mensajeCompraExsitosaAlComprador(OfertaTiendaItemMinecraft oferta, ItemStack item) {
-        return GOLD + "Has comprado " + item.getType() + " por " + GREEN + "" +
-                FORMATEA.format(oferta.getPrecio()) + "PC";
+        return GOLD + "Has comprado " + item.getType() + " por " + formatPixelcoins(oferta.getPrecio());
     }
 
     @Override
     public String mensajeCompraExsitosaAlVendedor(OfertaTiendaItemMinecraft oferta, ItemStack item, String comprador) {
-        return GOLD + comprador + " te ha comprado 1 de " + item.getType() +
-                " por " + GREEN + FORMATEA.format(oferta.getPrecio()) + " PC";
+        return GOLD + comprador + " te ha comprado 1 de " + item.getType() + " por " + formatPixelcoins(oferta.getPrecio());
     }
 
     @Override

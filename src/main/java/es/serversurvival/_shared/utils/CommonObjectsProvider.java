@@ -7,26 +7,17 @@ import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Configuration
 public final class CommonObjectsProvider {
     @Provider
     public ExecutorService executorService() {
-        return Funciones.POOL;
+        return Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     }
 
     @Provider
     public Executor executor() {
-        return Funciones.POOL;
-    }
-
-    @Provider
-    public DateTimeFormatter dateFormatter() {
-        return Funciones.DATE_FORMATER;
-    }
-
-    @Provider
-    public DecimalFormat decimalFormat() {
-        return Funciones.FORMATEA;
+        return Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     }
 }

@@ -15,6 +15,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.*;
 import static es.serversurvival.minecraftserver._shared.MinecraftUtils.*;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.BOLD;
@@ -55,9 +56,9 @@ public final class RepartirDividendosConfirmacionMenu extends NumberSelectorMenu
     @Override
     public List<String> loreItemAceptar(double cantidad) {
         return List.of(
-                GOLD + "Dividendo/Accion: " + GREEN + Funciones.formatNumero(cantidad) + " PC",
-                GOLD + "Total a pagar: " + GREEN + Funciones.formatNumero(cantidad * this.getState().getNTotalAcciones()) + " PC",
-                GOLD + "Pixelcoins empresa: " + GREEN + Funciones.formatNumero(pixelcoinsEmpresa) + " PC"
+                GOLD + "Dividendo/Accion: " + formatPixelcoins(cantidad),
+                GOLD + "Total a pagar: " + formatPixelcoins(cantidad * this.getState().getNTotalAcciones()),
+                GOLD + "Pixelcoins empresa: " + formatPixelcoins(pixelcoinsEmpresa)
         );
     }
 

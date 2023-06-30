@@ -136,8 +136,7 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
                 ItemStack item = items.get(i);
                 UUID activoId = MinecraftUtils.getLastLineOfLore(items.get(i), 0);
                 double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(activoId, getPlayer().getUniqueId());
-                String nuevoLore = GOLD + "Precio: " + GREEN + formatNumero(ultimoPrecio)
-                        + " PC" + GOLD + " / " + getState().getNombreUnidadSingular();
+                String nuevoLore = GOLD + "Precio: " + formatPixelcoins(ultimoPrecio) + "/ " + getState().getNombreUnidadSingular();
 
                 item = ItemUtils.setLore(item,  1, nuevoLore);
 

@@ -44,12 +44,12 @@ public final class VenderObjetoTiendaCommandRunner implements CommandRunnerArgs<
         syncTiendaMenu(player);
 
         player.sendMessage(GOLD + "Has subido a la tienda " + itemASubirTienda.getAmount() + " de " + itemASubirTienda.getType()
-                + " por " + GREEN + FORMATEA.format(comando.getPrecio()) + " PC " + GOLD + "Para ver la tienda o retirarlo " + AQUA + "/tienda ver");
+                + " por " + formatPixelcoins(comando.getPrecio()) + "Para ver la tienda o retirarlo " + AQUA + "/tienda ver");
         player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
         player.getInventory().clear(player.getInventory().getHeldItemSlot());
 
         Bukkit.broadcastMessage(GOLD + player.getName() + " ha subido a la tienda " + itemASubirTienda.getAmount() + " de " + itemASubirTienda.getType()
-                + " por " + GREEN + FORMATEA.format(comando.getPrecio()) + " PC ");
+                + " por " + formatPixelcoins(comando.getPrecio()));
     }
 
     private void syncTiendaMenu(Player player) {

@@ -16,9 +16,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+import static es.serversurvival._shared.utils.Funciones.formatPixelcoins;
 import static org.bukkit.ChatColor.GOLD;
-import static org.bukkit.ChatColor.GREEN;
 
 @Service
 @RequiredArgsConstructor
@@ -53,8 +52,8 @@ public final class IngresadorItem {
     private void enviarMensaje(Player player, ItemStack itemEnMano, TipoCambioPixelcoins tipoCambio) {
         double pixelcoinsAnadidas = tipoCambio.cambio * itemEnMano.getAmount();
         double pixelcoinsJugador = transaccionesService.getBalancePixelcoins(player.getUniqueId());
-        MinecraftUtils.enviarMensajeYSonido(player, GOLD + "Se ha añadido: " + GREEN + FORMATEA.format(pixelcoinsAnadidas)
-                + GOLD + " Tienes " + GREEN + FORMATEA.format(pixelcoinsJugador) + " PC", Sound.ENTITY_PLAYER_LEVELUP);
+        MinecraftUtils.enviarMensajeYSonido(player, GOLD + "Se ha añadido: " + formatPixelcoins(pixelcoinsAnadidas) +
+                "Tienes " + formatPixelcoins(pixelcoinsJugador), Sound.ENTITY_PLAYER_LEVELUP);
     }
 
     private boolean elTipoDeCambioDelItemEnLaManoEstaPermitido(Material materialItemEnLaMano, TipoCambioPixelcoins[] tipoCambioPixelcoinsPermitidos) {

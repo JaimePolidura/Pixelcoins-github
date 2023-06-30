@@ -14,6 +14,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.*;
 import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
@@ -63,8 +64,8 @@ public final class PonerVentaDeudaMercadoPrecioSelectorMenu extends NumberSelect
                 .jugadorId(player.getUniqueId())
                 .build());
 
-        player.sendMessage(GOLD + "Has puesto la deuda en el mercado por " + Funciones.FORMATEA.format(precio) + " PC " +
-                GOLD + "Para ver el mercado " + AQUA + " /deudas mercado");
+        player.sendMessage(GOLD + "Has puesto la deuda en el mercado por " + formatPixelcoins(precio) +
+                "Para ver el mercado " + AQUA + " /deudas mercado");
     }
 
     @Override

@@ -9,14 +9,13 @@ import es.serversurvival.pixelcoins.empresas._shared.accionistas.domain.Accionis
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas.ponerventa.PonerVentaAccionesParametros;
 import lombok.AllArgsConstructor;
-import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.List;
 
-import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+import static es.serversurvival._shared.utils.Funciones.formatPixelcoins;
 import static es.serversurvival.minecraftserver._shared.MinecraftUtils.*;
 import static org.bukkit.ChatColor.*;
 
@@ -64,7 +63,7 @@ public final class VenderAccionEmpresaPrecioSelectorMenu extends NumberSelectorM
     @Override
     public List<String> loreItemAceptar(double precio) {
         return List.of(
-                GOLD + "Vender " + this.getState().cantidadAVender() + " cantidad de " + this.getState().empresa.getNombre() + " a " + GREEN + FORMATEA.format(precio) + " PC"
+                GOLD + "Vender " + this.getState().cantidadAVender() + " cantidad de " + this.getState().empresa.getNombre() + " a " + formatPixelcoins(precio)
         );
     }
 

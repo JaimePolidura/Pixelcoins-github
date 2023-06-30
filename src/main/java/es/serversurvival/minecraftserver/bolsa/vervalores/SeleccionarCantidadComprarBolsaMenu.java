@@ -14,6 +14,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.List;
 
+import static es.serversurvival._shared.utils.Funciones.*;
+import static es.serversurvival._shared.utils.Funciones.formatPixelcoins;
 import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
@@ -44,9 +46,9 @@ public final class SeleccionarCantidadComprarBolsaMenu extends NumberSelectorMen
     public List<String> loreItemAceptar(double cantidad) {
         return List.of(
                 GOLD + "Comprar: " + cantidad + " " + getState().getNombreUnidadTipoActivo(),
-                GOLD + "Precio/Unidad: " + GREEN + Funciones.FORMATEA.format(getState().precioPorUnidad) + " PC",
-                GOLD + "Precio/Total: " + GREEN + Funciones.FORMATEA.format(getState().precioPorUnidad * cantidad) + " PC",
-                GOLD + "Tus pixelcoins: " + GREEN + Funciones.FORMATEA.format(getState().pixelcoinsJugador) + " PC"
+                GOLD + "Precio/Unidad: " + formatPixelcoins(getState().precioPorUnidad),
+                GOLD + "Precio/Total: " + formatPixelcoins(getState().precioPorUnidad * cantidad),
+                GOLD + "Tus pixelcoins: " + formatPixelcoins(getState().pixelcoinsJugador)
         );
     }
 

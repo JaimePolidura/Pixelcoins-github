@@ -1,6 +1,7 @@
 package es.serversurvival.pixelcoins.transacciones;
 
 import com.google.common.util.concurrent.AtomicDouble;
+import es.serversurvival._shared.utils.Funciones;
 import lombok.AllArgsConstructor;
 
 import java.util.Map;
@@ -29,13 +30,17 @@ public final class TransaccionesBalanceCache {
     }
 
     public void update(Transaccion transaccion) {
-        balanceByEntidadId.putIfAbsent(transaccion.getPagadoId(), new AtomicDouble(0));
-        AtomicDouble balancePagado = balanceByEntidadId.get(transaccion.getPagadoId());
-        balancePagado.addAndGet(transaccion.getPixelcoins());
+        if(!transaccion.getPagadoId().equals(Funciones.NULL_ID)){
+            balanceByEntidadId.putIfAbsent(transaccion.getPagadoId(), new AtomicDouble(0));
+            AtomicDouble balancePagado = balanceByEntidadId.get(transaccion.getPagadoId());
+            balancePagado.addAndGet(transaccion.getPixelcoins());
+        }
 
-        balanceByEntidadId.putIfAbsent(transaccion.getPagadorId(), new AtomicDouble(0));
-        AtomicDouble balancePagador = balanceByEntidadId.get(transaccion.getPagadorId());
-        do {
-        }while (!balancePagador.compareAndSet(balancePagador.get(), balancePagador.get() - transaccion.getPixelcoins()));
+        if(!transaccion.getPagadorId().equals(Funciones.NULL_ID)){
+            balanceByEntidadId.putIfAbsent(transaccion.getPagadorId(), new AtomicDouble(0));
+            AtomicDouble balancePagador = balanceByEntidadId.get(transaccion.getPagadorId());
+            do {
+            }while (!balancePagador.compareAndSet(balancePagador.get(), balancePagador.get() - transaccion.getPixelcoins()));
+        }
     }
 }

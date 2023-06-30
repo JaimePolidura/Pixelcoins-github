@@ -12,7 +12,7 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.Map;
 
-import static es.serversurvival._shared.utils.Funciones.FORMATEA;
+import static es.serversurvival._shared.utils.Funciones.formatPixelcoins;
 
 @ScoreboardCreator
 @RequiredArgsConstructor
@@ -35,7 +35,7 @@ public class TopPlayerDisplayScoreboard implements ServerScoreboardCreator {
         int posicionTopReico = 1;
 
         for (Map.Entry<String, Double> entry : topPlayers.entrySet()) {
-            String mensaje = ChatColor.GOLD + "" + posicionTopReico + ": " + entry.getKey() + ChatColor.GREEN + " " + FORMATEA.format(entry.getValue()) + " PC";
+            String mensaje = ChatColor.GOLD + "" + posicionTopReico + ": " + entry.getKey() + formatPixelcoins(entry.getValue());
 
             MinecraftUtils.addLineToScoreboard(objective, mensaje, fila);
 

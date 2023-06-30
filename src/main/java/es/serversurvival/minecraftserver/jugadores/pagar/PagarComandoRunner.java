@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
+import static es.serversurvival._shared.utils.Funciones.*;
 import static org.bukkit.ChatColor.GOLD;
 import static org.bukkit.ChatColor.GREEN;
 
@@ -32,9 +33,9 @@ public class PagarComandoRunner implements CommandRunnerArgs<PagarComando> {
     }
 
     private void sendMessage (Player pagador, Player pagado, double pixelcoins) {
-        pagador.sendMessage(GOLD + "Has pagado: " + GREEN + Funciones.FORMATEA.format(pixelcoins) + " PC " + GOLD + "a " + pagado.getName());
+        pagador.sendMessage(GOLD + "Has pagado: " + formatPixelcoins(pixelcoins) + GOLD + "a " + pagado.getName());
 
-        MinecraftUtils.enviarMensajeYSonido(pagado.getUniqueId(),GOLD + pagador.getName() + " te ha pagado " + GREEN + Funciones.FORMATEA.format(pixelcoins) + "PC!",
+        MinecraftUtils.enviarMensajeYSonido(pagado.getUniqueId(),GOLD + pagador.getName() + " te ha pagado " + formatPixelcoins(pixelcoins),
                 Sound.ENTITY_PLAYER_LEVELUP);
     }
 }

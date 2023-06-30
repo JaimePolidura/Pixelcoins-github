@@ -53,7 +53,7 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
     @Override
     public int[][] items() {
         return new int[][] {
-                {1, 2, 5, 0, 0, 0, 0,  10, 3},
+                {1, 2, 5, 0, 0, 0, 4,  10, 3},
                 {6, 0, 0, 0, 0, 0, 0,   0, 0},
                 {0, 0, 0, 0, 0, 0, 0,   0, 0},
                 {0, 0, 0, 0, 0, 0, 0,   0, 0},
@@ -87,7 +87,9 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
     }
 
     private void repartirDividendos(Player player, InventoryClickEvent event) {
-        this.menuService.open(player, RepartirDividendosConfirmacionMenu.class, this.getState());
+        if(esDirector(player)){
+            this.menuService.open(player, RepartirDividendosConfirmacionMenu.class, this.getState());
+        }
     }
 
     private void abrirCerrarEmpresaConfirmacion(Player player, InventoryClickEvent event) {
@@ -98,7 +100,7 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
         UUID empleadoId = MinecraftUtils.getLastLineOfLore(event.getCurrentItem(), 0);
         UUID jugadorId = MinecraftUtils.getLastLineOfLore(event.getCurrentItem(), 1);
 
-        if(!getState().getDirectorJugadorId().equals(getPlayer().getUniqueId()))
+        if(!esDirector(getPlayer()))
             return;
         if(jugadorId.equals(getState().getDirectorJugadorId()))
             return;
@@ -130,7 +132,7 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
     }
 
     private ItemStack buildEmpleadoItem(Empleado empleado) {
-        boolean esDirector = getState().getDirectorJugadorId().equals(getPlayer().getUniqueId());
+        boolean esDirector = esDirector(getPlayer());
         return ItemBuilder.of(Material.PLAYER_HEAD)
                 .title(empleado.getEmpleadoJugadorId().equals(getState().getDirectorJugadorId()) ?
                                 DARK_RED + "" + BOLD  + "DIRECTOR DE LA EMPRESA" :
@@ -139,7 +141,7 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
                         "   ",
                         GOLD + "Empleado: " + jugadoresService.getNombreById(empleado.getEmpleadoJugadorId()),
                         GOLD + "Cargo: " + empleado.getDescripccion(),
-                        GOLD + "Sueldo: " + GREEN + formatNumero(empleado.getSueldo()) + " PC / " + GOLD + millisToDias(empleado.getPeriodoPagoMs()) + " dias",
+                        GOLD + "Sueldo: " + formatPixelcoins(empleado.getSueldo()) + "/ " + millisToDias(empleado.getPeriodoPagoMs()) + " dias",
                         GOLD + "Ultima fecha paga: " + Funciones.toString(empleado.getFechaUltimoPago()),
                         "   ",
                         "/empresas editarempleado " + getState().getNombre() + " " + jugadoresService.getNombreById(empleado.getEmpleadoJugadorId()),
@@ -157,10 +159,14 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
     }
 
     private ItemStack buildItemRepartirDividendo() {
-        return ItemBuilder.of(Material.GOLD_INGOT)
-                .title(GOLD + "" + BOLD + "REPARTIR DIVIDENDOS")
-                .lore(GOLD + "Repartir pixelcoins por cada accion")
-                .build();
+        boolean esDirector = esDirector(getPlayer());
+
+        return esDirector ?
+                ItemBuilder.of(Material.GOLD_INGOT)
+                        .title(GOLD + "" + BOLD + "REPARTIR DIVIDENDOS")
+                        .lore(GOLD + "Repartir pixelcoins por cada accion")
+                        .build() :
+                ItemBuilder.of(Material.AIR).build();
     }
 
     private ItemStack buildItemAccionistas() {
@@ -185,7 +191,7 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
     private record Accionista(String nombreAccionista, int nAcciones, double porcentajeNTotalAcciones) {}
 
     private String getLoreAccionista(Accionista accionista) {
-        String percentajeOwnership = Funciones.formatPorcentaje(accionista.porcentajeNTotalAcciones * 100);
+        String percentajeOwnership = Funciones.formatPorcentaje(accionista.porcentajeNTotalAcciones);
 
         return GOLD + accionista.nombreAccionista() + ": " + GREEN + percentajeOwnership + "%";
     }
@@ -195,7 +201,7 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
         lore.add(GOLD + "Descripccion:");
         lore.add(1, GOLD + "" + getState().getDescripcion());
         lore.add("  ");
-        lore.add(GOLD + "Pixelcoins: " + GREEN + FORMATEA.format(transaccionesService.getBalancePixelcoins(getState().getEmpresaId())) + " PC");
+        lore.add(GOLD + "Pixelcoins: " + GREEN + formatPixelcoins(transaccionesService.getBalancePixelcoins(getState().getEmpresaId())));
         lore.add(GOLD + "Fundador: " + jugadoresService.getNombreById(getState().getFundadorJugadorId()));
         lore.add(GOLD + "Director: " + jugadoresService.getNombreById(getState().getDirectorJugadorId()));
         lore.add(GOLD + "Nº Total acciones: " + getState().getNTotalAcciones());
@@ -232,5 +238,9 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
 
             itemEmpleado.setItemMeta(currentItemMeta);
         }
+    }
+
+    private boolean esDirector(Player player) {
+        return getState().getDirectorJugadorId().equals(player.getUniqueId());
     }
 }

@@ -14,6 +14,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import static es.serversurvival.minecraftserver._shared.MinecraftUtils.enviarMensajeYSonido;
+import static org.bukkit.ChatColor.*;
 
 @Command(
         value = "empresas sacar",
@@ -22,7 +23,6 @@ import static es.serversurvival.minecraftserver._shared.MinecraftUtils.enviarMen
 )
 @RequiredArgsConstructor
 public final class SacarPixelcoinsEmpresaCommandRunner implements CommandRunnerArgs<SacarPixelcoinsEmpresaComando> {
-    private final SacarPixelcoinsEmpresaUseCase sacarPixelcoinsEmpresaUseCase;
     private final EmpresasService empresasService;
     private final UseCaseBus useCaseBus;
 
@@ -36,7 +36,7 @@ public final class SacarPixelcoinsEmpresaCommandRunner implements CommandRunnerA
                 .pixelcoins(comando.getPixelcoins())
                 .build());
 
-        enviarMensajeYSonido(player, ChatColor.GOLD + "Has sacado " + ChatColor.GREEN + Funciones.FORMATEA.format(comando.getPixelcoins())
-                + " PC" + ChatColor.GOLD + " de la empresa " + comando.getEmpresa(), Sound.ENTITY_PLAYER_LEVELUP);
+        enviarMensajeYSonido(player, GOLD + "Has sacado " + Funciones.formatPixelcoins(comando.getPixelcoins())
+                + GOLD + "de la empresa " + comando.getEmpresa(), Sound.ENTITY_PLAYER_LEVELUP);
     }
 }
