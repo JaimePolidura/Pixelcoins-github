@@ -52,12 +52,12 @@ public final class Funciones {
         String rentabildiadString = formatPorcentaje(rentabilidad);
 
         return (rentabilidad >= 0) ?
-                (ChatColor.GREEN + "+" + rentabildiadString + " % " + ChatColor.RESET) :
-                (ChatColor.RED + rentabildiadString + " % " + ChatColor.RESET);
+                (ChatColor.GREEN + "+" + rentabildiadString + ChatColor.RESET) :
+                (ChatColor.RED + rentabildiadString + ChatColor.RESET);
     }
 
     public static String formatPorcentaje(double porcentaje) {
-        return Funciones.FORMATEA.format(Funciones.redondeoDecimales(porcentaje * 100, 1));
+        return Funciones.FORMATEA.format(Funciones.redondeoDecimales(porcentaje * 100, 1)) + " % ";
     }
 
     public static double rentabilidad(double ingresos, double beneficios) {

@@ -8,12 +8,10 @@ import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.minecraftserver._shared.MinecraftUtils;
-import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.bolsa.vercartera.MiCarteraBolsaMenu;
 import es.serversurvival.minecraftserver.deudas.verdeudas.MisDeudasMenu;
-import es.serversurvival.minecraftserver.empresas.misacciones.MisEmpresasMenu;
 import es.serversurvival.minecraftserver.empresas.misempleos.MisEmpleosMenu;
+import es.serversurvival.minecraftserver.empresas.vertodas.VerTodasEmpresasMenu;
 import es.serversurvival.minecraftserver.tienda.vertienda.TiendaMenu;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
 import es.serversurvival.pixelcoins.jugadores.patrimonio.CalculadorPatrimonioService;
@@ -78,7 +76,7 @@ public final class PerfilMenu extends Menu implements AfterShow {
                 .item(4, buildItemTienda(), (p, e) -> this.menuService.open(p, TiendaMenu.class))
                 .item(5, buildItemDeudas(), (p, e) -> this.menuService.open(p, MisDeudasMenu.class))
                 .item(6, buildItemBolsa(), (p, e) -> this.menuService.open(p, MiCarteraBolsaMenu.class))
-                .item(7, buildItemMisEmpresas(), (p, e) -> this.menuService.open(p, MisEmpresasMenu.class))
+                .item(7, buildItemTodasEmpresas(), (p, e) -> this.menuService.open(p, VerTodasEmpresasMenu.class))
                 .item(8, buildItemEmpleos(), (p, e) -> this.menuService.open(p, MisEmpleosMenu.class))
                 .build();
     }
@@ -99,8 +97,8 @@ public final class PerfilMenu extends Menu implements AfterShow {
         return ItemBuilder.of(Material.GOLDEN_APPLE).title(displayName).lore(lore).build();
     }
 
-    private ItemStack buildItemMisEmpresas() {
-        String displayName = CLICKEABLE + "VER TUS EMPRESAS";
+    private ItemStack buildItemTodasEmpresas() {
+        String displayName = CLICKEABLE + "VER TODAS LAS EMPRESAS";
         List<String> lore = new ArrayList<>();
         lore.add("  ");
 
@@ -114,7 +112,7 @@ public final class PerfilMenu extends Menu implements AfterShow {
                     + "Pixelcoins: " + formatPixelcoins(pixelcoinsCorrespondientes));
         }
 
-        return ItemBuilder.of(Material.BOOK).title(displayName).lore(lore).build();
+        return ItemBuilder.of(Material.NETHERITE_SCRAP).title(displayName).lore(lore).build();
     }
 
     private ItemStack buildItemBolsa () {

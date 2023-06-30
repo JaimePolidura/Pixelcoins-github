@@ -35,7 +35,7 @@ public class TopPlayerDisplayScoreboard implements ServerScoreboardCreator {
         int posicionTopReico = 1;
 
         for (Map.Entry<String, Double> entry : topPlayers.entrySet()) {
-            String mensaje = ChatColor.GOLD + "" + posicionTopReico + ": " + entry.getKey() + formatPixelcoins(entry.getValue());
+            String mensaje = ChatColor.GOLD + "" + posicionTopReico + ": " + entry.getKey() + " " + formatPixelcoins(entry.getValue());
 
             MinecraftUtils.addLineToScoreboard(objective, mensaje, fila);
 

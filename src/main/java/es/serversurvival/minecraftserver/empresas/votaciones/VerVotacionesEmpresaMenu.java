@@ -3,6 +3,7 @@ package es.serversurvival.minecraftserver.empresas.votaciones;
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
+import es.bukkitbettermenus.menustate.AfterShow;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival._shared.ConfigurationVariables;
@@ -11,6 +12,7 @@ import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.empresas.miempresa.MiEmpresaMenu;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver.empresas.votaciones.lorevotacionitem.VotacionItemLoreBuilderService;
+import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.AccionistasEmpresasService;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.Votacion;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.application.VotacionesService;
@@ -34,12 +36,15 @@ import static org.bukkit.ChatColor.BOLD;
 import static org.bukkit.ChatColor.DARK_RED;
 
 @RequiredArgsConstructor
-public final class VerVotacionesEmpresaMenu extends Menu<Empresa> {
+public final class VerVotacionesEmpresaMenu extends Menu<Empresa> implements AfterShow {
     private final VotacionItemLoreBuilderService votacionItemLoreBuilderService;
+    private final AccionistasEmpresasService accionistasEmpresasService;
     private final VotacionesService votacionesService;
     private final JugadoresService jugadoresService;
     private final VotosService votosService;
     private final MenuService menuService;
+
+    private boolean esAccionista;
 
     @Override
     public int[][] items() {
@@ -71,7 +76,7 @@ public final class VerVotacionesEmpresaMenu extends Menu<Empresa> {
     private void abrirVotarMenu(Player player, InventoryClickEvent event) {
         UUID votacionId = MinecraftUtils.getLastLineOfLore(event.getCurrentItem(), 0);
 
-        if(!votosService.haVotado(player.getUniqueId(), votacionId)){
+        if(esAccionista && !votosService.haVotado(player.getUniqueId(), votacionId)){
             menuService.open(player, VotarMenu.class, votacionesService.getById(votacionId));
         }
     }
@@ -100,8 +105,10 @@ public final class VerVotacionesEmpresaMenu extends Menu<Empresa> {
 
                 if(voto.isPresent())
                     yield GOLD + "" + BOLD + "HAS VOTADO " + (voto.get().isAfavor() ? "A FAVOR" : "EN CONTRA");
-                else
+                else if (voto.isEmpty() && esAccionista)
                     yield MenuItems.CLICKEABLE + "VOTAR";
+                else
+                    yield RED + "" + BOLD + "NO ERES ACCIONISTA";
             }
         };
     }
@@ -143,5 +150,11 @@ public final class VerVotacionesEmpresaMenu extends Menu<Empresa> {
 
     private void irAMiEmpresaMenu(Player player, InventoryClickEvent event) {
         menuService.open(player, MiEmpresaMenu.class, getState());
+    }
+
+    @Override
+    public void afterShow(Player player) {
+        this.esAccionista = accionistasEmpresasService.findByEmpresaIdAndJugadorId(getState().getEmpresaId(), getPlayer().getUniqueId())
+                .isPresent();
     }
 }

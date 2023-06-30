@@ -8,7 +8,7 @@ import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.empresas.mercado.MercadoAccionesEmpresasMenu;
-import es.serversurvival.minecraftserver.empresas.vertodas.TodasEmpresasMenu;
+import es.serversurvival.minecraftserver.empresas.vertodas.VerTodasEmpresasMenu;
 import es.serversurvival.minecraftserver.jugadores.perfil.PerfilMenu;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.domain.AccionistaEmpresa;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.AccionistasEmpresasService;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
-public final class MisEmpresasMenu extends Menu {
+public final class MisEmpresasAccionesMenu extends Menu {
     private final AccionistasEmpresasService accionistasEmpresasService;
     private final EmpresasService empresasService;
     private final OfertasService ofertasService;
@@ -53,10 +53,10 @@ public final class MisEmpresasMenu extends Menu {
     @Override
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
-                .title(DARK_RED + "" + BOLD + "      TUS EMPRESAS")
+                .title(DARK_RED + "" + BOLD + "TUS ACCIONES DE EMPRESAS")
                 .fixedItems()
                 .item(1, buildItemInfo())
-                .item(2, buildItemTodasLasEmpresas(), (p, e) -> menuService.open(p, TodasEmpresasMenu.class))
+                .item(2, buildItemTodasLasEmpresas(), (p, e) -> menuService.open(p, VerTodasEmpresasMenu.class))
                 .item(3, buildItemMercado(), (p, e) -> menuService.open(p, MercadoAccionesEmpresasMenu.class))
                 .items(6, this::buildItemAcciones, this::venderAccion)
                 .breakpoint(7, MenuItems.GO_BACK, (p, e) -> menuService.open(p, PerfilMenu.class))
@@ -68,7 +68,8 @@ public final class MisEmpresasMenu extends Menu {
     }
 
     private ItemStack buildItemTodasLasEmpresas() {
-        return ItemBuilder.of(Material.NETHERITE_SCRAP).title(MenuItems.CLICKEABLE + "VER TODAS LAS EMPRESAS").build();
+        return ItemBuilder.of(Material.NETHERITE_SCRAP)
+                .title(MenuItems.CLICKEABLE + "VER TODAS LAS EMPRESAS").build();
     }
 
     private void venderAccion(Player player, InventoryClickEvent event) {
@@ -98,12 +99,30 @@ public final class MisEmpresasMenu extends Menu {
     }
 
     private ItemStack buildItemInfo() {
-        return ItemBuilder.of(Material.PAPER).build();
+        return ItemBuilder.of(Material.PAPER)
+                .lore(List.of(
+                    GOLD + "Puedes comprar y vender acciones de empresas del servidor",
+                    GOLD + "Esto te converte en parte propietario de la empresa. Por lo",
+                    GOLD + "Cual puedes recibir dividendes, decidir quien gestionala la",
+                    GOLD + "empresa etc..",
+                    GOLD + "",
+                    GOLD + "Para comprar/vender acciones:",
+                    AQUA + "/empresas misacciones",
+                    AQUA + "/empresas mercado",
+                    GOLD + "",
+                    GOLD + "Si quieres vender acciones de tu empresa: ",
+                    AQUA + "/empresas ipo <nombre empresa> <nº acciones a vender>",
+                    AQUA + "   <precio/accion>",
+                    GOLD + "",
+                    GOLD + "Para mas comandos: ",
+                    AQUA + "/empresas ayuda"
+                ))
+                .build();
     }
 
     private ItemStack buildItemMercado() {
         return ItemBuilder.of(Material.CHEST)
-                .title(GOLD + "" + BOLD + "" + UNDERLINE + "VER MERCADO DE EMPRESAS SERVER")
+                .title(MenuItems.CLICKEABLE + "VER MERCADO DE EMPRESAS SERVER")
                 .build();
     }
 
@@ -114,7 +133,7 @@ public final class MisEmpresasMenu extends Menu {
     }
 
     private ItemStack buildItemAccionista(AccionistaEmpresa accion) {
-        return ItemBuilder.of(Material.RED_BANNER)
+        return ItemBuilder.of(Material.CREEPER_BANNER_PATTERN)
                 .title(MenuItems.CLICKEABLE + "VENDER")
                 .lore(List.of(
                         GOLD + "Empresa: " + empresasService.getById(accion.getEmpresaId()).getNombre(),

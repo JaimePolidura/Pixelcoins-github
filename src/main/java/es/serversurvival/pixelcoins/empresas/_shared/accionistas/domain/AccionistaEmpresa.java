@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-//TODO AccionistaEmpresa y posiciones son muy similares
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

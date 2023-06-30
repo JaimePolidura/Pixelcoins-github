@@ -6,8 +6,10 @@ import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
+import es.serversurvival.minecraftserver.empresas.mercado.MercadoAccionesEmpresasMenu;
 import es.serversurvival.minecraftserver.empresas.miempresa.MiEmpresaMenu;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
+import es.serversurvival.minecraftserver.empresas.misacciones.MisEmpresasAccionesMenu;
 import es.serversurvival.minecraftserver.jugadores.perfil.PerfilMenu;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.AccionistasEmpresasService;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.application.EmpleadosService;
@@ -27,7 +29,7 @@ import static es.serversurvival._shared.utils.Funciones.formatPixelcoins;
 import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
-public final class TodasEmpresasMenu extends Menu {
+public final class VerTodasEmpresasMenu extends Menu {
     private final AccionistasEmpresasService accionistasEmpresasService;
     private final TransaccionesService transaccionesService;
     private final EmpleadosService empleadosService;
@@ -40,8 +42,8 @@ public final class TodasEmpresasMenu extends Menu {
     @Override
     public int[][] items() {
         return new int[][] {
-                {1, 0, 0, 0, 0, 0, 0, 0, 0 },
-                {2, 0, 0, 0, 0, 0, 0, 0, 0 },
+                {1, 2, 3, 0, 0, 0, 0, 0, 0 },
+                {4, 0, 0, 0, 0, 0, 0, 0, 0 },
                 {0, 0, 0, 0, 0, 0, 0, 0, 0 },
                 {0, 0, 0, 0, 0, 0, 0, 0, 0 },
                 {0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -53,14 +55,28 @@ public final class TodasEmpresasMenu extends Menu {
     public MenuConfiguration configuration() {
         return MenuConfiguration.builder()
                 .fixedItems()
-                .title(DARK_RED + "" + BOLD + "           EMPRESAS")
+                .title(DARK_RED + "" + BOLD + "   TODAS LAS EMPRESAS")
                 .item(1, buildItemInfo())
-                .items(2, this::buildItemsEmpresas, this::onItemEmpresaClicked)
+                .item(2, buildItemVerTusAcciones(), (p, e) -> menuService.open(p, MisEmpresasAccionesMenu.class))
+                .item(3, buidlItemVerMercado(), (p, e) -> menuService.open(p, MercadoAccionesEmpresasMenu.class))
+                .items(4, this::buildItemsEmpresas, this::onItemEmpresaClicked)
                 .breakpoint(7, MenuItems.GO_BACK, this::goBackToProfileMenu)
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
                         .forward(9, Material.GREEN_WOOL)
                         .build())
+                .build();
+    }
+
+    private ItemStack buidlItemVerMercado() {
+        return ItemBuilder.of(Material.CHEST)
+                .title(MenuItems.CLICKEABLE + "VER MERCADO DE EMPRESAS SERVER")
+                .build();
+    }
+
+    private ItemStack buildItemVerTusAcciones() {
+        return ItemBuilder.of(Material.CREEPER_BANNER_PATTERN)
+                .title(MenuItems.CLICKEABLE + "VER TUS ACCIONES")
                 .build();
     }
 
@@ -116,10 +132,15 @@ public final class TodasEmpresasMenu extends Menu {
         return ItemBuilder.of(Material.PAPER)
                 .title(GOLD + "" + BOLD + "INFO")
                 .lore(List.of(
-                        "Puedes crear un empresa, contratar",
-                        "empledos, sacar a bolsa, facturar etc",
-                        "Para mas informacion /empresas help"
+                        GOLD + "Puedes crear un empresa, contratar a jugadores",
+                        GOLD + "facturar, vender acciones etc",
+                        GOLD + "Para mas informacion "+AQUA+"/empresas ayuda",
+                        " ",
+                        AQUA + "/empresas crear <nombre> <descripccion>",
+                        AQUA + "/empresas pagar <nombre empresa> <pixelcoins>"
                 ))
                 .build();
     }
+
+
 }

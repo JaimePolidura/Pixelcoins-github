@@ -4,6 +4,7 @@ import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.menustate.AfterShow;
+import es.bukkitbettermenus.menustate.BeforeShow;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
@@ -32,6 +33,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -42,13 +44,17 @@ import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.GOLD;
 
 @RequiredArgsConstructor
-public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
+public final class MiEmpresaMenu extends Menu<Empresa> implements BeforeShow, AfterShow {
     private final AccionistasEmpresasService accionistasEmpresasService;
     private final TransaccionesService transaccionesService;
     private final VotacionesService votacionesService;
     private final EmpleadosService empleadosService;
     private final JugadoresService jugadoresService;
     private final MenuService menuService;
+
+    private boolean esAccionista;
+    private boolean esDirector;
+    private boolean esCotizada;
 
     @Override
     public int[][] items() {
@@ -83,31 +89,36 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
     }
 
     private void openMenuVotaciones(Player player, InventoryClickEvent event) {
-        this.menuService.open(player, VerVotacionesEmpresaMenu.class, getState());
+        if(esCotizada && (esAccionista || esDirector)){
+            this.menuService.open(player, VerVotacionesEmpresaMenu.class, getState());
+        }
     }
 
     private void repartirDividendos(Player player, InventoryClickEvent event) {
-        if(esDirector(player)){
+        if(esDirector && esCotizada){
             this.menuService.open(player, RepartirDividendosConfirmacionMenu.class, this.getState());
         }
     }
 
     private void abrirCerrarEmpresaConfirmacion(Player player, InventoryClickEvent event) {
-        this.menuService.open(player, CerrarEmpresaConfirmacionMenu.class, getState());
+        if(!esCotizada){
+            this.menuService.open(player, CerrarEmpresaConfirmacionMenu.class, getState());
+        }
     }
 
     private void abrirMenuOpccionesEmpleado(Player player, InventoryClickEvent event) {
-        UUID empleadoId = MinecraftUtils.getLastLineOfLore(event.getCurrentItem(), 0);
-        UUID jugadorId = MinecraftUtils.getLastLineOfLore(event.getCurrentItem(), 1);
+        if(!esCotizada || esDirector) {
+            UUID empleadoId = MinecraftUtils.getLastLineOfLore(event.getCurrentItem(), 0);
+            UUID empleadoJugadorId = MinecraftUtils.getLastLineOfLore(event.getCurrentItem(), 1);
 
-        if(!esDirector(getPlayer()))
-            return;
-        if(jugadorId.equals(getState().getDirectorJugadorId()))
-            return;
+            if(empleadoJugadorId.equals(getState().getDirectorJugadorId())){
+                return;
+            }
 
-        Empleado empleado = empleadosService.getById(empleadoId);
+            Empleado empleado = empleadosService.getById(empleadoId);
 
-        menuService.open(player, OpccionesEmpleadoMenu.class, empleado);
+            menuService.open(player, OpccionesEmpleadoMenu.class, empleado);
+        }
     }
 
     private void goBackToProfileMenu(Player player, InventoryClickEvent event) {
@@ -120,9 +131,13 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
                 .count();
         boolean hayVotacionesPendienets = numeroVotacionesPendientes > 0;
 
-        return ItemBuilder.of(Material.WHITE_BANNER)
-                .title(hayVotacionesPendienets ? MenuItems.CLICKEABLE + "VER LAS VOTACIONES" : GOLD + "" + BOLD + "VOTACIONES")
-                .lore(hayVotacionesPendienets ? RED + "Hay "+numeroVotacionesPendientes+" votaciones pendientes" : GOLD + "No hay votaciones pendientes").build();
+        return esCotizada && (esAccionista || esDirector) ?
+                ItemBuilder.of(Material.WHITE_BANNER)
+                        .title(hayVotacionesPendienets ? MenuItems.CLICKEABLE + "VER LAS VOTACIONES" : GOLD + "" + BOLD + "VOTACIONES")
+                        .lore(hayVotacionesPendienets ? RED + "Hay "+numeroVotacionesPendientes+" votaciones pendientes" : GOLD + "No hay votaciones pendientes")
+                        .build() :
+                ItemBuilder.of(Material.AIR)
+                        .build();
     }
 
     private List<ItemStack> buildItemsEmpleados() {
@@ -132,7 +147,6 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
     }
 
     private ItemStack buildEmpleadoItem(Empleado empleado) {
-        boolean esDirector = esDirector(getPlayer());
         return ItemBuilder.of(Material.PLAYER_HEAD)
                 .title(empleado.getEmpleadoJugadorId().equals(getState().getDirectorJugadorId()) ?
                                 DARK_RED + "" + BOLD  + "DIRECTOR DE LA EMPRESA" :
@@ -153,15 +167,13 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
     }
 
     private ItemStack buildItemCerrarEmpresa() {
-        return !getState().isEsCotizada() ?
+        return !esCotizada ?
                 ItemBuilder.of(Material.BARRIER).title(MenuItems.CLICKEABLE + "CERRAR LA EMPRESA").build() :
                 ItemBuilder.of(Material.AIR).build();
     }
 
     private ItemStack buildItemRepartirDividendo() {
-        boolean esDirector = esDirector(getPlayer());
-
-        return esDirector ?
+        return esDirector && esCotizada ?
                 ItemBuilder.of(Material.GOLD_INGOT)
                         .title(GOLD + "" + BOLD + "REPARTIR DIVIDENDOS")
                         .lore(GOLD + "Repartir pixelcoins por cada accion")
@@ -170,6 +182,10 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
     }
 
     private ItemStack buildItemAccionistas() {
+        if(!esCotizada){
+            return ItemBuilder.of(Material.AIR).build();
+        }
+
         List<String> loreAccionistas = accionistasEmpresasService.findByEmpresaId(getState().getEmpresaId()).stream()
                 .map(posicion -> new Accionista(
                         jugadoresService.getNombreById(posicion.getAccionisaJugadorId()),
@@ -193,7 +209,7 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
     private String getLoreAccionista(Accionista accionista) {
         String percentajeOwnership = Funciones.formatPorcentaje(accionista.porcentajeNTotalAcciones);
 
-        return GOLD + accionista.nombreAccionista() + ": " + GREEN + percentajeOwnership + "%";
+        return GOLD + accionista.nombreAccionista() + ": " + GREEN + percentajeOwnership;
     }
 
     private ItemStack buildItemEmpresaStats() {
@@ -205,13 +221,15 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
         lore.add(GOLD + "Fundador: " + jugadoresService.getNombreById(getState().getFundadorJugadorId()));
         lore.add(GOLD + "Director: " + jugadoresService.getNombreById(getState().getDirectorJugadorId()));
         lore.add(GOLD + "Nº Total acciones: " + getState().getNTotalAcciones());
-        lore.add(GOLD + "Fecha creacion: " + getState().getFechaCreacion().toString());
-        lore.add(GOLD + (getState().isEsCotizada() ? "Es publica" : "No es publica"));
-        lore.add("   ");
-        lore.add("/empresas depositar " + getState().getNombre() + " <pixelcoins>");
-        lore.add("/empresas sacar " + getState().getNombre() + " <pixelcoins>");
-        lore.add("/empresas logotipo " + getState().getNombre() + "");
-        lore.add("Mas info en /ayuda empresario o:");
+        lore.add(GOLD + "Fecha creacion: " + Funciones.toString(getState().getFechaCreacion()));
+        lore.add(GOLD + (getState().isEsCotizada() ? "Cotiza en bolsa" : "No cotiza en bolsa"));
+
+        if(esDirector || !esCotizada){
+            lore.add(" ");
+            lore.add(AQUA + "/empresas editar " +getState().getNombre()+ " nombre <nuevo nombre>");
+            lore.add(AQUA + "/empresas editar " +getState().getNombre()+ " desc <nueva descripccion>");
+            lore.add(AQUA + "/empresas logotipo " +getState().getNombre());
+        }
 
         return ItemBuilder.of(Material.WRITABLE_BOOK)
                 .title(GOLD + "" + BOLD + "" + getState().getNombre().toUpperCase())
@@ -219,14 +237,81 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
                 .build();
     }
 
-    //TODO
     private ItemStack buildItemInfo() {
+        boolean esDirector = getState().getDirectorJugadorId().equals(getPlayer().getUniqueId());
+        boolean esCotizada = getState().isEsCotizada();
+
+        List<String> lore = !esCotizada ?
+                buildLoreEmpresaNoCotizada() :
+                (esDirector ?
+                        buildLoreEmpresaCotizadaDirector() :
+                        buildLoreEmpresaAccionista());
+        
         return ItemBuilder.of(Material.PAPER)
                 .title(GOLD + "" + BOLD + "INFO")
-                .lore(List.of(
-                        "TOOD"
-                ))
+                .lore(lore)
                 .build();
+    }
+
+    private List<String> buildLoreEmpresaAccionista() {
+        return List.of(
+                GOLD + "Eres el accionista de una empresa cotizada. En parte",
+                GOLD + "eres propietario de la empresa. Puedes recibir dividendos",
+                GOLD + "y decidir quien gestiona de la empresa a traves de las",
+                GOLD + "votaciones donde participaran el resto de accionistas",
+                AQUA + "/empresas votaciones " + getState().getNombre(),
+                AQUA + "/empresas nuevodirector",
+                "",
+                GOLD + "Tambien puedes vender tus acciones en el mercado por PC:",
+                AQUA + "/empresas misacciones",
+                "",
+                GOLD + "Para ver mas comandos "+AQUA+"/empresas ayuda"
+        );
+    }
+
+    private List<String> buildLoreEmpresaCotizadaDirector() {
+        return List.of(
+                GOLD + "Eres el director de una empresa cotizada. Trabajas",
+                GOLD + "para tus accionistas. Eres el encargado de gestionar",
+                GOLD + "la empresa y de repartir dividendos",
+                AQUA + "/empresas repartirdividendos "+getState().getNombre()+" <dividendo/accion>",
+                AQUA + "/empresas emitiracciones "+getState().getNombre()+" <nºacciones nuevas> <precio/accion>",
+                AQUA + "/empresas logotipo "+getState().getNombre(),
+                AQUA + "/empresas contratar",
+                AQUA + "/empresas despedir",
+                "",
+                GOLD + "La empresa al ser cotizada ya no puedes sacar",
+                GOLD + "ni depositar pixelcoins por que ya no eres 100%",
+                GOLD + "propietario",
+                "",
+                GOLD + "Para ver mas comandos "+AQUA+"/empresas ayuda"
+        );
+    }
+
+    private List<String> buildLoreEmpresaNoCotizada() {
+        return List.of(
+                GOLD + "La empresa al no ser cotizada tienes todo el control:",
+                AQUA + "/empresas depositar "+getState().getNombre()+ " <pixelcoins>",
+                AQUA + "/empresas sacar "+getState().getNombre()+" <pixelcoins>",
+                AQUA + "/empresas logotipo "+getState().getNombre(),
+                AQUA + "/empresas contratar",
+                AQUA + "/empresas despedir",
+                "",
+                GOLD + "Si la empresa necesita pixelcoins puedes vender acciones. Para ello:",
+                AQUA + "/empresas ipo " + getState().getNombre() + " <numero accionones a vender> <precio/accion>",
+                GOLD + "Por defecto una empresa tiene 100 acciones. La empresa al no ser",
+                GOLD + "cotizada tienes las 100 acciones. "+AQUA+"/empresas misacciones",
+                "",
+                GOLD + "Para ver mas comandos "+AQUA+"/empresas ayuda"
+        );
+    }
+
+    @Override
+    public void beforeShow(Player player) {
+        this.esAccionista = accionistasEmpresasService.findByEmpresaIdAndJugadorId(getState().getEmpresaId(), player.getUniqueId())
+                .isPresent();
+        this.esDirector = getState().getDirectorJugadorId().equals(player.getUniqueId());
+        this.esCotizada = getState().isEsCotizada();
     }
 
     @Override
@@ -238,9 +323,5 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements AfterShow {
 
             itemEmpleado.setItemMeta(currentItemMeta);
         }
-    }
-
-    private boolean esDirector(Player player) {
-        return getState().getDirectorJugadorId().equals(player.getUniqueId());
     }
 }

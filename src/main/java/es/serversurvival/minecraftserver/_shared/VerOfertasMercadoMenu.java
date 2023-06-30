@@ -37,16 +37,16 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
     public final static String PROPIETARIO_OFERTA_ITEM_DISPLAYNAME = RED + "" + BOLD + UNDERLINE + "RETIRAR";
     public final static String NO_PROPIETARIO_OFERTA_DISPLAYNAME = AQUA + "" + BOLD + UNDERLINE + "COMPRAR";
 
-    private final SyncMenuService syncMenuService;
-    private final OfertasService ofertasService;
-    private final MenuService menuService;
-    private final UseCaseBus useCaseBus;
+    protected final SyncMenuService syncMenuService;
+    protected final OfertasService ofertasService;
+    protected final MenuService menuService;
+    protected final UseCaseBus useCaseBus;
 
     @Override
     public final int[][] items() {
         return new int[][] {
-                {1, 0, 0, 0, 0, 0, 0, 0, 0},
-                {2, 0, 0, 0, 0, 0, 0, 0, 0},
+                {1, 2, 3, 0, 0, 0, 0, 0, 0},
+                {4, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -60,7 +60,9 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
                 .title(titulo())
                 .fixedItems()
                 .item(1, buildItemInfo())
-                .items(2, buildItemsOfertas(), this::onItemTiendaOfertaClicked)
+                .item(2, buildOptionalItem1(), this::onClickOptionalItem1)
+                .item(3, buildOptionalItem2(), this::onClickOptionalItem2)
+                .items(4, buildItemsOfertas(), this::onItemTiendaOfertaClicked)
                 .breakpoint(7, MenuItems.GO_BACK, (p, e) -> menuService.open(p, PerfilMenu.class))
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
@@ -158,5 +160,19 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
 
     private ItemStack buildItemInfo() {
         return ItemBuilder.of(Material.PAPER).title(ChatColor.GOLD + "" + ChatColor.BOLD + "INFO").lore(loreItemInfo()).build();
+    }
+
+    protected void onClickOptionalItem2(Player player, InventoryClickEvent event) {
+    }
+
+    protected ItemStack buildOptionalItem2() {
+        return ItemBuilder.of(Material.AIR).build();
+    }
+
+    protected void onClickOptionalItem1(Player player, InventoryClickEvent event) {
+    }
+
+    protected ItemStack buildOptionalItem1() {
+        return ItemBuilder.of(Material.AIR).build();
     }
 }

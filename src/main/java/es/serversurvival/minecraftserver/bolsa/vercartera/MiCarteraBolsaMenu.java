@@ -10,6 +10,7 @@ import es.bukkitclassmapper._shared.utils.ItemUtils;
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
+import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.bolsa.verordenespremarket.MisOrdenesPremarketMenu;
 import es.serversurvival.minecraftserver.bolsa.verposicionescerradas.VerPosicionesCerradasMenu;
 import es.serversurvival.minecraftserver.bolsa.vervalores.ElegirTipoActivoDisponibleMenu;
@@ -148,7 +149,7 @@ public final class MiCarteraBolsaMenu extends Menu implements AfterShow {
 
     private ItemStack buildItemInfo() {
         return ItemBuilder.of(Material.PAPER)
-                .title(GOLD + "" + BOLD + "INFO")
+                .title(MenuItems.INFO)
                 .lore(List.of(
                         "Puedes comprar valores en la bolsa",
                         "que cotizen en Estados Unidos",

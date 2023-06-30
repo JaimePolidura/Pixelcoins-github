@@ -5,6 +5,7 @@ import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.deudas._shared.DeudaItemLore;
@@ -21,6 +22,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static es.serversurvival._shared.utils.Funciones.formatPixelcoins;
+import static es.serversurvival._shared.utils.Funciones.formatPorcentaje;
 import static es.serversurvival.minecraftserver._shared.menus.MenuItems.CLICKEABLE;
 import static org.bukkit.ChatColor.*;
 
@@ -85,8 +88,27 @@ public final class MisDeudasMenu extends Menu {
                 .build();
     }
 
-    //TODO
     private ItemStack buildItemInfo() {
-        return ItemBuilder.of(Material.PAPER).build();
+        return ItemBuilder.of(Material.PAPER)
+                .title(MenuItems.INFO)
+                .lore(List.of(
+                        GOLD + "Puedes dar prestamos a jugadores y endeudarte por PC.",
+                        "",
+                        GOLD + "El pago del prestamo seran las pixelcoins por los interes. ",
+                        GOLD + "Por ejemplo pixelcoins: " + formatPixelcoins(100) + " intereses: " + formatPorcentaje(0.1) + " = " + formatPixelcoins(100 * 0.1),
+                        GOLD + "El pago se hara cada X dias en un total de Y veces",
+                        GOLD + "Salvo el ultimo dia que se pagará tambien todas las pixelcions.",
+                        "",
+                        GOLD + "Ejemplo: digamos que los interes son " + formatPixelcoins(10),
+                        GOLD + "y tendra un total de 3 pagos que se haran cada dia:",
+                        GOLD + "   - Dia 1 " + formatPixelcoins(10),
+                        GOLD + "   - Dia 2 " + formatPixelcoins(10),
+                        GOLD + "   - Dia 3 " + formatPixelcoins(10) + "+ " + formatPixelcoins(100),
+                        GOLD + "Total pagado: " + formatPixelcoins(10 * 4 + 100),
+                        "",
+                        AQUA + "/deudas prestar",
+                        AQUA + "/deudas ver"
+                ))
+                .build();
     }
 }

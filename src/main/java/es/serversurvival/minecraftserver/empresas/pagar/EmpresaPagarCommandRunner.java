@@ -1,11 +1,10 @@
-package es.serversurvival.minecraftserver.empresas.comprarservicio;
+package es.serversurvival.minecraftserver.empresas.pagar;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import es.serversurvival.pixelcoins.empresas.comprarservicio.ComprarServicioParametros;
-import es.serversurvival.pixelcoins.empresas.comprarservicio.ComprarServicioUseCase;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 
@@ -15,18 +14,17 @@ import static es.serversurvival._shared.utils.Funciones.*;
 import static org.bukkit.ChatColor.*;
 
 @Command(
-        value = "empresas comprar",
+        value = "empresas pagar",
         args = {"empresa", "precio"},
         explanation = "Hacer un pago a una empresa"
 )
 @AllArgsConstructor
-public final class EmpresaComprarServicioCommandRunner implements CommandRunnerArgs<EmpresaComprarServicioComando> {
-    private final ComprarServicioUseCase comprarServicioUseCase;
+public final class EmpresaPagarCommandRunner implements CommandRunnerArgs<EmpresaPagarComando> {
     private final EmpresasService empresasService;
     private final UseCaseBus useCaseBus;
 
     @Override
-    public void execute(EmpresaComprarServicioComando comando, Player player) {
+    public void execute(EmpresaPagarComando comando, Player player) {
         UUID empresaId = empresasService.getByNombre(comando.getEmpresa()).getEmpresaId();
 
         useCaseBus.handle(ComprarServicioParametros.builder()

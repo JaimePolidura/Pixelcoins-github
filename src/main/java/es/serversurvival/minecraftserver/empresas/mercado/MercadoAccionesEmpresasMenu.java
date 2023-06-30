@@ -3,6 +3,8 @@ package es.serversurvival.minecraftserver.empresas.mercado;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.modules.sync.SyncMenuService;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.serversurvival.minecraftserver._shared.menus.MenuItems;
+import es.serversurvival.minecraftserver.empresas.vertodas.VerTodasEmpresasMenu;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.minecraftserver._shared.VerOfertasMercadoMenu;
@@ -13,6 +15,8 @@ import es.serversurvival.pixelcoins.jugadores._shared.jugadores.Jugador;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
@@ -20,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static es.serversurvival._shared.utils.Funciones.formatPixelcoins;
+import static es.serversurvival.minecraftserver._shared.menus.MenuItems.CLICKEABLE;
 import static org.bukkit.ChatColor.*;
 
 public final class MercadoAccionesEmpresasMenu extends VerOfertasMercadoMenu<OfertaAccionMercado> {
@@ -45,7 +50,7 @@ public final class MercadoAccionesEmpresasMenu extends VerOfertasMercadoMenu<Ofe
 
     @Override
     public String titulo() {
-        return DARK_RED + "" + BOLD + "    ACCIONES EMPRESAS";
+        return DARK_RED + "" + BOLD + "MERCADO ACCIONES EMPRESA";
     }
 
     @Override
@@ -80,6 +85,8 @@ public final class MercadoAccionesEmpresasMenu extends VerOfertasMercadoMenu<Ofe
                 VerOfertasMercadoMenu.NO_PROPIETARIO_OFERTA_DISPLAYNAME;
     }
 
+
+
     @Override
     public String mensajeCompraExsitosaAlComprador(OfertaAccionMercado oferta, ItemStack item) {
         return GOLD + "Has comprado 1 accion de " + empresasService.getById(oferta.getEmpresaId()).getNombre() + " por " +
@@ -99,6 +106,46 @@ public final class MercadoAccionesEmpresasMenu extends VerOfertasMercadoMenu<Ofe
 
     @Override
     public List<String> loreItemInfo() {
-        return Collections.EMPTY_LIST;
+        return List.of(
+                GOLD + "Puedes comprar y vender acciones de empresas del servidor",
+                GOLD + "Esto te converte en parte propietario de la empresa. Por lo",
+                GOLD + "Cual puedes recibir dividendes, decidir quien gestionala la",
+                GOLD + "empresa etc..",
+                GOLD + "",
+                GOLD + "Para comprar/vender acciones:",
+                AQUA + "/empresas misacciones",
+                AQUA + "/empresas mercado",
+                GOLD + "",
+                GOLD + "Si quieres vender acciones de tu empresa: ",
+                AQUA + "/empresas ipo <nombre empresa> <nº acciones a vender>",
+                AQUA + "   <precio/accion>",
+                GOLD + "",
+                GOLD + "Para mas comandos: ",
+                AQUA + "/empresas ayuda"
+        );
+    }
+
+    @Override
+    protected ItemStack buildOptionalItem1() {
+        return ItemBuilder.of(Material.NETHERITE_SCRAP)
+                .title(CLICKEABLE + "VER TODAS LAS EMPRESAS")
+                .build();
+    }
+
+    @Override
+    protected void onClickOptionalItem1(Player player, InventoryClickEvent event) {
+        menuService.open(player, VerTodasEmpresasMenu.class);
+    }
+
+    @Override
+    protected ItemStack buildOptionalItem2() {
+        return ItemBuilder.of(Material.CHEST)
+                .title(MenuItems.CLICKEABLE + "VER MERCADO DE EMPRESAS SERVER")
+                .build();
+    }
+
+    @Override
+    protected void onClickOptionalItem2(Player player, InventoryClickEvent event) {
+        menuService.open(player, MercadoAccionesEmpresasMenu.class);
     }
 }

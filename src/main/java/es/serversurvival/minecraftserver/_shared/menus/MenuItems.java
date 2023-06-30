@@ -11,6 +11,7 @@ public final class MenuItems {
             .title(RED + "<-")
             .build();
 
+    public static final String INFO = GOLD + "" + BOLD + "INFO";
     public static final String CLICKEABLE = GOLD + "" + BOLD + UNDERLINE;
     public static final String CARGANDO = RED + "Cargando...";
 }

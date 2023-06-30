@@ -13,6 +13,6 @@ public final class VerMisAccionesCommandRunner implements CommandRunnerNonArgs {
 
     @Override
     public void execute(Player player) {
-        menuService.open(player, MisEmpresasMenu.class);
+        menuService.open(player, MisEmpresasAccionesMenu.class);
     }
 }

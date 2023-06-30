@@ -112,12 +112,14 @@ public final class MisEmpleosMenu extends Menu {
                 .build();
     }
 
-    //TODO
     private ItemStack buildItemInfo() {
         return ItemBuilder.of(Material.PAPER)
                 .title(GOLD + "" + BOLD + "INFO")
                 .lore(List.of(
-                        ""
+                        "Las empresas del servidor te pueden contratar",
+                        "y pagarte un sueldo.",
+                        "/empresas contratar",
+                        "/empresas dejarempleo <nombre de la empresa>"
                 ))
                 .build();
     }

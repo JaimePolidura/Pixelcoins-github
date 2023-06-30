@@ -3,9 +3,9 @@ package es.serversurvival.minecraftserver.deudas.verdeudasmercado;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.modules.sync.SyncMenuService;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.VerOfertasMercadoMenu;
+import es.serversurvival.minecraftserver.deudas.verdeudas.MisDeudasMenu;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.deudas._shared.*;
 import es.serversurvival.pixelcoins.deudas._shared.application.DeudasService;
@@ -16,11 +16,14 @@ import es.serversurvival.minecraftserver.deudas._shared.DeudaItemLore;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
 import static es.serversurvival._shared.utils.Funciones.*;
+import static es.serversurvival.minecraftserver._shared.menus.MenuItems.CLICKEABLE;
 import static org.bukkit.ChatColor.*;
 
 public final class MercadoDeudaMenu extends VerOfertasMercadoMenu<OfertaDeudaMercado> {
@@ -103,5 +106,17 @@ public final class MercadoDeudaMenu extends VerOfertasMercadoMenu<OfertaDeudaMer
     @Override
     public String mensajeRetiradoExistoso(OfertaDeudaMercado oferta, ItemStack item) {
         return GOLD + "Has retirado la deuda del mercado";
+    }
+
+    @Override
+    protected ItemStack buildOptionalItem2() {
+        return ItemBuilder.of(Material.DIAMOND_SWORD)
+                .title(CLICKEABLE + "VER TUS DEUDAS")
+                .build();
+    }
+
+    @Override
+    protected void onClickOptionalItem1(Player player, InventoryClickEvent event) {
+        this.menuService.open(player, MisDeudasMenu.class);
     }
 }
