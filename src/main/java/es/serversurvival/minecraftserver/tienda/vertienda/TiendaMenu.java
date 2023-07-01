@@ -45,11 +45,11 @@ public final class TiendaMenu extends VerOfertasMercadoMenu<OfertaTiendaItemMine
     @Override
     public List<String> loreItemInfo() {
         return List.of(
-                "Para vender un item: 1) selecciona",
-                "el item con la mano y 2) pon el comando:",
-                "/tienda vender <precio>",
+                GOLD + "Puedes vender objetos de minecraft en la tienda. Para ello:",
+                GOLD + "    1º Selecciona un item en la mano",
+                GOLD + "    2º Pon el comando " + AQUA + "/tienda vender <precio/objeto>",
                 "",
-                "Para mas ayuda /tienda ayuda"
+                GOLD + "Para mas ayuda: " + AQUA + "/tienda ayuda"
         );
     }
 

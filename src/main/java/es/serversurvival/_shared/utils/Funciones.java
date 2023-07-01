@@ -57,7 +57,7 @@ public final class Funciones {
     }
 
     public static String formatPorcentaje(double porcentaje) {
-        return Funciones.FORMATEA.format(Funciones.redondeoDecimales(porcentaje * 100, 1)) + " % ";
+        return Funciones.FORMATEA.format(Funciones.redondeoDecimales(porcentaje * 100, 1)) + " % " + ChatColor.GOLD;
     }
 
     public static double rentabilidad(double ingresos, double beneficios) {

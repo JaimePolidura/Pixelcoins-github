@@ -95,7 +95,7 @@ public final class MisDeudasMenu extends Menu {
                         GOLD + "Puedes dar prestamos a jugadores y endeudarte por PC.",
                         "",
                         GOLD + "El pago del prestamo seran las pixelcoins por los interes. ",
-                        GOLD + "Por ejemplo pixelcoins: " + formatPixelcoins(100) + " intereses: " + formatPorcentaje(0.1) + " = " + formatPixelcoins(100 * 0.1),
+                        GOLD + "Por ejemplo pixelcoins: " + formatPixelcoins(100) + " * intereses: " + formatPorcentaje(0.1) + " = " + formatPixelcoins(100 * 0.1),
                         GOLD + "El pago se hara cada X dias en un total de Y veces",
                         GOLD + "Salvo el ultimo dia que se pagará tambien todas las pixelcions.",
                         "",

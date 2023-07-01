@@ -48,7 +48,7 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
     public int[][] items() {
         return new int[][] {
                 {1, 0, 0, 0, 0, 0, 0, 0, 0},
-                {2, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -61,8 +61,7 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
         return MenuConfiguration.builder()
                 .title(DARK_RED + "" + BOLD + "   Escoge para invertir")
                 .fixedItems()
-                .item(1, itemInfo())
-                .items(2, itemValoresDisponibles(), this::onValorSeleccionado)
+                .items(1, itemValoresDisponibles(), this::onValorSeleccionado)
                 .breakpoint(7)
                 .onPageChanged(this::onPageChanged)
                 .onClose(this::onClose)
@@ -114,7 +113,6 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
     }
 
     private void onClose(InventoryCloseEvent inventoryCloseEvent) {
-        inventoryCloseEvent.getPlayer().sendMessage(LIGHT_PURPLE + "Se ha cerrado el menu");
         cargadorPreciosThreadByPageId.forEach(Thread::interrupt);
     }
 
@@ -126,7 +124,7 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
 
     private void cargarPreciosActualesEnPaginaActual(Page page) {
         Thread thread = new Thread(() -> {
-            List<ItemStack> items = page.getItemsByItemNum(2);
+            List<ItemStack> items = page.getItemsByItemNum(1);
 
             for (int i = 0; i < items.size(); i++) {
                 if(Thread.interrupted()){
@@ -141,20 +139,16 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
                 item = ItemUtils.setLore(item,  1, nuevoLore);
 
                 if(getActualPage().getPageId() == page.getPageId()){
-                    super.setItemLore(i + 9, 1, nuevoLore);
+                    super.setItemLore(i, 1, nuevoLore);
                 }
 
-                super.getActualPage().getItems().set(i + 9, item);
+                super.getActualPage().getItems().set(i, item);
             }
         });
 
         cargadorPreciosThreadByPageId.add(thread);
 
         thread.start();
-    }
-
-    private ItemStack itemInfo() {
-        return ItemBuilder.of(Material.PAPER).build();
     }
 
     private ItemStack itemNextPage() {

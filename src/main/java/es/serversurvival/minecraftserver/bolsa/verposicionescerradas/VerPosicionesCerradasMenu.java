@@ -93,8 +93,8 @@ public final class VerPosicionesCerradasMenu extends Menu<VerPosicionesCerradasM
                         GOLD + "Rentabilidad: " + formatRentabilidad(posicion.getRentabilidad()),
                         GOLD + "Cantidad: " + posicion.getCantidad(),
                         GOLD + "Precio actual: " + CARGANDO,
-                        GOLD + "Fecha apertura: " + posicion.getFechaApertura(),
-                        GOLD + "Fecha cierre: " + posicion.getFechaCierre(),
+                        GOLD + "Fecha apertura: " + Funciones.toString(posicion.getFechaApertura()),
+                        GOLD + "Fecha cierre: " + Funciones.toString(posicion.getFechaCierre()),
                         "",
                         posicion.getPosicionId().toString()
                 ))
@@ -108,7 +108,13 @@ public final class VerPosicionesCerradasMenu extends Menu<VerPosicionesCerradasM
     }
 
     private ItemStack buildItemInfo() {
-        return ItemBuilder.of(Material.PAPER).build();
+        return ItemBuilder.of(Material.PAPER)
+                .title(MenuItems.INFO)
+                .lore(List.of(
+                        GOLD + "Las posiciones cerradas son las ventas que has hecho",
+                        GOLD + "en bolsa de criptomonedas y acciones."
+                ))
+                .build();
     }
 
     @Override

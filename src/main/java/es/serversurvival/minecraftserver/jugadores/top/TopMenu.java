@@ -3,7 +3,9 @@ package es.serversurvival.minecraftserver.jugadores.top;
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
+import es.bukkitbettermenus.menustate.AfterShow;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.jugadores.perfil.PerfilMenu;
@@ -18,24 +20,29 @@ import es.serversurvival.pixelcoins.jugadores._shared.jugadores.Jugador;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import es.serversurvival.pixelcoins.jugadores.patrimonio.CalculadorPatrimonioService;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
-public final class TopMenu extends Menu {
+public final class TopMenu extends Menu implements AfterShow {
     private final CalculadorPatrimonioService calculadorPatrimonioService;
     private final JugadoresEstadisticasService estadisticas;
     private final ActivosBolsaService activosBolsaService;
     private final PosicionesService posicionesService;
     private final JugadoresService jugadoresService;
     private final MenuService menuService;
+    private final Executor executor;
 
     @Override
     public int[][] items() {
@@ -149,20 +156,10 @@ public final class TopMenu extends Menu {
     }
 
     private ItemStack buildTopPobresJugadoresItem() {
-        Map<String, Double> listaRicos = calculadorPatrimonioService.calcularTopJugadores(true, 5);
-        String displayName = GREEN + "" + BOLD + "TOP POBRES";
-        List<String> lore = new ArrayList<>();
-        int pos = 1;
-
-        for(Map.Entry<String, Double> entry : listaRicos.entrySet()){
-            if(pos == 6) break;
-            if(entry.getValue() == 0) continue;
-
-            lore.add(GOLD + "" + pos + "º " + entry.getKey() + ": " + formatPixelcoins(entry.getValue()));
-            pos++;
-        }
-
-        return ItemBuilder.of(Material.DIRT).title(displayName).lore(lore).build();
+        return ItemBuilder.of(Material.DIRT)
+                .title(GREEN + "" + BOLD + "TOP POBRES")
+                .lore(List.of(MenuItems.CARGANDO))
+                .build();
     }
 
     private ItemStack buildTopCompradoresTienda() {
@@ -199,18 +196,53 @@ public final class TopMenu extends Menu {
     }
 
     private ItemStack buildTopRicosJugadoresItem() {
+        return ItemBuilder.of(Material.GOLD_BLOCK)
+                .title(GREEN + "" + BOLD + "TOP RICOS")
+                .lore(MenuItems.CARGANDO)
+                .build();
+    }
+
+    @Override
+    public void afterShow(Player player) {
+        executor.execute(() -> {
+            fillItemTopRicos();
+            fillItemTopPobres();
+        });
+    }
+
+    private void fillItemTopRicos() {
         Map<String, Double> listaRicos = calculadorPatrimonioService.calcularTopJugadores(false, 5);
-        String displayName = GREEN + "" + BOLD + "TOP RICOS";
         List<String> lore = new ArrayList<>();
         int pos = 1;
 
         for(Map.Entry<String, Double> entry : listaRicos.entrySet()){
             if(pos == 6) break;
+            if(entry.getValue() == 0) continue;
 
             lore.add(GOLD + "" + pos + "º " + entry.getKey() + ": " + formatPixelcoins(entry.getValue()));
             pos++;
         }
 
-        return ItemBuilder.of(Material.GOLD_BLOCK).title(displayName).lore(lore).build();
+        Bukkit.getScheduler().runTask(Pixelcoin.INSTANCE, () -> {
+            super.setItemLoreActualPage(10, lore);
+        });
+    }
+
+    private void fillItemTopPobres() {
+        Map<String, Double> listaPobres = calculadorPatrimonioService.calcularTopJugadores(true, 5);
+        List<String> lore = new ArrayList<>();
+        int pos = 1;
+
+        for(Map.Entry<String, Double> entry : listaPobres.entrySet()){
+            if(pos == 6) break;
+            if(entry.getValue() == 0) continue;
+
+            lore.add(GOLD + "" + pos + "º " + entry.getKey() + ": " + formatPixelcoins(entry.getValue()));
+            pos++;
+        }
+
+        Bukkit.getScheduler().runTask(Pixelcoin.INSTANCE, () -> {
+            super.setItemLoreActualPage(13, lore);
+        });
     }
 }

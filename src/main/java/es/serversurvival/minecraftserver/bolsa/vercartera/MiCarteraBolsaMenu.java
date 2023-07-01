@@ -20,6 +20,7 @@ import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.TipoActivoBolsa;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.TipoApuestaService;
 import es.serversurvival.minecraftserver.jugadores.perfil.PerfilMenu;
+import es.serversurvival.pixelcoins.bolsa._shared.posiciones.application.CortoTipoApuestaService;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.Posicion;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.application.PosicionesService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 import static es.serversurvival.minecraftserver._shared.menus.MenuItems.CARGANDO;
@@ -151,24 +153,27 @@ public final class MiCarteraBolsaMenu extends Menu implements AfterShow {
         return ItemBuilder.of(Material.PAPER)
                 .title(MenuItems.INFO)
                 .lore(List.of(
-                        "Puedes comprar valores en la bolsa",
-                        "que cotizen en Estados Unidos",
-                        "Para buscar valores para invertir",
-                        "le das click al item de la derecha",
-                        "Si quieres otro valor que no este",
-                        "en la lista debes poner:",
-                        "/bolsa invertir <ticker> <nacciones>",
-                        "  <ticker> es la letra identificatoria",
-                        "    del valor: ejemplo Amazon: AMZN",
-                        "    (la empresa debe cotizar en USA)",
-                        "   <nacciones> numero de cantidad a comprar",
-                        "   ",
-                        "Para consultar tus valores en carteras ",
-                        "y venderlas tienes tres vias: el menu actual,",
-                        "la web y en el comando /bolsa cartera",
-                        "   ",
-                        "Mas info en /bolsa ayuda o /ayuda bolsa o en:",
-                        "http://serversurvival2.ddns.net/perfil"
+                        GOLD + "Puedes invertir en acciones y criptomonedas a cambio",
+                        GOLD + "de PC Las podras vender mas adelante al precio al",
+                        GOLD + "que cotizen en la vida real.",
+                        "",
+                        GOLD + "Para eligir inversion " + AQUA + "/bolsa valores" + GOLD + " o si",
+                        GOLD + "quieres invertir en otra empresa que no aparezca: ",
+                        AQUA + "/bolsa invertir <ticker> <nº acciones>",
+                        GOLD + "El ticker es un identificador de una accion",
+                        GOLD + "lo podras encontrar en internet. Ejemplo Google GOOG",
+                        "",
+                        GOLD + "Tambien puedes apostar a a la baja en una accion",
+                        GOLD + "es decir cuando el precio baje ganar dinero: ",
+                        AQUA + "/bolsa invertir <ticker> <nº acciones> CORTO",
+                        GOLD + "Se te cobrara una comision del " + Funciones.formatPorcentaje(1 - CortoTipoApuestaService.COMISION_ABRIR_CORTO),
+                        GOLD + "Sobre el total del valor de la inversion",
+                        "",
+                        AQUA + "/bolsa cartera",
+                        AQUA + "/bolsa cartera [nombre de otro jugador]",
+                        AQUA + "/bolsa precio <ticker>",
+                        "",
+                        GOLD + "Para mas comandos " + AQUA + "/bolsa ayuda"
                 ))
                 .build();
     }

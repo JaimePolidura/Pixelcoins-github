@@ -11,7 +11,7 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public final class CortoTipoApuestaService implements TipoApuestaService {
-    public static final double COMISION_ABRIR_CORTO = 0.5;
+    public static final double COMISION_ABRIR_CORTO = 0.9;
 
     private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;
     private final PosicionesService posicionesService;

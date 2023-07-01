@@ -58,7 +58,13 @@ public final class MercadoDeudaMenu extends VerOfertasMercadoMenu<OfertaDeudaMer
 
     @Override
     public List<String> loreItemInfo() {
-        return Collections.EMPTY_LIST;
+        return List.of(
+                GOLD + "Si un jugador te debe dinero, puedes vender esa deuda",
+                GOLD + "por PC. Dejaras de cobrar los intereses, sera el comprador",
+                GOLD + "quien los cobre.",
+                "",
+                GOLD + "Para mas comandos: " + AQUA + "/deudas ayuda"
+        );
     }
 
     @Override
@@ -109,7 +115,7 @@ public final class MercadoDeudaMenu extends VerOfertasMercadoMenu<OfertaDeudaMer
     }
 
     @Override
-    protected ItemStack buildOptionalItem2() {
+    protected ItemStack buildOptionalItem1() {
         return ItemBuilder.of(Material.DIAMOND_SWORD)
                 .title(CLICKEABLE + "VER TUS DEUDAS")
                 .build();
