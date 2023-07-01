@@ -2,12 +2,10 @@ package es.serversurvival.minecraftserver.empresas.repatirdividendos;
 
 import es.bukkitbettermenus.menustate.BeforeShow;
 import es.serversurvival.minecraftserver._shared.menus.NumberSelectorMenu;
-import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas.repartirdividendos.RepartirDividendosParametros;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
-import lombok.AllArgsConstructor;
+import es.serversurvival.pixelcoins.transacciones.TransaccionesBalanceService;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -22,7 +20,7 @@ import static org.bukkit.ChatColor.BOLD;
 
 @RequiredArgsConstructor
 public final class RepartirDividendosConfirmacionMenu extends NumberSelectorMenu<Empresa> implements BeforeShow {
-    private final TransaccionesService transaccionesService;
+    private final TransaccionesBalanceService transaccionesBalanceService;
     private final UseCaseBus useCaseBus;
 
     private double pixelcoinsEmpresa;
@@ -64,6 +62,6 @@ public final class RepartirDividendosConfirmacionMenu extends NumberSelectorMenu
 
     @Override
     public void beforeShow(Player player) {
-        pixelcoinsEmpresa = transaccionesService.getBalancePixelcoins(getState().getEmpresaId());
+        pixelcoinsEmpresa = transaccionesBalanceService.get(getState().getEmpresaId());
     }
 }

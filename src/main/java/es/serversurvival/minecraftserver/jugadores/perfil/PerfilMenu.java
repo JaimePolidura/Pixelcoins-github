@@ -16,7 +16,6 @@ import es.serversurvival.minecraftserver.tienda.vertienda.TiendaMenu;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
 import es.serversurvival.pixelcoins.jugadores.patrimonio.CalculadorPatrimonioService;
 import es.serversurvival.pixelcoins.jugadores.patrimonio.TipoCuentaPatrimonio;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
 import es.serversurvival.minecraftserver.jugadores.top.TopMenu;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.Posicion;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.application.PosicionesService;
@@ -26,6 +25,7 @@ import es.serversurvival.pixelcoins.empresas._shared.empleados.domain.Empleado;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.application.EmpleadosService;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
+import es.serversurvival.pixelcoins.transacciones.TransaccionesBalanceService;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -43,10 +43,10 @@ import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
 public final class PerfilMenu extends Menu implements AfterShow {
+    private final TransaccionesBalanceService transaccionesBalanceService;
     private final CalculadorPatrimonioService calculadorPatrimonioService;
     private final AccionistasEmpresasService accionistasEmpresasService;
     private final DependenciesRepository dependenciesRepository;
-    private final TransaccionesService transaccionesService;
     private final ActivosBolsaService activosBolsaService;
     private final PosicionesService posicionesService;
     private final EmpleadosService empleadosService;
@@ -106,7 +106,7 @@ public final class PerfilMenu extends Menu implements AfterShow {
         for (AccionistaEmpresa accion : acciones) {
             Empresa empresa = empresasService.getById(accion.getEmpresaId());
             double porcentajeEmpresa = (double) accion.getNAcciones() / empresa.getNTotalAcciones();
-            double pixelcoinsCorrespondientes = porcentajeEmpresa * transaccionesService.getBalancePixelcoins(empresa.getEmpresaId());
+            double pixelcoinsCorrespondientes = porcentajeEmpresa * transaccionesBalanceService.get(empresa.getEmpresaId());
 
             lore.add(GOLD + "- " + empresa.getNombre() + " " + formatPorcentaje(porcentajeEmpresa)
                     + "Pixelcoins: " + formatPixelcoins(pixelcoinsCorrespondientes));

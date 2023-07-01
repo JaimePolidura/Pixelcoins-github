@@ -6,18 +6,19 @@ import es.serversurvival.pixelcoins._shared.Validador;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
+import es.serversurvival.pixelcoins.transacciones.Movimiento;
 import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
-import es.serversurvival.pixelcoins.transacciones.Transaccion;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
 import es.serversurvival.pixelcoins.deudas._shared.domain.Deuda;
 import es.serversurvival.pixelcoins.deudas._shared.application.DeudasService;
 import es.serversurvival.pixelcoins.deudas._shared.application.DeudasValidador;
+import es.serversurvival.pixelcoins.transacciones.Transaccion;
+import es.serversurvival.pixelcoins.transacciones.TransaccionesSaver;
 import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
 public final class PagarTodaLaDeudaUseCase implements UseCaseHandler<PagarTodaLaDeudaParametros> {
-    private final TransaccionesService transaccionesService;
+    private final TransaccionesSaver transaccionesSaver;
     private final DeudasValidador deudasValidador;
     private final OfertasService ofertasService;
     private final DeudasService deudasService;
@@ -35,7 +36,7 @@ public final class PagarTodaLaDeudaUseCase implements UseCaseHandler<PagarTodaLa
 
         deudasService.save(deuda.anotarPagadoPorCompleto());
         ofertasService.deleteByObjetoYTipo(parametros.getDeudaId().toString(), TipoOferta.DEUDA_MERCADO_SECUNDARIO);
-        transaccionesService.save(Transaccion.builder()
+        transaccionesSaver.save(Transaccion.builder()
                 .pagadoId(deuda.getAcredorJugadorId())
                 .pagadorId(parametros.getJugadorId())
                 .pixelcoins(pixelcoinsRestantes)

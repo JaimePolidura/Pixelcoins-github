@@ -8,17 +8,13 @@ import es.bukkitbettermenus.menustate.AfterShow;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
-import es.jaime.javaddd.application.utils.ExceptionUtils;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
-import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBolsaUltimosPreciosService;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.TipoActivoBolsa;
-import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
+import es.serversurvival.pixelcoins.transacciones.TransaccionesBalanceService;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -27,10 +23,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
-import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
-import static es.jaime.javaddd.application.utils.ExceptionUtils.*;
 import static es.serversurvival._shared.utils.Funciones.*;
 import static es.serversurvival.minecraftserver._shared.menus.MenuItems.CARGANDO;
 import static org.bukkit.ChatColor.*;
@@ -38,7 +32,7 @@ import static org.bukkit.ChatColor.*;
 @RequiredArgsConstructor
 public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> implements AfterShow {
     private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;
-    private final TransaccionesService transaccionesService;
+    private final TransaccionesBalanceService transaccionesBalanceService;
     private final ActivosBolsaService activosBolsaService;
     private final MenuService menuService;
 
@@ -77,7 +71,7 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
         UUID activoBolsaId = MinecraftUtils.getLastLineOfLore(itemClicked, 0);
         ActivoBolsa activoBolsa = activosBolsaService.getById(activoBolsaId);
         double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(activoBolsaId, null);
-        double pixelcoinsJugador = transaccionesService.getBalancePixelcoins(player.getUniqueId());
+        double pixelcoinsJugador = transaccionesBalanceService.get(player.getUniqueId());
 
         if(pixelcoinsJugador < ultimoPrecio){
             MinecraftUtils.enviarMensajeYSonido(player, DARK_RED + "No tienes las suficientes pixelcoins", Sound.ENTITY_VILLAGER_NO);

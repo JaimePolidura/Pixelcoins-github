@@ -15,6 +15,7 @@ import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver.empresas.cerrar.CerrarEmpresaConfirmacionMenu;
 import es.serversurvival.minecraftserver.empresas.votaciones.VerVotacionesEmpresaMenu;
 import es.serversurvival.minecraftserver.jugadores.perfil.PerfilMenu;
+import es.serversurvival.minecraftserver.transacciones.VerTransaccionesMenu;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.AccionistasEmpresasService;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.domain.Empleado;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.application.EmpleadosService;
@@ -22,20 +23,19 @@ import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.Votacion;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.application.VotacionesService;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
+import es.serversurvival.pixelcoins.transacciones.TransaccionesBalanceService;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import static es.serversurvival._shared.utils.Funciones.*;
@@ -45,8 +45,8 @@ import static org.bukkit.ChatColor.GOLD;
 
 @RequiredArgsConstructor
 public final class MiEmpresaMenu extends Menu<Empresa> implements BeforeShow, AfterShow {
+    private final TransaccionesBalanceService transaccionesBalanceService;
     private final AccionistasEmpresasService accionistasEmpresasService;
-    private final TransaccionesService transaccionesService;
     private final VotacionesService votacionesService;
     private final EmpleadosService empleadosService;
     private final JugadoresService jugadoresService;
@@ -59,12 +59,12 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements BeforeShow, Af
     @Override
     public int[][] items() {
         return new int[][] {
-                {1, 2, 5, 0, 0, 0, 4,  10, 3},
-                {6, 0, 0, 0, 0, 0, 0,   0, 0},
-                {0, 0, 0, 0, 0, 0, 0,   0, 0},
-                {0, 0, 0, 0, 0, 0, 0,   0, 0},
-                {0, 0, 0, 0, 0, 0, 0,   0, 0},
-                {0, 0, 0, 0, 0, 0, 7,   8, 9}
+                {1, 2, 11, 5, 0, 0, 4,  10, 3},
+                {6, 0, 0,  0, 0, 0, 0,   0, 0},
+                {0, 0, 0,  0, 0, 0, 0,   0, 0},
+                {0, 0, 0,  0, 0, 0, 0,   0, 0},
+                {0, 0, 0,  0, 0, 0, 0,   0, 0},
+                {0, 0, 0,  0, 0, 0, 7,   8, 9}
         };
     }
 
@@ -75,16 +75,34 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements BeforeShow, Af
                 .title(format(DARK_RED + "" + BOLD + "Empresa: %s", this.getState().getNombre()))
                 .item(1, buildItemInfo())
                 .item(2, buildItemEmpresaStats())
+                .item(11, buildItemTransacciones(), goBackDeTransacciones())
                 .item(3, buildItemAccionistas())
+                .item(5, buildItemCerrarEmpresa(), this::abrirCerrarEmpresaConfirmacion)
                 .item(4, buildItemRepartirDividendo(), this::repartirDividendos)
                 .item(10, buildItemVotaciones(), this::openMenuVotaciones)
-                .item(5, buildItemCerrarEmpresa(), this::abrirCerrarEmpresaConfirmacion)
                 .items(6, buildItemsEmpleados(), this::abrirMenuOpccionesEmpleado)
-                .breakpoint(7, MenuItems.GO_BACK, this::goBackToProfileMenu)
+                .breakpoint(7, MenuItems.GO_MENU_BACK, this::goBackToProfileMenu)
                 .paginated(PaginationConfiguration.builder()
                         .forward(9, Material.GREEN_WOOL)
                         .backward(8, Material.RED_WOOL)
                         .build())
+                .build();
+    }
+
+    private BiConsumer<Player, InventoryClickEvent> goBackDeTransacciones() {
+        return (p, e) -> menuService.open(p, VerTransaccionesMenu.class, VerTransaccionesMenu.State.builder()
+                .entidadId(getState().getEmpresaId())
+                .onBack(() -> menuService.open(p, MiEmpresaMenu.class, getState()))
+                .nombre(getState().getNombre())
+                .menuBackItem(ItemBuilder.of(Material.valueOf(getState().getLogotipo()))
+                        .title(MenuItems.GO_BACK_TITLE + " " + getState().getNombre())
+                        .build())
+                .build());
+    }
+
+    private ItemStack buildItemTransacciones() {
+        return ItemBuilder.of(Material.BOOKSHELF)
+                .title(MenuItems.CLICKEABLE + "Ver ultimas transacciones")
                 .build();
     }
 
@@ -217,7 +235,7 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements BeforeShow, Af
         lore.add(GOLD + "Descripccion:");
         lore.add(1, GOLD + "" + getState().getDescripcion());
         lore.add("  ");
-        lore.add(GOLD + "Pixelcoins: " + GREEN + formatPixelcoins(transaccionesService.getBalancePixelcoins(getState().getEmpresaId())));
+        lore.add(GOLD + "Pixelcoins: " + GREEN + formatPixelcoins(transaccionesBalanceService.get(getState().getEmpresaId())));
         lore.add(GOLD + "Fundador: " + jugadoresService.getNombreById(getState().getFundadorJugadorId()));
         lore.add(GOLD + "Director: " + jugadoresService.getNombreById(getState().getDirectorJugadorId()));
         lore.add(GOLD + "Nº Total acciones: " + getState().getNTotalAcciones());
@@ -231,7 +249,7 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements BeforeShow, Af
             lore.add(AQUA + "/empresas logotipo " +getState().getNombre());
         }
 
-        return ItemBuilder.of(Material.WRITABLE_BOOK)
+        return ItemBuilder.of(Material.valueOf(getState().getLogotipo()))
                 .title(GOLD + "" + BOLD + "" + getState().getNombre().toUpperCase())
                 .lore(lore)
                 .build();

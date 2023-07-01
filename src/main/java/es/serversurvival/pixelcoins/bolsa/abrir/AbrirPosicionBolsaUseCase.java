@@ -10,8 +10,10 @@ import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.PosicionAbiertaBuilder;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.application.PosicionesService;
 import es.serversurvival.pixelcoins.bolsa._shared.premarket.application.AbridorOrdenesPremarket;
+import es.serversurvival.pixelcoins.transacciones.Movimiento;
 import es.serversurvival.pixelcoins.transacciones.Transaccion;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
+import es.serversurvival.pixelcoins.transacciones.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.TransaccionesSaver;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;
@@ -21,8 +23,8 @@ import java.util.UUID;
 public final class AbrirPosicionBolsaUseCase implements UseCaseHandler<AbrirPosicoinBolsaParametros> {
     private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;
     private final AbridorOrdenesPremarket abridorOrdenesPremarket;
-    private final TransaccionesService transaccionesService;
     private final ActivosBolsaService activosBolsaService;
+    private final TransaccionesSaver transaccionesSaver;
     private final PosicionesService posicionesService;
     private final BolsaValidator validator;
     private final EventBus eventBus;
@@ -45,7 +47,7 @@ public final class AbrirPosicionBolsaUseCase implements UseCaseHandler<AbrirPosi
         double totalPixelcoins = validator.getPixelcoinsAbrirPosicion(parametros.getActivoBolsaId(), parametros.getCantidad(),
                 parametros.getTipoApuesta(), parametros.getJugadorId());
 
-        transaccionesService.save(Transaccion.builder()
+        transaccionesSaver.save(Transaccion.builder()
                 .pagadorId(parametros.getJugadorId())
                 .objeto(parametros.getActivoBolsaId())
                 .pixelcoins(totalPixelcoins)

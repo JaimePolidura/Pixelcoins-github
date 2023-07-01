@@ -5,7 +5,6 @@ import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.deudas._shared.DeudaItemLore;
@@ -53,7 +52,7 @@ public final class MisDeudasMenu extends Menu {
                 .item(1, buildItemInfo())
                 .item(2, buildItemMercado(), (p, e) -> menuService.open(p, MercadoDeudaMenu.class))
                 .items(3, this::buildItemsDeudas, this::onDeudaItemClicked)
-                .breakpoint(7, MenuItems.GO_BACK, (p, e) -> menuService.open(p, PerfilMenu.class))
+                .breakpoint(7, MenuItems.GO_MENU_BACK, (p, e) -> menuService.open(p, PerfilMenu.class))
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
                         .forward(9, Material.GREEN_WOOL)

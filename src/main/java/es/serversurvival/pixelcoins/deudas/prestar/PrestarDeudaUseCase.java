@@ -4,18 +4,19 @@ import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.Validador;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
+import es.serversurvival.pixelcoins.transacciones.Movimiento;
 import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
-import es.serversurvival.pixelcoins.transacciones.Transaccion;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
 import es.serversurvival.pixelcoins.deudas._shared.domain.Deuda;
 import es.serversurvival.pixelcoins.deudas._shared.application.DeudasService;
 import es.serversurvival.pixelcoins.deudas._shared.application.DeudasValidador;
+import es.serversurvival.pixelcoins.transacciones.Transaccion;
+import es.serversurvival.pixelcoins.transacciones.TransaccionesSaver;
 import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
 public final class PrestarDeudaUseCase implements UseCaseHandler<PrestarDeudaParametros> {
-    private final TransaccionesService transaccionesService;
+    private final TransaccionesSaver transaccionesSaver;
     private final DeudasValidador deudasValidador;
     private final DeudasService deudasService;
     private final Validador validador;
@@ -28,7 +29,7 @@ public final class PrestarDeudaUseCase implements UseCaseHandler<PrestarDeudaPar
         Deuda deuda = Deuda.fromParametrosUseCase(parametros);
 
         deudasService.save(deuda);
-        transaccionesService.save(Transaccion.builder()
+        transaccionesSaver.save(Transaccion.builder()
                 .pagadorId(parametros.getAcredorJugadorId())
                 .pagadoId(parametros.getDeudorJugadorId())
                 .pixelcoins(parametros.getNominal())

@@ -8,9 +8,7 @@ import es.serversurvival.pixelcoins.deudas._shared.domain.Deuda;
 import es.serversurvival.pixelcoins.deudas._shared.domain.EstadoDeuda;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
-import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
-import es.serversurvival.pixelcoins.transacciones.Transaccion;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
+import es.serversurvival.pixelcoins.transacciones.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +20,8 @@ import static org.mockito.Mockito.*;
 
 public final class PagarDeudaCuotasUseCaseTest {
     private PagarDeudaCuotasUseCase useCase;
-    private TransaccionesService transaccionesService;
+    private TransaccionesBalanceService transaccionesBalanceService;
+    private TransaccionesSaver transaccionesSaver;
     private OfertasService ofertasService;
     private DeudasService deudasService;
     private TiempoService tiempoActual;
@@ -30,13 +29,14 @@ public final class PagarDeudaCuotasUseCaseTest {
 
     @BeforeEach
     public void init() {
-        this.transaccionesService = mock(TransaccionesService.class);
+        this.transaccionesBalanceService = mock(TransaccionesBalanceService.class);
+        this.transaccionesSaver = mock(TransaccionesSaver.class);
         this.ofertasService = mock(OfertasService.class);
         this.deudasService = mock(DeudasService.class);
         this.tiempoActual = mock(TiempoService.class);
         this.eventBus = mock(EventBus.class);
 
-        this.useCase = new PagarDeudaCuotasUseCase(transaccionesService, ofertasService, deudasService, tiempoActual, eventBus);
+        this.useCase = new PagarDeudaCuotasUseCase(transaccionesBalanceService, transaccionesSaver, ofertasService, deudasService, tiempoActual, eventBus);
     }
 
     @Test
@@ -51,7 +51,7 @@ public final class PagarDeudaCuotasUseCaseTest {
         UUID deudor = UUID.randomUUID();
         LocalDateTime ultimoPagoDeuda = LocalDateTime.now();
 
-        when(transaccionesService.getBalancePixelcoins(deudor)).thenReturn(10000.0D);
+        when(transaccionesBalanceService.get(deudor)).thenReturn(10000.0D);
         when(tiempoActual.toMillis(any())).thenReturn(ultimoPagoToMillis);
         when(tiempoActual.millis()).thenReturn(tiempoActualMillis);
 
@@ -73,14 +73,14 @@ public final class PagarDeudaCuotasUseCaseTest {
         assertThat(deuda.getEstadoDeuda()).isEqualTo(EstadoDeuda.PAGADA); //Se modifica por referencia
         assertThat(deuda.getFechaUltimoPagoCuota()).isEqualTo(ultimoPagoDeuda.plusNanos(periodoPagoCuota * 1_000_000 * 2));
 
-        verify(transaccionesService, times(2)).save(any(Transaccion.class));
-        verify(transaccionesService, times(1)).save(argThat(ArgPredicateMatcher.of(transaccion ->
+        verify(transaccionesSaver, times(2)).save(any(Transaccion.class));
+        verify(transaccionesSaver, times(1)).save(argThat(ArgPredicateMatcher.of(transaccion ->
                 transaccion.getPagadorId().equals(deudor) &&
                         transaccion.getPagadoId().equals(acredor) &&
                         transaccion.getPixelcoins() == cuota &&
                         transaccion.getTipo() == TipoTransaccion.DEUDAS_CUOTA &&
                         transaccion.getObjeto().equals(deuda.getDeudaId().toString()))));
-        verify(transaccionesService, times(1)).save(argThat(ArgPredicateMatcher.of(transaccion ->
+        verify(transaccionesSaver, times(1)).save(argThat(ArgPredicateMatcher.of(transaccion ->
                 transaccion.getPagadorId().equals(deudor) &&
                         transaccion.getPagadoId().equals(acredor) &&
                         transaccion.getPixelcoins() == cuota + nominal &&
@@ -102,7 +102,7 @@ public final class PagarDeudaCuotasUseCaseTest {
         UUID deudor = UUID.randomUUID();
         LocalDateTime ultimoPagoDeuda = LocalDateTime.now();
 
-        when(transaccionesService.getBalancePixelcoins(deudor)).thenReturn(10000.0D);
+        when(transaccionesBalanceService.get(deudor)).thenReturn(10000.0D);
         when(tiempoActual.toMillis(any())).thenReturn(ultimoPagoToMillis);
         when(tiempoActual.millis()).thenReturn(tiempoActualMillis);
 
@@ -123,8 +123,8 @@ public final class PagarDeudaCuotasUseCaseTest {
         assertThat(deuda.getNCuotasPagadas()).isEqualTo(3); //Se modifica por referencia
         assertThat(deuda.getFechaUltimoPagoCuota()).isEqualTo(ultimoPagoDeuda.plusNanos(periodoPagoCuota * 1_000_000 * 2));
 
-        verify(transaccionesService, times(2)).save(any(Transaccion.class));
-        verify(transaccionesService, times(2)).save(argThat(ArgPredicateMatcher.of(transaccion ->
+        verify(transaccionesSaver, times(2)).save(any(Transaccion.class));
+        verify(transaccionesSaver, times(2)).save(argThat(ArgPredicateMatcher.of(transaccion ->
                 transaccion.getPagadorId().equals(deudor) &&
                         transaccion.getPagadoId().equals(acredor) &&
                         transaccion.getPixelcoins() == cuota &&
@@ -145,7 +145,7 @@ public final class PagarDeudaCuotasUseCaseTest {
         UUID deudor = UUID.randomUUID();
         LocalDateTime ultimoPagoDeuda = LocalDateTime.now();
 
-        when(transaccionesService.getBalancePixelcoins(deudor)).thenReturn(9.0d);
+        when(transaccionesBalanceService.get(deudor)).thenReturn(9.0d);
         when(tiempoActual.toMillis(any())).thenReturn(ultimoPagoToMillis);
         when(tiempoActual.millis()).thenReturn(tiempoActualMillis);
         Deuda deuda = Deuda.builder()
@@ -162,7 +162,7 @@ public final class PagarDeudaCuotasUseCaseTest {
                 .build();
         this.useCase.handle(PagarDeudaCuotasParametros.from(deuda));
 
-        verify(this.transaccionesService, never()).save(any());
+        verify(transaccionesSaver, never()).save(any());
 
         verify(this.deudasService, times(1)).save(any());
         assertThat(deuda.getNCuotasImpagadas()).isEqualTo(2);
@@ -182,6 +182,6 @@ public final class PagarDeudaCuotasUseCaseTest {
                 .fechaUltimoPagoCuota(LocalDateTime.now())
                 .build()));
 
-        verify(this.transaccionesService, never()).save(any());
+        verify(transaccionesSaver, never()).save(any());
     }
 }

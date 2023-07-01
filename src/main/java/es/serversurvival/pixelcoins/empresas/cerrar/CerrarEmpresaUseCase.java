@@ -8,9 +8,7 @@ import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.Acci
 import es.serversurvival.pixelcoins.empresas._shared.empleados.application.EmpleadosService;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
-import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
-import es.serversurvival.pixelcoins.transacciones.Transaccion;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
+import es.serversurvival.pixelcoins.transacciones.*;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;
@@ -18,11 +16,12 @@ import java.util.UUID;
 @UseCase
 @AllArgsConstructor
 public final class CerrarEmpresaUseCase implements UseCaseHandler<CerrarEmpresaParametros> {
+    private final TransaccionesBalanceService transaccionesBalanceService;
     private final AccionistasEmpresasService accionistasEmpresasService;
-    private final TransaccionesService transaccionesService;
-    private final EmpresasValidador validador;
+    private final TransaccionesSaver transaccionesSaver;
     private final EmpleadosService empleadosService;
     private final EmpresasService empresasService;
+    private final EmpresasValidador validador;
     private final EventBus eventBus;
 
     @Override
@@ -36,10 +35,10 @@ public final class CerrarEmpresaUseCase implements UseCaseHandler<CerrarEmpresaP
         despedirATodosLosEmpleados(parametros.getEmpresaId());
         empresasService.save(empresa.cerrar());
         accionistasEmpresasService.deleteByEmpresaId(parametros.getEmpresaId());
-        transaccionesService.save(Transaccion.builder()
+        transaccionesSaver.save(Transaccion.builder()
                 .pagadoId(parametros.getJugadorId())
                 .pagadorId(parametros.getEmpresaId())
-                .pixelcoins(transaccionesService.getBalancePixelcoins(parametros.getEmpresaId()))
+                .pixelcoins(transaccionesBalanceService.get(parametros.getEmpresaId()))
                 .tipo(TipoTransaccion.EMPRESAS_CERRAR)
                 .build());
 

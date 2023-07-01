@@ -5,7 +5,7 @@ import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.jugadores.cambiar.TipoCambioPixelcoins;
 import es.serversurvival.pixelcoins.jugadores.cambiar.ingresarItem.IngresarItemParametros;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
+import es.serversurvival.pixelcoins.transacciones.TransaccionesBalanceService;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -22,7 +22,7 @@ import static org.bukkit.ChatColor.GOLD;
 @Service
 @RequiredArgsConstructor
 public final class IngresadorItem {
-    private final TransaccionesService transaccionesService;
+    private final TransaccionesBalanceService transaccionesBalanceService;
     private final UseCaseBus useCaseBus;
 
     public void ingresarItemInMano(Player player, TipoCambioPixelcoins... tipoCambioPixelcoinsPermitidos) {
@@ -51,7 +51,7 @@ public final class IngresadorItem {
 
     private void enviarMensaje(Player player, ItemStack itemEnMano, TipoCambioPixelcoins tipoCambio) {
         double pixelcoinsAnadidas = tipoCambio.cambio * itemEnMano.getAmount();
-        double pixelcoinsJugador = transaccionesService.getBalancePixelcoins(player.getUniqueId());
+        double pixelcoinsJugador = transaccionesBalanceService.get(player.getUniqueId());
         MinecraftUtils.enviarMensajeYSonido(player, GOLD + "Se ha añadido: " + formatPixelcoins(pixelcoinsAnadidas) +
                 "Tienes " + formatPixelcoins(pixelcoinsJugador), Sound.ENTITY_PLAYER_LEVELUP);
     }

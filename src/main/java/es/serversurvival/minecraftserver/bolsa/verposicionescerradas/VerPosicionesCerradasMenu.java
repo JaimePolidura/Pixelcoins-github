@@ -60,7 +60,7 @@ public final class VerPosicionesCerradasMenu extends Menu<VerPosicionesCerradasM
                 .item(1, buildItemInfo())
                 .item(5, buidItemCambiarOrden(), this::cambiarOrden)
                 .items(2, this::buildItemPosicionesCerradas)
-                .breakpoint(7, MenuItems.GO_BACK, (p, e) -> menuService.open(p, PerfilMenu.class))
+                .breakpoint(7, MenuItems.GO_MENU_BACK, (p, e) -> menuService.open(p, PerfilMenu.class))
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
                         .forward(9, Material.GREEN_WOOL)

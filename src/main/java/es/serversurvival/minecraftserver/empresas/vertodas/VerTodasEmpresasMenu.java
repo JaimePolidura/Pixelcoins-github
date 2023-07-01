@@ -16,7 +16,7 @@ import es.serversurvival.pixelcoins.empresas._shared.empleados.application.Emple
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
+import es.serversurvival.pixelcoins.transacciones.TransaccionesBalanceService;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -30,8 +30,8 @@ import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
 public final class VerTodasEmpresasMenu extends Menu {
+    private final TransaccionesBalanceService transaccionesBalanceService;
     private final AccionistasEmpresasService accionistasEmpresasService;
-    private final TransaccionesService transaccionesService;
     private final EmpleadosService empleadosService;
     private final JugadoresService jugadoresService;
     private final EmpresasService empresasService;
@@ -60,7 +60,7 @@ public final class VerTodasEmpresasMenu extends Menu {
                 .item(2, buildItemVerTusAcciones(), (p, e) -> menuService.open(p, MisEmpresasAccionesMenu.class))
                 .item(3, buidlItemVerMercado(), (p, e) -> menuService.open(p, MercadoAccionesEmpresasMenu.class))
                 .items(4, this::buildItemsEmpresas, this::onItemEmpresaClicked)
-                .breakpoint(7, MenuItems.GO_BACK, this::goBackToProfileMenu)
+                .breakpoint(7, MenuItems.GO_MENU_BACK, this::goBackToProfileMenu)
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
                         .forward(9, Material.GREEN_WOOL)
@@ -119,7 +119,7 @@ public final class VerTodasEmpresasMenu extends Menu {
                         GOLD + "Descripccion: " + empresa.getDescripcion(),
                         empresa.isEsCotizada() ? GOLD + "Cotiza en bolsa" : GOLD + "No cotiza en bolsa",
                         "     ",
-                        GOLD + "Pixelcoins: " + formatPixelcoins(transaccionesService.getBalancePixelcoins(empresa.getEmpresaId())),
+                        GOLD + "Pixelcoins: " + formatPixelcoins(transaccionesBalanceService.get(empresa.getEmpresaId())),
                         GOLD + "Nº Total acciones: " + empresa.getNTotalAcciones(),
                         "      ",
                         GOLD + (empleadosNombres.isEmpty() ? "Sin trabajadores" : GOLD + "Empleados: " + empleadosNombres),

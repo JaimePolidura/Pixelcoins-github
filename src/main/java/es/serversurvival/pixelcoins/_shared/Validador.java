@@ -3,7 +3,7 @@ package es.serversurvival.pixelcoins._shared;
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.*;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
+import es.serversurvival.pixelcoins.transacciones.TransaccionesBalanceService;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;
@@ -11,7 +11,7 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public final class Validador {
-    private final TransaccionesService transaccionesService;
+    private final TransaccionesBalanceService transaccionesBalanceService;
 
     public void stringLongitudEntre(String texto, int min, int max, String nombre) {
         if(texto.length() < min || texto.length() > max){
@@ -37,6 +37,12 @@ public final class Validador {
         }
     }
 
+    public void numeroIgualA(double numero, double numeroASerIgual) {
+        if(numero != numeroASerIgual){
+            throw new IllegalQuantity(String.format("%s tiene que ser %s", numero, numeroASerIgual));
+        }
+    }
+
     public void numeroMayorQueCero(double numero, String nombre) {
         if(numero <= 0){
             throw new IllegalQuantity(String.format("%s tiene que ser un numero positivo mayor que 0", nombre));
@@ -44,7 +50,7 @@ public final class Validador {
     }
 
     public void jugadorTienePixelcoins(UUID jugadorId, double pixelcoinsMinimo) {
-        if(transaccionesService.getBalancePixelcoins(jugadorId) < pixelcoinsMinimo){
+        if(transaccionesBalanceService.get(jugadorId) < pixelcoinsMinimo){
             throw new NotEnoughPixelcoins("No tienes las suficientes pixelcoins");
         }
     }

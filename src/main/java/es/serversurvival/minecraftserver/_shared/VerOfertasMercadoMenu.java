@@ -63,7 +63,7 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
                 .item(2, buildOptionalItem1(), this::onClickOptionalItem1)
                 .item(3, buildOptionalItem2(), this::onClickOptionalItem2)
                 .items(4, buildItemsOfertas(), this::onItemTiendaOfertaClicked)
-                .breakpoint(7, MenuItems.GO_BACK, (p, e) -> menuService.open(p, PerfilMenu.class))
+                .breakpoint(7, MenuItems.GO_MENU_BACK, (p, e) -> menuService.open(p, PerfilMenu.class))
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
                         .forward(9, Material.GREEN_WOOL)

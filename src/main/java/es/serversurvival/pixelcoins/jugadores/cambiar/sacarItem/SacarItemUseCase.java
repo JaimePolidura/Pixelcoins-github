@@ -4,16 +4,17 @@ import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.Validador;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
+import es.serversurvival.pixelcoins.transacciones.Movimiento;
 import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
-import es.serversurvival.pixelcoins.transacciones.Transaccion;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
+import es.serversurvival.pixelcoins.transacciones.Transaccion;
+import es.serversurvival.pixelcoins.transacciones.TransaccionesSaver;
 import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
 public final class SacarItemUseCase implements UseCaseHandler<SacarItemParametros> {
-    private final TransaccionesService transaccionesService;
+    private final TransaccionesSaver transaccionesSaver;
     private final JugadoresService jugadoresService;
     private final Validador validador;
     private final EventBus eventBus;
@@ -25,7 +26,7 @@ public final class SacarItemUseCase implements UseCaseHandler<SacarItemParametro
 
         validador.jugadorTienePixelcoins(parametros.getJugadorId(), pixelcoinsASacar);
 
-        transaccionesService.save(Transaccion.builder()
+        transaccionesSaver.save(Transaccion.builder()
                 .tipo(TipoTransaccion.JUGADORES_CAMBIO_SACAR_ITEM)
                 .pagadorId(jugador.getJugadorId())
                 .pixelcoins(pixelcoinsASacar)

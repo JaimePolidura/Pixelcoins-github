@@ -3,6 +3,9 @@ main: es.serversurvival.Pixelcoin
 version: 11.0
 api-version: "1.19"
 commands:
+  transacciones:
+    description: Ver los ultimos movimientos de pixelcoins que has hecho
+    usage: /<command>
   cambio:
     description: Cambio pixelcoins/items
     usage: /<command>
@@ -14,9 +17,6 @@ commands:
     usage: /<command> <nombre nombreAccionista> <cantidad>
   normas:
     description: Ver las normas del servidor
-    usage: /<command>
-  estadisticas:
-    description: Ver todos tus objetos vendidos, gastos, ingresos y beneficios
     usage: /<command>
   deudas:
     description: Comandos relacionados con las empresas
@@ -39,9 +39,6 @@ commands:
   cls:
     description: Limpiar el chat
     usage: /<command>
-  empleos:
-    description: Comandos relacionados con los trabajos
-    usage: /<command> <subComandos...>
   ayuda:
     description: ver las ayudas
     usage: /<command>

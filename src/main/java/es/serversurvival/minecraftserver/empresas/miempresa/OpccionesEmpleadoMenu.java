@@ -40,7 +40,7 @@ public final class OpccionesEmpleadoMenu extends Menu<Empleado> implements Befor
         return MenuConfiguration.builder()
                 .title(DARK_RED + "" + BOLD + "          " + jugadoresService.getNombreById(getState().getEmpleadoJugadorId()))
                 .fixedItems()
-                .item(5, MenuItems.GO_BACK, (p, e) -> menuService.open(p, MiEmpresaMenu.class, empresasService.getById(getState().getEmpresaId())))
+                .item(5, MenuItems.GO_MENU_BACK, (p, e) -> menuService.open(p, MiEmpresaMenu.class, empresasService.getById(getState().getEmpresaId())))
                 .item(1, this::buildItemEditar, this::editarEmpleado)
                 .item(2, this::buildItemDespedir, this::despedirEmpleado)
                 .build();

@@ -7,14 +7,15 @@ import es.serversurvival.pixelcoins.mercado._shared.accion.OfertaCompradaListene
 import es.serversurvival.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasValidator;
+import es.serversurvival.pixelcoins.transacciones.Movimiento;
 import es.serversurvival.pixelcoins.transacciones.Transaccion;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
+import es.serversurvival.pixelcoins.transacciones.TransaccionesSaver;
 import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
 public final class ComprarOfertaUseCase implements UseCaseHandler<ComprarOfertaParametros> {
-    private final TransaccionesService transaccionesService;
+    private final TransaccionesSaver transaccionesSaver;
     private final OfertaCustomCaller ofertaAccionCaller;
     private final OfertasValidator ofertasValidator;
     private final OfertasService ofertasService;
@@ -29,7 +30,7 @@ public final class ComprarOfertaUseCase implements UseCaseHandler<ComprarOfertaP
         ofertaAComprar = ofertaAComprar.decrementarCantidad();
 
         decrementarCantidadOBorrar(ofertaAComprar);
-        transaccionesService.save(Transaccion.builder()
+        transaccionesSaver.save(Transaccion.builder()
                 .pagadoId(ofertaAComprar.getVendedorId())
                 .pagadorId(parametros.getJugadorId())
                 .pixelcoins(ofertaAComprar.getPrecio())

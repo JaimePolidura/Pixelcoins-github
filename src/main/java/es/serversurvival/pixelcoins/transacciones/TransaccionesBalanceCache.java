@@ -10,20 +10,17 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 @AllArgsConstructor
-public final class TransaccionesBalanceCache {
+public class TransaccionesBalanceCache {
     private final Map<UUID, AtomicDouble> balanceByEntidadId;
 
     public TransaccionesBalanceCache() {
         this.balanceByEntidadId = new ConcurrentHashMap<>();
     }
 
-    public double get(UUID entidadId,
-                      Function<UUID, Double> pagadoPixelcoinsDb,
-                      Function<UUID, Double> pagadorPixelcoinsDb) {
+    public double get(UUID entidadId, Function<UUID, Double> callbackPixelcoinsBalance){
         if(!balanceByEntidadId.containsKey(entidadId)){
             balanceByEntidadId.putIfAbsent(entidadId, new AtomicDouble(0));
-            return balanceByEntidadId.get(entidadId)
-                    .addAndGet(pagadoPixelcoinsDb.apply(entidadId) - pagadorPixelcoinsDb.apply(entidadId));
+            balanceByEntidadId.get(entidadId).addAndGet(callbackPixelcoinsBalance.apply(entidadId));
         }
 
         return balanceByEntidadId.get(entidadId).get();

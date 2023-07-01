@@ -6,7 +6,6 @@ import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.menustate.AfterShow;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival.Pixelcoin;
-import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.jugadores.perfil.PerfilMenu;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
@@ -25,7 +24,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +67,7 @@ public final class TopMenu extends Menu implements AfterShow {
                 .item(6, buildTopMorososJugadoresItem())
                 .item(7, buildItemPeoresOperacioensBolsa())
                 .item(8, buildItemTopActivosBolsa())
-                .item(9, MenuItems.GO_BACK, (p, e) -> this.menuService.open(p, PerfilMenu.class))
+                .item(9, MenuItems.GO_MENU_BACK, (p, e) -> this.menuService.open(p, PerfilMenu.class))
                 .build();
     }
 

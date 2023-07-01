@@ -57,7 +57,7 @@ public final class MisEmpleosMenu extends Menu {
                 .title(DARK_RED + "" + BOLD + "        TUS EMPLEOS")
                 .item(1, buildItemInfo())
                 .items(2, this::buildItemsEmpleos, this::dejarEmpleo)
-                .breakpoint(7, MenuItems.GO_BACK, (p, e) -> menuService.open(p, PerfilMenu.class))
+                .breakpoint(7, MenuItems.GO_MENU_BACK, (p, e) -> menuService.open(p, PerfilMenu.class))
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
                         .forward(9, Material.GREEN_WOOL)

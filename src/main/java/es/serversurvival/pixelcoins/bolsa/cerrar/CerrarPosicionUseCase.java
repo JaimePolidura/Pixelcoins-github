@@ -12,8 +12,9 @@ import es.serversurvival.pixelcoins.bolsa._shared.premarket.application.AbridorO
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.Posicion;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.application.PosicionesService;
 import es.serversurvival.pixelcoins.bolsa._shared.premarket.application.OrdenesPremarketService;
+import es.serversurvival.pixelcoins.transacciones.Movimiento;
 import es.serversurvival.pixelcoins.transacciones.Transaccion;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
+import es.serversurvival.pixelcoins.transacciones.TransaccionesSaver;
 import lombok.AllArgsConstructor;
 
 @UseCase
@@ -23,8 +24,8 @@ public final class CerrarPosicionUseCase implements UseCaseHandler<CerrarPosicio
     private final AbridorOrdenesPremarket abridorOrdenesPremarket;
     private final OrdenesPremarketService ordenesPremarketService;
     private final DependenciesRepository dependenciesRepository;
-    private final TransaccionesService transaccionesService;
     private final ActivosBolsaService activosBolsaService;
+    private final TransaccionesSaver transaccionesSaver;
     private final PosicionesService posicionesService;
     private final BolsaValidator validator;
     private final EventBus eventBus;
@@ -53,7 +54,7 @@ public final class CerrarPosicionUseCase implements UseCaseHandler<CerrarPosicio
         posicionesService.savePosicionAbiertaConNuevaCantidad(posicionAbierta);
         posicionesService.save(posicionCerrada);
         ordenesPremarketService.deletebyPosicionAbiertId(posicionAbierta.getPosicionId());
-        transaccionesService.save(Transaccion.builder()
+        transaccionesSaver.save(Transaccion.builder()
                 .pagadoId(parametros.getJugadorId())
                 .tipo(posicionCerrada.getTipoApuesta().getTipoTransaccionCerrar())
                 .pixelcoins(valorPosicion)

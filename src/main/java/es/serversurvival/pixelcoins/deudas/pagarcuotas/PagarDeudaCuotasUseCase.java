@@ -6,9 +6,7 @@ import es.serversurvival._shared.TiempoService;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
-import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
-import es.serversurvival.pixelcoins.transacciones.Transaccion;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
+import es.serversurvival.pixelcoins.transacciones.*;
 import es.serversurvival.pixelcoins.deudas._shared.domain.Deuda;
 import es.serversurvival.pixelcoins.deudas._shared.application.DeudasService;
 import lombok.AllArgsConstructor;
@@ -18,7 +16,8 @@ import static es.jaime.javaddd.application.utils.Utils.*;
 @UseCase
 @AllArgsConstructor
 public final class PagarDeudaCuotasUseCase implements UseCaseHandler<PagarDeudaCuotasParametros> {
-    private final TransaccionesService transaccionesService;
+    private final TransaccionesBalanceService transaccionesBalanceService;
+    private final TransaccionesSaver transaccionesSaver;
     private final OfertasService ofertasService;
     private final DeudasService deudasService;
     private final TiempoService tiempoService;
@@ -32,14 +31,14 @@ public final class PagarDeudaCuotasUseCase implements UseCaseHandler<PagarDeudaC
     }
 
     private void pagarCuota(Deuda deuda) {
-        boolean deudorTienePixelcoins = transaccionesService.getBalancePixelcoins(deuda.getDeudorJugadorId()) >= deuda.getCuota();
+        boolean deudorTienePixelcoins = transaccionesBalanceService.get(deuda.getDeudorJugadorId()) >= deuda.getCuota();
 
         if(!deudorTienePixelcoins){
             anotarImpagoDeudaCuota(deuda);
             return;
         }
 
-        transaccionesService.save(Transaccion.builder()
+        transaccionesSaver.save(Transaccion.builder()
                 .pagadorId(deuda.getDeudorJugadorId())
                 .pagadoId(deuda.getAcredorJugadorId())
                 .pixelcoins(deuda.getCuota())

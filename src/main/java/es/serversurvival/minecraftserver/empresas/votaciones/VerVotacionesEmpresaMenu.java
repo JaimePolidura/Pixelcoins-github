@@ -65,7 +65,7 @@ public final class VerVotacionesEmpresaMenu extends Menu<Empresa> implements Aft
                 .title(DARK_RED + "" + BOLD + "Votaciones: " + getState().getNombre())
                 .item(1, buildItemInfo())
                 .items(2, buildItemVotaciones(), this::abrirVotarMenu)
-                .breakpoint(7, MenuItems.GO_BACK, this::irAMiEmpresaMenu)
+                .breakpoint(7, MenuItems.GO_MENU_BACK, this::irAMiEmpresaMenu)
                 .paginated(PaginationConfiguration.builder()
                         .forward(9, Material.GREEN_WOOL)
                         .backward(8, Material.RED_WOOL)

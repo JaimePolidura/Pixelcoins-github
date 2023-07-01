@@ -5,20 +5,21 @@ import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.Validador;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
+import es.serversurvival.pixelcoins.transacciones.Movimiento;
 import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
-import es.serversurvival.pixelcoins.transacciones.Transaccion;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.domain.AccionistaEmpresa;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.AccionistasEmpresasService;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
+import es.serversurvival.pixelcoins.transacciones.Transaccion;
+import es.serversurvival.pixelcoins.transacciones.TransaccionesSaver;
 import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
 public final class RepartirDividendosUseCase implements UseCaseHandler<RepartirDividendosParametros> {
     private final AccionistasEmpresasService accionistasEmpresasService;
-    private final TransaccionesService transaccionesService;
+    private final TransaccionesSaver transaccionesSaver;
     private final EmpresasValidador empresasValidador;
     private final EmpresasService empresasService;
     private final Validador validador;
@@ -43,7 +44,7 @@ public final class RepartirDividendosUseCase implements UseCaseHandler<RepartirD
     }
 
     private void repartirDividendo(AccionistaEmpresa accionista, double dividendoPorAccion) {
-        this.transaccionesService.save(Transaccion.builder()
+        transaccionesSaver.save(Transaccion.builder()
                         .pagadorId(accionista.getEmpresaId())
                         .pagadoId(accionista.getAccionisaJugadorId())
                         .tipo(TipoTransaccion.EMPRESAS_DIVIDENDO)

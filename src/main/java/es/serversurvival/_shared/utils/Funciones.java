@@ -44,6 +44,12 @@ public final class Funciones {
                 ChatColor.RED +   formatNumero(pixelcoins) + " PC " + ChatColor.GOLD;
     }
 
+    public static String formatPixelcoinsResultado(double pixelcoins) {
+        return pixelcoins >= 0 ?
+                ChatColor.GREEN + "+" + formatNumero(pixelcoins) + " PC " + ChatColor.GOLD :
+                ChatColor.RED +         formatNumero(pixelcoins) + " PC " + ChatColor.GOLD;
+    }
+
     public static String formatNumero(double numero) {
         return Funciones.FORMATEA.format(Funciones.redondeoDecimales(numero, 2));
     }

@@ -4,9 +4,9 @@ import es.dependencyinjector.dependencies.annotations.Service;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.domain.AccionistaEmpresa;
 import es.serversurvival.pixelcoins.jugadores.patrimonio.CalculadorPatrimonio;
 import es.serversurvival.pixelcoins.jugadores.patrimonio.TipoCuentaPatrimonio;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
+import es.serversurvival.pixelcoins.transacciones.TransaccionesBalanceService;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -15,8 +15,8 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public final class EmpresasAccionesCalculadorPatrimonio implements CalculadorPatrimonio {
+    private final TransaccionesBalanceService transaccionesBalanceService;
     private final AccionistasEmpresasService accionistasEmpresasService;
-    private final TransaccionesService transaccionesService;
     private final EmpresasService empresasService;
 
     @Override
@@ -26,7 +26,7 @@ public final class EmpresasAccionesCalculadorPatrimonio implements CalculadorPat
 
         for (AccionistaEmpresa accion : acciones) {
             Empresa empresa = empresasService.getById(accion.getEmpresaId());
-            double pixelcoinsEmpresa = transaccionesService.getBalancePixelcoins(empresa.getEmpresaId());
+            double pixelcoinsEmpresa = transaccionesBalanceService.get(empresa.getEmpresaId());
             double porcentajeEmpresa = (double) accion.getNAcciones() / empresa.getNTotalAcciones();
 
             valorTotal += porcentajeEmpresa * pixelcoinsEmpresa;

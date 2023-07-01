@@ -5,15 +5,16 @@ import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.Validador;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
+import es.serversurvival.pixelcoins.transacciones.Movimiento;
 import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
 import es.serversurvival.pixelcoins.transacciones.Transaccion;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
+import es.serversurvival.pixelcoins.transacciones.TransaccionesSaver;
 import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
 public final class ComprarServicioUseCase implements UseCaseHandler<ComprarServicioParametros> {
-    private final TransaccionesService transaccionesService;
+    private final TransaccionesSaver transaccionesSaver;
     private final EmpresasValidador empresasValidador;
     private final Validador validador;
     private final EventBus eventBus;
@@ -25,7 +26,7 @@ public final class ComprarServicioUseCase implements UseCaseHandler<ComprarServi
         empresasValidador.noEmpleadoEmpresa(parametros.getEmpresaId(), parametros.getJugadorId(), "Eres empleado de la empresa, no puedes pagarla`");
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
 
-        this.transaccionesService.save(Transaccion.builder()
+        transaccionesSaver.save(Transaccion.builder()
                 .pagadorId(parametros.getJugadorId())
                 .pagadoId(parametros.getEmpresaId())
                 .pixelcoins(parametros.getPixelcoins())

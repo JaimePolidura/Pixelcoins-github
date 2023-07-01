@@ -1,5 +1,6 @@
 package es.serversurvival.pixelcoins.transacciones;
 
+
 import es.serversurvival._shared.utils.Funciones;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,8 +22,8 @@ public final class Transaccion {
     @Getter private LocalDateTime fecha;
     @Getter private String objeto;
 
-    public static TransaccionBuilder builder() {
-        return new TransaccionBuilder();
+    public static Transaccion.TransaccionBuilder builder() {
+        return new Transaccion.TransaccionBuilder();
     }
 
     public static class TransaccionBuilder {
@@ -42,32 +43,32 @@ public final class Transaccion {
             this.objeto = "";
         }
 
-        public TransaccionBuilder tipo(TipoTransaccion tipo) {
+        public Transaccion.TransaccionBuilder tipo(TipoTransaccion tipo) {
             this.tipo = tipo;
             return this;
         }
 
-        public TransaccionBuilder pagadorId(UUID pagadorId) {
+        public Transaccion.TransaccionBuilder pagadorId(UUID pagadorId) {
             this.pagadorId = pagadorId;
             return this;
         }
 
-        public TransaccionBuilder pagadoId(UUID pagadoId) {
+        public Transaccion.TransaccionBuilder pagadoId(UUID pagadoId) {
             this.pagadoId = pagadoId;
             return this;
         }
 
-        public TransaccionBuilder pixelcoins(double pixelcoins) {
+        public Transaccion.TransaccionBuilder pixelcoins(double pixelcoins) {
             this.pixelcoins = pixelcoins;
             return this;
         }
 
-        public TransaccionBuilder objeto(UUID objeto) {
+        public Transaccion.TransaccionBuilder objeto(UUID objeto) {
             this.objeto = objeto.toString();
             return this;
         }
 
-        public TransaccionBuilder objeto(String objeto) {
+        public Transaccion.TransaccionBuilder objeto(String objeto) {
             this.objeto = objeto;
             return this;
         }

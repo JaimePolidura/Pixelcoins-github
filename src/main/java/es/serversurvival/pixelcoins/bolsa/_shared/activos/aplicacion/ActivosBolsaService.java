@@ -18,7 +18,7 @@ public final class ActivosBolsaService {
     private final ActivoBolsaRepository repository;
     private final Cache<UUID, ActivoBolsa> cacheById;
 
-    public ActivosBolsaService(ActivoBolsaRepository repository, Cache<UUID, ActivoBolsa> cacheById) {
+    public ActivosBolsaService(ActivoBolsaRepository repository) {
         this.cacheById = new MUCache<>(50);
         this.repository = repository;
     }

@@ -4,9 +4,7 @@ import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.Validador;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
-import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
-import es.serversurvival.pixelcoins.transacciones.Transaccion;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
+import es.serversurvival.pixelcoins.transacciones.*;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.Jugador;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
@@ -21,7 +19,8 @@ import org.bukkit.inventory.ItemStack;
 @UseCase
 @AllArgsConstructor
 public final class SacarMaxItemUseCase implements UseCaseHandler<SacarMaxItemParametros> {
-    private final TransaccionesService transaccionesService;
+    private final TransaccionesBalanceService transaccionesBalanceService;
+    private final TransaccionesSaver transaccionesSaver;
     private final JugadoresService jugadoresService;
     private final Validador validador;
     private final EventBus eventBus;
@@ -30,7 +29,7 @@ public final class SacarMaxItemUseCase implements UseCaseHandler<SacarMaxItemPar
     public void handle(SacarMaxItemParametros parametros) {
         validador.jugadorTienePixelcoins(parametros.getJugadorId(), parametros.getTipoCambio().cambio);
 
-        double pixelcoinsJugador = transaccionesService.getBalancePixelcoins(parametros.getJugadorId());
+        double pixelcoinsJugador = transaccionesBalanceService.get(parametros.getJugadorId());
         Jugador jugador = jugadoresService.getById(parametros.getJugadorId());
 
         switch (parametros.getTipoCambio()) {
@@ -119,7 +118,7 @@ public final class SacarMaxItemUseCase implements UseCaseHandler<SacarMaxItemPar
     }
 
     private void decrementarPixelcoins(Jugador jugador, double pixelcoinsADecrementar, TipoCambioPixelcoins tipoCambioPixelcoins) {
-        this.transaccionesService.save(Transaccion.builder()
+        transaccionesSaver.save(Transaccion.builder()
                         .tipo(TipoTransaccion.JUGADORES_CAMBIO_SACAR_MAX_ITEM)
                         .objeto(tipoCambioPixelcoins.name())
                         .pagadorId(jugador.getJugadorId())

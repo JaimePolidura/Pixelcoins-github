@@ -9,7 +9,7 @@ import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.jugadores.cambiar.TipoCambioPixelcoins;
 import es.serversurvival.pixelcoins.jugadores.cambiar.sacarItem.SacarItemParametros;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesService;
+import es.serversurvival.pixelcoins.transacciones.TransaccionesBalanceService;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -26,7 +26,7 @@ import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
 public final class SacarItemMenu extends Menu {
-    private final TransaccionesService transaccionesService;
+    private final TransaccionesBalanceService transaccionesBalanceService;
     private final UseCaseBus useCaseBus;
 
     @Override
@@ -53,7 +53,7 @@ public final class SacarItemMenu extends Menu {
     }
 
     private void onClick(Player player, InventoryClickEvent event) {
-        double pixelcoinsJugador = transaccionesService.getBalancePixelcoins(player.getUniqueId());
+        double pixelcoinsJugador = transaccionesBalanceService.get(player.getUniqueId());
 
         ItemStack itemClickeado = event.getCurrentItem();
         int espacios = getEspaciosOcupados(player.getInventory());
@@ -108,7 +108,7 @@ public final class SacarItemMenu extends Menu {
     }
 
     public ItemStack buildItem (UUID jugadorId, String itemACambiar, double cambio, Material itemMaterial) {
-        double pilxelcoinsJugaodor = transaccionesService.getBalancePixelcoins(jugadorId);
+        double pilxelcoinsJugaodor = transaccionesBalanceService.get(jugadorId);
 
         String displayName = MenuItems.CLICKEABLE + "SACAR UN " + itemACambiar;
         List<String> lore = new ArrayList<>();
