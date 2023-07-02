@@ -7,6 +7,7 @@ import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.VerOfertasMercadoMenu;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
+import es.serversurvival.pixelcoins.mensajes._shared.application.EnviadorMensajes;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival.pixelcoins.tienda._shared.OfertaTiendaItemMinecraft;
@@ -21,9 +22,9 @@ import static org.bukkit.ChatColor.*;
 public final class TiendaMenu extends VerOfertasMercadoMenu<OfertaTiendaItemMinecraft> {
     private final JugadoresService jugadoresService;
 
-    public TiendaMenu(SyncMenuService syncMenuService, OfertasService ofertasService, MenuService menuService,
-                      UseCaseBus useCaseBus, JugadoresService jugadoresService) {
-        super(syncMenuService, ofertasService, menuService, useCaseBus);
+    public TiendaMenu(EnviadorMensajes enviadorMensajes, SyncMenuService syncMenuService, OfertasService ofertasService,
+                      MenuService menuService, UseCaseBus useCaseBus, JugadoresService jugadoresService) {
+        super(enviadorMensajes, syncMenuService, ofertasService, menuService, useCaseBus);
         this.jugadoresService = jugadoresService;
     }
 

@@ -43,15 +43,6 @@ public final class MinecraftUtils {
                 .forEach(player -> player.sendMessage(mensaje));
     }
 
-    public static void enviarMensajeYSonido(UUID jugadorId, String mensaje, Sound sound) {
-        Player player = Bukkit.getPlayer(jugadorId);
-
-        if(player != null){
-            player.sendMessage(mensaje);
-            player.playSound(player.getLocation(), sound, 10, 1);
-        }
-    }
-
     public static void enviarMensajeYSonido (Player player, String mensaje, Sound sound) {
         player.sendMessage(mensaje);
         player.playSound(player.getLocation(), sound, 10, 1);

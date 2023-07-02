@@ -36,13 +36,6 @@ public final class VenderAccionEmpresaPrecioSelectorMenu extends NumberSelectorM
 
         var menu = this.menuService.buildMenu(player, MercadoAccionesEmpresasMenu.class);
         this.syncMenuService.sync(menu);
-
-        enviarMensajeYSonido(player, GOLD + "Al ser un accion de una empresa del servidor de minecraft. Se ha puesta " +
-                        "la oferta de venta en el mercado de cantidad. Para consultar el mercado: " + AQUA + "/empresas mercado",
-                Sound.ENTITY_PLAYER_LEVELUP);
-
-        broadcastExcept(player, GOLD + player.getName() + " ha subido cantidad de la empresa del servidor: " +
-                this.getState().empresa.getNombre() + AQUA + " /empresas mercado");
     }
 
     @Override

@@ -44,6 +44,7 @@ public final class ProponerNuevoDirectorUseCase implements UseCaseHandler<Propon
                 .empresaId(parametros.getEmpresaId())
                 .build());
 
-        eventBus.publish(new NuevoDirectorPropuesto(parametros));
+        eventBus.publish(new NuevoDirectorPropuesto(parametros.getJugadorId(), parametros.getEmpresaId(),
+                parametros.getNuevoDirectorId(), parametros.getDescripccion()));
     }
 }

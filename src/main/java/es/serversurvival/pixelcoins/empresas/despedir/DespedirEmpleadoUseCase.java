@@ -28,6 +28,6 @@ public final class DespedirEmpleadoUseCase implements UseCaseHandler<DespedirEmp
 
         empleadosService.save(empleado.despedir(parametros.getCausa()));
 
-        eventBus.publish(new EmpleadoDespedido(parametros.getEmpleadoIdADespedir()));
+        eventBus.publish(new EmpleadoDespedido(parametros.getCausa(), parametros.getEmpleadoIdADespedir(), parametros.getEmpresaId()));
     }
 }

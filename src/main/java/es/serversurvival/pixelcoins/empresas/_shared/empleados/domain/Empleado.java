@@ -42,7 +42,7 @@ public final class Empleado {
 
     public Empleado editar(EditarEmpleadoParametros parametros) {
         return new Empleado(empleadoId, empleadoJugadorId, empresaId, parametros.getNuevaDescripccion(), parametros.getNuevoSueldo(),
-                parametros.getNuevoPeriodoPago(), parametros.getNuevoPeriodoPago() == periodoPagoMs ? LocalDateTime.now() : fechaUltimoPago ,
+                parametros.getNuevoPeriodoPagoMs(), parametros.getNuevoPeriodoPagoMs() == periodoPagoMs ? LocalDateTime.now() : fechaUltimoPago ,
                 fechaContratacion, estaContratado, fechaDespido, causaDespido);
     }
 

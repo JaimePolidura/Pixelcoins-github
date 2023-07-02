@@ -10,6 +10,7 @@ import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.bukkitclassmapper._shared.utils.ItemUtils;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
+import es.serversurvival.pixelcoins.mensajes._shared.application.EnviadorMensajes;
 import es.serversurvival.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
@@ -28,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static es.serversurvival.minecraftserver._shared.MinecraftUtils.enviarMensajeYSonido;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.BOLD;
 
@@ -37,6 +37,7 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
     public final static String PROPIETARIO_OFERTA_ITEM_DISPLAYNAME = RED + "" + BOLD + UNDERLINE + "RETIRAR";
     public final static String NO_PROPIETARIO_OFERTA_DISPLAYNAME = AQUA + "" + BOLD + UNDERLINE + "COMPRAR";
 
+    protected final EnviadorMensajes enviadorMensajes;
     protected final SyncMenuService syncMenuService;
     protected final OfertasService ofertasService;
     protected final MenuService menuService;
@@ -95,8 +96,10 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
         }else{
             comprarOferta(oferta, event.getCurrentItem());
 
-            enviarMensajeYSonido(player.getUniqueId(), mensajeCompraExsitosaAlComprador(oferta, item), Sound.ENTITY_EXPERIENCE_ORB_PICKUP);
-            enviarMensajeYSonido(oferta.getVendedorId(), mensajeCompraExsitosaAlVendedor(oferta, item, player.getName()), Sound.ENTITY_PLAYER_LEVELUP);
+            enviadorMensajes.enviarMensajeYSonido(player.getUniqueId(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP,
+                    mensajeCompraExsitosaAlComprador(oferta, item));
+            enviadorMensajes.enviarMensajeYSonido(oferta.getVendedorId(), Sound.ENTITY_PLAYER_LEVELUP,
+                    mensajeCompraExsitosaAlVendedor(oferta, item, player.getName()));
         }
     }
 

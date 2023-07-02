@@ -6,6 +6,7 @@ import es.bukkitbettermenus.modules.sync.SyncMenuService;
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
 import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver.tienda.vertienda.TiendaMenu;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.tienda.ponerventa.PonerVentaTiendaItemMinecraftParametros;
@@ -48,7 +49,7 @@ public final class VenderObjetoTiendaCommandRunner implements CommandRunnerArgs<
         player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
         player.getInventory().clear(player.getInventory().getHeldItemSlot());
 
-        Bukkit.broadcastMessage(GOLD + player.getName() + " ha subido a la tienda " + itemASubirTienda.getAmount() + " de " + itemASubirTienda.getType()
+        MinecraftUtils.broadcastExcept(player, GOLD + player.getName() + " ha subido a la tienda " + itemASubirTienda.getAmount() + " de " + itemASubirTienda.getType()
                 + " por " + formatPixelcoins(comando.getPrecio()));
     }
 

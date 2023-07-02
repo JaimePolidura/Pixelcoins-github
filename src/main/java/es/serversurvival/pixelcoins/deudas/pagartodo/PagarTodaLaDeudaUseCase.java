@@ -44,6 +44,6 @@ public final class PagarTodaLaDeudaUseCase implements UseCaseHandler<PagarTodaLa
                 .tipo(TipoTransaccion.DEUDAS_PAGO_COMPLETO)
                 .build());
 
-        eventBus.publish(new DeudaPagadoPorCompleto(parametros.getDeudaId(), deuda.getDeudorJugadorId()));
+        eventBus.publish(new DeudaPagadoPorCompleto(parametros.getDeudaId(), deuda.getDeudorJugadorId(), pixelcoinsRestantes));
     }
 }

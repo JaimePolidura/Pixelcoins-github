@@ -39,7 +39,8 @@ public final class EmpresasIPOUseCase implements UseCaseHandler<EmpresaIPOParame
 
         empresasService.save(empresasService.getById(parametros.getEmpresaId()).marcarComoCotizada());
 
-        eventBus.publish(new EmpresaIPORealizada(parametros));
+        eventBus.publish(new EmpresaIPORealizada(parametros.getEmpresaId(), parametros.getNumeroAccionesVender(),
+                parametros.getPrecioPorAccion()));
     }
 
     public void validar(EmpresaIPOParametros parametros) {

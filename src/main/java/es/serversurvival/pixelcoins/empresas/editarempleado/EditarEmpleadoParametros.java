@@ -15,5 +15,5 @@ public final class EditarEmpleadoParametros implements ParametrosUseCase {
     @Getter private final UUID empleadoIdEdtiar;
     @Getter private final String nuevaDescripccion;
     @Getter private final double nuevoSueldo;
-    @Getter private final long nuevoPeriodoPago;
+    @Getter private final long nuevoPeriodoPagoMs;
 }

@@ -1,4 +1,4 @@
-package es.serversurvival.pixelcoins.empresas.comprarservicio;
+package es.serversurvival.pixelcoins.empresas.pagar;
 
 import es.serversurvival.pixelcoins._shared.usecases.ParametrosUseCase;
 import lombok.AllArgsConstructor;
@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Builder
 @AllArgsConstructor
-public final class ComprarServicioParametros implements ParametrosUseCase {
+public final class PagarEmpresaParametros implements ParametrosUseCase {
     @Getter private final UUID jugadorId;
     @Getter private final UUID empresaId;
     @Getter private final double pixelcoins;

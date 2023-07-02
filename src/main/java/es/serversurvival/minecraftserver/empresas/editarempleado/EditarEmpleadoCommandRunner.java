@@ -39,13 +39,13 @@ public final class EditarEmpleadoCommandRunner implements CommandRunnerArgs<Edit
                 .jugadorId(player.getUniqueId())
                 .nuevoSueldo(empleado.getSueldo())
                 .nuevaDescripccion(empleado.getDescripccion())
-                .nuevoPeriodoPago(empleado.getPeriodoPagoMs())
+                .nuevoPeriodoPagoMs(empleado.getPeriodoPagoMs())
                 .empresaId(empresa.getEmpresaId());
 
         switch (comando.getQueSeEdita().toLowerCase()) {
             case "sueldo" -> useCaseBus.handle(editarEmpleadoBuilder.nuevoSueldo(comando.nuevoValorToDouble()).build());
             case "cargo", "descipccion", "desc" -> useCaseBus.handle(editarEmpleadoBuilder.nuevaDescripccion(comando.getNuevoValor()).build());
-            case "periodopago" -> useCaseBus.handle(editarEmpleadoBuilder.nuevoPeriodoPago(
+            case "periodopago" -> useCaseBus.handle(editarEmpleadoBuilder.nuevoPeriodoPagoMs(
                     comando.nuevoValorToLong() * 24 * 60 * 60 * 1000
             ).build());
         }

@@ -63,9 +63,6 @@ public final class PonerVentaDeudaMercadoPrecioSelectorMenu extends NumberSelect
                 .precio(precio)
                 .jugadorId(player.getUniqueId())
                 .build());
-
-        player.sendMessage(GOLD + "Has puesto la deuda en el mercado por " + formatPixelcoins(precio) +
-                "Para ver el mercado " + AQUA + " /deudas mercado");
     }
 
     @Override

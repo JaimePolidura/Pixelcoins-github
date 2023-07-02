@@ -7,12 +7,7 @@ import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import es.serversurvival.pixelcoins.empresas.depositar.DepositarPixelcoinsEmpresaParametros;
 import lombok.AllArgsConstructor;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-
-import static es.serversurvival._shared.utils.Funciones.formatPixelcoins;
-import static es.serversurvival.minecraftserver._shared.MinecraftUtils.enviarMensajeYSonido;
-import static org.bukkit.ChatColor.*;
 
 @Command(
         value = "empresas depositar",
@@ -33,8 +28,5 @@ public final class DepositarPixelcoinsEmpresaCommandRunner implements CommandRun
                 .jugadorId(player.getUniqueId())
                 .pixelcoins(comando.getPixelcoins())
                 .build());
-
-        enviarMensajeYSonido(player, GOLD + "Has depositado " + formatPixelcoins(comando.getPixelcoins())
-                + " en tu empresa: " + DARK_AQUA + comando.getEmpresa(), Sound.ENTITY_PLAYER_LEVELUP);
     }
 }

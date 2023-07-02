@@ -11,4 +11,7 @@ public final class DirectorCambiado extends PixelcoinsEvento {
     @Getter private final UUID empresaId;
     @Getter private final UUID antiguoDirectorJugadorId;
     @Getter private final UUID nuevoDirectorJugadorId;
+    @Getter private final String razonDespido;
+    @Getter private final double nuevoSueldo;
+    @Getter private final long periodoPagoMs;
 }

@@ -25,7 +25,5 @@ public final class DejarEmpleoCommandRunner implements CommandRunnerArgs<DejarEm
         Empresa empresa = empresasService.getByNombre(comando.getEmpresa());
 
         useCaseBus.handle(new DejarEmpleoParametros(player.getUniqueId(), empresa.getEmpresaId()));
-
-        player.sendMessage(GOLD + "Te has ido del trabajo");
     }
 }

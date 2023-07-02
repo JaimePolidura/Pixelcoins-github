@@ -41,7 +41,5 @@ public final class EditarEmpresaCommandRunner implements CommandRunnerArgs<Edita
             case "logotipo", "l" -> useCaseBus.handle(parametrosBuilder.nuevoIcono(itemPlayerHand.getType().toString()).build());
             default -> throw new IllegalArgumentException(String.format("%s no encontrado. Valores disponibles: nombre, descripccion, logitpo", comando.getQueSeEdita().toLowerCase()));
         }
-
-        player.sendMessage(ChatColor.GOLD + "Has editado la empresa");
     }
 }

@@ -38,6 +38,10 @@ public class EmpleadosService {
         return repository.findByEmpleadoJugadorId(empleadoJugadorId);
     }
 
+    public List<Empleado> findEmpleoByEmpresaId(UUID empresaId) {
+        return this.repository.findByEmpresaId(empresaId);
+    }
+
     public List<Empleado> findEmpleoActivoByEmpresaId(UUID empresaId) {
         return this.repository.findByEmpresaId(empresaId).stream()
                 .filter(Empleado::isEstaContratado)

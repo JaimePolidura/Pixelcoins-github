@@ -2,19 +2,12 @@ package es.serversurvival.minecraftserver.empresas.sacar;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import es.serversurvival.pixelcoins.empresas.sacar.SacarPixelcoinsEmpresaParametros;
-import es.serversurvival.pixelcoins.empresas.sacar.SacarPixelcoinsEmpresaUseCase;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-
-import static es.serversurvival.minecraftserver._shared.MinecraftUtils.enviarMensajeYSonido;
-import static org.bukkit.ChatColor.*;
 
 @Command(
         value = "empresas sacar",
@@ -35,8 +28,5 @@ public final class SacarPixelcoinsEmpresaCommandRunner implements CommandRunnerA
                 .jugadorId(player.getUniqueId())
                 .pixelcoins(comando.getPixelcoins())
                 .build());
-
-        enviarMensajeYSonido(player, GOLD + "Has sacado " + Funciones.formatPixelcoins(comando.getPixelcoins())
-                + GOLD + "de la empresa " + comando.getEmpresa(), Sound.ENTITY_PLAYER_LEVELUP);
     }
 }

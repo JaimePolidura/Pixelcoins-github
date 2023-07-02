@@ -34,6 +34,6 @@ public final class CrearEmpresaUseCase implements UseCaseHandler<CrearEmpresaPar
         empleadosService.save(Empleado.fromDirectorEmpresa(empresa));
         accionistasEmpresasService.save(AccionistaEmpresa.fromFundadorEmpresa(empresa));
 
-        eventBus.publish(new EmpresaCreada(empresa.getEmpresaId()));
+        eventBus.publish(new EmpresaCreada(empresa));
     }
 }

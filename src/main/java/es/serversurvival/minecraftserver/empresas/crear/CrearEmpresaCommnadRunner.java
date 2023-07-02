@@ -31,10 +31,5 @@ public final class CrearEmpresaCommnadRunner implements CommandRunnerArgs<CrearE
                 .icono(Material.DIAMOND_PICKAXE.toString())
                 .jugadorCreadorId(player.getUniqueId())
                 .build());
-
-        enviarMensajeYSonido(player, GOLD + "Has creado la empresa " + comando.getEmpresa() + " Comandos utiles: " +
-                AQUA + "/empresas depositar, /empresas contratar, /empresas logotipo, /empresas vertodas, /empresas miempresa "+comando.getEmpresa()+" /empresas editar", Sound.ENTITY_PLAYER_LEVELUP);
-
-        broadcastExcept(player, GOLD + player.getName() + " ha creado una nueva empresa: " + DARK_AQUA + comando.getEmpresa());
     }
 }

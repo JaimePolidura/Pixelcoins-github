@@ -23,13 +23,15 @@ public final class EditarEmpresaUseCase implements UseCaseHandler<EditarEmpresaP
         empresasValidador.nombreEmpresaCorrecta(parametros.getNuevoNombre());
         empresasValidador.validarIcono(parametros.getNuevoNombre());
 
-        Empresa empresa = empresasService.getById(parametros.getEmpresaId());
+        Empresa empresaSinEditar = empresasService.getById(parametros.getEmpresaId());
+        Empresa empresaEditada = empresaSinEditar.editar(parametros);
 
-        if(!empresa.getNombre().equalsIgnoreCase(parametros.getNuevoNombre()))
+        if(!empresaSinEditar.getNombre().equalsIgnoreCase(parametros.getNuevoNombre()))
             empresasValidador.empresaNoExiste(parametros.getNuevoNombre());
 
-        empresasService.save(empresa.editar(parametros));
+        empresasService.save(empresaEditada);
 
-        eventBus.publish(new EmpresaEditada(parametros.getEmpresaId()));
+        eventBus.publish(new EmpresaEditada(empresaSinEditar, empresaEditada, parametros.getNuevoNombre(), parametros.getNuevaDescripccion(),
+                parametros.getNuevoIcono()));
     }
 }

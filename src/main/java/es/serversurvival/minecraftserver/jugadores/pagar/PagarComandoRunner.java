@@ -2,17 +2,10 @@ package es.serversurvival.minecraftserver.jugadores.pagar;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.jugadores.pagar.HacerPagarParametros;
 import lombok.AllArgsConstructor;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-
-import static es.serversurvival._shared.utils.Funciones.*;
-import static org.bukkit.ChatColor.GOLD;
-import static org.bukkit.ChatColor.GREEN;
 
 @Command(
         value = "pagar",
@@ -33,9 +26,6 @@ public class PagarComandoRunner implements CommandRunnerArgs<PagarComando> {
     }
 
     private void sendMessage (Player pagador, Player pagado, double pixelcoins) {
-        pagador.sendMessage(GOLD + "Has pagado: " + formatPixelcoins(pixelcoins) + GOLD + "a " + pagado.getName());
 
-        MinecraftUtils.enviarMensajeYSonido(pagado.getUniqueId(),GOLD + pagador.getName() + " te ha pagado " + formatPixelcoins(pixelcoins),
-                Sound.ENTITY_PLAYER_LEVELUP);
     }
 }

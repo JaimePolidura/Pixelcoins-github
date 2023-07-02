@@ -41,12 +41,6 @@ public final class PrestarConfirmacionMenu extends ConfirmacionMenu<PrestarConfi
                 .deudorJugadorId(getPlayer().getUniqueId())
                 .acredorJugadorId(state.getAcredorJugadorId())
                 .build());
-
-        String enviadorNombre = jugadoresService.getNombreById(state.getAcredorJugadorId());
-
-        destinatario.sendMessage(GOLD + "Has aceptado la solicitud de prestamo de " + enviadorNombre + " para ver tus deudas " + AQUA + "/deudas ver");
-        MinecraftUtils.enviarMensajeYSonido(Bukkit.getPlayer(state.getAcredorJugadorId()),
-                GOLD + destinatario.getName() + " te ha aceptado la solicitud de deuda", Sound.ENTITY_PLAYER_LEVELUP);
     }
 
     @Override

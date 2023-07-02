@@ -60,8 +60,6 @@ public final class OpccionesEmpleadoMenu extends Menu<Empleado> implements Befor
                 .jugadorId(player.getUniqueId())
                 .build());
 
-        getPlayer().sendMessage(GOLD + "Has despedido a " + nombreEmpleado + " de la empresa " + nombreEmpresa);
-
         player.closeInventory();
     }
 

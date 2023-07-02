@@ -4,7 +4,6 @@ import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.deudas.vendermercado.PonerVentaDeudaMercadoPrecioSelectorMenu;
 import es.serversurvival.minecraftserver.deudas._shared.DeudaItemLore;
@@ -12,19 +11,19 @@ import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.deudas._shared.domain.Deuda;
 import es.serversurvival.pixelcoins.deudas.cancelar.CancelarDeudaParametros;
 import es.serversurvival.pixelcoins.deudas.pagartodo.PagarTodaLaDeudaParametros;
+import es.serversurvival.pixelcoins.mensajes._shared.application.EnviadorMensajes;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import static es.serversurvival._shared.utils.Funciones.formatPixelcoins;
 import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
 public final class OpccionesDeudaMenu extends Menu<Deuda> {
     private final DeudaItemLore deudaItemMercadoLore;
+    private final EnviadorMensajes enviadorMensajes;
     private final MenuService menuService;
     private final UseCaseBus useCaseBus;
 
@@ -81,23 +80,12 @@ public final class OpccionesDeudaMenu extends Menu<Deuda> {
 
     private void cancelarDeuda(Player player) {
         useCaseBus.handle(CancelarDeudaParametros.of(player.getUniqueId(), getState().getDeudaId()));
-
-        String pixelcoinsDeuda = formatPixelcoins(getState().getPixelcoinsRestantesDePagar());
-        player.sendMessage(GOLD + "Has cancelado la deuda");
         player.closeInventory();
-        MinecraftUtils.enviarMensajeYSonido(getState().getDeudorJugadorId(),
-                player.getName() + " te ha cancelado la deuda que tenia contigo por " + pixelcoinsDeuda,
-                Sound.ENTITY_PLAYER_LEVELUP);
     }
 
     private void pagarDeuda(Player player) {
         useCaseBus.handle(PagarTodaLaDeudaParametros.of(getState().getDeudaId(), player.getUniqueId()));
-
-        player.sendMessage(GOLD + "Has pagado toda la deuda. En total han sido " + formatPixelcoins(- getState().getPixelcoinsRestantesDePagar()));
         player.closeInventory();
-        MinecraftUtils.enviarMensajeYSonido(getState().getAcredorJugadorId(),
-                GOLD + player.getName() + " te ha pagada una deuda por " + formatPixelcoins(getState().getPixelcoinsRestantesDePagar()),
-                Sound.ENTITY_PLAYER_LEVELUP);
     }
 
     private boolean esAcredor(Player player) {

@@ -32,8 +32,6 @@ public final class RepartirDividendosConfirmacionMenu extends NumberSelectorMenu
                 .jugadorId(player.getUniqueId())
                 .dividendoPorAccion(dividendoPorAccion)
                 .build());
-
-        enviarMensajeYSonido(player, GOLD + "Se han pagado todos los dividendos", Sound.ENTITY_PLAYER_LEVELUP);
     }
 
     @Override

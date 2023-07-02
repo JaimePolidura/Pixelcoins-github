@@ -1,12 +1,11 @@
 package es.serversurvival.pixelcoins.deudas.cancelar;
 
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
+import es.serversurvival.pixelcoins.deudas._shared.domain.Deuda;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.UUID;
-
 @AllArgsConstructor
 public final class DeudaCancelada extends PixelcoinsEvento {
-    @Getter private final UUID deudaId;
+    @Getter private Deuda deuda;
 }

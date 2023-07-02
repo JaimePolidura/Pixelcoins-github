@@ -3,10 +3,8 @@ package es.serversurvival.minecraftserver.empresas.contratar;
 import es.bukkitbettermenus.MenuService;
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.serversurvival.Pixelcoin;
-import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver.webaction.WebActionException;
 import es.serversurvival.minecraftserver.webaction.WebActionHandler;
-import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import es.serversurvival.pixelcoins.empresas.contratar.ContratarEmpleadoParametros;
@@ -20,9 +18,6 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 import static es.serversurvival._shared.utils.Funciones.*;
-import static es.serversurvival.minecraftserver._shared.MinecraftUtils.enviarMensajeYSonido;
-import static org.bukkit.ChatColor.*;
-import static org.bukkit.Sound.*;
 
 @Service
 @AllArgsConstructor

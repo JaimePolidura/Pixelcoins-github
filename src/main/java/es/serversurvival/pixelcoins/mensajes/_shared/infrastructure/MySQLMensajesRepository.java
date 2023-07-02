@@ -4,6 +4,7 @@ import es.jaime.connection.ConnectionManager;
 import es.jaime.repository.EntityMapper;
 import es.jaime.repository.Repository;
 import es.jaimetruman.delete.Delete;
+import es.jaimetruman.select.Select;
 import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival.pixelcoins.mensajes._shared.domain.Mensaje;
 import es.serversurvival.pixelcoins.mensajes._shared.domain.MensajesRepository;
@@ -28,12 +29,15 @@ public final class MySQLMensajesRepository extends Repository<Mensaje, UUID, Obj
 
     @Override
     public List<Mensaje> findByJugadorIdNoVistos(UUID jugadorId) {
-        return super.buildListFromQuery(String.format("SELECT * FROM %s WHERE jugadorId = '%s' AND fechaVisto IS NULL", TABLE_NAME, jugadorId.toString()));
+        return super.buildListFromQuery(String.format("SELECT * FROM %s WHERE destinatarioId = '%s' AND visto IS FALSE", TABLE_NAME, jugadorId.toString()));
     }
 
     @Override
     public void deleteByFechaVistaLessThan(LocalDateTime lessThan) {
-        super.execute(Delete.from(TABLE_NAME).where("fechaVisto").smaller(lessThan));
+        String query = Delete.from(TABLE_NAME).where("fechaVisto").smaller(lessThan).and("visto").toString();
+        query += " AND visto IS TRUE";
+
+        super.execute(query);
     }
 
     @Override

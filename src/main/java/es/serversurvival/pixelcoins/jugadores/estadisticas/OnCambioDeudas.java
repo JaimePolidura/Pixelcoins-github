@@ -2,8 +2,8 @@ package es.serversurvival.pixelcoins.jugadores.estadisticas;
 
 import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventListener;
-import es.serversurvival.pixelcoins.deudas.pagarcuotas.CuotaDeudaNoPagadaEvento;
-import es.serversurvival.pixelcoins.deudas.pagarcuotas.CuotaDeudaPagadaEvento;
+import es.serversurvival.pixelcoins.deudas.pagarcuotas.CuotaNoPagada;
+import es.serversurvival.pixelcoins.deudas.pagarcuotas.CuotaPagada;
 import es.serversurvival.pixelcoins.deudas.pagartodo.DeudaPagadoPorCompleto;
 import es.serversurvival.pixelcoins.jugadores._shared.estadisticas.domain.JugadorTipoContadorEstadistica;
 import es.serversurvival.pixelcoins.jugadores._shared.estadisticas.application.JugadoresEstadisticasService;
@@ -20,12 +20,12 @@ public final class OnCambioDeudas {
     }
 
     @EventListener
-    public void on(CuotaDeudaPagadaEvento evento) {
+    public void on(CuotaPagada evento) {
         jugadoresEstadisticasService.incrementar(evento.getDeudorJugadorId(), JugadorTipoContadorEstadistica.N_DEUDA_PAGOS);
     }
 
     @EventListener
-    public void on(CuotaDeudaNoPagadaEvento evento) {
+    public void on(CuotaNoPagada evento) {
         jugadoresEstadisticasService.incrementar(evento.getDeudorJugadorId(), JugadorTipoContadorEstadistica.N_DEUDA_INPAGOS);
     }
 }

@@ -31,11 +31,6 @@ public final class ConfirmarIPOMenu extends ConfirmacionMenu<ConfirmarIPOMenu.Co
                 .jugadorId(player.getUniqueId())
                 .empresaId(state.getEmpresa().getEmpresaId())
                 .build());
-
-        player.sendMessage(GOLD + "Has sacado a bolsa la empresa " + state.getEmpresa().getNombre() + AQUA + " /empresas mercado");
-        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-
-        MinecraftUtils.broadcastExcept(player, GOLD + player.getName() + " ha sacado a bolsa " + state.getEmpresa().getNombre() + " " + AQUA + "/empresas mercado");
     }
 
     @Override

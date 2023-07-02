@@ -1,12 +1,11 @@
 package es.serversurvival.minecraftserver.empresas.contratar;
 
 import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.menus.ConfirmacionMenu;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas.contratar.ContratarEmpleadoParametros;
+import es.serversurvival.pixelcoins.mensajes._shared.application.EnviadorMensajes;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.Material;
@@ -18,12 +17,12 @@ import java.util.List;
 import java.util.UUID;
 
 import static es.serversurvival._shared.utils.Funciones.*;
-import static es.serversurvival.minecraftserver._shared.MinecraftUtils.enviarMensajeYSonido;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.Sound.ENTITY_PLAYER_LEVELUP;
 
 @AllArgsConstructor
 public final class ConfirmarOfertaContratacionMenu extends ConfirmacionMenu<ConfirmarOfertaContratacionMenu.State> {
+    private final EnviadorMensajes enviadorMensajes;
     private final UseCaseBus useCaseBus;
 
     @Override
@@ -40,11 +39,11 @@ public final class ConfirmarOfertaContratacionMenu extends ConfirmacionMenu<Conf
                 .sueldo(state.getSueldo())
                 .build());
 
-        enviarMensajeYSonido(jugadorIdContratador, GOLD + "Has contratado a " + getPlayer().getName() +
-                " en la empresa " + state.getEmpresa().getNombre(), ENTITY_PLAYER_LEVELUP) ;
-        enviarMensajeYSonido(jugadorIdAContratar, GOLD + "Has sido contratado en " + state.getEmpresa().getNombre() + "con el cargo " +
-                state.getDescripccion() + " con un sueldo de " + formatPixelcoins(state.getSueldo()) + "/ " +
-                millisToDias(state.getPeriodoPagoSueldoMs()) + " dias", ENTITY_PLAYER_LEVELUP);
+        enviadorMensajes.enviarMensajeYSonido(jugadorIdContratador, ENTITY_PLAYER_LEVELUP,GOLD + "Has contratado a " + getPlayer().getName() +
+                " en la empresa " + state.getEmpresa().getNombre());
+        enviadorMensajes.enviarMensajeYSonido(jugadorIdAContratar, ENTITY_PLAYER_LEVELUP, GOLD + "Has sido contratado en " + state.getEmpresa().getNombre()
+                + "con el cargo " + state.getDescripccion() + " con un sueldo de " + formatPixelcoins(state.getSueldo()) + "/ " +
+                millisToDias(state.getPeriodoPagoSueldoMs()) + " dias");
     }
 
     @Override

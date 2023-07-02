@@ -82,7 +82,7 @@ public final class MisDeudasMenu extends Menu {
         boolean esAcredor = deuda.getAcredorJugadorId().equals(getPlayer().getUniqueId());
 
         return ItemBuilder.of(esAcredor ? Material.GREEN_BANNER : Material.RED_BANNER)
-                .title(CLICKEABLE + "VER")
+                .title(CLICKEABLE + "OPCCIONES")
                 .lore(deudaItemMercadoLore.buildDescDeuda(deuda))
                 .build();
     }

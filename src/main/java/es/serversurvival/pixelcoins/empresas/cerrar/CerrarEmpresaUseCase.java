@@ -42,7 +42,7 @@ public final class CerrarEmpresaUseCase implements UseCaseHandler<CerrarEmpresaP
                 .tipo(TipoTransaccion.EMPRESAS_CERRAR)
                 .build());
 
-        eventBus.publish(new EmpresaCerrada(empresa.getEmpresaId()));
+        eventBus.publish(new EmpresaCerrada(empresa));
     }
 
     private void despedirATodosLosEmpleados(UUID empresaId) {

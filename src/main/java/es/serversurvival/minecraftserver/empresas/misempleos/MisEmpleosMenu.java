@@ -76,8 +76,6 @@ public final class MisEmpleosMenu extends Menu {
         useCaseBus.handle(new DejarEmpleoParametros(player.getUniqueId(), empresaId));
 
         menuService.close(player);
-
-        player.sendMessage(GOLD + "Te has ido del trabajo");
     }
 
     private List<ItemStack> buildItemsEmpleos(Player player) {

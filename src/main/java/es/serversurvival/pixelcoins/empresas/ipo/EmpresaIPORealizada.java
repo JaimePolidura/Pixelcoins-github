@@ -1,10 +1,15 @@
 package es.serversurvival.pixelcoins.empresas.ipo;
 
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 public final class EmpresaIPORealizada extends PixelcoinsEvento {
-    @Getter private final EmpresaIPOParametros empresaIPOParametros;
+    @Getter private final UUID empresaId;
+    @Getter private final int nAccionesAVender;
+    @Getter private final double precioPorAccion;
 }

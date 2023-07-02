@@ -10,6 +10,7 @@ import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.deudas._shared.*;
 import es.serversurvival.pixelcoins.deudas._shared.application.DeudasService;
 import es.serversurvival.pixelcoins.deudas._shared.domain.Deuda;
+import es.serversurvival.pixelcoins.mensajes._shared.application.EnviadorMensajes;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival.minecraftserver.deudas._shared.DeudaItemLore;
@@ -31,15 +32,13 @@ public final class MercadoDeudaMenu extends VerOfertasMercadoMenu<OfertaDeudaMer
     private final JugadoresService jugadoresService;
     private final DeudasService deudasService;
 
-    public MercadoDeudaMenu(SyncMenuService syncMenuService, OfertasService ofertasService, MenuService menuService,
-                            UseCaseBus useCaseBus, DeudaItemLore deudaItemMercadoLore, JugadoresService jugadoresService,
-                            DeudasService deudasService) {
-        super(syncMenuService, ofertasService, menuService, useCaseBus);
+    public MercadoDeudaMenu(EnviadorMensajes enviadorMensajes, SyncMenuService syncMenuService, OfertasService ofertasService,
+                            MenuService menuService, UseCaseBus useCaseBus, DeudaItemLore deudaItemMercadoLore, JugadoresService jugadoresService, DeudasService deudasService) {
+        super(enviadorMensajes, syncMenuService, ofertasService, menuService, useCaseBus);
         this.deudaItemMercadoLore = deudaItemMercadoLore;
         this.jugadoresService = jugadoresService;
         this.deudasService = deudasService;
     }
-
 
     @Override
     public TipoOferta[] tipoOfertas() {

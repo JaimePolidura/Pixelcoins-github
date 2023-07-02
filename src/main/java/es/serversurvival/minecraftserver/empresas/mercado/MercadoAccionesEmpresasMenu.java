@@ -6,6 +6,7 @@ import es.bukkitclassmapper._shared.utils.ItemBuilder;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.empresas.vertodas.VerTodasEmpresasMenu;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
+import es.serversurvival.pixelcoins.mensajes._shared.application.EnviadorMensajes;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.minecraftserver._shared.VerOfertasMercadoMenu;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.OfertaAccionMercado;
@@ -19,7 +20,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,12 +31,13 @@ public final class MercadoAccionesEmpresasMenu extends VerOfertasMercadoMenu<Ofe
     private final JugadoresService jugadoresService;
     private final EmpresasService empresasService;
 
-    public MercadoAccionesEmpresasMenu(SyncMenuService syncMenuService, OfertasService ofertasService, MenuService menuService,
-                                       UseCaseBus useCaseBus, JugadoresService jugadoresService, EmpresasService empresasService) {
-        super(syncMenuService, ofertasService, menuService, useCaseBus);
+    public MercadoAccionesEmpresasMenu(EnviadorMensajes enviadorMensajes, SyncMenuService syncMenuService, OfertasService ofertasService,
+                                       MenuService menuService, UseCaseBus useCaseBus, JugadoresService jugadoresService, EmpresasService empresasService) {
+        super(enviadorMensajes, syncMenuService, ofertasService, menuService, useCaseBus);
         this.jugadoresService = jugadoresService;
         this.empresasService = empresasService;
     }
+
 
     @Override
     public TipoOferta[] tipoOfertas() {

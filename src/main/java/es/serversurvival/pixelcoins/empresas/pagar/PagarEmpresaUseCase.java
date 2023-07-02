@@ -1,11 +1,10 @@
-package es.serversurvival.pixelcoins.empresas.comprarservicio;
+package es.serversurvival.pixelcoins.empresas.pagar;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.Validador;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
-import es.serversurvival.pixelcoins.transacciones.Movimiento;
 import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
 import es.serversurvival.pixelcoins.transacciones.Transaccion;
 import es.serversurvival.pixelcoins.transacciones.TransaccionesSaver;
@@ -13,14 +12,14 @@ import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
-public final class ComprarServicioUseCase implements UseCaseHandler<ComprarServicioParametros> {
+public final class PagarEmpresaUseCase implements UseCaseHandler<PagarEmpresaParametros> {
     private final TransaccionesSaver transaccionesSaver;
     private final EmpresasValidador empresasValidador;
     private final Validador validador;
     private final EventBus eventBus;
 
     @Override
-    public void handle(ComprarServicioParametros parametros) {
+    public void handle(PagarEmpresaParametros parametros) {
         validador.numeroMayorQueCero(parametros.getPixelcoins(), "Pixelcoins");
         validador.jugadorTienePixelcoins(parametros.getJugadorId(), parametros.getPixelcoins());
         empresasValidador.noEmpleadoEmpresa(parametros.getEmpresaId(), parametros.getJugadorId(), "Eres empleado de la empresa, no puedes pagarla`");
@@ -33,6 +32,6 @@ public final class ComprarServicioUseCase implements UseCaseHandler<ComprarServi
                 .tipo(TipoTransaccion.EMPRESAS_COMPRA_SERVICIO)
                 .build());
 
-        eventBus.publish(new EmpresaServicioComprado(parametros.getEmpresaId(), parametros.getJugadorId(), parametros.getPixelcoins()));
+        eventBus.publish(new EmpresaPagada(parametros.getEmpresaId(), parametros.getJugadorId(), parametros.getPixelcoins()));
     }
 }

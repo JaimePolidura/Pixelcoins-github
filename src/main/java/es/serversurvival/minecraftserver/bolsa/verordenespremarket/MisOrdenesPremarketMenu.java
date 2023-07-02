@@ -61,7 +61,6 @@ public final class MisOrdenesPremarketMenu extends Menu {
 
         useCaseBus.handle(new CancelarOrdenPremarketParametros(player.getUniqueId(), ordenId));
         player.closeInventory();
-        player.sendMessage(GOLD + "Has cancelado la orden");
     }
 
     private List<ItemStack> buildItemsOrders(Player player) {

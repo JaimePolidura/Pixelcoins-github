@@ -22,11 +22,12 @@ public final class EditarEmpleadoUseCase implements UseCaseHandler<EditarEmplead
         empresasValidador.empleadoJugadorEmpresaActivo(parametros.getEmpresaId(), empleado.getEmpleadoJugadorId());
         empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
         empresasValidador.sueldoCorrecto(parametros.getNuevoSueldo());
-        empresasValidador.periodoPagoCorrecto(parametros.getNuevoPeriodoPago());
+        empresasValidador.periodoPagoCorrecto(parametros.getNuevoPeriodoPagoMs());
         empresasValidador.descripccionCorrecta(parametros.getNuevaDescripccion());
 
         empleadosService.save(empleado.editar(parametros));
 
-        eventBus.publish(new EmpleadoEditado(parametros.getEmpleadoIdEdtiar()));
+        eventBus.publish(new EmpleadoEditado(parametros.getEmpresaId(), empleado, parametros.getNuevaDescripccion(),
+                parametros.getNuevoSueldo(), parametros.getNuevoPeriodoPagoMs()));
     }
 }

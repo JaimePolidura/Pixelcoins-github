@@ -26,6 +26,5 @@ public final class CerrarEmpresaCommandRunner implements CommandRunnerArgs<Cerra
 
         useCaseBus.handle(new CerrarEmpresaParametros(empresa.getEmpresaId(), player.getUniqueId()));
 
-        player.sendMessage(ChatColor.GOLD + "Has cerrado la empresa");
     }
 }

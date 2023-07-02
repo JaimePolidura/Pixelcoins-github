@@ -81,7 +81,6 @@ public final class SacarItemMenu extends Menu {
         MinecraftUtils.enviarMensajeYSonido(player, GOLD + "Has convertido las pixelcoins: " + formatPixelcoins(-cambioPixelcoins) +
                 "Quedan " + formatPixelcoins(pixelcoinsJugador - cambioPixelcoins), Sound.ENTITY_PLAYER_LEVELUP);
 
-
         updateItemLore(2, pixelcoinsJugador, cambioPixelcoins);
         updateItemLore(3, pixelcoinsJugador, cambioPixelcoins);
         updateItemLore(4, pixelcoinsJugador, cambioPixelcoins);

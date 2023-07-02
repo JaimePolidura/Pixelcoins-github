@@ -2,7 +2,6 @@ package es.serversurvival.minecraftserver.empresas.despedir;
 
 import es.bukkitclassmapper.commands.Command;
 import es.bukkitclassmapper.commands.commandrunners.CommandRunnerArgs;
-import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.domain.Empleado;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.application.EmpleadosService;
@@ -10,13 +9,11 @@ import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import es.serversurvival.pixelcoins.empresas.despedir.DespedirEmpleadoParametros;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
+import es.serversurvival.pixelcoins.mensajes._shared.application.EnviadorMensajes;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
-
-import static org.bukkit.ChatColor.*;
 
 @Command(
         value = "empresas despedir",
@@ -25,6 +22,7 @@ import static org.bukkit.ChatColor.*;
 @RequiredArgsConstructor
 public final class DespedirEmpleadoCommandRunner implements CommandRunnerArgs<DespedirEmpleadoComando> {
     private final JugadoresService jugadoresService;
+    private final EnviadorMensajes enviadorMensajes;
     private final EmpleadosService empleadosService;
     private final EmpresasService empresasService;
     private final UseCaseBus useCaseBus;
@@ -42,8 +40,5 @@ public final class DespedirEmpleadoCommandRunner implements CommandRunnerArgs<De
                 .jugadorId(player.getUniqueId())
                 .build());
 
-        player.sendMessage(GOLD + "Has despedido a: " + comando.getEmpleado() + " de la empresa " + comando.getEmpleado());
-        MinecraftUtils.enviarMensajeYSonido(jugadorDespedirId, RED + "Has sido despedido de " + empresa + " por: " +
-                comando.getCausaDespido(), Sound.BLOCK_ANVIL_LAND);
     }
 }
