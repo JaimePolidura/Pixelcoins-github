@@ -25,6 +25,10 @@ public class DeudasService {
                 .collect(Collectors.toList());
     }
 
+    public List<Deuda> findByAcredorJugadorId(UUID acredorjugadorId) {
+        return this.deudasRepository.findByAcredorJugadorId(acredorjugadorId);
+    }
+
     public List<Deuda> findByJugadorIdPendiente(UUID jugadorId) {
         return deudasRepository.findByJugadorId(jugadorId).stream()
                 .filter(Deuda::estaPendiente)

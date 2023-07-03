@@ -1,14 +1,17 @@
 package es.serversurvival.pixelcoins.bolsa.cerrar;
 
+import es.serversurvival._shared.eventospixelcoins.InvocaAUnReto;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.TipoBolsaApuesta;
+import es.serversurvival.pixelcoins.retos._shared.retos.RetoMapping;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Map;
 import java.util.UUID;
 
-public final class PosicionBolsaCerrada extends PixelcoinsEvento {
+public final class PosicionBolsaCerrada extends PixelcoinsEvento implements InvocaAUnReto {
     @Getter private UUID jugadorId;
     @Getter private boolean premarket;
     @Getter private int cantidad;
@@ -35,5 +38,19 @@ public final class PosicionBolsaCerrada extends PixelcoinsEvento {
     public PosicionBolsaCerrada(UUID jugadorId) {
         this.jugadorId = jugadorId;
         this.premarket = true;
+    }
+
+    @Override
+    public Map<UUID, RetoMapping> retosByJugadorId() {
+        if(premarket || rentabilidad <= 0){
+           return null;
+        }
+
+        return Map.of(jugadorId, RetoMapping.BOLSA_CERRAR_RENTABILIDAD);
+    }
+
+    @Override
+    public Object otroDatoReto() {
+        return this.rentabilidad;
     }
 }

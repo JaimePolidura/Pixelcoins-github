@@ -1,6 +1,7 @@
 package es.serversurvival.pixelcoins.transacciones;
 
 
+import com.mysql.cj.x.protobuf.MysqlxExpr;
 import es.serversurvival._shared.utils.Funciones;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public final class Transaccion {
     @Getter private double pixelcoins;
     @Getter private LocalDateTime fecha;
     @Getter private String objeto;
+    @Getter private UUID otro;
 
     public static Transaccion.TransaccionBuilder builder() {
         return new Transaccion.TransaccionBuilder();
@@ -34,47 +36,54 @@ public final class Transaccion {
         private double pixelcoins;
         private LocalDateTime fecha;
         private String objeto;
+        private UUID otro;
 
         public TransaccionBuilder() {
             this.transaccionId = UUID.randomUUID();
             this.fecha = LocalDateTime.now();
             this.pagadoId = Funciones.NULL_ID;
             this.pagadorId = Funciones.NULL_ID;
+            this.otro = Funciones.NULL_ID;
             this.objeto = "";
         }
 
-        public Transaccion.TransaccionBuilder tipo(TipoTransaccion tipo) {
+        public TransaccionBuilder tipo(TipoTransaccion tipo) {
             this.tipo = tipo;
             return this;
         }
 
-        public Transaccion.TransaccionBuilder pagadorId(UUID pagadorId) {
+        public TransaccionBuilder pagadorId(UUID pagadorId) {
             this.pagadorId = pagadorId;
             return this;
         }
 
-        public Transaccion.TransaccionBuilder pagadoId(UUID pagadoId) {
+        public TransaccionBuilder pagadoId(UUID pagadoId) {
             this.pagadoId = pagadoId;
             return this;
         }
 
-        public Transaccion.TransaccionBuilder pixelcoins(double pixelcoins) {
+        public TransaccionBuilder pixelcoins(double pixelcoins) {
             this.pixelcoins = pixelcoins;
             return this;
         }
 
-        public Transaccion.TransaccionBuilder objeto(UUID objeto) {
+        public TransaccionBuilder objeto(UUID objeto) {
             this.objeto = objeto.toString();
             return this;
         }
 
-        public Transaccion.TransaccionBuilder objeto(String objeto) {
+        public TransaccionBuilder objeto(String objeto) {
             this.objeto = objeto;
             return this;
         }
 
+        public TransaccionBuilder otro(UUID otro) {
+            this.otro = otro;
+            return this;
+        }
+
         public Transaccion build() {
-            return new Transaccion(transaccionId, tipo, pagadorId, pagadoId, pixelcoins, fecha, objeto);
+            return new Transaccion(transaccionId, tipo, pagadorId, pagadoId, pixelcoins, fecha, objeto, otro);
         }
     }
 }

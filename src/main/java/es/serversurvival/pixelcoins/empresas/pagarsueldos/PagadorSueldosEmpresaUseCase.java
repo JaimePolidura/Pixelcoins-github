@@ -48,6 +48,9 @@ public final class PagadorSueldosEmpresaUseCase implements UseCaseHandler<Pagado
                 .pixelcoins(empleado.getSueldo())
                 .tipo(TipoTransaccion.EMPRESAS_SUELDO)
                 .build());
+
+        eventBus.publish(new SueldoEmpresaPagado(empleado.getEmpleadoJugadorId(), empresa.getDirectorJugadorId(),
+                empleado.getEmpresaId(), empleado.getSueldo()));
     }
 
     private int getNumeroSueldosPendientes(Empleado empleado) {

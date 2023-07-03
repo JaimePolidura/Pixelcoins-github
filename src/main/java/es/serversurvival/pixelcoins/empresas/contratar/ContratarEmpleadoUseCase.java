@@ -21,13 +21,14 @@ public final class ContratarEmpleadoUseCase implements UseCaseHandler<ContratarE
 
         empleadosService.save(Empleado.fromContratarParametros(parametros));
 
-        eventBus.publish(new JugadorContratado(parametros.getJugadorIdAContratar()));
+        eventBus.publish(new JugadorContratado(parametros.getJugadorIdAContratar(), parametros.getJugadorId(),
+                parametros.getEmpresaId()));
     }
 
     public void validar(ContratarEmpleadoParametros parametros) {
         empresasValidador.empresaNoCerrada(parametros.getEmpresaId());
         empresasValidador.noEmpleadoEmpresa(parametros.getEmpresaId(), parametros.getJugadorIdAContratar());
-        empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorIdContrador());
+        empresasValidador.directorEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
         empresasValidador.sueldoCorrecto(parametros.getSueldo());
         empresasValidador.periodoPagoCorrecto(parametros.getPeriodoPagoMs());
         empresasValidador.descripccionCorrecta(parametros.getDescripccion());

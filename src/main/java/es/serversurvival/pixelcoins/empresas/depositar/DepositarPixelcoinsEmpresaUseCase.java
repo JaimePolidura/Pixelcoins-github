@@ -34,6 +34,7 @@ public final class DepositarPixelcoinsEmpresaUseCase implements UseCaseHandler<D
                 .tipo(TipoTransaccion.EMPRESAS_DEPOSITAR)
                 .build());
 
-        eventBus.publish(new PixelcoinsDepositadas(parametros.getEmpresaId(), parametros.getPixelcoins()));
+        eventBus.publish(new PixelcoinsDepositadas(parametros.getJugadorId(), parametros.getEmpresaId(),
+                parametros.getPixelcoins()));
     }
 }

@@ -51,7 +51,8 @@ public final class PagarDeudaCuotasUseCase implements UseCaseHandler<PagarDeudaC
             ofertasService.deleteByObjetoYTipo(deuda.getDeudaId().toString(), TipoOferta.DEUDA_MERCADO_SECUNDARIO);
         }
 
-        eventBus.publish(new CuotaPagada(deuda.getDeudaId(), deuda.getCuota(), deuda.getDeudorJugadorId()));
+        eventBus.publish(new CuotaPagada(deuda.getDeudaId(), deuda.getCuota(), deuda.getDeudorJugadorId(),
+                deuda.getAcredorJugadorId(), deuda.estaPendiente(), deuda.getNCuotasImpagadas()));
     }
 
     private void anotarImpagoDeudaCuota(Deuda deuda) {

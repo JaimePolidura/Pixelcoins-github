@@ -34,7 +34,7 @@ public final class ConfirmarOfertaContratacionMenu extends ConfirmacionMenu<Conf
                 .jugadorIdAContratar(jugadorIdAContratar)
                 .descripccion(state.getDescripccion())
                 .empresaId(state.getEmpresa().getEmpresaId())
-                .jugadorIdContrador(jugadorIdContratador)
+                .jugadorId(jugadorIdContratador)
                 .periodoPagoMs(state.getPeriodoPagoSueldoMs())
                 .sueldo(state.getSueldo())
                 .build());

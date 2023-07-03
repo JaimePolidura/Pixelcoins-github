@@ -1,6 +1,7 @@
 package es.serversurvival.pixelcoins.empresas._shared.votaciones.votar;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
+import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.AccionistasEmpresasService;
@@ -19,7 +20,8 @@ public final class VotarVotacionUseCase implements UseCaseHandler<VotarVotacionP
     private final ResultadoVotacionChecker resultadoVotacionChecker;
     private final EmpresasValidador empresasValidador;
     private final VotosService votosService;
-    
+    private final EventBus eventBus;
+
     @Override
     public void handle(VotarVotacionParametros parametros) {
         empresasValidador.accionistaDeEmpresa(parametros.getEmpresaId(), parametros.getJugadorId());
@@ -40,5 +42,7 @@ public final class VotarVotacionUseCase implements UseCaseHandler<VotarVotacionP
                 .build());
 
         resultadoVotacionChecker.check(parametros.getVotacionId());
+
+        eventBus.publish(new VotacionVotada(parametros.getJugadorId(), parametros.getVotacionId(), parametros.isAFavor()));
     }
 }

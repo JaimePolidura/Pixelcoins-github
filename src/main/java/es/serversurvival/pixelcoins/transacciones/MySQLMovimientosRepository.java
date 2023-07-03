@@ -33,6 +33,22 @@ public final class MySQLMovimientosRepository extends Repository<Movimiento, UUI
     }
 
     @Override
+    public double getBalance(TipoTransaccion tipoTransaccion, UUID entidadId) {
+        return super.getDoubleByQuery(String.format(
+                "SELECT SUM(pixelcoins) FROM %s WHERE entidadId = '%s' AND tipo = '%s'",
+                TABLE_NAME, entidadId.toString(), tipoTransaccion.toString()
+        ));
+    }
+
+    @Override
+    public double getBalance(TipoTransaccion tipoTransaccion, UUID entidadId, UUID otro) {
+        return super.getDoubleByQuery(String.format(
+                "SELECT SUM(pixelcoins) FROM %s WHERE entidadId = '%s' AND tipo = '%s' AND otro = '%s'",
+                TABLE_NAME, entidadId.toString(), tipoTransaccion.toString(), otro.toString()
+        ));
+    }
+
+    @Override
     public List<Movimiento> findByEntidadIdOrderByFecha(UUID entidadId, int limit) {
         return buildListFromQuery(
                 Select.from(TABLE_NAME).where("entidadId").equal(entidadId)

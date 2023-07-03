@@ -21,9 +21,10 @@ public final class OfertaDeudaCompradaMercadoSecundarioListener implements Ofert
     public void on(OfertaDeudaMercadoSecundario ofertaComprada, UUID compradorJugadorId) {
         UUID deudaId = ofertaComprada.getObjetoToUUID();
         Deuda deuda = deudasService.getById(deudaId);
+        UUID acredorAntiguoDeudaId = deuda.getAcredorJugadorId();
 
         deudasService.save(deuda.nuevoAcredor(compradorJugadorId));
 
-        eventBus.publish(new DeudaComprada(deudaId, compradorJugadorId, ofertaComprada.getPrecio()));
+        eventBus.publish(new DeudaComprada(deudaId, compradorJugadorId, acredorAntiguoDeudaId, ofertaComprada.getPrecio()));
     }
 }

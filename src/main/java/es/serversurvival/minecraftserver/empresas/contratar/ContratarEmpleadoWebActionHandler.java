@@ -41,7 +41,7 @@ public final class ContratarEmpleadoWebActionHandler implements WebActionHandler
                 .jugadorIdAContratar(jugadorAContratar.getJugadorId())
                 .descripccion(body.getDescripccion())
                 .empresaId(empresa.getEmpresaId())
-                .jugadorIdContrador(jugadorIdContratador)
+                .jugadorId(jugadorIdContratador)
                 .periodoPagoMs(diasToMillis(body.getPeriodoPagoEnDias()))
                 .sueldo(body.getSueldo())
                 .build());

@@ -26,6 +26,6 @@ public final class IngresarItemUseCase implements UseCaseHandler<IngresarItemPar
                 .objeto(parametros.getTipoCambio().name())
                 .build());
 
-        eventBus.publish(new ItemIngresadoEvento(parametros.getJugadorId(), pixelcoinsAnadir, parametros.getTipoCambio().name()));
+        eventBus.publish(new ItemIngresadoEvento(parametros.getJugadorId(), pixelcoinsAnadir, parametros.getTipoCambio()));
     }
 }

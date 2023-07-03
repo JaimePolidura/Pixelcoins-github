@@ -31,7 +31,7 @@ public final class EmitirAccionesServerUseCase implements UseCaseHandler<EmitirA
                 .empresaId(parametros.getEmpresaId())
                 .build());
 
-        eventBus.publish(new AccionesEmitidasEmpresa(parametros.getEmpresaId(), parametros.getNumeroNuevasAcciones(),
-                parametros.getPrecioPorAccion()));
+        eventBus.publish(new AccionesEmitidasEmpresa(parametros.getJugadorId(), parametros.getEmpresaId(),
+                parametros.getNumeroNuevasAcciones(), parametros.getPrecioPorAccion()));
     }
 }

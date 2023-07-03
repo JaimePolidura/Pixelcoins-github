@@ -26,6 +26,9 @@ public final class IniciarVotacionUseCase {
 
         votacionesService.save(votacion);
 
+        eventBus.publish(new VotacionIniciada(votacion.getVotacionId(), votacion.getIniciadoPorJugadorId(),
+                votacion.getEmpresaId()));
+
         return votacion.getVotacionId();
     }
 }

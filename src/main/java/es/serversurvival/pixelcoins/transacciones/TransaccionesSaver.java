@@ -10,11 +10,11 @@ import java.util.UUID;
 @AllArgsConstructor
 public class TransaccionesSaver {
     private final TransaccionesBalanceCache transaccionesBalanceCache;
-    private final MovimientoRepository movimientoRepository;
+    private final MovimientosService movimientosService;
 
     public void save(Transaccion transaccion) {
         if(!transaccion.getPagadorId().equals(Funciones.NULL_ID)){
-            movimientoRepository.save(Movimiento.builder()
+            movimientosService.save(Movimiento.builder()
                     .movimientoId(UUID.randomUUID())
                     .transaccionId(transaccion.getTransaccionId())
                     .entidadId(transaccion.getPagadoId())
@@ -27,7 +27,7 @@ public class TransaccionesSaver {
         }
 
         if(!transaccion.getPagadoId().equals(Funciones.NULL_ID)){
-            movimientoRepository.save(Movimiento.builder()
+            movimientosService.save(Movimiento.builder()
                     .movimientoId(UUID.randomUUID())
                     .transaccionId(transaccion.getTransaccionId())
                     .entidadId(transaccion.getPagadorId())

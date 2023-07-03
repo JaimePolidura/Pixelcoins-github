@@ -40,7 +40,8 @@ public final class RepartirDividendosUseCase implements UseCaseHandler<RepartirD
             repartirDividendo(accionistaEmpresa, parametros.getDividendoPorAccion());
         });
 
-        eventBus.publish(new DividendosEmpresaRepartido(parametros.getEmpresaId(), parametros.getDividendoPorAccion()));
+        eventBus.publish(new DividendosEmpresaRepartido(parametros.getJugadorId(), parametros.getEmpresaId(),
+                parametros.getDividendoPorAccion()));
     }
 
     private void repartirDividendo(AccionistaEmpresa accionista, double dividendoPorAccion) {

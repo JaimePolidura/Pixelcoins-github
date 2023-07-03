@@ -14,4 +14,12 @@ public class TransaccionesBalanceService {
     public double get(UUID entidadId) {
         return transaccionesBalanceCache.get(entidadId, movimientoRepository::getBalance);
     }
+
+    public double get(TipoTransaccion tipoTransaccion, UUID entidadId) {
+        return movimientoRepository.getBalance(tipoTransaccion, entidadId);
+    }
+
+    public double get(TipoTransaccion tipoTransaccion, UUID entidadId, UUID otro) {
+        return movimientoRepository.getBalance(tipoTransaccion, entidadId, otro);
+    }
 }
