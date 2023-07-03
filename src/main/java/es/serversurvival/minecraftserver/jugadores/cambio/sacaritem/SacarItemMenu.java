@@ -9,7 +9,7 @@ import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.jugadores.cambiar.TipoCambioPixelcoins;
 import es.serversurvival.pixelcoins.jugadores.cambiar.sacarItem.SacarItemParametros;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
 import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.Sound;

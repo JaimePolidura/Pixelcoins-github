@@ -5,10 +5,9 @@ import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.Validador;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
-import es.serversurvival.pixelcoins.transacciones.Movimiento;
-import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
-import es.serversurvival.pixelcoins.transacciones.Transaccion;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesSaver;
+import es.serversurvival.pixelcoins.transacciones.domain.TipoTransaccion;
+import es.serversurvival.pixelcoins.transacciones.domain.Transaccion;
+import es.serversurvival.pixelcoins.transacciones.application.TransaccionesSaver;
 import lombok.AllArgsConstructor;
 
 @UseCase

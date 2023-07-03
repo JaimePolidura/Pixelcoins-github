@@ -10,10 +10,8 @@ import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.PosicionAbiertaBuilder;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.application.PosicionesService;
 import es.serversurvival.pixelcoins.bolsa._shared.premarket.application.AbridorOrdenesPremarket;
-import es.serversurvival.pixelcoins.transacciones.Movimiento;
-import es.serversurvival.pixelcoins.transacciones.Transaccion;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesBalanceService;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesSaver;
+import es.serversurvival.pixelcoins.transacciones.domain.Transaccion;
+import es.serversurvival.pixelcoins.transacciones.application.TransaccionesSaver;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;

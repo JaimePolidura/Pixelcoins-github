@@ -3,7 +3,7 @@ package es.serversurvival.pixelcoins.deudas.prestar;
 import es.serversurvival._shared.eventospixelcoins.InvocaAUnReto;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.pixelcoins.deudas._shared.domain.Deuda;
-import es.serversurvival.pixelcoins.retos._shared.retos.RetoMapping;
+import es.serversurvival.pixelcoins.retos._shared.retos.application.RetoMapping;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

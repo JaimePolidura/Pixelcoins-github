@@ -1,10 +1,10 @@
-package es.serversurvival.pixelcoins.retos._shared.retos;
+package es.serversurvival.pixelcoins.retos._shared.retos.application;
 
 import es.serversurvival.pixelcoins.deudas.pagarcuotas.CuotaPagadaRetoProgresivoService;
 import es.serversurvival.pixelcoins.deudas.prestar.DeudasPrestarAcredorRetoProgresivoService;
 import es.serversurvival.pixelcoins.empresas.pagar.PagarEmpresaPagadoRetoProgresivoService;
 import es.serversurvival.pixelcoins.empresas.pagar.PagarEmpresaPagadorRetoProgresivoService;
-import es.serversurvival.pixelcoins.retos._shared.RetoProgresivoService;
+import es.serversurvival.pixelcoins.retos._shared.retos.domain.RetoProgresivoService;
 import es.serversurvival.pixelcoins.tienda.comprar.VenderTiendaRetoProgresivoService;
 import lombok.Getter;
 

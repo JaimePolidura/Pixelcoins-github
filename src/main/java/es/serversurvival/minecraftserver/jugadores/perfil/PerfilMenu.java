@@ -25,7 +25,7 @@ import es.serversurvival.pixelcoins.empresas._shared.empleados.domain.Empleado;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.application.EmpleadosService;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

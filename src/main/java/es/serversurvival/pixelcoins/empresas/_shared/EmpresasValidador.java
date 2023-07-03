@@ -19,7 +19,7 @@ import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votacion
 import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votos.application.VotosService;
 import es.serversurvival.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
 import lombok.AllArgsConstructor;
 
 import java.util.Optional;

@@ -6,7 +6,7 @@ import es.serversurvival.pixelcoins.empresas._shared.accionistas.OfertaAccionMer
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.OfertaAccionMercadoEmision;
 import es.serversurvival.pixelcoins.empresas.ipo.OfertaAccionMercadoIPO;
 import es.serversurvival.pixelcoins.tienda._shared.OfertaTiendaItemMinecraft;
-import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
+import es.serversurvival.pixelcoins.transacciones.domain.TipoTransaccion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

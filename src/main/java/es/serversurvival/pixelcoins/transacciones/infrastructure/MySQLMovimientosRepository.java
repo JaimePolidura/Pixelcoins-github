@@ -1,4 +1,4 @@
-package es.serversurvival.pixelcoins.transacciones;
+package es.serversurvival.pixelcoins.transacciones.infrastructure;
 
 import es.jaime.connection.ConnectionManager;
 import es.jaime.repository.EntityMapper;
@@ -6,8 +6,10 @@ import es.jaime.repository.Repository;
 import es.jaimetruman.select.Order;
 import es.jaimetruman.select.Select;
 import es.serversurvival._shared.mysql.MySQLRepository;
+import es.serversurvival.pixelcoins.transacciones.domain.TipoTransaccion;
+import es.serversurvival.pixelcoins.transacciones.domain.Movimiento;
+import es.serversurvival.pixelcoins.transacciones.domain.MovimientoRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 

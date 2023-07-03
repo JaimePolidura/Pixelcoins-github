@@ -5,16 +5,14 @@ import es.serversurvival.minecraftserver._shared.menus.NumberSelectorMenu;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas.repartirdividendos.RepartirDividendosParametros;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.List;
 
 import static es.serversurvival._shared.utils.Funciones.*;
-import static es.serversurvival.minecraftserver._shared.MinecraftUtils.*;
 import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.BOLD;
 

@@ -1,4 +1,4 @@
-package es.serversurvival.pixelcoins.transacciones;
+package es.serversurvival.pixelcoins.transacciones.domain;
 
 import java.util.List;
 import java.util.UUID;

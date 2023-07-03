@@ -2,7 +2,7 @@ package es.serversurvival.pixelcoins.deudas.comprar;
 
 import es.serversurvival._shared.eventospixelcoins.InvocaAUnReto;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
-import es.serversurvival.pixelcoins.retos._shared.retos.RetoMapping;
+import es.serversurvival.pixelcoins.retos._shared.retos.application.RetoMapping;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,7 +15,7 @@ public final class DeudaComprada extends PixelcoinsEvento implements InvocaAUnRe
     @Getter private final UUID compradorJugadorId;
     @Getter private final UUID vendedorJugadorId;
     @Getter private final double pixelcoins;
-    
+
     @Override
     public Map<UUID, RetoMapping> retosByJugadorId() {
         return Map.of(

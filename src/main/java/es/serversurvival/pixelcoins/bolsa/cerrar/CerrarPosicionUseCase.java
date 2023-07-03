@@ -12,9 +12,8 @@ import es.serversurvival.pixelcoins.bolsa._shared.premarket.application.AbridorO
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.Posicion;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.application.PosicionesService;
 import es.serversurvival.pixelcoins.bolsa._shared.premarket.application.OrdenesPremarketService;
-import es.serversurvival.pixelcoins.transacciones.Movimiento;
-import es.serversurvival.pixelcoins.transacciones.Transaccion;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesSaver;
+import es.serversurvival.pixelcoins.transacciones.domain.Transaccion;
+import es.serversurvival.pixelcoins.transacciones.application.TransaccionesSaver;
 import lombok.AllArgsConstructor;
 
 @UseCase

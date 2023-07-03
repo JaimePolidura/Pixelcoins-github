@@ -1,4 +1,4 @@
-package es.serversurvival.pixelcoins.retos._shared;
+package es.serversurvival.pixelcoins.retos._shared.retos.domain;
 
 import java.util.UUID;
 

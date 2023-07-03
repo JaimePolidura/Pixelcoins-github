@@ -3,7 +3,7 @@ package es.serversurvival.pixelcoins._shared;
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.*;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;

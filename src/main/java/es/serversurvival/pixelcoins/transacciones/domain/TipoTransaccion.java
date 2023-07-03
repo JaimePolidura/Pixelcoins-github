@@ -1,4 +1,4 @@
-package es.serversurvival.pixelcoins.transacciones;
+package es.serversurvival.pixelcoins.transacciones.domain;
 
 public enum TipoTransaccion {
     JUGADORES_PAGO,

@@ -1,7 +1,6 @@
-package es.serversurvival.pixelcoins.transacciones;
+package es.serversurvival.pixelcoins.transacciones.domain;
 
 
-import com.mysql.cj.x.protobuf.MysqlxExpr;
 import es.serversurvival._shared.utils.Funciones;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -3,7 +3,7 @@ package es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.TipoApuestaService;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.application.CortoTipoApuestaService;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.application.LargoTipoApuestaService;
-import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
+import es.serversurvival.pixelcoins.transacciones.domain.TipoTransaccion;
 import lombok.Getter;
 import org.bukkit.Material;
 

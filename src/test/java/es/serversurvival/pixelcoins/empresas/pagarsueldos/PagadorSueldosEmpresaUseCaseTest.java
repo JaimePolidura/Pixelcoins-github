@@ -6,8 +6,8 @@ import es.serversurvival._shared.TiempoService;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.application.EmpleadosService;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.domain.Empleado;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesBalanceService;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesSaver;
+import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.application.TransaccionesSaver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static es.serversurvival.pixelcoins.transacciones.TipoTransaccion.EMPRESAS_SUELDO;
+import static es.serversurvival.pixelcoins.transacciones.domain.TipoTransaccion.EMPRESAS_SUELDO;
 import static org.mockito.Mockito.*;
 
 public class PagadorSueldosEmpresaUseCaseTest {

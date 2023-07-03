@@ -2,11 +2,10 @@ package es.serversurvival.pixelcoins.deudas.pagarcuotas;
 
 import es.serversurvival._shared.eventospixelcoins.InvocaAUnReto;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
-import es.serversurvival.pixelcoins.retos._shared.retos.RetoMapping;
+import es.serversurvival.pixelcoins.retos._shared.retos.application.RetoMapping;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.checkerframework.checker.lock.qual.Holding;
 
 import java.util.Map;
 import java.util.UUID;

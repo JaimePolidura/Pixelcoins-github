@@ -1,7 +1,8 @@
-package es.serversurvival.pixelcoins.transacciones;
+package es.serversurvival.pixelcoins.transacciones.application;
 
 import com.google.common.util.concurrent.AtomicDouble;
 import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.pixelcoins.transacciones.domain.Transaccion;
 import lombok.AllArgsConstructor;
 
 import java.util.Map;

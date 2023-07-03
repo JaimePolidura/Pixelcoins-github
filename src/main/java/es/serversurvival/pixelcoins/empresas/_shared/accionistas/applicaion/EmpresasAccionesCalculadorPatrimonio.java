@@ -6,7 +6,7 @@ import es.serversurvival.pixelcoins.jugadores.patrimonio.CalculadorPatrimonio;
 import es.serversurvival.pixelcoins.jugadores.patrimonio.TipoCuentaPatrimonio;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
 import lombok.AllArgsConstructor;
 
 import java.util.List;

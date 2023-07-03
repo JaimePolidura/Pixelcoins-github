@@ -5,7 +5,6 @@ import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBolsaUltimosPreciosService;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.pixelcoins._shared.Validador;
@@ -16,7 +15,7 @@ import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.TipoPosicion
 import es.serversurvival.pixelcoins.bolsa._shared.premarket.application.OrdenesPremarketService;
 import es.serversurvival.pixelcoins.bolsa._shared.premarket.domain.OrdenPremarket;
 import es.serversurvival.pixelcoins.bolsa.abrir.AbrirPosicoinBolsaParametros;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;

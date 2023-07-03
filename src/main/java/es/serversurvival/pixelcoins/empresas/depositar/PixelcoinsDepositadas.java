@@ -2,8 +2,7 @@ package es.serversurvival.pixelcoins.empresas.depositar;
 
 import es.serversurvival._shared.eventospixelcoins.InvocaAUnReto;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
-import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
-import es.serversurvival.pixelcoins.retos._shared.retos.RetoMapping;
+import es.serversurvival.pixelcoins.retos._shared.retos.application.RetoMapping;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

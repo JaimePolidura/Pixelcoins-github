@@ -5,13 +5,13 @@ import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventListener;
 import es.jaime.Priority;
 import es.serversurvival._shared.eventospixelcoins.InvocaAUnReto;
-import es.serversurvival.pixelcoins.retos._shared.RetoProgresivoService;
-import es.serversurvival.pixelcoins.retos._shared.retos.Reto;
-import es.serversurvival.pixelcoins.retos._shared.retos.RetosService;
-import es.serversurvival.pixelcoins.retos._shared.retos.RetoMapping;
-import es.serversurvival.pixelcoins.retos._shared.retos.TipoReto;
-import es.serversurvival.pixelcoins.retos._shared.retosadquiridos.AdquisitorRetos;
-import es.serversurvival.pixelcoins.retos._shared.retosadquiridos.RetosAdquiridosService;
+import es.serversurvival.pixelcoins.retos._shared.retos.domain.RetoProgresivoService;
+import es.serversurvival.pixelcoins.retos._shared.retos.domain.Reto;
+import es.serversurvival.pixelcoins.retos._shared.retos.application.RetosService;
+import es.serversurvival.pixelcoins.retos._shared.retos.application.RetoMapping;
+import es.serversurvival.pixelcoins.retos._shared.retos.domain.TipoReto;
+import es.serversurvival.pixelcoins.retos._shared.retosadquiridos.application.AdquisitorRetos;
+import es.serversurvival.pixelcoins.retos._shared.retosadquiridos.application.RetosAdquiridosService;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -58,16 +58,17 @@ public final class OnPixelcoinEvento {
         double cantidadActualJugador = retoProgresivoService.getCantidad(jugadorId, otroId);
 
         List<Reto> todosLosRectosEnLaProgresion = retosService.findByRetoLineaPadre(reto.getRetoPadreProgresionId());
-        List<Integer> retosIdQuePuedeAdquirir = getRetosEnLaProgresionQuePuedeAdquirir(cantidadActualJugador, todosLosRectosEnLaProgresion);
+        List<Integer> retosIdQuePuedeAdquirir = getRetosEnLaProgresionQuePuedeAdquirir(cantidadActualJugador, todosLosRectosEnLaProgresion, jugadorId);
 
         if (retosIdQuePuedeAdquirir.size() > 0) {
             adquisitorRetos.adquirir(jugadorId, retosIdQuePuedeAdquirir);
         }
     }
 
-    private List<Integer> getRetosEnLaProgresionQuePuedeAdquirir(double cantidadActualJugador, List<Reto> todosRetosLinea) {
+    private List<Integer> getRetosEnLaProgresionQuePuedeAdquirir(double cantidadActualJugador, List<Reto> todosRetosLinea, UUID jugadorId) {
         return todosRetosLinea.stream()
                 .filter(reto -> cantidadActualJugador >= reto.getCantidadRequerida())
+                .filter(reto -> !retosAdquiridosService.estaAdquirido(jugadorId, reto.getRetoId()))
                 .map(Reto::getRetoId)
                 .collect(Collectors.toList());
     }

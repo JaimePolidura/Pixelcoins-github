@@ -7,9 +7,8 @@ import es.serversurvival.pixelcoins.mercado._shared.accion.OfertaCompradaListene
 import es.serversurvival.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasValidator;
-import es.serversurvival.pixelcoins.transacciones.Movimiento;
-import es.serversurvival.pixelcoins.transacciones.Transaccion;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesSaver;
+import es.serversurvival.pixelcoins.transacciones.domain.Transaccion;
+import es.serversurvival.pixelcoins.transacciones.application.TransaccionesSaver;
 import lombok.AllArgsConstructor;
 
 @UseCase

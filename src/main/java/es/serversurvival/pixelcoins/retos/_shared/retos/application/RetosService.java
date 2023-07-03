@@ -1,7 +1,9 @@
-package es.serversurvival.pixelcoins.retos._shared.retos;
+package es.serversurvival.pixelcoins.retos._shared.retos.application;
 
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.serversurvival.pixelcoins.retos._shared.retos.domain.Reto;
+import es.serversurvival.pixelcoins.retos._shared.retos.domain.RetosRepository;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -9,7 +11,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public final class RetosService {
+public class RetosService {
     private final RetosRepository retosRepository;
 
     public List<Reto> findByRetoLineaPadre(UUID retoLineaPadreId) {

@@ -5,6 +5,8 @@ import es.jaime.EventListener;
 import es.jaime.Priority;
 import es.serversurvival.minecraftserver.scoreboards.ScoreboardDisplayer;
 import es.serversurvival.pixelcoins._shared.EventoTipoTransaccion;
+import es.serversurvival.pixelcoins.transacciones.domain.Transaccion;
+import es.serversurvival.pixelcoins.transacciones.domain.TransaccionCreada;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -14,12 +16,13 @@ import org.bukkit.entity.Player;
 public final class OnTransactionScoreboard {
     private final ScoreboardDisplayer scoreboardDisplayer;
 
-    @EventListener(value = {EventoTipoTransaccion.class}, pritority = Priority.LOWEST)
-    public void on(EventoTipoTransaccion transaccion) {
+    @EventListener(pritority = Priority.LOWEST)
+    public void on(TransaccionCreada transaccionCreada) {
         Player player;
+        Transaccion transaccion = transaccionCreada.getTransaccion();
 
-        if((player = Bukkit.getPlayer(transaccion.pagadoId())) != null ||
-                (player = Bukkit.getPlayer(transaccion.pagadorId())) != null){
+        if((player = Bukkit.getPlayer(transaccion.getPagadoId())) != null ||
+                (player = Bukkit.getPlayer(transaccion.getPagadorId())) != null){
             scoreboardDisplayer.showActualScoreboard(player);
         }
     }

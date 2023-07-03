@@ -1,9 +1,9 @@
 package es.serversurvival.pixelcoins.deudas.pagarcuotas;
 
 import es.dependencyinjector.dependencies.annotations.Service;
-import es.serversurvival.pixelcoins.retos._shared.RetoProgresivoService;
-import es.serversurvival.pixelcoins.transacciones.TipoTransaccion;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.retos._shared.retos.domain.RetoProgresivoService;
+import es.serversurvival.pixelcoins.transacciones.domain.TipoTransaccion;
+import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;

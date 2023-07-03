@@ -2,7 +2,7 @@ package es.serversurvival.pixelcoins.mercado._shared;
 
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
-import es.serversurvival.pixelcoins.transacciones.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;

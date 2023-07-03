@@ -4,8 +4,7 @@ import es.serversurvival._shared.eventospixelcoins.InvocaAUnReto;
 import es.serversurvival._shared.eventospixelcoins.PixelcoinsEvento;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.TipoBolsaApuesta;
-import es.serversurvival.pixelcoins.retos._shared.retos.RetoMapping;
-import lombok.AllArgsConstructor;
+import es.serversurvival.pixelcoins.retos._shared.retos.application.RetoMapping;
 import lombok.Getter;
 
 import java.util.Map;
