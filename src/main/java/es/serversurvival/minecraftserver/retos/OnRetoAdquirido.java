@@ -20,7 +20,7 @@ public final class OnRetoAdquirido {
         String mensaje = ChatColor.DARK_PURPLE + "Has alcanzado el reto " + evento.getReto().getNombre();
 
         if(evento.getReto().getTipoRecompensa() == TipoRecompensa.PIXELCOINS){
-            mensaje += " Has sido recompensado con " + Funciones.formatPixelcoins(evento.getReto().getRecomponsaPixelcoins());
+            mensaje += " Has sido recompensado con " + Funciones.formatPixelcoins(evento.getReto().getRecompensaPixelcoins());
         }
 
         enviadorMensajes.enviarMensajeYSonido(

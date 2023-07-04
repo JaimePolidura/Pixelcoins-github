@@ -20,7 +20,6 @@ public final class ItemVendidoJugadorEvento extends PixelcoinsEvento implements 
     @Override
     public Map<UUID, List<RetoMapping>> retosByJugadorId() {
         return Map.of(
-                compradorJugadorId, List.of(RetoMapping.JUGADORES_VENDER_JUGADOR_COMPRADOR),
                 vendedorJugadorId, List.of(RetoMapping.JUGADORES_VENDER_JUGADOR_VENDEDOR)
         );
     }

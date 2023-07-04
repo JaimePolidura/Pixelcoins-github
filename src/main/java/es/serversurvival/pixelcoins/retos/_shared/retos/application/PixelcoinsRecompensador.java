@@ -20,7 +20,7 @@ public final class PixelcoinsRecompensador implements RecompensadorReto {
         transaccionesSaver.save(Transaccion.builder()
                         .pagadoId(jugadorId)
                         .objeto(reto.getRetoId())
-                        .pixelcoins(reto.getRecomponsaPixelcoins())
+                        .pixelcoins(reto.getRecompensaPixelcoins())
                         .tipo(TipoTransaccion.RETOS_RECOMPENSA_PIXELCOINS)
                 .build());
     }
