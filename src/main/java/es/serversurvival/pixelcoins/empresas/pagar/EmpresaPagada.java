@@ -6,6 +6,7 @@ import es.serversurvival.pixelcoins.retos._shared.retos.application.RetoMapping;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -17,10 +18,10 @@ public final class EmpresaPagada extends PixelcoinsEvento implements InvocaAUnRe
     @Getter private final double pixelcoins;
 
     @Override
-    public Map<UUID, RetoMapping> retosByJugadorId() {
+    public Map<UUID, List<RetoMapping>> retosByJugadorId() {
         return Map.of(
-                empresaDirectorJugadorId, RetoMapping.EMPRESAS_PAGAR_PAGADO,
-                jugadorPagadorId, RetoMapping.EMPRESAS_PAGAR_PAGADOR
+                empresaDirectorJugadorId, List.of(RetoMapping.EMPRESAS_PAGAR_PAGADO),
+                jugadorPagadorId, List.of(RetoMapping.EMPRESAS_PAGAR_PAGADOR)
         );
     }
 

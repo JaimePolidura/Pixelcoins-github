@@ -16,7 +16,7 @@ public class RetosAdquiridosService {
         repository.save(retoAdquirido);
     }
 
-    public boolean estaAdquirido(UUID jugadorId, int retoId) {
+    public boolean estaAdquirido(UUID jugadorId, UUID retoId) {
         return repository.findByJugadorIdAndRetoId(jugadorId, retoId).isPresent();
     }
 }

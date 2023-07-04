@@ -6,6 +6,7 @@ import es.serversurvival.pixelcoins.retos._shared.retos.application.RetoMapping;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -16,10 +17,10 @@ public final class JugadorContratado extends PixelcoinsEvento implements InvocaA
     @Getter private final UUID empresaId;
 
     @Override
-    public Map<UUID, RetoMapping> retosByJugadorId() {
+    public Map<UUID, List<RetoMapping>> retosByJugadorId() {
         return Map.of(
-                jugadorIdContratador, RetoMapping.EMPRESAS_CONTRATAR,
-                jugadorIdContratado, RetoMapping.EMPRESAS_CONTRATADO
+                jugadorIdContratador, List.of(RetoMapping.EMPRESAS_CONTRATAR),
+                jugadorIdContratado, List.of(RetoMapping.EMPRESAS_CONTRATADO)
         );
     }
 }

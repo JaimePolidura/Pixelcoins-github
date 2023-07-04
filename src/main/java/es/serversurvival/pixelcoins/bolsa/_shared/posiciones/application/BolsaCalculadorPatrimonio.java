@@ -20,16 +20,16 @@ public final class BolsaCalculadorPatrimonio implements CalculadorPatrimonio {
     @Override
     public double calcular(UUID jugadorId) {
         List<Posicion> posicionesAbiertas = posicionesService.findPosicionesAbiertasByJugadorId(jugadorId);
-        double valorTotal = 0;
 
-        for (Posicion posicionesAbierta : posicionesAbiertas) {
-            Class<? extends TipoApuestaService> tipoApuestaServiceClass = posicionesAbierta.getTipoApuesta().getTipoApuestaService();
-            TipoApuestaService tipoApuestaService = dependenciesRepository.get(tipoApuestaServiceClass);
+        return posicionesAbiertas.stream()
+                .parallel()
+                .mapToDouble(posicionAbierta -> {
+                    Class<? extends TipoApuestaService> tipoApuestaServiceClass = posicionAbierta.getTipoApuesta().getTipoApuestaService();
+                    TipoApuestaService tipoApuestaService = dependenciesRepository.get(tipoApuestaServiceClass);
 
-            valorTotal += tipoApuestaService.getPixelcoinsCerrarPosicion(posicionesAbierta.getPosicionId(), jugadorId, posicionesAbierta.getCantidad());
-        }
-
-        return valorTotal;
+                    return tipoApuestaService.getPixelcoinsCerrarPosicion(posicionAbierta.getPosicionId(), jugadorId, posicionAbierta.getCantidad());
+                })
+                .sum();
     }
 
     @Override

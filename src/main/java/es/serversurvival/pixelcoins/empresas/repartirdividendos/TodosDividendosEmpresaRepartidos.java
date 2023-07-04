@@ -6,19 +6,20 @@ import es.serversurvival.pixelcoins.retos._shared.retos.application.RetoMapping;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class DividendosEmpresaRepartido extends PixelcoinsEvento implements InvocaAUnReto {
+public final class TodosDividendosEmpresaRepartidos extends PixelcoinsEvento implements InvocaAUnReto {
     @Getter private final UUID jugadorId;
     @Getter private final UUID empresaId;
     @Getter private final double dividendoPorAccion;
 
     @Override
-    public Map<UUID, RetoMapping> retosByJugadorId() {
+    public Map<UUID, List<RetoMapping>> retosByJugadorId() {
         return Map.of(
-                jugadorId, RetoMapping.EMPRESAS_BOLSA_REPARTIR_DIVIDENDOS
+                jugadorId, List.of(RetoMapping.EMPRESAS_BOLSA_REPARTIR_DIVIDENDOS)
         );
     }
 }

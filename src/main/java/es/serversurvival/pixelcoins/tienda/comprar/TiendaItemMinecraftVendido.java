@@ -6,6 +6,7 @@ import es.serversurvival.pixelcoins.retos._shared.retos.application.RetoMapping;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -16,7 +17,10 @@ public final class TiendaItemMinecraftVendido extends PixelcoinsEvento implement
     @Getter private final double pixelcoins;
 
     @Override
-    public Map<UUID, RetoMapping> retosByJugadorId() {
-        return Map.of(vendedorJugadorId, RetoMapping.TIENDA_VENDER_PIXELCOINS);
+    public Map<UUID, List<RetoMapping>> retosByJugadorId() {
+        return Map.of(vendedorJugadorId, List.of(
+                RetoMapping.TIENDA_VENDER_VOLUMEN,
+                RetoMapping.TIENDA_VENDER_CANTIDAD
+        ));
     }
 }

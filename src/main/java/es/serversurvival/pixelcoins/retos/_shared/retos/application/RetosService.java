@@ -15,11 +15,16 @@ public class RetosService {
     private final RetosRepository retosRepository;
 
     public List<Reto> findByRetoLineaPadre(UUID retoLineaPadreId) {
-        return null;
+        return retosRepository.findByRetoLineaPadre(retoLineaPadreId);
     }
 
     public Reto getById(int retoId) {
         return retosRepository.findById(retoId)
                 .orElseThrow(() -> new ResourceNotFound(String.format("Reto con id %s no encontrado", retoId)));
+    }
+
+    public Reto getByMapping(RetoMapping mapping) {
+        return retosRepository.findByMapping(mapping)
+                .orElseThrow(() -> new ResourceNotFound(String.format("Reto con mapping %s no encontrado", mapping)));
     }
 }

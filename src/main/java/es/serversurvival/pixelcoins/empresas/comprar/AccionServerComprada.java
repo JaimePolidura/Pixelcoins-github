@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -21,18 +22,22 @@ public final class AccionServerComprada extends PixelcoinsEvento implements Invo
     @Getter private final UUID vendedorJugadorId;
 
     @Override
-    public Map<UUID, RetoMapping> retosByJugadorId() {
-        Map<UUID, RetoMapping> retos = new HashMap<>();
-        retos.put(compradorJugadorId, RetoMapping.EMPRESAS_ACCIONISTAS_COMPRAR);
+    public Map<UUID, List<RetoMapping>> retosByJugadorId() {
+        if(vendedorJugadorId.equals(compradorJugadorId)) {
+            return null;
+        }
+
+        Map<UUID, List<RetoMapping>> retos = new HashMap<>();
+        retos.put(compradorJugadorId, List.of(RetoMapping.EMPRESAS_ACCIONISTAS_COMPRAR));
 
         if(tipoOferta == TipoOferta.ACCIONES_SERVER_IPO){
-            retos.put(directorEmpresaId, RetoMapping.EMPRESAS_BOLSA_RECAUDAR_IPO);
+            retos.put(directorEmpresaId, List.of(RetoMapping.EMPRESAS_BOLSA_RECAUDAR_IPO));
         }
         if(tipoOferta == TipoOferta.ACCIONES_SERVER_EMISION){
-            retos.put(directorEmpresaId, RetoMapping.EMPRESAS_BOLSA_RECAUDAR_EMISION);
+            retos.put(directorEmpresaId, List.of(RetoMapping.EMPRESAS_BOLSA_RECAUDAR_EMISION));
         }
         if(tipoOferta == TipoOferta.ACCIONES_SERVER_JUGADOR){
-            retos.put(vendedorJugadorId, RetoMapping.EMPRESAS_ACCIONISTAS_VENTA);
+            retos.put(vendedorJugadorId, List.of(RetoMapping.EMPRESAS_ACCIONISTAS_VENTA));
         }
 
         return retos;

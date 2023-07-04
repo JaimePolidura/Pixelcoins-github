@@ -26,7 +26,7 @@ public class LRUCache<K, V> implements LimitedCache<K, V> {
     }
 
     @Override
-    public void put(K key, V value) {
+    public V put(K key, V value) {
         this.lock.lock();
 
         removeIfExists(key, value);
@@ -37,6 +37,8 @@ public class LRUCache<K, V> implements LimitedCache<K, V> {
         }
 
         this.lock.unlock();
+
+        return value;
     }
 
     @Override

@@ -28,4 +28,6 @@ public enum TipoTransaccion {
     BOLSA_ABRIR_CORTO,
     BOLSA_CERRAR_LARGO,
     BOLSA_CERRAR_CORTO,
+
+    RETOS_RECOMPENSA_PIXELCOINS
 }

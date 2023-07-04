@@ -37,6 +37,7 @@ public final class VotarMenu extends ConfirmacionMenu<Votacion> {
                 .aFavor(aFavor)
                 .empresaId(getState().getEmpresaId())
                 .votacionId(getState().getVotacionId())
+                .autoVoto(false)
                 .jugadorId(getPlayer().getUniqueId())
                 .build());
     }

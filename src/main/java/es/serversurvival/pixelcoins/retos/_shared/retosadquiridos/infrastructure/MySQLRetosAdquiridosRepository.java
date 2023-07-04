@@ -26,7 +26,7 @@ public final class MySQLRetosAdquiridosRepository extends Repository<RetoAdquiri
     }
 
     @Override
-    public Optional<RetoAdquirido> findByJugadorIdAndRetoId(UUID jugadorId, int retoId) {
+    public Optional<RetoAdquirido> findByJugadorIdAndRetoId(UUID jugadorId, UUID retoId) {
         return super.buildObjectFromQuery(Select.from(TABLE_NAME).where("jugadorId").equal(jugadorId)
                 .and("retoId").equal(retoId));
     }

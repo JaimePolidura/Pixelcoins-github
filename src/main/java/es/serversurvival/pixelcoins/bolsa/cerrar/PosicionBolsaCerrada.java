@@ -7,6 +7,7 @@ import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.TipoBolsaApu
 import es.serversurvival.pixelcoins.retos._shared.retos.application.RetoMapping;
 import lombok.Getter;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -40,12 +41,12 @@ public final class PosicionBolsaCerrada extends PixelcoinsEvento implements Invo
     }
 
     @Override
-    public Map<UUID, RetoMapping> retosByJugadorId() {
+    public Map<UUID, List<RetoMapping>> retosByJugadorId() {
         if(premarket || rentabilidad <= 0){
            return null;
         }
 
-        return Map.of(jugadorId, RetoMapping.BOLSA_CERRAR_RENTABILIDAD);
+        return Map.of(jugadorId, List.of(RetoMapping.BOLSA_CERRAR_RENTABILIDAD));
     }
 
     @Override

@@ -6,6 +6,7 @@ import es.serversurvival.pixelcoins.retos._shared.retos.application.RetoMapping;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -17,10 +18,10 @@ public final class ItemVendidoJugadorEvento extends PixelcoinsEvento implements 
     @Getter private final String itemMaterial;
 
     @Override
-    public Map<UUID, RetoMapping> retosByJugadorId() {
+    public Map<UUID, List<RetoMapping>> retosByJugadorId() {
         return Map.of(
-                compradorJugadorId, RetoMapping.JUGADORES_VENDER_JUGADOR_COMPRADOR,
-                vendedorJugadorId, RetoMapping.JUGADORES_VENDER_JUGADOR_VENDEDOR
+                compradorJugadorId, List.of(RetoMapping.JUGADORES_VENDER_JUGADOR_COMPRADOR),
+                vendedorJugadorId, List.of(RetoMapping.JUGADORES_VENDER_JUGADOR_VENDEDOR)
         );
     }
 }

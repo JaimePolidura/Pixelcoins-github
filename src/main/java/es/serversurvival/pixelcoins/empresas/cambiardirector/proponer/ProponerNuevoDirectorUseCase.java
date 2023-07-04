@@ -42,6 +42,7 @@ public final class ProponerNuevoDirectorUseCase implements UseCaseHandler<Propon
                 .votacionId(votacionId)
                 .jugadorId(parametros.getJugadorId())
                 .empresaId(parametros.getEmpresaId())
+                .autoVoto(true)
                 .build());
 
         eventBus.publish(new NuevoDirectorPropuesto(parametros.getJugadorId(), parametros.getEmpresaId(),

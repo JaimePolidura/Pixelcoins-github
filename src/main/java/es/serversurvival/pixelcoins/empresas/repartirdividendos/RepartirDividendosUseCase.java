@@ -36,19 +36,22 @@ public final class RepartirDividendosUseCase implements UseCaseHandler<RepartirD
         empresasValidador.tienePixelcoinsSuficientes(parametros.getEmpresaId(), gastosTotales);
 
         accionistasEmpresasService.findByEmpresaId(parametros.getEmpresaId()).forEach(accionistaEmpresa -> {
-            repartirDividendo(accionistaEmpresa, parametros.getDividendoPorAccion());
+            repartirDividendo(accionistaEmpresa, parametros.getDividendoPorAccion(), empresa);
         });
 
-        eventBus.publish(new DividendosEmpresaRepartido(parametros.getJugadorId(), parametros.getEmpresaId(),
+        eventBus.publish(new TodosDividendosEmpresaRepartidos(parametros.getJugadorId(), parametros.getEmpresaId(),
                 parametros.getDividendoPorAccion()));
     }
 
-    private void repartirDividendo(AccionistaEmpresa accionista, double dividendoPorAccion) {
+    private void repartirDividendo(AccionistaEmpresa accionista, double dividendoPorAccion, Empresa empresa) {
         transaccionesSaver.save(Transaccion.builder()
                         .pagadorId(accionista.getEmpresaId())
                         .pagadoId(accionista.getAccionisaJugadorId())
                         .tipo(TipoTransaccion.EMPRESAS_DIVIDENDO)
                         .pixelcoins(dividendoPorAccion * accionista.getNAcciones())
                 .build());
+
+        eventBus.publish(new DividendoRepartido(accionista.getAccionisaJugadorId(), empresa.getDirectorJugadorId(), empresa.getEmpresaId(),
+                dividendoPorAccion, accionista.getNAcciones()));
     }
 }

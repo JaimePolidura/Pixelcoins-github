@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @EventHandler
 @AllArgsConstructor
-public final class OnPixelcoinEvento {
+public final class OnPixelcoinEventoReto {
     private final DependenciesRepository dependenciesRepository;
     private final RetosAdquiridosService retosAdquiridosService;
     private final AdquisitorRetos adquisitorRetos;
@@ -29,27 +29,32 @@ public final class OnPixelcoinEvento {
 
     @EventListener(value = InvocaAUnReto.class, pritority = Priority.LOWEST)
     public void on(InvocaAUnReto evento) {
-        Map<UUID, RetoMapping> retosByJugadorId = evento.retosByJugadorId();
-        Object otroId = evento.otroDatoReto();
+        Map<UUID, List<RetoMapping>> retosByJugadorId = evento.retosByJugadorId();
+        Object otro = evento.otroDatoReto();
 
         if(retosByJugadorId == null || retosByJugadorId.isEmpty()){
             return;
         }
 
-        for (Map.Entry<UUID, RetoMapping> entry : retosByJugadorId.entrySet()) {
-            if (retosAdquiridosService.estaAdquirido(entry.getKey(), entry.getValue().getRetoId())) {
-                continue;
-            }
+        for (Map.Entry<UUID, List<RetoMapping>> entry : retosByJugadorId.entrySet()) {
+            for (RetoMapping retoMapping : entry.getValue()) {
+                Reto reto = retosService.getByMapping(retoMapping);
+                UUID jugadorId = entry.getKey();
 
-            RetoMapping retoMapping = entry.getValue();
-            Reto reto = retosService.getById(retoMapping.getRetoId());
-            UUID jugadorId = entry.getKey();
-
-            if (reto.getTipo() == TipoReto.PROGRESIVO) {
-                intentarAdquirirRetosProgresivos(retoMapping, reto, jugadorId, otroId);
-            }else{
-                adquisitorRetos.adquirir(jugadorId, retoMapping.getRetoId());
+                intentarAdquirirReto(reto, jugadorId, retoMapping, otro);
             }
+        }
+    }
+
+    private void intentarAdquirirReto(Reto reto, UUID jugadorId, RetoMapping retoMapping, Object otro) {
+        if (retosAdquiridosService.estaAdquirido(jugadorId, reto.getRetoId())) {
+            return;
+        }
+
+        if (reto.esTipoProgresivo()) {
+            intentarAdquirirRetosProgresivos(retoMapping, reto, jugadorId, otro);
+        }else{
+            adquisitorRetos.adquirir(jugadorId, reto);
         }
     }
 
@@ -58,18 +63,17 @@ public final class OnPixelcoinEvento {
         double cantidadActualJugador = retoProgresivoService.getCantidad(jugadorId, otroId);
 
         List<Reto> todosLosRectosEnLaProgresion = retosService.findByRetoLineaPadre(reto.getRetoPadreProgresionId());
-        List<Integer> retosIdQuePuedeAdquirir = getRetosEnLaProgresionQuePuedeAdquirir(cantidadActualJugador, todosLosRectosEnLaProgresion, jugadorId);
+        List<Reto> retosQuePuedeAdquirir = getRetosEnLaProgresionQuePuedeAdquirir(cantidadActualJugador, todosLosRectosEnLaProgresion, jugadorId);
 
-        if (retosIdQuePuedeAdquirir.size() > 0) {
-            adquisitorRetos.adquirir(jugadorId, retosIdQuePuedeAdquirir);
+        if (retosQuePuedeAdquirir.size() > 0) {
+            adquisitorRetos.adquirir(jugadorId, retosQuePuedeAdquirir);
         }
     }
 
-    private List<Integer> getRetosEnLaProgresionQuePuedeAdquirir(double cantidadActualJugador, List<Reto> todosRetosLinea, UUID jugadorId) {
+    private List<Reto> getRetosEnLaProgresionQuePuedeAdquirir(double cantidadActualJugador, List<Reto> todosRetosLinea, UUID jugadorId) {
         return todosRetosLinea.stream()
                 .filter(reto -> cantidadActualJugador >= reto.getCantidadRequerida())
                 .filter(reto -> !retosAdquiridosService.estaAdquirido(jugadorId, reto.getRetoId()))
-                .map(Reto::getRetoId)
                 .collect(Collectors.toList());
     }
 }

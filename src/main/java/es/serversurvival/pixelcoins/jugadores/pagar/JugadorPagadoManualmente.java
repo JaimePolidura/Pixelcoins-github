@@ -6,6 +6,7 @@ import es.serversurvival.pixelcoins.retos._shared.retos.application.RetoMapping;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -16,10 +17,9 @@ public final class JugadorPagadoManualmente extends PixelcoinsEvento implements 
     @Getter private final UUID jugadorPagadoId;
 
     @Override
-    public Map<UUID, RetoMapping> retosByJugadorId() {
+    public Map<UUID, List<RetoMapping>> retosByJugadorId() {
         return Map.of(
-                jugadorPagadorId, RetoMapping.JUGADORES_PAGO_PAGADOR,
-                jugadorPagadoId, RetoMapping.JUGADORES_PAGO_PAGADO
+                jugadorPagadorId, List.of(RetoMapping.JUGADORES_PAGO_PAGADOR)
         );
     }
 }

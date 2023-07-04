@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -21,11 +22,11 @@ public final class CuotaPagada extends PixelcoinsEvento implements InvocaAUnReto
     @Getter private final int nInpagos;
 
     @Override
-    public Map<UUID, RetoMapping> retosByJugadorId() {
+    public Map<UUID, List<RetoMapping>> retosByJugadorId() {
         if(estaPendiente){
-            return Map.of(acredorJugadorId, RetoMapping.DEUDAS_PRESTAR_COBRO_CUOTAS);
+            return Map.of(acredorJugadorId, List.of(RetoMapping.DEUDAS_PRESTAR_COBRO_CUOTAS));
         }else if(estaPendiente && nInpagos == 0){
-            return Map.of(deudorJugadorId, RetoMapping.DEUDAS_PAGADA_ENTERA_SIN_NINPAGOS);
+            return Map.of(deudorJugadorId, List.of(RetoMapping.DEUDAS_PAGADA_ENTERA_SIN_NINPAGOS));
         }
 
         return null;

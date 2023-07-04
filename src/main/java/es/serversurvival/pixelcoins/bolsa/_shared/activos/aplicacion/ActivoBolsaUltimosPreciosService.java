@@ -5,6 +5,7 @@ import es.dependencyinjector.dependencies.annotations.Service;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.TipoActivoBolsaService;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.TipoActivoBolsa;
+import es.serversurvival.pixelcoins.bolsa._shared.premarket.application.AbridorOrdenesPremarket;
 
 import java.util.Map;
 import java.util.UUID;
@@ -18,10 +19,13 @@ import static es.serversurvival._shared.ConfigurationVariables.BOLSA_PRECIOS_CAC
 public final class ActivoBolsaUltimosPreciosService {
     private final Map<UUID, ActivoBolsaPrecioCache> cacheByActivoBolsaId;
 
-    private final DependenciesRepository dependencies;
+    private final AbridorOrdenesPremarket abridorOrdenesPremarket;
     private final ActivosBolsaService activosBolsaService;
+    private final DependenciesRepository dependencies;
 
-    public ActivoBolsaUltimosPreciosService(DependenciesRepository dependenciesRepository, ActivosBolsaService activosBolsaService) {
+    public ActivoBolsaUltimosPreciosService(AbridorOrdenesPremarket abridorOrdenesPremarket, DependenciesRepository dependenciesRepository,
+                                            ActivosBolsaService activosBolsaService) {
+        this.abridorOrdenesPremarket = abridorOrdenesPremarket;
         this.dependencies = dependenciesRepository;
         this.activosBolsaService = activosBolsaService;
         this.cacheByActivoBolsaId = new ConcurrentHashMap<>();
@@ -39,7 +43,7 @@ public final class ActivoBolsaUltimosPreciosService {
     }
 
     private boolean cacheValida(UUID activoBolsaId, UUID lectorId) {
-        boolean notCacheInvalidation = lectorId == null;
+        boolean notCacheInvalidation = lectorId == null || !abridorOrdenesPremarket.estaElMercadoAbierto();
 
         return cacheByActivoBolsaId.containsKey(activoBolsaId) &&
                 (notCacheInvalidation ||

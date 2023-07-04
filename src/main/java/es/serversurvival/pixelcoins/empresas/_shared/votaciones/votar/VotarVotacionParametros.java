@@ -14,4 +14,5 @@ public final class VotarVotacionParametros implements ParametrosUseCase {
     @Getter private final UUID empresaId;
     @Getter private final UUID votacionId;
     @Getter private final boolean aFavor;
+    @Getter private final boolean autoVoto;
 }

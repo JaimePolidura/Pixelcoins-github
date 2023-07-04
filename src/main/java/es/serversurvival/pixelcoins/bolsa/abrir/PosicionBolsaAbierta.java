@@ -7,6 +7,7 @@ import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.TipoBolsaApu
 import es.serversurvival.pixelcoins.retos._shared.retos.application.RetoMapping;
 import lombok.Getter;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -35,15 +36,15 @@ public final class PosicionBolsaAbierta extends PixelcoinsEvento implements Invo
     }
 
     @Override
-    public Map<UUID, RetoMapping> retosByJugadorId() {
+    public Map<UUID, List<RetoMapping>> retosByJugadorId() {
         if(premarket){
             return null;
         }
 
         if(tipoApuesta == TipoBolsaApuesta.LARGO){
-            return Map.of(jugadorId, RetoMapping.BOLSA_ABRIR_LARGO);
+            return Map.of(jugadorId, List.of(RetoMapping.BOLSA_ABRIR_LARGO));
         }else{
-            return Map.of(jugadorId, RetoMapping.BOLSA_ABRIR_CORTO);
+            return Map.of(jugadorId, List.of(RetoMapping.BOLSA_ABRIR_CORTO));
         }
     }
 }

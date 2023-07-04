@@ -10,7 +10,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
-@AllArgsConstructor
 public class TransaccionesBalanceCache {
     private final Map<UUID, AtomicDouble> balanceByEntidadId;
 

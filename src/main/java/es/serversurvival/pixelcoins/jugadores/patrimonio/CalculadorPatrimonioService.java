@@ -49,14 +49,6 @@ public final class CalculadorPatrimonioService {
         return calculador.calcular(jugadorId);
     }
 
-    public int getPosicionTopRicos(String jugadorNombre) {
-        Map<String, Double> topJugadores = calcularTopJugadores(true, Integer.MAX_VALUE);
-
-        return topJugadores.containsKey(jugadorNombre) ?
-                getPositionOfKeyInMap(topJugadores, k -> k.equalsIgnoreCase(jugadorNombre)) :
-                20;
-    }
-
     public Map<String, Double> calcularTopJugadores (boolean creciente, int limit) {
         List<Jugador> allJugadordes = jugadoresService.findAll();
 

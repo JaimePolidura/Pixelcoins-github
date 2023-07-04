@@ -16,7 +16,6 @@ public final class LargoTipoApuestaService implements TipoApuestaService {
     @Override
     public double getPixelcoinsAbrirPosicion(UUID activoBolsaId, UUID jugadorId, int cantidad) {
         return activoBolsaUltimosPreciosService.getUltimoPrecio(activoBolsaId, jugadorId) * cantidad;
-
     }
 
     @Override

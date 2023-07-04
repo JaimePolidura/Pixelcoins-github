@@ -5,7 +5,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 public interface Cache<K, V> {
-    void put(K key, V value);
+    V put(K key, V value);
     void remove(K key);
     void remove(Predicate<V> condition);
     Optional<V> find(K key);

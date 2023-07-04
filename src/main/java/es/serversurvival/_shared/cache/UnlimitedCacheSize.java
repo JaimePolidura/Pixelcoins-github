@@ -14,8 +14,9 @@ public final class UnlimitedCacheSize<K, V> implements Cache<K, V>{
     }
 
     @Override
-    public void put(K key, V value) {
+    public V put(K key, V value) {
         this.cacheItems.put(key, value);
+        return value;
     }
 
     @Override

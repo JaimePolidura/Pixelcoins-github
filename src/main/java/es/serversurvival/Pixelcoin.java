@@ -34,6 +34,8 @@ import es.serversurvival._shared.mysql.MySQLRepository;
 import es.serversurvival.minecraftserver.scoreboards.ScoreboardCreator;
 import es.serversurvival.minecraftserver.webaction.server.WebAcionHttpServer;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
+import es.serversurvival.pixelcoins.retos._shared.retos.domain.Reto;
+import es.serversurvival.pixelcoins.retos._shared.retos.infrastructure.MySQLRetosRepository;
 import es.serversurvival.pixelcoins.tienda._shared.MySQLTiendaObjetoEncantamientosDeserializer;
 import es.serversurvival.pixelcoins.tienda._shared.MySQLTiendaObjetoEncantamientosSerializer;
 import es.serversurvival.pixelcoins.tienda._shared.TiendaItemMinecraftEncantamientos;

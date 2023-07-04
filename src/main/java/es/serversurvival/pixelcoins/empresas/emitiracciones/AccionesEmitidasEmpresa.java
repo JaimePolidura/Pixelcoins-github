@@ -6,6 +6,7 @@ import es.serversurvival.pixelcoins.retos._shared.retos.application.RetoMapping;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -18,9 +19,9 @@ public final class AccionesEmitidasEmpresa extends PixelcoinsEvento implements I
 
 
     @Override
-    public Map<UUID, RetoMapping> retosByJugadorId() {
+    public Map<UUID, List<RetoMapping>> retosByJugadorId() {
         return Map.of(
-                jugadorId, RetoMapping.EMPRESAS_BOLSA_EMITIR
+                jugadorId, List.of(RetoMapping.EMPRESAS_BOLSA_EMITIR)
         );
     }
 }

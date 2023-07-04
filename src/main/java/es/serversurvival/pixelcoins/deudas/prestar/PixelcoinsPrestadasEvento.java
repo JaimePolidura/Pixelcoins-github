@@ -7,6 +7,7 @@ import es.serversurvival.pixelcoins.retos._shared.retos.application.RetoMapping;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -15,10 +16,10 @@ public final class PixelcoinsPrestadasEvento extends PixelcoinsEvento implements
     @Getter private final Deuda deuda;
 
     @Override
-    public Map<UUID, RetoMapping> retosByJugadorId() {
+    public Map<UUID, List<RetoMapping>> retosByJugadorId() {
         return Map.of(
-                deuda.getAcredorJugadorId(), RetoMapping.DEUDAS_PRESTAR_ACREDOR,
-                deuda.getDeudorJugadorId(), RetoMapping.DEUDAS_PRESTAR_DEUDOR
+                deuda.getAcredorJugadorId(), List.of(RetoMapping.DEUDAS_PRESTAR_ACREDOR),
+                deuda.getDeudorJugadorId(), List.of(RetoMapping.DEUDAS_PRESTAR_DEUDOR)
         );
     }
 }

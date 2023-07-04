@@ -27,6 +27,14 @@ public final class Transaccion {
         return new Transaccion.TransaccionBuilder();
     }
 
+    public boolean hasPagador() {
+        return this.pagadorId != null && !this.pagadorId.equals(Funciones.NULL_ID);
+    }
+
+    public boolean hasPagado() {
+        return this.pagadoId != null && !this.pagadoId.equals(Funciones.NULL_ID);
+    }
+
     public static class TransaccionBuilder {
         private UUID transaccionId;
         private TipoTransaccion tipo;
