@@ -14,8 +14,8 @@ import java.util.UUID;
 public class RetosService {
     private final RetosRepository retosRepository;
 
-    public List<Reto> findByRetoLineaPadre(UUID retoLineaPadreId) {
-        return retosRepository.findByRetoLineaPadre(retoLineaPadreId);
+    public List<Reto> findByRetoPadreProgresionId(UUID retoPadreProgresionId) {
+        return retosRepository.findByRetoLineaPadre(retoPadreProgresionId);
     }
 
     public Reto getById(int retoId) {

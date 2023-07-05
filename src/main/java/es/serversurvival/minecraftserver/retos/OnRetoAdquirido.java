@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 
+import static org.bukkit.ChatColor.*;
+
 @EventHandler
 @AllArgsConstructor
 public final class OnRetoAdquirido {
@@ -17,10 +19,16 @@ public final class OnRetoAdquirido {
 
     @EventListener
     public void on(RetoAdquiridoEvento evento) {
-        String mensaje = ChatColor.DARK_PURPLE + "Has alcanzado el reto " + evento.getReto().getNombre();
+        String mensaje = BOLD + "" + LIGHT_PURPLE + "Has alcanzado el reto '" + evento.getReto().getNombre() + "' ";
 
+        if(evento.getReto().esTipoProgresivo()){
+            double cantidad = evento.getReto().getCantidadRequerida();
+
+            mensaje += "con " + evento.getReto().getFormatoCantidadRequerida().formatear(cantidad) + LIGHT_PURPLE + " en " +
+                    evento.getReto().getNombreUnidadCantidadRequerida().toLowerCase() + " ";
+        }
         if(evento.getReto().getTipoRecompensa() == TipoRecompensa.PIXELCOINS){
-            mensaje += " Has sido recompensado con " + Funciones.formatPixelcoins(evento.getReto().getRecompensaPixelcoins());
+            mensaje += "\nHas sido recompensado con " + Funciones.formatPixelcoins(evento.getReto().getRecompensaPixelcoins());
         }
 
         enviadorMensajes.enviarMensajeYSonido(

@@ -6,10 +6,7 @@ import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.pixelcoins.lootbox.LootboxTier;
 import es.serversurvival.pixelcoins.retos._shared.retos.application.RetoMapping;
-import es.serversurvival.pixelcoins.retos._shared.retos.domain.ModuloReto;
-import es.serversurvival.pixelcoins.retos._shared.retos.domain.Reto;
-import es.serversurvival.pixelcoins.retos._shared.retos.domain.RetosRepository;
-import es.serversurvival.pixelcoins.retos._shared.retos.domain.TipoReto;
+import es.serversurvival.pixelcoins.retos._shared.retos.domain.*;
 import es.serversurvival.pixelcoins.retos._shared.retos.domain.recompensas.TipoRecompensa;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +18,7 @@ import java.util.stream.Collectors;
 import static es.serversurvival.pixelcoins.retos._shared.OnPluginIniciado.RecompensaRetoSeeder.*;
 import static es.serversurvival.pixelcoins.retos._shared.OnPluginIniciado.RecompensaRetoSeeder.lootbox;
 import static es.serversurvival.pixelcoins.retos._shared.retos.application.RetoMapping.*;
+import static es.serversurvival.pixelcoins.retos._shared.retos.domain.FormatoCantidadRequerida.*;
 import static es.serversurvival.pixelcoins.retos._shared.retos.domain.ModuloReto.*;
 
 @EventHandler
@@ -44,6 +42,10 @@ public final class OnPluginIniciado {
 
     @EventListener
     public void on(PluginIniciado e) {
+        if(!retosRepository.findAll().isEmpty()){
+            return;
+        }
+
         List<RetoSeeder> retosSeeder = crearRetos();
         saveRetosToRepository(retosSeeder);
     }
@@ -55,7 +57,7 @@ public final class OnPluginIniciado {
                 RetoSeeder.individual(JUGADORES_CAMBIO_INGRESAR_DIAMANTE, "Ingresa un diamante", "Cambia un diamante por pixelcoins con /cambio ingresar", JUGADORES, NORMAL),
                 RetoSeeder.individual(JUGADORES_CAMBIO_INGRESAR_CUARZO, "Ingresa cuarzo", "Cambia un bloque de cuarzo por pixelcoins con /cambio ingresar", JUGADORES, NORMAL),
                 RetoSeeder.individual(JUGADORES_CAMBIO_INGRESAR_LAPISLAZULI, "Ingresa lapislazuli", "Cambia lapislazuli por pixelcoins con /cambio ingresar", JUGADORES, NORMAL),
-                RetoSeeder.progresivoInicio(JUGADORES_PATRIMONIO, "Dinero", "Ten el maximo dinero posible. El dinero se son todas las pixelcoins que tienes en el servidor: empresas + pixelcoins + bolsa + pixelcoins que te deben - pixelcoins que debes", JUGADORES, List.of(
+                RetoSeeder.progresivoInicio(JUGADORES_PATRIMONIO, "Dinero", "Ten el maximo dinero posible. El dinero se son todas las pixelcoins que tienes en el servidor: empresas + pixelcoins + bolsa + pixelcoins que te deben - pixelcoins que debes", PIXELCOINS, "Pixelcoins", JUGADORES, List.of(
                         RetoSeeder.progresivo(100, MUY_FACIL),
                         RetoSeeder.progresivo(1000, FACIL),
                         RetoSeeder.progresivo(5000, NORMAL_LOOTBOX),
@@ -67,7 +69,7 @@ public final class OnPluginIniciado {
                         RetoSeeder.progresivo(1000000, MUY_DIFICIL_LOOTBOX.withCantidad(5))
                 )),
 
-                RetoSeeder.progresivoInicio(EMPRESAS_PAGAR_PAGADOR, "Paga a una empresa", "Haz un total de pagos a las empresas con /empresas pagar", EMPRESAS, List.of(
+                RetoSeeder.progresivoInicio(EMPRESAS_PAGAR_PAGADOR, "Paga a una empresa", "Haz un total de pagos a las empresas con /empresas pagar", PIXELCOINS, "Pagos", EMPRESAS, List.of(
                         RetoSeeder.progresivo(100, MUY_FACIL),
                         RetoSeeder.progresivo(250, MUY_FACIL),
                         RetoSeeder.progresivo(500, FACIL),
@@ -79,7 +81,7 @@ public final class OnPluginIniciado {
                 )),
 
                 RetoSeeder.individual(EMPRESAS_CREAR, "Crea una empresa", "Crea una empresa con /empresas crear", EMPRESAS, NORMAL, List.of(
-                        RetoSeeder.progresivoInicio(EMPRESAS_PAGAR_PAGADO,"Facturacion empresa", "Haz facturar todas las pixelcons posibles a una empresa en la que seas director", EMPRESAS, List.of(
+                        RetoSeeder.progresivoInicio(EMPRESAS_PAGAR_PAGADO,"Facturacion empresa", "Haz facturar todas las pixelcons posibles a una empresa en la que seas director", PIXELCOINS, "Facturacion", EMPRESAS, List.of(
                                 RetoSeeder.progresivo(100, MUY_FACIL),
                                 RetoSeeder.progresivo(1000, FACIL),
                                 RetoSeeder.progresivo(5000, NORMAL_LOOTBOX),
@@ -112,7 +114,7 @@ public final class OnPluginIniciado {
                         RetoSeeder.individual(EMPRESAS_CONTRATADO_PAGADO_SUELDO,"Ser pagado un sueldo", "El sueldo se paga automaticamente en la empresa donde estes contratado", EMPRESAS, FACIL)
                 )),
 
-                RetoSeeder.progresivoInicio(DEUDAS_PRESTAR_ACREDOR,"Prestar pixelcoins", "Haz que los jugadores te deban todas estas pixelcoins a la vez con /deudas prestar", DEUDAS, List.of(
+                RetoSeeder.progresivoInicio(DEUDAS_PRESTAR_ACREDOR,"Prestar pixelcoins", "Haz que los jugadores te deban todas estas pixelcoins a la vez con /deudas prestar", PIXELCOINS, "Prestamos", DEUDAS, List.of(
                         RetoSeeder.progresivo(100, FACIL),
                         RetoSeeder.progresivo(250, FACIL),
                         RetoSeeder.progresivo(500, FACIL),
@@ -126,7 +128,7 @@ public final class OnPluginIniciado {
                 RetoSeeder.individual(DEUDAS_COMPRAR,"Compra deuda", "Compra deuda de otro jugador en el mercado /deudas mercado", DEUDAS, NORMAL),
                 RetoSeeder.individual(DEUDAS_VENDER,"Vende deuda", "Si un jugador te debe dinero, puedes vender esa deuda por pixelcoins en el mercado. El comprador recibira los intereses", DEUDAS, NORMAL),
                 RetoSeeder.individual(DEUDAS_PAGADA_ENTERA_SIN_NINPAGOS,"No impages la deuda", "Paga todas las cuotas de la deuda sin hacer ningun impago", DEUDAS, DIFICIL),
-                RetoSeeder.progresivoInicio(DEUDAS_PRESTAR_COBRO_CUOTAS,"Cobra intereses de la deuda", "Ten cobrado en total estas pixelcoins de intereses de deudas que te deban otros jugadores", DEUDAS, List.of(
+                RetoSeeder.progresivoInicio(DEUDAS_PRESTAR_COBRO_CUOTAS,"Cobra intereses de la deuda", "Ten cobrado en total estas pixelcoins de intereses de deudas que te deban otros jugadores", PIXELCOINS, "Pixelcoins en intereses", DEUDAS, List.of(
                         RetoSeeder.progresivo(100, FACIL),
                         RetoSeeder.progresivo(250, FACIL),
                         RetoSeeder.progresivo(500, NORMAL),
@@ -139,7 +141,7 @@ public final class OnPluginIniciado {
 
                 RetoSeeder.individual(BOLSA_ABRIR_LARGO,"Compra acciones en bolsa", "Puedes comprar acciones de la bolsa de la vida real en /bolsa valores", BOLSA, NORMAL),
                 RetoSeeder.individual(BOLSA_ABRIR_CORTO,"Vender en corto", "Puedes apostar en contra de acciones de la bolsa de la vida real con /bolsa invertir", BOLSA, DIFICIL),
-                RetoSeeder.progresivoInicio(BOLSA_CERRAR_RENTABILIDAD, "Obtener rentabilidad", "Obten la maxima rentabilidad vendiendo acciones", BOLSA, List.of(
+                RetoSeeder.progresivoInicio(BOLSA_CERRAR_RENTABILIDAD, "Obtener rentabilidad", "Obten la maxima rentabilidad vendiendo acciones", PORCENTAJE_RESULTADO, "Rentabilidad en bolsa", BOLSA, List.of(
                         RetoSeeder.progresivo(1.05d, FACIL),
                         RetoSeeder.progresivo(1.15d, NORMAL),
                         RetoSeeder.progresivo(1.25d, NORMAL_LOOTBOX),
@@ -149,7 +151,7 @@ public final class OnPluginIniciado {
                         RetoSeeder.progresivo(2.5d, MUY_DIFICIL_LOOTBOX.withCantidad(3)),
                         RetoSeeder.progresivo(3d, MUY_MUY_DIFICIL)
                 )),
-                RetoSeeder.progresivoInicio(TIENDA_VENDER_VOLUMEN, "Vende en la tienda (volumen)", "Obten el maximo volumen de ventas de pixelcoins en la tienda con /tienda vender", TIENDA, List.of(
+                RetoSeeder.progresivoInicio(TIENDA_VENDER_VOLUMEN, "Vende en la tienda (volumen)", "Obten el maximo volumen de ventas de pixelcoins en la tienda con /tienda vender", PIXELCOINS, "Ventas", TIENDA, List.of(
                         RetoSeeder.progresivo(100, MUY_FACIL),
                         RetoSeeder.progresivo(250, FACIL),
                         RetoSeeder.progresivo(500, FACIL),
@@ -159,7 +161,7 @@ public final class OnPluginIniciado {
                         RetoSeeder.progresivo(25000, DIFICIL_LOOTBOX),
                         RetoSeeder.progresivo(50000, MUY_DIFICIL_LOOTBOX.withCantidad(2))
                 )),
-                RetoSeeder.progresivoInicio(TIENDA_VENDER_CANTIDAD, "Vende en la tienda (cantidad)", "Ten el maximo numero de objetos vendidos en la tienda", TIENDA, List.of(
+                RetoSeeder.progresivoInicio(TIENDA_VENDER_CANTIDAD, "Vende en la tienda (cantidad)", "Ten el maximo numero de objetos vendidos en la tienda", NUMERO, "Nº En ventas", TIENDA, List.of(
                         RetoSeeder.progresivo(1, MUY_FACIL),
                         RetoSeeder.progresivo(64, FACIL),
                         RetoSeeder.progresivo(128, FACIL),
@@ -187,8 +189,7 @@ public final class OnPluginIniciado {
                 List<Reto> retosProgresion = buildRetosProgresion(pendingToBuild.retoSeeder, retoAnteriorId);
 
                 retos.addAll(retosProgresion);
-            }
-            if(tieneHijos){
+            }else {
                 Reto retoPadre = Reto.builder()
                         .retoId(UUID.randomUUID())
                         .nombre(retoSeederPendingToBuild.nombre)
@@ -199,16 +200,19 @@ public final class OnPluginIniciado {
                         .retoPadreProgresionId(Funciones.NULL_ID)
                         .cantidadRequerida(0)
                         .tipo(retoSeederPendingToBuild.tipo)
+                        .tipoRecompensa(retoSeederPendingToBuild.recompensa.tipoRecompensa)
                         .recompensaPixelcoins(retoSeederPendingToBuild.recompensa.pixelcoins)
                         .lootboxTierRecompensa(retoSeederPendingToBuild.recompensa.lootboxTier)
                         .nLootboxesRecompensa(retoSeederPendingToBuild.recompensa.cantidad)
                         .build();
 
-                List<RetoPendingToBuild> hijosPendingToBuild = retoSeederToRetoPendingToBuild(pendingToBuild.retoSeeder.getHijos(), retoPadre.getRetoId());
-
-                retosPendingToBuild.addAll(hijosPendingToBuild);
-
                 retos.add(retoPadre);
+
+                if(tieneHijos){
+                    List<RetoPendingToBuild> hijosPendingToBuild = retoSeederToRetoPendingToBuild(pendingToBuild.retoSeeder.getHijos(), retoPadre.getRetoId());
+
+                    retosPendingToBuild.addAll(hijosPendingToBuild);
+                }
             }
         }
 
@@ -229,16 +233,19 @@ public final class OnPluginIniciado {
                     .descripccion(padreSeeder.descripccion)
                     .mapping(padreSeeder.mapping)
                     .moduloReto(padreSeeder.modulo)
-                    .retoPadreId(primeroEnProgresion ? retoAnteriorId : retoPadreProgresion)
+                    .retoPadreId(retoAnteriorId)
                     .retoPadreProgresionId(retoPadreProgresion)
+                    .nombreUnidadCantidadRequerida(padreSeeder.nombreUnidadCantidadRequerida)
+                    .formatoCantidadRequerida(padreSeeder.formatoCantidadRequerida)
                     .cantidadRequerida(actualRetoSeeder.cantidadRequerida)
                     .tipo(padreSeeder.tipo)
+                    .tipoRecompensa(actualRetoSeeder.recompensa.tipoRecompensa)
                     .recompensaPixelcoins(actualRetoSeeder.recompensa.pixelcoins)
                     .lootboxTierRecompensa(actualRetoSeeder.recompensa.lootboxTier)
                     .nLootboxesRecompensa(actualRetoSeeder.recompensa.cantidad)
                     .build();
 
-            retoPadreProgresion = reto.getRetoId();
+            retoAnteriorId = reto.getRetoId();
 
             retos.add(reto);
         }
@@ -262,6 +269,8 @@ public final class OnPluginIniciado {
         @Getter private ModuloReto modulo;
         @Getter private TipoReto tipo;
         @Getter private double cantidadRequerida;
+        @Getter private FormatoCantidadRequerida formatoCantidadRequerida;
+        @Getter private String nombreUnidadCantidadRequerida;
         @Getter private List<RetoSeeder> hijos;
         @Getter private List<RetoSeeder> progresion;
         @Getter private RecompensaRetoSeeder recompensa;
@@ -275,19 +284,19 @@ public final class OnPluginIniciado {
         }
 
         public static RetoSeeder individual(RetoMapping mapping, String nombre, String desc, ModuloReto moduloReto, RecompensaRetoSeeder recompensa, List<RetoSeeder> hijos) {
-            return new RetoSeeder(mapping, nombre, desc, moduloReto, TipoReto.INDEPENDIENTE, 0, hijos, null, recompensa);
+            return new RetoSeeder(mapping, nombre, desc, moduloReto, TipoReto.INDEPENDIENTE, 0, null, "", hijos, null, recompensa);
         }
 
         public static RetoSeeder individual(RetoMapping mapping, String nombre, String desc, ModuloReto moduloReto, RecompensaRetoSeeder recompensa) {
-            return new RetoSeeder(mapping, nombre, desc, moduloReto, TipoReto.INDEPENDIENTE, 0, null, null, recompensa);
+            return new RetoSeeder(mapping, nombre, desc, moduloReto, TipoReto.INDEPENDIENTE, 0, null, "", null, null, recompensa);
         }
 
-        public static RetoSeeder progresivoInicio(RetoMapping mapping, String nombre, String desc, ModuloReto moduloReto, List<RetoSeeder> progresion) {
-            return new RetoSeeder(mapping, nombre, desc, moduloReto, TipoReto.PROGRESIVO, 0, null, progresion, null);
+        public static RetoSeeder progresivoInicio(RetoMapping mapping, String nombre, String desc, FormatoCantidadRequerida formato, String nombreUnidadCantidadRequerida, ModuloReto moduloReto, List<RetoSeeder> progresion) {
+            return new RetoSeeder(mapping, nombre, desc, moduloReto, TipoReto.PROGRESIVO, 0,  formato, nombreUnidadCantidadRequerida, null, progresion, null);
         }
 
         public static RetoSeeder progresivo(double cantidadRequerida, RecompensaRetoSeeder recompensa) {
-            return new RetoSeeder(null, null, null, null ,TipoReto.PROGRESIVO, cantidadRequerida, null, null, recompensa);
+            return new RetoSeeder(null, null, null, null ,TipoReto.PROGRESIVO, cantidadRequerida, null, "", null, null, recompensa);
         }
     }
 

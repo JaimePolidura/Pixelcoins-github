@@ -15,4 +15,6 @@ public interface RetosRepository {
     Optional<Reto> findByMapping(RetoMapping retoMapping);
 
     List<Reto> findByRetoLineaPadre(UUID retoLineaPadreId);
+
+    List<Reto> findAll();
 }

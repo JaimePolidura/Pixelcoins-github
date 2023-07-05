@@ -9,7 +9,6 @@ import es.serversurvival.pixelcoins.retos._shared.retos.domain.RetoProgresivoSer
 import es.serversurvival.pixelcoins.retos._shared.retos.domain.Reto;
 import es.serversurvival.pixelcoins.retos._shared.retos.application.RetosService;
 import es.serversurvival.pixelcoins.retos._shared.retos.application.RetoMapping;
-import es.serversurvival.pixelcoins.retos._shared.retos.domain.TipoReto;
 import es.serversurvival.pixelcoins.retos._shared.retosadquiridos.application.AdquisitorRetos;
 import es.serversurvival.pixelcoins.retos._shared.retosadquiridos.application.RetosAdquiridosService;
 import lombok.AllArgsConstructor;
@@ -27,7 +26,7 @@ public final class OnPixelcoinEventoReto {
     private final AdquisitorRetos adquisitorRetos;
     private final RetosService retosService;
 
-    @EventListener(value = InvocaAUnReto.class, pritority = Priority.LOWEST)
+    @EventListener(pritority = Priority.LOWEST)
     public void on(InvocaAUnReto evento) {
         Map<UUID, List<RetoMapping>> retosByJugadorId = evento.retosByJugadorId();
         Object otro = evento.otroDatoReto();
@@ -62,7 +61,7 @@ public final class OnPixelcoinEventoReto {
         RetoProgresivoService retoProgresivoService = dependenciesRepository.get(retoMapping.getRetoProgresivoService());
         double cantidadActualJugador = retoProgresivoService.getCantidad(jugadorId, otroId);
 
-        List<Reto> todosLosRectosEnLaProgresion = retosService.findByRetoLineaPadre(reto.getRetoPadreProgresionId());
+        List<Reto> todosLosRectosEnLaProgresion = retosService.findByRetoPadreProgresionId(reto.getRetoPadreProgresionId());
         List<Reto> retosQuePuedeAdquirir = getRetosEnLaProgresionQuePuedeAdquirir(cantidadActualJugador, todosLosRectosEnLaProgresion, jugadorId);
 
         if (retosQuePuedeAdquirir.size() > 0) {

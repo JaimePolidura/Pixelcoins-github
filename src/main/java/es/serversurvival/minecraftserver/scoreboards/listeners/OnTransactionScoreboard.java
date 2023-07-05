@@ -4,7 +4,6 @@ import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventListener;
 import es.jaime.Priority;
 import es.serversurvival.minecraftserver.scoreboards.ScoreboardDisplayer;
-import es.serversurvival.pixelcoins._shared.EventoTipoTransaccion;
 import es.serversurvival.pixelcoins.transacciones.domain.Transaccion;
 import es.serversurvival.pixelcoins.transacciones.domain.TransaccionCreada;
 import lombok.RequiredArgsConstructor;

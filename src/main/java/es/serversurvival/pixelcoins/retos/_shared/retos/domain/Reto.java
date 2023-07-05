@@ -21,6 +21,8 @@ public class Reto {
     @Getter private UUID retoPadreProgresionId;
     @Getter private TipoReto tipo;
     @Getter private double cantidadRequerida;
+    @Getter private String nombreUnidadCantidadRequerida;
+    @Getter private FormatoCantidadRequerida formatoCantidadRequerida;
     @Getter private TipoRecompensa tipoRecompensa;
     @Getter private double recompensaPixelcoins;
     @Getter private LootboxTier lootboxTierRecompensa;
