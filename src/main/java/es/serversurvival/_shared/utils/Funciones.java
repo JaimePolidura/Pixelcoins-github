@@ -38,6 +38,44 @@ public final class Funciones {
         return espaciosLibres;
     }
 
+    public static List<String> dividirDesc (String sentence, Integer k){
+        int totalLines = (sentence.length() / k);
+        if(sentence.length() % k != 0){
+            totalLines++;
+        }
+
+        int beginIndex = 0;
+        int endIndex = k;
+        List<String> toReturn = new ArrayList<>();
+
+        for(int i = 0; i < totalLines; i++){
+            boolean lastIteration = (i + 1) == totalLines || endIndex > sentence.length();
+            if(beginIndex >= sentence.length()){
+                break;
+            }
+            if(lastIteration){
+                endIndex = sentence.substring(beginIndex).length() + beginIndex;
+            }
+
+            int offsetEndIndex = 0;
+
+            if(!lastIteration && sentence.charAt(endIndex) != ' '){
+                for(offsetEndIndex = 0; (offsetEndIndex + endIndex) < sentence.length(); offsetEndIndex++){
+                    if(sentence.charAt(endIndex + offsetEndIndex) == ' '){
+                        break;
+                    }
+                }
+            }
+
+            toReturn.add(sentence.substring(beginIndex, endIndex + offsetEndIndex));
+
+            beginIndex = beginIndex + k + offsetEndIndex + 1;
+            endIndex = endIndex + k + offsetEndIndex + 1;
+        }
+
+        return toReturn;
+    }
+
     public static String formatPixelcoins(double pixelcoins) {
         return pixelcoins >= 0 ?
                 ChatColor.GREEN + formatNumero(pixelcoins) + " PC " + ChatColor.GOLD :

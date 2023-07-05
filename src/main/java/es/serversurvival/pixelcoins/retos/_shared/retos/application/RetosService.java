@@ -2,6 +2,7 @@ package es.serversurvival.pixelcoins.retos._shared.retos.application;
 
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.serversurvival.pixelcoins.retos._shared.retos.domain.ModuloReto;
 import es.serversurvival.pixelcoins.retos._shared.retos.domain.Reto;
 import es.serversurvival.pixelcoins.retos._shared.retos.domain.RetosRepository;
 import lombok.AllArgsConstructor;
@@ -14,11 +15,15 @@ import java.util.UUID;
 public class RetosService {
     private final RetosRepository retosRepository;
 
-    public List<Reto> findByRetoPadreProgresionId(UUID retoPadreProgresionId) {
-        return retosRepository.findByRetoLineaPadre(retoPadreProgresionId);
+    public List<Reto> findByRetoPadreProgresionIdSortByPosicion(UUID retoPadreProgresionId) {
+        return retosRepository.findByRetoPadreProgresionIdSortByPosicion(retoPadreProgresionId);
     }
 
-    public Reto getById(int retoId) {
+    public List<Reto> findByModuloAndRetoPadreId(ModuloReto modulo, UUID retoPadreId) {
+        return this.retosRepository.findByModuloAndRetoPadreId(modulo, retoPadreId);
+    }
+
+    public Reto getById(UUID retoId) {
         return retosRepository.findById(retoId)
                 .orElseThrow(() -> new ResourceNotFound(String.format("Reto con id %s no encontrado", retoId)));
     }

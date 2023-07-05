@@ -61,7 +61,7 @@ public final class OnPixelcoinEventoReto {
         RetoProgresivoService retoProgresivoService = dependenciesRepository.get(retoMapping.getRetoProgresivoService());
         double cantidadActualJugador = retoProgresivoService.getCantidad(jugadorId, otroId);
 
-        List<Reto> todosLosRectosEnLaProgresion = retosService.findByRetoPadreProgresionId(reto.getRetoPadreProgresionId());
+        List<Reto> todosLosRectosEnLaProgresion = retosService.findByRetoPadreProgresionIdSortByPosicion(reto.getRetoPadreProgresionId());
         List<Reto> retosQuePuedeAdquirir = getRetosEnLaProgresionQuePuedeAdquirir(cantidadActualJugador, todosLosRectosEnLaProgresion, jugadorId);
 
         if (retosQuePuedeAdquirir.size() > 0) {

@@ -3,6 +3,9 @@ main: es.serversurvival.Pixelcoin
 version: 11.0
 api-version: "1.19"
 commands:
+  retos:
+    description: Ver los retos
+    usage: /<command>
   transacciones:
     description: Ver los ultimos movimientos de pixelcoins que has hecho
     usage: /<command>
