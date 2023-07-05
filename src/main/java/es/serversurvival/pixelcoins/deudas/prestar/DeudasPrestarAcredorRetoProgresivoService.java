@@ -19,7 +19,7 @@ public final class DeudasPrestarAcredorRetoProgresivoService implements RetoProg
 
     @Override
     public double getCantidad(UUID jugadorId, Object otro) {
-        double totalPixelcoinsPrestadas = transaccionesBalanceService.get(TipoTransaccion.DEUDAS_PRIMER_DESEMBOLSO, jugadorId);
+        double totalPixelcoinsPrestadas = -1 * transaccionesBalanceService.get(TipoTransaccion.DEUDAS_PRIMER_DESEMBOLSO, jugadorId);
         double totalPixelcoinsDeudasCanceladas = deudasService.findByAcredorJugadorId(jugadorId).stream()
                 .filter(deuda -> deuda.getEstadoDeuda() == EstadoDeuda.CANCELADA)
                 .mapToDouble(Deuda::getPixelcoinsRestantesDePagar)

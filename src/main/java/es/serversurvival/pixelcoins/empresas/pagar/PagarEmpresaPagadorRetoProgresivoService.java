@@ -15,6 +15,6 @@ public final class PagarEmpresaPagadorRetoProgresivoService implements RetoProgr
 
     @Override
     public double getCantidad(UUID jugadorId, Object otro) {
-        return transaccionesBalanceService.get(TipoTransaccion.EMPRESAS_PAGAR, jugadorId);
+        return -1 * transaccionesBalanceService.get(TipoTransaccion.EMPRESAS_PAGAR, jugadorId);
     }
 }

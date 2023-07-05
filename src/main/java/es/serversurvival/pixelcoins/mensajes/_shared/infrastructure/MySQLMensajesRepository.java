@@ -29,15 +29,14 @@ public final class MySQLMensajesRepository extends Repository<Mensaje, UUID, Obj
 
     @Override
     public List<Mensaje> findByJugadorIdNoVistos(UUID jugadorId) {
-        return super.buildListFromQuery(String.format("SELECT * FROM %s WHERE destinatarioId = '%s' AND visto IS FALSE", TABLE_NAME, jugadorId.toString()));
+        return super.buildListFromQuery(Select.from(TABLE_NAME).where("destinatarioId").equal(jugadorId)
+                .and("visto").isFalse());
     }
 
     @Override
     public void deleteByFechaVistaLessThan(LocalDateTime lessThan) {
-        String query = Delete.from(TABLE_NAME).where("fechaVisto").smaller(lessThan).and("visto").toString();
-        query += " AND visto IS TRUE";
-
-        super.execute(query);
+        super.execute(Delete.from(TABLE_NAME).where("fechaVisto").smaller(lessThan)
+                .and("visto").isTrue());
     }
 
     @Override

@@ -28,9 +28,11 @@ import es.jaime.ORMJava;
 import es.jaime.connection.DatabaseTransactionManager;
 import es.jaime.impl.EventBusSync;
 import es.jaime.javaddd.domain.database.TransactionManager;
+import es.serversurvival._shared.eventospixelcoins.EventBusWrapperAsync;
 import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
 
 import es.serversurvival._shared.mysql.MySQLRepository;
+import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver.scoreboards.ScoreboardCreator;
 import es.serversurvival.minecraftserver.webaction.server.WebAcionHttpServer;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
@@ -93,11 +95,12 @@ public final class Pixelcoin extends JavaPlugin {
                 OnInventoryClick.class, OnInventoryClose.class);
 
         InstanceProviderDependencyInjector instanceProvider = new InstanceProviderDependencyInjector(dependenciesRepository, excludedDependeies);
-        EventBus eventBus = new EventBusSync(COMMON_PACKAGE, instanceProvider);
-        dependenciesRepository.add(EventBusSync.class, eventBus);
+        EventBus eventBus = new EventBusWrapperAsync(new EventBusSync(COMMON_PACKAGE, instanceProvider), Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
+
+        dependenciesRepository.add(EventBusWrapperAsync.class, eventBus);
+        abstractionsRepository.add(EventBus.class, EventBusWrapperAsync.class);
         dependenciesRepository.add(DependenciesRepository.class, dependenciesRepository);
         dependenciesRepository.add(ObjectMapper.class, new ObjectMapper());
-        abstractionsRepository.add(EventBus.class, EventBusSync.class);
         abstractionsRepository.add(TransactionManager.class, DatabaseTransactionManager.class);
 
         ORMJava.addCustomDeserializer(TiendaItemMinecraftEncantamientos.class, new MySQLTiendaObjetoEncantamientosDeserializer());

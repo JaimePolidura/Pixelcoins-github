@@ -14,6 +14,7 @@ public final class VenderTiendaCantidadRetoProgresivoService implements RetoProg
 
     @Override
     public double getCantidad(UUID jugadorId, Object otro) {
-        return jugadoresEstadisticasService.getById(jugadorId).getNVentasTienda();
+        return jugadoresEstadisticasService.getById(jugadorId)
+                .getNVentasTienda();
     }
 }

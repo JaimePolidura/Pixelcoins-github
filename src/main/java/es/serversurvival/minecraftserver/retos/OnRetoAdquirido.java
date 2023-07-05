@@ -19,16 +19,16 @@ public final class OnRetoAdquirido {
 
     @EventListener
     public void on(RetoAdquiridoEvento evento) {
-        String mensaje = BOLD + "" + LIGHT_PURPLE + "Has alcanzado el reto '" + evento.getReto().getNombre() + "' ";
+        String mensaje = GOLD + "Has alcanzado el reto \"" + evento.getReto().getNombre() + "\" ";
 
         if(evento.getReto().esTipoProgresivo()){
             double cantidad = evento.getReto().getCantidadRequerida();
 
-            mensaje += "con " + evento.getReto().getFormatoCantidadRequerida().formatear(cantidad) + LIGHT_PURPLE + " en " +
+            mensaje += "con " + evento.getReto().getFormatoCantidadRequerida().formatear(cantidad) + " en " +
                     evento.getReto().getNombreUnidadCantidadRequerida().toLowerCase() + " ";
         }
         if(evento.getReto().getTipoRecompensa() == TipoRecompensa.PIXELCOINS){
-            mensaje += "\nHas sido recompensado con " + Funciones.formatPixelcoins(evento.getReto().getRecompensaPixelcoins());
+            mensaje += "Has sido recompensado con " + Funciones.formatPixelcoins(evento.getReto().getRecompensaPixelcoins());
         }
 
         enviadorMensajes.enviarMensajeYSonido(

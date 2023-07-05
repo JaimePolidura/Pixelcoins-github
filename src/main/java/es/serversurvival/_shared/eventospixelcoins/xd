@@ -1,0 +1,49 @@
+[15:38:53] [Server thread/INFO]: SELECT * FROM empresas WHERE nombre = 'cic'
+[15:38:53] [Server thread/INFO]: SELECT * FROM empresas_empleados WHERE empleadoJugadorId = '2730b830-7f0a-4a3e-8b2c-4cf885551118' AND empresaId = '999f3c39-6bfd-4eb1-a67a-f24a7546d510'
+[15:38:53] [Server thread/INFO]: SELECT * FROM transacciones_movimientos WHERE movimientoId = '13ca8abe-fc3e-484d-8fc8-c56ad47ca5d0'
+[15:38:53] [Server thread/INFO]: INSERT INTO transacciones_movimientos (movimientoId, transaccionId, entidadId, otraEntidadId, pixelcoins, tipo, fecha, objeto) VALUES ('13ca8abe-fc3e-484d-8fc8-c56ad47ca5d0', '730c2b48-1b8e-41b7-8e1d-c23d2c0ee4cc', '999f3c39-6bfd-4eb1-a67a-f24a7546d510', '2730b830-7f0a-4a3e-8b2c-4cf885551118', 1000.0, 'EMPRESAS_PAGAR', '2023-07-05 15:38:53', '')
+[15:38:53] [Server thread/INFO]: SELECT * FROM transacciones_movimientos WHERE movimientoId = '64a2e2a3-23a7-414e-bdae-b2235d9dd4a5'
+[15:38:53] [Server thread/INFO]: INSERT INTO transacciones_movimientos (movimientoId, transaccionId, entidadId, otraEntidadId, pixelcoins, tipo, fecha, objeto) VALUES ('64a2e2a3-23a7-414e-bdae-b2235d9dd4a5', '730c2b48-1b8e-41b7-8e1d-c23d2c0ee4cc', '2730b830-7f0a-4a3e-8b2c-4cf885551118', '999f3c39-6bfd-4eb1-a67a-f24a7546d510', -1000.0, 'EMPRESAS_PAGAR', '2023-07-05 15:38:53', '')
+[15:38:53] [Server thread/INFO]: SELECT * FROM jugadores
+[15:38:53] [ForkJoinPool.commonPool-worker-10/INFO]: SELECT * FROM empresas_accionistas WHERE accionisaJugadorId = '2730b830-7f0a-4a3e-8b2c-4cf885551118'
+[15:38:53] [ForkJoinPool.commonPool-worker-4/INFO]: SELECT * FROM posiciones WHERE jugadorId = '2730b830-7f0a-4a3e-8b2c-4cf885551118'
+[15:38:53] [Server thread/INFO]: SELECT * FROM deudas WHERE acredorJugadorId = '2730b830-7f0a-4a3e-8b2c-4cf885551118'
+[15:38:53] [ForkJoinPool.commonPool-worker-8/INFO]: SELECT * FROM deudas WHERE deudorJugadorId = '2730b830-7f0a-4a3e-8b2c-4cf885551118'
+[15:38:53] [ForkJoinPool.commonPool-worker-4/INFO]: SELECT * FROM posiciones WHERE posicionId = '38061a24-115d-4a10-820c-25cc9cb9255d'
+[15:38:53] [ForkJoinPool.commonPool-worker-10/INFO]: SELECT * FROM posiciones WHERE posicionId = '215be0f2-0aa7-4c3e-8647-5e5d86643bbc'
+[15:38:53] [ForkJoinPool.commonPool-worker-8/INFO]: SELECT * FROM posiciones WHERE posicionId = '43bdb5dd-75f5-42a8-b4ad-e319eb06b75a'
+[15:38:53] [ForkJoinPool.commonPool-worker-4/INFO]: SELECT * FROM deudas WHERE deudorJugadorId = '8c893f4b-c5cd-4add-b1d8-f76100aeebad'
+[15:38:53] [ForkJoinPool.commonPool-worker-10/INFO]: SELECT * FROM deudas WHERE acredorJugadorId = '8c893f4b-c5cd-4add-b1d8-f76100aeebad'
+[15:38:53] [ForkJoinPool.commonPool-worker-8/INFO]: SELECT * FROM empresas_accionistas WHERE accionisaJugadorId = '8c893f4b-c5cd-4add-b1d8-f76100aeebad'
+[15:38:53] [Server thread/INFO]: SELECT * FROM posiciones WHERE jugadorId = '8c893f4b-c5cd-4add-b1d8-f76100aeebad'
+[15:38:53] [Server thread/INFO]: SELECT * FROM posiciones WHERE jugadorId = '91fb555d-fa93-42c7-a4af-96211a206a88'
+[15:38:53] [ForkJoinPool.commonPool-worker-4/INFO]: SELECT * FROM deudas WHERE deudorJugadorId = '91fb555d-fa93-42c7-a4af-96211a206a88'
+[15:38:53] [Server thread/INFO]: SELECT * FROM deudas WHERE acredorJugadorId = '91fb555d-fa93-42c7-a4af-96211a206a88'
+[15:38:53] [ForkJoinPool.commonPool-worker-10/INFO]: SELECT * FROM empresas_accionistas WHERE accionisaJugadorId = '91fb555d-fa93-42c7-a4af-96211a206a88'
+[15:38:53] [Server thread/INFO]: SELECT * FROM retos WHERE mapping = 'JUGADORES_PATRIMONIO'
+[15:38:53] [Server thread/INFO]: SELECT * FROM retos_adquiridos WHERE jugadorId = '999f3c39-6bfd-4eb1-a67a-f24a7546d510' AND retoId = '0c7e7c7f-598a-4f53-97eb-0dcafa0ad0fe'
+[15:38:53] [Server thread/INFO]: SELECT * FROM posiciones WHERE jugadorId = '999f3c39-6bfd-4eb1-a67a-f24a7546d510'
+[15:38:53] [ForkJoinPool.commonPool-worker-10/INFO]: SELECT * FROM empresas_accionistas WHERE accionisaJugadorId = '999f3c39-6bfd-4eb1-a67a-f24a7546d510'
+[15:38:53] [ForkJoinPool.commonPool-worker-4/INFO]: SELECT * FROM deudas WHERE deudorJugadorId = '999f3c39-6bfd-4eb1-a67a-f24a7546d510'
+[15:38:53] [Server thread/INFO]: SELECT * FROM deudas WHERE acredorJugadorId = '999f3c39-6bfd-4eb1-a67a-f24a7546d510'
+[15:38:53] [Server thread/INFO]: SELECT * FROM retos WHERE retoPadreProgresionId = '5ffb6ea4-4277-4103-88d2-108d6529604c' ORDER BY posicionEnProgresion ASC
+[15:38:53] [Server thread/INFO]: SELECT * FROM retos_adquiridos WHERE jugadorId = '999f3c39-6bfd-4eb1-a67a-f24a7546d510' AND retoId = '5ffb6ea4-4277-4103-88d2-108d6529604c'
+[15:38:53] [Server thread/INFO]: SELECT * FROM retos_adquiridos WHERE jugadorId = '999f3c39-6bfd-4eb1-a67a-f24a7546d510' AND retoId = 'c2f0f599-c307-46ec-afc8-fe57bcbf3c57'
+[15:38:53] [Server thread/INFO]: SELECT * FROM retos WHERE mapping = 'JUGADORES_PATRIMONIO'
+[15:38:53] [Server thread/INFO]: SELECT * FROM retos_adquiridos WHERE jugadorId = '2730b830-7f0a-4a3e-8b2c-4cf885551118' AND retoId = '0c7e7c7f-598a-4f53-97eb-0dcafa0ad0fe'
+[15:38:53] [Server thread/INFO]: SELECT * FROM empresas_empleados WHERE empresaId = '999f3c39-6bfd-4eb1-a67a-f24a7546d510'
+[15:38:53] [Server thread/INFO]: SELECT * FROM mensajes WHERE mensajeId = 'b9936daa-bbf9-4754-8a13-10660e598488'
+[15:38:53] [Server thread/INFO]: INSERT INTO mensajes (mensajeId, destinatarioId, fechaEnvio, fechaVisto, mensaje, visto) VALUES ('b9936daa-bbf9-4754-8a13-10660e598488', '91fb555d-fa93-42c7-a4af-96211a206a88', '2023-07-05 15:38:53', '0001-01-01 00:00:00', 'º6JaimeTruman ha pagado ºa1.000 PC º6 a la empresa donde trabajas cic', 0)
+[15:38:53] [Server thread/INFO]: SELECT * FROM retos WHERE mapping = 'EMPRESAS_PAGAR_PAGADO'
+[15:38:53] [Server thread/INFO]: SELECT * FROM retos_adquiridos WHERE jugadorId = '91fb555d-fa93-42c7-a4af-96211a206a88' AND retoId = '13819b55-13df-4b59-a8c6-f42aa08b697b'
+[15:38:53] [Server thread/INFO]: SELECT SUM(pixelcoins) FROM transacciones_movimientos WHERE entidadId = '999f3c39-6bfd-4eb1-a67a-f24a7546d510' AND tipo = 'EMPRESAS_PAGAR' AND otro = '91fb555d-fa93-42c7-a4af-96211a206a88'
+[15:38:53] [Server thread/INFO]: SELECT * FROM retos WHERE retoPadreProgresionId = '682513e0-edc2-4d4d-b9e2-b850ca0ca51e' ORDER BY posicionEnProgresion ASC
+
+
+[15:38:53] [Server thread/INFO]: SELECT * FROM retos WHERE mapping = 'EMPRESAS_PAGAR_PAGADOR'
+[15:38:53] [Server thread/INFO]: SELECT * FROM retos_adquiridos WHERE jugadorId = '2730b830-7f0a-4a3e-8b2c-4cf885551118' AND retoId = '01079d07-f27f-4a9a-894f-8254932b0127'
+[15:38:53] [Server thread/INFO]: SELECT SUM(pixelcoins) FROM transacciones_movimientos WHERE entidadId = '2730b830-7f0a-4a3e-8b2c-4cf885551118' AND tipo = 'EMPRESAS_PAGAR'
+[15:38:53] [Server thread/INFO]: SELECT * FROM retos WHERE retoPadreProgresionId = '2a808af4-7a54-45a8-acb7-0919ef1891de' ORDER BY posicionEnProgresion ASC
+[15:39:41] [Server thread/INFO]: SELECT * FROM jugadores_estadisticas WHERE jugadorId = '2730b830-7f0a-4a3e-8b2c-4cf885551118'
+[15:39:41] [Server thread/INFO]: SELECT * FROM deudas WHERE deudorJugadorId = '2730b830-7f0a-4a3e-8b2c-4cf885551118'
+[15:39:41] [Server thread/INFO]: SELECT * FROM deudas WHERE acredorJugadorId = '2730b830-7f0a-4a3e-8b2c-4cf885551118'

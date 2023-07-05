@@ -45,10 +45,7 @@ public final class MySQLMercadoOfertasRepository extends Repository<Oferta, UUID
 
     @Override
     public List<Oferta> findByTipo(TipoOferta... tipoOfertas) {
-        return buildListFromQuery(String.format("SELECT * FROM %s WHERE tipo IN (%s)", TABLE_NAME, Arrays.stream(tipoOfertas)
-                .map(TipoOferta::toString)
-                .map(string -> String.format("'%s'", string))
-                .collect(Collectors.joining(","))));
+        return buildListFromQuery(Select.from(TABLE_NAME).where("tipo").in(tipoOfertas));
     }
 
     @Override
