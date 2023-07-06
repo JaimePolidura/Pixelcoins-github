@@ -35,7 +35,7 @@ public final class OnPosicionCerrada {
         if(evento.getTipoApuesta() == TipoBolsaApuesta.LARGO){
             enviadorMensajes.enviarMensajeYSonido(player.getUniqueId(), Sound.ENTITY_PLAYER_LEVELUP,  GOLD + "Has vendido " + evento.getCantidad() + " " + evento.getActivoBolsa().getTipoActivo().getNombreUnidadPlural()
                     + " de " + evento.getActivoBolsa().getNombreLargo() + " por " + formatPixelcoins(evento.getPrecioCierre()) + "/ " + evento.getActivoBolsa().getTipoActivo().getNombreUnidadSingular().toLowerCase()
-                    + GOLD + "Has obtenido " + formatPixelcoins(evento.getPixelcoinsTotales()) + "con una rentabilidad del " + formatRentabilidad(evento.getRentabilidad()));
+                    + GOLD + " Has obtenido " + formatPixelcoins(evento.getPixelcoinsTotales()) + "con una rentabilidad del " + formatRentabilidad(evento.getRentabilidad()));
 
             broadcastExcept(player, GOLD + player.getName() + " ha obtenido una rentabilidad del " + formatRentabilidad(evento.getRentabilidad()) + GOLD + " vendiendo " + evento.getCantidad() + " " +
                     evento.getActivoBolsa().getTipoActivo().getNombreUnidadPlural() + " de " + evento.getActivoBolsa().getNombreLargo()

@@ -3,7 +3,7 @@ package es.serversurvival.pixelcoins._shared;
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.*;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
-import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.application.MovimientosService;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;
@@ -11,7 +11,7 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public final class Validador {
-    private final TransaccionesBalanceService transaccionesBalanceService;
+    private final MovimientosService movmientosService;
 
     public void stringLongitudEntre(String texto, int min, int max, String nombre) {
         if(texto.length() < min || texto.length() > max){
@@ -50,7 +50,7 @@ public final class Validador {
     }
 
     public void jugadorTienePixelcoins(UUID jugadorId, double pixelcoinsMinimo) {
-        if(transaccionesBalanceService.get(jugadorId) < pixelcoinsMinimo){
+        if(movmientosService.getBalance(jugadorId) < pixelcoinsMinimo){
             throw new NotEnoughPixelcoins("No tienes las suficientes pixelcoins");
         }
     }

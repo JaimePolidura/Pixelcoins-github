@@ -3,6 +3,7 @@ package es.serversurvival._shared.mysql;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import es.dependencyinjector.dependencies.annotations.Configuration;
 import es.jaime.configuration.DatabaseConfiguration;
+import es.jaime.connection.pool.ConnectionPool;
 import es.serversurvival._shared.ConfigurationVariables;
 import lombok.AllArgsConstructor;
 

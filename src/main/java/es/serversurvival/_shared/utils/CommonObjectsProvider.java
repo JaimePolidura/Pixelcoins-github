@@ -13,11 +13,11 @@ import java.util.concurrent.Executors;
 public final class CommonObjectsProvider {
     @Provider
     public ExecutorService executorService() {
-        return Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        return (ExecutorService) Funciones.EXECUTOR;
     }
 
     @Provider
     public Executor executor() {
-        return Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        return Funciones.EXECUTOR;
     }
 }

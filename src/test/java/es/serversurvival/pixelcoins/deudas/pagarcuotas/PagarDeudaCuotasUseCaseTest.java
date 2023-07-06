@@ -8,7 +8,7 @@ import es.serversurvival.pixelcoins.deudas._shared.domain.Deuda;
 import es.serversurvival.pixelcoins.deudas._shared.domain.EstadoDeuda;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
-import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.application.MovimientosService;
 import es.serversurvival.pixelcoins.transacciones.application.TransaccionesSaver;
 import es.serversurvival.pixelcoins.transacciones.domain.TipoTransaccion;
 import es.serversurvival.pixelcoins.transacciones.domain.Transaccion;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 
 public final class PagarDeudaCuotasUseCaseTest {
     private PagarDeudaCuotasUseCase useCase;
-    private TransaccionesBalanceService transaccionesBalanceService;
+    private MovimientosService movimientosService;
     private TransaccionesSaver transaccionesSaver;
     private OfertasService ofertasService;
     private DeudasService deudasService;
@@ -32,14 +32,14 @@ public final class PagarDeudaCuotasUseCaseTest {
 
     @BeforeEach
     public void init() {
-        this.transaccionesBalanceService = mock(TransaccionesBalanceService.class);
+        this.movimientosService = mock(MovimientosService.class);
         this.transaccionesSaver = mock(TransaccionesSaver.class);
         this.ofertasService = mock(OfertasService.class);
         this.deudasService = mock(DeudasService.class);
         this.tiempoActual = mock(TiempoService.class);
         this.eventBus = mock(EventBus.class);
 
-        this.useCase = new PagarDeudaCuotasUseCase(transaccionesBalanceService, transaccionesSaver, ofertasService, deudasService, tiempoActual, eventBus);
+        this.useCase = new PagarDeudaCuotasUseCase(movimientosService, transaccionesSaver, ofertasService, deudasService, tiempoActual, eventBus);
     }
 
     @Test
@@ -54,7 +54,7 @@ public final class PagarDeudaCuotasUseCaseTest {
         UUID deudor = UUID.randomUUID();
         LocalDateTime ultimoPagoDeuda = LocalDateTime.now();
 
-        when(transaccionesBalanceService.get(deudor)).thenReturn(10000.0D);
+        when(movimientosService.getBalance(deudor)).thenReturn(10000.0D);
         when(tiempoActual.toMillis(any())).thenReturn(ultimoPagoToMillis);
         when(tiempoActual.millis()).thenReturn(tiempoActualMillis);
 
@@ -105,7 +105,7 @@ public final class PagarDeudaCuotasUseCaseTest {
         UUID deudor = UUID.randomUUID();
         LocalDateTime ultimoPagoDeuda = LocalDateTime.now();
 
-        when(transaccionesBalanceService.get(deudor)).thenReturn(10000.0D);
+        when(movimientosService.getBalance(deudor)).thenReturn(10000.0D);
         when(tiempoActual.toMillis(any())).thenReturn(ultimoPagoToMillis);
         when(tiempoActual.millis()).thenReturn(tiempoActualMillis);
 
@@ -148,7 +148,7 @@ public final class PagarDeudaCuotasUseCaseTest {
         UUID deudor = UUID.randomUUID();
         LocalDateTime ultimoPagoDeuda = LocalDateTime.now();
 
-        when(transaccionesBalanceService.get(deudor)).thenReturn(9.0d);
+        when(movimientosService.getBalance(deudor)).thenReturn(9.0d);
         when(tiempoActual.toMillis(any())).thenReturn(ultimoPagoToMillis);
         when(tiempoActual.millis()).thenReturn(tiempoActualMillis);
         Deuda deuda = Deuda.builder()

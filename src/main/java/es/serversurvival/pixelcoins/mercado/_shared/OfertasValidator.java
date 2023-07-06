@@ -2,18 +2,18 @@ package es.serversurvival.pixelcoins.mercado._shared;
 
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
-import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.application.MovimientosService;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;
 
 @AllArgsConstructor
 public final class OfertasValidator {
-    private final TransaccionesBalanceService transaccionesBalanceService;
+    private final MovimientosService movimientosService;
     private final OfertasService ofertasService;
 
     public void tienePixelcoinsSuficientes(UUID ofertaId, UUID jugadorId) {
-        if(transaccionesBalanceService.get(jugadorId) < ofertasService.getById(ofertaId).getPrecio()){
+        if(movimientosService.getBalance(jugadorId) < ofertasService.getById(ofertaId).getPrecio()){
             throw new NotEnoughPixelcoins("La empresa no tiene las suficientes pixelcoins");
         }
     }

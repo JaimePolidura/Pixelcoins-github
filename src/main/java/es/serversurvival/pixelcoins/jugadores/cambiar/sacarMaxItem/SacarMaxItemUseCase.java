@@ -8,7 +8,7 @@ import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.Jugador;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import es.serversurvival.pixelcoins.jugadores.cambiar.TipoCambioPixelcoins;
-import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.application.MovimientosService;
 import es.serversurvival.pixelcoins.transacciones.application.TransaccionesSaver;
 import es.serversurvival.pixelcoins.transacciones.domain.TipoTransaccion;
 import es.serversurvival.pixelcoins.transacciones.domain.Transaccion;
@@ -22,7 +22,7 @@ import org.bukkit.inventory.ItemStack;
 @UseCase
 @AllArgsConstructor
 public final class SacarMaxItemUseCase implements UseCaseHandler<SacarMaxItemParametros> {
-    private final TransaccionesBalanceService transaccionesBalanceService;
+    private final MovimientosService movimientosService;
     private final TransaccionesSaver transaccionesSaver;
     private final JugadoresService jugadoresService;
     private final Validador validador;
@@ -32,7 +32,7 @@ public final class SacarMaxItemUseCase implements UseCaseHandler<SacarMaxItemPar
     public void handle(SacarMaxItemParametros parametros) {
         validador.jugadorTienePixelcoins(parametros.getJugadorId(), parametros.getTipoCambio().cambio);
 
-        double pixelcoinsJugador = transaccionesBalanceService.get(parametros.getJugadorId());
+        double pixelcoinsJugador = movimientosService.getBalance(parametros.getJugadorId());
         Jugador jugador = jugadoresService.getById(parametros.getJugadorId());
 
         switch (parametros.getTipoCambio()) {

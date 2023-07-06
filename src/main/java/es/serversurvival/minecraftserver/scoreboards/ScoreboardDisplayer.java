@@ -27,21 +27,23 @@ public final class ScoreboardDisplayer implements Listener {
 
     public void showActualScoreboard(Player player) {
         if(lastScoreboardCreatorSelected != null){ //Puede ser que ScoreboardUpdaterTask no se haya ejecutado
-            player.setScoreboard(this.lastScoreboardCreatorSelected.create(player));
+            lastScoreboardCreatorSelected.create(player);
         }
     }
 
     private void showGlobalScoreboard(ServerScoreboardCreator actualScoreboard) {
         List<Player> onlinePlayers = (List<Player>) Bukkit.getOnlinePlayers();
-
-        Scoreboard newScoreboard = actualScoreboard.create(null);
-        onlinePlayers.forEach(ply -> ply.setScoreboard(newScoreboard));
+        Scoreboard scoreboard = actualScoreboard.create(null);
+        onlinePlayers.forEach(ply -> ply.setScoreboard(scoreboard));
     }
 
     private void showSingleScoreboard(ServerScoreboardCreator scoreboardCreator) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            Scoreboard newScoreboard = scoreboardCreator.create(player);
-            player.setScoreboard(newScoreboard);
+            player.setScoreboard(scoreboardCreator.create(player));
         }
+    }
+
+    public ServerScoreboardCreator getLastScoreboardCreatorSelected() {
+        return this.lastScoreboardCreatorSelected;
     }
 }

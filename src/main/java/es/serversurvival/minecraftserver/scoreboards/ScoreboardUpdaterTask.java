@@ -6,26 +6,25 @@ import es.bukkitclassmapper.task.TaskRunner;
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.dependencyinjector.hooks.AfterAllScanned;
 import es.jaime.javaddd.application.utils.CollectionUtils;
-import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
+import es.serversurvival.minecraftserver.scoreboards.displays.PatrimonioDisplayScoreboard;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Iterator;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Task(value = BukkitTimeUnit.MINUTE, delay = BukkitTimeUnit.MINUTE)
+@Task(value = BukkitTimeUnit.SECOND * 20, delay = 0)
 public final class ScoreboardUpdaterTask implements TaskRunner, AfterAllScanned {
-    private final ScoreboardDisplayer scoreBoardManager;
+    private final ScoreboardDisplayer scoreboardDisplayer;
 
     private Iterator<ServerScoreboardCreator> nextScoreboard;
     private List<ServerScoreboardCreator> scoreboards;
 
     @Override
     public void run() {
-        scoreBoardManager.showNewScoreboard((List<Player>) Bukkit.getOnlinePlayers(), nextScoreboard.next());
+        scoreboardDisplayer.showNewScoreboard((List<Player>) Bukkit.getOnlinePlayers(), nextScoreboard.next());
     }
 
     @Override

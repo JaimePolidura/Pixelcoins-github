@@ -79,7 +79,7 @@ public final class MinecraftUtils {
         return scoreboard;
     }
 
-    public static void addLineToScoreboard (Objective objective, String message, int fila) {
+    public static void setLineToScoreboard(Objective objective, String message, int fila) {
         Score score = objective.getScore(message);
         score.setScore(fila);
     }

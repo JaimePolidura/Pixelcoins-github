@@ -22,7 +22,6 @@ public final class BolsaCalculadorPatrimonio implements CalculadorPatrimonio {
         List<Posicion> posicionesAbiertas = posicionesService.findPosicionesAbiertasByJugadorId(jugadorId);
 
         return posicionesAbiertas.stream()
-                .parallel()
                 .mapToDouble(posicionAbierta -> {
                     Class<? extends TipoApuestaService> tipoApuestaServiceClass = posicionAbierta.getTipoApuesta().getTipoApuestaService();
                     TipoApuestaService tipoApuestaService = dependenciesRepository.get(tipoApuestaServiceClass);

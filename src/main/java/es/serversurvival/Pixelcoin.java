@@ -25,7 +25,9 @@ import es.dependencyinjector.dependencies.InMemoryDependenciesRepository;
 import es.jaime.EventBus;
 import es.jaime.EventListenerDependencyProvider;
 import es.jaime.ORMJava;
+import es.jaime.connection.ConnectionManager;
 import es.jaime.connection.DatabaseTransactionManager;
+import es.jaime.connection.pool.ConnectionPool;
 import es.jaime.impl.EventBusSync;
 import es.jaime.javaddd.domain.database.TransactionManager;
 import es.serversurvival._shared.eventospixelcoins.EventBusWrapperAsync;
@@ -36,8 +38,6 @@ import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver.scoreboards.ScoreboardCreator;
 import es.serversurvival.minecraftserver.webaction.server.WebAcionHttpServer;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
-import es.serversurvival.pixelcoins.retos._shared.retos.domain.Reto;
-import es.serversurvival.pixelcoins.retos._shared.retos.infrastructure.MySQLRetosRepository;
 import es.serversurvival.pixelcoins.tienda._shared.MySQLTiendaObjetoEncantamientosDeserializer;
 import es.serversurvival.pixelcoins.tienda._shared.MySQLTiendaObjetoEncantamientosSerializer;
 import es.serversurvival.pixelcoins.tienda._shared.TiendaItemMinecraftEncantamientos;
@@ -52,7 +52,6 @@ import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
-
 
 import java.util.Set;
 import java.util.concurrent.Executors;
@@ -95,7 +94,7 @@ public final class Pixelcoin extends JavaPlugin {
                 OnInventoryClick.class, OnInventoryClose.class);
 
         InstanceProviderDependencyInjector instanceProvider = new InstanceProviderDependencyInjector(dependenciesRepository, excludedDependeies);
-        EventBus eventBus = new EventBusWrapperAsync(new EventBusSync(COMMON_PACKAGE, instanceProvider), Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
+        EventBus eventBus = new EventBusWrapperAsync(new EventBusSync(COMMON_PACKAGE, instanceProvider), Funciones.EXECUTOR);
 
         dependenciesRepository.add(EventBusWrapperAsync.class, eventBus);
         abstractionsRepository.add(EventBus.class, EventBusWrapperAsync.class);
@@ -128,7 +127,7 @@ public final class Pixelcoin extends JavaPlugin {
                 .useDebugLogging()
                 .reflections(reflections)
                 .instanceProvider(instanceProvider)
-                .threadPool(Executors.newCachedThreadPool())
+                .threadPool(Funciones.EXECUTOR)
                 .commandMapper(ON_WRONG_PERMISSION, ON_WRONG_COMMAND)
                 .taskMapper()
                 .mobMapper()
@@ -149,6 +148,7 @@ public final class Pixelcoin extends JavaPlugin {
     public void onDisable() {
         DEPENDENCIES_REPOSTIORY.get(WebAcionHttpServer.class)
                 .stop();
+        DEPENDENCIES_REPOSTIORY.get(ConnectionManager.class);
     }
 
     @AllArgsConstructor

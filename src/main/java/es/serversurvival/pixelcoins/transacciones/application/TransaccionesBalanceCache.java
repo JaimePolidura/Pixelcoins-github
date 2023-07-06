@@ -2,6 +2,7 @@ package es.serversurvival.pixelcoins.transacciones.application;
 
 import com.google.common.util.concurrent.AtomicDouble;
 import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.pixelcoins.transacciones.domain.Movimiento;
 import es.serversurvival.pixelcoins.transacciones.domain.Transaccion;
 import lombok.AllArgsConstructor;
 
@@ -19,25 +20,16 @@ public class TransaccionesBalanceCache {
 
     public double get(UUID entidadId, Function<UUID, Double> callbackPixelcoinsBalance){
         if(!balanceByEntidadId.containsKey(entidadId)){
-            balanceByEntidadId.putIfAbsent(entidadId, new AtomicDouble(0));
-            balanceByEntidadId.get(entidadId).addAndGet(callbackPixelcoinsBalance.apply(entidadId));
+            double balance = callbackPixelcoinsBalance.apply(entidadId);
+            balanceByEntidadId.putIfAbsent(entidadId, new AtomicDouble(balance));
         }
 
         return balanceByEntidadId.get(entidadId).get();
     }
 
-    public void update(Transaccion transaccion) {
-        if(!transaccion.getPagadoId().equals(Funciones.NULL_ID)){
-            balanceByEntidadId.putIfAbsent(transaccion.getPagadoId(), new AtomicDouble(0));
-            AtomicDouble balancePagado = balanceByEntidadId.get(transaccion.getPagadoId());
-            balancePagado.addAndGet(transaccion.getPixelcoins());
-        }
-
-        if(!transaccion.getPagadorId().equals(Funciones.NULL_ID)){
-            balanceByEntidadId.putIfAbsent(transaccion.getPagadorId(), new AtomicDouble(0));
-            AtomicDouble balancePagador = balanceByEntidadId.get(transaccion.getPagadorId());
-            do {
-            }while (!balancePagador.compareAndSet(balancePagador.get(), balancePagador.get() - transaccion.getPixelcoins()));
-        }
+    public void update(Movimiento movimiento, Function<UUID, Double> callbackPixelcoinsBalance) {
+        balanceByEntidadId.putIfAbsent(movimiento.getEntidadId(), new AtomicDouble(callbackPixelcoinsBalance.apply(movimiento.getEntidadId())));
+        AtomicDouble balance = balanceByEntidadId.get(movimiento.getEntidadId());
+        balance.addAndGet(movimiento.getPixelcoins());
     }
 }

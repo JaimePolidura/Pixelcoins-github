@@ -10,8 +10,11 @@ import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -24,6 +27,8 @@ public final class Funciones {
     public static final LocalDateTime NULL_LOCALDATETIME = LocalDateTime.of(0, 1, 1, 0, 0, 0);
 
     private static final DecimalFormat FORMATEA = new DecimalFormat("###,###.##");
+
+    public static final Executor EXECUTOR = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     public static int getEspaciosOcupados(Inventory inventory) {
         int espaciosLibres = 36;
@@ -98,6 +103,11 @@ public final class Funciones {
         return (rentabilidad >= 0) ?
                 (ChatColor.GREEN + "+" + rentabildiadString + ChatColor.RESET) :
                 (ChatColor.RED + rentabildiadString + ChatColor.RESET);
+    }
+
+    @SneakyThrows
+    public static double desFormatearNumero(String numeroFormateado) {
+        return FORMATEA.parse(numeroFormateado).doubleValue();
     }
 
     public static String formatPorcentaje(double porcentaje) {

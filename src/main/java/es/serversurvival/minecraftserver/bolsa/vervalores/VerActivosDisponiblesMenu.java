@@ -13,7 +13,7 @@ import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBolsa
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.TipoActivoBolsa;
-import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.application.MovimientosService;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -32,8 +32,8 @@ import static org.bukkit.ChatColor.*;
 @RequiredArgsConstructor
 public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> implements AfterShow {
     private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;
-    private final TransaccionesBalanceService transaccionesBalanceService;
     private final ActivosBolsaService activosBolsaService;
+    private final MovimientosService movimientosService;
     private final MenuService menuService;
 
     private List<Thread> cargadorPreciosThreadByPageId = new LinkedList<>();
@@ -71,7 +71,7 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
         UUID activoBolsaId = MinecraftUtils.getLastLineOfLore(itemClicked, 0);
         ActivoBolsa activoBolsa = activosBolsaService.getById(activoBolsaId);
         double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(activoBolsaId, null);
-        double pixelcoinsJugador = transaccionesBalanceService.get(player.getUniqueId());
+        double pixelcoinsJugador = movimientosService.getBalance(player.getUniqueId());
 
         if(pixelcoinsJugador < ultimoPrecio){
             MinecraftUtils.enviarMensajeYSonido(player, DARK_RED + "No tienes las suficientes pixelcoins", Sound.ENTITY_VILLAGER_NO);

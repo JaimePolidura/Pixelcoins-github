@@ -7,7 +7,7 @@ import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.domain.Empleado;
 import es.serversurvival.pixelcoins.empresas._shared.empleados.application.EmpleadosService;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
-import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.application.MovimientosService;
 import es.serversurvival.pixelcoins.transacciones.application.TransaccionesSaver;
 import es.serversurvival.pixelcoins.transacciones.domain.TipoTransaccion;
 import es.serversurvival.pixelcoins.transacciones.domain.Transaccion;
@@ -16,7 +16,7 @@ import lombok.AllArgsConstructor;
 @UseCase
 @AllArgsConstructor
 public final class PagadorSueldosEmpresaUseCase implements UseCaseHandler<PagadorSueldosEmpresaParametros> {
-    private final TransaccionesBalanceService transaccionesBalanceService;
+    private final MovimientosService movimientosService;
     private final TransaccionesSaver transaccionesSaver;
     private final EmpleadosService empleadosService;
     private final TiempoService tiempoService;
@@ -32,7 +32,7 @@ public final class PagadorSueldosEmpresaUseCase implements UseCaseHandler<Pagado
         int numeroPagosPendientes = getNumeroSueldosPendientes(empleado);
 
         for (int i = 0; i < numeroPagosPendientes; i++) {
-            double pixelcoinsEmpresa = transaccionesBalanceService.get(empresa.getEmpresaId());
+            double pixelcoinsEmpresa = movimientosService.getBalance(empresa.getEmpresaId());
 
             if(empleado.getSueldo() > pixelcoinsEmpresa){
                 eventBus.publish(new ErrorPagandoSueldoEmpresa(empleado.getEmpleadoId(), empleado.getSueldo()));

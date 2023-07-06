@@ -10,6 +10,8 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static es.serversurvival._shared.utils.Funciones.formatPixelcoins;
 import static es.serversurvival.minecraftserver._shared.MinecraftUtils.*;
@@ -20,22 +22,44 @@ import static org.bukkit.ChatColor.*;
 public class PatrimonioDisplayScoreboard implements ServerScoreboardCreator {
     private final CalculadorPatrimonioService calculadorPatrimonioService;
 
+    private final Map<UUID, Map<TipoCuentaPatrimonio, Double>> patrimonioByJugadorId = new ConcurrentHashMap<>();
+
     @Override
     public Scoreboard create(Player player) {
-        Scoreboard scoreboard = createScoreboard("dinero", GOLD + "" + BOLD + "JUGADOR");
-        Objective objective = scoreboard.getObjective("dinero");
-
         Map<TipoCuentaPatrimonio, Double> patrimonioDesglosado = calculadorPatrimonioService.calcularDesglosadoPorCuentas(player.getUniqueId());
+
+        return creatPatrimonioScoreboard(patrimonioDesglosado, player, "dinero");
+    }
+
+    @Override
+    public boolean isGlobal() {
+        return false;
+    }
+
+    public void updateTipoCuenta(Player player, TipoCuentaPatrimonio tipoCuenta, double delta) {
+        Map<TipoCuentaPatrimonio, Double> patrimonioDesglosado =  patrimonioByJugadorId.get(player.getUniqueId());
+        patrimonioDesglosado.put(tipoCuenta, patrimonioDesglosado.get(tipoCuenta) + delta);
+
+        Scoreboard scoreboard = creatPatrimonioScoreboard(patrimonioDesglosado, player, "patrimonio");
+        player.setScoreboard(scoreboard);
+    }
+
+    private Scoreboard creatPatrimonioScoreboard(Map<TipoCuentaPatrimonio, Double> patrimonioDesglosado, Player player, String nombre) {
+        Scoreboard scoreboard = createScoreboard(nombre, GOLD + "" + BOLD + "JUGADOR");
+        Objective objective = scoreboard.getObjective(nombre);
+
+        patrimonioByJugadorId.put(player.getUniqueId(), patrimonioDesglosado);
+
         double patriominioTotal = patrimonioDesglosado.values().stream().mapToDouble(a -> a).sum();
 
-        addLineToScoreboard(objective, GOLD + "Tu patrimonio total: " + formatPixelcoins(Math.round(patriominioTotal)), 1);
-        addLineToScoreboard(objective, GOLD + "----------------", 2);
+        setLineToScoreboard(objective, GOLD + "Tu patrimonio total: " + formatPixelcoins(Math.round(patriominioTotal)), 1);
+        setLineToScoreboard(objective, GOLD + "----------------", 2);
         int scoreBoardLine = 3 + patrimonioDesglosado.size();
 
         for (TipoCuentaPatrimonio cuenta : patrimonioDesglosado.keySet()) {
             double patriomnioCuenta = patrimonioDesglosado.get(cuenta);
 
-            addLineToScoreboard(objective, GOLD + cuenta.getAlias() + ": " + formatPixelcoins(Math.round(patriomnioCuenta)), scoreBoardLine);
+            setLineToScoreboard(objective, getTipoCuentaLineaScoreboard(cuenta, patriomnioCuenta), scoreBoardLine);
 
             scoreBoardLine--;
         }
@@ -43,8 +67,7 @@ public class PatrimonioDisplayScoreboard implements ServerScoreboardCreator {
         return scoreboard;
     }
 
-    @Override
-    public boolean isGlobal() {
-        return false;
+    private String getTipoCuentaLineaScoreboard(TipoCuentaPatrimonio cuenta, double patriomnioCuenta) {
+        return GOLD + cuenta.getAlias() + ": " + formatPixelcoins(Math.round(patriomnioCuenta));
     }
 }

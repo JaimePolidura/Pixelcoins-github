@@ -19,7 +19,7 @@ import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votacion
 import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votos.application.VotosService;
 import es.serversurvival.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
-import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.application.MovimientosService;
 import lombok.AllArgsConstructor;
 
 import java.util.Optional;
@@ -28,8 +28,8 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public final class EmpresasValidador {
-    private final TransaccionesBalanceService transaccionesBalanceService;
     private final AccionistasEmpresasService accionistasEmpresasService;
+    private final MovimientosService movimientosService;
     private final VotacionesService votacionesService;
     private final EmpleadosService empleadosService;
     private final EmpresasService empresasService;
@@ -38,7 +38,7 @@ public final class EmpresasValidador {
     private final Validador validador;
 
     public void tienePixelcoinsSuficientes(UUID empresaId, double pixelcoins) {
-        if(transaccionesBalanceService.get(empresaId) < pixelcoins){
+        if(movimientosService.getBalance(empresaId) < pixelcoins){
            throw new NotEnoughPixelcoins("La empresa no tiene las suficientes pixelcoins");
         }
     }

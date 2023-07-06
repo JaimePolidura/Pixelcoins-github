@@ -15,7 +15,6 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public class TransaccionesSaver {
-    private final TransaccionesBalanceCache transaccionesBalanceCache;
     private final MovimientosService movimientosService;
     private final EventBus eventBus;
 
@@ -45,8 +44,6 @@ public class TransaccionesSaver {
                     .fecha(transaccion.getFecha())
                     .build());
         }
-
-        transaccionesBalanceCache.update(transaccion);
 
         eventBus.publish(new TransaccionCreada(transaccion));
     }

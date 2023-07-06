@@ -8,7 +8,7 @@ import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival.pixelcoins.deudas._shared.domain.Deuda;
 import es.serversurvival.pixelcoins.deudas._shared.application.DeudasService;
-import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.application.MovimientosService;
 import es.serversurvival.pixelcoins.transacciones.application.TransaccionesSaver;
 import es.serversurvival.pixelcoins.transacciones.domain.TipoTransaccion;
 import es.serversurvival.pixelcoins.transacciones.domain.Transaccion;
@@ -19,7 +19,7 @@ import static es.jaime.javaddd.application.utils.Utils.*;
 @UseCase
 @AllArgsConstructor
 public final class PagarDeudaCuotasUseCase implements UseCaseHandler<PagarDeudaCuotasParametros> {
-    private final TransaccionesBalanceService transaccionesBalanceService;
+    private final MovimientosService movimientosService;
     private final TransaccionesSaver transaccionesSaver;
     private final OfertasService ofertasService;
     private final DeudasService deudasService;
@@ -34,7 +34,7 @@ public final class PagarDeudaCuotasUseCase implements UseCaseHandler<PagarDeudaC
     }
 
     private void pagarCuota(Deuda deuda) {
-        boolean deudorTienePixelcoins = transaccionesBalanceService.get(deuda.getDeudorJugadorId()) >= deuda.getCuota();
+        boolean deudorTienePixelcoins = movimientosService.getBalance(deuda.getDeudorJugadorId()) >= deuda.getCuota();
 
         if(!deudorTienePixelcoins){
             anotarImpagoDeudaCuota(deuda);

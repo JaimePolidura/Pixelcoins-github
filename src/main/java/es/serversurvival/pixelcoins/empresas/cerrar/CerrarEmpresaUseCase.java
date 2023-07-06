@@ -8,7 +8,7 @@ import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.Acci
 import es.serversurvival.pixelcoins.empresas._shared.empleados.application.EmpleadosService;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
-import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.application.MovimientosService;
 import es.serversurvival.pixelcoins.transacciones.application.TransaccionesSaver;
 import es.serversurvival.pixelcoins.transacciones.domain.TipoTransaccion;
 import es.serversurvival.pixelcoins.transacciones.domain.Transaccion;
@@ -19,8 +19,8 @@ import java.util.UUID;
 @UseCase
 @AllArgsConstructor
 public final class CerrarEmpresaUseCase implements UseCaseHandler<CerrarEmpresaParametros> {
-    private final TransaccionesBalanceService transaccionesBalanceService;
     private final AccionistasEmpresasService accionistasEmpresasService;
+    private final MovimientosService movimientosService;
     private final TransaccionesSaver transaccionesSaver;
     private final EmpleadosService empleadosService;
     private final EmpresasService empresasService;
@@ -41,7 +41,7 @@ public final class CerrarEmpresaUseCase implements UseCaseHandler<CerrarEmpresaP
         transaccionesSaver.save(Transaccion.builder()
                 .pagadoId(parametros.getJugadorId())
                 .pagadorId(parametros.getEmpresaId())
-                .pixelcoins(transaccionesBalanceService.get(parametros.getEmpresaId()))
+                .pixelcoins(movimientosService.getBalance(parametros.getEmpresaId()))
                 .tipo(TipoTransaccion.EMPRESAS_CERRAR)
                 .build());
 

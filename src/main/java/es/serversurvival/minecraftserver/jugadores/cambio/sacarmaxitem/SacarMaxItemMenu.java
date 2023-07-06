@@ -7,7 +7,7 @@ import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.jugadores.cambiar.TipoCambioPixelcoins;
 import es.serversurvival.pixelcoins.jugadores.cambiar.sacarMaxItem.SacarMaxItemParametros;
 import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.application.MovimientosService;
 import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -22,7 +22,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 public final class SacarMaxItemMenu extends Menu {
-    private final TransaccionesBalanceService transaccionesBalanceService;
+    private final MovimientosService movimientosService;
     private final UseCaseBus useCaseBus;
 
     @Override
@@ -73,7 +73,7 @@ public final class SacarMaxItemMenu extends Menu {
     }
 
     private ItemStack buildItem (UUID jugaodrId, String item, Material material, int cambioPixelcoins) {
-        double pixelcoinsJugador = transaccionesBalanceService.get(jugaodrId);
+        double pixelcoinsJugador = movimientosService.getBalance(jugaodrId);
 
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "SACAR MAXIMO DE " + item;
         List<String> lore = new ArrayList<>() {{

@@ -21,7 +21,6 @@ public final class CalculadorPatrimonioService {
 
     public double calcular(UUID jugadorId) {
         return dependencies.filterByImplementsInterface(CalculadorPatrimonio.class).stream()
-                .parallel()
                 .mapToDouble(calculador -> calculador.calcular(jugadorId))
                 .sum();
     }

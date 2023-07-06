@@ -15,7 +15,7 @@ import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.TipoPosicion
 import es.serversurvival.pixelcoins.bolsa._shared.premarket.application.OrdenesPremarketService;
 import es.serversurvival.pixelcoins.bolsa._shared.premarket.domain.OrdenPremarket;
 import es.serversurvival.pixelcoins.bolsa.abrir.AbrirPosicoinBolsaParametros;
-import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.application.MovimientosService;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;
@@ -23,10 +23,10 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public final class BolsaValidator {
-    private final TransaccionesBalanceService transaccionesBalanceService;
     private final OrdenesPremarketService ordenesPremarketService;
     private final DependenciesRepository dependenciesRepository;
     private final ActivosBolsaService activosBolsaService;
+    private final MovimientosService movimientosService;
     private final PosicionesService posicionesService;
     private final Validador validador;
 
@@ -51,7 +51,7 @@ public final class BolsaValidator {
     public void suficientesPixelcoinsAbrir(AbrirPosicoinBolsaParametros parametros) {
         double precioBolsaTotal = getPixelcoinsAbrirPosicion(parametros.getActivoBolsaId(), parametros.getCantidad(),
                 parametros.getTipoApuesta(), parametros.getJugadorId());
-        double pixelcoinsJugador = transaccionesBalanceService.get(parametros.getJugadorId());
+        double pixelcoinsJugador = movimientosService.getBalance(parametros.getJugadorId());
 
         if(precioBolsaTotal > pixelcoinsJugador){
             throw new NotEnoughPixelcoins("No tienes las suficientes pixelcoins");

@@ -35,11 +35,11 @@ public class DeudasDisplayScoreboard implements ServerScoreboardCreator {
         double totalAPagar = getPixelcoinsTotalesDeudor(player);
         double totalASerPagado = getPixelcoinsTotalesCredor(player);
 
-        addLineToScoreboard(objective, GOLD + "Pixelcoins que debes: " + formatPixelcoins(totalAPagar), 0);
-        addLineToScoreboard(objective, GOLD + "Pixelcoins que te deben: " + formatPixelcoins(totalASerPagado), -1);
-        addLineToScoreboard(objective, "     ", -2);
-        addLineToScoreboard(objective, GOLD + "Nº de veces pagadas la deuda: " + formatPixelcoins(estadisticas.getNDeudaPagos()), -3);
-        addLineToScoreboard(objective, GOLD + "Nº de veces no pagadas la deuda: " + formatPixelcoins(estadisticas.getNDeudaInpagos()), -4);
+        setLineToScoreboard(objective, GOLD + "Pixelcoins que debes: " + formatPixelcoins(totalAPagar), 0);
+        setLineToScoreboard(objective, GOLD + "Pixelcoins que te deben: " + formatPixelcoins(totalASerPagado), -1);
+        setLineToScoreboard(objective, "     ", -2);
+        setLineToScoreboard(objective, GOLD + "Nº de veces pagadas la deuda: " + formatPixelcoins(estadisticas.getNDeudaPagos()), -3);
+        setLineToScoreboard(objective, GOLD + "Nº de veces no pagadas la deuda: " + formatPixelcoins(estadisticas.getNDeudaInpagos()), -4);
 
         return scoreboard;
     }

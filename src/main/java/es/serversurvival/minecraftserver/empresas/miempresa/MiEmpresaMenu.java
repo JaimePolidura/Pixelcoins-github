@@ -23,7 +23,7 @@ import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.Votacion;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.application.VotacionesService;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
-import es.serversurvival.pixelcoins.transacciones.application.TransaccionesBalanceService;
+import es.serversurvival.pixelcoins.transacciones.application.MovimientosService;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -45,8 +45,8 @@ import static org.bukkit.ChatColor.GOLD;
 
 @RequiredArgsConstructor
 public final class MiEmpresaMenu extends Menu<Empresa> implements BeforeShow, AfterShow {
-    private final TransaccionesBalanceService transaccionesBalanceService;
     private final AccionistasEmpresasService accionistasEmpresasService;
+    private final MovimientosService movimientosService;
     private final VotacionesService votacionesService;
     private final EmpleadosService empleadosService;
     private final JugadoresService jugadoresService;
@@ -235,7 +235,7 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements BeforeShow, Af
         lore.add(GOLD + "Descripccion:");
         lore.add(1, GOLD + "" + getState().getDescripcion());
         lore.add("  ");
-        lore.add(GOLD + "Pixelcoins: " + GREEN + formatPixelcoins(transaccionesBalanceService.get(getState().getEmpresaId())));
+        lore.add(GOLD + "Pixelcoins: " + GREEN + formatPixelcoins(movimientosService.getBalance(getState().getEmpresaId())));
         lore.add(GOLD + "Fundador: " + jugadoresService.getNombreById(getState().getFundadorJugadorId()));
         lore.add(GOLD + "Director: " + jugadoresService.getNombreById(getState().getDirectorJugadorId()));
         lore.add(GOLD + "Nº Total acciones: " + getState().getNTotalAcciones());

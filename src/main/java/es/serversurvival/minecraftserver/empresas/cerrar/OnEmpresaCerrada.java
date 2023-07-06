@@ -20,8 +20,10 @@ public final class OnEmpresaCerrada {
                 "se te han embolsado las pixelcoins");
 
         empleadosService.findEmpleoByEmpresaId(evento.getEmpresa().getEmpresaId()).forEach(empleado -> {
-            enviadorMensajes.enviarMensaje(empleado.getEmpleadoJugadorId(), ChatColor.GOLD + "Se ha cerrado la empresa " +
-                    evento.getEmpresa().getNombre() + " en la que trabajabas");
+            if(!empleado.getEmpleadoJugadorId().equals(evento.getEmpresa().getDirectorJugadorId())){
+                enviadorMensajes.enviarMensaje(empleado.getEmpleadoJugadorId(), ChatColor.GOLD + "Se ha cerrado la empresa " +
+                        evento.getEmpresa().getNombre() + " en la que trabajabas");
+            }
         });
     }
 }
