@@ -63,10 +63,25 @@ public final class MinecraftUtils {
         return UUID.fromString(lore.get(lore.size() - indexStaringFromLast - 1));
     }
 
+    public static String getLastLineOfLoreStr(ItemStack itemStack, int indexStaringFromLast) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        List<String> lore = itemMeta.getLore();
+
+        return lore.get(lore.size() - indexStaringFromLast - 1);
+    }
+
     public static void setLoreAndDisplayName (ItemStack itemStack, List<String> lore, String displayname) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setLore(lore);
         itemMeta.setDisplayName(displayname);
+        itemStack.setItemMeta(itemMeta);
+    }
+
+    public static void setLoreLine (ItemStack itemStack, int index, String newLoreLine) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        List<String> lore = itemMeta.getLore();
+        lore.set(index, newLoreLine);
+        itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
     }
 

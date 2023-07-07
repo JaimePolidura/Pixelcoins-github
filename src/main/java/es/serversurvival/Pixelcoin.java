@@ -27,7 +27,6 @@ import es.jaime.EventListenerDependencyProvider;
 import es.jaime.ORMJava;
 import es.jaime.connection.ConnectionManager;
 import es.jaime.connection.DatabaseTransactionManager;
-import es.jaime.connection.pool.ConnectionPool;
 import es.jaime.impl.EventBusSync;
 import es.jaime.javaddd.domain.database.TransactionManager;
 import es.serversurvival._shared.eventospixelcoins.EventBusWrapperAsync;
@@ -40,7 +39,7 @@ import es.serversurvival.minecraftserver.webaction.server.WebAcionHttpServer;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.tienda._shared.MySQLTiendaObjetoEncantamientosDeserializer;
 import es.serversurvival.pixelcoins.tienda._shared.MySQLTiendaObjetoEncantamientosSerializer;
-import es.serversurvival.pixelcoins.tienda._shared.TiendaItemMinecraftEncantamientos;
+import es.serversurvival._shared.items.ItemMinecraftEncantamientos;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
@@ -54,7 +53,6 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
 import java.util.Set;
-import java.util.concurrent.Executors;
 
 import static org.bukkit.ChatColor.*;
 
@@ -102,8 +100,8 @@ public final class Pixelcoin extends JavaPlugin {
         dependenciesRepository.add(ObjectMapper.class, new ObjectMapper());
         abstractionsRepository.add(TransactionManager.class, DatabaseTransactionManager.class);
 
-        ORMJava.addCustomDeserializer(TiendaItemMinecraftEncantamientos.class, new MySQLTiendaObjetoEncantamientosDeserializer());
-        ORMJava.addCustomSerializer(TiendaItemMinecraftEncantamientos.class, new MySQLTiendaObjetoEncantamientosSerializer());
+        ORMJava.addCustomDeserializer(ItemMinecraftEncantamientos.class, new MySQLTiendaObjetoEncantamientosDeserializer());
+        ORMJava.addCustomSerializer(ItemMinecraftEncantamientos.class, new MySQLTiendaObjetoEncantamientosSerializer());
 
         DependencyInjectorBootstrapper.init(DependencyInjectorConfiguration.builder()
                 .singleThreadedScan()

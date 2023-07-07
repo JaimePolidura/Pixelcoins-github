@@ -1,4 +1,4 @@
-package es.serversurvival.pixelcoins.tienda._shared;
+package es.serversurvival._shared.items;
 
 import es.serversurvival._shared.utils.Funciones;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.SneakyThrows;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public final class TiendaItemMinecraftEncantamiento {
+public final class ItemMinecraftEncantamiento {
     @Getter private String nombre;
     @Getter private int nivel;
 

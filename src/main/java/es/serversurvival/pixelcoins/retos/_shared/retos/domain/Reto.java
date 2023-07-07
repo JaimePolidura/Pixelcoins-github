@@ -1,10 +1,9 @@
 package es.serversurvival.pixelcoins.retos._shared.retos.domain;
 
-import es.serversurvival.pixelcoins.lootbox.LootboxTier;
+import es.serversurvival.pixelcoins.lootbox.items.domain.LootboxTier;
 import es.serversurvival.pixelcoins.retos._shared.retos.application.RetoMapping;
 import es.serversurvival.pixelcoins.retos._shared.retos.domain.recompensas.TipoRecompensa;
 import lombok.*;
-import org.bukkit.Material;
 
 import java.util.UUID;
 

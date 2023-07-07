@@ -1,6 +1,6 @@
 package es.serversurvival.pixelcoins.retos._shared.retos.domain.recompensas;
 
-import es.serversurvival.pixelcoins.lootbox.LootboxRecompensador;
+import es.serversurvival.pixelcoins.lootbox.propiedad.LootboxRecompensador;
 import es.serversurvival.pixelcoins.retos._shared.retos.application.PixelcoinsRecompensador;
 import lombok.Getter;
 

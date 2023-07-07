@@ -1,5 +1,7 @@
 package es.serversurvival.pixelcoins.tienda._shared;
 
+import es.serversurvival._shared.items.ItemMinecraftEncantamiento;
+import es.serversurvival._shared.items.ItemMinecraftEncantamientos;
 import es.serversurvival.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
 import es.serversurvival._shared.utils.CuatriConsumer;
@@ -12,19 +14,18 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 @NoArgsConstructor
 public final class OfertaTiendaItemMinecraft extends Oferta {
-    @Getter private TiendaItemMinecraftEncantamientos encantamientos;
+    @Getter private ItemMinecraftEncantamientos encantamientos;
     @Getter private short durabilidad;
     @Getter private boolean tieneNombre;
     @Getter private String nombre;
 
     public OfertaTiendaItemMinecraft(UUID ofertaId, UUID vendedorId, LocalDateTime fechaSubida, int cantidad, double precio, String objeto,
-                                     TipoOferta tipoOferta, TiendaItemMinecraftEncantamientos encantamientos, short durabilidad, boolean tieneNombre,
+                                     TipoOferta tipoOferta, ItemMinecraftEncantamientos encantamientos, short durabilidad, boolean tieneNombre,
                                      String nombre) {
         super(ofertaId, vendedorId, fechaSubida, cantidad, precio, objeto, tipoOferta);
         this.encantamientos = encantamientos;
@@ -57,7 +58,7 @@ public final class OfertaTiendaItemMinecraft extends Oferta {
     private void rellenarEncantamientoLibro (ItemStack itemToConvert, CuatriConsumer<ItemStack, ItemMeta, Enchantment, Integer> enchantmentAdder) {
         ItemMeta meta = itemToConvert.getItemMeta();
 
-        for(TiendaItemMinecraftEncantamiento encantamiento : encantamientos.getEncantamientos()){
+        for(ItemMinecraftEncantamiento encantamiento : encantamientos.getEncantamientos()){
             Enchantment enchantMentToPut = Enchantment.getByName(encantamiento.getNombre());
             int level = encantamiento.getNivel();
 
@@ -72,11 +73,10 @@ public final class OfertaTiendaItemMinecraft extends Oferta {
     }
 
     public static class OfertaItemTiendaMercadoBuilder extends Oferta.AbstractOfertaBuilder<OfertaItemTiendaMercadoBuilder> {
-        private TiendaItemMinecraftEncantamientos encantamientos;
+        private ItemMinecraftEncantamientos encantamientos;
         private boolean tieneNombre;
         private short durabilidad;
         private String nombre;
-        private String objetoMinecraft;
 
         public OfertaItemTiendaMercadoBuilder() {
             this.tipoOferta = TipoOferta.TIENDA_ITEM_MINECRAFT;
@@ -89,18 +89,17 @@ public final class OfertaTiendaItemMinecraft extends Oferta {
             this.encantamientos = getEncantamientosDeItem(itemStack);
             this.objeto = itemStack.getType().toString();
             this.cantidad = itemStack.getAmount();
-            this.objetoMinecraft = itemStack.getType().toString();
 
             return this;
         }
 
-        private TiendaItemMinecraftEncantamientos getEncantamientosDeItem (ItemStack item) {
+        private ItemMinecraftEncantamientos getEncantamientosDeItem (ItemStack item) {
             Map<Enchantment, Integer> enchantmentsBukkitTypes = item.getType() == Material.ENCHANTED_BOOK ?
                     ((EnchantmentStorageMeta) item.getItemMeta()).getStoredEnchants() :
                     item.getEnchantments();
 
-            return new TiendaItemMinecraftEncantamientos(enchantmentsBukkitTypes.keySet().stream()
-                    .map(e -> new TiendaItemMinecraftEncantamiento(e.getName(), enchantmentsBukkitTypes.get(e)))
+            return new ItemMinecraftEncantamientos(enchantmentsBukkitTypes.keySet().stream()
+                    .map(e -> new ItemMinecraftEncantamiento(e.getName(), enchantmentsBukkitTypes.get(e)))
                     .toList());
         }
 

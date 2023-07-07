@@ -9,9 +9,9 @@ public enum TipoCambioPixelcoins {
     LAPIS_BLOCK(TipoCambioPixelcoins.LAPISLAZULI * 9, "bloque de lapislazuli"),
     QUARTZ_BLOCK(TipoCambioPixelcoins.CUARZO, "bloque de cuarzo");
 
-    public static final int DIAMANTE = 290;
-    public static final int CUARZO = 12;
-    public static final int LAPISLAZULI = 5;
+    public static final int DIAMANTE = 250;
+    public static final int CUARZO = 25;
+    public static final int LAPISLAZULI = 10;
 
     @Getter public final int cambio;
     @Getter public final String nombre;

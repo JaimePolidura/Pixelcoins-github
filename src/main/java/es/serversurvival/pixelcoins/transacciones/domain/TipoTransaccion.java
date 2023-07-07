@@ -6,7 +6,6 @@ import lombok.Getter;
 
 import static es.serversurvival.pixelcoins.jugadores.patrimonio.TipoCuentaPatrimonio.*;
 import static es.serversurvival.pixelcoins.transacciones.domain.TipoTransaccion.CuentaAfectada.*;
-import static es.serversurvival.pixelcoins.transacciones.domain.TipoTransaccion.CuentaAfectada.cuentaAfectadaPagador;
 
 @AllArgsConstructor
 public enum TipoTransaccion {
@@ -38,7 +37,9 @@ public enum TipoTransaccion {
     BOLSA_CERRAR_LARGO               (cuentaAfectadaPagador(null, null ),       cuentaAfectadaPagado(EFECTIVO, BOLSA)),
     BOLSA_CERRAR_CORTO               (cuentaAfectadaPagador(null, null ),       cuentaAfectadaPagado(EFECTIVO, BOLSA)),
 
-    RETOS_RECOMPENSA_PIXELCOINS      (cuentaAfectadaPagador(null, null),        cuentaAfectadaPagado(EFECTIVO, null));
+    RETOS_RECOMPENSA_PIXELCOINS      (cuentaAfectadaPagador(null, null),        cuentaAfectadaPagado(EFECTIVO, null)),
+
+    LOOTBOX_COMPRAR                  (cuentaAfectadaPagador(null, EFECTIVO),          cuentaAfectadaPagado(null, null));
 
     @Getter private final CuentaAfectada cuentaAfectadaPagador;
     @Getter private final CuentaAfectada cuentaAfectadaPagado;

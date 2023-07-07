@@ -4,7 +4,7 @@ import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventListener;
 import es.serversurvival._shared.eventospixelcoins.PluginIniciado;
 import es.serversurvival._shared.utils.Funciones;
-import es.serversurvival.pixelcoins.lootbox.LootboxTier;
+import es.serversurvival.pixelcoins.lootbox.items.domain.LootboxTier;
 import es.serversurvival.pixelcoins.retos._shared.retos.application.RetoMapping;
 import es.serversurvival.pixelcoins.retos._shared.retos.domain.*;
 import es.serversurvival.pixelcoins.retos._shared.retos.domain.recompensas.TipoRecompensa;
