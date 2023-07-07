@@ -40,13 +40,14 @@ public class PatrimonioDisplayScoreboard implements ServerScoreboardCreator {
         Map<TipoCuentaPatrimonio, Double> patrimonioDesglosado =  patrimonioByJugadorId.get(player.getUniqueId());
         patrimonioDesglosado.put(tipoCuenta, patrimonioDesglosado.get(tipoCuenta) + delta);
 
-        Scoreboard scoreboard = creatPatrimonioScoreboard(patrimonioDesglosado, player, "patrimonio");
-        player.setScoreboard(scoreboard);
+        player.setScoreboard(creatPatrimonioScoreboard(patrimonioDesglosado, player, "patrimonio"));
     }
 
     private Scoreboard creatPatrimonioScoreboard(Map<TipoCuentaPatrimonio, Double> patrimonioDesglosado, Player player, String nombre) {
-        Scoreboard scoreboard = createScoreboard(nombre, GOLD + "" + BOLD + "JUGADOR");
-        Objective objective = scoreboard.getObjective(nombre);
+        String objectiveName = String.valueOf(System.currentTimeMillis());
+
+        Scoreboard scoreboard = createScoreboard(objectiveName, GOLD + "" + BOLD + "JUGADOR");
+        Objective objective = scoreboard.getObjective(objectiveName);
 
         patrimonioByJugadorId.put(player.getUniqueId(), patrimonioDesglosado);
 
