@@ -3,7 +3,7 @@ package es.serversurvival.minecraftserver.deudas.verdeudas;
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
-import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitbettermenus.utils.ItemBuilder;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.deudas.vendermercado.PonerVentaDeudaMercadoPrecioSelectorMenu;
 import es.serversurvival.minecraftserver.deudas._shared.DeudaItemLore;

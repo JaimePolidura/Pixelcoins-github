@@ -2,7 +2,7 @@ package es.serversurvival.minecraftserver.empresas.mercado;
 
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.modules.sync.SyncMenuService;
-import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitbettermenus.utils.ItemBuilder;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.empresas.vertodas.VerTodasEmpresasMenu;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;

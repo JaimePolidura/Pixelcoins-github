@@ -3,6 +3,9 @@ main: es.serversurvival.Pixelcoin
 version: 11.0
 api-version: "1.19"
 commands:
+  lootbox:
+    description: Ver los lootboxes
+    usage: /<command>
   retos:
     description: Ver los retos
     usage: /<command>

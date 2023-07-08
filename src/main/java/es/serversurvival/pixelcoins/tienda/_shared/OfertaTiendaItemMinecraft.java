@@ -86,21 +86,11 @@ public final class OfertaTiendaItemMinecraft extends Oferta {
             this.tieneNombre = itemStack.getItemMeta().hasDisplayName();
             this.nombre = itemStack.getItemMeta().getDisplayName();
             this.durabilidad = itemStack.getDurability();
-            this.encantamientos = getEncantamientosDeItem(itemStack);
+            this.encantamientos = ItemMinecraftEncantamientos.fromItem(itemStack);
             this.objeto = itemStack.getType().toString();
             this.cantidad = itemStack.getAmount();
 
             return this;
-        }
-
-        private ItemMinecraftEncantamientos getEncantamientosDeItem (ItemStack item) {
-            Map<Enchantment, Integer> enchantmentsBukkitTypes = item.getType() == Material.ENCHANTED_BOOK ?
-                    ((EnchantmentStorageMeta) item.getItemMeta()).getStoredEnchants() :
-                    item.getEnchantments();
-
-            return new ItemMinecraftEncantamientos(enchantmentsBukkitTypes.keySet().stream()
-                    .map(e -> new ItemMinecraftEncantamiento(e.getName(), enchantmentsBukkitTypes.get(e)))
-                    .toList());
         }
 
         @Override

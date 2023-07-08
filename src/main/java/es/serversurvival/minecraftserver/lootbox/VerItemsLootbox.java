@@ -1,11 +1,11 @@
-package es.serversurvival._shared.lootbox.ver;
+package es.serversurvival.minecraftserver.lootbox;
 
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.menustate.AfterShow;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
-import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitbettermenus.utils.ItemBuilder;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
@@ -21,7 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static es.serversurvival._shared.utils.Funciones.*;
@@ -73,7 +72,8 @@ public final class VerItemsLootbox extends Menu<LootboxTier> implements AfterSho
 
     private ItemStack buildItemFromLootboxItem(LootboxItem lootboxItem) {
         return ItemBuilder.of(Material.valueOf(lootboxItem.getNombre()))
-                .title(buildItemTitleLootbox(lootboxItem))
+                .title(BOLD + buildItemTitleLootbox(lootboxItem))
+                .addEnchanments(lootboxItem.getEncantamientos().toEnchantments())
                 .amount(lootboxItem.getCantidadMinima())
                 .lore(List.of(
                         GOLD + "Probabilidad: " + MenuItems.CARGANDO,
@@ -87,7 +87,7 @@ public final class VerItemsLootbox extends Menu<LootboxTier> implements AfterSho
     }
 
     private String buildItemTitleLootbox(LootboxItem lootboxItem) {
-        return BOLD + "" + switch(lootboxItem.getRareza()) {
+        return switch(lootboxItem.getRareza()) {
             case MUY_COMUN -> GOLD + "MUY COMUN";
             case COMUN -> BLUE + "COMUN";
             case RARO -> RED + "RARO";
@@ -113,15 +113,16 @@ public final class VerItemsLootbox extends Menu<LootboxTier> implements AfterSho
 
     @Override
     public void afterShow(Player player) {
-        for (ItemStack itemLootbox : super.getAllItemsByItemNum(6)) {
+        super.forEachAllItemsByItemNum(6, (item, pageId, slot) -> {
             LootboxItemRareza rareza = LootboxItemRareza.valueOf(
-                    MinecraftUtils.getLastLineOfLoreStr(itemLootbox, 0)
+                    MinecraftUtils.getLastLineOfLoreStr(item, 0)
             );
 
             int nItemsConLaRareza = cantidadItemsPorRareza.get(rareza);
             double probabilidad = rareza.getProbabilidad() * ((double) 1 / nItemsConLaRareza);
 
-            MinecraftUtils.setLoreLine(itemLootbox, 0, GOLD + "Probabilidad: " + Funciones.formatPorcentaje(probabilidad));
-        }
+            super.setItemLore(pageId, slot, 0, GOLD + "Probabilidad: " + Funciones.formatPorcentaje(probabilidad));
+        });
     }
 }
+

@@ -1,7 +1,6 @@
 package es.serversurvival.minecraftserver.deudas.prestar;
 
-import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import es.serversurvival.minecraftserver._shared.MinecraftUtils;
+import es.bukkitbettermenus.utils.ItemBuilder;
 import es.serversurvival.minecraftserver._shared.menus.ConfirmacionMenu;
 import es.serversurvival.minecraftserver.deudas._shared.DeudaItemLore;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
@@ -9,9 +8,7 @@ import es.serversurvival.pixelcoins.deudas.prestar.PrestarDeudaParametros;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;

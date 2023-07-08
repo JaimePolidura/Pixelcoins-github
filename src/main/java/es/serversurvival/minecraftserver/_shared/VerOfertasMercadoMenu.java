@@ -6,8 +6,8 @@ import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitbettermenus.modules.sync.SyncMenuConfiguration;
 import es.bukkitbettermenus.modules.sync.SyncMenuService;
-import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import es.bukkitclassmapper._shared.utils.ItemUtils;
+import es.bukkitbettermenus.utils.ItemBuilder;
+import es.bukkitbettermenus.utils.ItemUtils;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.mensajes._shared.application.EnviadorMensajes;
@@ -165,8 +165,7 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
         return ItemBuilder.of(Material.PAPER).title(ChatColor.GOLD + "" + ChatColor.BOLD + "INFO").lore(loreItemInfo()).build();
     }
 
-    protected void onClickOptionalItem2(Player player, InventoryClickEvent event) {
-    }
+    protected void onClickOptionalItem2(Player player, InventoryClickEvent event) {}
 
     protected ItemStack buildOptionalItem2() {
         return ItemBuilder.of(Material.AIR).build();

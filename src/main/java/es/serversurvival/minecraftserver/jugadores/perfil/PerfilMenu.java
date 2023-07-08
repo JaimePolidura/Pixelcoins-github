@@ -4,7 +4,7 @@ import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.menustate.AfterShow;
-import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitbettermenus.utils.ItemBuilder;
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.utils.Funciones;
@@ -185,7 +185,7 @@ public final class PerfilMenu extends Menu implements AfterShow {
             double patrimonioNeto = totalEfectivo + totalDeudasAcredor + totalBolsa + totalAccionesEmpresas + totalDeudasDeudor;
 
             Bukkit.getScheduler().runTask(Pixelcoin.INSTANCE, () -> {
-                super.setItemLoreActualPage(10, List.of(
+                super.setActualItemLore(10, List.of(
                         "   ",
                         GOLD + "Efectivo: " + formatPixelcoins(totalEfectivo),
                         GOLD + "Bolsa: " + formatPixelcoins(totalBolsa),

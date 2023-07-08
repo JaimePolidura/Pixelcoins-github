@@ -25,4 +25,8 @@ public final class LootboxItemsService {
     public List<LootboxItem> findByTierAndRareza(LootboxTier tier, LootboxItemRareza rareza) {
         return repository.findByTierAndRareza(tier, rareza);
     }
+
+    public List<LootboxItem> findAll() {
+        return repository.findAll();
+    }
 }

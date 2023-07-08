@@ -2,7 +2,7 @@ package es.serversurvival.minecraftserver.jugadores.cambio.sacarmaxitem;
 
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
-import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitbettermenus.utils.ItemBuilder;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.jugadores.cambiar.TipoCambioPixelcoins;
 import es.serversurvival.pixelcoins.jugadores.cambiar.sacarMaxItem.SacarMaxItemParametros;

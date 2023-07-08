@@ -2,7 +2,7 @@ package es.serversurvival.minecraftserver.deudas.verdeudasmercado;
 
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.modules.sync.SyncMenuService;
-import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitbettermenus.utils.ItemBuilder;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.VerOfertasMercadoMenu;
 import es.serversurvival.minecraftserver.deudas.verdeudas.MisDeudasMenu;

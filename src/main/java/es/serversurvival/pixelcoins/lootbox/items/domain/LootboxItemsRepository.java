@@ -8,4 +8,6 @@ public interface LootboxItemsRepository {
     List<LootboxItem> findByTier(LootboxTier tier);
 
     List<LootboxItem> findByTierAndRareza(LootboxTier tier, LootboxItemRareza rareza);
+
+    List<LootboxItem> findAll();
 }

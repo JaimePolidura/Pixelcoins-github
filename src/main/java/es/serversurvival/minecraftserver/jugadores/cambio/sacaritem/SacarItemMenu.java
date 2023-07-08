@@ -2,8 +2,8 @@ package es.serversurvival.minecraftserver.jugadores.cambio.sacaritem;
 
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
-import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import es.bukkitclassmapper._shared.utils.ItemUtils;
+import es.bukkitbettermenus.utils.ItemBuilder;
+import es.bukkitbettermenus.utils.ItemUtils;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
@@ -89,10 +89,9 @@ public final class SacarItemMenu extends Menu {
     }
 
     private void updateItemLore(int itemNum, double pixelcoinsJugador, double cambioPixelcoins) {
-        ItemUtils.setLore(
-                (ItemStack) super.getActualItemsByItemNum(itemNum).get(0), 2,
-                GOLD + "Tus pixelcoins disponibles: " + formatPixelcoins(pixelcoinsJugador - cambioPixelcoins)
-        );
+        int slot = super.getActualSlotByItemNum(itemNum);
+
+        super.setActualItemLore(slot, 2, GOLD + "Tus pixelcoins disponibles: " + formatPixelcoins(pixelcoinsJugador - cambioPixelcoins));
     }
 
     private ItemStack buildItemInfo() {

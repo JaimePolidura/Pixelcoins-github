@@ -6,8 +6,8 @@ import es.bukkitbettermenus.Page;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.menustate.AfterShow;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
-import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import es.bukkitclassmapper._shared.utils.ItemUtils;
+import es.bukkitbettermenus.utils.ItemBuilder;
+import es.bukkitbettermenus.utils.ItemUtils;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivoBolsaUltimosPreciosService;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
@@ -133,7 +133,7 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
                 item = ItemUtils.setLore(item,  1, nuevoLore);
 
                 if(getActualPage().getPageId() == page.getPageId()){
-                    super.setItemLore(i, 1, nuevoLore);
+                    super.setActualItemLore(i, 1, nuevoLore );
                 }
 
                 super.getActualPage().getItems().set(i, item);

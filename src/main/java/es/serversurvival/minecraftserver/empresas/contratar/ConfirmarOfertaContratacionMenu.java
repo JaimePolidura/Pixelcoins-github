@@ -1,6 +1,6 @@
 package es.serversurvival.minecraftserver.empresas.contratar;
 
-import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitbettermenus.utils.ItemBuilder;
 import es.serversurvival.minecraftserver._shared.menus.ConfirmacionMenu;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
@@ -44,6 +44,10 @@ public final class ConfirmarOfertaContratacionMenu extends ConfirmacionMenu<Conf
         enviadorMensajes.enviarMensajeYSonido(jugadorIdAContratar, ENTITY_PLAYER_LEVELUP, GOLD + "Has sido contratado en " + state.getEmpresa().getNombre()
                 + "con el cargo " + state.getDescripccion() + " con un sueldo de " + formatPixelcoins(state.getSueldo()) + "/ " +
                 millisToDias(state.getPeriodoPagoSueldoMs()) + " dias");
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Hoa");
     }
 
     @Override

@@ -4,7 +4,7 @@ import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.modules.confirmation.ConfirmationConfiguration;
 import es.bukkitbettermenus.modules.numberselector.NumberSelectorMenuConfiguration;
-import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitbettermenus.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -75,9 +75,9 @@ public abstract class NumberSelectorMenu<T> extends Menu<T> {
     public int minValue() {
         return 1;
     }
-    
+
     public final void onCantidadChanged(double cantidad){
-        super.setItemLoreActualPage(14, loreItemAceptar(cantidad));
+        super.setActualItemLore(14, loreItemAceptar(cantidad));
     }
 
     public ItemStack buildItemAccept() {

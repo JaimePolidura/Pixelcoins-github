@@ -3,11 +3,10 @@ package es.serversurvival.minecraftserver.empresas.cerrar;
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.modules.confirmation.ConfirmationConfiguration;
-import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitbettermenus.utils.ItemBuilder;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas.cerrar.CerrarEmpresaParametros;
-import es.serversurvival.pixelcoins.empresas.cerrar.CerrarEmpresaUseCase;
 import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -20,7 +19,6 @@ import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
 public final class CerrarEmpresaConfirmacionMenu extends Menu<Empresa> {
-    private final CerrarEmpresaUseCase cerrarEmpresaUseCase;
     private final UseCaseBus useCaseBus;
 
     @Override

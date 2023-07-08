@@ -1,12 +1,13 @@
 package es.serversurvival.minecraftserver.bolsa.vercartera;
 
+import com.google.common.util.concurrent.AtomicDouble;
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.menustate.AfterShow;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
-import es.bukkitclassmapper._shared.utils.ItemBuilder;
-import es.bukkitclassmapper._shared.utils.ItemUtils;
+import es.bukkitbettermenus.utils.ItemBuilder;
+import es.bukkitbettermenus.utils.TriConsumer;
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
@@ -26,15 +27,12 @@ import es.serversurvival.pixelcoins.bolsa._shared.posiciones.application.Posicio
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
-import java.util.stream.Collectors;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 import static es.serversurvival.minecraftserver._shared.menus.MenuItems.CARGANDO;
@@ -181,17 +179,14 @@ public final class MiCarteraBolsaMenu extends Menu implements AfterShow {
     @Override
     public void afterShow(Player player) {
         executor.execute(() -> {
-            List<ItemStack> itemPosiciones = super.getAllItemsByItemNum(6);
-            double valorInicialInvertidoTotalCartera = 0.0d;
-            double beneficiosOPerdidasTotalCartera = 0.0d;
-            double valorTotalCartera = 0.0d;
+            final AtomicDouble valorInicialInvertidoTotalCartera = new AtomicDouble(0.0d);
+            final AtomicDouble beneficiosOPerdidasTotalCartera = new AtomicDouble(0.0d);
+            final AtomicDouble valorTotalCartera = new AtomicDouble(0.0d);
 
-            for (int i = 0; i < itemPosiciones.size(); i++) {
-                ItemStack itemPosicion = itemPosiciones.get(i);
-                UUID posicionId = MinecraftUtils.getLastLineOfLore(itemPosicion, 0);
+            super.forEachAllItemsByItemNum(6, (TriConsumer<ItemStack, Integer, Integer>) (itemStack, pageId, slot) -> {
+                UUID posicionId = MinecraftUtils.getLastLineOfLore(itemStack, 0);
                 Posicion posicion = posicionesJugadorById.get(posicionId);
                 boolean activoIdYaVisto = activosIdYaVistos.contains(posicion.getActivoBolsaId());
-                int slot = i + 9;
 
                 TipoApuestaService tipoApuestaService = dependenciesRepository.get(posicion.getTipoApuesta().getTipoApuestaService());
                 double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(posicion.getActivoBolsaId(), activoIdYaVisto ? null : player.getUniqueId());
@@ -199,20 +194,20 @@ public final class MiCarteraBolsaMenu extends Menu implements AfterShow {
                 double valorTotalPosicion = tipoApuestaService.getPixelcoinsCerrarPosicion(posicion.getPosicionId(), posicion.getCantidad(), ultimoPrecio);
                 double beneficiosOPerdidasPosicion = tipoApuestaService.calcularBeneficiosOPerdidas(posicion.getPrecioApertura(), ultimoPrecio, posicion.getCantidad());
 
-                valorInicialInvertidoTotalCartera += ultimoPrecio * posicion.getPrecioApertura();
-                beneficiosOPerdidasTotalCartera += beneficiosOPerdidasPosicion;
-                valorTotalCartera += valorTotalPosicion;
+                valorInicialInvertidoTotalCartera.addAndGet(ultimoPrecio * posicion.getPrecioApertura());
+                beneficiosOPerdidasTotalCartera.addAndGet(beneficiosOPerdidasPosicion);
+                valorTotalCartera.addAndGet(valorTotalPosicion);
 
-                super.setItemLore(slot, 6, GOLD + "Precio actual: " + formatPixelcoins(ultimoPrecio));
-                super.setItemLore(slot, 7, GOLD + "Rentabilidad: " + formatRentabilidad(rentabilidad));
-                super.setItemLore(slot, 8, GOLD + (beneficiosOPerdidasPosicion >= 0 ? "Beneficios: " : "Perdidas: ") + formatPixelcoins(beneficiosOPerdidasPosicion));
-                super.setItemLore(slot, 9, GOLD + "Valor total: " + formatPixelcoins(valorTotalPosicion));
-            }
+                setItemLore(pageId, slot, 6, GOLD + "Precio actual: " + formatPixelcoins(ultimoPrecio));
+                setItemLore(pageId, slot, 7, GOLD + "Rentabilidad: " + formatRentabilidad(rentabilidad));
+                setItemLore(pageId, slot, 8, GOLD + (beneficiosOPerdidasPosicion >= 0 ? "Beneficios: " : "Perdidas: ") + formatPixelcoins(beneficiosOPerdidasPosicion));
+                setItemLore(pageId, slot, 9, GOLD + "Valor total: " + formatPixelcoins(valorTotalPosicion));
+            });
 
-            super.setItemLoreActualPage(8, List.of(
-                    GOLD + "Valor total: " + formatPixelcoins(valorTotalCartera),
-                    GOLD + "Resultado: " + formatPixelcoins(beneficiosOPerdidasTotalCartera),
-                    GOLD + "Rentabilidad: " + formatRentabilidad(valorTotalCartera == 0 ? 0 : beneficiosOPerdidasTotalCartera / valorInicialInvertidoTotalCartera)
+            super.setActualItemLore(8, List.of(
+                    GOLD + "Valor total: " + formatPixelcoins(valorTotalCartera.get()),
+                    GOLD + "Resultado: " + formatPixelcoins(beneficiosOPerdidasTotalCartera.get()),
+                    GOLD + "Rentabilidad: " + formatRentabilidad(valorTotalCartera.get() == 0 ? 0 : beneficiosOPerdidasTotalCartera.get() / valorInicialInvertidoTotalCartera.get())
             ));
         });
     }

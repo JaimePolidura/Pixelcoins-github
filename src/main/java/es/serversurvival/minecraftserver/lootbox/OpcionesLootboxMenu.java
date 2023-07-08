@@ -1,14 +1,13 @@
-package es.serversurvival._shared.lootbox.ver;
+package es.serversurvival.minecraftserver.lootbox;
 
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
-import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitbettermenus.utils.ItemBuilder;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.pixelcoins.lootbox.items.domain.LootboxTier;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;

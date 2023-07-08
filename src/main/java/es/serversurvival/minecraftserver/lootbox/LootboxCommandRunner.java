@@ -1,4 +1,4 @@
-package es.serversurvival._shared.lootbox.ver;
+package es.serversurvival.minecraftserver.lootbox;
 
 import es.bukkitbettermenus.MenuService;
 import es.bukkitclassmapper.commands.Command;

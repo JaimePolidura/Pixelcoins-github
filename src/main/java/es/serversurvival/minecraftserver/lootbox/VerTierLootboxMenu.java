@@ -1,9 +1,9 @@
-package es.serversurvival._shared.lootbox.ver;
+package es.serversurvival.minecraftserver.lootbox;
 
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
-import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitbettermenus.utils.ItemBuilder;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.pixelcoins.lootbox.items.domain.LootboxTier;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ public final class VerTierLootboxMenu extends Menu {
 
     @Override
     public int[][] items() {
-        return new int[][]{{1, 0, 3, 0, 2}};
+        return new int[][]{{1, 0, 2, 0, 3}};
     }
 
     @Override
@@ -24,7 +24,7 @@ public final class VerTierLootboxMenu extends Menu {
         return MenuConfiguration.builder()
                 .staticMenu()
                 .fixedItems()
-                .title(MenuItems.TITULO_MENU + "       Lootboxes")
+                .title(MenuItems.TITULO_MENU + "          Lootboxes")
                 .item(1, buildItemLootbox(LootboxTier.COMUN), (p, e) -> openOpcionesLootbox(LootboxTier.COMUN, p))
                 .item(2, buildItemLootbox(LootboxTier.NORMAL), (p, e) -> openOpcionesLootbox(LootboxTier.NORMAL, p))
                 .item(3, buildItemLootbox(LootboxTier.RARO), (p, e) -> openOpcionesLootbox(LootboxTier.RARO, p))

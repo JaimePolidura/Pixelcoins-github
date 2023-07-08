@@ -5,7 +5,7 @@ import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.menustate.AfterShow;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
-import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitbettermenus.utils.ItemBuilder;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.jugadores.perfil.PerfilMenu;
@@ -119,20 +119,14 @@ public final class VerPosicionesCerradasMenu extends Menu<VerPosicionesCerradasM
 
     @Override
     public void afterShow(Player player) {
-        executor.execute(() -> {
-            List<ItemStack> actualItemsByItemNum = super.getActualItemsByItemNum(2);
+        super.forEachAllItemsByItemNum(2, (itemPosicion, pageId, slot) -> {
+            UUID posicionId = MinecraftUtils.getLastLineOfLore(itemPosicion, 0);
+            Posicion posicion = posicionesCerradasJugadorById.get(posicionId);
+            boolean activoIdYaVisto = activosIdYaVistos.contains(posicion.getActivoBolsaId());
 
-            for (int i = 0; i < actualItemsByItemNum.size(); i++) {
-                ItemStack itemPosicion = actualItemsByItemNum.get(i);
+            double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(posicion.getActivoBolsaId(), activoIdYaVisto ? null : posicion.getJugadorId());
 
-                UUID posicionId = MinecraftUtils.getLastLineOfLore(itemPosicion, 0);
-                Posicion posicion = posicionesCerradasJugadorById.get(posicionId);
-                boolean activoIdYaVisto = activosIdYaVistos.contains(posicion.getActivoBolsaId());
-
-                double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(posicion.getActivoBolsaId(), activoIdYaVisto ? null : posicion.getJugadorId());
-
-                super.setItemLore(i + 9, 5, GOLD + "Precio actual: " + formatPixelcoins(ultimoPrecio));
-            }
+            super.setItemLore(pageId, slot, 5, GOLD + "Precio actual: " + formatPixelcoins(ultimoPrecio));
         });
     }
 

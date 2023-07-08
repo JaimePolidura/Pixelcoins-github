@@ -1,6 +1,6 @@
 package es.serversurvival.minecraftserver._shared.menus;
 
-import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitbettermenus.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

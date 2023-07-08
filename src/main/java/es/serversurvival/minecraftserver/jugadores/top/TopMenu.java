@@ -4,7 +4,7 @@ import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.menustate.AfterShow;
-import es.bukkitclassmapper._shared.utils.ItemBuilder;
+import es.bukkitbettermenus.utils.ItemBuilder;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.jugadores.perfil.PerfilMenu;
@@ -222,7 +222,7 @@ public final class TopMenu extends Menu implements AfterShow {
         }
 
         Bukkit.getScheduler().runTask(Pixelcoin.INSTANCE, () -> {
-            super.setItemLoreActualPage(10, lore);
+            super.setActualItemLore(10, lore);
         });
     }
 
@@ -240,7 +240,7 @@ public final class TopMenu extends Menu implements AfterShow {
         }
 
         Bukkit.getScheduler().runTask(Pixelcoin.INSTANCE, () -> {
-            super.setItemLoreActualPage(13, lore);
+            super.setActualItemLore(13, lore);
         });
     }
 }
