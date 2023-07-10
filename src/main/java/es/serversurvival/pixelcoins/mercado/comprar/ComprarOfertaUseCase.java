@@ -2,8 +2,8 @@ package es.serversurvival.pixelcoins.mercado.comprar;
 
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
-import es.serversurvival.pixelcoins.mercado._shared.accion.OfertaCustomCaller;
-import es.serversurvival.pixelcoins.mercado._shared.accion.OfertaCompradaListener;
+import es.serversurvival.pixelcoins.mercado._shared.custom.OfertaCustomCaller;
+import es.serversurvival.pixelcoins.mercado._shared.custom.accion.OfertaCompradaListener;
 import es.serversurvival.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasValidator;

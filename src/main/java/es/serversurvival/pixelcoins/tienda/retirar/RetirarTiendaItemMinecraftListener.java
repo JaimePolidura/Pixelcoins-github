@@ -1,7 +1,7 @@
 package es.serversurvival.pixelcoins.tienda.retirar;
 
 import es.dependencyinjector.dependencies.annotations.EventHandler;
-import es.serversurvival.pixelcoins.mercado._shared.accion.OfertaRetiradaListener;
+import es.serversurvival.pixelcoins.mercado._shared.custom.accion.OfertaRetiradaListener;
 import es.serversurvival.pixelcoins.tienda._shared.OfertaTiendaItemMinecraft;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;

@@ -6,19 +6,16 @@ import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.domain.AccionistaEmpresa;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.AccionistasEmpresasService;
-import es.serversurvival.pixelcoins.empresas._shared.accionistas.OfertaAccionMercadoJugador;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
-import es.serversurvival.pixelcoins.mercado._shared.Oferta;
-import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
-import es.serversurvival.pixelcoins.mercado.ofrecer.OfrecerOfertaParametros;
-import es.serversurvival.pixelcoins.mercado.ofrecer.OfrecerOfertaUseCase;
+import es.serversurvival.pixelcoins.mercado.ponerventa.PonerVentaOfertaParametros;
+import es.serversurvival.pixelcoins.mercado.ponerventa.PonerVentaOfertaUseCase;
 import lombok.AllArgsConstructor;
 
 @UseCase
 @AllArgsConstructor
 public final class EmpresasIPOUseCase implements UseCaseHandler<EmpresaIPOParametros> {
     private final AccionistasEmpresasService accionistasEmpresasService;
-    private final OfrecerOfertaUseCase ofrecerOfertaUseCase;
+    private final PonerVentaOfertaUseCase ofrecerOfertaUseCase;
     private final EmpresasValidador empresasValidador;
     private final EmpresasService empresasService;
     private final EventBus eventBus;
@@ -29,7 +26,7 @@ public final class EmpresasIPOUseCase implements UseCaseHandler<EmpresaIPOParame
 
         AccionistaEmpresa acciones = accionistasEmpresasService.getByEmpresaIdAndJugadorId(parametros.getEmpresaId(), parametros.getJugadorId());
 
-        ofrecerOfertaUseCase.handle(OfrecerOfertaParametros.of(OfertaAccionMercadoIPO.builder()
+        ofrecerOfertaUseCase.handle(PonerVentaOfertaParametros.of(OfertaAccionMercadoIPO.builder()
                 .accionesFundadorId(acciones.getAccionistaId())
                 .empresaId(parametros.getEmpresaId())
                 .cantidad(parametros.getNumeroAccionesVender())

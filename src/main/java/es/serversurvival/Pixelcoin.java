@@ -120,6 +120,7 @@ public final class Pixelcoin extends JavaPlugin {
 
         BukkitBetterMenus.setInstanceProvider(instanceProvider);
         BukkitBetterMenus.registerEventListeners(this, Bukkit.getPluginManager());
+        BukkitBetterMenus.setPlugin(this);
 
         ClassMapperConfiguration.builder(this, COMMON_PACKAGE)
                 .useDebugLogging()

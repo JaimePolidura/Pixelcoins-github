@@ -5,14 +5,14 @@ import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.serversurvival.pixelcoins.deudas._shared.OfertaDeudaMercadoSecundario;
 import es.serversurvival.pixelcoins.deudas._shared.application.DeudasService;
 import es.serversurvival.pixelcoins.deudas._shared.domain.Deuda;
-import es.serversurvival.pixelcoins.mercado._shared.OfertaCustomComprarValidator;
+import es.serversurvival.pixelcoins.mercado._shared.custom.validator.OfertaComprarValidator;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public final class ComprarDeudaMercadoSecundarioValidator implements OfertaCustomComprarValidator<OfertaDeudaMercadoSecundario> {
+public final class ComprarDeudaMercadoSecundarioValidator implements OfertaComprarValidator<OfertaDeudaMercadoSecundario> {
     private final DeudasService deudasService;
 
     @Override

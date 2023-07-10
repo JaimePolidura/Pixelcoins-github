@@ -4,8 +4,6 @@ import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver.scoreboards.ScoreboardCreator;
 import es.serversurvival.minecraftserver.scoreboards.ServerScoreboardCreator;
 import es.serversurvival.pixelcoins.jugadores.patrimonio.CalculadorPatrimonioService;
-import fr.minuskube.netherboard.Netherboard;
-import fr.minuskube.netherboard.bukkit.BPlayerBoard;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -15,9 +13,6 @@ import org.bukkit.scoreboard.Scoreboard;
 import java.util.Map;
 
 import static es.serversurvival._shared.utils.Funciones.formatPixelcoins;
-import static es.serversurvival._shared.utils.Funciones.formatRentabilidad;
-import static org.bukkit.ChatColor.BOLD;
-import static org.bukkit.ChatColor.GOLD;
 
 @ScoreboardCreator
 @RequiredArgsConstructor

@@ -6,7 +6,7 @@ import es.serversurvival.pixelcoins.empresas._shared.accionistas.domain.Accionis
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
-import es.serversurvival.pixelcoins.mercado._shared.accion.OfertaCompradaListener;
+import es.serversurvival.pixelcoins.mercado._shared.custom.accion.OfertaCompradaListener;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.AccionistasEmpresasService;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.DecrementorPosicionesAccionesJugador;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.OfertaAccionMercadoJugador;

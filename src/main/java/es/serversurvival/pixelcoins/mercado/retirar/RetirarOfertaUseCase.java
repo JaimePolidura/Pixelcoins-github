@@ -5,8 +5,8 @@ import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival.pixelcoins.mercado._shared.Oferta;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasService;
 import es.serversurvival.pixelcoins.mercado._shared.OfertasValidator;
-import es.serversurvival.pixelcoins.mercado._shared.accion.OfertaCustomCaller;
-import es.serversurvival.pixelcoins.mercado._shared.accion.OfertaRetiradaListener;
+import es.serversurvival.pixelcoins.mercado._shared.custom.OfertaCustomCaller;
+import es.serversurvival.pixelcoins.mercado._shared.custom.accion.OfertaRetiradaListener;
 import lombok.AllArgsConstructor;
 
 @UseCase

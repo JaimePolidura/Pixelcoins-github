@@ -18,6 +18,7 @@ public final class PonerVentaTiendaItemMinecraftUseCase implements UseCaseHandle
 
     @Override
     public void handle(PonerVentaTiendaItemMinecraftParametros parametros) {
+        validator.itemNoTieneMarcaDeAgua(parametros.getItem());
         validator.itemNoBaneado(parametros.getItem());
         validator.precio(parametros.getPrecio());
 

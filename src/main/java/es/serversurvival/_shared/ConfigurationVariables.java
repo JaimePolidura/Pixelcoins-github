@@ -3,6 +3,8 @@ package es.serversurvival._shared;
 public final class ConfigurationVariables {
     public static final long MENSAJES_MAXIMO_TIEMPO_LEIDO_MS = 7L * 24 * 60 * 60 * 1000;
 
+    public static final String TIENDA_MARCA_DE_AGUA = "C";
+
     public static final String  WEB_ACTIONS_SERVER_IP = "192.168.1.107";
     public static final int     WEB_ACTIONS_FRONTEND_SERVER_PORT = 80;
     public static final int     WEB_ACTIONS_BACKEND_SERVER_PORT = 8080;

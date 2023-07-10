@@ -54,7 +54,7 @@
         <dependency>
             <groupId>com.github.JaimeTruman</groupId>
             <artifactId>Bukkit-better-menus</artifactId>
-            <version>1.2.13</version>
+            <version>1.2.22</version>
         </dependency>
         <dependency>
             <groupId>com.github.JaimeTruman</groupId>
@@ -62,12 +62,6 @@
             <version>2.1.1</version>
         </dependency>
 
-        <dependency>
-            <groupId>fr.minuskube</groupId>
-            <artifactId>netherboard-bukkit</artifactId>
-            <version>1.2.3</version>
-            <scope>compile</scope>
-        </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
@@ -114,7 +108,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.24</version>
+            <version>1.18.28</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -130,7 +124,6 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
-            <version>4.5.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -147,8 +140,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>17</source>
+                    <target>17</target>
                 </configuration>
             </plugin>
             <plugin>

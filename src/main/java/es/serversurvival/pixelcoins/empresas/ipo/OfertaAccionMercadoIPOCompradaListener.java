@@ -9,7 +9,7 @@ import es.serversurvival.pixelcoins.empresas._shared.empresas.application.Empres
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas.comprar.AccionServerComprada;
 import es.serversurvival.pixelcoins.mercado._shared.TipoOferta;
-import es.serversurvival.pixelcoins.mercado._shared.accion.OfertaCompradaListener;
+import es.serversurvival.pixelcoins.mercado._shared.custom.accion.OfertaCompradaListener;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;

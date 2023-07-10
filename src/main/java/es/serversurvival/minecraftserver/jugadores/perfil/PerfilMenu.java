@@ -8,10 +8,13 @@ import es.bukkitbettermenus.utils.ItemBuilder;
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.serversurvival.Pixelcoin;
 import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.bolsa.vercartera.MiCarteraBolsaMenu;
 import es.serversurvival.minecraftserver.deudas.verdeudas.MisDeudasMenu;
 import es.serversurvival.minecraftserver.empresas.misempleos.MisEmpleosMenu;
 import es.serversurvival.minecraftserver.empresas.vertodas.VerTodasEmpresasMenu;
+import es.serversurvival.minecraftserver.lootbox.VerTierLootboxMenu;
+import es.serversurvival.minecraftserver.lootbox.mislootboxes.VerMisLootboxesMenu;
 import es.serversurvival.minecraftserver.tienda.vertienda.TiendaMenu;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.aplicacion.ActivosBolsaService;
 import es.serversurvival.pixelcoins.jugadores.patrimonio.CalculadorPatrimonioService;
@@ -58,10 +61,10 @@ public final class PerfilMenu extends Menu implements AfterShow {
     public int[][] items() {
         return new int[][] {
                 {1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 3, 0, 0, 0, 0, 0, 4, 1},
-                {1, 0, 0, 0, 6, 0, 0, 0, 1},
-                {1, 0, 5, 0, 0, 0, 7, 0, 1},
-                {1, 0, 0, 0, 8, 0, 0, 0, 1},
+                {1, 3, 0, 0, 6, 0, 0, 4, 1},
+                {1, 0, 0, 0, 0, 0, 0, 0, 1},
+                {1, 5, 0, 0, 0, 0, 0, 7, 1},
+                {1, 0, 0, 8, 0, 9, 0, 0, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1}
         };
     }
@@ -72,12 +75,19 @@ public final class PerfilMenu extends Menu implements AfterShow {
                 .fixedItems()
                 .title(DARK_RED + "" + BOLD + "           TU PERFIL")
                 .item(1, Material.BLACK_STAINED_GLASS_PANE)
-                .item(3, buildItemStats(), (p, e) -> this.menuService.open(p, TopMenu.class))
-                .item(4, buildItemTienda(), (p, e) -> this.menuService.open(p, TiendaMenu.class))
-                .item(5, buildItemDeudas(), (p, e) -> this.menuService.open(p, MisDeudasMenu.class))
-                .item(6, buildItemBolsa(), (p, e) -> this.menuService.open(p, MiCarteraBolsaMenu.class))
-                .item(7, buildItemTodasEmpresas(), (p, e) -> this.menuService.open(p, VerTodasEmpresasMenu.class))
-                .item(8, buildItemEmpleos(), (p, e) -> this.menuService.open(p, MisEmpleosMenu.class))
+                .item(3, buildItemStats(), (p, e) -> menuService.open(p, TopMenu.class))
+                .item(4, buildItemTienda(), (p, e) -> menuService.open(p, TiendaMenu.class))
+                .item(5, buildItemDeudas(), (p, e) -> menuService.open(p, MisDeudasMenu.class))
+                .item(6, buildItemBolsa(), (p, e) -> menuService.open(p, MiCarteraBolsaMenu.class))
+                .item(7, buildItemTodasEmpresas(), (p, e) -> menuService.open(p, VerTodasEmpresasMenu.class))
+                .item(8, buildItemEmpleos(), (p, e) -> menuService.open(p, MisEmpleosMenu.class))
+                .item(9, buildItemVerTusLootboxes(), (p, e) -> menuService.open(p, VerMisLootboxesMenu.class))
+                .build();
+    }
+
+    private ItemStack buildItemVerTusLootboxes() {
+        return ItemBuilder.of(Material.ENCHANTING_TABLE)
+                .title(CLICKEABLE + "VER TUS LOOTBOXES")
                 .build();
     }
 

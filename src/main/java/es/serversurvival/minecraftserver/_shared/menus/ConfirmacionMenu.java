@@ -24,11 +24,15 @@ public abstract class ConfirmacionMenu<T> extends Menu<T> {
                 .fixedItems()
                 .item(3, buildItemOptional())
                 .confirmation(ConfirmationConfiguration.builder()
-                        .closeOnAction(true)
+                        .closeOnAction(closeOnAction())
                         .cancel(1, cancelarItem(), this::onCancelar)
                         .accept(2, aceptarItem(), (player, event) -> onAceptar(player, event, getState()))
                         .build())
                 .build();
+    }
+
+    protected boolean closeOnAction() {
+        return true;
     }
 
     protected ItemStack buildItemOptional() {

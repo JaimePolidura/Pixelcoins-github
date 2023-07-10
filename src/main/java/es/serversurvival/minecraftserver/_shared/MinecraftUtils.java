@@ -27,6 +27,16 @@ public final class MinecraftUtils {
         player.spigot().sendMessage(message);
     }
 
+    public static void darItem(Player player, ItemStack item) {
+        boolean isFull = player.getInventory().firstEmpty() == -1;
+
+        if(!isFull){
+            player.getInventory().addItem(item);
+        }else{
+            player.getWorld().dropItem(player.getLocation(), item);
+        }
+    }
+
     public static void broadcastExcept(UUID playerId, String mensaje) {
         Player player = Bukkit.getPlayer(playerId);
 

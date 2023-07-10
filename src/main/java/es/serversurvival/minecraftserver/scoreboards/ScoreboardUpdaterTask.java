@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Task(value = BukkitTimeUnit.SECOND * 20, delay = 0)
+@Task(value = BukkitTimeUnit.MINUTE, delay = BukkitTimeUnit.MINUTE)
 public final class ScoreboardUpdaterTask implements TaskRunner, AfterAllScanned {
     private final ScoreboardDisplayer scoreboardDisplayer;
 
