@@ -4,6 +4,7 @@ import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.menustate.AfterShow;
+import es.bukkitbettermenus.modules.async.config.AsyncTasksConfiguration;
 import es.bukkitbettermenus.utils.ItemBuilder;
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.serversurvival.Pixelcoin;
@@ -45,7 +46,7 @@ import static es.serversurvival.minecraftserver._shared.menus.MenuItems.*;
 import static org.bukkit.ChatColor.*;
 
 @AllArgsConstructor
-public final class PerfilMenu extends Menu implements AfterShow {
+public final class PerfilMenu extends Menu {
     private final CalculadorPatrimonioService calculadorPatrimonioService;
     private final AccionistasEmpresasService accionistasEmpresasService;
     private final DependenciesRepository dependenciesRepository;
@@ -55,7 +56,6 @@ public final class PerfilMenu extends Menu implements AfterShow {
     private final EmpleadosService empleadosService;
     private final EmpresasService empresasService;
     private final MenuService menuService;
-    private final Executor executor;
 
     @Override
     public int[][] items() {
@@ -74,6 +74,9 @@ public final class PerfilMenu extends Menu implements AfterShow {
         return MenuConfiguration.builder()
                 .fixedItems()
                 .title(DARK_RED + "" + BOLD + "           TU PERFIL")
+                .asyncTasks(AsyncTasksConfiguration.builder()
+                        .wholeMenu(this::calcularPatrimonio)
+                        .build())
                 .item(1, Material.BLACK_STAINED_GLASS_PANE)
                 .item(3, buildItemStats(), (p, e) -> menuService.open(p, TopMenu.class))
                 .item(4, buildItemTienda(), (p, e) -> menuService.open(p, TiendaMenu.class))
@@ -83,6 +86,30 @@ public final class PerfilMenu extends Menu implements AfterShow {
                 .item(8, buildItemEmpleos(), (p, e) -> menuService.open(p, MisEmpleosMenu.class))
                 .item(9, buildItemVerTusLootboxes(), (p, e) -> menuService.open(p, VerMisLootboxesMenu.class))
                 .build();
+    }
+
+    private void calcularPatrimonio() {
+        Map<TipoCuentaPatrimonio, Double> patrimonioDesglosado = calculadorPatrimonioService.calcularDesglosadoPorCuentas(getPlayer().getUniqueId());
+
+        double totalEfectivo = patrimonioDesglosado.get(TipoCuentaPatrimonio.EFECTIVO);
+        double totalDeudasDeudor = patrimonioDesglosado.get(TipoCuentaPatrimonio.DEUDA_DEUDOR);
+        double totalDeudasAcredor = patrimonioDesglosado.get(TipoCuentaPatrimonio.DEUDA_ACREDOR);
+        double totalBolsa = patrimonioDesglosado.get(TipoCuentaPatrimonio.BOLSA);
+        double totalAccionesEmpresas = patrimonioDesglosado.get(TipoCuentaPatrimonio.EMPRESAS_ACCIONES);
+        double patrimonioNeto = totalEfectivo + totalDeudasAcredor + totalBolsa + totalAccionesEmpresas + totalDeudasDeudor;
+
+        Bukkit.getScheduler().runTask(Pixelcoin.INSTANCE, () -> {
+            super.setActualItemLore(10, List.of(
+                    "   ",
+                    GOLD + "Efectivo: " + formatPixelcoins(totalEfectivo),
+                    GOLD + "Bolsa: " + formatPixelcoins(totalBolsa),
+                    GOLD + "Empresas: " + formatPixelcoins(totalAccionesEmpresas),
+                    GOLD + "Total que te deben: " + formatPixelcoins(totalDeudasAcredor),
+                    GOLD + "Total que debes: " + formatPixelcoins(totalDeudasDeudor),
+                    "   ",
+                    GOLD + "" + BOLD + "Patrimonio neto: " + formatPixelcoins(patrimonioNeto)
+            ));
+        });
     }
 
     private ItemStack buildItemVerTusLootboxes() {
@@ -180,32 +207,5 @@ public final class PerfilMenu extends Menu implements AfterShow {
         stats.setItemMeta(metaStats);
 
         return stats;
-    }
-
-    @Override
-    public void afterShow(Player player) {
-        executor.execute(() -> {
-            Map<TipoCuentaPatrimonio, Double> patrimonioDesglosado = calculadorPatrimonioService.calcularDesglosadoPorCuentas(getPlayer().getUniqueId());
-
-            double totalEfectivo = patrimonioDesglosado.get(TipoCuentaPatrimonio.EFECTIVO);
-            double totalDeudasDeudor = patrimonioDesglosado.get(TipoCuentaPatrimonio.DEUDA_DEUDOR);
-            double totalDeudasAcredor = patrimonioDesglosado.get(TipoCuentaPatrimonio.DEUDA_ACREDOR);
-            double totalBolsa = patrimonioDesglosado.get(TipoCuentaPatrimonio.BOLSA);
-            double totalAccionesEmpresas = patrimonioDesglosado.get(TipoCuentaPatrimonio.EMPRESAS_ACCIONES);
-            double patrimonioNeto = totalEfectivo + totalDeudasAcredor + totalBolsa + totalAccionesEmpresas + totalDeudasDeudor;
-
-            Bukkit.getScheduler().runTask(Pixelcoin.INSTANCE, () -> {
-                super.setActualItemLore(10, List.of(
-                        "   ",
-                        GOLD + "Efectivo: " + formatPixelcoins(totalEfectivo),
-                        GOLD + "Bolsa: " + formatPixelcoins(totalBolsa),
-                        GOLD + "Empresas: " + formatPixelcoins(totalAccionesEmpresas),
-                        GOLD + "Total que te deben: " + formatPixelcoins(totalDeudasAcredor),
-                        GOLD + "Total que debes: " + formatPixelcoins(totalDeudasDeudor),
-                        "   ",
-                        GOLD + "" + BOLD + "Patrimonio neto: " + formatPixelcoins(patrimonioNeto)
-                ));
-            });
-        });
     }
 }

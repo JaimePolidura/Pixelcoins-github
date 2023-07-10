@@ -5,6 +5,7 @@ import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.Page;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.menustate.AfterShow;
+import es.bukkitbettermenus.modules.async.config.AsyncTasksConfiguration;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitbettermenus.utils.ItemBuilder;
 import es.bukkitbettermenus.utils.ItemUtils;
@@ -30,13 +31,11 @@ import static es.serversurvival.minecraftserver._shared.menus.MenuItems.CARGANDO
 import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
-public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> implements AfterShow {
+public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> {
     private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;
     private final ActivosBolsaService activosBolsaService;
     private final MovimientosService movimientosService;
     private final MenuService menuService;
-
-    private List<Thread> cargadorPreciosThreadByPageId = new LinkedList<>();
 
     @Override
     public int[][] items() {
@@ -57,8 +56,9 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
                 .fixedItems()
                 .items(1, itemValoresDisponibles(), this::onValorSeleccionado)
                 .breakpoint(7)
-                .onPageChanged(this::onPageChanged)
-                .onClose(this::onClose)
+                .asyncTasks(AsyncTasksConfiguration.builder()
+                        .onPageLoaded(1, this::cargarPrecioActualBolsa)
+                        .build())
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, itemBackPage())
                         .forward(9, itemNextPage())
@@ -83,6 +83,20 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
         ));
     }
 
+    private void cargarPrecioActualBolsa(Page page, int slot, ItemStack item) {
+        UUID activoId = MinecraftUtils.getLastLineOfLore(item, 0);
+        double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(activoId, getPlayer().getUniqueId());
+        String nuevoLore = GOLD + "Precio: " + formatPixelcoins(ultimoPrecio) + "/ " + getState().getNombreUnidadSingular();
+
+        item = ItemUtils.setLore(item,  1, nuevoLore);
+
+        if(getActualPage().getPageId() == page.getPageId()){
+            super.setActualItemLore(slot, 1, nuevoLore );
+        }
+
+        super.getActualPage().getItems().set(slot, item);
+    }
+
     private List<ItemStack> itemValoresDisponibles() {
         return activosBolsaService.findByTipo(getState()).stream()
                 .map(this::buildItemFromActiboBolsa)
@@ -99,50 +113,6 @@ public final class VerActivosDisponiblesMenu extends Menu<TipoActivoBolsa> imple
                         activoBolsa.getActivoBolsaId().toString()
                 ))
                 .build();
-    }
-
-    @Override
-    public void afterShow(Player player) {
-        cargarPreciosActualesEnPaginaActual(getActualPage());
-    }
-
-    private void onClose(InventoryCloseEvent inventoryCloseEvent) {
-        cargadorPreciosThreadByPageId.forEach(Thread::interrupt);
-    }
-
-    private void onPageChanged(Page page) {
-        if(!page.isAlreadyVisited()){
-            cargarPreciosActualesEnPaginaActual(page);
-        }
-    }
-
-    private void cargarPreciosActualesEnPaginaActual(Page page) {
-        Thread thread = new Thread(() -> {
-            List<ItemStack> items = page.getItemsByItemNum(1);
-
-            for (int i = 0; i < items.size(); i++) {
-                if(Thread.interrupted()){
-                    break;
-                }
-
-                ItemStack item = items.get(i);
-                UUID activoId = MinecraftUtils.getLastLineOfLore(items.get(i), 0);
-                double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(activoId, getPlayer().getUniqueId());
-                String nuevoLore = GOLD + "Precio: " + formatPixelcoins(ultimoPrecio) + "/ " + getState().getNombreUnidadSingular();
-
-                item = ItemUtils.setLore(item,  1, nuevoLore);
-
-                if(getActualPage().getPageId() == page.getPageId()){
-                    super.setActualItemLore(i, 1, nuevoLore );
-                }
-
-                super.getActualPage().getItems().set(i, item);
-            }
-        });
-
-        cargadorPreciosThreadByPageId.add(thread);
-
-        thread.start();
     }
 
     private ItemStack itemNextPage() {

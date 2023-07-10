@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import static es.serversurvival._shared.utils.Funciones.*;
 import static es.serversurvival._shared.utils.Funciones.formatNumero;
@@ -27,6 +28,7 @@ public final class BolsaCerrarPosicionMenu extends NumberSelectorMenu<Posicion> 
     private final DependenciesRepository dependenciesRepository;
     private final MenuService menuService;
     private final UseCaseBus useCaseBus;
+    private final Executor executor;
 
     private double valorTotalPorAccion;
     private double resultadoPorAccion;

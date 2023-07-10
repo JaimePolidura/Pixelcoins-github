@@ -5,6 +5,7 @@ import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.menustate.AfterShow;
+import es.bukkitbettermenus.modules.async.config.AsyncTasksConfiguration;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitbettermenus.utils.ItemBuilder;
 import es.bukkitbettermenus.utils.TriConsumer;
@@ -40,13 +41,12 @@ import static es.serversurvival.minecraftserver._shared.menus.MenuItems.CLICKEAB
 import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
-public final class MiCarteraBolsaMenu extends Menu implements AfterShow {
+public final class MiCarteraBolsaMenu extends Menu {
     private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;
     private final DependenciesRepository dependenciesRepository;
     private final ActivosBolsaService activosBolsaService;
     private final PosicionesService posicionesService;
     private final MenuService menuService;
-    private final Executor executor;
 
     private Map<UUID, Posicion> posicionesJugadorById = new HashMap<>();
     private Set<UUID> activosIdYaVistos = new HashSet<>();
@@ -73,6 +73,9 @@ public final class MiCarteraBolsaMenu extends Menu implements AfterShow {
                 .item(3, buildItemPosicionesCerradas(), (p, e) -> menuService.open(p, VerPosicionesCerradasMenu.class))
                 .item(4, buildItemOrdenesPremarket(), (p, e) -> menuService.open(p, MisOrdenesPremarketMenu.class))
                 .item(5, buildItemStats())
+                .asyncTasks(AsyncTasksConfiguration.builder()
+                        .wholeMenu(this::calcularEstadisitcasYPreciosActuales)
+                        .build())
                 .items(6, this::buildItemsPosicionesAbiertas, this::cerrarPosicion)
                 .breakpoint(7, buildItemGoBackToProfileMenu(), this::goToProfileMenu)
                 .paginated(PaginationConfiguration.builder()
@@ -80,6 +83,41 @@ public final class MiCarteraBolsaMenu extends Menu implements AfterShow {
                         .forward(9, Material.GREEN_WOOL)
                         .build())
                 .build();
+    }
+
+    private void calcularEstadisitcasYPreciosActuales() {
+        final AtomicDouble valorInicialInvertidoTotalCartera = new AtomicDouble(0.0d);
+        final AtomicDouble beneficiosOPerdidasTotalCartera = new AtomicDouble(0.0d);
+        final AtomicDouble valorTotalCartera = new AtomicDouble(0.0d);
+
+        super.forEachAllItemsByItemNum(6, (TriConsumer<ItemStack, Integer, Integer>) (itemStack, pageId, slot) -> {
+            UUID posicionId = MinecraftUtils.getLastLineOfLore(itemStack, 0);
+            Posicion posicion = posicionesJugadorById.get(posicionId);
+            boolean activoIdYaVisto = activosIdYaVistos.contains(posicion.getActivoBolsaId());
+
+            TipoApuestaService tipoApuestaService = dependenciesRepository.get(posicion.getTipoApuesta().getTipoApuestaService());
+            double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(posicion.getActivoBolsaId(), activoIdYaVisto ? null : getPlayer().getUniqueId());
+            double rentabilidad = tipoApuestaService.calcularRentabilidad(posicion.getPrecioApertura(), ultimoPrecio);
+            double valorTotalPosicion = tipoApuestaService.getPixelcoinsCerrarPosicion(posicion.getPosicionId(), posicion.getCantidad(), ultimoPrecio);
+            double beneficiosOPerdidasPosicion = tipoApuestaService.calcularBeneficiosOPerdidas(posicion.getPrecioApertura(), ultimoPrecio, posicion.getCantidad());
+
+            valorInicialInvertidoTotalCartera.addAndGet(ultimoPrecio * posicion.getPrecioApertura());
+            beneficiosOPerdidasTotalCartera.addAndGet(beneficiosOPerdidasPosicion);
+            valorTotalCartera.addAndGet(valorTotalPosicion);
+
+            activosIdYaVistos.add(posicion.getActivoBolsaId());
+
+            setItemLore(pageId, slot, 6, GOLD + "Precio actual: " + formatPixelcoins(ultimoPrecio));
+            setItemLore(pageId, slot, 7, GOLD + "Rentabilidad: " + formatRentabilidad(rentabilidad));
+            setItemLore(pageId, slot, 8, GOLD + (beneficiosOPerdidasPosicion >= 0 ? "Beneficios: " : "Perdidas: ") + formatPixelcoins(beneficiosOPerdidasPosicion));
+            setItemLore(pageId, slot, 9, GOLD + "Valor total: " + formatPixelcoins(valorTotalPosicion));
+        });
+
+        super.setActualItemLore(8, List.of(
+                GOLD + "Valor total: " + formatPixelcoins(valorTotalCartera.get()),
+                GOLD + "Resultado: " + formatPixelcoins(beneficiosOPerdidasTotalCartera.get()),
+                GOLD + "Rentabilidad: " + formatRentabilidad(valorTotalCartera.get() == 0 ? 0 : beneficiosOPerdidasTotalCartera.get() / valorInicialInvertidoTotalCartera.get())
+        ));
     }
 
     private ItemStack buildItemOrdenesPremarket() {
@@ -174,41 +212,5 @@ public final class MiCarteraBolsaMenu extends Menu implements AfterShow {
                         GOLD + "Para mas comandos " + AQUA + "/bolsa ayuda"
                 ))
                 .build();
-    }
-
-    @Override
-    public void afterShow(Player player) {
-        executor.execute(() -> {
-            final AtomicDouble valorInicialInvertidoTotalCartera = new AtomicDouble(0.0d);
-            final AtomicDouble beneficiosOPerdidasTotalCartera = new AtomicDouble(0.0d);
-            final AtomicDouble valorTotalCartera = new AtomicDouble(0.0d);
-
-            super.forEachAllItemsByItemNum(6, (TriConsumer<ItemStack, Integer, Integer>) (itemStack, pageId, slot) -> {
-                UUID posicionId = MinecraftUtils.getLastLineOfLore(itemStack, 0);
-                Posicion posicion = posicionesJugadorById.get(posicionId);
-                boolean activoIdYaVisto = activosIdYaVistos.contains(posicion.getActivoBolsaId());
-
-                TipoApuestaService tipoApuestaService = dependenciesRepository.get(posicion.getTipoApuesta().getTipoApuestaService());
-                double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(posicion.getActivoBolsaId(), activoIdYaVisto ? null : player.getUniqueId());
-                double rentabilidad = tipoApuestaService.calcularRentabilidad(posicion.getPrecioApertura(), ultimoPrecio);
-                double valorTotalPosicion = tipoApuestaService.getPixelcoinsCerrarPosicion(posicion.getPosicionId(), posicion.getCantidad(), ultimoPrecio);
-                double beneficiosOPerdidasPosicion = tipoApuestaService.calcularBeneficiosOPerdidas(posicion.getPrecioApertura(), ultimoPrecio, posicion.getCantidad());
-
-                valorInicialInvertidoTotalCartera.addAndGet(ultimoPrecio * posicion.getPrecioApertura());
-                beneficiosOPerdidasTotalCartera.addAndGet(beneficiosOPerdidasPosicion);
-                valorTotalCartera.addAndGet(valorTotalPosicion);
-
-                setItemLore(pageId, slot, 6, GOLD + "Precio actual: " + formatPixelcoins(ultimoPrecio));
-                setItemLore(pageId, slot, 7, GOLD + "Rentabilidad: " + formatRentabilidad(rentabilidad));
-                setItemLore(pageId, slot, 8, GOLD + (beneficiosOPerdidasPosicion >= 0 ? "Beneficios: " : "Perdidas: ") + formatPixelcoins(beneficiosOPerdidasPosicion));
-                setItemLore(pageId, slot, 9, GOLD + "Valor total: " + formatPixelcoins(valorTotalPosicion));
-            });
-
-            super.setActualItemLore(8, List.of(
-                    GOLD + "Valor total: " + formatPixelcoins(valorTotalCartera.get()),
-                    GOLD + "Resultado: " + formatPixelcoins(beneficiosOPerdidasTotalCartera.get()),
-                    GOLD + "Rentabilidad: " + formatRentabilidad(valorTotalCartera.get() == 0 ? 0 : beneficiosOPerdidasTotalCartera.get() / valorInicialInvertidoTotalCartera.get())
-            ));
-        });
     }
 }

@@ -2,8 +2,10 @@ package es.serversurvival.minecraftserver.bolsa.verposicionescerradas;
 
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.Page;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.menustate.AfterShow;
+import es.bukkitbettermenus.modules.async.config.AsyncTasksConfiguration;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitbettermenus.utils.ItemBuilder;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
@@ -30,12 +32,11 @@ import static es.serversurvival.minecraftserver._shared.menus.MenuItems.CLICKEAB
 import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
-public final class VerPosicionesCerradasMenu extends Menu<VerPosicionesCerradasMenu.Orden> implements AfterShow {
+public final class VerPosicionesCerradasMenu extends Menu<VerPosicionesCerradasMenu.Orden> {
     private final ActivoBolsaUltimosPreciosService activoBolsaUltimosPreciosService;
     private final ActivosBolsaService activosBolsaService;
     private final PosicionesService posicionesService;
     private final MenuService menuService;
-    private final Executor executor;
 
     private Map<UUID, Posicion> posicionesCerradasJugadorById = new HashMap<>();
     private Set<UUID> activosIdYaVistos = new HashSet<>();
@@ -61,11 +62,26 @@ public final class VerPosicionesCerradasMenu extends Menu<VerPosicionesCerradasM
                 .item(5, buidItemCambiarOrden(), this::cambiarOrden)
                 .items(2, this::buildItemPosicionesCerradas)
                 .breakpoint(7, MenuItems.GO_MENU_BACK, (p, e) -> menuService.open(p, PerfilMenu.class))
+                .asyncTasks(AsyncTasksConfiguration.builder()
+                        .onPageLoaded(2, this::mostrarPrecioActualEnBolsa)
+                        .build())
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
                         .forward(9, Material.GREEN_WOOL)
                         .build())
                 .build();
+    }
+
+    private void mostrarPrecioActualEnBolsa(Page page, Integer slot, ItemStack itemPosicion) {
+        UUID posicionId = MinecraftUtils.getLastLineOfLore(itemPosicion, 0);
+        Posicion posicion = posicionesCerradasJugadorById.get(posicionId);
+        boolean activoIdYaVisto = activosIdYaVistos.contains(posicion.getActivoBolsaId());
+
+        double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(posicion.getActivoBolsaId(), activoIdYaVisto ? null : posicion.getJugadorId());
+
+        super.setItemLore(page.getPageId(), slot, 5, GOLD + "Precio actual: " + formatPixelcoins(ultimoPrecio));
+
+        activosIdYaVistos.add(posicion.getPosicionId());
     }
 
     private void cambiarOrden(Player player, InventoryClickEvent event) {
@@ -115,19 +131,6 @@ public final class VerPosicionesCerradasMenu extends Menu<VerPosicionesCerradasM
                         GOLD + "en bolsa de criptomonedas y acciones."
                 ))
                 .build();
-    }
-
-    @Override
-    public void afterShow(Player player) {
-        super.forEachAllItemsByItemNum(2, (itemPosicion, pageId, slot) -> {
-            UUID posicionId = MinecraftUtils.getLastLineOfLore(itemPosicion, 0);
-            Posicion posicion = posicionesCerradasJugadorById.get(posicionId);
-            boolean activoIdYaVisto = activosIdYaVistos.contains(posicion.getActivoBolsaId());
-
-            double ultimoPrecio = activoBolsaUltimosPreciosService.getUltimoPrecio(posicion.getActivoBolsaId(), activoIdYaVisto ? null : posicion.getJugadorId());
-
-            super.setItemLore(pageId, slot, 5, GOLD + "Precio actual: " + formatPixelcoins(ultimoPrecio));
-        });
     }
 
     public enum Orden {

@@ -2,9 +2,11 @@ package es.serversurvival.minecraftserver.empresas.miempresa;
 
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
+import es.bukkitbettermenus.Page;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.menustate.AfterShow;
 import es.bukkitbettermenus.menustate.BeforeShow;
+import es.bukkitbettermenus.modules.async.config.AsyncTasksConfiguration;
 import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitbettermenus.utils.ItemBuilder;
 import es.bukkitbettermenus.utils.ItemUtils;
@@ -44,7 +46,7 @@ import static org.bukkit.ChatColor.*;
 import static org.bukkit.ChatColor.GOLD;
 
 @RequiredArgsConstructor
-public final class MiEmpresaMenu extends Menu<Empresa> implements BeforeShow, AfterShow {
+public final class MiEmpresaMenu extends Menu<Empresa> implements BeforeShow {
     private final AccionistasEmpresasService accionistasEmpresasService;
     private final MovimientosService movimientosService;
     private final VotacionesService votacionesService;
@@ -81,12 +83,23 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements BeforeShow, Af
                 .item(4, buildItemRepartirDividendo(), this::repartirDividendos)
                 .item(10, buildItemVotaciones(), this::openMenuVotaciones)
                 .items(6, buildItemsEmpleados(), this::abrirMenuOpccionesEmpleado)
+                .asyncTasks(AsyncTasksConfiguration.builder()
+                        .onPageLoaded(6, this::mostrarCabezasJugadoresEmpleados)
+                        .build())
                 .breakpoint(7, MenuItems.GO_MENU_BACK, this::goBackToProfileMenu)
                 .paginated(PaginationConfiguration.builder()
                         .forward(9, Material.GREEN_WOOL)
                         .backward(8, Material.RED_WOOL)
                         .build())
                 .build();
+    }
+
+    private void mostrarCabezasJugadoresEmpleados(Page page, Integer integer, ItemStack itemEmpleado) {
+        SkullMeta currentItemMeta = (SkullMeta) itemEmpleado.getItemMeta();
+        String empleadoNombre = ItemUtils.getLore(itemEmpleado, 1).split(" ")[1];
+        currentItemMeta.setOwningPlayer(Bukkit.getOfflinePlayer(empleadoNombre));
+
+        itemEmpleado.setItemMeta(currentItemMeta);
     }
 
     private BiConsumer<Player, InventoryClickEvent> goBackDeTransacciones() {
@@ -330,16 +343,5 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements BeforeShow, Af
                 .isPresent();
         this.esDirector = getState().getDirectorJugadorId().equals(player.getUniqueId());
         this.esCotizada = getState().isEsCotizada();
-    }
-
-    @Override
-    public void afterShow(Player player) {
-        for (ItemStack itemEmpleado : super.getAllItemsByItemNum(6)) {
-            SkullMeta currentItemMeta = (SkullMeta) itemEmpleado.getItemMeta();
-            String empleadoNombre = ItemUtils.getLore(itemEmpleado, 1).split(" ")[1];
-            currentItemMeta.setOwningPlayer(Bukkit.getOfflinePlayer(empleadoNombre));
-
-            itemEmpleado.setItemMeta(currentItemMeta);
-        }
     }
 }

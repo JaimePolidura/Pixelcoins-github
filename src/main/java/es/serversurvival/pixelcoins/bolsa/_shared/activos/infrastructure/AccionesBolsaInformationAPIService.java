@@ -17,16 +17,15 @@ public final class AccionesBolsaInformationAPIService implements TipoActivoBolsa
         try{
             Object response = peticionHttp(String.format("https://finnhub.io/api/v1/quote?symbol=%s&token=%s", nombreCorto, FINHUB_API_KEY));
             JSONObject json = (JSONObject) response;
+            double precio = Double.parseDouble(String.valueOf(json.get("c")));
 
-            return Double.parseDouble(String.valueOf(json.get("c")));
+            if(precio <= 0){
+                throw new RuntimeException(String.format("Activo con el ticker %s no encontrado", nombreCorto));
+            }
+
+            return precio;
         }catch (Exception  e) {
-            return rethrowChecked(() -> {
-                JSONObject json = (JSONObject) Funciones.peticionHttp("https://api.nasdaq.com/api/quote/%s/info?assetclass=stocks");
-                JSONObject data = (JSONObject) json.get("data");
-                JSONObject primary = (JSONObject) data.get("primary");
-
-                return Double.parseDouble(primary.get("lastSalePrice").toString().split("\\$")[0]);
-            });
+            throw new RuntimeException(String.format("Activo con el ticker %s no encontrado", nombreCorto));
         }
     }
 
