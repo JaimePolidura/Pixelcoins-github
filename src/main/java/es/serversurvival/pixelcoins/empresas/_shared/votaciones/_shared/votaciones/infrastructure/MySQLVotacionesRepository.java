@@ -11,10 +11,8 @@ import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votacion
 import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.VotacionesRepository;
 import es.serversurvival.pixelcoins.empresas.cambiardirector.CambiarDirectorVotacion;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.lang.reflect.Type;
+import java.util.*;
 
 @MySQLRepository
 public final class MySQLVotacionesRepository extends Repository<Votacion, UUID, TipoVotacion> implements VotacionesRepository {

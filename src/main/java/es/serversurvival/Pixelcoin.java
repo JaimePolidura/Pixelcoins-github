@@ -26,7 +26,8 @@ import es.jaime.EventBus;
 import es.jaime.EventListenerDependencyProvider;
 import es.jaime.ORMJava;
 import es.jaime.connection.ConnectionManager;
-import es.jaime.connection.DatabaseTransactionManager;
+import es.jaime.connection.transactions.DatabaseTransacionExecutor;
+import es.jaime.connection.transactions.DatabaseTransactionManager;
 import es.jaime.impl.EventBusSync;
 import es.jaime.javaddd.domain.database.TransactionManager;
 import es.serversurvival._shared.eventospixelcoins.EventBusWrapperAsync;
@@ -147,7 +148,8 @@ public final class Pixelcoin extends JavaPlugin {
     public void onDisable() {
         DEPENDENCIES_REPOSTIORY.get(WebAcionHttpServer.class)
                 .stop();
-        DEPENDENCIES_REPOSTIORY.get(ConnectionManager.class);
+        DEPENDENCIES_REPOSTIORY.get(ConnectionManager.class)
+                .releaseAllConnections();
     }
 
     @AllArgsConstructor

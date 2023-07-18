@@ -4,6 +4,8 @@ import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.modules.confirmation.ConfirmationConfiguration;
 import es.bukkitbettermenus.modules.numberselector.NumberSelectorMenuConfiguration;
+import es.bukkitbettermenus.modules.timers.MenuTimer;
+import es.bukkitbettermenus.modules.timers.TimerExecutionType;
 import es.bukkitbettermenus.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
