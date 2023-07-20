@@ -2,44 +2,32 @@ package es.serversurvival.pixelcoins._shared.usecases;
 
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.dependencyinjector.dependencies.annotations.Service;
-import es.jaime.javaddd.application.utils.ReflectionUtils;
-import es.jaime.javaddd.domain.database.TransactionManager;
+import es.jaime.connection.transactions.DatabaseTransacionExecutor;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import es.serversurvival.pixelcoins.jugadores.cambiar.ingresarItem.IngresarItemUseCase;
-import lombok.SneakyThrows;
+import es.serversurvival._shared.mysql.TransactionExecutor;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public final class UseCaseBus {
+    private final TransactionExecutor transactionExecutor;
     private final DependenciesRepository dependencies;
-    private final TransactionManager transactionManager;
 
     private final Map<Class<?>, UseCaseHandler<?>> useCasesByParametrosCache;
 
-    public UseCaseBus(DependenciesRepository dependencies, TransactionManager transactionManager) {
+    public UseCaseBus(TransactionExecutor transactionExecutor, DependenciesRepository dependencies) {
+        this.transactionExecutor = transactionExecutor;
         this.useCasesByParametrosCache = new ConcurrentHashMap<>();
-        this.transactionManager = transactionManager;
         this.dependencies = dependencies;
     }
 
     public <T extends ParametrosUseCase> void handle(T parametros) {
-        UseCaseHandler<T> useCase =  getUseCase(parametros);
+        UseCaseHandler<T> useCase = getUseCase(parametros);
 
-        try {
-            transactionManager.start();
+        transactionExecutor.execute(DatabaseTransacionExecutor.ExceptionHandlingMethod.ONLY_RETHROW, () ->  {
             useCase.handle(parametros);
-            transactionManager.commit();
-        } catch (Exception e) {
-            transactionManager.rollback();
-            throw new RuntimeException(e);
-        }
+        });
     }
 
     private <T extends ParametrosUseCase> UseCaseHandler<T> getUseCase(T parametros) {

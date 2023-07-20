@@ -1,22 +1,18 @@
 package es.serversurvival._shared.mysql;
 
 import es.dependencyinjector.dependencies.annotations.Service;
-import es.jaime.javaddd.domain.database.TransactionManager;
-import lombok.AllArgsConstructor;
+import es.jaime.connection.transactions.DatabaseTransacionExecutor;
+import es.jaime.connection.transactions.DatabaseTransactionManager;
 
 @Service
-@AllArgsConstructor
 public final class TransactionExecutor {
-    private final TransactionManager transactionManager;
+    private final DatabaseTransacionExecutor databaseTransacionExecutor;
 
-    public void execute(Runnable runnable) {
-        try{
-            transactionManager.start();
-            runnable.run();
-            transactionManager.commit();
-        }catch (Exception e) {
-            transactionManager.rollback();
-            throw new RuntimeException(e);
-        }
+    public TransactionExecutor(DatabaseTransactionManager transactionManager) {
+        this.databaseTransacionExecutor = new DatabaseTransacionExecutor(transactionManager);
+    }
+
+    public void execute(DatabaseTransacionExecutor.ExceptionHandlingMethod exceptionHandlingMethod, Runnable runnable) {
+        this.databaseTransacionExecutor.execute(exceptionHandlingMethod, runnable);
     }
 }
