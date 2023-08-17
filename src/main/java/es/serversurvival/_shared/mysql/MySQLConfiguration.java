@@ -27,6 +27,6 @@ public final class MySQLConfiguration extends DatabaseConfiguration {
 
     @Override
     public boolean showQueries() {
-        return true;
+        return false;
     }
 }
