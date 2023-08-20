@@ -1,23 +1,27 @@
 package es.serversurvival.pixelcoins.jugadores.cambiar;
 
+import es.serversurvival.pixelcoins.config._shared.application.Configuration;
+import es.serversurvival.pixelcoins.config._shared.domain.ConfigurationKey;
 import lombok.Getter;
 
 public enum TipoCambioPixelcoins {
-    DIAMOND(TipoCambioPixelcoins.DIAMANTE, "diamante"),
-    DIAMOND_BLOCK(TipoCambioPixelcoins.DIAMANTE * 9, "bloque de diamante"),
-    LAPIS_LAZULI(TipoCambioPixelcoins.LAPISLAZULI, "lapislazuli"),
-    LAPIS_BLOCK(TipoCambioPixelcoins.LAPISLAZULI * 9, "bloque de lapislazuli"),
-    QUARTZ_BLOCK(TipoCambioPixelcoins.CUARZO, "bloque de cuarzo");
+    DIAMOND(ConfigurationKey.JUGADORES_CAMBIO_DIAMANTE, 1,"diamante"),
+    DIAMOND_BLOCK(ConfigurationKey.JUGADORES_CAMBIO_DIAMANTE, 9, "bloque de diamante"),
+    LAPIS_LAZULI(ConfigurationKey.JUGADORES_CAMBIO_LAPISLAZULI, 1,"lapislazuli"),
+    LAPIS_BLOCK(ConfigurationKey.JUGADORES_CAMBIO_LAPISLAZULI, 9, "bloque de lapislazuli"),
+    QUARTZ_BLOCK(ConfigurationKey.JUGADORES_CAMBIO_CUARZO, 1, "bloque de cuarzo");
 
-    public static final int DIAMANTE = 250;
-    public static final int CUARZO = 25;
-    public static final int LAPISLAZULI = 10;
-
-    @Getter public final int cambio;
+    @Getter public final ConfigurationKey cambioConfigKey;
+    @Getter public final int cantidad;
     @Getter public final String nombre;
 
-    TipoCambioPixelcoins(int cambio, String nombre) {
-        this.cambio = cambio;
+    public int getCambio(Configuration configuration) {
+        return (int) (configuration.getDouble(cambioConfigKey) * cantidad);
+    }
+
+    TipoCambioPixelcoins(ConfigurationKey cambioConfigKey, int cantidad, String nombre) {
+        this.cambioConfigKey = cambioConfigKey;
+        this.cantidad = cantidad;
         this.nombre = nombre;
     }
 }

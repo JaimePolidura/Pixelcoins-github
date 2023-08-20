@@ -3,6 +3,7 @@ package es.serversurvival.pixelcoins.jugadores.cambiar.ingresarItem;
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
+import es.serversurvival.pixelcoins.config._shared.application.Configuration;
 import es.serversurvival.pixelcoins.transacciones.domain.TipoTransaccion;
 import es.serversurvival.pixelcoins.transacciones.domain.Transaccion;
 import es.serversurvival.pixelcoins.transacciones.application.TransaccionesSaver;
@@ -12,11 +13,12 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public final class IngresarItemUseCase implements UseCaseHandler<IngresarItemParametros> {
     private final TransaccionesSaver transaccionesSaver;
+    private final Configuration configuration;
     private final EventBus eventBus;
 
     @Override
     public void handle(IngresarItemParametros parametros) {
-        double pixelcoinsAnadir = parametros.getTipoCambio().cambio * parametros.getCantiadad();
+        double pixelcoinsAnadir = parametros.getTipoCambio().getCambio(configuration) * parametros.getCantiadad();
 
         transaccionesSaver.save(Transaccion.builder()
                 .tipo(TipoTransaccion.JUGADORES_CAMBIO_INGRESAR_ITEM)

@@ -7,6 +7,7 @@ import es.bukkitbettermenus.utils.ItemUtils;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
+import es.serversurvival.pixelcoins.config._shared.application.Configuration;
 import es.serversurvival.pixelcoins.jugadores.cambiar.TipoCambioPixelcoins;
 import es.serversurvival.pixelcoins.jugadores.cambiar.sacarItem.SacarItemParametros;
 import es.serversurvival.pixelcoins.transacciones.application.MovimientosService;
@@ -27,6 +28,7 @@ import static org.bukkit.ChatColor.*;
 @AllArgsConstructor
 public final class SacarItemMenu extends Menu {
     private final MovimientosService movimientosService;
+    private final Configuration configuration;
     private final UseCaseBus useCaseBus;
 
     @Override
@@ -44,12 +46,16 @@ public final class SacarItemMenu extends Menu {
                 .title(DARK_RED + "" + BOLD + "   ELIGE ITEM PARA SACAR")
                 .fixedItems()
                 .item(1, buildItemInfo())
-                .item(2, player -> buildItem(player.getUniqueId(), "DIAMANTE", TipoCambioPixelcoins.DIAMANTE, Material.DIAMOND), this::onClick)
-                .item(3, player -> buildItem(player.getUniqueId(), "BLOQUE DE DIAMANTE", TipoCambioPixelcoins.DIAMANTE * 9, Material.DIAMOND_BLOCK), this::onClick)
-                .item(4, player -> buildItem(player.getUniqueId(), "LAPISLAZULI", TipoCambioPixelcoins.LAPISLAZULI, Material.LAPIS_LAZULI), this::onClick)
-                .item(5, player -> buildItem(player.getUniqueId(), "BLOQUE DE LAPISLAZULI", TipoCambioPixelcoins.LAPISLAZULI * 9, Material.LAPIS_BLOCK), this::onClick)
-                .item(6, player -> buildItem(player.getUniqueId(), "CUARZO", TipoCambioPixelcoins.CUARZO, Material.QUARTZ_BLOCK), this::onClick)
+                .item(2, player -> buildItem(player.getUniqueId(), "DIAMANTE", getCambioPixelcoins(TipoCambioPixelcoins.DIAMOND), Material.DIAMOND), this::onClick)
+                .item(3, player -> buildItem(player.getUniqueId(), "BLOQUE DE DIAMANTE", getCambioPixelcoins(TipoCambioPixelcoins.DIAMOND_BLOCK), Material.DIAMOND_BLOCK), this::onClick)
+                .item(4, player -> buildItem(player.getUniqueId(), "LAPISLAZULI", getCambioPixelcoins(TipoCambioPixelcoins.LAPIS_LAZULI), Material.LAPIS_LAZULI), this::onClick)
+                .item(5, player -> buildItem(player.getUniqueId(), "BLOQUE DE LAPISLAZULI", getCambioPixelcoins(TipoCambioPixelcoins.LAPIS_BLOCK), Material.LAPIS_BLOCK), this::onClick)
+                .item(6, player -> buildItem(player.getUniqueId(), "CUARZO", getCambioPixelcoins(TipoCambioPixelcoins.QUARTZ_BLOCK), Material.QUARTZ_BLOCK), this::onClick)
                 .build();
+    }
+
+    private double getCambioPixelcoins(TipoCambioPixelcoins tipoCambioPixelcoins) {
+        return tipoCambioPixelcoins.getCambio(configuration);
     }
 
     private void onClick(Player player, InventoryClickEvent event) {
@@ -68,7 +74,7 @@ public final class SacarItemMenu extends Menu {
 
         String tipoItemClickeado = itemClickeado.getType().toString();
         TipoCambioPixelcoins tipoCambio = TipoCambioPixelcoins.valueOf(tipoItemClickeado);
-        double cambioPixelcoins = tipoCambio.cambio; //Pixelcoins a sacar
+        double cambioPixelcoins = tipoCambio.getCambio(configuration); //Pixelcoins a sacar
         if(pixelcoinsJugador < cambioPixelcoins){
             MinecraftUtils.enviarMensajeYSonido(player, DARK_RED + "Necesitas tener minimo " + cambioPixelcoins + " pixelcoins para convertirlo", Sound.ENTITY_VILLAGER_NO);
             return;

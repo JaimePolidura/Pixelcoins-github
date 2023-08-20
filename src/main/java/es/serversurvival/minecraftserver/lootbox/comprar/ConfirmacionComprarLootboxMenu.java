@@ -7,6 +7,7 @@ import es.serversurvival.minecraftserver._shared.menus.ConfirmacionMenu;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.lootbox.AbrirLootboxMenu;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
+import es.serversurvival.pixelcoins.config._shared.application.Configuration;
 import es.serversurvival.pixelcoins.lootbox._shared.items.domain.LootboxTier;
 import es.serversurvival.pixelcoins.lootbox.comprar.ComprarLootboxParametros;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
 public final class ConfirmacionComprarLootboxMenu extends ConfirmacionMenu<LootboxTier> {
+    private final Configuration configuration;
     private final MenuService menuService;
     private final UseCaseBus useCaseBus;
 
@@ -43,7 +45,7 @@ public final class ConfirmacionComprarLootboxMenu extends ConfirmacionMenu<Lootb
         return ItemBuilder.of(Material.GREEN_WOOL)
                 .title(MenuItems.CLICKEABLE + "Comprar")
                 .lore(List.of(
-                        GOLD + "Comprar lootbox por " + Funciones.formatPixelcoins(getState().getPrecio())
+                        GOLD + "Comprar lootbox por " + Funciones.formatPixelcoins(configuration.getDouble(getState().getConfigurationKey()))
                 ))
                 .build();
     }

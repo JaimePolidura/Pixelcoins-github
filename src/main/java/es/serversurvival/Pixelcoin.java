@@ -5,6 +5,7 @@ import es.bukkitbettermenus.BukkitBetterMenus;
 import es.bukkitbettermenus.MenusDependenciesInstanceProvider;
 import es.bukkitbettermenus.eventlisteners.OnInventoryClick;
 import es.bukkitbettermenus.eventlisteners.OnInventoryClose;
+import es.bukkitclassmapper.ClassMapper;
 import es.bukkitclassmapper.ClassMapperConfiguration;
 import es.bukkitclassmapper._shared.utils.reflections.BukkitClassMapperInstanceProvider;
 import es.bukkitclassmapper.commands.Command;
@@ -38,6 +39,8 @@ import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver.scoreboards.ScoreboardCreator;
 import es.serversurvival.minecraftserver.webaction.server.WebAcionHttpServer;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
+import es.serversurvival.pixelcoins.config._shared.application.Configuration;
+import es.serversurvival.pixelcoins.config._shared.domain.ConfigurationKey;
 import es.serversurvival.pixelcoins.tienda._shared.MySQLTiendaObjetoEncantamientosDeserializer;
 import es.serversurvival.pixelcoins.tienda._shared.MySQLTiendaObjetoEncantamientosSerializer;
 import es.serversurvival._shared.items.ItemMinecraftEncantamientos;
@@ -73,6 +76,7 @@ public final class Pixelcoin extends JavaPlugin {
 
     private static DependenciesRepository DEPENDENCIES_REPOSTIORY;
 
+    public static ClassMapperConfiguration CLASS_MAPPER = null;
     public static Plugin INSTANCE = null;
 
     @SneakyThrows
@@ -123,7 +127,10 @@ public final class Pixelcoin extends JavaPlugin {
         BukkitBetterMenus.registerEventListeners(this, Bukkit.getPluginManager());
         BukkitBetterMenus.setPlugin(this);
 
-        ClassMapperConfiguration.builder(this, COMMON_PACKAGE)
+        boolean printExpceptinos = dependenciesRepository.get(Configuration.class)
+                .getBoolean(ConfigurationKey.PRINT_COMMANDS_EXCEPTIONS);
+
+        CLASS_MAPPER = ClassMapperConfiguration.builder(this, COMMON_PACKAGE)
                 .useDebugLogging()
                 .reflections(reflections)
                 .instanceProvider(instanceProvider)
@@ -131,7 +138,7 @@ public final class Pixelcoin extends JavaPlugin {
                 .commandMapper(ON_WRONG_PERMISSION, ON_WRONG_COMMAND)
                 .taskMapper()
                 .mobMapper()
-                .printExceptions(true)
+                .printExceptions(printExpceptinos)
                 .eventListenerMapper()
                 .waitUntilCompletion()
                 .build()

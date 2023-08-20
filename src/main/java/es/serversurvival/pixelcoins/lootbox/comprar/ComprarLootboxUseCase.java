@@ -3,6 +3,7 @@ package es.serversurvival.pixelcoins.lootbox.comprar;
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
+import es.serversurvival.pixelcoins.config._shared.application.Configuration;
 import es.serversurvival.pixelcoins.lootbox._shared.propiedad.application.LootboxEnPropiedadValidator;
 import es.serversurvival.pixelcoins.lootbox._shared.propiedad.application.LootboxEnPropiedadService;
 import es.serversurvival.pixelcoins.lootbox._shared.propiedad.domain.LootboxEnPropiedad;
@@ -19,13 +20,14 @@ public final class ComprarLootboxUseCase implements UseCaseHandler<ComprarLootbo
     private final LootboxEnPropiedadService lootboxEnPropiedadService;
     private final LootboxEnPropiedadValidator validator;
     private final TransaccionesSaver transaccionesSaver;
+    private final Configuration configuration;
     private final EventBus eventBus;
 
     @Override
     public void handle(ComprarLootboxParametros parametros) {
         validator.tienePixelcoins(parametros.getJugadorId(), parametros.getLootboxTier());
 
-        double precio = parametros.getLootboxTier().getPrecio();
+        double precio = configuration.getDouble(parametros.getLootboxTier().getConfigurationKey());
         UUID lootBoxEnPropiedadId = parametros.getLootboxPropiedadId();
 
         lootboxEnPropiedadService.save(LootboxEnPropiedad.builder()

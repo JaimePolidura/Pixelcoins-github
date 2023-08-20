@@ -6,14 +6,13 @@ import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.ActivoBolsa;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.TipoActivoBolsaService;
 import es.serversurvival.pixelcoins.bolsa._shared.activos.dominio.TipoActivoBolsa;
 import es.serversurvival.pixelcoins.bolsa._shared.premarket.application.AbridorOrdenesPremarket;
+import es.serversurvival.pixelcoins.config._shared.application.Configuration;
+import es.serversurvival.pixelcoins.config._shared.domain.ConfigurationKey;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import static es.serversurvival._shared.ConfigurationVariables.BOLSA_PRECIOS_CACHE_N_VECES_LECTURA_SIN_ACTUALIZAR;
-import static es.serversurvival._shared.ConfigurationVariables.BOLSA_PRECIOS_CACHE_TIEMPO_MS_VALIDOS;
 
 @Service
 public final class ActivoBolsaUltimosPreciosService {
@@ -22,12 +21,14 @@ public final class ActivoBolsaUltimosPreciosService {
     private final AbridorOrdenesPremarket abridorOrdenesPremarket;
     private final ActivosBolsaService activosBolsaService;
     private final DependenciesRepository dependencies;
+    private final Configuration configuration;
 
     public ActivoBolsaUltimosPreciosService(AbridorOrdenesPremarket abridorOrdenesPremarket, DependenciesRepository dependenciesRepository,
-                                            ActivosBolsaService activosBolsaService) {
+                                            ActivosBolsaService activosBolsaService, Configuration configuration) {
         this.abridorOrdenesPremarket = abridorOrdenesPremarket;
         this.dependencies = dependenciesRepository;
         this.activosBolsaService = activosBolsaService;
+        this.configuration = configuration;
         this.cacheByActivoBolsaId = new ConcurrentHashMap<>();
     }
 
@@ -45,10 +46,13 @@ public final class ActivoBolsaUltimosPreciosService {
     private boolean cacheValida(UUID activoBolsaId, UUID lectorId) {
         boolean notCacheInvalidation = lectorId == null || !abridorOrdenesPremarket.estaElMercadoAbierto();
 
+        double msUltimaVezActualizadoInvlidarCache = configuration.getDouble(ConfigurationKey.BOLSA_PRECIOS_CACHE_TIEMPO_MS_VALIDOS);
+        int nVecesLeidoParaInvalidarCache = configuration.getInt(ConfigurationKey.BOLSA_PRECIOS_CACHE_N_VECES_LECTURA_SIN_ACTUALIZAR);
+
         return cacheByActivoBolsaId.containsKey(activoBolsaId) &&
                 (notCacheInvalidation ||
-                    (cacheByActivoBolsaId.get(activoBolsaId).getNumeroLectuasSinActualizar(lectorId) <= BOLSA_PRECIOS_CACHE_N_VECES_LECTURA_SIN_ACTUALIZAR &&
-                    cacheByActivoBolsaId.get(activoBolsaId).getUltimaVezActualizdoMs() + BOLSA_PRECIOS_CACHE_TIEMPO_MS_VALIDOS >= System.currentTimeMillis()));
+                    (cacheByActivoBolsaId.get(activoBolsaId).getNumeroLectuasSinActualizar(lectorId) <= nVecesLeidoParaInvalidarCache &&
+                    cacheByActivoBolsaId.get(activoBolsaId).getUltimaVezActualizdoMs() + msUltimaVezActualizadoInvlidarCache >= System.currentTimeMillis()));
     }
 
     private void actualizarUltimoPrecioEnCache(ActivoBolsa activoBolsa) {

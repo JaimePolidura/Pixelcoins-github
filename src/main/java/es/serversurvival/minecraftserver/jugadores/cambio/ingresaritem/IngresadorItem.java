@@ -3,6 +3,7 @@ package es.serversurvival.minecraftserver.jugadores.cambio.ingresaritem;
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
+import es.serversurvival.pixelcoins.config._shared.application.Configuration;
 import es.serversurvival.pixelcoins.jugadores.cambiar.TipoCambioPixelcoins;
 import es.serversurvival.pixelcoins.jugadores.cambiar.ingresarItem.IngresarItemParametros;
 import es.serversurvival.pixelcoins.transacciones.application.MovimientosService;
@@ -23,6 +24,7 @@ import static org.bukkit.ChatColor.GOLD;
 @RequiredArgsConstructor
 public final class IngresadorItem {
     private final MovimientosService movimientosService;
+    private final Configuration configuration;
     private final UseCaseBus useCaseBus;
 
     public void ingresarItemInMano(Player player, TipoCambioPixelcoins... tipoCambioPixelcoinsPermitidos) {
@@ -46,11 +48,11 @@ public final class IngresadorItem {
 
         player.getInventory().clear(player.getInventory().getHeldItemSlot());
 
-        enviarMensaje(player, itemEnMano, tipoCambio);
+        enviarMensaje(player, tipoCambio);
     }
 
-    private void enviarMensaje(Player player, ItemStack itemEnMano, TipoCambioPixelcoins tipoCambio) {
-        double pixelcoinsAnadidas = tipoCambio.cambio * itemEnMano.getAmount();
+    private void enviarMensaje(Player player, TipoCambioPixelcoins tipoCambio) {
+        double pixelcoinsAnadidas = tipoCambio.getCambio(configuration);
         double pixelcoinsJugador = movimientosService.getBalance(player.getUniqueId());
         MinecraftUtils.enviarMensajeYSonido(player, GOLD + "Se ha añadido: " + formatPixelcoins(pixelcoinsAnadidas) +
                 "Tienes " + formatPixelcoins(pixelcoinsJugador), Sound.ENTITY_PLAYER_LEVELUP);

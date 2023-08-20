@@ -7,6 +7,7 @@ import es.bukkitbettermenus.utils.ItemBuilder;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.lootbox.VerTierLootboxMenu;
+import es.serversurvival.pixelcoins.config._shared.application.Configuration;
 import es.serversurvival.pixelcoins.lootbox._shared.items.domain.LootboxTier;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
@@ -20,6 +21,7 @@ import static org.bukkit.ChatColor.*;
 
 @RequiredArgsConstructor
 public final class OpcionesLootboxMenu extends Menu<LootboxTier> {
+    private final Configuration configuration;
     private final MenuService menuService;
 
     @Override
@@ -53,7 +55,7 @@ public final class OpcionesLootboxMenu extends Menu<LootboxTier> {
         return ItemBuilder.of(Material.GOLD_INGOT)
                 .title(MenuItems.CLICKEABLE + "COMPRAR")
                 .lore(List.of(
-                        GOLD + "Precio: " + Funciones.formatPixelcoins(getState().getPrecio()) + "/ lootbox"
+                        GOLD + "Precio: " + Funciones.formatPixelcoins(configuration.getDouble(getState().getConfigurationKey())) + "/ lootbox"
                 ))
                 .build();
 

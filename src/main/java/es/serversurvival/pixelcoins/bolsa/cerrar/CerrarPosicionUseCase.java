@@ -12,6 +12,8 @@ import es.serversurvival.pixelcoins.bolsa._shared.premarket.application.AbridorO
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.domain.Posicion;
 import es.serversurvival.pixelcoins.bolsa._shared.posiciones.application.PosicionesService;
 import es.serversurvival.pixelcoins.bolsa._shared.premarket.application.OrdenesPremarketService;
+import es.serversurvival.pixelcoins.config._shared.application.Configuration;
+import es.serversurvival.pixelcoins.config._shared.domain.ConfigurationKey;
 import es.serversurvival.pixelcoins.transacciones.domain.Transaccion;
 import es.serversurvival.pixelcoins.transacciones.application.TransaccionesSaver;
 import lombok.AllArgsConstructor;
@@ -26,6 +28,7 @@ public final class CerrarPosicionUseCase implements UseCaseHandler<CerrarPosicio
     private final ActivosBolsaService activosBolsaService;
     private final TransaccionesSaver transaccionesSaver;
     private final PosicionesService posicionesService;
+    private final Configuration configuration;
     private final BolsaValidator validator;
     private final EventBus eventBus;
 
@@ -35,7 +38,9 @@ public final class CerrarPosicionUseCase implements UseCaseHandler<CerrarPosicio
         validator.posicionTieneCantidad(parametros.getPosicionAbiertaId(), parametros.getCantidad());
         validator.posicionAbierta(parametros.getPosicionAbiertaId());
 
-        if(!abridorOrdenesPremarket.estaElMercadoAbierto()){
+        boolean premarketHabilitado = configuration.getBoolean(ConfigurationKey.BOLSA_PREMARKET_HABILITADO);
+
+        if(!abridorOrdenesPremarket.estaElMercadoAbierto() && premarketHabilitado){
             abridorOrdenesPremarket.abrirOrdenCerrar(parametros.toAbrirOrdenPremarketCerrarParametros());
             eventBus.publish(new PosicionBolsaCerrada(parametros.getJugadorId()));
             return;

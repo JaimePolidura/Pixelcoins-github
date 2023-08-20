@@ -3,16 +3,22 @@ package es.serversurvival.minecraftserver.webaction.token;
 import es.dependencyinjector.dependencies.annotations.Service;
 import es.serversurvival._shared.ConfigurationVariables;
 import es.serversurvival.minecraftserver.webaction.WebActionType;
+import es.serversurvival.pixelcoins.config._shared.application.Configuration;
+import es.serversurvival.pixelcoins.config._shared.domain.ConfigurationKey;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.vavr.control.Try;
+import lombok.AllArgsConstructor;
 
 import java.time.ZonedDateTime;
 import java.util.*;
 
 @Service
+@AllArgsConstructor
 public final class WebActionTokenService {
+    private final Configuration configuration;
+
     public String generate(WebActionType actionType, UUID jugadorId) {
         return Jwts.builder()
                 .setClaims(new HashMap<>(Map.of(
@@ -21,7 +27,7 @@ public final class WebActionTokenService {
                 )))
                 .setSubject(jugadorId.toString())
                 .setIssuedAt(new Date())
-                .signWith(SignatureAlgorithm.HS256, ConfigurationVariables.WEB_ACTIONS_SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS256, configuration.get(ConfigurationKey.WEB_ACTIONS_SECRET_KEY))
                 .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(5).toInstant()))
                 .compact();
     }
@@ -42,7 +48,7 @@ public final class WebActionTokenService {
 
     private Claims getClaims (String token){
         return Jwts.parser()
-                .setSigningKey(ConfigurationVariables.WEB_ACTIONS_SECRET_KEY)
+                .setSigningKey(configuration.get(ConfigurationKey.WEB_ACTIONS_SECRET_KEY))
                 .parseClaimsJws(token)
                 .getBody();
     }

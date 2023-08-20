@@ -6,6 +6,8 @@ import es.jaime.javaddd.domain.exceptions.IllegalType;
 import es.serversurvival._shared.ConfigurationVariables;
 import es.serversurvival.minecraftserver._shared.menus.ConfirmacionMenu;
 import es.serversurvival.pixelcoins._shared.Validador;
+import es.serversurvival.pixelcoins.config._shared.application.Configuration;
+import es.serversurvival.pixelcoins.config._shared.domain.ConfigurationKey;
 import lombok.AllArgsConstructor;
 import org.bukkit.inventory.ItemStack;
 
@@ -17,6 +19,7 @@ import java.util.List;
 public final class TiendaItemMinecraftValidator {
     private static final List<String> BANNED_ITEMS = Arrays.asList("POTION", "BANNER", "SPLASH_POTION", "LINGERING_POTION", "AIR");
 
+    private final Configuration configuration;
     private final Validador validador;
 
     public void precio(double precio) {
@@ -35,7 +38,9 @@ public final class TiendaItemMinecraftValidator {
     public void itemNoTieneMarcaDeAgua(ItemStack itemStack) {
         List<String> lore = itemStack.getItemMeta().getLore();
         if(lore != null && lore.size() >= 1){
-            boolean tieneMarcaDeAgua = lore.get(0).contains(ConfigurationVariables.TIENDA_MARCA_DE_AGUA);
+            String marcaDeAgua = configuration.get(ConfigurationKey.TIENDA_MARCA_DE_AGUA);
+            boolean tieneMarcaDeAgua = lore.get(0).contains(marcaDeAgua);
+
             if(tieneMarcaDeAgua){
                 throw new AlreadyExists("No puedes revender un objeto que compraste en la tienda");
             }

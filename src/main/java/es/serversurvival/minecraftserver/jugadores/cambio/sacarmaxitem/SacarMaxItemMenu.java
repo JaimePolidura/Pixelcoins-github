@@ -4,6 +4,7 @@ import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.utils.ItemBuilder;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseBus;
+import es.serversurvival.pixelcoins.config._shared.application.Configuration;
 import es.serversurvival.pixelcoins.jugadores.cambiar.TipoCambioPixelcoins;
 import es.serversurvival.pixelcoins.jugadores.cambiar.sacarMaxItem.SacarMaxItemParametros;
 import es.serversurvival._shared.utils.Funciones;
@@ -23,6 +24,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public final class SacarMaxItemMenu extends Menu {
     private final MovimientosService movimientosService;
+    private final Configuration configuration;
     private final UseCaseBus useCaseBus;
 
     @Override
@@ -40,10 +42,14 @@ public final class SacarMaxItemMenu extends Menu {
                 .fixedItems()
                 .title(ChatColor.DARK_RED + "" + ChatColor.BOLD + "ELLIGE ITEM PARA SACR MAX")
                 .item(4, buildItemInfo())
-                .item(2, player -> buildItem(player.getUniqueId(), "DIAMANTES", Material.DIAMOND_BLOCK, TipoCambioPixelcoins.DIAMANTE), this::onClick)
-                .item(3, player -> buildItem(player.getUniqueId(), "LAPISLAZULI", Material.LAPIS_BLOCK, TipoCambioPixelcoins.LAPISLAZULI), this::onClick)
-                .item(4, player -> buildItem(player.getUniqueId(), "CUARZO", Material.QUARTZ_BLOCK, TipoCambioPixelcoins.CUARZO), this::onClick)
+                .item(2, player -> buildItem(player.getUniqueId(), "DIAMANTES", Material.DIAMOND_BLOCK, getCambio(TipoCambioPixelcoins.DIAMOND)), this::onClick)
+                .item(3, player -> buildItem(player.getUniqueId(), "LAPISLAZULI", Material.LAPIS_BLOCK, getCambio(TipoCambioPixelcoins.LAPIS_LAZULI)), this::onClick)
+                .item(4, player -> buildItem(player.getUniqueId(), "CUARZO", Material.QUARTZ_BLOCK, getCambio(TipoCambioPixelcoins.QUARTZ_BLOCK)), this::onClick)
                 .build();
+    }
+
+    private double getCambio(TipoCambioPixelcoins tipoCambioPixelcoins) {
+        return tipoCambioPixelcoins.getCambio(configuration);
     }
 
     private void onClick(Player player, InventoryClickEvent event) {
@@ -72,7 +78,7 @@ public final class SacarMaxItemMenu extends Menu {
         return ItemBuilder.of(Material.PAPER).lore(lore).build();
     }
 
-    private ItemStack buildItem (UUID jugaodrId, String item, Material material, int cambioPixelcoins) {
+    private ItemStack buildItem (UUID jugaodrId, String item, Material material, double cambioPixelcoins) {
         double pixelcoinsJugador = movimientosService.getBalance(jugaodrId);
 
         String displayName = ChatColor.GOLD + "" + ChatColor.BOLD + "SACAR MAXIMO DE " + item;

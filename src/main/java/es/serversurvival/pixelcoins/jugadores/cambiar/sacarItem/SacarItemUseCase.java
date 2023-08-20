@@ -4,6 +4,7 @@ import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.Validador;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
+import es.serversurvival.pixelcoins.config._shared.application.Configuration;
 import es.serversurvival.pixelcoins.transacciones.domain.TipoTransaccion;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import es.serversurvival.pixelcoins.transacciones.domain.Transaccion;
@@ -15,13 +16,14 @@ import lombok.AllArgsConstructor;
 public final class SacarItemUseCase implements UseCaseHandler<SacarItemParametros> {
     private final TransaccionesSaver transaccionesSaver;
     private final JugadoresService jugadoresService;
+    private final Configuration configuration;
     private final Validador validador;
     private final EventBus eventBus;
 
     @Override
     public void handle(SacarItemParametros parametros) {
         var jugador = this.jugadoresService.getById(parametros.getJugadorId());
-        var pixelcoinsASacar = parametros.getTipoCambio().cambio * parametros.getCantidad();
+        var pixelcoinsASacar = parametros.getTipoCambio().getCambio(configuration) * parametros.getCantidad();
 
         validador.jugadorTienePixelcoins(parametros.getJugadorId(), pixelcoinsASacar);
 

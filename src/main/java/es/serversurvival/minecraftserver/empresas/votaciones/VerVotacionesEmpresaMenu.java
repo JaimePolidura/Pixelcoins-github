@@ -12,6 +12,8 @@ import es.serversurvival.minecraftserver._shared.menus.MenuItems;
 import es.serversurvival.minecraftserver.empresas.miempresa.MiEmpresaMenu;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
 import es.serversurvival.minecraftserver.empresas.votaciones.lorevotacionitem.VotacionItemLoreBuilderService;
+import es.serversurvival.pixelcoins.config._shared.application.Configuration;
+import es.serversurvival.pixelcoins.config._shared.domain.ConfigurationKey;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.AccionistasEmpresasService;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.votaciones._shared.votaciones.domain.Votacion;
@@ -41,6 +43,7 @@ public final class VerVotacionesEmpresaMenu extends Menu<Empresa> implements Aft
     private final AccionistasEmpresasService accionistasEmpresasService;
     private final VotacionesService votacionesService;
     private final JugadoresService jugadoresService;
+    private final Configuration configuration;
     private final VotosService votosService;
     private final MenuService menuService;
 
@@ -132,7 +135,7 @@ public final class VerVotacionesEmpresaMenu extends Menu<Empresa> implements Aft
             add(GOLD + "Numero votos a favor: " + GREEN + votosService.getVotosFavor(votacion.getVotacionId()));
             add(GOLD + "Numero votos en contra: " + RED + votosService.getVotosContra(votacion.getVotacionId()));
             add(GOLD + "Nº Total acciones empresa: " + getState().getNTotalAcciones());
-            add(GOLD + "% Nº Total acciones votadas necesarias para finalizar: " + ConfigurationVariables.EMPRESAS_PORCENTAJE_ACCIONES_TOTALES_VOTACION * 100 + "%");
+            add(GOLD + "% Nº Total acciones votadas necesarias para finalizar: " +  configuration.getDouble(ConfigurationKey.EMPRESAS_PORCENTAJE_ACCIONES_TOTALES_VOTACION) * 100 + "%");
             add("  ");
         }};
 

@@ -53,7 +53,7 @@ public final class Empresa {
                 parametros.getNuevoIcono(), nTotalAcciones, fechaCreacion, esCotizada, estaCerrado, fechaCerrado);
     }
 
-    public static Empresa fromParametrosCrearEmpresa(CrearEmpresaParametros comando) {
+    public static Empresa fromParametrosCrearEmpresa(CrearEmpresaParametros comando, int nAccionesInicial) {
         return Empresa.builder()
                 .empresaId(UUID.randomUUID())
                 .nombre(comando.getNombre())
@@ -62,7 +62,7 @@ public final class Empresa {
                 .directorJugadorId(comando.getJugadorCreadorId())
                 .descripcion(comando.getDescripccion())
                 .logotipo(comando.getIcono())
-                .nTotalAcciones(ConfigurationVariables.EMPRESAS_N_ACCIONES_INICIAL)
+                .nTotalAcciones(nAccionesInicial)
                 .fechaCreacion(LocalDateTime.now())
                 .esCotizada(false)
                 .estaCerrado(false)

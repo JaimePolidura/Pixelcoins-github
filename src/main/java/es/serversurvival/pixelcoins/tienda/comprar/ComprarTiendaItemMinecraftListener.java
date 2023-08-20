@@ -4,6 +4,8 @@ import es.dependencyinjector.dependencies.annotations.EventHandler;
 import es.jaime.EventBus;
 import es.serversurvival._shared.ConfigurationVariables;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
+import es.serversurvival.pixelcoins.config._shared.application.Configuration;
+import es.serversurvival.pixelcoins.config._shared.domain.ConfigurationKey;
 import es.serversurvival.pixelcoins.mercado._shared.custom.accion.OfertaCompradaListener;
 import es.serversurvival.pixelcoins.tienda._shared.OfertaTiendaItemMinecraft;
 import lombok.AllArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.UUID;
 @EventHandler
 @AllArgsConstructor
 public final class ComprarTiendaItemMinecraftListener implements OfertaCompradaListener<OfertaTiendaItemMinecraft> {
+    private final Configuration configuration;
     private final EventBus eventBus;
 
     @Override
@@ -32,6 +35,7 @@ public final class ComprarTiendaItemMinecraftListener implements OfertaCompradaL
     }
 
     private ItemStack setMarcaDeAguaItem(ItemStack item) {
-        return MinecraftUtils.setLore(item, List.of(ConfigurationVariables.TIENDA_MARCA_DE_AGUA));
+        String marcaDeAgua = configuration.get(ConfigurationKey.TIENDA_MARCA_DE_AGUA);
+        return MinecraftUtils.setLore(item, List.of(marcaDeAgua));
     }
 }

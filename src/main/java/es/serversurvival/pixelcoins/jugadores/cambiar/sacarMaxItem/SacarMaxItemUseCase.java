@@ -5,6 +5,7 @@ import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.Validador;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
 import es.serversurvival._shared.utils.Funciones;
+import es.serversurvival.pixelcoins.config._shared.application.Configuration;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.Jugador;
 import es.serversurvival.pixelcoins.jugadores._shared.jugadores.JugadoresService;
 import es.serversurvival.pixelcoins.jugadores.cambiar.TipoCambioPixelcoins;
@@ -25,12 +26,13 @@ public final class SacarMaxItemUseCase implements UseCaseHandler<SacarMaxItemPar
     private final MovimientosService movimientosService;
     private final TransaccionesSaver transaccionesSaver;
     private final JugadoresService jugadoresService;
+    private final Configuration configuration;
     private final Validador validador;
     private final EventBus eventBus;
 
     @Override
     public void handle(SacarMaxItemParametros parametros) {
-        validador.jugadorTienePixelcoins(parametros.getJugadorId(), parametros.getTipoCambio().cambio);
+        validador.jugadorTienePixelcoins(parametros.getJugadorId(), parametros.getTipoCambio().getCambio(configuration));
 
         double pixelcoinsJugador = movimientosService.getBalance(parametros.getJugadorId());
         Jugador jugador = jugadoresService.getById(parametros.getJugadorId());
@@ -44,10 +46,11 @@ public final class SacarMaxItemUseCase implements UseCaseHandler<SacarMaxItemPar
 
     public void sacarMaxItemDiamond (Jugador jugador, double pixelcoinsJugador) {
         Player player = Bukkit.getPlayer(jugador.getNombre());
+        int cambioDiamante = (int) TipoCambioPixelcoins.DIAMOND.getCambio(configuration);
 
-        int convertibles = (int) (pixelcoinsJugador - (pixelcoinsJugador % TipoCambioPixelcoins.DIAMANTE));
-        int items = (convertibles / TipoCambioPixelcoins.DIAMANTE) % 9;
-        int bloques = ((convertibles / TipoCambioPixelcoins.DIAMANTE) - items) / 9;
+        int convertibles = (int) (pixelcoinsJugador - (pixelcoinsJugador % cambioDiamante));
+        int items = (int) ((convertibles / cambioDiamante) % 9);
+        int bloques = (int) (((convertibles / cambioDiamante) - items) / 9);
 
         int bloquesAnadidos = 0;
         int[] slotsBloques = slotsItem(bloques, 36 - Funciones.getEspaciosOcupados(player.getInventory()));
@@ -64,7 +67,7 @@ public final class SacarMaxItemUseCase implements UseCaseHandler<SacarMaxItemPar
             inventoryJugador.addItem(new ItemStack(Material.getMaterial("DIAMOND"), slotsDiamantes[i]));
         }
 
-        int coste = (TipoCambioPixelcoins.DIAMANTE * bloquesAnadidos * 9) + (TipoCambioPixelcoins.DIAMANTE * diamantesAnadidos);
+        int coste = (cambioDiamante * bloquesAnadidos * 9) + (cambioDiamante * diamantesAnadidos);
 
         this.decrementarPixelcoins(jugador, pixelcoinsJugador, TipoCambioPixelcoins.DIAMOND);
 
@@ -73,10 +76,11 @@ public final class SacarMaxItemUseCase implements UseCaseHandler<SacarMaxItemPar
 
     public void sacarMaxItemLapisLazuli (Jugador jugador, double dineroJugador) {
         Player player = Bukkit.getPlayer(jugador.getNombre());
+        int cambioLapislazuli = (int) TipoCambioPixelcoins.LAPIS_BLOCK.getCambio(configuration);
 
-        int convertibles = (int) (dineroJugador - (dineroJugador % TipoCambioPixelcoins.LAPISLAZULI));
-        int items = (convertibles / TipoCambioPixelcoins.LAPISLAZULI) % 9;
-        int bloques = ((convertibles / TipoCambioPixelcoins.LAPISLAZULI) - items) / 9;
+        int convertibles = (int) (dineroJugador - (dineroJugador % cambioLapislazuli));
+        int items = (convertibles / cambioLapislazuli) % 9;
+        int bloques = ((convertibles / cambioLapislazuli) - items) / 9;
 
         int bloquesAnadidos = 0;
         int[] slotsBloques = slotsItem(bloques, 36 - Funciones.getEspaciosOcupados(player.getInventory()));
@@ -93,7 +97,7 @@ public final class SacarMaxItemUseCase implements UseCaseHandler<SacarMaxItemPar
             inventoryJugador.addItem(new ItemStack(Material.getMaterial("LAPIS_LAZULI"), slotsDiamantes[i]));
         }
 
-        int coste = (TipoCambioPixelcoins.LAPISLAZULI * bloquesAnadidos * 9) + (TipoCambioPixelcoins.LAPISLAZULI * diamantesAnadidos);
+        int coste = (cambioLapislazuli * bloquesAnadidos * 9) + (cambioLapislazuli * diamantesAnadidos);
 
         decrementarPixelcoins(jugador, coste, TipoCambioPixelcoins.LAPIS_LAZULI);
 
@@ -102,8 +106,9 @@ public final class SacarMaxItemUseCase implements UseCaseHandler<SacarMaxItemPar
 
     public void sacarMaxItemQuartzBlock (Jugador jugador, double dineroJugador) {
         Player player = Bukkit.getPlayer(jugador.getNombre());
+        int cambioCuarzo = (int) TipoCambioPixelcoins.QUARTZ_BLOCK.getCambio(configuration);
 
-        int bloques = (int) ((dineroJugador - (dineroJugador % TipoCambioPixelcoins.CUARZO)) / TipoCambioPixelcoins.CUARZO);
+        int bloques = (int) ((dineroJugador - (dineroJugador % cambioCuarzo)) / cambioCuarzo);
 
         int[] slotsBloques = slotsItem(bloques, 36 - Funciones.getEspaciosOcupados(player.getInventory()));
         int bloquesAnadidos = 0;
@@ -113,7 +118,7 @@ public final class SacarMaxItemUseCase implements UseCaseHandler<SacarMaxItemPar
             jugadorInventory.addItem(new ItemStack(Material.getMaterial("QUARTZ_BLOCK"), slotsBloques[i]));
         }
 
-        int coste = (TipoCambioPixelcoins.CUARZO * bloquesAnadidos);
+        int coste = (cambioCuarzo * bloquesAnadidos);
 
         decrementarPixelcoins(jugador, coste, TipoCambioPixelcoins.LAPIS_LAZULI);
 

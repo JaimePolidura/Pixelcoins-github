@@ -3,6 +3,8 @@ package es.serversurvival.pixelcoins.empresas.crear;
 import es.dependencyinjector.dependencies.annotations.UseCase;
 import es.jaime.EventBus;
 import es.serversurvival.pixelcoins._shared.usecases.UseCaseHandler;
+import es.serversurvival.pixelcoins.config._shared.application.Configuration;
+import es.serversurvival.pixelcoins.config._shared.domain.ConfigurationKey;
 import es.serversurvival.pixelcoins.empresas._shared.EmpresasValidador;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.domain.AccionistaEmpresa;
 import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.AccionistasEmpresasService;
@@ -19,6 +21,7 @@ public final class CrearEmpresaUseCase implements UseCaseHandler<CrearEmpresaPar
     private final EmpresasValidador empresasValidador;
     private final EmpleadosService empleadosService;
     private final EmpresasService empresasService;
+    private final Configuration configuration;
     private final EventBus eventBus;
 
     @Override
@@ -28,7 +31,9 @@ public final class CrearEmpresaUseCase implements UseCaseHandler<CrearEmpresaPar
         empresasValidador.validarIcono(parametros.getIcono());
         empresasValidador.empresaNoExiste(parametros.getNombre());
 
-        Empresa empresa = Empresa.fromParametrosCrearEmpresa(parametros);
+        int nAccionesInicial = configuration.getInt(ConfigurationKey.EMPRESAS_N_ACCIONES_INICIAL);
+        Empresa empresa = Empresa.fromParametrosCrearEmpresa(parametros, nAccionesInicial);
+
 
         empresasService.save(empresa);
         empleadosService.save(Empleado.fromDirectorEmpresa(empresa));

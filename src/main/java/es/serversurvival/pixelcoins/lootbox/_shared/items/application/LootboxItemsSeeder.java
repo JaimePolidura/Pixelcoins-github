@@ -37,18 +37,23 @@ public final class LootboxItemsSeeder {
                 item(COMUN, LootboxItemRareza.MUY_COMUN, Material.DARK_OAK_LOG, 16, 64),
                 item(COMUN, LootboxItemRareza.MUY_COMUN, Material.SPRUCE_LOG, 16, 64),
                 item(COMUN, LootboxItemRareza.MUY_COMUN, Material.OAK_DOOR, 2, 32),
-                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.JUNGLE_DOOR, 2, 32),
-                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.DARK_OAK_DOOR, 3, 32),
+                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.JUNGLE_DOOR, 8, 32),
+                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.DARK_OAK_DOOR, 8, 32),
                 item(COMUN, LootboxItemRareza.MUY_COMUN, Material.SAND, 32, 64),
-                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.OAK_FENCE, 2, 43),
-                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.JUNGLE_FENCE, 2, 43),
-                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.BIRCH_FENCE_GATE, 2, 43),
-                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.OAK_FENCE_GATE, 2, 43),
+                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.OAK_FENCE, 8, 43),
+                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.JUNGLE_FENCE, 8, 43),
+                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.BIRCH_FENCE_GATE, 8, 43),
+                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.OAK_FENCE_GATE, 8, 43),
                 item(COMUN, LootboxItemRareza.MUY_COMUN, Material.TORCH, 32, 64),
                 item(COMUN, LootboxItemRareza.MUY_COMUN, Material.IRON_PICKAXE),
                 item(COMUN, LootboxItemRareza.MUY_COMUN, Material.IRON_SWORD),
                 item(COMUN, LootboxItemRareza.MUY_COMUN, Material.IRON_AXE),
                 item(COMUN, LootboxItemRareza.MUY_COMUN, Material.IRON_SHOVEL),
+                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.ENCHANTED_BOOK, Map.of(Enchantment.FIRE_ASPECT, 1)),
+                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.ENCHANTED_BOOK, Map.of(Enchantment.PROTECTION_ENVIRONMENTAL, 2)),
+                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.ENCHANTED_BOOK, Map.of(Enchantment.DURABILITY, 1)),
+                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.ENCHANTED_BOOK, Map.of(Enchantment.DAMAGE_ALL, 2)),
+                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.ENCHANTED_BOOK, Map.of(Enchantment.ARROW_DAMAGE, 2)),
 
                 item(COMUN, LootboxItemRareza.COMUN, Material.SANDSTONE, 32, 64),
                 item(COMUN, LootboxItemRareza.COMUN, Material.STONE_BRICKS, 32, 64),
@@ -91,6 +96,20 @@ public final class LootboxItemsSeeder {
                 item(COMUN, LootboxItemRareza.COMUN, Material.OBSIDIAN, 8, 16),
                 item(COMUN, LootboxItemRareza.COMUN, Material.BREWING_STAND, 2, 4),
                 item(COMUN, LootboxItemRareza.COMUN, Material.ENCHANTED_BOOK, Map.of(Enchantment.KNOCKBACK, 1)),
+                item(COMUN, LootboxItemRareza.COMUN, Material.IRON_PICKAXE, Map.of(
+                        Enchantment.DURABILITY, 2,
+                        Enchantment.DIG_SPEED, 1
+                )),
+                item(COMUN, LootboxItemRareza.COMUN, Material.IRON_PICKAXE, Map.of(
+                        Enchantment.LOOT_BONUS_BLOCKS, 1,
+                        Enchantment.DIG_SPEED, 2
+                )),
+                item(COMUN, LootboxItemRareza.COMUN, Material.IRON_HELMET, Map.of(
+                        Enchantment.PROTECTION_ENVIRONMENTAL, 2
+                )),
+                item(COMUN, LootboxItemRareza.COMUN, Material.IRON_SWORD, Map.of(
+                        Enchantment.DAMAGE_ALL, 1
+                )),
 
                 item(COMUN, LootboxItemRareza.RARO, Material.QUARTZ_BLOCK, 16, 32),
                 item(COMUN, LootboxItemRareza.RARO, Material.LAPIS_ORE, 16, 32),
@@ -120,14 +139,22 @@ public final class LootboxItemsSeeder {
                 item(COMUN, LootboxItemRareza.RARO, Material.IRON_BLOCK, 8, 16),
                 item(COMUN, LootboxItemRareza.RARO, Material.SPYGLASS),
                 item(COMUN, LootboxItemRareza.RARO, Material.LEAD, 2, 4),
-                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.ENCHANTED_BOOK, Map.of(Enchantment.FIRE_ASPECT, 1)),
-                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.ENCHANTED_BOOK, Map.of(Enchantment.PROTECTION_ENVIRONMENTAL, 2)),
-                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.ENCHANTED_BOOK, Map.of(Enchantment.DURABILITY, 1)),
-                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.ENCHANTED_BOOK, Map.of(Enchantment.DAMAGE_ALL, 2)),
-                item(COMUN, LootboxItemRareza.MUY_COMUN, Material.ENCHANTED_BOOK, Map.of(Enchantment.ARROW_DAMAGE, 2)),
+                item(COMUN, LootboxItemRareza.RARO, Material.ENCHANTED_BOOK, Map.of(Enchantment.PROTECTION_ENVIRONMENTAL, 3)),
+                item(COMUN, LootboxItemRareza.RARO, Material.SADDLE),
                 item(COMUN, LootboxItemRareza.RARO, Material.IRON_HORSE_ARMOR),
                 item(COMUN, LootboxItemRareza.RARO, Material.SADDLE),
                 item(COMUN, LootboxItemRareza.RARO, Material.ENCHANTED_BOOK, Map.of(Enchantment.FIRE_ASPECT, 1)),
+                item(COMUN, LootboxItemRareza.RARO, Material.ENCHANTED_BOOK, Map.of(Enchantment.PROTECTION_ENVIRONMENTAL, 3)),
+                item(COMUN, LootboxItemRareza.RARO, Material.ENCHANTED_BOOK, Map.of(Enchantment.DURABILITY, 2)),
+                item(COMUN, LootboxItemRareza.RARO, Material.ENCHANTED_BOOK, Map.of(Enchantment.DAMAGE_ALL, 3)),
+                item(COMUN, LootboxItemRareza.RARO, Material.ENCHANTED_BOOK, Map.of(Enchantment.ARROW_DAMAGE, 3)),
+                item(COMUN, LootboxItemRareza.RARO, Material.IRON_SWORD, Map.of(
+                        Enchantment.DAMAGE_ALL, 3
+                )),
+                item(COMUN, LootboxItemRareza.RARO, Material.IRON_SWORD, Map.of(
+                        Enchantment.DAMAGE_ALL, 2,
+                        Enchantment.DURABILITY, 1
+                )),
                 item(COMUN, LootboxItemRareza.RARO, Material.IRON_SHOVEL, Map.of(
                         Enchantment.DURABILITY, 2,
                         Enchantment.DIG_SPEED, 2
@@ -138,6 +165,10 @@ public final class LootboxItemsSeeder {
                 )),
                 item(COMUN, LootboxItemRareza.RARO, Material.IRON_SWORD, Map.of(
                         Enchantment.DAMAGE_ALL, 3
+                )),
+                item(COMUN, LootboxItemRareza.RARO, Material.IRON_BOOTS, Map.of(
+                        Enchantment.PROTECTION_FALL, 2,
+                        Enchantment.PROTECTION_ENVIRONMENTAL, 2
                 )),
 
                 item(COMUN, LootboxItemRareza.MUY_RARO, Material.ENCHANTING_TABLE, 1, 2),
@@ -176,18 +207,18 @@ public final class LootboxItemsSeeder {
                         Enchantment.DIG_SPEED, 2,
                         Enchantment.LOOT_BONUS_BLOCKS, 1
                 )),
-                item(COMUN, LootboxItemRareza.MUY_RARO, Material.DIAMOND_SWORD, Map.of(
+                item(COMUN, LootboxItemRareza.MUY_RARO, Material.IRON_SWORD, Map.of(
                         Enchantment.DURABILITY, 2,
                         Enchantment.FIRE_ASPECT, 1,
                         Enchantment.LOOT_BONUS_MOBS, 1,
                         Enchantment.DAMAGE_ALL, 3
                 )),
                 item(COMUN, LootboxItemRareza.MUY_RARO, Material.IRON_SWORD, Map.of(
-                        Enchantment.LOOT_BONUS_MOBS, 2,
-                        Enchantment.DAMAGE_ALL, 1
+                        Enchantment.LOOT_BONUS_MOBS, 1,
+                        Enchantment.DAMAGE_ALL, 2
                 )),
                 item(COMUN, LootboxItemRareza.MUY_RARO, Material.DIAMOND_SWORD, Map.of(
-                        Enchantment.LOOT_BONUS_MOBS, 2,
+                        Enchantment.LOOT_BONUS_MOBS, 1,
                         Enchantment.DAMAGE_ALL, 1
                 )),
                 item(COMUN, LootboxItemRareza.MUY_RARO, Material.DIAMOND_CHESTPLATE, Map.of(
@@ -256,6 +287,15 @@ public final class LootboxItemsSeeder {
                 item(NORMAL, LootboxItemRareza.COMUN, Material.ENCHANTED_BOOK, Map.of(Enchantment.ARROW_DAMAGE, 3)),
                 item(NORMAL, LootboxItemRareza.COMUN, Material.ENCHANTED_BOOK, Map.of(Enchantment.LOOT_BONUS_MOBS, 1)),
                 item(NORMAL, LootboxItemRareza.COMUN, Material.ENCHANTED_BOOK, Map.of(Enchantment.LOOT_BONUS_BLOCKS, 1)),
+                item(NORMAL, LootboxItemRareza.MUY_COMUN, Material.ENCHANTED_BOOK, Map.of(
+                        Enchantment.FIRE_ASPECT, 2,
+                        Enchantment.DAMAGE_ALL, 3)
+                ),
+                item(NORMAL, LootboxItemRareza.MUY_COMUN, Material.ENCHANTED_BOOK, Map.of(Enchantment.PROTECTION_ENVIRONMENTAL, 3)),
+                item(NORMAL, LootboxItemRareza.MUY_COMUN, Material.ENCHANTED_BOOK, Map.of(Enchantment.DURABILITY, 2)),
+                item(NORMAL, LootboxItemRareza.MUY_COMUN, Material.ENCHANTED_BOOK, Map.of(Enchantment.DAMAGE_ALL, 3)),
+                item(NORMAL, LootboxItemRareza.MUY_COMUN, Material.ENCHANTED_BOOK, Map.of(Enchantment.ARROW_DAMAGE, 3)),
+                item(NORMAL, LootboxItemRareza.MUY_COMUN, Material.ENCHANTED_BOOK, Map.of(Enchantment.FROST_WALKER, 2)),
 
                 item(NORMAL, LootboxItemRareza.RARO, Material.LAPIS_BLOCK, 8, 16),
                 item(NORMAL, LootboxItemRareza.RARO, Material.QUARTZ_BLOCK, 32, 64),
@@ -293,6 +333,8 @@ public final class LootboxItemsSeeder {
                 item(NORMAL, LootboxItemRareza.RARO, Material.ENCHANTED_BOOK, Map.of(Enchantment.ARROW_DAMAGE, 3)),
                 item(NORMAL, LootboxItemRareza.RARO, Material.ENCHANTED_BOOK, Map.of(Enchantment.LOOT_BONUS_MOBS, 2)),
                 item(NORMAL, LootboxItemRareza.RARO, Material.ENCHANTED_BOOK, Map.of(Enchantment.LOOT_BONUS_BLOCKS, 2)),
+                item(NORMAL, LootboxItemRareza.RARO, Material.ENCHANTED_BOOK, Map.of(Enchantment.ARROW_INFINITE, 1)),
+                item(NORMAL, LootboxItemRareza.RARO, Material.ENCHANTED_BOOK, Map.of(Enchantment.SILK_TOUCH, 1)),
 
                 item(NORMAL, LootboxItemRareza.MUY_RARO, Material.DIAMOND_ORE, 16, 32),
                 item(NORMAL, LootboxItemRareza.MUY_RARO, Material.TURTLE_EGG, 4, 8),
@@ -342,10 +384,18 @@ public final class LootboxItemsSeeder {
                         Enchantment.DURABILITY, 2
                 )),
                 item(NORMAL, LootboxItemRareza.MUY_RARO, Material.DIAMOND_CHESTPLATE, Map.of(
-                        Enchantment.PROTECTION_ENVIRONMENTAL, 1
+                        Enchantment.PROTECTION_ENVIRONMENTAL, 4
+                )),
+                item(NORMAL, LootboxItemRareza.MUY_RARO, Material.DIAMOND_CHESTPLATE, Map.of(
+                        Enchantment.PROTECTION_ENVIRONMENTAL, 3,
+                        Enchantment.DURABILITY, 2
                 )),
                 item(NORMAL, LootboxItemRareza.MUY_RARO, Material.DIAMOND_HELMET, Map.of(
                         Enchantment.PROTECTION_ENVIRONMENTAL, 4
+                )),
+                item(NORMAL, LootboxItemRareza.MUY_RARO, Material.DIAMOND_HELMET, Map.of(
+                        Enchantment.PROTECTION_ENVIRONMENTAL, 4,
+                        Enchantment.DURABILITY, 2
                 ))
         );
 
