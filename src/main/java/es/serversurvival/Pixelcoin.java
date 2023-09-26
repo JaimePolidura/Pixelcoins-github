@@ -24,6 +24,7 @@ import es.dependencyinjector.abstractions.InMemoryAbstractionsRepository;
 import es.dependencyinjector.dependencies.DependenciesRepository;
 import es.dependencyinjector.dependencies.InMemoryDependenciesRepository;
 import es.jaime.EventBus;
+import es.jaime.EventListener;
 import es.jaime.EventListenerDependencyProvider;
 import es.jaime.ORMJava;
 import es.jaime.connection.ConnectionManager;
@@ -109,7 +110,6 @@ public final class Pixelcoin extends JavaPlugin {
         ORMJava.addCustomSerializer(ItemMinecraftEncantamientos.class, new MySQLTiendaObjetoEncantamientosSerializer());
 
         DependencyInjectorBootstrapper.init(DependencyInjectorConfiguration.builder()
-                .singleThreadedScan()
                 .packageToScan(COMMON_PACKAGE)
                 .reflections(reflections)
                 .dependenciesRepository(dependenciesRepository)

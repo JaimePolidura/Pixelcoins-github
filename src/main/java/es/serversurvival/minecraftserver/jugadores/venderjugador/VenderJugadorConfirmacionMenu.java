@@ -22,7 +22,6 @@ import static org.bukkit.ChatColor.*;
 @AllArgsConstructor
 public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu<VenderJugadorConfirmacionMenuState> {
     private final UseCaseBus useCaseBus;
-    private final EventBus eventBus;
 
     @Override
     public void onAceptar(Player destinatario, InventoryClickEvent event, VenderJugadorConfirmacionMenuState state) {
@@ -57,8 +56,6 @@ public final class VenderJugadorConfirmacionMenu extends ConfirmacionMenu<Vender
 
         comprador.sendMessage(GOLD + "Has comprado el item");
         comprador.playSound(comprador.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10, 1);
-
-        this.eventBus.publish(new ItemVendidoJugadorEvento(comprador.getUniqueId(), vendedor.getUniqueId(), precio, itemAVender.getType().toString()));
     }
 
     private boolean isItemInInventory(Player jugadorVendedor, ItemStack itemAVender, int slotItemVender) {

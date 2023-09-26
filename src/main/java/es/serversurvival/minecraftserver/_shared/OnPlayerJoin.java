@@ -10,7 +10,7 @@ import static org.bukkit.ChatColor.*;
 
 @EventHandler
 @RequiredArgsConstructor
-public final class OnPlayerJoin  implements Listener {
+public final class OnPlayerJoin implements Listener {
     private final LeectorMensajesService leectorMensajesService;
 
     @org.bukkit.event.EventHandler

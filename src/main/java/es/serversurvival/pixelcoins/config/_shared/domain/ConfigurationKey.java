@@ -27,4 +27,6 @@ public enum ConfigurationKey {
     PRINT_COMMANDS_EXCEPTIONS,
 
     SCOREBOARDS_N_TOP_JUGADORES,
+
+    TPA_TIMEOUT_MS
 }

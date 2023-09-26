@@ -61,6 +61,10 @@ public final class PagadorSueldosEmpresaUseCase implements UseCaseHandler<Pagado
         long periodoPagosMs = empleado.getPeriodoPagoMs();
         long tiempoAhoraMs = tiempoService.millis();
 
+        if(periodoPagosMs == 0){
+            return 0;
+        }
+
         long tiempoTranscurridoDesdeUltimaPaga = tiempoAhoraMs - ultimoPagoMs;
 
         return (int) (tiempoTranscurridoDesdeUltimaPaga / periodoPagosMs);

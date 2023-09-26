@@ -31,6 +31,7 @@ public final class LootboxEnPropiedad {
         this.lootboxItemAbierto = lootboxItemResultado.getLootboxItemId();
         this.fechaAbierto = LocalDateTime.now();
         this.cantidadResultado = lootboxItemResultado.getCantidad();
+        this.estado = LootboxCompradaEstado.ABIERTA;
 
         return this;
     }

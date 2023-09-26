@@ -156,6 +156,11 @@ public abstract class VerOfertasMercadoMenu<T extends Oferta> extends Menu {
     }
 
     private ItemStack cambiarDisplayNameItem(ItemStack item) {
+        //TODO
+        if(item == null || item.getItemMeta() == null) {
+            return item;
+        }
+
         boolean propietarioItem = MinecraftUtils.getLastLineOfLore(item, 1).equals(getPlayer().getUniqueId());
 
         return ItemUtils.setDisplayname(item, propietarioItem ? PROPIETARIO_OFERTA_ITEM_DISPLAYNAME : NO_PROPIETARIO_OFERTA_DISPLAYNAME);

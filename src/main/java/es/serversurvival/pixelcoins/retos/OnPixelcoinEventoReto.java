@@ -26,7 +26,7 @@ public final class OnPixelcoinEventoReto {
     private final AdquisitorRetos adquisitorRetos;
     private final RetosService retosService;
 
-    @EventListener(pritority = Priority.LOWEST)
+    @EventListener(pritority = Priority.LOWEST, value = InvocaAUnReto.class)
     public void on(InvocaAUnReto evento) {
         Map<UUID, List<RetoMapping>> retosByJugadorId = evento.retosByJugadorId();
         Object otro = evento.otroDatoReto();

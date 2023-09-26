@@ -46,10 +46,6 @@ public final class ConfirmarOfertaContratacionMenu extends ConfirmacionMenu<Conf
                 millisToDias(state.getPeriodoPagoSueldoMs()) + " dias");
     }
 
-    public static void main(String[] args) {
-        System.out.println("Hoa");
-    }
-
     @Override
     public ItemStack aceptarItem() {
         return ItemBuilder.of(Material.GREEN_WOOL)
