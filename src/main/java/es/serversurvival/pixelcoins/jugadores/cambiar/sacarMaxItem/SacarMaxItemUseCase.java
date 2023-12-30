@@ -36,7 +36,7 @@ public final class SacarMaxItemUseCase implements UseCaseHandler<SacarMaxItemPar
 
         double pixelcoinsJugador = movimientosService.getBalance(parametros.getJugadorId());
         Jugador jugador = jugadoresService.getById(parametros.getJugadorId());
-
+        
         switch (parametros.getTipoCambio()) {
             case DIAMOND, DIAMOND_BLOCK -> sacarMaxItemDiamond(jugador, pixelcoinsJugador);
             case LAPIS_BLOCK, LAPIS_LAZULI -> sacarMaxItemLapisLazuli(jugador, pixelcoinsJugador);
@@ -69,7 +69,7 @@ public final class SacarMaxItemUseCase implements UseCaseHandler<SacarMaxItemPar
 
         int coste = (cambioDiamante * bloquesAnadidos * 9) + (cambioDiamante * diamantesAnadidos);
 
-        this.decrementarPixelcoins(jugador, pixelcoinsJugador, TipoCambioPixelcoins.DIAMOND);
+        this.decrementarPixelcoins(jugador, coste, TipoCambioPixelcoins.DIAMOND);
 
         this.eventBus.publish(new ItemSacadoMaxEvento(jugador, "DIAMOND", coste));
     }
@@ -127,10 +127,10 @@ public final class SacarMaxItemUseCase implements UseCaseHandler<SacarMaxItemPar
 
     private void decrementarPixelcoins(Jugador jugador, double pixelcoinsADecrementar, TipoCambioPixelcoins tipoCambioPixelcoins) {
         transaccionesSaver.save(Transaccion.builder()
-                        .tipo(TipoTransaccion.JUGADORES_CAMBIO_SACAR_MAX_ITEM)
-                        .objeto(tipoCambioPixelcoins.name())
-                        .pagadorId(jugador.getJugadorId())
-                        .pixelcoins(pixelcoinsADecrementar)
+                .tipo(TipoTransaccion.JUGADORES_CAMBIO_SACAR_MAX_ITEM)
+                .objeto(tipoCambioPixelcoins.name())
+                .pagadorId(jugador.getJugadorId())
+                .pixelcoins(pixelcoinsADecrementar)
                 .build());
     }
 
