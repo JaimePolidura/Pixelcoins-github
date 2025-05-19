@@ -36,7 +36,7 @@ public final class SacarMaxItemUseCase implements UseCaseHandler<SacarMaxItemPar
 
         double pixelcoinsJugador = movimientosService.getBalance(parametros.getJugadorId());
         Jugador jugador = jugadoresService.getById(parametros.getJugadorId());
-        
+
         switch (parametros.getTipoCambio()) {
             case DIAMOND, DIAMOND_BLOCK -> sacarMaxItemDiamond(jugador, pixelcoinsJugador);
             case LAPIS_BLOCK, LAPIS_LAZULI -> sacarMaxItemLapisLazuli(jugador, pixelcoinsJugador);

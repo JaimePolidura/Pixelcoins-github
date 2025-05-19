@@ -18,14 +18,10 @@ public class PagarComandoRunner implements CommandRunnerArgs<PagarComando> {
 
     @Override
     public void execute(PagarComando comando, Player sender) {
-        double pixelcoins = comando.getPixelcoins();
-
-        useCaseBus.handle(HacerPagarParametros.of(sender.getUniqueId(), comando.getDestino().getUniqueId(), comando.getPixelcoins()));
-
-        sendMessage(sender, comando.getDestino(), pixelcoins);
-    }
-
-    private void sendMessage (Player pagador, Player pagado, double pixelcoins) {
-
+        useCaseBus.handle(HacerPagarParametros.of(
+                sender.getUniqueId(),
+                comando.getDestino().getUniqueId(),
+                comando.getPixelcoins()
+        ));
     }
 }
