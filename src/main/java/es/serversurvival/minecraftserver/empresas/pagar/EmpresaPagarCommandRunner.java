@@ -10,9 +10,6 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-import static es.serversurvival._shared.utils.Funciones.*;
-import static org.bukkit.ChatColor.*;
-
 @Command(
         value = "empresas pagar",
         args = {"empresa", "precio"},

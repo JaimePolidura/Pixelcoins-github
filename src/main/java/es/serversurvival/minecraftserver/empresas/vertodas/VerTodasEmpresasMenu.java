@@ -87,7 +87,7 @@ public final class VerTodasEmpresasMenu extends Menu {
     private void onItemEmpresaClicked(Player player, InventoryClickEvent event) {
         Empresa empresa = this.empresasService.getById(MinecraftUtils.getLastLineOfLore(event.getCurrentItem(), 0));
 
-        if(empresasIdDondeElJugadorEsAccionista.contains(empresa.getEmpresaId())) {
+        if (empresasIdDondeElJugadorEsAccionista.contains(empresa.getEmpresaId())) {
             menuService.open(player, MiEmpresaMenu.class, empresa);
         }
     }
@@ -104,14 +104,12 @@ public final class VerTodasEmpresasMenu extends Menu {
                 .map(empleado -> jugadoresService.getNombreById(empleado.getEmpleadoJugadorId()))
                 .toList();
 
-        if(esAccionista){
+        if (esAccionista) {
             empresasIdDondeElJugadorEsAccionista.add(empresa.getEmpresaId());
         }
 
         return ItemBuilder.of(Material.getMaterial(empresa.getLogotipo()))
-                .title(esAccionista ?
-                        MenuItems.CLICKEABLE + "VER TU EMPRESA" :
-                        GOLD + "" + BOLD + "" + empresa.getNombre())
+                .title( MenuItems.CLICKEABLE + "VER " + GOLD + "" + BOLD + "" + empresa.getNombre() + empresa.getNombre())
                 .lore(List.of(
                         GOLD + "Empresa: " + empresa.getNombre(),
                         GOLD + "Director: " + jugadoresService.getNombreById(empresa.getDirectorJugadorId()),
