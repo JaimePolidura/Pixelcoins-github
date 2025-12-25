@@ -34,7 +34,7 @@ public final class PagarTodaLaDeudaUseCase implements UseCaseHandler<PagarTodaLa
         validador.jugadorTienePixelcoins(parametros.getJugadorId(), deuda.getPixelcoinsRestantesDePagar());
 
         deudasService.save(deuda.anotarPagadoPorCompleto());
-        ofertasService.deleteByObjetoYTipo(parametros.getDeudaId().toString(), TipoOferta.DEUDA_MERCADO_SECUNDARIO);
+        ofertasService.deleteByObjetoYTipo(parametros.getDeudaId(), TipoOferta.DEUDA_MERCADO_SECUNDARIO);
         transaccionesSaver.save(Transaccion.builder()
                 .pagadoId(deuda.getAcredorJugadorId())
                 .pagadorId(parametros.getJugadorId())

@@ -6,6 +6,7 @@ import es.serversurvival._shared.exceptions.NotEnoughPixelcoins;
 import es.serversurvival.pixelcoins.transacciones.application.MovimientosService;
 import lombok.AllArgsConstructor;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -52,6 +53,12 @@ public final class Validador {
     public void jugadorTienePixelcoins(UUID jugadorId, double pixelcoinsMinimo) {
         if(movmientosService.getBalance(jugadorId) < pixelcoinsMinimo){
             throw new NotEnoughPixelcoins("No tienes las suficientes pixelcoins");
+        }
+    }
+
+    public void isPresent(Optional<?> optional, String mensaje) {
+        if (optional.isEmpty()) {
+            throw new CannotBeNull(mensaje);
         }
     }
 }

@@ -4,6 +4,7 @@ import es.dependencyinjector.dependencies.annotations.Service;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -45,7 +46,7 @@ public class OfertasService {
         this.repository.deleteById(ofertaId);
     }
 
-    public void deleteByObjetoYTipo(String objeto, TipoOferta tipo) {
-        this.repository.deleteByObjetoYTipo(objeto, tipo);
+    public void deleteByObjetoYTipo(UUID objeto, TipoOferta tipo) {
+        this.repository.deleteByObjetoYTipo(objeto.toString(), tipo);
     }
 }

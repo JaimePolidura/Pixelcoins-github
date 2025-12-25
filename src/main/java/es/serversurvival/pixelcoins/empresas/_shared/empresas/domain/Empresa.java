@@ -1,6 +1,5 @@
 package es.serversurvival.pixelcoins.empresas._shared.empresas.domain;
 
-import es.serversurvival._shared.ConfigurationVariables;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.pixelcoins.empresas.editarempresa.EditarEmpresaParametros;
 import es.serversurvival.pixelcoins.empresas.crear.CrearEmpresaParametros;
@@ -26,31 +25,32 @@ public final class Empresa {
     @Getter private LocalDateTime fechaCreacion;
     @Getter private boolean esCotizada;
     @Getter private boolean estaCerrado;
+    @Getter private RazonCierre razonCierre;
     @Getter private LocalDateTime fechaCerrado;
 
     public Empresa nuevoDirector(UUID directorJugadorId) {
         return new Empresa(empresaId, nombre, fundadorJugadorId, directorJugadorId, descripcion, logotipo, nTotalAcciones,
-                fechaCreacion, esCotizada, estaCerrado, fechaCerrado);
+                fechaCreacion, esCotizada, estaCerrado, razonCierre, fechaCerrado);
     }
 
     public Empresa incrementNTotalAccionesEn(int nTotalAccionesAIncrementar){
         return new Empresa(empresaId, nombre, fundadorJugadorId, directorJugadorId, descripcion, logotipo, nTotalAcciones + nTotalAccionesAIncrementar,
-                fechaCreacion, esCotizada, estaCerrado, fechaCerrado);
+                fechaCreacion, esCotizada, estaCerrado, razonCierre, fechaCerrado);
     }
 
     public Empresa marcarComoCotizada() {
         return new Empresa(empresaId, nombre, fundadorJugadorId, directorJugadorId, descripcion, logotipo, nTotalAcciones,
-                fechaCreacion, true, estaCerrado, fechaCerrado);
+                fechaCreacion, true, estaCerrado, razonCierre, fechaCerrado);
     }
 
-    public Empresa cerrar() {
+    public Empresa cerrar(RazonCierre razonCierre) {
         return new Empresa(empresaId, nombre, fundadorJugadorId, directorJugadorId, descripcion, logotipo, nTotalAcciones,
-                fechaCreacion, esCotizada, true, LocalDateTime.now());
+                fechaCreacion, esCotizada, true, razonCierre, LocalDateTime.now());
     }
 
     public Empresa editar(EditarEmpresaParametros parametros) {
         return new Empresa(empresaId, parametros.getNuevoNombre(), fundadorJugadorId, directorJugadorId, parametros.getNuevaDescripccion(),
-                parametros.getNuevoIcono(), nTotalAcciones, fechaCreacion, esCotizada, estaCerrado, fechaCerrado);
+                parametros.getNuevoIcono(), nTotalAcciones, fechaCreacion, esCotizada, estaCerrado, razonCierre, fechaCerrado);
     }
 
     public static Empresa fromParametrosCrearEmpresa(CrearEmpresaParametros comando, int nAccionesInicial) {

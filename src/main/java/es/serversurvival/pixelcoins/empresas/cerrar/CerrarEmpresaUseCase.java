@@ -8,6 +8,7 @@ import es.serversurvival.pixelcoins.empresas._shared.accionistas.applicaion.Acci
 import es.serversurvival.pixelcoins.empresas._shared.empleados.application.EmpleadosService;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.Empresa;
 import es.serversurvival.pixelcoins.empresas._shared.empresas.application.EmpresasService;
+import es.serversurvival.pixelcoins.empresas._shared.empresas.domain.RazonCierre;
 import es.serversurvival.pixelcoins.transacciones.application.MovimientosService;
 import es.serversurvival.pixelcoins.transacciones.application.TransaccionesSaver;
 import es.serversurvival.pixelcoins.transacciones.domain.TipoTransaccion;
@@ -36,7 +37,7 @@ public final class CerrarEmpresaUseCase implements UseCaseHandler<CerrarEmpresaP
         Empresa empresa = this.empresasService.getById(parametros.getEmpresaId());
 
         despedirATodosLosEmpleados(parametros.getEmpresaId());
-        empresasService.save(empresa.cerrar());
+        empresasService.save(empresa.cerrar(RazonCierre.CIERRE));
         accionistasEmpresasService.deleteByEmpresaId(parametros.getEmpresaId());
         transaccionesSaver.save(Transaccion.builder()
                 .pagadoId(parametros.getJugadorId())

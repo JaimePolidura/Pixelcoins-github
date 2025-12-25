@@ -82,8 +82,9 @@ CREATE TABLE `empresas` (
   `ingresos` double(24,3) NOT NULL,
   `gastos` double(24,3) NOT NULL,
   `icono` varchar(24) NOT NULL,
+  `razonCierre` varchar(16) NOT NULL,
   `descripcion` varchar(400) NOT NULL,
-  PRIMARY KEY (`id`),
+ PRIMARY KEY (`id`),
   KEY `nombre` (`nombre`)
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
 

@@ -51,6 +51,11 @@ public final class Empleado {
                 fechaContratacion, false, LocalDateTime.now(), causaDespido);
     }
 
+    public Empleado moverAEmpresa(UUID nuevaEmpresaId) {
+        return new Empleado(UUID.randomUUID(), empleadoJugadorId, nuevaEmpresaId, descripccion, sueldo, periodoPagoMs,
+                fechaUltimoPago, fechaContratacion, true, null, null);
+    }
+
     public static Empleado fromVotacionCambiarDirector(CambiarDirectorVotacion votacion) {
         LocalDateTime fechaAhora = LocalDateTime.now();
 

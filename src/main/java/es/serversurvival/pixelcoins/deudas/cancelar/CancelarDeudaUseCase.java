@@ -26,7 +26,7 @@ public final class CancelarDeudaUseCase implements UseCaseHandler<CancelarDeudaP
         Deuda deuda = deudasService.getById(parametros.getDeudaId());
 
         deudasService.save(deuda.cancelar());
-        ofertasService.deleteByObjetoYTipo(deuda.getDeudaId().toString(), TipoOferta.DEUDA_MERCADO_SECUNDARIO);
+        ofertasService.deleteByObjetoYTipo(deuda.getDeudaId(), TipoOferta.DEUDA_MERCADO_SECUNDARIO);
 
         eventBus.publish(new DeudaCancelada(deuda));
     }

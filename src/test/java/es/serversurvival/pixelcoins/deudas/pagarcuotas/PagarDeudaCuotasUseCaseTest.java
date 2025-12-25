@@ -90,7 +90,7 @@ public final class PagarDeudaCuotasUseCaseTest {
                         transaccion.getTipo() == TipoTransaccion.DEUDAS_CUOTA &&
                         transaccion.getObjeto().equals(deuda.getDeudaId().toString()))));
 
-        verify(ofertasService, times(1)).deleteByObjetoYTipo(eq(deuda.getDeudaId().toString()), eq(TipoOferta.DEUDA_MERCADO_SECUNDARIO));
+        verify(ofertasService, times(1)).deleteByObjetoYTipo(eq(deuda.getDeudaId()), eq(TipoOferta.DEUDA_MERCADO_SECUNDARIO));
     }
 
     @Test
