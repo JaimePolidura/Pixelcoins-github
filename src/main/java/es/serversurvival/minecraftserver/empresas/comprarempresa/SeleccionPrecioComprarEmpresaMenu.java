@@ -53,7 +53,10 @@ public class SeleccionPrecioComprarEmpresaMenu extends NumberSelectorMenu<Selecc
 
     @Override
     public void onAccept(Player player, double cantidad, InventoryClickEvent event) {
+        Empresa empresaAComprar = getState().getEmpresaAComprar();
+        if (empresaAComprar.isEsCotizada()) {
 
+        }
     }
 
     public static Estado tipoCompradorEmpresa(Empresa empresaAComprar, Empresa empresaCompradora) {

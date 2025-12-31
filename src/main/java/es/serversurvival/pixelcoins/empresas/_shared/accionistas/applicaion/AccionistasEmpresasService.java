@@ -56,4 +56,8 @@ public final class AccionistasEmpresasService {
                 .orElse(new AccionistaEmpresa(UUID.randomUUID(), empresaId, compradorId, 0))
                 .incrementarNAccionesEnUno());
     }
+
+    public boolean esAccionista(UUID jugadorId, UUID empresaId) {
+        return findByEmpresaIdAndJugadorId(jugadorId, empresaId).isPresent();
+    }
 }

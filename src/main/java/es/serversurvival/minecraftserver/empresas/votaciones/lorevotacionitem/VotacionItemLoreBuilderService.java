@@ -28,6 +28,7 @@ public final class VotacionItemLoreBuilderService {
     }
 
     private enum VotacionItemLoreBuilderMapper {
+        ACEPTAR_OFERTA_COMPRA_EMPRESA(TipoVotacion.ACEPTAR_OFERTA_COMPRA_EMPRESA, PropuestaCompraEmpresaLoreBuilder.class),
         CAMBIAR_DIRECTOR(TipoVotacion.CAMBIAR_DIRECTOR, CambiarDirectorLoreBuilder.class);
 
         public final TipoVotacion tipoVotacion;
