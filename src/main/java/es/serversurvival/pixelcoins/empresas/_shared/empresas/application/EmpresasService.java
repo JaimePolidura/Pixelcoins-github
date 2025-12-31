@@ -43,6 +43,12 @@ public class EmpresasService {
         return this.empresasRepository.findByNombre(nombre);
     }
 
+    public List<Empresa> findByDirectorJugadorIdNoCerrada(UUID directorJugadorId) {
+        return this.empresasRepository.findByDirectorJugadorId(directorJugadorId).stream()
+                .filter(empresa -> !empresa.isEstaCerrado())
+                .collect(Collectors.toList());
+    }
+
     public List<Empresa> findAllNoCerradas() {
         return this.empresasRepository.findAll().stream()
                 .filter(empresa -> !empresa.isEstaCerrado())

@@ -59,7 +59,7 @@ public final class VerTodasEmpresasMenu extends Menu {
                 .item(1, buildItemInfo())
                 .item(2, buildItemVerTusAcciones(), (p, e) -> menuService.open(p, MisEmpresasAccionesMenu.class))
                 .item(3, buidlItemVerMercado(), (p, e) -> menuService.open(p, MercadoAccionesEmpresasMenu.class))
-                .items(4, this::buildItemsEmpresas, this::onItemEmpresaClicked)
+                .items(4, buildItemsEmpresas(), this::onItemEmpresaClicked)
                 .breakpoint(7, MenuItems.GO_MENU_BACK, this::goBackToProfileMenu)
                 .paginated(PaginationConfiguration.builder()
                         .backward(8, Material.RED_WOOL)
@@ -92,13 +92,14 @@ public final class VerTodasEmpresasMenu extends Menu {
         }
     }
 
-    private List<ItemStack> buildItemsEmpresas(Player player) {
+    private List<ItemStack> buildItemsEmpresas() {
         return empresasService.findAllNoCerradas().stream()
-                .map(empresa -> buildItemEmpresa(empresa, player))
+                .map(this::buildItemEmpresa)
                 .toList();
     }
 
-    private ItemStack buildItemEmpresa(Empresa empresa, Player player) {
+    private ItemStack buildItemEmpresa(Empresa empresa) {
+        Player player = getPlayer();
         boolean esAccionista = accionistasEmpresasService.findByEmpresaIdAndJugadorId(empresa.getEmpresaId(), player.getUniqueId()).isPresent();
         List<String> empleadosNombres = this.empleadosService.findEmpleoActivoByEmpresaId(empresa.getEmpresaId()).stream()
                 .map(empleado -> jugadoresService.getNombreById(empleado.getEmpleadoJugadorId()))

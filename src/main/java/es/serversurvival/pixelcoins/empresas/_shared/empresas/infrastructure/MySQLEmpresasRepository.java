@@ -37,6 +37,11 @@ public final class MySQLEmpresasRepository extends Repository<Empresa, UUID, Obj
     }
 
     @Override
+    public List<Empresa> findByDirectorJugadorId(UUID directorJugadorId) {
+        return super.buildListFromQuery(Select.from(TABLE_NAME).where("directorJugadorId").equal(directorJugadorId));
+    }
+
+    @Override
     public List<Empresa> findAll() {
         return super.findAll();
     }

@@ -11,5 +11,7 @@ public interface EmpresasRepository {
 
     Optional<Empresa> findByNombre(String nombre);
 
+    List<Empresa> findByDirectorJugadorId(UUID directorJugadorId);
+
     List<Empresa> findAll();
 }

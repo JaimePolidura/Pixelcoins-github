@@ -3,6 +3,7 @@ package es.serversurvival.minecraftserver.empresas.miempresa;
 import es.bukkitbettermenus.Menu;
 import es.bukkitbettermenus.MenuService;
 import es.bukkitbettermenus.Page;
+import es.bukkitbettermenus.configuration.ItemClickedListener;
 import es.bukkitbettermenus.configuration.MenuConfiguration;
 import es.bukkitbettermenus.menustate.BeforeShow;
 import es.bukkitbettermenus.modules.async.config.AsyncTasksConfiguration;
@@ -10,6 +11,7 @@ import es.bukkitbettermenus.modules.pagination.PaginationConfiguration;
 import es.bukkitbettermenus.utils.ItemBuilder;
 import es.bukkitbettermenus.utils.ItemUtils;
 import es.serversurvival.minecraftserver._shared.menus.MenuItems;
+import es.serversurvival.minecraftserver.empresas.comprarempresa.SeleccionCompradorEmpresaMenu;
 import es.serversurvival.minecraftserver.empresas.repatirdividendos.RepartirDividendosConfirmacionMenu;
 import es.serversurvival._shared.utils.Funciones;
 import es.serversurvival.minecraftserver._shared.MinecraftUtils;
@@ -36,7 +38,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import static es.serversurvival._shared.utils.Funciones.*;
@@ -58,12 +59,12 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements BeforeShow {
     @Override
     public int[][] items() {
         return new int[][] {
-                {1, 2, 11, 5, 0, 0, 4,  10, 3},
-                {6, 0, 0,  0, 0, 0, 0,   0, 0},
-                {0, 0, 0,  0, 0, 0, 0,   0, 0},
-                {0, 0, 0,  0, 0, 0, 0,   0, 0},
-                {0, 0, 0,  0, 0, 0, 0,   0, 0},
-                {0, 0, 0,  0, 0, 0, 7,   8, 9}
+                {1, 2, 3, 4, 5, 6, 7,  0,  0},
+                {9, 0, 0, 0, 0, 0, 0,  0,  0},
+                {0, 0, 0, 0, 0, 0, 0,  0,  0},
+                {0, 0, 0, 0, 0, 0, 0,  0,  0},
+                {0, 0, 0, 0, 0, 0, 0,  0,  0},
+                {0, 0, 0, 0, 0, 0, 10, 11, 12}
         };
     }
 
@@ -74,20 +75,40 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements BeforeShow {
                 .title(format(DARK_RED + "" + BOLD + "Empresa: %s", this.getState().getNombre()))
                 .item(1, buildItemInfo())
                 .item(2, buildItemEmpresaStats())
-                .item(11, buildItemTransacciones(), goBackDeTransacciones())
-                .item(3, buildItemAccionistas())
+                .item(3, buildItemTransacciones(), goBackDeTransacciones())
+                .item(4, buildItemAccionistas())
                 .item(5, buildItemCerrarEmpresa(), this::abrirCerrarEmpresaConfirmacion)
-                .item(4, buildItemRepartirDividendo(), this::repartirDividendos)
-                .item(10, buildItemVotaciones(), this::openMenuVotaciones)
-                .items(6, buildItemsEmpleados(), this::abrirMenuOpccionesEmpleado)
+                .item(6, buildItemRepartirDividendo(), this::repartirDividendos)
+                .item(7, buildItemVotaciones(), this::openMenuVotaciones)
+                .item(8, buildItemAdquirirEmpresa(), this::openMenuComprarEmpresa)
+                .collapse(1, 7)
+                .items(9, buildItemsEmpleados(), this::abrirMenuOpccionesEmpleado)
                 .asyncTasks(AsyncTasksConfiguration.builder()
-                        .onPageLoaded(6, this::mostrarCabezasJugadoresEmpleados)
+                        .onPageLoaded(9, this::mostrarCabezasJugadoresEmpleados)
                         .build())
-                .breakpoint(7, MenuItems.GO_MENU_BACK, this::goBackToProfileMenu)
+                .breakpoint(10, MenuItems.GO_MENU_BACK, this::goBackToProfileMenu)
                 .paginated(PaginationConfiguration.builder()
-                        .forward(9, Material.GREEN_WOOL)
-                        .backward(8, Material.RED_WOOL)
+                        .forward(11, Material.GREEN_WOOL)
+                        .backward(12, Material.RED_WOOL)
                         .build())
+                .build();
+    }
+
+    private void openMenuComprarEmpresa(Player player, InventoryClickEvent inventoryClickEvent) {
+        if (!puedeAdquirirEmpresa()) {
+            return;
+        }
+
+        menuService.open(player, SeleccionCompradorEmpresaMenu.class, getState());
+    }
+
+    private ItemStack buildItemAdquirirEmpresa() {
+        if (!puedeAdquirirEmpresa()) {
+            return ItemBuilder.of(Material.AIR).build();
+        }
+
+        return ItemBuilder.of(Material.EMERALD)
+                .title(MenuItems.CLICKEABLE + "COMPRAR EMPRESA")
                 .build();
     }
 
@@ -99,7 +120,7 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements BeforeShow {
         itemEmpleado.setItemMeta(currentItemMeta);
     }
 
-    private BiConsumer<Player, InventoryClickEvent> goBackDeTransacciones() {
+    private ItemClickedListener goBackDeTransacciones() {
         if (!puedeVerTransaccionesEmpresa()) {
             return (ignored1, ignored2) -> {};
         }
@@ -116,7 +137,7 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements BeforeShow {
 
     private ItemStack buildItemTransacciones() {
         return puedeVerTransaccionesEmpresa() ? ItemBuilder.of(Material.BOOKSHELF)
-                .title(MenuItems.CLICKEABLE + "Ver ultimas transacciones")
+                .title(MenuItems.CLICKEABLE + "VER ULTIMAS TRANSACCIONES")
                 .build() :
                 ItemBuilder.of(Material.AIR).build();
     }
@@ -375,6 +396,13 @@ public final class MiEmpresaMenu extends Menu<Empresa> implements BeforeShow {
         } else { //!esCotizada
             this.estadoEmpresaJugador = EstadoEmpresaJugador.NO_RELACION_O_ACCIONISTA_NO_CORIZADA;
         }
+    }
+
+    private boolean puedeAdquirirEmpresa() {
+        return switch (estadoEmpresaJugador) {
+            case NO_RELACION_O_ACCIONISTA_COTIZADA, NO_RELACION_O_ACCIONISTA_NO_CORIZADA, DIRECTOR_COTIZADA -> true;
+            default -> false;
+        };
     }
 
     private boolean puedeVerTransaccionesEmpresa() {
